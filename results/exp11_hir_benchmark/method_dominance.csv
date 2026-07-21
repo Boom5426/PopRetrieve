@@ -1,0 +1,17 @@
+welfare_type,information_condition,metric,best_method,best_value
+mean,observed,hit_at_1,DART_mmd,0.05555555555555555
+mean,observed,mrr,DART_mmd,0.2224615753709407
+mean,observed,ndcg,DART_mmd,0.2815751093225704
+mean,observed,decision_regret,DART_mmd,0.11396666206989899
+mean,predicted_mean,hit_at_1,DART_sliced_wasserstein,0.05555555555555555
+mean,predicted_mean,mrr,DART_coverage_worst,0.14190183333006076
+mean,predicted_mean,ndcg,DART_coverage_worst,0.18430311514395722
+mean,predicted_mean,decision_regret,DART_sliced_wasserstein,0.4517954507542621
+worst,observed,hit_at_1,DART_coverage_worst,0.09722222222222222
+worst,observed,mrr,DART_coverage_worst,0.24918638764972587
+worst,observed,ndcg,DART_coverage_worst,0.301461001332685
+worst,observed,decision_regret,DART_coverage_worst,0.29315436317486826
+worst,predicted_mean,hit_at_1,DART_energy,0.08333333333333333
+worst,predicted_mean,mrr,DART_mmd,0.15671506675007335
+worst,predicted_mean,ndcg,DART_coverage_worst,0.17909982358220045
+worst,predicted_mean,decision_regret,DART_mmd,0.9609444490231355

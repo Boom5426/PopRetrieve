@@ -1,0 +1,33 @@
+# SciPlex3 — main mechanism dataset (controlled proof, divergence gate, theory anchor).
+dataset: sciplex3
+processed_path: ../data/processed/sciplex3_all.pt   # resolved via utils.io.DATA_ROOT by default
+annotation_dir: ../data/annotation
+context_axis: cell_line
+cell_lines: [K562, A549, MCF7]
+classes: {a: HDAC, b: JAK}     # two orthogonal MOA response modes (obs['target'])
+dose: 10000.0
+n_hvg: 2000
+
+controlled:                    # exp01
+  n_total: 400
+  n_distractors: 40
+  alphas: [0.5, 0.6, 0.7, 0.8, 0.9]
+  n_seeds: 20
+  seed_base: 1000
+
+divergence_gate:               # exp02
+  divergence_lams: [0.0, 0.25, 0.5, 0.75, 1.0, 1.5]
+  power_Ns: [15, 30, 60, 120, 240]
+  metric_lams: [0.0, 0.5, 0.75, 1.0, 1.5]
+  metric_cap: 220
+  alpha: 0.7
+  n_seeds: 20
+
+crossline:                     # exp03
+  pairs: [[K562, A549], [A549, MCF7], [K562, MCF7]]
+  n_total: 200
+  n_distractors: 40
+  n_drugs: 15
+  alphas: [0.5, 0.6, 0.7, 0.8, 0.9]
+  n_seeds: 10
+  probe: {min_cells: 30, gate: 0.9, rel_floor: 0.5}

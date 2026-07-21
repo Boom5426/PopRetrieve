@@ -1,0 +1,32 @@
+{
+  "step1_rank_correlation_mean_vs_cell": -0.18993,
+  "step1_fraction_rankings_disagree": 0.9,
+  "step1_per_seed_rho": [
+    -0.1804,
+    -0.1755,
+    -0.0419,
+    -0.2278,
+    -0.0741,
+    -0.2599,
+    -0.1574,
+    -0.287,
+    -0.3776,
+    -0.1323,
+    -0.3409,
+    -0.1362,
+    0.018,
+    -0.0242,
+    -0.2505,
+    -0.296,
+    -0.2955,
+    -0.1322,
+    -0.1077,
+    -0.3196
+  ],
+  "step2_dart_wins_cell_level": 0.6,
+  "step2_dart_wins_mean_based": 0.9,
+  "step2_n_total_queries": 20,
+  "step2_n_dart_wins_cell": 12,
+  "step2_n_dart_wins_mean": 18,
+  "confirmed_blind_spot": true
+}

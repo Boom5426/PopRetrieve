@@ -1,0 +1,36 @@
+{
+  "constructed_class": {
+    "best_unsup": 0.6866666666666666,
+    "ceiling_infold": 0.7066666666666667,
+    "ceiling_matched": 0.7,
+    "gap_infold": 0.030000000000000027,
+    "gap_matched": 0.013333333333333308,
+    "n_splits": 1
+  },
+  "constructed_drug": {
+    "best_unsup": 0.8369252873563218,
+    "ceiling_infold": 0.88125,
+    "ceiling_matched": 0.8793604651162791,
+    "gap_infold": 0.016145833333333304,
+    "gap_matched": 0.007291666666666641,
+    "n_splits": 24
+  },
+  "natural": {
+    "best_unsup": 0.7766666666666666,
+    "ceiling_infold": 0.9266666666666667,
+    "ceiling_matched": 0.9233333333333333,
+    "gap_infold": 0.1216666666666667,
+    "gap_matched": 0.11666666666666664,
+    "n_splits": 36
+  },
+  "n_patients": 4,
+  "n_drug_pairs": 36,
+  "headline": {
+    "comparator": "constructed_drug (one drug vs one drug), NOT constructed_class",
+    "constructed_drug_ceiling_matched": 0.8793604651162791,
+    "natural_ceiling_matched": 0.9233333333333333,
+    "constructed_drug_gap_matched": 0.007291666666666641,
+    "natural_gap_matched": 0.11666666666666664,
+    "constructed_class_ceiling_matched": 0.7
+  }
+}

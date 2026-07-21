@@ -1,0 +1,7 @@
+signal,family,hit@1,hit@5,hit@10,hit@20,mrr,ndcg@10,best_rank,median_rank
+field_match,reference_upper,1.0,1.0,1.0,1.0,1.0,1.0,1.0,49.0
+target_overlap,pdgrapher_inverse_design,1.0,1.0,1.0,1.0,1.0,1.0,1.0,73.0
+distance_reduction,dart_distributional,0.0,1.0,1.0,1.0,0.3333333333333333,0.1100458831490401,3.0,714.5
+graph_proximity,pdgrapher_inverse_design,0.0,0.0,0.0,0.0,0.005076142131979695,0.0,197.0,779.0
+random,reference_lower,0.0,0.0,0.0,1.0,0.07142857142857142,0.0,14.0,752.0
+signature_reversal,signature_retrieval,0.0,0.0,0.0,1.0,0.06971153846153846,0.0,14.5,859.5

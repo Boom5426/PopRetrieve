@@ -1,0 +1,11 @@
+query_id,signal,topk_overlap,top1_flip,delta_rank_vs_pdgrapher
+A549|sample-0|observed_target,target_overlap,0.0,1,195
+A549|sample-0|observed_target,signature_reversal,0.0,1,-679
+A549|sample-0|observed_target,field_match,0.0,1,195
+A549|sample-0|observed_target,random,0.0,1,-209
+A549|sample-0|observed_target,distance_reduction,0.0,1,-971
+A549|sample-1|observed_target,target_overlap,0.0,1,195
+A549|sample-1|observed_target,signature_reversal,0.0,1,-639
+A549|sample-1|observed_target,field_match,0.0,1,195
+A549|sample-1|observed_target,random,0.0,1,-209
+A549|sample-1|observed_target,distance_reduction,0.0,1,-970

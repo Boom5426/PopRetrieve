@@ -1,0 +1,2 @@
+benchmark,drug_target_map,gt_definition,pdgrapher_reference_signal,dart_signal,note
+pdgrapher_closed_loop_benchmark.parquet,"drug_target_prior.parquet (CIGS graph, exact 1369/1369)",field_match >= 1.0,graph_proximity,distance_reduction (relative source→target population distance reduction),no PDGrapher training; precomputed closed-loop ranked outputs consumed

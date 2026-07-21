@@ -1,0 +1,50 @@
+# DrugRank-Flow Stage-1 config (SciPlex3, all cell lines, control->drug transition)
+seed: 0
+device: cuda
+
+data:
+  processed_path: data/processed/sciplex3_all.pt
+  annotation_dir: data/annotation
+  drug_features_path: data/annotation/drug_morgan_ecfp4.npy
+  splits_dir: data/splits
+  split: random          # random | drug_disjoint | moa_disjoint | cell_line_disjoint_A549 | cell_line_disjoint_MCF7
+  val_fold: val
+
+model:
+  pop_hidden: 512
+  pop_dim: 256
+  drug_hidden: 512
+  drug_dim: 256
+  emb_dim: 128
+  dropout: 0.1
+
+train:
+  epochs: 120
+  phase1_epochs: 20
+  batch_size: 64
+  n_source: 128
+  n_target: 128
+  num_workers: 6
+  lr_phase1: 1.0e-3
+  lr_phase2: 3.0e-4
+  weight_decay: 1.0e-5
+  grad_clip: 1.0
+  bce_pos_weight: 20.0
+  lambda_recon: 0.1
+  moa_soft_weight: 0.3
+  gallery_refresh_every: 1
+  temp0: 0.20
+  temp1: 0.10
+  temp_end: 120
+  lam0: 50.0
+  lam1: 5.0
+  lam_end: 120
+  max_train_conditions: 100000
+
+eval:
+  every: 2
+  query_batch: 32
+
+out:
+  ckpt_dir: checkpoints
+  results_dir: results/drug_ranking

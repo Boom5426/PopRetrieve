@@ -1,0 +1,4 @@
+ko,contrast,cross_cos,mean_cosine,mean_cosine_lo,mean_cosine_hi,global_energy,global_energy_lo,global_energy_hi
+IFNGR1,Control+IFNγ,0.14728255569934845,0.2,0.05,0.4,0.8,0.6,0.95
+IFNGR1,Control+Co-culture,0.2573155462741852,0.1,0.0,0.25,0.65,0.45,0.85
+IFNGR1,IFNγ+Co-culture,0.6715536117553711,0.95,0.85,1.0,0.95,0.85,1.0

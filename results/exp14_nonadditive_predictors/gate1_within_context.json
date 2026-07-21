@@ -1,0 +1,68 @@
+{
+  "real_cells": {
+    "cos_vs_real_control": 0.20543433842405587,
+    "n": 30
+  },
+  "average_effect": {
+    "learned": 0.5016095148490641,
+    "cos_vs_real_control": 0.999999999999986,
+    "cos_vs_model_baseline": 0.999999999999986,
+    "n": 30,
+    "baseline_kind": "identity",
+    "model_class": "ADDITIVE (gene space)",
+    "void": false
+  },
+  "linear_latent": {
+    "learned": 0.6145691985494334,
+    "cos_vs_real_control": 0.1900573676537416,
+    "cos_vs_model_baseline": 0.9999999999996568,
+    "n": 30,
+    "baseline_kind": "reconstruction",
+    "model_class": "ADDITIVE (latent) + linear decoder",
+    "void": false
+  },
+  "scgen_real": {
+    "learned": 0.5238263833426642,
+    "cos_vs_real_control": 0.40435286663157655,
+    "cos_vs_model_baseline": 0.9724397619939876,
+    "n": 30,
+    "baseline_kind": "reconstruction",
+    "model_class": "additive latent delta + NONLINEAR decoder [published scGen]",
+    "void": false
+  },
+  "cpa_real": {
+    "status": "did not run"
+  },
+  "ot_map": {
+    "learned": 0.3524432540922354,
+    "cos_vs_real_control": 0.37978370412074897,
+    "cos_vs_model_baseline": 0.9004524910531723,
+    "n": 30,
+    "baseline_kind": "reconstruction",
+    "model_class": "per-cell OT displacement (NON-ADDITIVE)",
+    "void": false
+  },
+  "self_check": {
+    "passed": true
+  },
+  "subpopulations": [
+    {
+      "context": "A549",
+      "n_sub0": 203,
+      "n_sub1": 197,
+      "silhouette": 0.062546327261424
+    },
+    {
+      "context": "K562",
+      "n_sub0": 212,
+      "n_sub1": 188,
+      "silhouette": 0.08140494561937565
+    },
+    {
+      "context": "MCF7",
+      "n_sub0": 194,
+      "n_sub1": 206,
+      "silhouette": 0.08741095630104294
+    }
+  ]
+}

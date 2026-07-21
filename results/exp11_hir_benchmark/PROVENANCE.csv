@@ -1,0 +1,9 @@
+file,layer,grid,n_rows_or_instances
+phase_grid_method_independent.csv,method-independent; PAIRS with method_performance for exp13's boundary fit,QUICK,288
+phase_grid_method_independent_FULL.csv,"method-independent, FULL grid; the layer the predictability model was fitted on",FULL,26880
+phase_grid_predictability.csv,predictability; fitted on the FULL method-independent layer above,FULL,13440
+phase_grid_method_performance.csv,method-performance (9 retrieval methods),QUICK,2592
+method_dominance.csv,method-performance (derived),QUICK,16
+uncertainty_band.csv,method-performance (derived),QUICK,36
+sanity_checks.csv,method-independent + method-performance,QUICK,3
+theoretical_boundary.csv,method-independent,QUICK,120

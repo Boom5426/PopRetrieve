@@ -1,0 +1,1289 @@
+# Corrections and retractions, 2026-07-12
+
+An audit of this repository found that several published numbers were artifacts of our own
+code rather than properties of the data or of the methods being studied. This file records
+every correction, what the number was, what it is, and why it changed. It exists because the
+paper's thesis is that objective-aligned evaluation inflates results, and a paper making
+that argument cannot itself ship numbers it has not checked.
+
+**None of the fourteen corrections overturns the paper's central claim.** The distributional gain is
+still large under objective-aligned metrics and still fails to transfer to oracle-independent
+ones. Several corrections make the negative result *sharper*. Two retract a mechanism we had
+asserted, and one converts an apparent confirmation into a refutation.
+
+**R14 is the one that adds a result rather than removing one, and it is the most serious
+process failure recorded here.** The manuscript asserted, in three places, that no Class C
+(oracle-independent) metric was available in this study. The repository has contained one the
+whole time: 155 SciPlex3 drugs matched to GDSC dose-response viability, plus the experiment and
+the control that decides it. A paper arguing that the field avoids oracle-independent evaluation
+cannot claim no such readout exists while shipping one in its own code. The result, once the
+controls are applied, is the strongest evidence in the paper *for* the paper's thesis: the
+apparent Class C win is a response-magnitude confound, beaten by a scalar that never looks at
+the query.
+
+**R13 is the one that changes a headline claim, and it took three attempts.** The paper's
+"0 of 37 real-data tasks are distributionally dominant" quotes a QUICK sanity run. Our first
+correction ("11 of 215 are dominant") was also wrong: it swapped the denominator and, worse,
+reported a count of threshold crossings as a finding, which is the error this paper exists to
+criticize. What we report now is the distribution: the real-data advantage is statistically
+real (Wilcoxon p = 1.3e-7) and practically negligible (mean +0.0018), and it is confined to
+the cell-line mixtures we constructed. The thesis is untouched; an absolute became a
+distribution.
+
+---
+
+## R1. RETRACTED: "predictors collapse subpopulation structure ~5x"
+
+**Was:** predicted candidate populations carry roughly fivefold less subpopulation-variance
+ratio than real data (real 0.046 versus predicted 0.009). Reported in the abstract, the
+introduction, Result 4, Fig 5c, and ED Fig 3c.
+
+**Is:** false, on both sides of the comparison.
+
+- The *predicted* side (0.009) was the **null value of the statistic**, not a measurement.
+  Every predictor synthesized its population as `control_mean + delta + iid N(0, sigma)`,
+  which is unimodal by construction (isotropy index 0.998). A k-means k=2 between-total
+  variance ratio on an isotropic cloud returns ~0.009 no matter what the predictor learned.
+  We were measuring our own synthesizer.
+- The *real* side (0.046) was a **single-context** treated population, not the alpha-blended
+  candidate population that a scorer actually ranks.
+
+**Corrected measurement** (`results/exp09_structure_diagnostics/`, n=96 per row). Populations
+are now synthesized by applying the predicted effect to the query context's real control
+cells, one cell at a time, which is what latent-arithmetic models actually do:
+
+| candidate population | subpop-variance ratio | induced response cosine |
+|---|---:|---:|
+| **real** (alpha-blended, what the scorer ranks) | **0.138** | **0.014** |
+| predicted, average-effect | 0.142 | 0.186 |
+| predicted, latent (scGen-family) | 0.462 | 0.239 |
+| predicted, nearest-neighbour | 0.142 | 0.366 |
+
+**The corrected mechanism is stronger than the retracted one.** Predictors do not collapse
+structure; they preserve it. What they fail to produce is *differential response*. Real
+subpopulations respond near-orthogonally (cosine 0.014); predicted ones respond in largely
+aligned directions. This is analytic, not empirical: average-effect, nearest-neighbour, scGen
+and CPA are all **additive** models that add one delta vector to every cell, so the two
+subpopulations' response deltas are identical and the induced divergence is exactly zero. A
+distributional score has nothing differential to exploit however much structure survives.
+
+Code: `src/baselines/population_synthesis.py` (new, documents both synthesizers);
+`src/baselines/scgen_predictor.py:179` no longer averages scGen's per-cell output away.
+Pinned by `tests/test_predictors_smoke.py::test_additive_predictors_induce_zero_response_divergence`.
+
+---
+
+## R2. CORRECTED: MoA-nDCG statistics were computed over 165 undefined values
+
+**Was:** MoA-nDCG median gap = 0.000 in every divergence stratum, n=765, Q4 needs n≈27,794
+for 80% power.
+
+**Is:** MoA recovery is **undefined** for the `leave_MoA_out` and `partial_library` splits,
+where the whole mechanism class is removed from the library. `exp12` wrote those 165 of 765
+queries (21.6%) as the literal value **-1**, and `exp16`/`exp17` differenced them like
+measurements: `(-1) - (-1) = 0`. Those 165 structural zeros were entering n, pinning the
+median at exactly 0.000 in every stratum, shrinking the standard deviation, and feeding the
+power calculation.
+
+**Corrected** (`exp16_common.mask_undefined`; sentinel written as NaN at source):
+
+| stratum | n (was 191) | median gap (was 0.000) | BH q |
+|---|---:|---:|---:|
+| Q1 (lowest divergence) | 166 | **−0.030** | 5.8e-5 |
+| Q2 | 150 | 0.000 | 0.073 |
+| Q3 | 141 | 0.000 | 0.566 |
+| Q4 (highest) | 143 | 0.000 | 0.566 |
+
+Total n for MoA-nDCG: **600**, not 765. Q4 n for 80% power: **20,844**, not 27,794.
+
+**This sharpens the negative result.** At the lowest divergence level DART does not merely
+fail to help, it **significantly hurts** annotation recovery. `minority_state_coverage` is
+unaffected (it never used the sentinel): Q1 +0.0009, Q4 +0.0018 stand as published.
+
+---
+
+## R3. RETRACTED: the CD34+ negative control confirmed the divergence gate
+
+**Was:** a table in `exp02_divergence_gate.py` placed the three datasets on the divergence
+axis: CD34+ at cosine **0.95** ("below gate, no advantage"), Frangieh 0.65, cross-line 0.14.
+The comment above it read "from probes". **No probe ran.** The three values were typed in.
+The table is the source data for Fig 1e and Fig 3e.
+
+**Is** (now computed, `results/exp02_divergence_gate/dataset_positions_on_gate.csv`):
+
+| dataset | measured cosine | clears the ≲0.9 gate? | who actually wins |
+|---|---:|:---:|---|
+| cross-line (SciPlex3) | 0.032 | yes | **DART** |
+| **CD34+ lineages** | **0.186** | **yes** | **mean-cosine** |
+| Frangieh immune | 0.709 | yes | mean-cosine (0.600 vs 0.578) |
+
+The hand-entered 0.95 placed CD34+ *outside* the gate, which made our negative control look
+like a **confirmation** of the criterion. The measured value on the same cells is 0.186:
+strongly divergent, comfortably inside the gate. The gate therefore predicts DART should win
+on CD34+, and it does not. Two of three datasets clear the gate and still favour the mean.
+
+**The divergence criterion is refuted by our own negative control.** This agrees with the
+direct gate audit already in the paper (the gate's reliability axis is *anti*-correlated with
+true divergence, rho = −0.21, p = 3.8e-9), so it strengthens a conclusion we had already
+drawn, but by a route we had been getting backwards.
+
+---
+
+## R4. CORRECTED: the Class A / Class B contrast compared two different methods
+
+**Was:** "The same method, on the same data, is far ahead or no better depending only on
+which metric class judges it", citing Class A **+0.119** against Class B **−0.013**.
+
+**Is:** those two numbers come from **different scorers on different query sets**. +0.119 is
+`coverage_worst` on 621 queries; −0.013 is `energy` on 480. Each side had been selected as
+the best of five for the metric class that flattered it, which is exactly the analytic degree
+of freedom this paper exists to criticize.
+
+**Corrected:** one scorer, one query set. On the 480 queries where both metric classes are
+defined, `coverage_worst` gives Class A **+0.129** and Class B **−0.037**. The collapse is
+*larger* under the disciplined comparison. All five variants behave the same way (Class A
++0.056 to +0.129; Class B −0.011 to −0.037). Fig 4a had been plotting the honest pair all
+along; the prose was the outlier.
+
+---
+
+## R5. FALSIFIED PANEL: "No predictor gives a positive gain"
+
+`figures/fig5/fig5b.py` reindexed on `'scgen_cpa_linear'` while
+`results/exp09_predict_then_rank/summary.csv` keys that predictor as `'scgen'`. The reindex
+produced NaN, the predictor was silently dropped, and it rendered as a blank row labelled
+`+nan`. It is the **one predictor with a positive gain** (+0.027 nDCG@10, recorded in the
+deck's own `source_data/fig5b_predictor_gaps.csv`).
+
+The panel title is now "Gain is small and sign-inconsistent" and the three values are
+reported: −0.071 (nearest-neighbour), −0.016 (average-effect), **+0.027** (latent-linear).
+The panel raises rather than plotting NaN if a predictor goes missing again. Our own
+`statistical_reporting_checklist.md:43` had warned "do not summarize as all negative".
+
+---
+
+## R6. CORRECTED: "leave-one-dataset-out cross-validation"
+
+The held-out unit in `exp16` is a **cell line** (A549, K562, MCF7), and all three come from
+**SciPlex3**. This is leave-one-cell-line-out within a single experiment, not
+leave-one-dataset-out: the lines share batch, protocol, HVG set and normalization. The column
+`cross_dataset_pos_fraction` is renamed `cross_cellline_pos_fraction`, and the
+cross-dataset generalization claim is withdrawn.
+
+---
+
+## R7. CORRECTED: exp13's acceptance test was declared PASS on a degenerate label
+
+On the shipped run the observed label was **constant** (`mean_sufficient` in 37 of 37 tasks),
+so it carried zero information. A constant predictor scores 100%; the reported 70.3% is 30
+points **worse** than saying nothing, and it was nonetheless declared **PASS** against a ≥0.6
+threshold. The test now reports the majority-class baseline and refuses to issue a verdict on
+a degenerate ground truth.
+
+**That shipped run was a QUICK sanity run**, and the label is not constant on the full task
+set. See R13, which supersedes the reading of this experiment. On the FULL set the test is no
+longer degenerate, it is simply **failed**: the majority-class baseline is 95.4% and the
+projection scores 61.1%.
+
+The related "predicted_mean → no-DART: 100%" is a **tautology**: `predict_regime` returns
+`no_DART` unconditionally for that information condition. It is now labelled as such and no
+longer offered as evidence.
+
+---
+
+## R8. CORRECTED: the aggregate table disagreed with the per-query data
+
+`exp12`'s `recommendation_vs_outcome.csv` reported a median regret reduction of 0.1133 where
+`per_query_scores.csv` gives 0.1190, and **the figures were built from the aggregate**. Cause:
+the paired lookup keyed on `(split_type, cell_line, heldout_drug, seed)`, which is not unique
+because the partial-library queries exist at three `observed_library_fraction` values; the
+subsequent `.iloc[0]` paired a DART row at fraction 0.4 against a baseline row at fraction
+0.2. The key now includes all six fields and raises on a non-unique index. Regenerated:
++0.1190 (recommended, n=621) versus +0.1219 (non-recommended, n=133), matching the text.
+
+---
+
+## R9. CORRECTED: the identifiability phase diagram said clustering gets harder with more cells
+
+At fixed separation, the published phase diagram showed ARI **falling** with cell budget
+(median 1.000 at 25 cells/source down to 0.289 at 400, at separation 2.0). Clustering does
+not get harder as you collect more cells. Cause: the separation manipulation computed source
+centroids on the **sampled** cells and then shifted **those same cells**, so at small n it
+amplified whatever separation each draw happened to contain. The centroids are now computed
+once on the full source populations, making the manipulation sample-independent.
+
+---
+
+## R10. CORRECTED: "9 unsupervised clustering methods"
+
+The nine columns comprise **6-7 distinct algorithms**. `response_kmeans_k2` is bit-identical
+to `raw_kmeans_k2` on all 20 seeds (k-means is translation-invariant, so subtracting a
+constant control mean changes nothing), and `bestk3/4/5` are one best-k method under three
+names. All are centroid- or Gaussian-based; no density (DBSCAN, HDBSCAN) or graph (Leiden,
+Louvain) method was tested, which is the natural next objection and is now stated as open.
+The headline "best median ARI 0.106" is a median over the **4 of 20 seeds** in which k=4 won;
+the dense columns sit at 0.037-0.078 and the global maximum is 0.149.
+
+---
+
+## R11. RETRACTED: "failure is predictable from observable features (AUC 0.640)"
+
+**Was:** on the FULL 13,440-cell HIR-Bench grid, a leave-one-grid-out logistic regression
+predicts retrieval failure at AUC 0.640 from observable structure and conflict features.
+
+**Is:** wrong on the features, wrong on the cross-validation, and wrong on the sample size.
+
+- **The features were not observable.** All four (`topk_disagreement`,
+  `weighted_kendall_conflict`, `standard_kendall_conflict`, `response_cosine`) are functions
+  of `cell.utility_matrix`. So is the label, `oracle_flip_risk`. It was one function of the
+  oracle predicting another function of the same oracle: **the exact circularity this project
+  exists to audit, committed inside the project.** The module docstring asserted it "must NOT
+  import oracle_utility"; it did not import it, but it received the oracle's quantities as
+  columns, so the firewall was nominal. The genuinely observable features
+  (`predictability.extract_features`) were implemented and **never called**.
+- **The cross-validation leaked.** `grid_id` also encodes `information_condition`,
+  `cells_per_subpop` and `noise_sigma`, none of which change the utility matrix. Holding out
+  one `grid_id` therefore left roughly **twelve near-identical copies** of the held-out
+  instance in the training set.
+- **The sample size was inflated 480-fold.** The label is a deterministic step function of
+  `(alpha, conflict_level)`. Grouping on those axes leaves **28 independent parameter cells**,
+  not 13,440 instances. Any confidence interval computed on n = 13,440 is meaningless.
+
+**Corrected** (`results/exp11_hir_benchmark/phase_grid_predictability.csv`, FULL grid,
+leave-one-parameter-cell-out):
+
+The full 2x2 (feature set x cross-validation grouping), which is what actually separates the
+two failure modes. Majority-class rate is 0.643 throughout.
+
+| feature set | 28 label-determining cells | 672 instances (leaky) | inflation |
+|---|---:|---:|---:|
+| **observable at query time** | **0.788** | 0.836 | +0.048 |
+| oracle-derived (the old four) | **0.400** | 0.640 | **+0.240** |
+
+**The attribution, stated precisely.** An earlier version of this file said "all of the
+reported 0.640 was pseudo-replication". That is an over-simplification and it is now
+corrected. Both mechanisms are real and the 2x2 separates them:
+
+- **Feature circularity** costs 0.388 of AUC (0.400 vs 0.788 under honest grouping). The
+  oracle-derived features carry no generalizing signal at all.
+- **Pseudo-replication** inflates the oracle-derived features by **+0.240** but the honest
+  features by only **+0.048**, a factor of five.
+
+The interaction is the interesting part: **an instance-level holdout preferentially rescues a
+circular feature set**, because memorizing near-duplicates is the only thing such a feature set
+can do; features carrying real signal barely benefit. A benchmark whose cross-validation unit
+is finer than its label-determining axes will manufacture apparent predictability exactly where
+there is none.
+
+**Also corrected: "worse than chance".** We wrote that AUC 0.400 is "worse than chance" in the
+manuscript abstract, Results and a figure caption. With n_eff = 28 and no per-fold distribution,
+a 0.1 deviation in AUC is **not distinguishable from 0.5**, and reading it as a directional
+finding repeats, at n_eff = 28, exactly the error this correction is about. The defensible
+statement is **"no better than chance"**. Likewise "the dominant feature is the query's response
+diversity" is downgraded to "the highest-weighted feature": feature-importance ranking on 28
+effective units was never tested for stability.
+
+Two caveats travel with the 0.788 and must not be dropped: the effective sample size is 28
+parameter cells, and because the label is deterministic within a cell, every held-out fold is
+single-class, so no per-fold AUC distribution exists and the pooled out-of-fold AUC is the
+only statistic available. "Moderately predictable" is as strong as this supports.
+
+`exp11_hir_benchmark.py --skip-method-perf` makes the FULL grid runnable in-tree, and
+`exp11_write_provenance.py` stamps which layer in `results/exp11_hir_benchmark/` came from
+which grid, because the method-performance layer is still a QUICK 144-instance sanity pass and
+a reader must not have to guess.
+
+---
+
+## R14. RETRACTED: "no Class C metric is available in this study"
+
+**Was:** the manuscript stated, in the negative-claims box, in the Discussion, and in the
+Methods metric taxonomy, that no oracle-independent (Class C) utility metric was available in
+the datasets used, and that reaching Class C would require future wet-lab work.
+
+**Is:** false. The repository has contained a Class C experiment the whole time:
+
+- `results/upgrade/drug_match_table.csv`, 155 SciPlex3 drug x cell-line pairs matched to
+  **GDSC dose-response** records (AUC, LN_IC50) in the same three cell lines.
+- `analysis/class_c/class_c_experiment.py`, leave-one-drug-out retrieval scored against that
+  potency oracle, 152 queries.
+- `analysis/class_c/class_c_magnitude_control.py`, the control that decides it.
+
+Dose-response viability is the **first metric named in our own Class C definition**. A paper
+whose thesis is that the field avoids oracle-independent evaluation cannot claim no such
+readout was available while shipping one in its own repository.
+
+### R14a. The v1 Class C scripts had a sign error that INVERTED the result. Do not use their numbers.
+
+`retrieval.metrics.score_energy` returns **minus** the energy distance, i.e. a **similarity**
+(higher = more similar). Both v1 scripts ranked it **ascending**:
+
+```python
+# class_c_experiment.py:121,133
+dart_ranks   = stats.rankdata(dart_scores)      # rank 1 = most NEGATIVE score
+dart_top1_idx = np.argmin(dart_scores)          # "lowest energy = top pick"  <-- WRONG
+# class_c_magnitude_control.py:91
+er = stats.rankdata(e_scores)                   # "energy: low = similar"     <-- WRONG
+```
+
+The variable holds a negated distance, so `argmin` selects the candidate **farthest** from the
+query. The mean-cosine baseline in the same scripts was ranked **correctly** (`argmax`). DART
+was therefore ranked backwards and its incumbent was not.
+
+This is not cosmetic. Large-response candidates sit far from everything (rank corr between
+energy **distance** and candidate magnitude = **+0.79**), and large response predicts potency.
+Ranking "farthest first" therefore selects potent drugs. That, and nothing else, produced v1's
+apparent **+0.52** DART-versus-potency correlation. It is the true value with the sign flipped.
+
+Two further faults in v1, both fixed: it pooled **all four doses** (10 nM to 10 uM) while every
+other retrieval experiment in the paper runs at 10 uM, and it pooled **GDSC1 and GDSC2** AUCs,
+which are different platforms and not on a common scale.
+
+### R14b. The corrected result
+
+`analysis/class_c/class_c_magnitude_control_v2.py`, 10 uM only, GDSC2 only, 34-35 drugs per
+line, 103 leave-one-drug-out queries. Median Spearman rho with true potency:
+
+| ranking of candidates | A549 | K562 | MCF7 | all |
+|---|---:|---:|---:|---:|
+| energy (distributional retrieval) | -0.538 | -0.625 | -0.486 | **-0.520** |
+| mean cosine, control-subtracted (correct incumbent) | +0.049 | +0.438 | +0.091 | +0.105 |
+| mean cosine, as commonly run (no control subtraction) | -0.573 | -0.647 | -0.482 | -0.533 |
+| **candidate response magnitude alone** (*no retrieval*) | +0.692 | +0.708 | +0.583 | **+0.692** |
+
+**Distributional retrieval is ANTI-correlated with potency (-0.520), with the same sign in all
+three cell lines.** The candidates it ranks first, the ones most similar to the query, are the
+**less potent** ones. A query-independent scalar that never looks at the query outranks it on
+**103 of 103 queries**.
+
+The mechanism is arithmetic: response magnitude predicts potency (rho = -0.69 / -0.71 / -0.58
+by line), and energy **distance** tracks candidate magnitude (+0.79), so ranking nearest-first
+returns the smallest-response, weakest drugs. Retrieval fidelity and therapeutic utility are
+anti-aligned on this data.
+
+**Do not restate this as a fraction.** An earlier internal note said the correlation was "83%
+explained by response magnitude (rho = -0.83)". A Spearman rho is not a fraction of variance
+explained; that is the error R12 already records.
+
+**Do not quote a p-value across the 103 queries.** They share a candidate pool within a cell
+line and the magnitude-only ranking is query-independent, so a paired test is anticonservative.
+Report the per-line medians and the unanimity of the sign.
+
+**Scope.** The oracle is *semi-real*: potency is a separate bulk assay, joined by compound name,
+at a different dose regime. It is strong enough to **withdraw any claim of therapeutic utility**
+and not strong enough to **prove that no distributional method could help**.
+
+Code: `analysis/class_c/class_c_magnitude_control_v2.py` (v1 retained, marked superseded).
+Data: `results/upgrade/class_c_magnitude_control_v2.{csv,json}`, `results/upgrade/drug_match_table.csv`.
+
+---
+
+## R12. Smaller corrections
+
+- **README Hit@1 table** was labelled "controlled SciPlex3 benchmark". It is an unweighted
+  **macro-mean over 7 (task × setting) cells of three tasks**. Query-weighted, the numbers are
+  0.887 / 0.421 rather than 0.837 / 0.389. Both are now reported, and the Frangieh
+  counterexample (mean-cosine 0.600 **beats** energy 0.578 on the only natural real dataset)
+  is stated in the README, the manuscript, and the Fig 3 caption.
+- **"energy CV at n=120 is 6.3%"** cited the wrong file. The probe reports **3.8%**; 6.3% is
+  the CV of a different quantity (the same-drug self-distance) in a different CSV.
+- **"83% of it is explained by response magnitude alone (rho = -0.83)"**: a Spearman rho is
+  not a fraction of variance explained, and no such decomposition exists in the repository.
+  The defensible statement is that a magnitude-only scalar scores +0.756 where energy scores
+  +0.520, and the control-subtracted distributional signal is +0.088.
+- **HIR-Bench "13,440 cells"** are benchmark **instances** (672 configurations × 20 seeds),
+  not biological cells. Renamed throughout; in a single-cell paper the old wording misleads.
+- **DART's expansion** in README.md and CITATION.cff was still the pre-repositioning
+  "Distribution-Aware Retrieval for Therapeutic Ranking". Both now match the approved
+  "Distributional Auditing of Retrieval Transfer".
+- **"35/35 reproduce end-to-end"** is a **consistency re-check** of cached CSVs against
+  hard-coded constants; `recompute_all.py` runs no experiment. Relabelled.
+
+---
+
+## Reproducibility repairs
+
+- `figures/figstyle.py` now defines `apply_style(sizes=...)`, the entry point every
+  `figN_assemble.py` calls. It previously existed only in an external authoring tool, so
+  **none of the six main composites could be rebuilt from a checkout**.
+- `figures/edfigs/ed_panels.py` was dead code: thirteen draw functions referencing fifteen
+  module-level names that were never assigned, with no loader, no assemble step, no savefig
+  and no `__main__`. **All four Extended Data figures now rebuild from committed code.**
+- Figure panels that read a top-level `upgrade/` directory now read `results/upgrade/`, which
+  is where the analysis scripts actually write. The duplicate directory is gone.
+- `exp11_hir_benchmark.py --skip-method-perf` makes the FULL-grid predictability layer
+  runnable in-tree. It previously required an out-of-tree "lean runner", which is why the
+  artifact committed under `results/` was a 144-instance QUICK run reporting AUC 0.5 while
+  the manuscript quoted 0.640.
+
+## Housekeeping: the duplicate top-level `upgrade/` directory is gone
+
+The repository used to carry a hand-curated top-level `upgrade/` alongside `results/upgrade/`,
+which is where every script in `analysis/` actually writes. The two were out of sync, and the
+duplication was a standing provenance hazard: some figure panels read one copy, the analysis
+scripts wrote the other.
+
+The top-level copy has been removed. `results/upgrade/` is now the single location, it holds
+the full set of audit artifacts, and **every figure panel reads it**. Two files were not
+carried over because they are superseded rather than lost: `conditional_advantage_per_query.csv`
+and `conditional_advantage_summary.csv`. Figure 5g now reads
+`results/exp17_true_divergence_subset/divergence_stratified.csv`, which is the same quantity
+computed on the corrected, sentinel-masked data and is the source the verdict document quotes.
+
+## Known remaining gap
+
+The repository is **not under version control**. Until `git init` and a tagged commit, no
+result in `results/` has provenance, the corrections above cannot be diffed against what they
+replaced, and an accidental deletion like the one recorded above is unrecoverable rather than
+a `git checkout` away. This is the single highest-value remaining fix.
+
+---
+
+## R13. RETRACTED: "0 of 37 real-data tasks are distributionally dominant"
+
+**This one took three attempts to get right, and the two failed attempts are instructive
+enough to record.**
+
+**Was:** "No real-data task is distributionally dominant (**0 of 37**)." A headline negative
+claim, in the abstract, the introduction, Result 3, the Methods, the Fig 4 caption, the
+negative-claims box, and the whole of panel Fig 4g.
+
+**Problem 1: 37 is the QUICK sanity task count.** Calling exp13's task builders directly:
+
+| configuration | tasks | what it is |
+|---|---:|---|
+| QUICK | **37** | 1 cell line, 4 drugs, 1 cross-line pair, 2 seeds. A **sanity run**. |
+| FULL | **239** | 3 cell lines, 10 drugs, 3 cross-line pairs, 3 seeds. |
+
+The 37 in the paper and the 37 that QUICK builds are the same number. A sanity run had been
+shipped in `results/` and quoted as the real-data result, and nothing on disk said so. This
+is the third instance of that failure mode in this repository (see R11 for HIR-Bench, and
+`results/exp11_hir_benchmark/PROVENANCE.md`). And the mechanism is worse than a mislabel:
+QUICK never samples the A549→MCF7 cross-line pair at all, which is precisely where the only
+robust effect lives. **"0 of 37" was not a measurement. It was a consequence of not looking.**
+
+**Problem 2 (our first correction was also wrong).** We first replaced it with "11 of 215
+observed-condition tasks (5.1%) are distributionally dominant". That is wrong twice over. The
+like-for-like denominator is **239**, not 215: swapping to the observed-only subset quietly
+improves the rate. And, more seriously, it reports a **count of threshold crossings as a
+finding**, which is the same error the paper exists to criticize, merely in the opposite
+direction.
+
+**Why a dominance count cannot be reported on this data.**
+
+- The **threshold is not calibrated**. The 0.01 margin sits at **0.77 standard deviations**
+  of the nonzero-difference distribution (sd = 0.0130), i.e. **inside its noise band**. It is
+  also **one-sided**: on the FULL run 11 tasks clear it for DART and **2 clear it for the
+  mean**, and only the first number would ever be reported.
+- **The seed is not a replicate.** In exp13 it re-draws which drugs are held out
+  (`rng.choice(common, n_drugs)`, exp13:234) and it **redefines the minority subpopulation**
+  by re-clustering (`_query_states(qX, k=2, seed=seed)`, exp13:242). A task recorded as
+  dominant at one seed carries no information about robustness.
+- **The count is a count of noise excursions.** Holding the drug fixed and resampling the
+  seed 10 times (harness validated first: it reproduces 30 of 30 recorded deltas to 0.00e+00):
+
+| cross-line task recorded as dominant | recorded | mean ± sd over 10 seeds | dominant in |
+|---|---:|---:|:---:|
+| **A549→MCF7 Abexinostat** | +0.0867 | **+0.0896 ± 0.0130** | **10/10** |
+| **A549→MCF7 Belinostat** | +0.0583 | **+0.0812 ± 0.0266** | **10/10** |
+| K562→A549 Sirtinol | +0.0327 | +0.0124 ± 0.0139 | 5/10 |
+| K562→A549 Costunolide | +0.0304 | +0.0111 ± 0.0110 | 5/10 |
+| K562→A549 UNC0379 | +0.0260 | +0.0116 ± 0.0133 | 4/10 |
+| K562→A549 SRT2104 | +0.0154 | +0.0094 ± 0.0130 | 3/10 |
+| K562→A549 AG-490 | +0.0239 | +0.0077 ± 0.0105 | 3/10 |
+| K562→A549 Alvespimycin | +0.0260 | +0.0088 ± 0.0115 | 3/10 |
+| K562→A549 Droxinostat | +0.0344 | +0.0068 ± 0.0130 | 2/10 |
+| K562→A549 IOX2 | +0.0339 | +0.0064 ± 0.0109 | 2/10 |
+
+  And the control that settles it: drugs that are dominant at **no** recorded seed clear the
+  same threshold in **1 to 4 of 10** resamples (median 3; Amisulpride 4/10, WP1066 4/10,
+  GSK J1 3/10, Disulfiram 2/10, Abexinostat K562->MCF7 1/10). The threshold is inside the noise.
+
+  **The control set itself had to be corrected.** It was originally selected by `task_id`,
+  which carries a `:sN` seed suffix, so a drug that crossed the threshold at one seed and
+  missed at another could land in **both** the dominant group and the control group. Sirtinol
+  did exactly that. A control must be a drug that is above threshold at no seed, so the
+  selection now deduplicates to `(pair, drug)` and subtracts the dominant set. This changed the
+  reported control range from "2 to 4 of 10" to **1 to 4 of 10**. Comparing a dominant set
+  against a control set that partly contains it is not a control.
+
+**Is (what we now report): the distribution, not a count.** Across all 239 real-data tasks
+the DART-minus-mean minority-state coverage is **statistically real and practically
+negligible**:
+
+| | |
+|---|---:|
+| mean over 239 tasks | **+0.0018** |
+| exactly zero (both families pick the same drug) | 102 / 239 |
+| nonzero (n=137): mean, sd | +0.0032, 0.0130 |
+| Wilcoxon, one-sided (H1: DART > mean) | **p = 1.3e-07** |
+| metric operating range | [0.60, 1.00] |
+
+And it is **confined to the mixtures we constructed**:
+
+| regime | n | mean coverage gain |
+|---|---:|---:|
+| **SciPlex3 cross-line (constructed)** | 90 | **+0.0043** |
+| SciPlex3 within-line | 90 | +0.0004 |
+| Frangieh (natural) | 23 | +0.0004 |
+| CD34+ (natural) | 12 | +0.0003 |
+| predicted candidates | 24 | +0.00003 |
+
+**This converges with exp17.** The divergence audit independently reports a coverage gain
+that is "statistically real but negligible", median **+0.0018**. exp13's distribution mean is
+**+0.0018**. Two experiments sharing no code path land on the same number, and the retracted
+"0 of 37" had been hiding it.
+
+**What survives resampling: exactly two tasks, and they are a hypothesis.**
+A549→MCF7 **Abexinostat** (+0.090 ± 0.013, 10/10 seeds) and **Belinostat** (+0.081 ± 0.027,
+10/10), both **HDAC inhibitors**, both ~7 sd above the noise band. With n=2, one cell-line
+pair and one drug class, this is suggestive and nothing more. A pre-registered test of HDAC
+inhibitors against the rest of the panel would be needed before claiming mechanism
+specificity. We record it because it is the only place in the study where distributional
+retrieval buys something on real data that survives being checked.
+
+**Side effect on R7.** With a non-constant label the acceptance test is no longer vacuous, it
+is simply **failed**: majority-class baseline 95.4%, projection accuracy 61.1%, i.e. 34
+points worse than a constant predictor. The HIR-Bench boundary does not transfer, and that
+holds whatever one makes of the threshold.
+
+**The thesis is untouched.** The natural datasets stay at zero, the predicted-candidate
+conditions stay at zero, the projection still fails, and the real-data advantage is still
+negligible. What changed is that an absolute ("zero") became a distribution, and the
+distribution is both more honest and more informative.
+
+---
+
+## R15. The Class-C oracle was semantically mismatched to the retrieval task
+
+**Severity: fatal to the conclusion drawn, not to the data.**
+
+R14 fixed a sign error and established that energy retrieval correlates at rho = -0.520 with
+**absolute GDSC potency**, and that a query-independent magnitude scalar reaches +0.692. We wrote
+that up as "retrieval fidelity and therapeutic utility point in opposite directions".
+
+**That conclusion does not follow, and the fault is in the oracle, not the method.** A similarity
+retriever is asked which candidate *resembles* the query. Absolute potency asks which candidate
+kills hardest. Handed a weak query, a correctly working retriever *should* return other weak
+drugs, and this scoring counts that as failure. Worse, the comparison is not neutral: potency is
+largely driven by response magnitude, and a scalar that sorts by magnitude is therefore
+near-guaranteed to win. Both the negative correlation and the scalar's "103/103 sweep" were
+close to preordained by the choice of oracle.
+
+**The corrected oracle** (`analysis/class_c/class_c_functional_oracle.py`) is drug-drug
+**functional similarity**: the rank correlation between two compounds' GDSC2 dose-response AUC
+profiles across the 966 cell lines that remain once the three SciPlex3 lines are excluded, so it
+is measured out of context. It is query-dependent (a query-independent scalar cannot game it) and
+mean-centered per compound (a drug's overall potency *level* cannot drive it).
+
+Cell lines differ enormously in general drug sensitivity, which inflates every drug-drug
+correlation: uncorrected, 85% of drug pairs look positively similar (median +0.178). Each cell
+line's mean AUC, estimated over all 286 GDSC2 compounds, is therefore subtracted first; the
+corrected oracle is symmetric about zero (52% positive, median +0.015). **This correction was
+specified on that reasoning before the retrieval results were inspected**, and both oracles are
+reported: they change every scorer's absolute value but not the ordering that carries the
+conclusion.
+
+| ranking (103 queries) | median rho | performs retrieval? |
+|---|---|---|
+| potency match (needs the query's own AUC; diagnostic only) | **+0.399** | no |
+| inverse-magnitude fixed ordering (query-independent) | +0.330 | no |
+| **energy (distributional)** | **+0.276** | yes |
+| mean cosine, no control subtraction | +0.241 | yes |
+| **response-magnitude match (query-dependent scalar)** | **+0.232** | no |
+| mean cosine, control-subtracted (correct incumbent) | **+0.083** | yes |
+
+energy partialled on magnitude-match: **+0.097**. energy beats magnitude-match on **62/103**
+queries (Wilcoxon p = 0.073, itself anticonservative).
+
+**The result is layered, and it is stronger than either the buggy +0.52 or the corrected -0.52.**
+Distributional retrieval *does* beat the correctly specified mean incumbent on an independent,
+out-of-context functional oracle, by a factor of three. But almost all of that margin is a
+**response-magnitude channel** that a scalar reproduces without comparing any distributions, and
+the residual attributable to the distribution is about +0.10. Objective fidelity does not make the
+gain imaginary; it makes it look an order of magnitude larger than it is.
+
+The absolute-potency analysis is retained as a **confounder audit** (Extended Data Fig. 5). It
+establishes the mechanism that makes the magnitude control mandatory: the energy *distance* tracks
+the candidate's own magnitude at rho = +0.791.
+
+---
+
+## R16. Gate 2 was supported only by centroid clustering, with no upper bound
+
+**Severity: the claim was unsupported; the corrected evidence happens to support it more strongly.**
+
+The manuscript claimed "no unsupervised method recovers known bimodal structure" and that "real
+subpopulations cannot reliably be told apart". The evidence was k-means and Gaussian mixtures
+only. Two gaps made that claim unsupportable:
+
+1. **No graph- or density-based method.** Leiden and HDBSCAN are the field's actual defaults and
+   were never run. "Centroid clustering failed" is not "the structure is not there".
+2. **No supervised upper bound.** Without one, clustering failure cannot distinguish
+   (a) *the information is absent from the representation* from
+   (b) *the information is present and unsupervised methods cannot reach it*.
+   These have opposite implications, and asserting (a) from clustering failure alone is the same
+   species of error this paper criticizes in others.
+
+`analysis/identifiability/gate2_supervised_upper_bound.py` measures both. Every method is scored
+in one unit, best-permutation accuracy, with the label matching given to each clusterer for free.
+
+| method | accuracy (real separation) |
+|---|---|
+| k-means (true k given) | 0.632 |
+| Gaussian mixture (true k given) | 0.661 |
+| **Leiden (graph)** | **0.674** |
+| HDBSCAN (density) | 0.500 (finds no density structure at all) |
+| supervised logistic | 0.685 |
+| supervised random forest | 0.669 |
+| supervised kNN | 0.605 |
+| **supervised ceiling (best of 3)** | **0.692** (AUC 0.752) |
+
+**Gap between the ceiling and the best unsupervised method: +0.018.** Unsupervised clustering is
+already extracting essentially everything the representation contains. A nonlinear learner does
+not beat a linear one, so the boundary is not a hidden nonlinear one our probe was too weak to
+find. **Gate 2 stands, but as an INFORMATION limit, not an algorithmic one**, which is a stronger
+and more useful statement than the one we could previously support.
+
+Two design points, both of which flip the answer if got wrong:
+- **The unsupervised methods get the easier (transductive) PCA; the supervised probe re-fits PCA
+  inside each training fold.** The comparison is deliberately biased *against* the conclusion drawn.
+- **ARI and AUC are not comparable.** Reporting "probe AUC 0.75 vs GMM ARI 0.10" would have made
+  the gap look enormous and produced the *opposite* (wrong) conclusion. The common unit is what
+  makes the result readable. Our first run of this experiment made exactly that error.
+
+**Positive control:** raise the separation artificially and the probe *does* pull away from
+clustering (ceiling 0.828 vs 0.714 at 1.5x; 0.924 vs 0.762 at 2x). Its failure to pull away on
+real data is therefore a measurement, not an insensitive probe.
+
+**Consequence for the framework.** Gate 2 cannot be read as "a distributional score must cluster":
+energy, MMD and sliced-Wasserstein are cluster-free and never form a partition. What it implies is
+subtler and closes the loop with R15: if the subpopulation signal sits at an information ceiling
+this low, it cannot be what dominates a distributional distance, so something else must, and we
+have measured what: the candidate's own response magnitude (rho = +0.791). That is why the
+distributional score behaves like a magnitude scalar on the functional oracle.
+
+---
+
+## R17. The "scGen/CPA" predictor is neither scGen nor CPA
+
+**Severity: fatal to a field-level claim; the algebraic claim is untouched.**
+
+`results/exp09_predict_then_rank/provenance.csv` records `scgen,cpa_linear`. The predictor labelled
+"scGen" throughout is `_CPALinearLatent`: a PCA encoder, a per-perturbation additive latent delta,
+and a linear decoder. **It is additive by construction.** The published scGen variational
+autoencoder was never run (scvi-tools is not installed); CPA was never run.
+
+The manuscript nevertheless stated that "current perturbation predictors are additive and
+therefore cannot produce differential response", listing "average-effect, nearest-neighbour, scGen
+and CPA". **We built an additive model, labelled it scGen, and then concluded that the field's
+models are additive.** That is the self-fulfilling structure this paper indicts in others.
+
+**What is withdrawn:** any claim about deployed perturbation predictors as a class.
+
+**What survives, and it is what actually carries the argument:** the *algebra*. A predictor that
+adds a single delta vector to every cell has, by definition, two subpopulations with identical
+responses; their induced cosine is exactly 1 and the exploitable divergence is exactly zero. This
+is a property of a model class, not of any implementation, and no amount of training removes it.
+Additivity is therefore *sufficient* to shut Gate 1. The three predictors we implement all sit at
+or near that ceiling, which demonstrates the algebra rather than surveying the field.
+
+The manuscript now says so explicitly, names the untested falsification (a non-additive,
+cell-state-conditional predictor: optimal transport, flow, Schrodinger bridge, or a perturbation
+foundation model), and states that if such a predictor restored the distributional advantage, the
+two-gate framework would be confirmed, and if it did not, the framework would be wrong.
+
+---
+
+## R18. Gate 2 was not an information limit. It was a limit of our own constructed benchmark.
+
+**Severity: we asserted a property of biology from a property of a benchmark we built. Retracted.**
+
+R16 concluded, from the HDAC-versus-JAK mixture in SciPlex3, that Gate 2 is an *information*
+limit: the supervised ceiling was 0.692 accuracy and the best unsupervised method reached 0.674,
+so clustering was already extracting essentially everything present, and we wrote that real
+subpopulations sit at an information ceiling no method can exceed.
+
+**That mixture is not biology. We constructed it.** Testing the same protocol on ZhaoSims2021,
+acute-slice culture and biopsy from 10 glioblastoma patients, where malignant glioma cells,
+tumour-associated myeloid cells and oligodendrocytes co-exist inside a single patient's tumour
+and nobody mixed anything:
+
+| | constructed mixture (HDAC vs JAK) | **natural tumour (malignant vs myeloid)** |
+|---|---|---|
+| supervised ceiling | 0.692 | **0.964** |
+| best unsupervised (Leiden) | 0.674 | **0.949** |
+| ceiling minus unsupervised | +0.018 | +0.015 |
+
+**In a real patient tumour the subpopulation structure is highly separable and off-the-shelf
+clustering finds it.** The "information limit" was a property of the benchmark, not of biology.
+The reviewer who predicted exactly this was right, and the claim is withdrawn.
+
+What survives, and is now stated with the correct scope: the *gap* between the supervised ceiling
+and unsupervised clustering is small in BOTH regimes (+0.018 and +0.015). The unsupervised
+assignment step is not the bottleneck anywhere. What differs enormously between the constructed
+and the natural setting is how much structure there is to assign.
+
+## R19. The constructed benchmark also OVERSTATED differential response, by an order of magnitude
+
+The same comparison cuts the other way on Gate 1, and we did not see this coming either.
+
+| | induced response cosine, cos(d_maj, d_min) |
+|---|---|
+| constructed SciPlex3 mixtures (A549+K562 etc.) | **0.014 to 0.044** (near-orthogonal) |
+| natural tumour (malignant vs myeloid, 17 patient-drug pairs) | **median 0.566** (range 0.08 to 0.76) |
+
+Mixing two unrelated cell lines makes one drug push them in nearly orthogonal directions. Inside
+one patient's tumour, malignant cells and tumour-associated macrophages share most of their
+response direction. **Our constructed benchmark therefore inflated the divergence a distributional
+score has to exploit by roughly an order of magnitude**, at the same time as it deflated the
+identifiability. Both distortions flatter the premise of the paper, and both are now reported.
+
+## R20. The two-gate criterion is necessary but NOT sufficient, and the motivating premise is only weakly supported
+
+Both gates are OPEN on natural tumour data: the compartments are identifiable (0.964) and they do
+respond in different directions (cos 0.566 < 1). The two-gate account therefore predicts that
+distributional information should be usable there. **It is barely usable.**
+
+The paper's motivating scenario, Fig. 1a, is that two drugs can share a mean signature and do
+opposite things to a subpopulation. Tested for the first time on a real tumour (18 within-patient
+drug pairs), mean-signature similarity predicts malignant-compartment response similarity at
+
+    Spearman rho = +0.878   (p = 1.6e-6)
+
+**The mean is largely, though not entirely, sufficient in real tumour tissue.** Of the 5 drug
+pairs most similar on the mean, 2 have a malignant-compartment response meaningfully less similar
+than their mean suggests. The residual is real and it is small.
+
+An earlier version of the analysis script declared "PREMISE HOLDS" on a threshold of rho < 0.9,
+which the observed 0.878 cleared by 0.02. **That threshold was ours, it was applied after seeing
+the number, and clearing it by 0.02 licenses nothing.** Moving a threshold after seeing the result
+is precisely the analytic freedom this paper exists to criticize. The pass/fail verdict has been
+deleted from the script; the correlation is reported and interpreted in the text.
+
+**Consequence for the framework.** Opening both gates does not deliver a distributional advantage,
+because even when subpopulations are identifiable and do respond differently, that differential
+response is largely collinear with the mean. The two gates are necessary conditions, not
+sufficient ones, and the paper now says so.
+
+**This converges with the Class-C result (R15) rather than contradicting it.** There, energy
+retrieval beat the mean incumbent on an independent functional oracle (+0.276 vs +0.083) but a
+scalar magnitude control reproduced nearly the whole margin, leaving a distributional residual of
++0.097. Here, in real tissue, the mean explains rho = 0.88 of the compartment-specific structure.
+Both say the same thing: **the distributional signal is real, positive, and about an order of
+magnitude smaller than objective-aligned evaluation makes it look.**
+
+---
+
+## R21. The natural Gate-2 test measured the wrong partition, so the withdrawal in R18 was made on bad evidence (and the claim is still withdrawn, for a different reason)
+
+**What was wrong.** `analysis/natural/zhao_two_gates.py::gate2_natural` separated **malignant from
+myeloid CONTROL cells** (`control=True`). That is a **cell-type** identification task: a glioma cell
+against a macrophage, two lineages differing in thousands of genes. The constructed benchmark
+separates **HDAC-treated from JAK-treated K562 cells**: a **drug-response** task, one lineage, cells
+differing only in which drug they saw. The script's own docstring claimed "Identical protocol ...
+directly comparable to the 0.692 ceiling". It is not. Gate 2 is *defined* on the partition a
+retrieval score must resolve inside a candidate population, which is a drug-response partition.
+Separating two lineages says nothing about it. **The 0.964 is withdrawn.**
+
+**What the correct experiment says** (`analysis/natural/gate2_drug_response.py`, one drug against
+one drug in both settings, matched representation, median paired gap):
+
+| arm | best unsupervised | supervised ceiling | gap |
+|---|---|---|---|
+| constructed, drug CLASS pooled (what the paper reported) | 0.687 | 0.700 | +0.013 |
+| constructed, one drug vs one drug (like-for-like) | 0.837 | 0.879 | +0.007 |
+| **natural tumour, one drug vs one drug (within compartment)** | **0.777** | **0.923** | **+0.117** |
+
+Two corrections, and the second reverses us again:
+
+1. **The 0.692 "information limit" was substantially an artefact of POOLING drugs within a class.**
+   Split the same K562 cells one drug against one drug and the ceiling is 0.879. What we read as an
+   information limit was the within-class heterogeneity of several compounds we had merged.
+2. **In real tissue the information IS present and unsupervised clustering CANNOT reach it.**
+   Ceiling 0.923, best unsupervised 0.777, gap +0.117 against +0.007 constructed. Centroid methods
+   collapse (k-means 0.638) where the graph method partly survives (Leiden 0.780): the signature of
+   a dominant variance direction that is not the drug-response axis.
+
+**So Gate 2 in real tissue is an ALGORITHMIC bottleneck, not an informational one.** This
+contradicts the original claim (R18's target) *and* the reading that replaced it ("real
+subpopulations are simply easy to resolve"). It is the one constructive finding in the study: the
+partition is there, off-the-shelf clustering misses it, and a better method could close the gap.
+
+**Bounds.** 30 of the 36 splits come from one patient (PW030); 39.9% of cells are dropped by the
+compartment-assignment margin, and the discarded cells are by construction the hardest to place, so
+both numbers are optimistic; the drug panels differ between arms.
+
+## R22. The Gate-2 bias direction was stated backwards, in the code, the Methods and the figure
+
+We wrote that giving the clusterers the easier transductive PCA while re-fitting the probe's PCA
+in-fold "biases the comparison AGAINST the conclusion we draw". **It biases it FOR.** The conclusion
+is that the *gap* is small; inflating the unsupervised arm and deflating the supervised arm makes
+the gap *smaller*. The +0.018 was therefore an underestimate presented as a conservative bound. The
+ceiling is now also reported under the **matched** representation (the same transductive PCA the
+clusterers get, which leaks no labels because PCA never sees them), and that is the number used.
+
+## R23. "Both oracles give the same verdict" was false: the Class-C result depends on the centering
+
+| ranking rule | corrected oracle | uncorrected oracle |
+|---|---|---|
+| energy (distributional) | **+0.276** | +0.097 |
+| mean cosine, control-subtracted (the incumbent) | +0.083 | **+0.138** |
+| magnitude scalar | +0.232 | **+0.217** |
+
+Under the uncorrected oracle energy does not merely lose to the scalar; **it loses to the mean
+incumbent**, reversing the single affirmative Class-C finding. The paper claimed the two oracles
+"give the same verdict" and quoted only energy and the scalar at the point of use, omitting the
+incumbent, which is the comparison the headline rests on. Full table now in Supplementary Table 4.
+The centering is defensible and was specified in advance, but the affirmative result is conditional
+on it. **Only the negative survives both constructions:** under neither oracle does the
+distributional score significantly beat a scalar that compares no distributions.
+
+## R24. The premise result is close to a single-patient measurement
+
+rho = +0.878 over "18 within-patient drug pairs" has **15 of those 18 pairs from one patient**
+(PW030, the only one given more than two compounds), reusing the same six drugs; the other three
+patients contribute one pair each. `p = 1.6e-6` treated them as 18 independent observations. **This
+is the pseudo-replication the paper devotes a section to criticising.** The p-value is deleted from
+the text and from the figure; the correlation is reported with its dependency structure stated.
+
+## R25. "An order of magnitude" was not supported by any pair of comparable numbers
+
+The divergence overstatement was computed as a **ratio of cosines** (0.566 / 0.014 = 40x), which is
+meaningless when one cosine is near zero. On any sensible divergence scale it is 1.2x to 2.3x
+(1-cos: 0.99 vs 0.43 = 2.3x; angle: 89.2 deg vs 55.5 deg = 1.6x). Separately, the Class-A gain (a
+Hit@1 or regret improvement) and the Class-C residual (a Spearman rho) are different quantities on
+different scales and were being divided by one another. Both claims are restated with the actual
+ratio and its units, or dropped.
+
+## R26. The oracle's SHAPE picks the winner (new result, not a correction)
+
+Same 218,331 cells, same 20 surface proteins, same two RNA rankings. The protein oracle is built
+twice, changing **only** its statistical form:
+
+| RNA ranking | oracle = MEAN protein | oracle = protein DISTRIBUTION |
+|---|---|---|
+| energy (distributional) | +0.146 | **+0.529** |
+| mean cosine (incumbent) | **+0.242** | +0.334 |
+| magnitude scalar (control) | +0.125 | +0.352 |
+
+**The winner swaps, independently in each of the three immune conditions.** No scorer sees protein
+data, so this is not Class-A circularity (a method grading its own objective). It is objective
+alignment operating **between two external, independent, blind criteria**: the judge's own
+statistical form selects the victor. This explains why the GDSC oracle favoured energy and the
+protein oracle favoured the mean; they were not in conflict, they were differently shaped.
+
+**The magnitude control survives it.** Both distributional objects are energy distances, and an
+energy distance tracks response magnitude (rho = +0.791), so a magnitude-to-magnitude channel could
+have produced the swap with no distribution compared. It does not, quite: the scalar climbs from
++0.125 to +0.352 as the oracle turns distributional (the confound behaving exactly as predicted),
+but energy still leads it by +0.177 there against +0.022 under the mean-shaped oracle. A genuine
+distributional signal exists in these cells, and **it is visible only to a criterion that is itself
+distributional.**
+
+## R27. Data provenance: what we could verify and what we could not
+
+**Verified.** scPerturb Zenodo record 13350497 (DOI 10.5281/zenodo.13350497, release 1.4) is real
+and contains all four h5ad files we use; `ZhaoSims2021.h5ad` on disk is 586,888,140 bytes, matching
+the Zenodo listing exactly. SciPlex3 was obtained through **scPerturb, not GEO**: the manuscript's
+`\TODO{GSE accession}` was asking us to fill in a path the code never took. The underlying primary
+accession GSE139944 (Srivatsan/Trapnell, sci-Plex) is confirmed and is now cited as the primary
+source, with the scPerturb file named as the artefact actually analysed.
+
+**Not verified, and stated as such in Data Availability.** The GDSC2 workbook was saved without its
+release suffix and has not been retained on either machine, so **we cannot certify which GDSC
+release the Class-C numbers were computed from, and we do not assert one.** The derived join table
+(`results/upgrade/drug_match_table.csv`, with DRUG_ID / cell line / AUC) is released, which is
+enough to identify the release by comparison against any candidate download; the loader now raises
+with instructions to do exactly that. Re-deriving the Class-C result from a named, current GDSC2
+release is a correction owed before publication.
+
+## R28. The Gate-1 measurement was cross-context, so it never tested the additivity theorem
+
+**What the theorem says.** A predictor that adds a single delta vector to every cell **of the query
+context** gives its two subpopulations identical response deltas, so `cos(d_0, d_1) = 1` exactly.
+
+**What we measured.** `analysis/predictors/exp_nonadditive_gate1.py` measured that cosine on an
+**alpha-blended candidate population whose two subpopulations are two different cell lines**
+(A549 + K562). An additive predictor emits a **different delta per context**, so the quantity
+measured was `cos(delta_A549, delta_K562)`: the similarity of two contexts' deltas. It has no reason
+to equal 1 and **is not a test of additivity at all.**
+
+**How it was caught.** The script asserts that its additive-by-construction controls must return
+1.000, because the algebra fixes that value. They returned **0.267 and 0.353**, and the script
+printed *"SELF-CHECK FAILED: the measurement is wrong, not the model"* and refused to report. The
+guard did its job. **This is the practice worth generalising: when theory pins a control to an exact
+value, assert it, do not merely print it.**
+
+**Consequence for the manuscript.** The published explanation of the measured 0.19-0.37 values, that
+they fall short of 1 because a scorer must estimate the partition and does so imperfectly (Gate-2
+assignment error), **is wrong**. The real cause is the cross-context structure. That paragraph is
+rewritten.
+
+**The corrected experiment** (`analysis/predictors/gate1_within_context.py`): both subpopulations are
+drawn from **one** cell line's own control cells (PCA + k-means on cell state), and the predictor is
+run **separately on each subpopulation's control cells**, so the partition is true by construction
+and no assignment step enters. Population synthesis draws a permutation, which preserves a mean
+exactly, so an additive predictor gives `d_0 = d_1 = delta` and `cos = 1.000` to floating point. The
+self-check is now exact and is asserted.
+
+**Still outstanding.** In the last full run CPA did not fit and the OT map was scored VOID by the
+`learned_check` (cos(predicted mean delta, true mean delta) = 0.183). **No Gate-1 number from that
+run is reportable**, and the question the framework names as its own falsification test, whether a
+genuinely non-additive predictor opens Gate 1, remains open.
+
+## R29. Two sample sizes were reported in the wrong unit, one of them inflating n by 43x
+
+- **"54,180 real queries"** (metric-correlation matrix, ED Fig. 1c). The retrieval experiments run
+  **1,260 queries**, each against a 43-candidate library: 1,260 x 43 = 54,180. The unit is the
+  **query-candidate scored pair**, not the query. Calling them queries overstates the independent
+  sample size by a factor of 43.
+- **"529 real drugs"** (silhouette analysis). The study's SciPlex3 panel is **188 drugs**. 529 is the
+  number of **(cell line, drug) pairs** with enough cells to cluster. The unit is the pair.
+
+Both are now stated in their correct unit. Neither changes a conclusion, but a reader recomputing a
+confidence interval from either number would have been badly misled.
+
+## R30. An additive latent model induces zero TRUE divergence and large APPARENT divergence, and the difference is its reconstruction error
+
+**Setup.** With the Gate-1 construct fixed to be within-context (R28), the calibration check finally
+runs. `average_effect`, which adds a delta in gene space, returns **cos = 1.000000000 exactly**, so
+the instrument is now provably correct. `linear_latent` does **not**: it returns 0.61, -0.03, -0.13.
+
+**The paper claims linear_latent is "additive by construction". Under one baseline that is true and
+under the other it is false, and both baselines are defensible.** A latent model does not add a
+delta to a cell. It *reconstructs* the cell and adds a delta to the reconstruction:
+
+    predicted(C) = P(C) + W.dz          P = the autoencoder's reconstruction
+
+so the response of subpopulation k depends on what it is referred to:
+
+| baseline | d_k | cos(d_0, d_1) |
+|---|---|---|
+| the model's OWN decoded control, P(C_k) | `W.dz` | **1.000000, EXACT (all 9 tested)** |
+| the REAL control cells, C_k | `[mean(P(C_k)) - mean(C_k)] + W.dz` | 0.61, -0.03, -0.13, ... |
+
+The bracket is the **PCA reconstruction bias of subpopulation k**. It is cell-state dependent, so it
+differs between subpopulations and does not cancel. The two subpopulations' reconstruction biases
+are themselves near-orthogonal (cos = -0.05 to -0.18 by context), and they swamp `W.dz`.
+
+**Consequences.**
+
+1. **The theorem is intact.** An additive latent model induces *exactly zero* true response
+   divergence. Verified to floating point.
+2. **But a retrieval scorer forms its response against real control cells**, so it sees the second
+   row, and measures substantial apparent divergence. **None of that divergence is drug response.**
+   It is the generator's reconstruction error. A distributional score run on such a candidate
+   population is confidently scoring an autoencoder's artefacts.
+3. **This condemns a class of diagnostics, including ours.** Any structure-preservation or
+   divergence measurement evaluated on a latent generative model's output *against real controls*
+   is at risk of measuring the autoencoder rather than the perturbation. The
+   subpopulation-variance-ratio and induced-cosine diagnostics reported in this paper are computed
+   that way and inherit the risk.
+4. **The docstring in `src/baselines/scgen_predictor.py` asserting that this model "induces no
+   response divergence between subpopulations" was false as written** (it is true only against the
+   model's own baseline) and has been corrected in place.
+
+`analysis/predictors/gate1_within_context.py` now reports **both** baselines side by side, declares
+per predictor which kind it has (`BASELINE_KIND`: a reconstructing model has its own baseline, a
+non-reconstructing one such as `average_effect` or the OT map does not), and asserts the 1.000000
+value on the correct column.
+
+**This is the paper's own thesis reached a third way: what you measure against decides what you
+find.** First the metric class (Class A vs B vs C), then the oracle's shape (mean vs distribution),
+now the baseline (real controls vs the model's own reconstruction).
+
+## R31. The +0.117 gap now has an uncertainty estimate, and it survives three attacks
+
+The claim that Gate 2 in real tissue is an *algorithmic* bottleneck (R21) rests entirely on the gap
+between the supervised ceiling (0.923) and the best unsupervised method (0.777). It was reported as
+a bare median with **no uncertainty of any kind**, and it had entered the abstract, the introduction,
+Fig. 6d and the discussion in that state. Three things were wrong with it and all three were tested
+(`analysis/natural/gate2_uncertainty.py`).
+
+**1. The winner's curse.** The gap is `max(3 supervised probes) - max(4 unsupervised clusterers)`.
+Both terms are maxima, both are upward-biased, and the biases do not cancel. Recomputing every
+**fixed (probe, clusterer) pair**, with no selection anywhere:
+
+|  | reported (both maximised) | no selection (9 fixed pairs) |
+|---|---|---|
+| natural tumour | +0.117 | **+0.122** |
+| constructed, like-for-like | +0.007 | **-0.002** |
+
+The maximisation moves the natural number by **-0.005**. The conclusion is unchanged. (Pairs
+involving HDBSCAN are excluded from that summary and reported separately: it assigns every cell to
+noise and scores exactly 0.500, so a large "gap" against it means the clusterer did nothing, not
+that the information is unreachable. Including it would have inflated the fixed-pair median to
++0.193 for a trivial reason.)
+
+**2. No confidence interval, and the obvious bootstrap would have been wrong.** 30 of the 36 natural
+splits come from one patient (PW030) and reuse the same six drugs. **A split-level bootstrap would
+treat them as 36 independent observations and return an interval several times too narrow** -- the
+same pseudo-replication this paper devotes a section to criticising. The bootstrap is therefore a
+**cluster bootstrap over patients**:
+
+- natural gap **+0.117, 95% CI [+0.115, +0.135]**
+- constructed gap +0.007, 95% CI [-0.008, +0.065]
+- natural minus constructed **+0.109, 95% CI [+0.052, +0.129]**, 0 of 5,000 draws at or below zero
+
+**Caveat stated in the paper:** a cluster bootstrap with only **four** clusters is known to
+under-cover. The interval is reported as a floor on the uncertainty, not a faithful estimate.
+
+**3. Drop the dominant patient.** Removing PW030 leaves 6 splits in 3 patients, and the gap there is
+**+0.123 [+0.098, +0.138]**, and the fixed-pair gap +0.200. Slightly **larger**, not smaller.
+
+**Verdict: the claim holds, and the reported number is conservative on every axis tested.** This is
+the first time in this project that a robustness check has confirmed rather than overturned one of
+our own numbers, and it is worth recording that it was run with the same intent as the ones that
+overturned things.
+
+## R32. The within-context Gate 1 finally runs. One deployed model is measured; the falsification test is NOT
+
+The corrected within-context measurement (R28) passes its calibration check: **both additive
+predictors return cos = 1.000000 exactly against their own baseline**, as the algebra requires. The
+instrument is sound, so its numbers mean what they say.
+
+Every predictor is first required to pass a **learning check**: cos(predicted mean delta, TRUE mean
+delta). A model that has not learned the drug effect cannot be said to open or shut any gate, and
+its "divergence" is noise structure. This is enforced, not assumed.
+
+| predictor | learning check | TRUE induced divergence (vs its own baseline) | fraction of real divergence reproduced |
+|---|---|---|---|
+| **REAL treated cells** | -- | **+0.205** | (the target) |
+| average_effect (gene-space additive) | 0.502 PASS | **1.000000** | 0% |
+| linear_latent (additive latent) | 0.343 PASS | **1.000000** | 0% |
+| **scgen_real (PUBLISHED scGen VAE)** | 0.420 PASS | **0.972** | **~3%** |
+| ot_map (entropic OT, non-additive) | **0.057 VOID** | (0.767) | **NOT REPORTABLE** |
+| cpa_real (published CPA) | did not converge | -- | -- |
+
+**What this earns.** The paper previously refused to say anything about deployed models. It can now
+say one thing: **the published scGen VAE is near-additive in practice** (0.972 against the additive
+ceiling of 1.000, where real cells sit at 0.205). Its nonlinear decoder buys a small departure from
+strict additivity and reproduces roughly 3% of the divergence real subpopulations show. Gate 1 is
+essentially shut for it. That is a fact about scGen, not about the field.
+
+**What it does NOT earn, and this is the important part.** The optimal-transport map, the one
+genuinely non-additive predictor, **failed its learning check**: cos = 0.057 +- 0.119 between its
+predicted and the true mean delta, against **0.502 for a plain average-effect predictor on the
+identical transfer task**. The task is therefore learnable and **our OT implementation is what
+failed**. Its measured divergence of 0.767 is noise structure. **It is discarded, not reported**,
+even though reporting it would have produced the headline "a non-additive predictor opens Gate 1",
+which is exactly the result we wanted.
+
+**Consequence: the central prediction of the two-gate account -- that opening Gate 1 restores a
+distributional advantage -- remains UNTESTED.** The paper names this as the experiment that would
+falsify it, and now also records that we did not manage to run it. Fixing the OT map (or running a
+flow / Schrodinger-bridge predictor) is the highest-value experiment left.
+
+## R33. The OT map is fixed (latent space), and it DOES open Gate 1, a crack. Part B still untested
+
+R32 recorded that the OT map failed its learning check (cos 0.057) and so could not test whether a
+non-additive predictor opens Gate 1. That failure was diagnosed and fixed.
+
+**Two bugs, both the same class the paper is about.** (1) *Curse of dimensionality:* in 2000 gene
+dimensions all pairwise costs are near-equal after normalization, so the Sinkhorn plan is nearly
+uniform and carries no signal. Every deployed neural-OT perturbation model (CellOT and kin) runs OT
+in a latent space for exactly this reason; we use a PCA-30 latent. (2) *Cross-context confound* (the
+same error as R28): pooling control and treated cells across non-query contexts in raw space makes
+the transport learn the context shift, not the drug response. Each fit context is now centred on its
+own control mean before pooling.
+
+**The configuration (PCA-30, reg 0.05) was chosen by the LEARNING check, not by the divergence it is
+used to measure.** With the fix, learning check rises 0.057 -> **0.352** (bar 0.30), so the map now
+learns the drug effect and its divergence is interpretable.
+
+| predictor | learned | TRUE induced divergence | interpretation |
+|---|---|---|---|
+| REAL cells | -- | **0.205** | the biological target |
+| additive (average-effect, linear-latent) | pass | **1.000000** | Gate 1 shut, exactly |
+| scgen VAE (published) | 0.42 | 0.972 | Gate 1 essentially shut |
+| **OT map (latent, non-additive)** | **0.352** | **0.903 +- 0.101** | **Gate 1 opens, a crack** |
+
+**Result:** a genuinely non-additive predictor DOES give different subpopulations different responses
+(0.903 is ~5 SE below the additive ceiling of 1.000 over n=30). But it closes only about an eighth of
+the distance from the ceiling (1.000) to real divergence (0.205), and its learning is weak, so part
+even of that crack is prediction noise.
+
+**Still untested: Part B.** Whether opening Gate 1 this far buys any *retrieval* gain is the central
+prediction of the two-gate account, and it requires re-running predict-then-rank with this map. Not
+done. The manuscript now states this as the single highest-value experiment left and names it as the
+falsification test.
+
+## R34 (update). Part B was run. It is inconclusive, for an instructive reason
+
+R33 left Part B (does opening Gate 1 buy retrieval gain?) untested. It has now been run
+(`analysis/predictors/part_b_ot_retrieval.py`, cross-line predict-then-rank, additive baseline vs
+the fixed OT map, n=8 seeds, 720 queries).
+
+**Result: inconclusive, because the OT map is too weak a predictor in this setting.**
+
+| candidate source | Hit@1 mean-cosine | Hit@1 energy | Hit@1 coverage |
+|---|---|---|---|
+| average_effect (additive) | 0.879 | 0.899 | 0.886 |
+| **ot_map (Gate-1-opening)** | **0.053** | **0.007** | **0.008** |
+
+On OT candidates **every retrieval rule collapses to near chance, mean-cosine included** -- not just
+DART. So the DART-minus-mean contrast on OT candidates (all negative) measures nothing about Gate 1;
+it measures that the predictor is unusable. The cross-line task is leave-two-contexts-out, harder
+than the within-context divergence measurement, and the same weak learning that lets the OT map only
+crack Gate 1 open (learning check 0.35) leaves it near chance as a predictor here.
+
+**The honest conclusion: we lack a predictor that BOTH predicts accurately AND opens Gate 1.** The
+additive predictors predict well (Hit@1 ~0.88) but cannot open Gate 1 by construction; the OT map
+opens Gate 1 but predicts near chance. A clean Part-B test needs one predictor with both properties,
+most plausibly a well-trained flow or Schrodinger-bridge model. This is consistent with the paper's
+thesis (the accurate part of a predictor is its mean; the non-additive part is noise) but is a
+**limitation, not a positive falsification**, and the manuscript presents it as such.
+
+**Leakage guard added along the way:** exp09 passed `exclude_context` only to the nearest-neighbour
+predictor, gated on `loco`. The OT map transports toward the query drug's treated cells, so without
+excluding the query's own contexts it transports toward the answer. The guard is now mandatory for
+the OT map and excludes both contexts of a cross-line query.
+
+## R27 (resolved). GDSC release recovered and verified: release 8.5
+
+R27 recorded that we could not certify which GDSC release the Class-C numbers came from. It is now
+recovered. The server reaches the Sanger mirror; downloading GDSC2 release 8.5
+(`GDSC2_fitted_dose_response_27Oct23.xlsx`, 21.3 MB) and checking it against the retained
+`drug_match_table.csv` gives an exact match: JQ1 (DRUG_ID 2172) AUC 0.734237 / 0.892312 / 0.679716
+in A549 / K-562 / MCF7, plus A-366 and ABT-737, all **6/6 at 1e-5**. The full Class-C oracle was
+re-run from this file and reproduces the setup exactly (966 lines after holding out the 3 SciPlex
+lines, 286 drugs, 591 usable pairs, median 909 shared lines, centered oracle median +0.015). The
+Data Availability statement now names release 8.5 instead of admitting the gap, and the loader error
+message names it too.
+
+## R21 (robustness added). The natural Gate-2/Gate-1 numbers survive the assignment thresholds
+
+M21 flagged that 0.923/0.777/0.566 rest on two hand-picked 0.25 constants plus a 39.9% cell drop,
+where the dropped cells are the hardest to classify. Sweep (analysis/natural/zhao_threshold_sensitivity.py),
+floor=margin in {0.10, 0.25, 0.40, 0.50}, all passing validation:
+
+| floor=margin | dropped | Gate2 ceiling | unsup | gap | Gate1 cos |
+|---|---|---|---|---|---|
+| 0.10 | 28.8% | 0.923 | 0.773 | 0.125 | 0.594 |
+| 0.25 (paper) | 39.9% | 0.923 | 0.780 | 0.122 | 0.566 |
+| 0.40 | 51.6% | 0.915 | 0.780 | 0.108 | 0.562 |
+| 0.50 | 58.2% | 0.923 | 0.797 | 0.120 | 0.538 |
+
+Ceiling flat at ~0.92, unsup ~0.78, gap ~0.12, Gate-1 cosine drifts mildly 0.59->0.54. **The
+threshold choice does not drive the result**, and 0.25 is mid-range, not cherry-picked. (The premise
+rho re-derived inline here is ~0.80 and likewise stable across thresholds; the production value 0.878
+uses a slightly different pairing, and stability is what the sweep tests.)
+
+## R27 (further confirmed). Class-C reproduces exactly from the recovered release 8.5
+
+Re-running the functional oracle from GDSC2 release 8.5 gives energy +0.2761, mean-cosine-ctrl
++0.0826, magnitude-match +0.2318, energy-partial +0.0969, energy>magmatch 62/103 (p=7.3e-2), and the
+per-line values, all matching the manuscript to the reported precision. The Class-C result is fully
+reproducible from a named, verified release.
+
+## R32 (update 2). CPA runs but does not learn per-drug effects; both non-additive predictors fail as Part-B instruments
+
+The CPA prediction path is fixed (two bugs: the query AnnData was never registered against the
+trained model's vocabulary, so predict raised `KeyError('perts not found')`; and its zero-effect
+baseline used the `_NULL_DRUG` sentinel, which is absent from CPA's registry -- CPA's real baseline
+is predicting the "control" perturbation). With both fixed, CPA runs, and the honest result is:
+
+| predictor | learning check | reconstruction | true induced divergence | verdict |
+|---|---|---|---|---|
+| ot_map (latent) | 0.352 | -- | 0.900 | opens Gate 1, but too weak to retrieve (Part B) |
+| **cpa_real (published, 60 cells/group, 20 ep)** | **0.076** | R2 0.39 | 1.000 | **VOID** |
+
+CPA trains all 20 epochs and reconstructs cells acceptably (r2_mean 0.39, stable from epoch 5), but
+`acc_pert` stays ~0.007 throughout: with 189 drugs at ~60 cells each, its per-drug perturbation
+embeddings never learn the drug-specific effect. So CPA reconstructs *cells* but not *responses*,
+and its delta learning check is 0.076 (below 0.30) -- VOID, divergence not reportable. The lever is
+cells-per-drug, not epochs, so a 300-cell/group run is under way to see whether more per-drug signal
+lets CPA learn.
+
+**300-cell confirmation.** Raising CPA's per-drug data 5x (60 -> 300 cells/group; fit time scaled
+5.3x, 387s -> 2038s, confirming the data actually grew) leaves the learning check at 0.076,
+UNCHANGED. acc_pert rose only 0.007 -> 0.009 (chance ~0.005). So the failure is not merely data
+volume: with 189 drugs the adversarial objective holds per-drug signal near chance, and more cells
+do not rescue it.
+
+**Net: neither non-additive predictor we could run serves as a clean Part-B instrument.** The OT map
+learns and opens Gate 1 but is too weak to retrieve with; CPA reconstructs cells (r2 0.39) but not
+responses (learning 0.076 at both 60 and 300 cells/group). The clean falsification (a predictor that
+both predicts accurately and opens Gate 1) remains out of reach with the predictors and compute
+available, and the manuscript states this as a limitation. This is the honest endpoint of a genuine
+attempt: two real predictor bugs were fixed (OT latent-space + context-centering; CPA prediction
+registration + baseline), and both predictors were run to a conclusive, well-diagnosed negative.
+
+## R40 (extension). A modern flow-matching model (CellFlow + ECFP4) tried as the Part-B predictor: same wall, now with a mechanism
+
+The Discussion named "a well-trained flow or Schroedinger-bridge model" as the highest-value test
+that would falsify the framework. We trained exactly that: CellFlow (Klein et al. 2025, bioRxiv
+10.1101/2025.04.11.648220; theislab/cellflow), an optimal-transport flow-matching predictor, in the
+SciPlex3 HVG gene space, conditioned on 2048-bit Morgan/ECFP4 fingerprints built from a verified
+drug->SMILES map (188/188 drugs, sourced verbatim from trapnell_drugs_smiles.csv; 5 truncated names
+resolved by mechanism cross-check against the sci-Plex target/pathway; ECFP4 independently
+RDKit-recomputed bit-for-bit).
+
+Result. Trained on all three cell lines CellFlow learns (mean-delta cosine 0.244 over 20 drugs at
+40k iters, up to 0.81 for AR-42, 0.67 for JQ1; the 20-drug average is below the 0.30 bar) and opens
+Gate 1 (induced divergence 0.85). But in the leakage-safe leave-one-context-out setting the clean
+Part-B requires, learning collapses to 0.029 at the IDENTICAL 40k budget and 20-drug set (matched
+control cellflow_gate1_transductive.json vs cellflow_gate1_loco.json), an 8.4x drop; per-drug it is
+paired (AR-42 0.81->0.27, JQ1 0.67->0.06). The collapse is mechanistic, not incidental: per-drug
+leave-one-context-out learning tracks the drug's cross-context response similarity (Pearson r=0.85,
+Spearman rho=0.73; crosscos_vs_loco.csv). On SciPlex3 that similarity is low (median cross_cos 0.04)
+and near zero for exactly the response-divergent drugs the retrieval task selects, so a predictor
+conditioned on chemistry alone cannot supply the accurate cross-context responses the clean test
+needs. Step 2 (retrieval falsification) was therefore NOT run: by the framework's own learn-then-test
+logic, retrieval numbers from a predictor that fails the leakage-safe learning gate are
+uninterpretable.
+
+Truthfulness audit (5 adversarial verifiers over the actual code and result files). No fabrication:
+all 188 SMILES verbatim from source, ECFP4 bit-for-bit reproducible, every reported number reproduces
+exactly from the CSV/JSON, and the leave-one-out is genuine (query context's control AND treated cells
+dropped before training; scored drugs present in the other two contexts with 386-480 treated cells
+each). Two things the audit corrected, applied here: (i) the wrapper's additive self-check is a
+tautology (pure arithmetic, never calls predict), so it does NOT validate the CellFlow pipeline; the
+pipeline is instead validated independently by the transductive per-drug signal (AR-42 0.81 while most
+drugs ~0, impossible if predict returned near-control). (ii) Wording was overclaimed and is now
+scoped: "memorization" -> in-distribution reconstruction vs out-of-distribution prediction;
+"principled/no drug-conditioned model/inherently" -> bounded, for the predictors we evaluated, by the
+cross_cos ceiling; an earlier note's "first N by cell count" was wrong (drug_pool is alphabetical).
+
+Manuscript edits (Results Part-B paragraph, Discussion "well-trained flow" paragraph, Limitations item)
+weave in the CellFlow result with the audited wording; references.bib gains the real CellFlow entry.
+Scripts: /data/boom/DART/analysis/predictors/cellflow/{export_sciplex3_ecfp4,cellflow_gate1_verify,
+crosscos_regression}.py (remote 4090). Results:
+results/exp14_nonadditive_predictors/cellflow_gate1{,_loco,_transductive}.{csv,json},
+crosscos_vs_loco.csv. Net: the clean Part-B falsification remains out of reach, now demonstrated with
+a modern flow-matching model and explained by a cross_cos transfer ceiling, strengthening the paper's
+stated limitation rather than resolving it. The CPA-with-ECFP control (use_rdkit_embeddings, a
+2048-bit Morgan fingerprint) was built and its plumbing verified but not run to completion, blocked
+by GPU contention on the shared 4090; it remains open.
+
+## R41 (closes R40's two open threads). CPA-ECFP completed, and the CellFlow collapse re-scored with distribution/DE metrics
+
+Both deferred jobs ran once the shared GPU freed. Neither changes a conclusion; both strengthen one.
+
+CPA with ECFP conditioning (the R40 open control). Re-run with the perturbation embedding FIXED to
+the 2048-bit Morgan/ECFP fingerprint (cpa-tools use_rdkit_embeddings) instead of a freely learned
+vector, transductive, 20 drugs, 100 epochs, 300 cells/group: overall delta learning 0.034 (A549
+-0.146, K562 0.239, MCF7 0.008), still VOID, and gate1-vs-own-baseline 0.9995 (near-additive). The
+free-embedding CPA was 0.076-0.08; chemistry conditioning does NOT rescue it. This refutes the
+hypothesis that CPA's VOID was a representation artefact and locates the failure in the adversarial
+objective. (cpa_ecfp4_gate.py; results/exp14_nonadditive_predictors/cpa_ecfp4_gate.json.)
+
+CellFlow collapse re-scored beyond the mean (motivated by cell-eval, ArcInstitute/cell-eval, and the
+principle that a mean-delta cosine can mislead). For every saved (setting, context, drug) triplet we
+recomputed, alongside the mean cosine, a distributional energy ratio energy(pred,true)/energy(ctrl,true)
+and gene-resolved DE metrics (direction match, recall@50, LFC Spearman). Transductive -> leave-one-
+context-out: cos_delta 0.243->0.029, energy_ratio 0.984->2.121, DE-direction 0.696->0.517 (~chance),
+DE-recall 0.282->0.066, LFC-Spearman 0.126->-0.003. The collapse holds on EVERY axis; the
+distributional metric is even more damning than the mean, since leave-one-context-out predictions are
+FARTHER from the true treated population than the unperturbed control is (energy ratio > 1). So the
+collapse is a genuine loss of the response, not an artefact of a first-moment score. Honest caveat:
+cell-eval's turnkey MetricsEvaluator could not run because it requires non-negative (log1p/count)
+input and DART's HVG matrix is centred/scaled (min -2.05); we therefore computed the same metric
+FAMILIES directly (transparent, delta-based), and note this in the text rather than claiming the
+cell-eval pipeline itself was run. (cellflow_save_preds.py + celleval_metrics.py;
+results/exp14_nonadditive_predictors/cellflow_celleval.{csv,json}.)
+
+Manuscript: the Results Part-B paragraph now states the collapse holds under distributional and DE
+metrics and that ECFP does not rescue CPA; the Limitations item carries the same two clauses. No
+conclusion is revised; the mean-based claim is upgraded from provisional to multi-metric-confirmed.

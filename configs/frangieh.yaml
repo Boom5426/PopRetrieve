@@ -1,0 +1,23 @@
+# Frangieh melanoma Perturb-CITE-seq — natural evidence (exp05).
+dataset: frangieh
+processed_path: ../data/processed/frangieh_hvg.npz   # npz: X/condition/perturbation/is_control/genes
+context_axis: condition        # immune microenvironment = natural subpopulation axis
+conditions: [Control, "IFNγ", Co-culture]        # 'IFNγ' with U+03B3
+n_hvg: 2000
+
+contrasts:                     # the three immune-context pairings
+  - [Control, "IFNγ"]
+  - [Control, Co-culture]
+  - ["IFNγ", Co-culture]
+
+per_ko_gate:
+  main_contrast: [Control, "IFNγ"]
+  alpha: 0.7
+  n_total: 200
+  n_distractors: 40
+  n_seeds: 20
+  probe: {min_cells: 40, gate: 0.9, rel_floor: 0.5}
+
+ifngr1_case:
+  ko: IFNGR1                   # within-gene controlled natural instance
+  n_seeds: 20

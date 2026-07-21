@@ -1,0 +1,176 @@
+\begin{thebibliography}{26}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Bunne et~al.(2024)Bunne, Roohani, Rosen, et~al.]{AIVirtualCell}
+C~Bunne, Y~Roohani, Y~Rosen, et~al.
+\newblock How to build the virtual cell with artificial intelligence:
+  priorities and opportunities.
+\newblock \emph{Cell}, 187:\penalty0 7045--7063, 2024.
+\newblock \doi{10.1016/j.cell.2024.11.015}.
+
+\bibitem[Cui et~al.(2024)]{ref7}
+H~Cui et~al.
+\newblock scgpt: toward building a foundation model for single-cell multi-omics
+  using generative ai.
+\newblock \emph{Nature Methods}, 21:\penalty0 1470--1480, 2024.
+
+\bibitem[Hao et~al.(2024)]{ref8}
+M~Hao et~al.
+\newblock Large-scale foundation model on single-cell transcriptomics.
+\newblock \emph{Nature Methods}, 21:\penalty0 1481--1491, 2024.
+
+\bibitem[Theodoris et~al.(2023)]{ref9}
+C~V Theodoris et~al.
+\newblock Transfer learning enables predictions in network biology.
+\newblock \emph{Nature}, 618:\penalty0 616--624, 2023.
+
+\bibitem[Lotfollahi et~al.(2019)Lotfollahi, Wolf, and Theis]{ref4}
+M~Lotfollahi, F~A Wolf, and F~J Theis.
+\newblock scgen predicts single-cell perturbation responses.
+\newblock \emph{Nature Methods}, 16:\penalty0 715--721, 2019.
+
+\bibitem[Lotfollahi et~al.(2023)]{ref5}
+M~Lotfollahi et~al.
+\newblock Predicting cellular responses to complex perturbations in
+  high-throughput screens.
+\newblock \emph{Molecular Systems Biology}, 19:\penalty0 e11517, 2023.
+
+\bibitem[Roohani et~al.(2024)Roohani, Huang, and Leskovec]{ref10}
+Y~Roohani, K~Huang, and J~Leskovec.
+\newblock Predicting transcriptional outcomes of novel multigene perturbations
+  with gears.
+\newblock \emph{Nature Biotechnology}, 42:\penalty0 927--935, 2024.
+
+\bibitem[Lamb et~al.(2006)]{ref1}
+J~Lamb et~al.
+\newblock The connectivity map: using gene-expression signatures to connect
+  small molecules, genes, and disease.
+\newblock \emph{Science}, 313:\penalty0 1929--1935, 2006.
+
+\bibitem[Subramanian et~al.(2017)]{ref2}
+A~Subramanian et~al.
+\newblock A next generation connectivity map: L1000 platform and the first
+  1,000,000 profiles.
+\newblock \emph{Cell}, 171:\penalty0 1437--1452, 2017.
+
+\bibitem[Peidli et~al.(2024)]{ref3}
+S~Peidli et~al.
+\newblock scperturb: harmonized single-cell perturbation data.
+\newblock \emph{Nature Methods}, 21:\penalty0 531--540, 2024.
+
+\bibitem[Ahlmann-Eltze et~al.(2025)Ahlmann-Eltze, Huber, and Anders]{ref13}
+C~Ahlmann-Eltze, W~Huber, and S~Anders.
+\newblock Deep-learning-based gene perturbation effect prediction does not yet
+  outperform simple linear baselines.
+\newblock \emph{Nature Methods}, 2025.
+
+\bibitem[Wei et~al.(2026)]{ref15}
+X~Wei et~al.
+\newblock Benchmarking algorithms for generalizable single-cell perturbation
+  response prediction.
+\newblock \emph{Nature Methods}, 2026.
+
+\bibitem[Hetzel et~al.(2022)]{ref6}
+L~Hetzel et~al.
+\newblock Predicting cellular responses to novel drug perturbations at a
+  single-cell resolution.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~35, 2022.
+
+\bibitem[Guney et~al.(2016)]{ref11}
+E~Guney et~al.
+\newblock Network-based in silico drug efficacy screening.
+\newblock \emph{Nature Communications}, 7:\penalty0 10331, 2016.
+
+\bibitem[Gonzalez et~al.(2025)]{ref12}
+G~Gonzalez et~al.
+\newblock Combinatorial prediction of therapeutic perturbations using causally
+  inspired neural networks.
+\newblock \emph{Nature Machine Intelligence}, 2025.
+
+\bibitem[Bunne et~al.(2023)]{CellOT}
+C~Bunne et~al.
+\newblock Learning single-cell perturbation responses using neural optimal
+  transport.
+\newblock \emph{Nature Methods}, 20:\penalty0 1759--1768, 2023.
+
+\bibitem[Chi et~al.(2025)]{Departures}
+C~Chi et~al.
+\newblock Departures: distributional transport for single-cell perturbation
+  prediction with neural {Schr\"odinger} bridges.
+\newblock \emph{arXiv}, 2025.
+\newblock preprint arXiv:2511.13124.
+
+\bibitem[Ji et~al.(2023)Ji, Green, Peidli, et~al.]{OptimalMetrics}
+Y~Ji, T~D Green, S~Peidli, et~al.
+\newblock Optimal distance metrics for single-cell {RNA}-seq populations.
+\newblock \emph{bioRxiv}, 2023.
+\newblock \doi{10.1101/2023.12.26.572833}.
+\newblock preprint.
+
+\bibitem[Rubbi et~al.(2026)Rubbi, Di~Francesco, Lotfollahi, and
+  Li{\`o}]{StandardizedEval}
+A~Rubbi, A~G Di~Francesco, M~Lotfollahi, and P~Li{\`o}.
+\newblock A standardized framework for evaluating gene expression generative
+  models.
+\newblock \emph{arXiv}, 2026.
+\newblock preprint arXiv:2603.11244.
+
+\bibitem[Heidari et~al.(2026)Heidari, Karimpour, Srivatsa, and
+  Montazeri]{ref16}
+M~Heidari, M~Karimpour, S~Srivatsa, and H~Montazeri.
+\newblock Evaluating single-cell perturbation response models is far from
+  straightforward.
+\newblock \emph{bioRxiv}, 2026.
+\newblock \doi{10.64898/2026.02.14.705879}.
+\newblock preprint.
+
+\bibitem[Agarwal and Bisht(2026)]{ref17}
+D~Agarwal and R~Bisht.
+\newblock The metric picks the winner: evaluation choice flips model rankings
+  for drug-response prediction in unseen chemistry.
+\newblock \emph{arXiv}, 2026.
+\newblock preprint arXiv:2606.12639.
+
+\bibitem[Klein et~al.(2025)]{CellFlow}
+D~Klein et~al.
+\newblock {CellFlow} enables generative single-cell phenotype modeling with
+  flow matching.
+\newblock \emph{bioRxiv}, 2025.
+\newblock preprint 2025.04.11.648220.
+
+\bibitem[Kedzierska et~al.(2025)]{ref14}
+K~Z Kedzierska et~al.
+\newblock Zero-shot evaluation reveals limitations of single-cell foundation
+  models.
+\newblock \emph{Genome Biology}, 26, 2025.
+
+\bibitem[Srivatsan et~al.(2020)]{dataSciPlex3}
+S~R Srivatsan et~al.
+\newblock Massively multiplex chemical transcriptomics at single-cell
+  resolution.
+\newblock \emph{Science}, 367:\penalty0 45--51, 2020.
+
+\bibitem[Frangieh et~al.(2021)]{dataFrangieh}
+C~J Frangieh et~al.
+\newblock Multimodal pooled perturb-cite-seq screens in patient models define
+  mechanisms of cancer immune evasion.
+\newblock \emph{Nature Genetics}, 53:\penalty0 332--341, 2021.
+
+\bibitem[Zhao et~al.(2021)Zhao, Dovas, Spinazzi, Levitin, Bush, Zhao,
+  Rosenfeld, Bruce, Canoll, and Sims]{dataZhao}
+Wenting Zhao, Athanassios Dovas, Eleonora~F. Spinazzi, Hanna~Mendes Levitin,
+  Matei~A. Bush, Peter Zhao, Steven~S. Rosenfeld, Jeffrey~N. Bruce, Peter
+  Canoll, and Peter~A. Sims.
+\newblock Single-cell analysis of glioblastoma tissue slices reveals
+  drug-response heterogeneity across malignant and immune compartments.
+\newblock \emph{Genome Medicine}, 13:\penalty0 82, 2021.
+\newblock \doi{10.1186/s13073-021-00894-y}.
+\newblock \TODO{verify title and author list against the source before
+  submission}.
+
+\end{thebibliography}

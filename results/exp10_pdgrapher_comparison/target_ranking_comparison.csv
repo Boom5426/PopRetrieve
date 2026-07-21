@@ -1,0 +1,13 @@
+query_id,signal,n_gt_targets,n_targets,target_ndcg@10,target_recall@1,target_recall@5,target_recall@10,target_recall@20
+A549|sample-0|observed_target,graph_proximity,1,994,0.0,0.0,0.0,0.0,0.0
+A549|sample-0|observed_target,target_overlap,1,994,0.0,0.0,0.0,0.0,0.0
+A549|sample-0|observed_target,signature_reversal,1,994,0.0,0.0,0.0,0.0,0.0
+A549|sample-0|observed_target,field_match,1,994,1.0,1.0,1.0,1.0,1.0
+A549|sample-0|observed_target,random,1,994,0.0,0.0,0.0,0.0,0.0
+A549|sample-0|observed_target,distance_reduction,1,994,0.43067655807339306,0.0,1.0,1.0,1.0
+A549|sample-1|observed_target,graph_proximity,1,994,0.0,0.0,0.0,0.0,0.0
+A549|sample-1|observed_target,target_overlap,1,994,0.0,0.0,0.0,0.0,0.0
+A549|sample-1|observed_target,signature_reversal,1,994,0.0,0.0,0.0,0.0,0.0
+A549|sample-1|observed_target,field_match,1,994,1.0,1.0,1.0,1.0,1.0
+A549|sample-1|observed_target,random,1,994,0.0,0.0,0.0,0.0,0.0
+A549|sample-1|observed_target,distance_reduction,1,994,0.43067655807339306,0.0,1.0,1.0,1.0

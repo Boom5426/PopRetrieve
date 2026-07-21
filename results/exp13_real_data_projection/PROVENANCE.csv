@@ -1,0 +1,2 @@
+configuration,n_tasks,n_tasks_built,n_failed,seeds,note
+FULL,239,239,0,"0,1,2","QUICK is a SANITY configuration (1 cell line, 4 drugs, 1 cross-line pair, 2 seeds) and builds 37 tasks. Do NOT quote a QUICK run as a real-data result. FULL builds 239."

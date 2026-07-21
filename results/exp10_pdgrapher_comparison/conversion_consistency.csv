@@ -1,0 +1,3 @@
+query_id,roundtrip,hit@1,hit@5,mrr,ndcg@10,n_gt
+A549|sample-0|observed_target,pdgrapher_drug→target→drug,0.0,0.0,0.01694915254237288,0.0,97
+A549|sample-1|observed_target,pdgrapher_drug→target→drug,0.0,0.0,0.01694915254237288,0.0,97

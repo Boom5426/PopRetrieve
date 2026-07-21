@@ -1,0 +1,38 @@
+dataset,task_id,observed_best_method,observed_dart_minority_cov,observed_mean_minority_cov
+sciplex3_within_line,A549:Cyclocytidine HCl:s0,mean_sufficient,0.9896990818673658,0.9896990818673658
+sciplex3_within_line,A549:Lomustine:s0,mean_sufficient,0.9882515258995048,0.987234797638941
+sciplex3_within_line,A549:TG101209:s0,mean_sufficient,0.988565629546001,0.988565629546001
+sciplex3_within_line,A549:PF-3845:s0,mean_sufficient,0.9940867657953116,0.992974390382092
+sciplex3_within_line,A549:Ruxolitinib (INCB018424):s1,mean_sufficient,0.9897342073082024,0.9897342073082024
+sciplex3_within_line,A549:Lomustine:s1,mean_sufficient,0.9895180314713496,0.9890414676521876
+sciplex3_within_line,A549:UNC1999:s1,mean_sufficient,0.9878656052779222,0.9876750804620328
+sciplex3_within_line,A549:JNJ-26854165 (Serdemetan):s1,mean_sufficient,0.9938201615662692,0.9942733545375766
+sciplex3_cross_line,K562->A549:Cyclocytidine HCl:s0,mean_sufficient,0.6585113249876584,0.6546840468898131
+sciplex3_cross_line,K562->A549:Lomustine:s0,mean_sufficient,0.6289814543586508,0.6289814543586508
+sciplex3_cross_line,K562->A549:TG101209:s0,mean_sufficient,0.6284070163109353,0.6284070163109353
+sciplex3_cross_line,K562->A549:PF-3845:s0,mean_sufficient,0.6612368478325799,0.6612368478325799
+sciplex3_cross_line,K562->A549:Ruxolitinib (INCB018424):s1,mean_sufficient,0.6444080812854425,0.6444080812854425
+sciplex3_cross_line,K562->A549:Lomustine:s1,mean_sufficient,0.6514236770345335,0.6514236770345335
+sciplex3_cross_line,K562->A549:UNC1999:s1,mean_sufficient,0.6574455249608312,0.6597428125584346
+sciplex3_cross_line,K562->A549:JNJ-26854165 (Serdemetan):s1,mean_sufficient,0.6581177171769934,0.6577839805729737
+cd34,CD34+:Crizotinib:s0,mean_sufficient,0.9866812867478147,0.9861854008813308
+cd34,CD34+:Geldanamycin:s0,mean_sufficient,0.9881992540118972,0.9881992540118972
+cd34,CD34+:Sapanisertib:s0,mean_sufficient,0.9771714200083828,0.9771714200083828
+cd34,CD34+:Neratinib:s0,mean_sufficient,0.9856224759692752,0.9848334400500336
+cd34,CD34+:Purmorphamine:s1,mean_sufficient,0.9868698247441864,0.9859611141753988
+cd34,CD34+:Geldanamycin:s1,mean_sufficient,0.9876543038661074,0.9876543038661074
+cd34,CD34+:panobinostat:s1,mean_sufficient,0.9908443260833104,0.986970615217582
+cd34,CD34+:Etomoxir:s1,mean_sufficient,0.9867225338039493,0.9867225338039493
+frangieh,Co-culture:LINC00518:s0,mean_sufficient,0.9961032691677054,0.9969207307228708
+frangieh,Co-culture:SP100:s0,mean_sufficient,0.9955035021236848,0.9954403419370684
+frangieh,Co-culture:PFDN4:s0,mean_sufficient,0.9960787954159932,0.9943686319901744
+frangieh,Co-culture:SDCBP:s1,mean_sufficient,0.9890191076762888,0.99195554767003
+frangieh,Co-culture:LINC00518:s1,mean_sufficient,0.9957446507297578,0.9944823107966612
+frangieh,Co-culture:TTLL1:s1,mean_sufficient,0.9964938573994369,0.9964938573994369
+frangieh,Co-culture:JMJD7:s1,mean_sufficient,0.9953170532348804,0.9941036677351348
+sciplex3_predicted_mean,A549:PF-573228:s0,mean_sufficient,0.9892891223240292,0.9888695298058352
+sciplex3_predicted_mean,"A549:Luminespib (AUY-922, NVP-AUY922):s0",mean_sufficient,0.9873977587099309,0.9873977587099309
+sciplex3_predicted_mean,A549:TGX-221:s0,mean_sufficient,0.9906464920219707,0.9906806299575472
+sciplex3_predicted_mean,A549:Lomustine:s1,mean_sufficient,0.9944384120673913,0.9944384120673913
+sciplex3_predicted_mean,A549:JNJ-7706621:s1,mean_sufficient,0.988640342464536,0.9902446890925684
+sciplex3_predicted_mean,A549:Ruxolitinib (INCB018424):s1,mean_sufficient,0.9950788407376858,0.9948159539097488

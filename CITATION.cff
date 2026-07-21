@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use DART, please cite it as below."
+title: "DART: Distributional Auditing of Retrieval Transfer"
+abstract: >-
+  DART ranks candidate drugs for a heterogeneous single-cell population by a
+  population-to-population distance rather than a mean-signature match, and is
+  used as a probe to expose when distributional information is trustworthy and
+  when objective-aligned evaluation metrics are circular. Its headline finding is
+  that apparent distributional gains do not transfer to oracle-independent
+  criteria.
+authors:
+  - name: "Boom5426"
+repository-code: "https://github.com/Boom5426/DART"
+license: MIT
+keywords:
+  - single-cell
+  - drug retrieval
+  - distributional distance
+  - perturbation
+  - evaluation

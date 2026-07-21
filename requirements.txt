@@ -1,0 +1,13 @@
+# DART core dependencies (tested versions in comments; Python 3.11).
+# Install:  pip install -r requirements.txt
+numpy>=1.24          # tested 2.4.6
+scipy>=1.10          # tested 1.17.1   (kendalltau / spearmanr)
+scikit-learn>=1.3    # tested 1.9.0    (PCA + KMeans natural subpopulations, CD34)
+pandas>=2.0          # tested 2.3.3
+torch>=2.0           # tested 2.5.1+cu121 (CPU build works; CUDA optional, speeds up energy)
+matplotlib>=3.7      # tested 3.11.0   (figures only)
+pyyaml>=6.0          # tested           (config loading)
+
+# Optional: pytest for the test suite. The tests also run WITHOUT pytest via
+#   python tests/run_tests.py
+# pytest>=7.0

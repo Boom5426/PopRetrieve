@@ -1,0 +1,11 @@
+rank,mean_cosine_top,global_energy_top
+1,majority-only,covers-both
+2,covers-both,majority-only
+3,distractor:CUDC-101,minority-only
+4,distractor:(+)-JQ1,distractor:Aminoglutethimide
+5,distractor:JNJ-7706621,distractor:Daphnetin
+6,distractor:YM155 (Sepantronium Bromide),distractor:Ofloxacin
+7,distractor:SRT1720 HCl,distractor:Valproic acid sodium salt (Sodium valproate)
+8,distractor:TAK-901,distractor:Ivosidenib (AG-120)
+9,distractor:AT9283,distractor:Fasudil (HA-1077) HCl
+10,distractor:Aminoglutethimide,distractor:Tranylcypromine (2-PCPA) HCl

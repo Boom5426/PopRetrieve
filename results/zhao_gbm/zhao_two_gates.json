@@ -1,0 +1,50 @@
+{
+  "dataset": "ZhaoSims2021 (patient-derived glioblastoma slices)",
+  "compartments": [
+    "malignant",
+    "myeloid"
+  ],
+  "n_patients": 10,
+  "gate1": {
+    "median": 0.5656322836875916,
+    "mean": 0.502882310134523,
+    "min": 0.0805039331316948,
+    "max": 0.7609178423881531,
+    "n": 17,
+    "verdict": "OPEN: naturally co-existing cell types respond in substantially different directions."
+  },
+  "premise": {
+    "n_drug_pairs": 18,
+    "spearman_mean_vs_malignant": 0.8782249742002064,
+    "p": 1.6482702612246244e-06,
+    "median_cos_mean": 0.4351996034383774,
+    "median_cos_malignant": 0.422832727432251,
+    "n_lookalike_pairs_that_diverge": 2,
+    "n_lookalike_pairs": 5,
+    "verdict": "PREMISE HOLDS: mean similarity does not determine compartment-specific similarity, so the mean is lossy in real tumour tissue."
+  },
+  "gate2": {
+    "n_runs": 80,
+    "patients": [
+      "PW030",
+      "PW031",
+      "PW032",
+      "PW034",
+      "PW036",
+      "PW040",
+      "PW051",
+      "PW053"
+    ],
+    "acc_kmeans_k2": 0.9275,
+    "acc_gmm_k2": 0.93875,
+    "acc_leiden": 0.94875,
+    "acc_hdbscan": 0.65875,
+    "probe_linear": 0.96375,
+    "probe_forest": 0.96,
+    "probe_knn": 0.52875,
+    "ceiling": 0.96375,
+    "best_unsupervised": 0.94875,
+    "gap": 0.015000000000000013,
+    "verdict": "OPEN: natural tumour compartments are far more separable than our constructed mixture (ceiling 0.964 versus 0.692). Gate 2 is NOT a universal information limit; it was a limit of the constructed benchmark. In real tissue the structure is there and unsupervised clustering finds it."
+  }
+}

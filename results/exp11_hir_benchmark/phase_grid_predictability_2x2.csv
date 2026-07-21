@@ -1,0 +1,5 @@
+feature_set,cv_grouping,auc,n_effective_units,majority_baseline,n_positive,n_negative,note
+observable,label_determining_cells,0.7876751302083335,28,0.6428571428571429,8640,4800,query-time observable features
+observable,instance_grid_id_LEAKY,0.8357026186342593,672,0.6428571428571429,8640,4800,"query-time observable features; LEAKY: grid_id encodes axes that do not change the utility matrix, leaving ~12 near-duplicates of each held-out instance in training. Reported only as the pseudo-replication control."
+oracle_derived,label_determining_cells,0.4,28,0.6428571428571429,8640,4800,CIRCULAR: features and label are both functions of the latent utility matrix
+oracle_derived,instance_grid_id_LEAKY,0.64009375,672,0.6428571428571429,8640,4800,"CIRCULAR: features and label are both functions of the latent utility matrix; LEAKY: grid_id encodes axes that do not change the utility matrix, leaving ~12 near-duplicates of each held-out instance in training. Reported only as the pseudo-replication control."

@@ -1,0 +1,13 @@
+query_id,signal,family,n_gt,n_cand,hit@1,hit@5,hit@10,hit@20,mrr,ndcg@10,best_rank,median_rank
+A549|sample-0|observed_target,graph_proximity,pdgrapher_inverse_design,97,1369,0.0,0.0,0.0,0.0,0.005076142131979695,0.0,197,779.0
+A549|sample-0|observed_target,target_overlap,pdgrapher_inverse_design,97,1369,1.0,1.0,1.0,1.0,1.0,1.0,1,73.0
+A549|sample-0|observed_target,signature_reversal,signature_retrieval,97,1369,0.0,0.0,0.0,1.0,0.0625,0.0,16,871.0
+A549|sample-0|observed_target,field_match,reference_upper,97,1369,1.0,1.0,1.0,1.0,1.0,1.0,1,49.0
+A549|sample-0|observed_target,random,reference_lower,97,1369,0.0,0.0,0.0,1.0,0.07142857142857142,0.0,14,752.0
+A549|sample-0|observed_target,distance_reduction,dart_distributional,97,1369,0.0,1.0,1.0,1.0,0.3333333333333333,0.1100458831490401,3,713.0
+A549|sample-1|observed_target,graph_proximity,pdgrapher_inverse_design,97,1369,0.0,0.0,0.0,0.0,0.005076142131979695,0.0,197,779.0
+A549|sample-1|observed_target,target_overlap,pdgrapher_inverse_design,97,1369,1.0,1.0,1.0,1.0,1.0,1.0,1,73.0
+A549|sample-1|observed_target,signature_reversal,signature_retrieval,97,1369,0.0,0.0,0.0,1.0,0.07692307692307693,0.0,13,848.0
+A549|sample-1|observed_target,field_match,reference_upper,97,1369,1.0,1.0,1.0,1.0,1.0,1.0,1,49.0
+A549|sample-1|observed_target,random,reference_lower,97,1369,0.0,0.0,0.0,1.0,0.07142857142857142,0.0,14,752.0
+A549|sample-1|observed_target,distance_reduction,dart_distributional,97,1369,0.0,1.0,1.0,1.0,0.3333333333333333,0.1100458831490401,3,716.0

@@ -1,0 +1,13 @@
+dataset,setting,alpha,seed,top1_incumbent,top1_ours,delta_rank
+crossline,K562+A549,0.9,1004,distractor:M344,covers-both,6
+crossline,K562+MCF7,0.9,1004,distractor:M344,covers-both,6
+crossline,K562+MCF7,0.8,1006,distractor:Trametinib (GSK1120212),covers-both,5
+crossline,K562+MCF7,0.7,1006,distractor:Trametinib (GSK1120212),covers-both,5
+crossline,K562+MCF7,0.9,1006,distractor:Danusertib (PHA-739358),covers-both,5
+crossline,K562+MCF7,0.6,1002,majority-only,covers-both,5
+crossline,K562+MCF7,0.6,1006,distractor:Danusertib (PHA-739358),covers-both,5
+crossline,K562+A549,0.5,1002,distractor:Tucidinostat (Chidamide),covers-both,4
+crossline,K562+MCF7,0.8,1009,majority-only,covers-both,4
+crossline,K562+MCF7,0.9,1008,distractor:M344,covers-both,4
+crossline,K562+A549,0.6,1000,distractor:Entinostat (MS-275),covers-both,4
+crossline,K562+A549,0.6,1002,majority-only,covers-both,4

@@ -1,0 +1,622 @@
+split_type,cell_line,heldout_drug,observed_library_fraction,seed,regret_reduction
+leave_drug_out,A549,Selisistat (EX 527),1.0,0,0.4454936981201172
+leave_drug_out,A549,KW-2449,1.0,0,0.5308914184570312
+leave_drug_out,A549,Lenalidomide (CC-5013),1.0,0,0.1078472137451171
+leave_drug_out,A549,Resminostat,1.0,0,-0.0253219604492188
+leave_drug_out,A549,Alendronate sodium trihydrate,1.0,0,0.1018352508544921
+leave_drug_out,A549,Veliparib (ABT-888),1.0,0,0.1943492889404297
+leave_drug_out,A549,Carmofur,1.0,0,0.1607036590576172
+leave_drug_out,A549,AG-490 (Tyrphostin B42),1.0,0,0.0
+leave_drug_out,A549,Meprednisone,1.0,0,0.1121463775634766
+leave_drug_out,A549,TGX-221,1.0,0,-0.0404033660888671
+leave_drug_out,A549,AZ 960,1.0,0,0.5070476531982422
+leave_drug_out,A549,Givinostat (ITF2357),1.0,0,1.3463897705078125
+leave_drug_out,A549,SRT2104 (GSK2245840),1.0,0,0.2194175720214844
+leave_drug_out,A549,PF-573228,1.0,0,0.021881103515625
+leave_drug_out,A549,Prednisone,1.0,0,0.049367904663086
+leave_drug_out,A549,M344,1.0,0,0.2394161224365235
+leave_drug_out,A549,Hesperadin,1.0,0,0.000772476196289
+leave_drug_out,A549,SL-327,1.0,0,-0.0805263519287109
+leave_drug_out,A549,TG101209,1.0,0,-0.032888412475586
+leave_drug_out,A549,BMS-754807,1.0,0,0.0993003845214844
+leave_drug_out,A549,"Roscovitine (Seliciclib,CYC202)",1.0,0,0.0688400268554688
+leave_drug_out,A549,(+)-JQ1,1.0,0,0.9590816497802734
+leave_drug_out,A549,Decitabine,1.0,0,2.609577178955078
+leave_drug_out,A549,Costunolide,1.0,0,-0.053924560546875
+leave_drug_out,A549,Pirarubicin,1.0,0,0.1724834442138672
+leave_drug_out,A549,Lomustine,1.0,0,0.4727954864501953
+leave_drug_out,A549,Mercaptopurine (6-MP),1.0,0,0.2045269012451172
+leave_MoA_out,A549,SRT3025 HCl,0.8723404255319149,0,0.0586700439453125
+leave_MoA_out,A549,Zileuton,0.973404255319149,0,0.2038936614990233
+leave_MoA_out,A549,Droxinostat,0.9361702127659576,0,0.3324146270751953
+leave_MoA_out,A549,Celecoxib,0.9787234042553192,0,-0.0267696380615233
+leave_MoA_out,A549,Ramelteon,0.9893617021276596,0,-0.2109565734863281
+partial_library,A549,batch,0.2,0,-0.007080078125
+partial_library,A549,batch,0.4,0,0.080434799194336
+leave_drug_out,A549,Hesperadin,1.0,1,0.7735977172851562
+leave_drug_out,A549,Celecoxib,1.0,1,0.098724365234375
+leave_drug_out,A549,WHI-P154,1.0,1,0.4172592163085937
+leave_drug_out,A549,Givinostat (ITF2357),1.0,1,2.181476593017578
+leave_drug_out,A549,UNC1999,1.0,1,1.2184734344482422
+leave_drug_out,A549,FLLL32,1.0,1,0.1452445983886719
+leave_drug_out,A549,Zileuton,1.0,1,0.1456642150878907
+leave_drug_out,A549,AC480 (BMS-599626),1.0,1,0.7809314727783203
+leave_drug_out,A549,Regorafenib (BAY 73-4506),1.0,1,0.2181053161621093
+leave_drug_out,A549,"Temsirolimus (CCI-779, NSC 683864)",1.0,1,0.0126285552978515
+leave_drug_out,A549,Alendronate sodium trihydrate,1.0,1,0.1960563659667969
+leave_drug_out,A549,Divalproex Sodium,1.0,1,0.9889354705810548
+leave_drug_out,A549,Aurora A Inhibitor I,1.0,1,0.2765541076660157
+leave_drug_out,A549,Curcumin,1.0,1,0.1670436859130858
+leave_drug_out,A549,Tucidinostat (Chidamide),1.0,1,0.0676460266113281
+leave_drug_out,A549,SL-327,1.0,1,0.5343837738037109
+leave_drug_out,A549,SNS-314,1.0,1,-0.0501899719238281
+leave_drug_out,A549,Azacitidine,1.0,1,2.220701217651367
+leave_drug_out,A549,G007-LK,1.0,1,2.17471694946289
+leave_drug_out,A549,Ruxolitinib (INCB018424),1.0,1,0.0812740325927734
+leave_drug_out,A549,Carmofur,1.0,1,0.1773662567138672
+leave_drug_out,A549,CYC116,1.0,1,0.3014774322509766
+leave_drug_out,A549,Prednisone,1.0,1,-0.1221160888671875
+leave_drug_out,A549,CUDC-101,1.0,1,-0.0917987823486328
+leave_drug_out,A549,Lenalidomide (CC-5013),1.0,1,-0.0288581848144531
+leave_drug_out,A549,Lapatinib (GW-572016) Ditosylate,1.0,1,-0.0032577514648438
+leave_drug_out,A549,UNC0379,1.0,1,1.262041091918945
+leave_drug_out,A549,SB431542,1.0,1,0.0938186645507813
+leave_drug_out,A549,Mocetinostat (MGCD0103),1.0,1,0.0
+leave_drug_out,A549,Ki8751,1.0,1,0.1462421417236328
+leave_drug_out,A549,"Roscovitine (Seliciclib,CYC202)",1.0,1,0.1359767913818358
+leave_drug_out,A549,Ofloxacin,1.0,1,0.2455463409423828
+leave_drug_out,A549,Daphnetin,1.0,1,-0.0167446136474608
+leave_drug_out,A549,Filgotinib (GLPG0634),1.0,1,0.223459243774414
+leave_MoA_out,A549,Fulvestrant,0.973404255319149,1,-0.0776443481445312
+leave_MoA_out,A549,PF-3845,0.973404255319149,1,0.1889858245849609
+leave_MoA_out,A549,Trichostatin A (TSA),0.9787234042553192,1,1.7305355072021484
+leave_MoA_out,A549,Bisindolylmaleimide IX (Ro 31-8220 Mesylate),0.9840425531914894,1,0.0
+leave_MoA_out,A549,Tanespimycin (17-AAG),0.9361702127659576,1,0.0
+leave_MoA_out,A549,BMS-911543,0.8936170212765957,1,0.0372447967529297
+partial_library,A549,batch,0.2,1,0.1376361846923828
+partial_library,A549,batch,0.4,1,-0.2111358642578125
+partial_library,A549,batch,0.6,1,0.1880054473876954
+leave_drug_out,A549,"Patupilone (EPO906, Epothilone B)",1.0,2,-0.302236557006836
+leave_drug_out,A549,Pelitinib (EKB-569),1.0,2,-0.0803909301757813
+leave_drug_out,A549,CYC116,1.0,2,0.1967430114746093
+leave_drug_out,A549,"Tozasertib (VX-680, MK-0457)",1.0,2,-0.1708717346191406
+leave_drug_out,A549,BMS-265246,1.0,2,0.1951007843017579
+leave_drug_out,A549,UNC1999,1.0,2,0.027322769165039
+leave_drug_out,A549,Filgotinib (GLPG0634),1.0,2,0.0541820526123047
+leave_drug_out,A549,Tofacitinib (CP-690550) Citrate,1.0,2,-0.0005054473876952
+leave_drug_out,A549,PD173074,1.0,2,-0.0091056823730469
+leave_drug_out,A549,UNC0379,1.0,2,0.1830806732177735
+leave_drug_out,A549,Lomustine,1.0,2,-0.0003757476806639
+leave_drug_out,A549,WP1066,1.0,2,0.0853176116943359
+leave_drug_out,A549,Danusertib (PHA-739358),1.0,2,0.6932868957519531
+leave_drug_out,A549,Navitoclax (ABT-263),1.0,2,0.1236839294433593
+leave_drug_out,A549,"Fluorouracil (5-Fluoracil, 5-FU)",1.0,2,0.2682552337646484
+leave_drug_out,A549,Quercetin,1.0,2,-0.0790634155273437
+leave_drug_out,A549,Altretamine,1.0,2,0.149404525756836
+leave_drug_out,A549,Lapatinib (GW-572016) Ditosylate,1.0,2,0.0
+leave_drug_out,A549,Thiotepa,1.0,2,0.2181549072265625
+leave_drug_out,A549,"Fedratinib (SAR302503, TG101348)",1.0,2,0.279754638671875
+leave_drug_out,A549,PF-3845,1.0,2,-0.1948966979980468
+leave_drug_out,A549,PD98059,1.0,2,-0.0567131042480468
+leave_drug_out,A549,Linifanib (ABT-869),1.0,2,0.3871612548828125
+leave_drug_out,A549,GSK J1,1.0,2,0.2649593353271484
+leave_drug_out,A549,UNC0631,1.0,2,0.3923664093017579
+leave_drug_out,A549,Obatoclax Mesylate (GX15-070),1.0,2,-0.0594768524169922
+leave_drug_out,A549,Bisindolylmaleimide IX (Ro 31-8220 Mesylate),1.0,2,1.8043670654296875
+leave_drug_out,A549,"Cerdulatinib (PRT062070, PRT2070)",1.0,2,0.0479202270507811
+leave_drug_out,A549,Busulfan,1.0,2,0.5075244903564453
+leave_drug_out,A549,Barasertib (AZD1152-HQPA),1.0,2,0.3347530364990234
+leave_MoA_out,A549,MK-0752,0.9893617021276596,2,0.4569530487060547
+leave_MoA_out,A549,JNJ-26854165 (Serdemetan),0.9680851063829788,2,0.1750965118408203
+leave_MoA_out,A549,Valproic acid sodium salt (Sodium valproate),0.9787234042553192,2,-0.1626224517822266
+leave_MoA_out,A549,Ki16425,0.9893617021276596,2,0.4288864135742187
+leave_MoA_out,A549,PD98059,0.9787234042553192,2,0.0872039794921875
+leave_MoA_out,A549,Clevudine,0.8723404255319149,2,0.0260486602783203
+leave_MoA_out,A549,ITSA-1 (ITSA1),0.7978723404255319,2,0.3655033111572265
+partial_library,A549,batch,0.2,2,-0.0417003631591796
+partial_library,A549,batch,0.4,2,0.0800228118896484
+partial_library,A549,batch,0.6,2,0.3716106414794922
+leave_drug_out,A549,Selisistat (EX 527),1.0,3,2.4979705810546875
+leave_drug_out,A549,PHA-680632,1.0,3,0.014251708984375
+leave_drug_out,A549,AG-490 (Tyrphostin B42),1.0,3,0.159200668334961
+leave_drug_out,A549,GSK1070916,1.0,3,0.4468402862548828
+leave_drug_out,A549,Busulfan,1.0,3,0.7574386596679688
+leave_drug_out,A549,GSK-LSD1 2HCl,1.0,3,-0.01422119140625
+leave_drug_out,A549,"Fluorouracil (5-Fluoracil, 5-FU)",1.0,3,-0.0243053436279296
+leave_drug_out,A549,Barasertib (AZD1152-HQPA),1.0,3,0.3992500305175781
+leave_drug_out,A549,Epothilone A,1.0,3,-0.4292831420898437
+leave_drug_out,A549,Resminostat,1.0,3,0.0
+leave_drug_out,A549,Decitabine,1.0,3,2.4357624053955083
+leave_drug_out,A549,PD173074,1.0,3,0.0698394775390625
+leave_drug_out,A549,BMS-536924,1.0,3,0.1294689178466797
+leave_drug_out,A549,Alendronate sodium trihydrate,1.0,3,0.0835609436035156
+leave_drug_out,A549,Triamcinolone Acetonide,1.0,3,0.3805961608886719
+leave_drug_out,A549,G007-LK,1.0,3,0.1576900482177735
+leave_drug_out,A549,Celecoxib,1.0,3,0.006641387939453
+leave_drug_out,A549,Tazemetostat (EPZ-6438),1.0,3,0.1844024658203125
+leave_drug_out,A549,"Fedratinib (SAR302503, TG101348)",1.0,3,0.2166919708251952
+leave_drug_out,A549,RG108,1.0,3,0.098855972290039
+leave_drug_out,A549,MK-5108 (VX-689),1.0,3,0.2233619689941406
+leave_drug_out,A549,Ofloxacin,1.0,3,0.4457893371582032
+leave_drug_out,A549,Amisulpride,1.0,3,0.0548458099365234
+leave_drug_out,A549,AZD1480,1.0,3,0.0914192199707031
+leave_drug_out,A549,Droxinostat,1.0,3,0.2408008575439452
+leave_drug_out,A549,Sirtinol,1.0,3,0.3236713409423828
+leave_drug_out,A549,Danusertib (PHA-739358),1.0,3,0.29058837890625
+leave_drug_out,A549,XAV-939,1.0,3,0.1401691436767578
+leave_drug_out,A549,BMS-754807,1.0,3,0.9580936431884766
+leave_drug_out,A549,PFI-1 (PF-6405761),1.0,3,0.219045639038086
+leave_drug_out,A549,Quercetin,1.0,3,0.0209674835205078
+leave_MoA_out,A549,Carmofur,0.8723404255319149,3,0.2856426239013672
+leave_MoA_out,A549,"Tozasertib (VX-680, MK-0457)",0.8882978723404256,3,0.0722541809082031
+leave_MoA_out,A549,Celecoxib,0.9787234042553192,3,-0.0008316040039061
+leave_MoA_out,A549,SL-327,0.9787234042553192,3,-0.0963859558105469
+leave_MoA_out,A549,Divalproex Sodium,0.9893617021276596,3,0.0111045837402343
+leave_MoA_out,A549,Enzastaurin (LY317615),0.9840425531914894,3,-0.0312767028808593
+partial_library,A549,batch,0.2,3,0.2492942810058593
+partial_library,A549,batch,0.4,3,0.2901134490966797
+leave_drug_out,A549,SRT3025 HCl,1.0,4,0.7526473999023438
+leave_drug_out,A549,Divalproex Sodium,1.0,4,0.2857723236083985
+leave_drug_out,A549,Ruxolitinib (INCB018424),1.0,4,0.1411857604980469
+leave_drug_out,A549,Ofloxacin,1.0,4,0.0501232147216796
+leave_drug_out,A549,Sorafenib Tosylate,1.0,4,0.042245864868164
+leave_drug_out,A549,Epothilone A,1.0,4,0.0
+leave_drug_out,A549,Ki8751,1.0,4,0.2223167419433594
+leave_drug_out,A549,ENMD-2076,1.0,4,0.3843421936035156
+leave_drug_out,A549,AT9283,1.0,4,0.2674674987792969
+leave_drug_out,A549,CEP-33779,1.0,4,0.1825618743896485
+leave_drug_out,A549,Ramelteon,1.0,4,0.1306991577148437
+leave_drug_out,A549,Motesanib Diphosphate (AMG-706),1.0,4,0.5402297973632814
+leave_drug_out,A549,Azacitidine,1.0,4,2.544719696044922
+leave_drug_out,A549,WP1066,1.0,4,0.2327423095703125
+leave_drug_out,A549,Trametinib (GSK1120212),1.0,4,-0.0600357055664062
+leave_drug_out,A549,SB431542,1.0,4,0.2165241241455079
+leave_drug_out,A549,Cimetidine,1.0,4,0.7257213592529297
+leave_drug_out,A549,G007-LK,1.0,4,2.2228450775146484
+leave_drug_out,A549,UNC0379,1.0,4,0.0
+leave_drug_out,A549,Raltitrexed,1.0,4,0.0
+leave_drug_out,A549,Flavopiridol HCl,1.0,4,0.2773189544677734
+leave_drug_out,A549,Sodium Phenylbutyrate,1.0,4,0.083108901977539
+leave_drug_out,A549,Ivosidenib (AG-120),1.0,4,0.0921535491943359
+leave_drug_out,A549,Quercetin,1.0,4,2.823383331298828
+leave_drug_out,A549,NVP-BSK805 2HCl,1.0,4,0.0
+leave_drug_out,A549,Tucidinostat (Chidamide),1.0,4,0.3066558837890625
+leave_drug_out,A549,Bisindolylmaleimide IX (Ro 31-8220 Mesylate),1.0,4,2.47195816040039
+leave_drug_out,A549,S3I-201,1.0,4,-0.070638656616211
+leave_drug_out,A549,GSK1070916,1.0,4,0.00714111328125
+leave_drug_out,A549,INO-1001 (3-Aminobenzamide),1.0,4,0.5388660430908203
+leave_drug_out,A549,AZD1480,1.0,4,0.2070960998535156
+leave_drug_out,A549,Mercaptopurine (6-MP),1.0,4,0.0496711730957031
+leave_drug_out,A549,BMS-911543,1.0,4,0.170501708984375
+leave_drug_out,A549,"Roscovitine (Seliciclib,CYC202)",1.0,4,0.2974452972412109
+leave_drug_out,A549,MK-5108 (VX-689),1.0,4,0.284353256225586
+leave_MoA_out,A549,Sorafenib Tosylate,0.9787234042553192,4,0.485300064086914
+leave_MoA_out,A549,Givinostat (ITF2357),0.9361702127659576,4,0.0
+leave_MoA_out,A549,CEP-33779,0.8936170212765957,4,0.1426830291748047
+leave_MoA_out,A549,SNS-314,0.8882978723404256,4,0.0
+leave_MoA_out,A549,Celecoxib,0.9787234042553192,4,0.0626907348632813
+leave_MoA_out,A549,Trichostatin A (TSA),0.9787234042553192,4,-0.0441970825195312
+leave_MoA_out,A549,Divalproex Sodium,0.9893617021276596,4,0.054178237915039
+partial_library,A549,batch,0.2,4,0.0493831634521485
+partial_library,A549,batch,0.4,4,0.0566692352294921
+partial_library,A549,batch,0.6,4,0.1385078430175781
+leave_drug_out,K562,MK-0752,1.0,0,0.7158241271972656
+leave_drug_out,K562,Resminostat,1.0,0,0.3374519348144531
+leave_drug_out,K562,Alendronate sodium trihydrate,1.0,0,0.1628265380859375
+leave_drug_out,K562,A-366,1.0,0,0.8756046295166016
+leave_drug_out,K562,Veliparib (ABT-888),1.0,0,0.3878250122070313
+leave_drug_out,K562,Quercetin,1.0,0,0.2336292266845703
+leave_drug_out,K562,AC480 (BMS-599626),1.0,0,0.0460720062255859
+leave_drug_out,K562,"Baricitinib (LY3009104, INCB028050)",1.0,0,0.3491840362548828
+leave_drug_out,K562,GSK1070916,1.0,0,0.1146945953369141
+leave_drug_out,K562,TGX-221,1.0,0,0.0504207611083985
+leave_drug_out,K562,AZ 960,1.0,0,0.2997493743896484
+leave_drug_out,K562,AG-14361,1.0,0,0.0994281768798828
+leave_drug_out,K562,Givinostat (ITF2357),1.0,0,0.0
+leave_drug_out,K562,SRT2104 (GSK2245840),1.0,0,-0.1166343688964842
+leave_drug_out,K562,Fasudil (HA-1077) HCl,1.0,0,0.4531745910644531
+leave_drug_out,K562,M344,1.0,0,0.1269855499267578
+leave_drug_out,K562,Hesperadin,1.0,0,1.061199188232422
+leave_drug_out,K562,SL-327,1.0,0,0.7804088592529298
+leave_drug_out,K562,Ofloxacin,1.0,0,-0.1093044281005859
+leave_drug_out,K562,TG101209,1.0,0,0.7012062072753906
+leave_drug_out,K562,"Roscovitine (Seliciclib,CYC202)",1.0,0,0.0916481018066406
+leave_drug_out,K562,Ki16425,1.0,0,0.1026477813720703
+leave_drug_out,K562,(+)-JQ1,1.0,0,0.3546276092529297
+leave_drug_out,K562,Decitabine,1.0,0,0.1115341186523437
+leave_drug_out,K562,Costunolide,1.0,0,-0.1936130523681641
+leave_drug_out,K562,Pirarubicin,1.0,0,0.0688362121582032
+leave_drug_out,K562,Mercaptopurine (6-MP),1.0,0,0.0272083282470703
+leave_MoA_out,K562,SRT3025 HCl,0.8723404255319149,0,0.1407318115234375
+leave_MoA_out,K562,Droxinostat,0.9361702127659576,0,-0.1362628936767578
+leave_MoA_out,K562,"Temsirolimus (CCI-779, NSC 683864)",0.9840425531914894,0,0.3282699584960938
+leave_MoA_out,K562,CEP-33779,0.8936170212765957,0,0.1458854675292969
+leave_MoA_out,K562,Sorafenib Tosylate,0.9787234042553192,0,0.8790454864501953
+leave_MoA_out,K562,Celecoxib,0.9787234042553192,0,0.8757915496826173
+leave_MoA_out,K562,Ramelteon,0.9893617021276596,0,-0.0760250091552734
+partial_library,K562,batch,0.2,0,0.3056488037109375
+partial_library,K562,batch,0.4,0,0.2554244995117188
+partial_library,K562,batch,0.6,0,0.2101764678955077
+leave_drug_out,K562,Hesperadin,1.0,1,-0.100189208984375
+leave_drug_out,K562,WHI-P154,1.0,1,0.0
+leave_drug_out,K562,Givinostat (ITF2357),1.0,1,0.0247669219970703
+leave_drug_out,K562,FLLL32,1.0,1,1.3379268646240234
+leave_drug_out,K562,Zileuton,1.0,1,0.0477962493896484
+leave_drug_out,K562,AC480 (BMS-599626),1.0,1,0.4215106964111328
+leave_drug_out,K562,Andarine,1.0,1,0.4746513366699219
+leave_drug_out,K562,Regorafenib (BAY 73-4506),1.0,1,-0.0055561065673827
+leave_drug_out,K562,AG-14361,1.0,1,0.7090473175048828
+leave_drug_out,K562,Tofacitinib (CP-690550) Citrate,1.0,1,-0.0882339477539063
+leave_drug_out,K562,"Temsirolimus (CCI-779, NSC 683864)",1.0,1,0.1304817199707031
+leave_drug_out,K562,Alendronate sodium trihydrate,1.0,1,-0.0551509857177734
+leave_drug_out,K562,Divalproex Sodium,1.0,1,0.6657962799072266
+leave_drug_out,K562,GSK-LSD1 2HCl,1.0,1,0.3134574890136719
+leave_drug_out,K562,Aurora A Inhibitor I,1.0,1,0.1020755767822265
+leave_drug_out,K562,Curcumin,1.0,1,0.6761360168457031
+leave_drug_out,K562,Tucidinostat (Chidamide),1.0,1,0.0
+leave_drug_out,K562,SL-327,1.0,1,0.168020248413086
+leave_drug_out,K562,SNS-314,1.0,1,0.0
+leave_drug_out,K562,Azacitidine,1.0,1,0.0156898498535155
+leave_drug_out,K562,G007-LK,1.0,1,0.1553573608398437
+leave_drug_out,K562,Pracinostat (SB939),1.0,1,1.4985904693603516
+leave_drug_out,K562,Ruxolitinib (INCB018424),1.0,1,1.0343551635742188
+leave_drug_out,K562,Carmofur,1.0,1,0.0134906768798828
+leave_drug_out,K562,Prednisone,1.0,1,0.8172397613525391
+leave_drug_out,K562,CUDC-101,1.0,1,0.5594520568847656
+leave_drug_out,K562,Lenalidomide (CC-5013),1.0,1,0.1663494110107422
+leave_drug_out,K562,Mocetinostat (MGCD0103),1.0,1,0.2014369964599609
+leave_drug_out,K562,Ki8751,1.0,1,0.3816585540771484
+leave_drug_out,K562,Ofloxacin,1.0,1,-0.0812053680419922
+leave_drug_out,K562,Filgotinib (GLPG0634),1.0,1,0.2435665130615235
+leave_MoA_out,K562,IOX2,0.9414893617021276,1,0.0930099487304687
+leave_MoA_out,K562,PF-3845,0.973404255319149,1,0.3760528564453125
+leave_MoA_out,K562,Trichostatin A (TSA),0.9787234042553192,1,2.449804306030273
+leave_MoA_out,K562,Bisindolylmaleimide IX (Ro 31-8220 Mesylate),0.9840425531914894,1,-0.0645427703857421
+leave_MoA_out,K562,Tanespimycin (17-AAG),0.9361702127659576,1,0.0486946105957031
+leave_MoA_out,K562,Avagacestat (BMS-708163),0.9893617021276596,1,0.1474723815917968
+leave_MoA_out,K562,BMS-911543,0.8936170212765957,1,0.0557174682617188
+partial_library,K562,batch,0.2,1,0.0918960571289062
+partial_library,K562,batch,0.4,1,0.1600608825683593
+partial_library,K562,batch,0.6,1,-0.0846405029296875
+leave_drug_out,K562,"Patupilone (EPO906, Epothilone B)",1.0,2,0.3119869232177735
+leave_drug_out,K562,Pelitinib (EKB-569),1.0,2,-0.18798828125
+leave_drug_out,K562,"Tozasertib (VX-680, MK-0457)",1.0,2,0.0
+leave_drug_out,K562,BMS-265246,1.0,2,0.1137619018554687
+leave_drug_out,K562,Filgotinib (GLPG0634),1.0,2,2.5623950958251958
+leave_drug_out,K562,Entacapone,1.0,2,-0.0129108428955078
+leave_drug_out,K562,Tofacitinib (CP-690550) Citrate,1.0,2,0.5254898071289062
+leave_drug_out,K562,Alendronate sodium trihydrate,1.0,2,0.393289566040039
+leave_drug_out,K562,PD173074,1.0,2,0.2803115844726562
+leave_drug_out,K562,UNC0379,1.0,2,0.3259658813476563
+leave_drug_out,K562,Lomustine,1.0,2,0.5339126586914062
+leave_drug_out,K562,WP1066,1.0,2,-0.2944393157958984
+leave_drug_out,K562,AR-42,1.0,2,1.027679443359375
+leave_drug_out,K562,Danusertib (PHA-739358),1.0,2,0.270822525024414
+leave_drug_out,K562,Altretamine,1.0,2,0.7386341094970703
+leave_drug_out,K562,Lapatinib (GW-572016) Ditosylate,1.0,2,0.2849063873291015
+leave_drug_out,K562,S3I-201,1.0,2,0.0990772247314453
+leave_drug_out,K562,TMP195,1.0,2,0.1638603210449218
+leave_drug_out,K562,"Fedratinib (SAR302503, TG101348)",1.0,2,1.072713851928711
+leave_drug_out,K562,PF-3845,1.0,2,0.0179080963134765
+leave_drug_out,K562,PD98059,1.0,2,0.3263893127441406
+leave_drug_out,K562,Linifanib (ABT-869),1.0,2,0.9924392700195312
+leave_drug_out,K562,TGX-221,1.0,2,0.0
+leave_drug_out,K562,GSK J1,1.0,2,0.4926147460937501
+leave_drug_out,K562,UNC0631,1.0,2,0.3687858581542969
+leave_drug_out,K562,Obatoclax Mesylate (GX15-070),1.0,2,0.0
+leave_drug_out,K562,Triamcinolone Acetonide,1.0,2,0.7204856872558595
+leave_drug_out,K562,Bisindolylmaleimide IX (Ro 31-8220 Mesylate),1.0,2,0.8141956329345703
+leave_drug_out,K562,"Cerdulatinib (PRT062070, PRT2070)",1.0,2,-0.0977916717529297
+leave_drug_out,K562,Busulfan,1.0,2,-0.0534172058105468
+leave_drug_out,K562,Barasertib (AZD1152-HQPA),1.0,2,-0.0982627868652343
+leave_MoA_out,K562,JNJ-26854165 (Serdemetan),0.9680851063829788,2,0.0730800628662109
+leave_MoA_out,K562,Valproic acid sodium salt (Sodium valproate),0.9787234042553192,2,0.0181121826171875
+leave_MoA_out,K562,PD98059,0.9787234042553192,2,-0.0659847259521484
+leave_MoA_out,K562,Clevudine,0.8723404255319149,2,0.217529296875
+leave_MoA_out,K562,ITSA-1 (ITSA1),0.7978723404255319,2,-0.1107101440429688
+partial_library,K562,batch,0.2,2,0.0126361846923827
+partial_library,K562,batch,0.4,2,-0.0772342681884765
+partial_library,K562,batch,0.6,2,0.1202869415283203
+leave_drug_out,K562,PHA-680632,1.0,3,0.1160774230957031
+leave_drug_out,K562,GSK1070916,1.0,3,0.0379638671875
+leave_drug_out,K562,Busulfan,1.0,3,-0.0455360412597656
+leave_drug_out,K562,GSK-LSD1 2HCl,1.0,3,0.1333141326904297
+leave_drug_out,K562,"Fluorouracil (5-Fluoracil, 5-FU)",1.0,3,0.0317363739013672
+leave_drug_out,K562,Barasertib (AZD1152-HQPA),1.0,3,0.0
+leave_drug_out,K562,Epothilone A,1.0,3,0.746044158935547
+leave_drug_out,K562,Resminostat,1.0,3,0.0597877502441405
+leave_drug_out,K562,Decitabine,1.0,3,1.1807518005371094
+leave_drug_out,K562,JNJ-7706621,1.0,3,0.4546623229980469
+leave_drug_out,K562,Alendronate sodium trihydrate,1.0,3,0.5088825225830078
+leave_drug_out,K562,Triamcinolone Acetonide,1.0,3,0.3625087738037109
+leave_drug_out,K562,Ki16425,1.0,3,-0.1256542205810547
+leave_drug_out,K562,Tazemetostat (EPZ-6438),1.0,3,0.6100139617919923
+leave_drug_out,K562,"Fedratinib (SAR302503, TG101348)",1.0,3,1.597574234008789
+leave_drug_out,K562,PF-573228,1.0,3,1.756845474243164
+leave_drug_out,K562,MK-5108 (VX-689),1.0,3,0.7514228820800782
+leave_drug_out,K562,Regorafenib (BAY 73-4506),1.0,3,0.3278236389160156
+leave_drug_out,K562,Amisulpride,1.0,3,0.9747619628906248
+leave_drug_out,K562,Meprednisone,1.0,3,0.3607006072998047
+leave_drug_out,K562,AZD1480,1.0,3,0.0769462585449219
+leave_drug_out,K562,Sirtinol,1.0,3,0.391010284423828
+leave_drug_out,K562,Danusertib (PHA-739358),1.0,3,0.4005165100097656
+leave_drug_out,K562,XAV-939,1.0,3,0.0719547271728516
+leave_drug_out,K562,PFI-1 (PF-6405761),1.0,3,0.3847560882568359
+leave_drug_out,K562,Quercetin,1.0,3,0.1791400909423828
+leave_MoA_out,K562,PD173074,0.9414893617021276,3,0.32806396484375
+leave_MoA_out,K562,"Tozasertib (VX-680, MK-0457)",0.8882978723404256,3,0.4631156921386719
+leave_MoA_out,K562,SL-327,0.9787234042553192,3,-0.1253261566162108
+leave_MoA_out,K562,Disulfiram,0.973404255319149,3,-0.1506271362304687
+leave_MoA_out,K562,Divalproex Sodium,0.9893617021276596,3,-0.2602996826171875
+partial_library,K562,batch,0.2,3,0.1296291351318358
+partial_library,K562,batch,0.4,3,-0.0112953186035155
+partial_library,K562,batch,0.6,3,0.2022705078125
+leave_drug_out,K562,SRT3025 HCl,1.0,4,0.1354255676269531
+leave_drug_out,K562,Ruxolitinib (INCB018424),1.0,4,0.1291160583496094
+leave_drug_out,K562,Sorafenib Tosylate,1.0,4,0.5736789703369142
+leave_drug_out,K562,Epothilone A,1.0,4,0.0
+leave_drug_out,K562,Ki8751,1.0,4,0.5416316986083984
+leave_drug_out,K562,ENMD-2076,1.0,4,0.4467964172363281
+leave_drug_out,K562,AT9283,1.0,4,0.5320892333984375
+leave_drug_out,K562,CEP-33779,1.0,4,-0.1661720275878906
+leave_drug_out,K562,Motesanib Diphosphate (AMG-706),1.0,4,0.4222660064697265
+leave_drug_out,K562,Azacitidine,1.0,4,0.0
+leave_drug_out,K562,WP1066,1.0,4,0.0764541625976562
+leave_drug_out,K562,Tie2 kinase inhibitor,1.0,4,0.366943359375
+leave_drug_out,K562,Trametinib (GSK1120212),1.0,4,-0.0036792755126953
+leave_drug_out,K562,SB431542,1.0,4,-0.0905742645263672
+leave_drug_out,K562,Streptozotocin (STZ),1.0,4,-0.2204914093017579
+leave_drug_out,K562,Raltitrexed,1.0,4,0.0
+leave_drug_out,K562,Flavopiridol HCl,1.0,4,-0.5196437835693359
+leave_drug_out,K562,Sodium Phenylbutyrate,1.0,4,0.6842327117919923
+leave_drug_out,K562,Quercetin,1.0,4,-0.1531162261962891
+leave_drug_out,K562,NVP-BSK805 2HCl,1.0,4,-0.0931015014648437
+leave_drug_out,K562,Tucidinostat (Chidamide),1.0,4,0.4963016510009765
+leave_drug_out,K562,Linifanib (ABT-869),1.0,4,0.2213096618652343
+leave_drug_out,K562,Bisindolylmaleimide IX (Ro 31-8220 Mesylate),1.0,4,0.5500583648681641
+leave_drug_out,K562,Nilotinib (AMN-107),1.0,4,0.1675014495849609
+leave_drug_out,K562,S3I-201,1.0,4,0.2429370880126952
+leave_drug_out,K562,GSK1070916,1.0,4,-0.0018215179443359
+leave_drug_out,K562,INO-1001 (3-Aminobenzamide),1.0,4,-0.0943679809570312
+leave_drug_out,K562,AZD1480,1.0,4,0.0163364410400391
+leave_drug_out,K562,Mercaptopurine (6-MP),1.0,4,0.2844829559326172
+leave_drug_out,K562,"Roscovitine (Seliciclib,CYC202)",1.0,4,-0.060659408569336
+leave_drug_out,K562,MK-5108 (VX-689),1.0,4,0.7749271392822267
+leave_MoA_out,K562,Sorafenib Tosylate,0.9787234042553192,4,0.7281169891357422
+leave_MoA_out,K562,Givinostat (ITF2357),0.9361702127659576,4,0.7503890991210938
+leave_MoA_out,K562,CEP-33779,0.8936170212765957,4,1.0825252532958984
+leave_MoA_out,K562,SNS-314,0.8882978723404256,4,-0.0517749786376953
+leave_MoA_out,K562,Celecoxib,0.9787234042553192,4,0.0866641998291015
+leave_MoA_out,K562,Trichostatin A (TSA),0.9787234042553192,4,0.4917564392089844
+leave_MoA_out,K562,Divalproex Sodium,0.9893617021276596,4,0.830272674560547
+partial_library,K562,batch,0.2,4,0.1413764953613281
+partial_library,K562,batch,0.4,4,0.065500259399414
+partial_library,K562,batch,0.6,4,0.2577457427978516
+leave_drug_out,MCF7,Selisistat (EX 527),1.0,0,-0.0177717208862304
+leave_drug_out,MCF7,KW-2449,1.0,0,-0.1128416061401366
+leave_drug_out,MCF7,Lenalidomide (CC-5013),1.0,0,0.0891180038452149
+leave_drug_out,MCF7,MK-0752,1.0,0,0.2229957580566406
+leave_drug_out,MCF7,Resminostat,1.0,0,0.0
+leave_drug_out,MCF7,Alendronate sodium trihydrate,1.0,0,-0.028273582458496
+leave_drug_out,MCF7,A-366,1.0,0,0.2108564376831054
+leave_drug_out,MCF7,Veliparib (ABT-888),1.0,0,0.4665393829345704
+leave_drug_out,MCF7,Carmofur,1.0,0,-0.0771198272705078
+leave_drug_out,MCF7,AG-490 (Tyrphostin B42),1.0,0,0.1016321182250976
+leave_drug_out,MCF7,Meprednisone,1.0,0,-0.0471925735473632
+leave_drug_out,MCF7,AC480 (BMS-599626),1.0,0,-0.0195016860961913
+leave_drug_out,MCF7,GSK1070916,1.0,0,0.0707101821899414
+leave_drug_out,MCF7,TGX-221,1.0,0,0.1192941665649414
+leave_drug_out,MCF7,AG-14361,1.0,0,-0.0431499481201172
+leave_drug_out,MCF7,Altretamine,1.0,0,0.0451612472534179
+leave_drug_out,MCF7,Givinostat (ITF2357),1.0,0,0.0
+leave_drug_out,MCF7,MC1568,1.0,0,2.119564056396484
+leave_drug_out,MCF7,SRT2104 (GSK2245840),1.0,0,2.008460998535156
+leave_drug_out,MCF7,PF-573228,1.0,0,0.1002893447875977
+leave_drug_out,MCF7,Prednisone,1.0,0,0.2158346176147461
+leave_drug_out,MCF7,Fasudil (HA-1077) HCl,1.0,0,-0.0475616455078125
+leave_drug_out,MCF7,Clevudine,1.0,0,-0.2353420257568359
+leave_drug_out,MCF7,M344,1.0,0,0.0
+leave_drug_out,MCF7,Hesperadin,1.0,0,-0.1580743789672852
+leave_drug_out,MCF7,SL-327,1.0,0,0.0174055099487305
+leave_drug_out,MCF7,Ofloxacin,1.0,0,0.0602931976318359
+leave_drug_out,MCF7,TG101209,1.0,0,0.0
+leave_drug_out,MCF7,BMS-754807,1.0,0,0.0285158157348632
+leave_drug_out,MCF7,"Roscovitine (Seliciclib,CYC202)",1.0,0,0.0273666381835937
+leave_drug_out,MCF7,Ki16425,1.0,0,-0.1174478530883788
+leave_drug_out,MCF7,(+)-JQ1,1.0,0,0.0
+leave_drug_out,MCF7,Decitabine,1.0,0,-0.2133264541625976
+leave_drug_out,MCF7,Costunolide,1.0,0,-0.1778955459594726
+leave_drug_out,MCF7,Mercaptopurine (6-MP),1.0,0,0.1601800918579101
+leave_MoA_out,MCF7,SRT3025 HCl,0.8723404255319149,0,0.8213024139404297
+leave_MoA_out,MCF7,Zileuton,0.973404255319149,0,0.1084880828857421
+leave_MoA_out,MCF7,Givinostat (ITF2357),0.9361702127659576,0,0.0
+leave_MoA_out,MCF7,TGX-221,0.9840425531914894,0,0.1829996109008789
+leave_MoA_out,MCF7,AT9283,0.8936170212765957,0,-0.0536909103393554
+leave_MoA_out,MCF7,PD98059,0.9787234042553192,0,-0.035506248474121
+leave_MoA_out,MCF7,Valproic acid sodium salt (Sodium valproate),0.9787234042553192,0,0.0663757324218749
+leave_MoA_out,MCF7,Ramelteon,0.9893617021276596,0,1.1715631484985352
+partial_library,MCF7,batch,0.2,0,0.2311296463012695
+partial_library,MCF7,batch,0.4,0,0.0487117767333984
+partial_library,MCF7,batch,0.6,0,0.8415613174438477
+leave_drug_out,MCF7,Hesperadin,1.0,1,0.0
+leave_drug_out,MCF7,Celecoxib,1.0,1,0.1707296371459961
+leave_drug_out,MCF7,WHI-P154,1.0,1,-0.0114774703979492
+leave_drug_out,MCF7,Givinostat (ITF2357),1.0,1,0.2348899841308592
+leave_drug_out,MCF7,FLLL32,1.0,1,0.8350706100463867
+leave_drug_out,MCF7,Zileuton,1.0,1,0.1332550048828125
+leave_drug_out,MCF7,S3I-201,1.0,1,0.0160894393920899
+leave_drug_out,MCF7,Andarine,1.0,1,-0.0110359191894531
+leave_drug_out,MCF7,Regorafenib (BAY 73-4506),1.0,1,2.3859338760375977
+leave_drug_out,MCF7,AG-14361,1.0,1,-0.1070709228515625
+leave_drug_out,MCF7,Tofacitinib (CP-690550) Citrate,1.0,1,0.1292629241943358
+leave_drug_out,MCF7,"Temsirolimus (CCI-779, NSC 683864)",1.0,1,-0.0113096237182617
+leave_drug_out,MCF7,Alendronate sodium trihydrate,1.0,1,0.0002155303955077
+leave_drug_out,MCF7,Divalproex Sodium,1.0,1,0.2219505310058593
+leave_drug_out,MCF7,GSK-LSD1 2HCl,1.0,1,0.3434762954711914
+leave_drug_out,MCF7,Aurora A Inhibitor I,1.0,1,0.9775571823120116
+leave_drug_out,MCF7,Curcumin,1.0,1,0.3973093032836914
+leave_drug_out,MCF7,Tucidinostat (Chidamide),1.0,1,0.0402097702026367
+leave_drug_out,MCF7,SL-327,1.0,1,-0.00604248046875
+leave_drug_out,MCF7,SNS-314,1.0,1,0.009378433227539
+leave_drug_out,MCF7,Azacitidine,1.0,1,0.1512556076049805
+leave_drug_out,MCF7,G007-LK,1.0,1,0.3940982818603515
+leave_drug_out,MCF7,Pracinostat (SB939),1.0,1,0.0
+leave_drug_out,MCF7,Ruxolitinib (INCB018424),1.0,1,0.1486377716064453
+leave_drug_out,MCF7,CYC116,1.0,1,-0.0097064971923828
+leave_drug_out,MCF7,CUDC-101,1.0,1,-0.0805530548095703
+leave_drug_out,MCF7,Lapatinib (GW-572016) Ditosylate,1.0,1,0.0529184341430663
+leave_drug_out,MCF7,UNC0379,1.0,1,0.3675260543823242
+leave_drug_out,MCF7,SB431542,1.0,1,-0.0799055099487305
+leave_drug_out,MCF7,Mocetinostat (MGCD0103),1.0,1,-1.0210018157958984
+leave_drug_out,MCF7,Ki8751,1.0,1,-0.1699342727661132
+leave_drug_out,MCF7,"Roscovitine (Seliciclib,CYC202)",1.0,1,-0.0215444564819335
+leave_drug_out,MCF7,Ofloxacin,1.0,1,0.0964565277099609
+leave_drug_out,MCF7,Daphnetin,1.0,1,0.0
+leave_drug_out,MCF7,Filgotinib (GLPG0634),1.0,1,0.2513160705566406
+leave_MoA_out,MCF7,IOX2,0.9414893617021276,1,-0.1260519027709961
+leave_MoA_out,MCF7,Prednisone,0.973404255319149,1,0.230072021484375
+leave_MoA_out,MCF7,Mesna,0.9787234042553192,1,0.1534843444824219
+leave_MoA_out,MCF7,Enzastaurin (LY317615),0.9840425531914894,1,0.4893455505371094
+leave_MoA_out,MCF7,M344,0.9361702127659576,1,0.0
+leave_MoA_out,MCF7,Filgotinib (GLPG0634),0.8936170212765957,1,0.0341167449951171
+partial_library,MCF7,batch,0.2,1,0.005746841430664
+partial_library,MCF7,batch,0.4,1,0.0638771057128906
+partial_library,MCF7,batch,0.6,1,0.1245536804199218
+leave_drug_out,MCF7,AICAR (Acadesine),1.0,2,-0.1805391311645508
+leave_drug_out,MCF7,"Patupilone (EPO906, Epothilone B)",1.0,2,1.2542076110839844
+leave_drug_out,MCF7,Pelitinib (EKB-569),1.0,2,0.0879364013671875
+leave_drug_out,MCF7,CYC116,1.0,2,0.0344820022583007
+leave_drug_out,MCF7,"Tozasertib (VX-680, MK-0457)",1.0,2,-0.0640878677368165
+leave_drug_out,MCF7,BMS-265246,1.0,2,0.4218893051147461
+leave_drug_out,MCF7,UNC1999,1.0,2,0.3760633468627929
+leave_drug_out,MCF7,Filgotinib (GLPG0634),1.0,2,0.0076169967651366
+leave_drug_out,MCF7,Entacapone,1.0,2,0.1490144729614257
+leave_drug_out,MCF7,Tofacitinib (CP-690550) Citrate,1.0,2,0.156341552734375
+leave_drug_out,MCF7,Alendronate sodium trihydrate,1.0,2,-0.0205669403076172
+leave_drug_out,MCF7,PD173074,1.0,2,0.1694402694702148
+leave_drug_out,MCF7,UNC0379,1.0,2,0.2043542861938476
+leave_drug_out,MCF7,Lomustine,1.0,2,0.2135934829711914
+leave_drug_out,MCF7,WP1066,1.0,2,0.2687149047851563
+leave_drug_out,MCF7,AR-42,1.0,2,0.0
+leave_drug_out,MCF7,Danusertib (PHA-739358),1.0,2,0.0570707321166992
+leave_drug_out,MCF7,Cimetidine,1.0,2,0.0832242965698242
+leave_drug_out,MCF7,Navitoclax (ABT-263),1.0,2,0.0862159729003906
+leave_drug_out,MCF7,"Fluorouracil (5-Fluoracil, 5-FU)",1.0,2,0.1190042495727539
+leave_drug_out,MCF7,Quercetin,1.0,2,-0.0194425582885741
+leave_drug_out,MCF7,Altretamine,1.0,2,0.3480787277221679
+leave_drug_out,MCF7,Lapatinib (GW-572016) Ditosylate,1.0,2,-0.007547378540039
+leave_drug_out,MCF7,Thiotepa,1.0,2,2.0845746994018555
+leave_drug_out,MCF7,TMP195,1.0,2,-0.0055065155029296
+leave_drug_out,MCF7,"Fedratinib (SAR302503, TG101348)",1.0,2,0.8306026458740234
+leave_drug_out,MCF7,PF-3845,1.0,2,0.0781679153442383
+leave_drug_out,MCF7,PD98059,1.0,2,0.0570974349975585
+leave_drug_out,MCF7,Linifanib (ABT-869),1.0,2,0.6405735015869142
+leave_drug_out,MCF7,TGX-221,1.0,2,-0.2488317489624024
+leave_drug_out,MCF7,UNC0631,1.0,2,0.2271871566772461
+leave_drug_out,MCF7,Obatoclax Mesylate (GX15-070),1.0,2,0.0213851928710936
+leave_drug_out,MCF7,Triamcinolone Acetonide,1.0,2,0.2031002044677734
+leave_drug_out,MCF7,Bisindolylmaleimide IX (Ro 31-8220 Mesylate),1.0,2,0.5930862426757812
+leave_drug_out,MCF7,"Cerdulatinib (PRT062070, PRT2070)",1.0,2,0.1108865737915039
+leave_drug_out,MCF7,Busulfan,1.0,2,0.0980091094970702
+leave_drug_out,MCF7,Barasertib (AZD1152-HQPA),1.0,2,0.0509424209594727
+leave_MoA_out,MCF7,Navitoclax (ABT-263),0.9680851063829788,2,-0.0890893936157226
+leave_MoA_out,MCF7,Valproic acid sodium salt (Sodium valproate),0.9787234042553192,2,0.1262292861938477
+leave_MoA_out,MCF7,Fulvestrant,0.973404255319149,2,0.2130661010742188
+leave_MoA_out,MCF7,Ramelteon,0.9893617021276596,2,0.1364641189575194
+leave_MoA_out,MCF7,Sorafenib Tosylate,0.9787234042553192,2,1.793156623840332
+leave_MoA_out,MCF7,SRT2104 (GSK2245840),0.8723404255319149,2,-0.0488672256469726
+leave_MoA_out,MCF7,UNC0631,0.7978723404255319,2,0.2495279312133789
+partial_library,MCF7,batch,0.2,2,0.0
+partial_library,MCF7,batch,0.4,2,-0.0162296295166015
+partial_library,MCF7,batch,0.6,2,0.104471206665039
+leave_drug_out,MCF7,Selisistat (EX 527),1.0,3,0.0
+leave_drug_out,MCF7,AG-490 (Tyrphostin B42),1.0,3,-0.1423616409301757
+leave_drug_out,MCF7,GSK1070916,1.0,3,0.1132946014404296
+leave_drug_out,MCF7,Busulfan,1.0,3,-0.0007858276367186
+leave_drug_out,MCF7,GSK-LSD1 2HCl,1.0,3,1.785586357116699
+leave_drug_out,MCF7,"Fluorouracil (5-Fluoracil, 5-FU)",1.0,3,0.1915845870971679
+leave_drug_out,MCF7,Barasertib (AZD1152-HQPA),1.0,3,0.0416641235351563
+leave_drug_out,MCF7,Epothilone A,1.0,3,0.8851308822631835
+leave_drug_out,MCF7,Resminostat,1.0,3,0.6556081771850586
+leave_drug_out,MCF7,Decitabine,1.0,3,0.4367856979370117
+leave_drug_out,MCF7,JNJ-7706621,1.0,3,0.0196733474731446
+leave_drug_out,MCF7,PD173074,1.0,3,0.065333366394043
+leave_drug_out,MCF7,BMS-536924,1.0,3,0.2800540924072265
+leave_drug_out,MCF7,Alendronate sodium trihydrate,1.0,3,0.1844234466552733
+leave_drug_out,MCF7,Triamcinolone Acetonide,1.0,3,0.4200773239135742
+leave_drug_out,MCF7,G007-LK,1.0,3,0.2168302536010742
+leave_drug_out,MCF7,Ki16425,1.0,3,0.331949234008789
+leave_drug_out,MCF7,Celecoxib,1.0,3,0.0
+leave_drug_out,MCF7,Tazemetostat (EPZ-6438),1.0,3,0.0627641677856445
+leave_drug_out,MCF7,"Fedratinib (SAR302503, TG101348)",1.0,3,0.0
+leave_drug_out,MCF7,RG108,1.0,3,0.0494594573974609
+leave_drug_out,MCF7,PF-573228,1.0,3,-0.04791259765625
+leave_drug_out,MCF7,MK-5108 (VX-689),1.0,3,0.0795278549194336
+leave_drug_out,MCF7,Regorafenib (BAY 73-4506),1.0,3,1.664396286010742
+leave_drug_out,MCF7,Ofloxacin,1.0,3,0.1124610900878906
+leave_drug_out,MCF7,Amisulpride,1.0,3,0.1377458572387696
+leave_drug_out,MCF7,Meprednisone,1.0,3,0.0233669281005859
+leave_drug_out,MCF7,AZD1480,1.0,3,-0.1388654708862305
+leave_drug_out,MCF7,Droxinostat,1.0,3,0.1379375457763672
+leave_drug_out,MCF7,Sirtinol,1.0,3,0.0649757385253907
+leave_drug_out,MCF7,Danusertib (PHA-739358),1.0,3,0.2636356353759765
+leave_drug_out,MCF7,XAV-939,1.0,3,0.0105667114257811
+leave_drug_out,MCF7,BMS-754807,1.0,3,0.1156063079833984
+leave_drug_out,MCF7,PFI-1 (PF-6405761),1.0,3,1.0391731262207031
+leave_drug_out,MCF7,Quercetin,1.0,3,2.275715827941894
+leave_MoA_out,MCF7,PD173074,0.9414893617021276,3,0.1387252807617188
+leave_MoA_out,MCF7,Sodium Phenylbutyrate,0.8723404255319149,3,-0.0006904602050782
+leave_MoA_out,MCF7,Danusertib (PHA-739358),0.8882978723404256,3,-0.0061941146850585
+leave_MoA_out,MCF7,Valproic acid sodium salt (Sodium valproate),0.9787234042553192,3,0.1238632202148437
+leave_MoA_out,MCF7,Trametinib (GSK1120212),0.9787234042553192,3,0.0
+leave_MoA_out,MCF7,PF-3845,0.973404255319149,3,-0.004979133605957
+leave_MoA_out,MCF7,Divalproex Sodium,0.9893617021276596,3,0.1392087936401367
+leave_MoA_out,MCF7,SB431542,0.9840425531914894,3,-0.0282678604125976
+partial_library,MCF7,batch,0.2,3,-0.0202913284301757
+partial_library,MCF7,batch,0.4,3,0.0
+partial_library,MCF7,batch,0.6,3,0.2519111633300781
+leave_drug_out,MCF7,SRT3025 HCl,1.0,4,0.0
+leave_drug_out,MCF7,Divalproex Sodium,1.0,4,0.0704421997070312
+leave_drug_out,MCF7,Ruxolitinib (INCB018424),1.0,4,0.106623649597168
+leave_drug_out,MCF7,Ofloxacin,1.0,4,0.1247844696044921
+leave_drug_out,MCF7,Sorafenib Tosylate,1.0,4,0.0
+leave_drug_out,MCF7,Epothilone A,1.0,4,0.2153587341308594
+leave_drug_out,MCF7,Ki8751,1.0,4,0.150681495666504
+leave_drug_out,MCF7,CEP-33779,1.0,4,0.0998620986938476
+leave_drug_out,MCF7,Ramelteon,1.0,4,0.0
+leave_drug_out,MCF7,Motesanib Diphosphate (AMG-706),1.0,4,0.1518278121948242
+leave_drug_out,MCF7,Azacitidine,1.0,4,1.125636100769043
+leave_drug_out,MCF7,WP1066,1.0,4,1.569692611694336
+leave_drug_out,MCF7,Tie2 kinase inhibitor,1.0,4,0.1182632446289063
+leave_drug_out,MCF7,Trametinib (GSK1120212),1.0,4,0.0
+leave_drug_out,MCF7,Cimetidine,1.0,4,0.0
+leave_drug_out,MCF7,G007-LK,1.0,4,0.0808000564575195
+leave_drug_out,MCF7,UNC0379,1.0,4,-0.0201168060302734
+leave_drug_out,MCF7,Streptozotocin (STZ),1.0,4,0.0814933776855468
+leave_drug_out,MCF7,Raltitrexed,1.0,4,0.203129768371582
+leave_drug_out,MCF7,Flavopiridol HCl,1.0,4,0.4155416488647461
+leave_drug_out,MCF7,Sodium Phenylbutyrate,1.0,4,0.0169553756713866
+leave_drug_out,MCF7,Ivosidenib (AG-120),1.0,4,-0.0211563110351563
+leave_drug_out,MCF7,Quercetin,1.0,4,-0.0529851913452148
+leave_drug_out,MCF7,NVP-BSK805 2HCl,1.0,4,0.0159025192260742
+leave_drug_out,MCF7,Tucidinostat (Chidamide),1.0,4,0.2078084945678711
+leave_drug_out,MCF7,Linifanib (ABT-869),1.0,4,0.8115444183349612
+leave_drug_out,MCF7,Bisindolylmaleimide IX (Ro 31-8220 Mesylate),1.0,4,0.0
+leave_drug_out,MCF7,Nilotinib (AMN-107),1.0,4,0.2060108184814453
+leave_drug_out,MCF7,GSK1070916,1.0,4,-0.11322021484375
+leave_drug_out,MCF7,INO-1001 (3-Aminobenzamide),1.0,4,0.0683784484863282
+leave_drug_out,MCF7,AZD1480,1.0,4,-0.0891103744506836
+leave_drug_out,MCF7,Mercaptopurine (6-MP),1.0,4,0.1393232345581053
+leave_drug_out,MCF7,BMS-911543,1.0,4,0.2459917068481446
+leave_drug_out,MCF7,"Roscovitine (Seliciclib,CYC202)",1.0,4,0.9275474548339844
+leave_drug_out,MCF7,MK-5108 (VX-689),1.0,4,0.1285429000854493
+leave_MoA_out,MCF7,Sorafenib Tosylate,0.9787234042553192,4,0.2659168243408203
+leave_MoA_out,MCF7,Pracinostat (SB939),0.9361702127659576,4,1.4992313385009766
+leave_MoA_out,MCF7,AZD1480,0.8936170212765957,4,-0.0470838546752929
+leave_MoA_out,MCF7,ZM 447439,0.8882978723404256,4,0.3264665603637696
+leave_MoA_out,MCF7,Mesna,0.9787234042553192,4,0.0829801559448241
+leave_MoA_out,MCF7,Thalidomide,0.9893617021276596,4,0.0723247528076171
+leave_MoA_out,MCF7,"Temsirolimus (CCI-779, NSC 683864)",0.9840425531914894,4,0.0790061950683593
+partial_library,MCF7,batch,0.2,4,0.1074962615966796
+partial_library,MCF7,batch,0.4,4,0.0
+partial_library,MCF7,batch,0.6,4,0.8605356216430665

@@ -1,0 +1,90 @@
+# ---- data (large; obtain separately, see DATA.md) ----
+/data
+data/
+*.h5ad
+*.npz
+*.h5
+*.tar.gz
+
+# ---- model weights / checkpoints (large) ----
+checkpoints/
+*.pt
+*.ckpt
+
+# ---- per-experiment results ----
+# The SUMMARY tables (1.8 MB for all 17 experiments) are TRACKED. They used to be excluded as
+# "large regenerable dumps", and both halves of that were wrong: they are not large, and a
+# reader cannot regenerate them, because that needs the 40 GB of processed tensors obtained
+# separately (see DATA.md). Excluding them meant every results/expNN_* path cited in the
+# README, in CORRECTIONS.md and in the paper resolved to nothing, so no reported number could
+# be checked. That is not acceptable for a paper whose subject is unverifiable numbers.
+#
+# The genuinely large raw dumps stay out.
+# (gitignore has no trailing comments: a '#' after a pattern becomes part of the pattern.)
+# 41 MB across all experiments:
+results/**/per_query_scores.csv
+# 7.6 MB of HIR-Bench per-instance rows:
+results/**/*method_independent*.csv
+results/exp11_hir_benchmark/FULL_reproduced_*/
+
+# ...with one deliberate exception. exp16 and exp17 read exp12's per-query scores DIRECTLY,
+# and those 765 queries are the evidence for the paper's central Class-A-versus-Class-B
+# contrast (+0.129 against -0.037) and for the sentinel correction in CORRECTIONS.md. Without
+# this file the audit cannot be re-run. 2.1 MB.
+!results/exp12_partial_observed_retrieval/per_query_scores.csv
+
+# ---- python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ---- environments ----
+.venv/
+venv/
+env/
+.python-version
+
+# ---- logs / temp / os / editors ----
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ---- scratch backups / run logs (session-local, not for git) ----
+results/_*_backup/
+results/_runlogs/
+.venv_pred/
+# dated figure-rename backup snapshot (session-local, not for git)
+/.fig_rename_backup_*/
+
+# ---- manuscript / internal writing (kept local, not for public repo) ----
+paper/
+docs/report_*.md
+docs/project_plan_*.md
+
+# (per-experiment results are handled at the top of this file: summaries tracked, raw dumps not)
+
+# ---- Class C: large GDSC dose-response downloads (obtain from cancerrxgene.org, see DATA.md) ----
+*.xlsx
+results/_audit/
+analysis/**/*.xlsx
+
+# ---- keep curated upgrade outputs ----
+!results/upgrade/
+!results/upgrade/**
+
+# ...except the superseded HIR-Bench lean run (4 MB, and its AUC is now regenerated in-tree by
+# `exp11_hir_benchmark.py --skip-method-perf`, which writes results/exp11_hir_benchmark/).
+results/upgrade/exp11_lean/
+
+# ---- figures live with the manuscript (kept local), not the code repo ----
+results/main_figures/

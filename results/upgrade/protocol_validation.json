@@ -1,0 +1,48 @@
+{
+  "probe1_translation_invariance": {
+    "probe": "translation_invariance",
+    "spearman_raw_vs_shifted": 0.9999999999999998,
+    "max_abs_score_diff": 2.6702880859375e-05,
+    "is_translation_invariant": true,
+    "interpretation": "If invariant, raw-vs-delta comparison is fair; delta-asymmetry objection falsified."
+  },
+  "probe2_subsampling_power": {
+    "probe": "subsampling_power",
+    "by_n": {
+      "60": {
+        "mean": -0.8997482299804688,
+        "std": 0.053290318066632376,
+        "cv": 0.059228033232952226
+      },
+      "120": {
+        "mean": -0.4440662384033203,
+        "std": 0.016919226322843848,
+        "cv": 0.03810068151913627
+      },
+      "250": {
+        "mean": -0.5445794105529785,
+        "std": 0.028545775172290563,
+        "cv": 0.05241802135569559
+      }
+    },
+    "cv_at_smallest_n": 0.059228033232952226,
+    "power_loss_likely": false,
+    "interpretation": "Low CV at operating n means the estimator is stable; power loss does not explain the null."
+  },
+  "probe3_metric_blindspot": {
+    "probe": "metric_blindspot",
+    "spearman_mean_vs_cell": -0.18822409883213323,
+    "mean_metric_cv": 0.015490656242188953,
+    "n_cases": 860,
+    "metric_is_blind": true,
+    "interpretation": "Negative/zero correlation with the cell-level reference, or near-zero dynamic range, means the scalar metric is structurally blind."
+  },
+  "probe4_magnitude_confound": {
+    "probe": "magnitude_confound",
+    "energy_vs_readout_rho_median": 0.5204168475900999,
+    "magnitude_only_vs_readout_rho_median": 0.7555780184414191,
+    "energy_explained_by_magnitude_rho_median": -0.8264465786314525,
+    "is_magnitude_confound": true,
+    "interpretation": "magnitude-only >= energy AND energy strongly explained by magnitude -> confound"
+  }
+}

@@ -1,0 +1,2 @@
+predictor,backend,note
+scgen,cpa_linear,cpa_linear = in-repo linear-latent fallback; scgen = real scvi-tools VAE

@@ -1,0 +1,13 @@
+experiment,cell_line,alpha,scorer,hit1,hit1_std,moa_ndcg,moa_ndcg_std,n_seeds
+controlled_mixture,K562,0.5,energy_raw,1.0,0.0,,,20
+controlled_mixture,K562,0.5,energy_delta,1.0,0.0,,,20
+controlled_mixture,K562,0.5,mean_cosine,0.0,0.0,,,20
+controlled_mixture,K562,0.7,energy_raw,1.0,0.0,,,20
+controlled_mixture,K562,0.7,energy_delta,1.0,0.0,,,20
+controlled_mixture,K562,0.7,mean_cosine,0.0,0.0,,,20
+controlled_mixture,K562,0.9,energy_raw,0.55,0.5104177855340404,,,20
+controlled_mixture,K562,0.9,energy_delta,0.55,0.5104177855340404,,,20
+controlled_mixture,K562,0.9,mean_cosine,0.25,0.4442616583193193,,,20
+exp12_setting_A,A549,,energy_raw,,,0.24206198357143052,0.4168157035548335,2
+exp12_setting_A,A549,,energy_delta,,,0.24206198357143052,0.4168157035548335,2
+exp12_setting_A,A549,,mean_cosine,,,0.21745730047619435,0.37936694500248996,2

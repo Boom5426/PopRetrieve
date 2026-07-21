@@ -1,0 +1,7 @@
+signal,per_query_ms,n_queries
+graph_proximity,3.7381335084016123,6
+target_overlap,3.5670558378721275,6
+signature_reversal,3.303588348596046,6
+field_match,3.4115728146086135,6
+random,3.2652567218368254,6
+distance_reduction,31.260386478000633,6

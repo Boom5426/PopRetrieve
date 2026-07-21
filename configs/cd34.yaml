@@ -1,0 +1,19 @@
+# CD34+ primary HSPCs (GSE306429) — honest negative control (exp04).
+dataset: cd34
+processed_path: ../data/processed/cd34_all.pt
+context_axis: cell_line        # single line 'CD34+'; subpops are DISCOVERED (PCA+KMeans)
+control_label: DMSO
+n_hvg: 2000
+
+self_retrieval:
+  K: 4                         # natural lineages: HSC/MPP, erythroid, myeloid, baso/mast
+  n_seeds: 8
+  cap: 160
+  seed_base: 1000
+  split_seed_base: 7000
+
+noise_control:                 # matched-budget within-vs-between
+  Ks: [2, 3]
+  cells_per_drug_subpop: 80
+  n_seeds: 12
+  min_subpop_fraction: 0.2

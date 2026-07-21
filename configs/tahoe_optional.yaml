@@ -1,0 +1,7 @@
+# Tahoe-100M — OPTIONAL ICLR strengthening anchor (plan Phase 5, NOT built this round).
+# Requires a GCP download. Placeholder only; see src/data/load_tahoe_optional.py.
+dataset: tahoe
+enabled: false
+usage:
+  A_cross_cancer_line: "cross-cancer-line heterogeneous query (larger drug library)"
+  B_single_sample_state: "single-sample natural divergent state (sensitive/resistant, EMT, persister)"
