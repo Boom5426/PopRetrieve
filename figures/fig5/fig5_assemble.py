@@ -1,4 +1,4 @@
-"""DART Figure 5: The benchmark decides the answer.
+"""JUDGE Figure 5: The benchmark decides the answer.
 
 WHY THESE TWO THINGS ARE NOW ONE FIGURE
 ---------------------------------------

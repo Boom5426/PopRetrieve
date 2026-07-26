@@ -1,4 +1,4 @@
-"""DART Figure 5 panel 5b: analytic boundary alpha*=B/(A+B)
+"""JUDGE Figure 5 panel 5b: analytic boundary alpha*=B/(A+B)
 Source data: source_data/fig5a_theoretical_boundary.csv
 Run standalone: python fig5b.py
 """

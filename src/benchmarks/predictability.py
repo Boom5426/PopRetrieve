@@ -1,7 +1,7 @@
 """HIR-Bench predictability layer.
 
 Extract observable (non-oracle) features from a benchmark cell and predict
-whether a DART-style distributional method would improve over mean retrieval.
+whether a JUDGE-style distributional method would improve over mean retrieval.
 
 The predictability module must NOT import oracle_utility — it uses only
 information available to a retrieval method at query time: the candidate
@@ -75,7 +75,7 @@ def response_diversity(X: np.ndarray, n_samples: int = 200) -> float:
 def score_disagreement(mean_scores: np.ndarray, dist_scores: np.ndarray) -> float:
     """Kendall tau distance between mean-based and distributional rankings.
 
-    Higher = the two scoring paradigms disagree more = DART may help.
+    Higher = the two scoring paradigms disagree more = JUDGE may help.
     """
     from scipy.stats import kendalltau
     tau, _ = kendalltau(mean_scores, dist_scores)

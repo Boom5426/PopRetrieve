@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """Experiment 11 — Synthetic phase diagram: when is distributional retrieval necessary?
 
-DART's central claim is a *divergence-gated* boundary: when a query population is internally
-homogeneous, mean-signature retrieval is already optimal and DART's distributional scorers
+JUDGE's central claim is a *divergence-gated* boundary: when a query population is internally
+homogeneous, mean-signature retrieval is already optimal and JUDGE's distributional scorers
 buy nothing; as the population's two modes diverge, mean-signature retrieval degrades (the
 mean washes out the minority mode) while distributional retrieval holds. This experiment maps
 that boundary as a 2-D phase diagram over a fully controlled synthetic sweep, so the phase
@@ -16,17 +16,17 @@ subpopulation by ``lam * (mu_B - mu_A)``):
 At each (lambda, alpha) cell we build many seeded queries and score the ground-truth candidate
 ('covers-both', the only candidate that reproduces BOTH modes) against distractors under:
     mean_cosine     mean-delta cosine (the signature/CMap incumbent)
-    global_energy   DART energy-distance retrieval (distributional)
-    coverage_worst  DART worst-subpop coverage (the divergence-gated scorer)
+    global_energy   JUDGE energy-distance retrieval (distributional)
+    coverage_worst  JUDGE worst-subpop coverage (the divergence-gated scorer)
 
-The phase-diagram source is the per-cell Hit@1 (and MRR) for each scorer, plus the DART
+The phase-diagram source is the per-cell Hit@1 (and MRR) for each scorer, plus the JUDGE
 advantage ``global_energy - mean_cosine`` whose sign flips across the boundary. No figure is
 drawn here (per the phase constraint); the CSVs are the plot-ready source.
 
 Outputs (results/exp11_synthetic_phase_diagram/):
     phase_diagram_source.csv    per (lambda, alpha, scorer) Hit@1, Hit@5, MRR, mean_rank
     dart_advantage_grid.csv     per (lambda, alpha) energy-vs-mean and coverage-vs-mean Δ Hit@1
-    boundary_contour.csv        per alpha, the lambda* where DART advantage crosses +0.05
+    boundary_contour.csv        per alpha, the lambda* where JUDGE advantage crosses +0.05
     divergence_calibration.csv  realized subpop cosine vs lambda (axis calibration)
     per_query_scores.csv        one row per (lambda, alpha, seed, candidate) x scorer
 
@@ -140,7 +140,7 @@ def run(n_seeds=12, grid=9, lines=("K562",), n_total=300, n_distractors=20):
     write_csv(cells, results_path(OUT, "phase_diagram_source.csv"))
     write_csv(pd.DataFrame(calib_rows), results_path(OUT, "divergence_calibration.csv"))
 
-    # --- DART advantage grid (energy - mean, coverage - mean) per (lambda, alpha) ---
+    # --- JUDGE advantage grid (energy - mean, coverage - mean) per (lambda, alpha) ---
     piv = cells.pivot_table(index=["line", "lambda", "alpha"], columns="scorer",
                             values="hit@1").reset_index()
     piv["adv_energy_vs_mean"] = piv["global_energy"] - piv["mean_cosine"]
@@ -159,7 +159,7 @@ def run(n_seeds=12, grid=9, lines=("K562",), n_total=300, n_distractors=20):
     write_csv(pd.DataFrame(bnd), results_path(OUT, "boundary_contour.csv"))
 
     # --- console headline: advantage surface ---
-    section("EXP11 HEADLINE — DART energy advantage over mean_cosine (Hit@1 Δ)")
+    section("EXP11 HEADLINE — JUDGE energy advantage over mean_cosine (Hit@1 Δ)")
     grid_view = piv.pivot_table(index="lambda", columns="alpha", values="adv_energy_vs_mean")
     log(grid_view.round(2).to_string())
     section("EXP11 — phase boundary (lambda* where energy advantage first >= +0.05)")

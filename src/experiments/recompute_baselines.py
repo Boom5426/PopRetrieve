@@ -5,7 +5,7 @@ Reads the compact per-experiment summary CSVs and emits
 ``results/baseline_comparison_master.csv`` with one row per (experiment, method, family) and a
 common metric schema (Drug Hit@1/5, MRR, nDCG@10, plus experiment-specific extras carried in a
 ``notes`` column). This is the single table a reader consults to compare every baseline against
-DART across the whole Phase-2 comparison; the per-experiment CSVs remain the detailed source.
+JUDGE across the whole Phase-2 comparison; the per-experiment CSVs remain the detailed source.
 
     python src/experiments/recompute_baselines.py
 """
@@ -24,10 +24,10 @@ from utils.logging import log, section
 
 # method -> family label (paper's taxonomy)
 FAMILY = {
-    "mean_cosine": "signature (DART special case)",
-    "global_energy": "DART distributional",
-    "coverage_mean": "DART divergence-gated",
-    "coverage_worst": "DART divergence-gated",
+    "mean_cosine": "signature (JUDGE special case)",
+    "global_energy": "JUDGE distributional",
+    "coverage_mean": "JUDGE divergence-gated",
+    "coverage_worst": "JUDGE divergence-gated",
     "cmap_cosine": "signature retrieval",
     "cmap_wtcs": "signature retrieval",
     "pca_mean": "latent mean retrieval",
@@ -35,7 +35,7 @@ FAMILY = {
     "graph_proximity": "direct inverse design (PDGrapher)",
     "target_overlap": "direct inverse design (PDGrapher)",
     "signature_reversal": "signature retrieval",
-    "distance_reduction": "DART-flavored population signal",
+    "distance_reduction": "JUDGE-flavored population signal",
     "field_match": "reference (upper)",
     "random": "reference (lower)",
 }
@@ -114,13 +114,13 @@ def _rows_exp11(root: Path) -> list[dict]:
     src = _safe_read(root / "exp11_synthetic_phase_diagram" / "dart_advantage_grid.csv")
     rows = []
     if src is not None:
-        # report the max DART energy advantage over the whole grid (the phase-diagram summary)
+        # report the max JUDGE energy advantage over the whole grid (the phase-diagram summary)
         max_adv = float(src["adv_energy_vs_mean"].max())
         mean_adv = float(src["adv_energy_vs_mean"].mean())
         rows.append({
             "experiment": "exp11_synthetic_phase_diagram",
             "method": "global_energy vs mean_cosine",
-            "family": "DART distributional vs signature",
+            "family": "JUDGE distributional vs signature",
             "drug_hit@1": None, "drug_hit@5": None, "mrr": None, "ndcg@10": None,
             "max_energy_advantage": max_adv, "mean_energy_advantage": mean_adv,
             "notes": "divergence-gated boundary; advantage = Hit@1(energy) - Hit@1(mean)",

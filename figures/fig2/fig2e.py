@@ -1,4 +1,4 @@
-"""DART Figure 2 panel 2e: the beta-interpolation spectrum, plus the K = 1 identity.
+"""JUDGE Figure 2 panel 2e: the beta-interpolation spectrum, plus the K = 1 identity.
 
 Source data:
   results/exp06_theory_limits/beta_interpolation.csv  (controlled benchmark; D_beta rises

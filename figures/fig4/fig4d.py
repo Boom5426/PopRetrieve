@@ -1,4 +1,4 @@
-"""DART Figure 4 panel 4d: recommended vs non-recommended
+"""JUDGE Figure 4 panel 4d: recommended vs non-recommended
 Source data: source_data/fig4d_recommendation_vs_outcome.csv
 Run standalone: python fig4d.py
 """

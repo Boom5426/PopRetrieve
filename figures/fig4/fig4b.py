@@ -1,4 +1,4 @@
-"""DART Figure 4 panel 4b: MoA-nDCG gain by cell line
+"""JUDGE Figure 4 panel 4b: MoA-nDCG gain by cell line
 Source data: source_data/fig4a_classA_vs_classB.csv
 Run standalone: python fig4b.py
 """
@@ -12,7 +12,7 @@ def draw_4b(ax):
 
     Presentation note (2026-07-26). The three cell lines were coloured FOCAL / GREY / COMP, i.e.
     the deck's blue "distributional" and orange "mean" roles were spent on cell-line identity,
-    which invites the reader to read a method contrast into a within-DART stratification. They
+    which invites the reader to read a method contrast into a within-JUDGE stratification. They
     are now three tints of the same blue, and the shared median is labelled directly.
     """
     p=pd.read_csv(f"{REPO}/figures/source_data/fig4a_classA_vs_classB.csv")

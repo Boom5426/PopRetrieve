@@ -1,4 +1,4 @@
-"""DART Figure 6 panel 6c: Gate 1 — structure is preserved, DIVERGENCE is not.
+"""JUDGE Figure 6 panel 6c: Gate 1 — structure is preserved, DIVERGENCE is not.
 Source data: results/exp09_structure_diagnostics/
 Run standalone: python fig6c.py
 

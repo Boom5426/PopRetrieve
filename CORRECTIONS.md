@@ -96,7 +96,7 @@ power calculation.
 
 Total n for MoA-nDCG: **600**, not 765. Q4 n for 80% power: **20,844**, not 27,794.
 
-**This sharpens the negative result.** At the lowest divergence level DART does not merely
+**This sharpens the negative result.** At the lowest divergence level JUDGE does not merely
 fail to help, it **significantly hurts** annotation recovery. `minority_state_coverage` is
 unaffected (it never used the sentinel): Q1 +0.0009, Q4 +0.0018 stand as published.
 
@@ -113,13 +113,13 @@ The table is the source data for Fig 1e and Fig 3e.
 
 | dataset | measured cosine | clears the ≲0.9 gate? | who actually wins |
 |---|---:|:---:|---|
-| cross-line (SciPlex3) | 0.032 | yes | **DART** |
+| cross-line (SciPlex3) | 0.032 | yes | **JUDGE** |
 | **CD34+ lineages** | **0.186** | **yes** | **mean-cosine** |
 | Frangieh immune | 0.709 | yes | mean-cosine (0.600 vs 0.578) |
 
 The hand-entered 0.95 placed CD34+ *outside* the gate, which made our negative control look
 like a **confirmation** of the criterion. The measured value on the same cells is 0.186:
-strongly divergent, comfortably inside the gate. The gate therefore predicts DART should win
+strongly divergent, comfortably inside the gate. The gate therefore predicts JUDGE should win
 on CD34+, and it does not. Two of three datasets clear the gate and still favour the mean.
 
 **The divergence criterion is refuted by our own negative control.** This agrees with the
@@ -185,7 +185,7 @@ set. See R13, which supersedes the reading of this experiment. On the FULL set t
 longer degenerate, it is simply **failed**: the majority-class baseline is 95.4% and the
 projection scores 61.1%.
 
-The related "predicted_mean → no-DART: 100%" is a **tautology**: `predict_regime` returns
+The related "predicted_mean → `no_DART`: 100%" is a **tautology**: `predict_regime` returns
 `no_DART` unconditionally for that information condition. It is now labelled as such and no
 longer offered as evidence.
 
@@ -197,7 +197,7 @@ longer offered as evidence.
 `per_query_scores.csv` gives 0.1190, and **the figures were built from the aggregate**. Cause:
 the paired lookup keyed on `(split_type, cell_line, heldout_drug, seed)`, which is not unique
 because the partial-library queries exist at three `observed_library_fraction` values; the
-subsequent `.iloc[0]` paired a DART row at fraction 0.4 against a baseline row at fraction
+subsequent `.iloc[0]` paired a JUDGE row at fraction 0.4 against a baseline row at fraction
 0.2. The key now includes all six fields and raises on a non-unique index. Regenerated:
 +0.1190 (recommended, n=621) versus +0.1219 (non-recommended, n=133), matching the text.
 
@@ -327,13 +327,13 @@ er = stats.rankdata(e_scores)                   # "energy: low = similar"     <-
 ```
 
 The variable holds a negated distance, so `argmin` selects the candidate **farthest** from the
-query. The mean-cosine baseline in the same scripts was ranked **correctly** (`argmax`). DART
+query. The mean-cosine baseline in the same scripts was ranked **correctly** (`argmax`). JUDGE
 was therefore ranked backwards and its incumbent was not.
 
 This is not cosmetic. Large-response candidates sit far from everything (rank corr between
 energy **distance** and candidate magnitude = **+0.79**), and large response predicts potency.
 Ranking "farthest first" therefore selects potent drugs. That, and nothing else, produced v1's
-apparent **+0.52** DART-versus-potency correlation. It is the true value with the sign flipped.
+apparent **+0.52** JUDGE-versus-potency correlation. It is the true value with the sign flipped.
 
 Two further faults in v1, both fixed: it pooled **all four doses** (10 nM to 10 uM) while every
 other retrieval experiment in the paper runs at 10 uM, and it pooled **GDSC1 and GDSC2** AUCs,
@@ -393,7 +393,7 @@ Data: `results/upgrade/class_c_magnitude_control_v2.{csv,json}`, `results/upgrad
   +0.520, and the control-subtracted distributional signal is +0.088.
 - **HIR-Bench "13,440 cells"** are benchmark **instances** (672 configurations × 20 seeds),
   not biological cells. Renamed throughout; in a single-cell paper the old wording misleads.
-- **DART's expansion** in README.md and CITATION.cff was still the pre-repositioning
+- **JUDGE's expansion** in README.md and CITATION.cff was still the pre-repositioning
   "Distribution-Aware Retrieval for Therapeutic Ranking". Both now match the approved
   "Distributional Auditing of Retrieval Transfer".
 - **"35/35 reproduce end-to-end"** is a **consistency re-check** of cached CSVs against
@@ -473,7 +473,7 @@ direction.
 
 - The **threshold is not calibrated**. The 0.01 margin sits at **0.77 standard deviations**
   of the nonzero-difference distribution (sd = 0.0130), i.e. **inside its noise band**. It is
-  also **one-sided**: on the FULL run 11 tasks clear it for DART and **2 clear it for the
+  also **one-sided**: on the FULL run 11 tasks clear it for JUDGE and **2 clear it for the
   mean**, and only the first number would ever be reported.
 - **The seed is not a replicate.** In exp13 it re-draws which drugs are held out
   (`rng.choice(common, n_drugs)`, exp13:234) and it **redefines the minority subpopulation**
@@ -508,7 +508,7 @@ direction.
   against a control set that partly contains it is not a control.
 
 **Is (what we now report): the distribution, not a count.** Across all 239 real-data tasks
-the DART-minus-mean minority-state coverage is **statistically real and practically
+the JUDGE-minus-mean minority-state coverage is **statistically real and practically
 negligible**:
 
 | | |
@@ -516,7 +516,7 @@ negligible**:
 | mean over 239 tasks | **+0.0018** |
 | exactly zero (both families pick the same drug) | 102 / 239 |
 | nonzero (n=137): mean, sd | +0.0032, 0.0130 |
-| Wilcoxon, one-sided (H1: DART > mean) | **p = 1.3e-07** |
+| Wilcoxon, one-sided (H1: JUDGE > mean) | **p = 1.3e-07** |
 | metric operating range | [0.60, 1.00] |
 
 And it is **confined to the mixtures we constructed**:
@@ -1123,7 +1123,7 @@ the fixed OT map, n=8 seeds, 720 queries).
 | **ot_map (Gate-1-opening)** | **0.053** | **0.007** | **0.008** |
 
 On OT candidates **every retrieval rule collapses to near chance, mean-cosine included** -- not just
-DART. So the DART-minus-mean contrast on OT candidates (all negative) measures nothing about Gate 1;
+JUDGE. So the JUDGE-minus-mean contrast on OT candidates (all negative) measures nothing about Gate 1;
 it measures that the predictor is unusable. The cross-line task is leave-two-contexts-out, harder
 than the within-context divergence measurement, and the same weak learning that lets the OT map only
 crack Gate 1 open (learning check 0.35) leaves it near chance as a predictor here.
@@ -1248,7 +1248,7 @@ cross_cos ceiling; an earlier note's "first N by cell count" was wrong (drug_poo
 
 Manuscript edits (Results Part-B paragraph, Discussion "well-trained flow" paragraph, Limitations item)
 weave in the CellFlow result with the audited wording; references.bib gains the real CellFlow entry.
-Scripts: /data/boom/DART/analysis/predictors/cellflow/{export_sciplex3_ecfp4,cellflow_gate1_verify,
+Scripts: /data/boom/JUDGE/analysis/predictors/cellflow/{export_sciplex3_ecfp4,cellflow_gate1_verify,
 crosscos_regression}.py (remote 4090). Results:
 results/exp14_nonadditive_predictors/cellflow_gate1{,_loco,_transductive}.{csv,json},
 crosscos_vs_loco.csv. Net: the clean Part-B falsification remains out of reach, now demonstrated with
@@ -1279,7 +1279,7 @@ distributional metric is even more damning than the mean, since leave-one-contex
 FARTHER from the true treated population than the unperturbed control is (energy ratio > 1). So the
 collapse is a genuine loss of the response, not an artefact of a first-moment score. Honest caveat:
 cell-eval's turnkey MetricsEvaluator could not run because it requires non-negative (log1p/count)
-input and DART's HVG matrix is centred/scaled (min -2.05); we therefore computed the same metric
+input and JUDGE's HVG matrix is centred/scaled (min -2.05); we therefore computed the same metric
 FAMILIES directly (transparent, delta-based), and note this in the text rather than claiming the
 cell-eval pipeline itself was run. (cellflow_save_preds.py + celleval_metrics.py;
 results/exp14_nonadditive_predictors/cellflow_celleval.{csv,json}.)

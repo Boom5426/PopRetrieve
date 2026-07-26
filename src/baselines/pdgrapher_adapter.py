@@ -1,8 +1,8 @@
-"""PDGrapher adapter — bridge inverse-design target ranking <-> DART drug ranking.
+"""PDGrapher adapter — bridge inverse-design target ranking <-> JUDGE drug ranking.
 
 PDGrapher (Gonzalez et al.) is a *direct inverse-design* method: given a diseased cell state
 it ranks candidate intervention **targets** (genes/nodes) by how well perturbing them steers
-the state toward a desired one, using network/graph proximity. DART instead ranks candidate
+the state toward a desired one, using network/graph proximity. JUDGE instead ranks candidate
 **drugs** by population-to-population retrieval. To compare them head-to-head we need a common
 currency, in BOTH directions:
 
@@ -180,7 +180,7 @@ def target_ranking_to_drug_ranking(target_scores: dict[str, float], dt_map: Drug
 def drug_ranking_to_target_ranking(drug_scores: dict[str, float], dt_map: DrugTargetMap,
                                    targets: Optional[list[str]] = None,
                                    agg: str = "max") -> dict[str, float]:
-    """Score each target by aggregating the scores of the drugs that hit it (DART -> targets)."""
+    """Score each target by aggregating the scores of the drugs that hit it (JUDGE -> targets)."""
     aggf = np.max if agg == "max" else np.mean
     # build target set
     if targets is None:

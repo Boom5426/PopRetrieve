@@ -1,4 +1,4 @@
-"""DART Figure 1 panel 1e: the three evidence classes, and who reports them.
+"""JUDGE Figure 1 panel 1e: the three evidence classes, and who reports them.
 
 Schematic (no external data). Two defects in the previous version are corrected here.
 
@@ -9,7 +9,7 @@ Schematic (no external data). Two defects in the previous version are corrected 
    in its own opening figure. Class C is now at the top and the axis is named for what actually
    increases: independence from the retrieval objective.
 
-2. The status column read "this study: none" for Class C. The manuscript says "We report DART
+2. The status column read "this study: none" for Class C. The manuscript says "We report JUDGE
    under all three classes", with the Class-C oracle imported from GDSC2 dose-response data and
    labelled semi-real for that reason. "none" was false. The column now reports all three, and
    the Class-C qualification is stated rather than hidden.

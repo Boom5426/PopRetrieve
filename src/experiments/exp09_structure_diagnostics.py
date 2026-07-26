@@ -32,7 +32,7 @@ per-subpopulation matched controls,
     d_k = mean(treated cells of subpop k) - mean(control cells of subpop k)
     induced_response_cosine = cos(d_0, d_1)
 
-Real data: cosine well below 1 (that divergence is the whole premise of DART).
+Real data: cosine well below 1 (that divergence is the whole premise of JUDGE).
 Any additive-effect predictor (average-effect, nearest-neighbor, and the latent-arithmetic
 models scGen and CPA) adds the SAME delta to every cell, so d_0 = d_1 exactly and the
 cosine is 1.000 by construction. That is an analytic property of the model class, it is not

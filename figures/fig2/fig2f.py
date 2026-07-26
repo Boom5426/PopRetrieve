@@ -1,4 +1,4 @@
-"""DART Figure 2 panel 2f: the metric family drawn as one variance-sensitivity axis.
+"""JUDGE Figure 2 panel 2f: the metric family drawn as one variance-sensitivity axis.
 
 Source data: none, this is the synthesis schematic. The ordering it draws is the manuscript's
 own statement that "energy, coverage and mean retrieval are one axis of variance sensitivity

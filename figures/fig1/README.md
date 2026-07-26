@@ -36,10 +36,10 @@ says so. There is no AI-generated panel in this figure any more.
 - **e** states this study's evidence coverage against the field audit. Two corrections were made
   here: the ladder used to put Class A at the top of an "evidence strength" arrow, which inverts
   the paper's own argument, and the status column used to read "this study: none" for Class C,
-  which contradicts "We report DART under all three classes". Class C is now at the top of an
+  which contradicts "We report JUDGE under all three classes". Class C is now at the top of an
   axis named for what actually increases (independence from the retrieval objective), and the
   Class-C entry is marked reported-but-imported.
-- Palette semantics are the house ones: GREY context, FOCAL blue distributional/DART signal,
+- Palette semantics are the house ones: GREY context, FOCAL blue distributional/JUDGE signal,
   COMP orange mean/collapse. No new hue family; GREEN and PURPLE are not used in this figure.
 - Per deck rule 5, Fig 1 sets tension only: no +0.119, no collapse statistics.
 

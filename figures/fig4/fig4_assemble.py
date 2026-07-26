@@ -1,4 +1,4 @@
-"""DART Figure 4: the apparent gains do not survive independent evaluation.
+"""JUDGE Figure 4: the apparent gains do not survive independent evaluation.
 
 Nine panels, one argument, read row by row. This is the metric-class ladder and the paper's
 central figure.

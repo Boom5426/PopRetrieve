@@ -10,12 +10,12 @@ abstract: >-
   oracle is real but small, with almost all of what remains reproduced by a scalar
   that compares no distributions. The repository does not propose a better
   drug-ranking method: the population-to-population retrieval scores it implements
-  are the instrument, released as DART (Distributional Auditing of Retrieval
+  are the instrument, released as JUDGE (Distributional Auditing of Retrieval
   Transfer). It also ships CORRECTIONS.md, a record of every number this project
   has retracted or revised.
 authors:
   - name: "Boom5426"
-repository-code: "https://github.com/Boom5426/DART"
+repository-code: "https://github.com/Boom5426/JUDGE"
 license: MIT
 keywords:
   - single-cell

@@ -1,4 +1,4 @@
-"""DART Figure 4 panel 4f: recommendation cannot sort divergence
+"""JUDGE Figure 4 panel 4f: recommendation cannot sort divergence
 Source data: source_data/fig4ef_gate_divergence.csv
 Run standalone: python fig4f.py
 """

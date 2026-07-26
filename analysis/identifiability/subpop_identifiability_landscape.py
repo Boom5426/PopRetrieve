@@ -6,7 +6,7 @@ subpop_identifiability_landscape.py (v2, optimized)
 Gap statistic on PCA-50 (not raw 2000d), MiniBatchKMeans, B=5.
 """
 
-# --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/DART) ---
+# --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/JUDGE) ---
 from pathlib import Path as _P
 REPO = _P(__file__).resolve().parents[2]
 SRC = str(REPO / "src")

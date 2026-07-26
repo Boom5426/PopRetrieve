@@ -23,7 +23,7 @@ Phase 2: gate-variant sweep (only meaningful if a fix is plausible, but we run i
 
 ABSOLUTE RULES (anti-self-deception, per the execution spec):
   - Primary judge metrics are the two NON-CIRCULAR ones only. Never tune an
-    energy-based / DART-aligned metric to make DART win.
+    energy-based / JUDGE-aligned metric to make JUDGE win.
   - No cherry-picking a variant without multiple-comparison correction.
   - FULL only for verdicts; QUICK for sanity.
   - "trend but not significant" is never written as "advantage". null is a valid result.
@@ -46,7 +46,7 @@ from utils.logging import log, section                             # noqa: E402
 
 OUT = "exp16_gate_diagnosis"
 
-# The DART method vs the mean incumbent for per-query non-circular gaps.
+# The JUDGE method vs the mean incumbent for per-query non-circular gaps.
 DART_METHOD = "DART_coverage_worst"
 MEAN_METHOD = "mean_cosine"
 NONCIRCULAR = ["minority_state_coverage", "moa_ndcg"]
@@ -59,7 +59,7 @@ NONCIRCULAR = ["minority_state_coverage", "moa_ndcg"]
 
 def _load_exp12_perquery():
     """Load exp12 per-query scores; one row per query with gate labels, true divergence,
-    and DART-vs-mean gaps on the two non-circular metrics.
+    and JUDGE-vs-mean gaps on the two non-circular metrics.
 
     exp12 is patched to log `true_divergence` (exp16_common.true_response_divergence)
     on the exact query population it scores — so there is NO reconstruction/join drift.
@@ -85,7 +85,7 @@ def _load_exp12_perquery():
         if extra in perf.columns:
             agg[extra] = (extra, "first")
     gate = perf.groupby(keys, dropna=False).agg(**agg).reset_index()
-    # DART and mean non-circular outcomes -> per-query gap
+    # JUDGE and mean non-circular outcomes -> per-query gap
     dart = perf[perf.method == DART_METHOD].set_index(keys)[NONCIRCULAR]
     mean = perf[perf.method == MEAN_METHOD].set_index(keys)[NONCIRCULAR]
     gap = (dart - mean).rename(columns={m: f"{m}_gap" for m in NONCIRCULAR}).reset_index()

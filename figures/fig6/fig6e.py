@@ -1,4 +1,4 @@
-"""DART Figure 6 panel 6e: Gate 2. Is the structure UNRECOVERABLE, or merely unclustered?
+"""JUDGE Figure 6 panel 6e: Gate 2. Is the structure UNRECOVERABLE, or merely unclustered?
 
 Source data: results/upgrade/gate2_supervised_upper_bound.csv (real separation, s = 1.0)
 

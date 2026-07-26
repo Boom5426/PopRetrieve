@@ -1,4 +1,4 @@
-"""DART Figure 1 panel 1b: the inverse-retrieval task, and the two scoring rules that act on it.
+"""JUDGE Figure 1 panel 1b: the inverse-retrieval task, and the two scoring rules that act on it.
 
 Schematic (no external data). The panel states two things the manuscript asserts:
   * the task is population-to-population inverse retrieval: a query population Q and a candidate

@@ -1,5 +1,5 @@
 """
-DART diagnostic protocol: four probes for distributional retrieval methods.
+JUDGE diagnostic protocol: four probes for distributional retrieval methods.
 
 Purpose
 -------
@@ -7,7 +7,7 @@ Distinguish a REAL method null (the method genuinely has no oracle-independent
 advantage) from an IMPLEMENTATION ARTIFACT (a null caused by an unfair comparison,
 a broken metric, low statistical power, or a hidden confound).
 
-Developed during the DART audit (2026-07). Each probe returns a verdict dict.
+Developed during the JUDGE audit (2026-07). Each probe returns a verdict dict.
 These are dependency-light (numpy, scipy, scikit-learn) and operate on cell x gene
 matrices already in memory.
 

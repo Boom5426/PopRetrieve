@@ -1,4 +1,4 @@
-"""DART Figure 2 panel 2a: the mean signature is the lambda -> 0 limit (schematic).
+"""JUDGE Figure 2 panel 2a: the mean signature is the lambda -> 0 limit (schematic).
 
 Source data: none. Seeded gaussian schematic (seed=0) illustrating the algebra
     X = mu + lambda * eps,  E[eps] = 0

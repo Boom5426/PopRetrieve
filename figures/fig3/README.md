@@ -13,7 +13,7 @@ retrieval objective); the figure must NOT be read as independent validation, whi
 | c | "72% of all 765 queries improve, median +0.118" | exp12 per_query_scores.csv | done |
 | d | "The gate does not concentrate the gain": +0.119 (n=621) vs +0.122 (n=133) | exp12 recommendation_vs_outcome.csv | done |
 | e | "Energy retrieval degrades as subpopulations merge" | fig3e_alpha_crossover.csv | done |
-| f | "All five DART metrics gain under the Class-A metric" | fig3f_classA_robustness.csv | done |
+| f | "All five JUDGE metrics gain under the Class-A metric" | fig3f_classA_robustness.csv | done |
 
 ## Verified numbers
 - 3a: energy 0.8369, pca_dist 0.7782, coverage_mean 0.7734, coverage_worst 0.5893, pca_mean 0.5179,
@@ -30,7 +30,7 @@ retrieval objective); the figure must NOT be read as independent validation, whi
 - 3e: exp01 controlled mixing sweep. Energy Hit@1 is monotone non-increasing in alpha for all three
   cell lines (K562 1.00 -> 0.35, A549 1.00 -> 0.85, MCF7 1.00 -> 0.75), which is what the panel
   title claims and what the panel asserts at draw time.
-- 3f: all five DART metrics positive on the 621 gate-recommended queries: energy +0.056, MMD +0.060,
+- 3f: all five JUDGE metrics positive on the 621 gate-recommended queries: energy +0.056, MMD +0.060,
   sliced-W +0.059, coverage-mean +0.090, coverage-worst +0.119.
 
 ## Honesty notes

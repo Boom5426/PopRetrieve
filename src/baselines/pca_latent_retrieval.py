@@ -1,6 +1,6 @@
 """PCA-latent retrieval baseline.
 
-A representation-learning stand-in between raw-signature CMap retrieval and DART's full
+A representation-learning stand-in between raw-signature CMap retrieval and JUDGE's full
 distributional distances: project cells into a low-dimensional PCA latent (fit on the
 available control / query cells, so it is a purely *unsupervised* linear embedding), then
 retrieve with one of two kernels:
@@ -10,7 +10,7 @@ retrieve with one of two kernels:
     mode='dist'  — a distributional distance IN the latent space: the (negated) energy
                    distance between the candidate and query latent point clouds. This keeps
                    distributional information but at a fraction of the ambient dimension —
-                   a cheap distributional retriever to bracket DART against.
+                   a cheap distributional retriever to bracket JUDGE against.
 
 The PCA basis is fit once per query on a control anchor (query control cells if available,
 else the pooled candidate+query cells), then reused for every candidate so scores are
@@ -29,7 +29,7 @@ def _energy_distance_np(X: np.ndarray, Y: np.ndarray, max_cells: int = 400,
     """Numpy energy distance E = 2E|X-Y| - E|X-X'| - E|Y-Y'| (lower = closer).
 
     Subsampled for tractability; pure numpy so the baseline carries no torch dependency
-    (the ambient-space DART energy uses the torch/CUDA kernel — this is the latent bracket).
+    (the ambient-space JUDGE energy uses the torch/CUDA kernel — this is the latent bracket).
     """
     rng = np.random.default_rng(seed)
     def sub(A, s):

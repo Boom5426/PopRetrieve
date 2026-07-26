@@ -8,7 +8,7 @@ Step 1 of the delta-vs-raw audit:
   (c) Hit@1 on controlled mixture task with raw vs delta energy scoring
 """
 
-# --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/DART) ---
+# --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/JUDGE) ---
 from pathlib import Path as _P
 REPO = _P(__file__).resolve().parents[2]
 SRC = str(REPO / "src")

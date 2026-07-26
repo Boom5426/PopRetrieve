@@ -107,22 +107,22 @@ def main():
     # ── Outcome A/B/C ──  (effect size gates A; significance-without-magnitude is not A)
     if hi_sig_material:
         outcome = ("**A — conditional advantage holds.** In the highest-divergence stratum, "
-                   "DART significantly AND materially exceeds mean retrieval on a non-circular "
+                   "JUDGE significantly AND materially exceeds mean retrieval on a non-circular "
                    "metric.")
     elif hi_sig_trivial:
         outcome = ("**B(−) — statistically real but negligible.** In the highest-divergence "
-                   "stratum DART significantly exceeds mean retrieval on a non-circular metric, "
+                   "stratum JUDGE significantly exceeds mean retrieval on a non-circular metric, "
                    "but the effect size is negligible (well below a small-effect floor). The "
                    "mean→distribution mechanism is intact and divergence-monotone, yet its "
                    "practical magnitude is tiny; on the annotation-recovery metric there is no "
                    "advantage at all.")
     elif hi_positive_trend and underpowered:
         outcome = ("**B — trend, sample-limited.** The highest-divergence stratum shows a "
-                   "positive but non-significant DART gap on a non-circular metric, and the "
+                   "positive but non-significant JUDGE gap on a non-circular metric, and the "
                    "power analysis shows the current sample is insufficient to resolve it.")
     else:
         outcome = ("**C — chain broken in expression data.** The highest-divergence stratum "
-                   "shows no positive non-circular DART advantage. Changing the gate or the "
+                   "shows no positive non-circular JUDGE advantage. Changing the gate or the "
                    "metric cannot recover it; a real functional/longitudinal outcome is needed.")
 
     # ── Lesion ──
@@ -138,7 +138,7 @@ def main():
         lesion = ("**Data/task layer (Phase 3), not (only) the gate.** The gate carries a weak "
                   "but significant divergence signal, yet ")
         lesion += ("even stratifying directly by true divergence — bypassing the gate entirely — "
-                   "DART shows no MATERIAL non-circular advantage in the highest-divergence "
+                   "JUDGE shows no MATERIAL non-circular advantage in the highest-divergence "
                    "stratum. The signal is either absent or negligibly small in the expression "
                    "data itself, so no gate re-calibration can recover a practical advantage."
                    if not hi_sig_material else
@@ -200,12 +200,12 @@ def main():
     # ── Impact ──
     if outcome.startswith("**A"):
         impact = ("Claim 3/Claim 4 reconciliation: the gate (or the true-divergence stratifier) "
-                  "DOES isolate a subset with a genuine non-circular DART advantage. Report this "
+                  "DOES isolate a subset with a genuine non-circular JUDGE advantage. Report this "
                   "subset explicitly; upgrade Claim 4 from 'metric-dependent, proxy-only' to "
                   "'conditional advantage on diagnosable high-divergence queries'.")
     elif outcome.startswith("**B(−)"):
         impact = ("Sharpens Claim 4 without overturning it. The mean→distribution advantage is "
-                  "(a) real and divergence-monotone on the coverage proxy — DART's sensitivity to "
+                  "(a) real and divergence-monotone on the coverage proxy — JUDGE's sensitivity to "
                   "response divergence is mechanistically confirmed — but (b) negligibly small in "
                   "magnitude and (c) entirely absent on annotation-recovery (moa_ndcg), where the "
                   "study is orders-of-magnitude underpowered. Report the monotone coverage trend "

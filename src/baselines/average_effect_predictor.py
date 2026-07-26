@@ -8,9 +8,9 @@ drug ``d`` the predicted signature is::
     hat_delta_d = mean_over_training_contexts( mean(treated_{c,d}) - mean(control_c) )
 
 Because it collapses to a single per-drug signature, it can only ever reproduce a mean
-match — so pairing it with DART's distributional decision layer cannot manufacture
+match — so pairing it with JUDGE's distributional decision layer cannot manufacture
 subpopulation coverage the predictor never modeled. That is the point: exp09 shows the
-*predictor* is the ceiling for a mean+R² retrieval, and DART's gains over a mean retrieval
+*predictor* is the ceiling for a mean+R² retrieval, and JUDGE's gains over a mean retrieval
 on top of the SAME predictor are bounded, isolating where the retrieval layer helps vs
 where the predictor does.
 

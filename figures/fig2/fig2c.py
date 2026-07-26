@@ -1,4 +1,4 @@
-"""DART Figure 2 panel 2c: energy distance meets the mean-distance floor as lambda -> 0.
+"""JUDGE Figure 2 panel 2c: energy distance meets the mean-distance floor as lambda -> 0.
 
 Source data: results/exp06_theory_limits/degenerate_limit_synthetic.csv (rows prop1_spread);
 mirrored for release in figures/source_data/fig2c_energy_collapse.csv. The dashed floor is the

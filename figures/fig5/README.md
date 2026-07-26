@@ -62,7 +62,7 @@ differs from the printed claim is the defect this figure was audited for.
   the 6.9 in canvas, each edit keyed to a substring of the original text so an upstream rewording
   fails the build instead of silently leaving a too-wide label on the page. There is exactly one
   copy of the plotting code.
-- Palette semantics are the deck's: blue distributional/DART, orange mean/collapse, grey context,
+- Palette semantics are the deck's: blue distributional/JUDGE, orange mean/collapse, grey context,
   purple the natural-tissue arm. Green is *not* used in row 2: across the deck green marks readouts
   handed information the retrieval method does not have, and in panel d colour encodes the
   experimental arm, so both bars of every arm share one hue.

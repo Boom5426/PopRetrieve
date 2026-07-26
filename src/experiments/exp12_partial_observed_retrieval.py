@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 """Experiment 12 — Partial-observed retrieval (Nature Methods phase-gate).
 
-Establishes whether DART's required information condition — candidate response
+Establishes whether JUDGE's required information condition — candidate response
 populations partially observed, optimal drug hidden — holds in real single-cell
-drug screens, and whether DART reduces decision regret / improves nDCG in the
+drug screens, and whether JUDGE reduces decision regret / improves nDCG in the
 high-conflict + reliable-structure subset.
 
 Three settings:
@@ -667,7 +667,7 @@ def run_setting_C(ds, ctx, fractions, drug2moa, drug2targets,
 # A query is identified by ALL SIX of these. Dropping observed_library_fraction (or the
 # information condition) makes the key non-unique: the partial_library queries exist at
 # fractions 0.2 / 0.4 / 0.6 under one (split_type, cell_line, heldout_drug, seed), so a
-# 4-key lookup returns three rows and taking .iloc[0] pairs a DART row at fraction 0.4
+# 4-key lookup returns three rows and taking .iloc[0] pairs a JUDGE row at fraction 0.4
 # against a mean_cosine row at fraction 0.2. That mispairing is what made this table report
 # a median regret reduction of 0.1133 where the per-query data give 0.1190, and the figures
 # were built from the wrong number.
@@ -676,7 +676,7 @@ QUERY_KEY = ["split_type", "cell_line", "heldout_drug", "heldout_MoA",
 
 
 def _recommendation_vs_outcome(df_perf):
-    """Stratify DART-mean advantage by recommendation_mode (protocol §5 core test)."""
+    """Stratify JUDGE-mean advantage by recommendation_mode (protocol §5 core test)."""
     rows = []
     ref = df_perf[df_perf.method == REF_METHOD].set_index(QUERY_KEY)
     if ref.index.has_duplicates:
@@ -699,7 +699,7 @@ def _recommendation_vs_outcome(df_perf):
                     unmatched += 1
                     continue
                 rr = ref.loc[key]
-                deltas_regret.append(rr.decision_regret - r.decision_regret)  # + = DART better
+                deltas_regret.append(rr.decision_regret - r.decision_regret)  # + = JUDGE better
                 # moa_ndcg is NaN where the metric is undefined for this split type; nanmean
                 # below drops those rather than counting them as a zero gain.
                 deltas_ndcg.append(r.moa_ndcg - rr.moa_ndcg)
@@ -795,12 +795,12 @@ def run(quick=False, n_drugs=None, n_seeds=None):
     section("RECOMMENDATION MODE DISTRIBUTION")
     log(df_diag.recommendation_mode.value_counts().to_string())
 
-    section("DART vs MEAN BY RECOMMENDATION MODE")
+    section("JUDGE vs MEAN BY RECOMMENDATION MODE")
     if len(df_rvo) > 0:
         for rmode in df_rvo.recommendation_mode.unique():
             sub = df_rvo[df_rvo.recommendation_mode == rmode]
             best = sub.loc[sub.mean_regret_reduction.idxmax()]
-            log(f"  [{rmode}] best DART={best.dart_method}: "
+            log(f"  [{rmode}] best JUDGE={best.dart_method}: "
                 f"regret_reduction={best.mean_regret_reduction:+.4f}, "
                 f"ndcg_gain={best.mean_ndcg_gain:+.4f}, n={int(best.n_queries)}")
 

@@ -13,7 +13,7 @@ probes, each returning a verdict dict:
 4. `magnitude_confound_probe`, is an apparent positive just the near-tautology
    that larger perturbations track the readout?
 
-`protocol_validation.py` re-runs all four probes on the DART audit data and
+`protocol_validation.py` re-runs all four probes on the JUDGE audit data and
 checks they reproduce the reported audit verdicts.
 
 ```bash

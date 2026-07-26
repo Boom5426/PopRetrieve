@@ -1,18 +1,18 @@
 #!/usr/bin/env python
-"""Experiment 8 — Signature-retrieval baselines vs DART (Phase-2, plan external-baselines).
+"""Experiment 8 — Signature-retrieval baselines vs JUDGE (Phase-2, plan external-baselines).
 
-Head-to-head of the incumbent *mean-signature* retrieval paradigm against DART's
+Head-to-head of the incumbent *mean-signature* retrieval paradigm against JUDGE's
 distributional retrieval, on the SAME queries and candidate libraries the core experiments
 use. Signature/latent baselines:
 
     mean_cosine   — cosine of mean-delta signatures (the classic 'mean-out' incumbent; also
-                    one of DART's own scorers, kept here as the canonical signature method)
+                    one of JUDGE's own scorers, kept here as the canonical signature method)
     cmap_cosine   — CMap-style full-signature connectivity (cosine)
     cmap_wtcs     — CMap WTCS-lite signed rank-enrichment of the query up/down tags
     pca_mean      — cosine in an unsupervised PCA latent
     pca_dist      — energy distance in the PCA latent (a cheap distributional retriever)
 
-DART distributional:
+JUDGE distributional:
 
     global_energy  — -energy_distance (K=1 full-distribution)          [reference ranker]
     coverage_mean  — -mean_k energy over matched subpops
@@ -20,14 +20,14 @@ DART distributional:
 
 Tasks: controlled (SciPlex3 two-MOA mixture) + cross-line (two real cell types, same drug)
 + Frangieh (natural immune contexts). Ground truth = 'covers-both'. Per query we compute
-Drug Hit@1/5, MRR, nDCG@10, median rank; and — versus DART-energy as the reference — top-1
+Drug Hit@1/5, MRR, nDCG@10, median rank; and — versus JUDGE-energy as the reference — top-1
 flip, top-k overlap, delta-rank. Divergence-stratified by the query's own subpop-response
 cosine. Runtime captured per method.
 
 Outputs (results/exp08_signature_baselines/):
     summary.csv                per (task, setting, method) retrieval metrics
     per_query_scores.csv       exchange format: one row per (query, candidate) x method
-    flip_vs_dart.csv           per (task, setting, method) flip/overlap/Δrank vs DART-energy
+    flip_vs_dart.csv           per (task, setting, method) flip/overlap/Δrank vs JUDGE-energy
     divergence_stratified.csv  per (task, divergence stratum, method) Hit@1 / Hit@5
     runtime.csv                per method wall-clock (total + per-query)
 
@@ -65,7 +65,7 @@ from baselines.pca_latent_retrieval import PCALatentRetrieval
 
 OUT = "exp08_signature_baselines"
 GT = "covers-both"
-REF = "global_energy"                      # DART reference ranker for flip/overlap/Δrank
+REF = "global_energy"                      # JUDGE reference ranker for flip/overlap/Δrank
 
 DART_METHODS = ["mean_cosine", "global_energy", "coverage_mean", "coverage_worst"]
 SIG_RANKERS = [CMapSignatureRetrieval("cosine"), CMapSignatureRetrieval("wtcs"),
@@ -83,7 +83,7 @@ def _score_query(q: dict, style: str, seed: int) -> tuple[dict, dict]:
     dt = time.perf_counter() - t0
     for m in DART_METHODS:
         scores[m] = ds[m]
-    # attribute DART wall-clock evenly across its scorers (single fused pass)
+    # attribute JUDGE wall-clock evenly across its scorers (single fused pass)
     for m in DART_METHODS:
         runtime[m] = dt / len(DART_METHODS)
     nq = normalize_query(q, ground_truth=GT)
@@ -212,7 +212,7 @@ def run(n_seeds=10, n_drugs=12, n_kos=6, alphas=(0.5, 0.7, 0.9),
     overall = summarize(metrics, ["task", "method"], METRIC_COLS)
     write_csv(overall, results_path(OUT, "summary_by_task.csv"))
 
-    # --- flip vs DART-energy ---
+    # --- flip vs JUDGE-energy ---
     flip = metrics[metrics.method != REF].groupby(["task", "setting", "method"]).agg(
         top1_flip_rate=("top1_flip_vs_ref", "mean"),
         mean_topk_overlap=("topk_overlap_vs_ref", "mean"),
@@ -243,7 +243,7 @@ def run(n_seeds=10, n_drugs=12, n_kos=6, alphas=(0.5, 0.7, 0.9),
     section("EXP08 HEADLINE — Drug Hit@1 by method (avg over all queries)")
     h1 = metrics.groupby("method")["hit@1"].mean().reindex(ALL_METHODS)
     for m in ALL_METHODS:
-        tag = "  <-- DART" if m in DART_METHODS else ""
+        tag = "  <-- JUDGE" if m in DART_METHODS else ""
         log(f"  {m:16s} Hit@1={h1[m]:.3f}{tag}")
     log("\n[exp08] wrote summary.csv / per_query_scores.csv / flip_vs_dart.csv / "
         "divergence_stratified.csv / runtime.csv")

@@ -35,7 +35,7 @@ import numpy as np
 # (-1) - (-1) = EXACTLY 0. On the shipped per_query_scores.csv that is 165 of 765 queries
 # (21.6%): 120 leave_MoA_out + 45 partial_library. Those structural zeros were entering n,
 # pinning median_gap at exactly 0.000 in every divergence stratum, shrinking sd_gap, and
-# feeding the power calculation. The qualitative verdict on moa_ndcg (no DART advantage)
+# feeding the power calculation. The qualitative verdict on moa_ndcg (no JUDGE advantage)
 # survives and in fact strengthens, but the published statistics did not.
 #
 # Mask them here, once, for every consumer.

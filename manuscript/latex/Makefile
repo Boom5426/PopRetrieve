@@ -1,5 +1,5 @@
-TEX  = DART_manuscript
-SI   = DART_SI
+TEX  = JUDGE_manuscript
+SI   = JUDGE_SI
 BIB  = references
 
 .PHONY: all si clean

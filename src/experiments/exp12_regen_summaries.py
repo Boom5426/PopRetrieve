@@ -10,7 +10,7 @@ Two defects produced that:
 
 1. The paired lookup keyed on (split_type, cell_line, heldout_drug, seed), which is NOT
    unique: the partial_library queries exist at observed_library_fraction 0.2 / 0.4 / 0.6
-   under one such key. `ref.loc[key]` then returned three rows and `.iloc[0]` paired a DART
+   under one such key. `ref.loc[key]` then returned three rows and `.iloc[0]` paired a JUDGE
    row at fraction 0.4 against a mean_cosine row at fraction 0.2.
 2. Undefined MoA metrics carried a -1 sentinel and were averaged as if they were
    measurements.

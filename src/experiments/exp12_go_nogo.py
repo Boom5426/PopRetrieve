@@ -26,7 +26,7 @@ DART_METHODS = ["DART_energy", "DART_mmd", "DART_sliced_wasserstein",
 
 
 def _paired_dart_vs_mean(perf, rmode):
-    """Paired regret: mean_cosine vs best DART method on the given recommendation subset.
+    """Paired regret: mean_cosine vs best JUDGE method on the given recommendation subset.
     Returns (n, median_regret_reduction, wilcoxon_p, frac_improved, best_dart)."""
     sub = perf[perf.recommendation_mode == rmode]
     if len(sub) == 0:
@@ -40,7 +40,7 @@ def _paired_dart_vs_mean(perf, rmode):
         common = ref.index.intersection(dd.index)
         if len(common) < 5:
             continue
-        red = ref.loc[common].values - dd.loc[common].values  # + => DART lower regret
+        red = ref.loc[common].values - dd.loc[common].values  # + => JUDGE lower regret
         # dedup index (multiple rows per key possible)
         red = red[np.isfinite(red)]
         med = float(np.median(red))
@@ -57,7 +57,7 @@ def _paired_dart_vs_mean(perf, rmode):
 
 
 def _ndcg_mrr_advantage(perf, rmode):
-    """Best DART nDCG/MRR minus mean_cosine on the subset (leave_drug_out only)."""
+    """Best JUDGE nDCG/MRR minus mean_cosine on the subset (leave_drug_out only)."""
     sub = perf[(perf.recommendation_mode == rmode) & (perf.split_type == "leave_drug_out")]
     if len(sub) == 0:
         return None
@@ -94,7 +94,7 @@ def main():
     # Criterion evaluations
     crit = {}
 
-    # C1: DART lowers regret on DART_recommended subset (significant)
+    # C1: JUDGE lowers regret on DART_recommended subset (significant)
     r = _paired_dart_vs_mean(perf, "DART_recommended")
     if r:
         c1 = r["median_regret_reduction"] > 0 and (r["wilcoxon_p"] < 0.05)
@@ -105,7 +105,7 @@ def main():
     else:
         crit["Go-1"] = (False, "DART_recommended subset too small for paired test")
 
-    # C2: DART nDCG/MRR beats mean on DART_recommended (high-conflict reliable-structure)
+    # C2: JUDGE nDCG/MRR beats mean on DART_recommended (high-conflict reliable-structure)
     nm = _ndcg_mrr_advantage(perf, "DART_recommended")
     if nm:
         c2 = (nm["ndcg_gain"] > 0) or (nm["mrr_gain"] > 0)
@@ -114,15 +114,15 @@ def main():
     else:
         crit["Go-2"] = (False, "no leave_drug_out rows in DART_recommended")
 
-    # C3: low-conflict correctly judged mean_sufficient (DART does not win there)
+    # C3: low-conflict correctly judged mean_sufficient (JUDGE does not win there)
     r_ms = _paired_dart_vs_mean(perf, "mean_sufficient")
     if r_ms:
-        # PASS if DART does NOT significantly beat mean here (regret reduction ~0 or n.s.)
+        # PASS if JUDGE does NOT significantly beat mean here (regret reduction ~0 or n.s.)
         c3 = not (r_ms["median_regret_reduction"] > 0.05 and r_ms["wilcoxon_p"] < 0.05)
-        crit["Go-3"] = (c3, f"mean_sufficient: DART regret reduction={r_ms['median_regret_reduction']:+.4f}, "
+        crit["Go-3"] = (c3, f"mean_sufficient: JUDGE regret reduction={r_ms['median_regret_reduction']:+.4f}, "
                             f"p={r_ms['wilcoxon_p']:.3g} (should be ~0 / n.s.)")
     else:
-        crit["Go-3"] = (True, "mean_sufficient subset small/empty — no spurious DART win (vacuously ok)")
+        crit["Go-3"] = (True, "mean_sufficient subset small/empty — no spurious JUDGE win (vacuously ok)")
 
     # C4: predicted-mean / no-call correctly judged (from exp13, cross-referenced)
     e13 = Path(results_path("exp13_real_data_projection", "projection.csv"))
@@ -130,11 +130,11 @@ def main():
         p13 = pd.read_csv(e13)
         pm = p13[p13.dataset == "sciplex3_predicted_mean"]
         pm_ok = pm.HIR_predicted_regime.isin(["no_DART", "mean_sufficient"]).mean() if len(pm) else 0
-        crit["Go-4"] = (pm_ok >= 0.6, f"exp13 predicted_mean → no-DART: {pm_ok:.0%} (≥60% target)")
+        crit["Go-4"] = (pm_ok >= 0.6, f"exp13 predicted_mean → no-JUDGE: {pm_ok:.0%} (≥60% target)")
     else:
         crit["Go-4"] = (None, "exp13 projection.csv not found — run exp13 first")
 
-    # C5: >=1 real case where DART changes top-k and covers a minority state mean missed
+    # C5: >=1 real case where JUDGE changes top-k and covers a minority state mean missed
     dr = perf[perf.recommendation_mode == "DART_recommended"]
     mino_gain = 0
     if len(dr) > 0:
@@ -146,7 +146,7 @@ def main():
             common = ref.index.intersection(dd.index)
             if len(common):
                 mino_gain = max(mino_gain, int(((dd.loc[common].values - ref.loc[common].values) > 0.05).sum()))
-    crit["Go-5"] = (mino_gain >= 1, f"{mino_gain} queries where DART covers a minority state "
+    crit["Go-5"] = (mino_gain >= 1, f"{mino_gain} queries where JUDGE covers a minority state "
                                      f">0.05 better than mean")
 
     # Render criteria
@@ -162,7 +162,7 @@ def main():
     L.append("")
 
     # ── Discrimination check: does the gate SEPARATE DART_recommended from other modes? ──
-    # A GO is only meaningful if DART's advantage is CONCENTRATED in DART_recommended.
+    # A GO is only meaningful if JUDGE's advantage is CONCENTRATED in DART_recommended.
     def _median_red(rmode):
         r = _paired_dart_vs_mean(perf, rmode)
         return r["median_regret_reduction"] if r else 0.0
@@ -189,38 +189,38 @@ def main():
              f"mean_or_no_call = {red_moc:+.4f} "
              f"({'gate separates' if gate_separates else 'gate does NOT separate — advantage is diffuse'})")
     L.append(f"- Non-circular nDCG (MoA-recovery) gain on DART_recommended = {ndcg_gain_rec:+.4f} "
-             f"({'DART helps' if ndcg_supports else 'DART does NOT help under the non-circular outcome'})\n")
+             f"({'JUDGE helps' if ndcg_supports else 'JUDGE does NOT help under the non-circular outcome'})\n")
     L.append("### Reasoning\n")
-    L.append("The phase-gate asks whether DART's advantage appears in the realistic "
+    L.append("The phase-gate asks whether JUDGE's advantage appears in the realistic "
              "partial-observed setting, on the subset the information-condition diagnostics flag "
              "as DART_recommended (high preference-conflict + reliable structure).\n")
     if verdict.startswith("GO"):
-        L.append("DART clears the bar cleanly: it reduces welfare-decision regret specifically on "
+        L.append("JUDGE clears the bar cleanly: it reduces welfare-decision regret specifically on "
                  "the DART_recommended subset, the advantage is concentrated there, and it holds "
                  "under the non-circular MoA-recovery outcome.")
     elif verdict.startswith("CONDITIONAL"):
-        L.append("**The GO is metric-dependent and must be reported as such.** DART reduces the "
+        L.append("**The GO is metric-dependent and must be reported as such.** JUDGE reduces the "
                  "energy-welfare decision regret significantly on the DART_recommended subset "
                  f"(median {red_rec:+.4f}, Wilcoxon p≪0.001, 72% of queries), and the gate "
                  "correctly withholds a recommendation on the small mean_sufficient subset. "
                  "**However, two honest caveats bound the claim:**\n\n"
-                 "1. *Metric alignment.* The welfare-regret proxy is energy-based, and DART "
+                 "1. *Metric alignment.* The welfare-regret proxy is energy-based, and JUDGE "
                  "optimizes distributional (energy/MMD) distance — so the regret metric is "
-                 "partially aligned with DART's objective. DART also reduces this regret on the "
+                 "partially aligned with JUDGE's objective. JUDGE also reduces this regret on the "
                  "mean_or_no_call subset by a similar margin, i.e. the advantage is not sharply "
                  "concentrated in DART_recommended.\n\n"
                  "2. *Non-circular outcomes are flat.* Under MoA-recovery nDCG and minority-state "
-                 "coverage (outcomes DART does not directly optimize), DART shows no consistent "
+                 "coverage (outcomes JUDGE does not directly optimize), JUDGE shows no consistent "
                  "gain over mean retrieval on this SciPlex3 leave-drug-out task (exp13: 0/37 tasks "
-                 "DART-favoured under minority coverage).\n\n"
-                 "**Recommended positioning:** DART's demonstrated contribution is *welfare-regret "
+                 "JUDGE-favoured under minority coverage).\n\n"
+                 "**Recommended positioning:** JUDGE's demonstrated contribution is *welfare-regret "
                  "reduction on information-condition-flagged high-conflict tasks*, plus the "
                  "diagnostic gate and HIR-Bench benchmark — a strong methods contribution. A "
                  "universal 'better drug recommendation' claim is not yet supported by the "
                  "non-circular outcomes; strengthening it needs a task with an oracle-independent "
                  "utility (e.g. real dose-response or held-out functional readout).")
     else:
-        L.append("DART does not clear the bar under the non-circular outcomes. Reposition as a "
+        L.append("JUDGE does not clear the bar under the non-circular outcomes. Reposition as a "
                  "benchmark + information-condition analysis paper (NCS / Cell Reports Methods / "
                  "Bioinformatics): the contribution is the diagnostic gate and HIR-Bench, not a "
                  "practical drug-recommendation method.")

@@ -1,4 +1,4 @@
-"""DART Figure 3 panel 3d: gate-recommended vs not-recommended queries.
+"""JUDGE Figure 3 panel 3d: gate-recommended vs not-recommended queries.
 
 Source data: results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv
 (row DART_coverage_worst). The two medians the manuscript quotes are +0.119 on the 621

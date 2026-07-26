@@ -5,14 +5,14 @@ This experiment exists because a count of threshold crossings looked like a find
 not. It is load-bearing evidence for CORRECTIONS.md R13 and for Result 3, so it ships as a
 first-class experiment rather than as an analysis script.
 
-WHY THE QUESTION ARISES. exp13 records, per task, the minority-state coverage of the DART
+WHY THE QUESTION ARISES. exp13 records, per task, the minority-state coverage of the JUDGE
 pick minus that of the mean pick, and a task is conventionally called "distributionally
 dominant" when that difference exceeds +0.01. Two things make a COUNT of such tasks
 untrustworthy on this data:
 
   1. The threshold is not calibrated to the data. It sits at 0.77 standard deviations of the
      nonzero-difference distribution (sd = 0.013), i.e. inside its noise band. It is also
-     one-sided: on the FULL run 11 tasks clear it for DART and 2 clear it for the mean.
+     one-sided: on the FULL run 11 tasks clear it for JUDGE and 2 clear it for the mean.
 
   2. THE SEED IS NOT A REPLICATE. In exp13 it re-draws which drugs are held out
      (rng.choice(common, n_drugs)) and it redefines the minority subpopulation by

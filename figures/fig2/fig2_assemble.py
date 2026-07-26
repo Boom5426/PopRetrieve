@@ -1,4 +1,4 @@
-"""DART Figure 2: mean-signature retrieval is the zero-variance limit of distribution-aware retrieval.
+"""JUDGE Figure 2: mean-signature retrieval is the zero-variance limit of distribution-aware retrieval.
 
 Assembles panels a-f into fig2_collapse.{png,pdf}. Reproducible entry point; the build harness
 (figures/build_all.py) calls build() and additionally enforces the 5 pt typography floor.

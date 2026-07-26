@@ -1,4 +1,4 @@
-"""DART Figure 6 panel 6b: predictor-specific retrieval gaps
+"""JUDGE Figure 6 panel 6b: predictor-specific retrieval gaps
 Source data: source_data/fig6b_predictor_gaps.csv
 Run standalone: python fig6b.py
 
