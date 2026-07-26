@@ -48,6 +48,41 @@
 %% places this range is quoted; see the seed-stability table in the code release.
 \newcommand{\CONTROLRANGE}{1 to 4}
 
+%% Tahoe-100M plate 3 pilot. Every value below is written by
+%% analysis/tahoe_pilot/tahoe_summary_numbers.py from the per-condition and per-pair CSVs in
+%% results/tahoe_pilot/, and is quoted through a macro so the Results text, the Extended Data
+%% caption and the Methods cannot drift apart. Re-run that script to recheck any of them.
+\newcommand{\TAHOELINES}{45}
+\newcommand{\TAHOEDRUGS}{92}
+\newcommand{\TAHOECONDS}{3630}
+\newcommand{\TAHOEGONE}{0.739}
+\newcommand{\TAHOEGONEQ}{0.600 to 0.836}
+\newcommand{\TAHOEBELOWREAL}{0.9}
+\newcommand{\TAHOEBELOWMIX}{0.11}
+\newcommand{\TAHOEGTWOCEIL}{0.853}
+\newcommand{\TAHOEGTWOUNSUP}{0.611}
+\newcommand{\TAHOEGTWOGAP}{0.157}
+\newcommand{\TAHOEGTWOPAIRS}{960}
+\newcommand{\TAHOEGTWOLINES}{48}
+\newcommand{\TAHOEGTWOLINESPOS}{48}
+\newcommand{\TAHOEKMEANS}{0.592}
+\newcommand{\TAHOEGMM}{0.582}
+\newcommand{\TAHOELEIDEN}{0.563}
+\newcommand{\TAHOEGTHREECC}{0.841}
+\newcommand{\TAHOEGTHREECCN}{44}
+\newcommand{\TAHOEGTHREEST}{0.778}
+\newcommand{\TAHOEGTHREESTN}{45}
+\newcommand{\TAHOEGTHREESTOPEN}{2}
+\newcommand{\TAHOEGTHREESTMIN}{0.236}
+\newcommand{\TAHOEGTHREEOVERLAP}{0.905}
+\newcommand{\TAHOECOUPLING}{0.620}
+\newcommand{\TAHOECOUPLINGRSQ}{0.385}
+\newcommand{\TAHOECOUPLINGN}{44}
+\newcommand{\TAHOEOPENGONE}{0.394 to 0.534}
+\newcommand{\TAHOEOPENGTHREE}{0.605 to 0.764}
+\newcommand{\TAHOECOUPLINGCROSS}{0.129}
+\newcommand{\TAHOEPARTAGREE}{0.466}
+
 %% The premise correlation, in two forms (analysis/natural/zhao_premise_disjoint.py;
 %% results/zhao_gbm/premise_disjoint.csv). The first correlates the mean signature with the
 %% malignant-compartment response, and the mean signature CONTAINS 43% of those cells, so part of
@@ -130,8 +165,8 @@ objective--utility mismatch; benchmark design; virtual cell
 
 \bigskip
 \noindent\textbf{Word count:} abstract 150 words; main text (Introduction, Results, Discussion,
-excluding figure captions) approximately 11{,}700 words; Methods 4{,}897 words. Display items: 6 main
-figures, no main-text tables. Supplementary Information: 6 Extended Data figures, 3 Supplementary
+excluding figure captions) approximately 12{,}500 words; Methods 4{,}897 words. Display items: 6 main
+figures, no main-text tables. Supplementary Information: 7 Extended Data figures, 3 Supplementary
 Notes, 4 Supplementary Tables.
 
 \end{flushleft}
@@ -964,6 +999,63 @@ that would be an anecdote wearing a benchmark's clothes. What this section shows
 a subpopulation, is largely absent in real tissue: an inference about why an advantage should not
 be expected, not a measurement of its absence.
 
+\textbf{We then re-measured all three conditions at scale, on material that is neither ours nor
+tissue.} Every gate number above rests on mixtures we assembled or on a cohort in which one
+patient supplies most of the pairs, and neither weakness can be fixed with these data. Tahoe-100M
+supplies a third kind of material: a complete grid of 50 cancer cell lines against 93 compounds at
+one dose, a vehicle arm in every line, a median of 648 cells per condition, and within-line
+heterogeneity that is intrinsic cell state rather than two populations pipetted together (plate 3;
+Methods). It is not tissue and we do not use it to argue relevance. We use it for sample size, and
+we recompute the same three statistics rather than new ones (Extended Data Fig.~7).
+
+\emph{Gate 1 widens the distance between constructed and unconstructed material.} Splitting each
+treated population by cell-cycle phase, each subpopulation referred to its own phase-matched
+control, the induced response cosine over \TAHOECONDS{} conditions has a median of \TAHOEGONE{}
+(interquartile \TAHOEGONEQ{}), and only \TAHOEBELOWMIX{}\% of conditions are as divergent as our
+constructed mixtures. The mixtures are not at one end of the natural range; they are outside it.
+The exclusion rule is mildly adverse here and we checked it: conditions are dropped when a
+subpopulation arm falls below 50 cells, which preferentially removes cell-cycle-arresting
+compounds, and those do respond more divergently, but the effect is negligible (Spearman $+0.077$
+between a drug's coverage and its cosine; the median moves from \TAHOEGONE{} to 0.740 on
+well-covered compounds alone).
+
+\emph{Gate 2 replicates, and the constructed benchmark is again the outlier.} Posed as the same
+drug-response question and scored with the same four-method clusterer panel, the supervised
+ceiling is \TAHOEGTWOCEIL{} and the best unsupervised method reaches \TAHOEGTWOUNSUP{}: a gap of
+\TAHOEGTWOGAP{} over \TAHOEGTWOPAIRS{} drug pairs, positive in \TAHOEGTWOLINESPOS{} of
+\TAHOEGTWOLINES{} cell lines. No method family rescues it, and the pattern differs from tissue in
+an informative way: k-means \TAHOEKMEANS{}, Gaussian mixtures \TAHOEGMM{} and Leiden
+\TAHOELEIDEN{} all sit near the 0.5 null, where in the tumour it was Leiden that partly survived.
+The information is present and off-the-shelf partitioning does not reach it, which is what the
+single tumour cohort suggested and could not establish.
+
+\emph{Gate 3 replicates and is qualified, which is the more useful outcome.} Ranking one
+compartment's response similarity by another's, on disjoint cells, gives a median Spearman of
+\TAHOEGTHREECC{} over \TAHOEGTHREECCN{} cell lines under the cell-cycle split, and
+\TAHOEGTHREEST{} over \TAHOEGTHREESTN{} under a partition fitted on control cells and fixed before
+any treated cell is seen, against \PREMISEDISJOINT{} for the tumour computed the same way. It is
+\emph{not} universal: under the control-state partition \TAHOEGTHREESTOPEN{} of
+\TAHOEGTHREESTN{} contexts fall below 0.5, the lowest at \TAHOEGTHREESTMIN{}. Those are contexts
+in which the bulk does not tell you what the minority does, and they are where a distributional
+score should pay off. A condition that is usually met and sometimes not is a condition; one that
+is always met would have been a verdict. Nor is Gate 3 Gate 1 restated: within the cell-cycle
+partition the two correlate across contexts at Spearman \TAHOECOUPLING{}
+($R^2 = \TAHOECOUPLINGRSQ{}$, $n = \TAHOECOUPLINGN{}$), and where subpopulations respond most
+differently (Gate 1 cosine \TAHOEOPENGONE{}) Gate 3 does fall, to \TAHOEOPENGTHREE{}, without
+reaching 0.5.
+
+\textbf{Four limits bound what this adds, and the first is the one that matters.} These are cell
+lines. Their heterogeneity is unconstructed, which is the property the argument needs, but it is
+not a tumour, and the paper's claims about relevance continue to rest on tissue. Second, this is
+one plate of fourteen, 93 of the 380 compounds in the resource. Third, both partitions are coarse
+two-way splits of cell state, not the persister or resistant-clone axis that motivates this work,
+so what is measured is whether \emph{a} real subpopulation structure behaves as the conditions
+predict, not whether \emph{that} one does. Fourth, which contexts show an open Gate 3 depends on
+the partition: the two partitions agree at the extremes, and the same two cell lines are the most
+open under both, but their rankings agree only moderately overall (Spearman \TAHOEPARTAGREE{}).
+Gate 3 can flag a handful of contexts; it cannot rank them finely until the partition is fixed in
+advance.
+
 \textbf{The two gates are necessary but not sufficient, and this is how we found out.} Opening them
 does not deliver a distributional advantage, because in real tissue the compartment-specific
 response is mostly ranked by the mean already. The independent functional oracle reaches a
@@ -1758,6 +1850,47 @@ earlier version of the analysis script declared the premise supported if the cor
 number, and clearing it by 0.02 licenses nothing; the verdict has been removed from the code and
 the correlation is reported and interpreted in the text.
 
+\subsection*{Re-measuring the three conditions on Tahoe-100M}
+
+\textbf{Why this dataset.} The three conditions are measured elsewhere in this paper on cell-line
+mixtures we assembled and on a tumour cohort in which one patient supplies 15 of 18 drug pairs.
+Tahoe-100M\cite{Tahoe100M} is used for neither biology nor relevance but for sample size, and
+because its heterogeneity is \emph{unconstructed}: within one cell line the cell-to-cell variation
+is intrinsic state, not two populations combined by us. Plate 3 is a complete grid, 50 cell lines
+$\times$ 93 compounds at a single concentration each, with a DMSO\_TF vehicle arm in every line,
+4,158,278 cells and a median of 648 cells per (line, compound). We use the released preprocessed
+matrix as it ships, 2,304 highly variable genes in log1p space, and refit nothing.
+
+\textbf{Partitions, and why two.} Gates 1 and 3 need a subpopulation split inside a treated
+population. The first is the cell-cycle call shipped with the data (G1 versus G2M; S is dropped as
+intermediate). The second is fitted independently: $k$-means with $k = 2$ on each line's
+\emph{control} cells only, with treated cells assigned to the nearest control centroid, so the
+partition is a property of untreated state and is fixed before any treated cell is seen and cannot
+be tuned to the response it is used to measure. Both are reported everywhere; neither is selected
+after the fact. Gate 2 uses neither, and instead uses drug identity, which is external to
+expression: recovering a marker-derived phase call from expression would be partly circular, and
+circularity is the subject of this paper. That makes the Gate 2 test here the same construct as
+the K562 benchmark and the tumour test, so the three are comparable.
+
+\textbf{Statistics.} Each subpopulation's response is its mean minus the mean of the
+\emph{same-subpopulation} control cells, so a baseline difference between subpopulations cannot
+enter the response (the error recorded as R28 and R30). Gate 1 is the cosine between the two
+subpopulation responses. Gate 3 correlates, across all within-line compound pairs, the cosine
+similarity of the majority responses with the cosine similarity of the minority responses; the two
+sides share \emph{no cells}, which is the form we also apply to the tumour statistic above. Gate 2
+draws a balanced sample of up to 300 cells per compound for 20 random compound pairs per line,
+scores a supervised ceiling as the out-of-fold accuracy of a five-fold cross-validated logistic
+probe and an unsupervised arm as the best of $k$-means in gene space, $k$-means and Gaussian
+mixtures in 50-dimensional PCA space, and Leiden with its resolution reduced until it returns two
+communities. Every method receives best-permutation label matching for free, as elsewhere in this
+paper. A condition enters Gates 1 and 3 only with at least 50 cells in each of the four arms and a
+pair enters Gate 2 only with at least 100 cells per arm; every exclusion is counted and the
+resulting bias is reported in Results rather than assumed away. Seed 0 throughout.
+
+\textbf{What we did not do.} We did not run retrieval on this dataset, and we report no Hit@$k$,
+no regret and no Class-A, Class-B or Class-C comparison from it. It enters this paper only as a
+larger measurement of the three conditions.
+
 \subsection*{Identifiability phase diagram}
 
 The phase diagram sweeps a separation scale and a cell budget on the K562 HDAC-versus-JAK
@@ -1801,6 +1934,13 @@ ZhaoSims2021 patient-derived glioblastoma (the natural-heterogeneity benchmark):
 \texttt{ZhaoSims2021.h5ad}; original data\cite{dataZhao}. CD34$+$ HSPC: Gene Expression
 Omnibus, accession GSE306429.
 
+\textbf{Tahoe-100M} (the unconstructed-heterogeneity check on the three conditions): released by
+Vevo Therapeutics and the Arc Institute under CC0 and distributed through the Arc Virtual Cell
+Atlas and Hugging Face (\texttt{tahoebio/Tahoe-100M})\cite{Tahoe100M}. This study uses plate 3
+only, in the released preprocessed form (4,158,278 cells $\times$ 2,304 highly variable genes,
+log1p), together with the released \texttt{obs\_metadata} and \texttt{sample\_metadata} tables.
+No number in this paper is derived from the remaining thirteen plates.
+
 \textbf{GDSC dose-response} (the Class-C functional oracle): Genomics of Drug Sensitivity in
 Cancer, GDSC2 fitted dose-response, release 8.5 (file
 \texttt{GDSC2\_fitted\_dose\_response\_27Oct23.xlsx}), available from
@@ -1826,7 +1966,12 @@ All code, experiment scripts, and the evaluation-metric taxonomy are available a
 release includes a test suite and a numerical consistency check that re-derives every
 reported constant from the cached experiment outputs; the latter re-reads the cached
 experiment tables and diffs them against the recorded constants, and is a consistency check
-rather than an end-to-end re-execution. A single driver script re-executes the pipeline from the processed tensors.
+rather than an end-to-end re-execution. A single driver script re-executes the pipeline from the
+processed tensors. The Tahoe-100M re-measurement of the three conditions is separate and
+self-contained (\texttt{analysis/tahoe\_pilot/}): one script computes the gate statistics, one
+recomputes Gate 3 on disjoint cell sets under both partitions, one re-scores Gate 2 across the
+full clusterer panel, and one derives every Tahoe number quoted in this paper from the per-condition
+and per-pair tables it writes, so each can be rechecked without rerunning the others.
 
 \section*{Acknowledgements}
 \TODO{Acknowledgements. Funding sources and grant numbers.}

@@ -38,7 +38,7 @@
 \renewcommand{\figurename}{Extended Data Fig.}
 \begin{document}
 \maketitle
-\noindent This Supplementary Information contains six Extended Data figures, three Supplementary
+\noindent This Supplementary Information contains seven Extended Data figures, three Supplementary
 Notes, and four Supplementary Tables.
 \bigskip
 
@@ -100,6 +100,46 @@ Notes, and four Supplementary Tables.
 \includegraphics[width=\textwidth]{figures/edfig6.pdf}
 \caption{\textbf{Extended Data Fig. 6. HIR-Bench: the panels demoted from the main text.} Main-text Fig.~5 keeps only the two HIR-Bench panels that carry argument, the analytic condition under which subpopulation structure can change a decision and the $2\times2$ that \emph{measures} circularity. The four panels here were previously in the main text and should not have been: HIR-Bench's phase boundary is designed into its generator, so recovering it verifies that the benchmark works rather than establishing anything about biology, and its transfer to real data fails (Supplementary Note 1). A reader could reasonably have read four main-text panels of a synthetic benchmark as biological evidence. They are retained because they document that the benchmark behaves as specified, which is a precondition for trusting the two panels that stayed. \textbf{a}, Generative model: a query response is a majority plus a minority subpopulation with welfares A and B. \textbf{b}, Energy-minus-mean Hit@1 across the (minority fraction, conflict) grid. \textbf{c}, Best decision regret by information condition. Collapsing candidates to their means inflates regret against both objectives and most severely against the worst-welfare one (0.29 observed versus 0.96 predicted-mean), which is the objective that depends on the minority subpopulation. \textbf{d}, Benchmark sanity checks: the no-conflict flip rate is 0.000 and the median boundary margin 0.27, both within threshold.}
 \label{fig:ed6}
+\end{figure}
+
+\clearpage
+
+% EXTENDED DATA FIGURE 7
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/edfig7.pdf}
+\caption{\textbf{Extended Data Fig. 7. The three conditions re-measured on unconstructed material.}
+Tahoe-100M plate 3 (Zhang \emph{et al.} 2025; \texttt{10.1101/2025.02.20.639398}): a complete grid of 50 cancer cell lines against 93 compounds at one
+dose, a vehicle arm in every line, 4,158,278 cells, median 648 cells per condition. Its
+within-line heterogeneity is intrinsic cell state, not two populations combined by us, which is
+the property that makes it useful here. \textbf{It is not tissue, and it is used for sample size
+rather than for relevance}; the paper's claims about what matters therapeutically continue to rest
+on the patient data of main-text Fig.~5. The statistics are the paper's own, not new ones.
+\textbf{a}, Gate 1. Induced response cosine between the two subpopulations of a treated population,
+each referred to its own matched control, over 3{,}630 conditions
+(median 0.739). Dashed lines mark the four values the main text quotes.
+Our constructed mixtures are not at one end of the unconstructed range: only
+0.11\% of conditions are as divergent as they are. \textbf{b}, Gate 2,
+posed as the same drug-response question and scored with the same four-method clusterer panel.
+One point per drug pair; diamonds are the three main-text settings. Supervised ceiling
+0.853 against best unsupervised 0.611,
+a gap of 0.157 that is positive in 48
+of 48 cell lines. No method family rescues it (k-means
+0.592, Gaussian mixtures 0.582, Leiden
+0.563), which differs from the tumour, where Leiden was the method that
+partly survived. \textbf{c}, Gate 3 under two partitions, both computed on \emph{disjoint} cell
+sets, against the tumour value computed the same way (0.835). Medians
+0.841 and 0.778. The condition is not
+universal: 2 of 45 contexts fall
+below 0.5 under the control-state partition, the lowest at 0.236, and
+those are the contexts in which a distributional score should pay off. \textbf{d}, Gate 3 against
+Gate 1 within the cell-cycle partition, which is the only comparison of the two that is
+like-for-like. They share some variance and are not the same condition. \textbf{Limits.} These are
+cell lines; this is one plate of fourteen and 93 of 380 compounds; both partitions are coarse
+two-way splits of cell state rather than the persister axis that motivates the paper; and which
+contexts show an open Gate 3 depends on the partition, the two agreeing at the extremes but only
+moderately in rank (Spearman 0.466).}
+\label{fig:ed7}
 \end{figure}
 
 \clearpage
@@ -205,6 +245,7 @@ Frangieh (2021)          & 218{,}023 & 2{,}000 HVG & Control, IFN$\gamma$, Co-cu
 CD34$+$ (GSE306429)                   & 33{,}984  & 2{,}000 HVG & discovered subpopulations       & 36 drugs \\
 HIR-Bench (synthetic instances)       & 13{,}440  & latent      & two-subpopulation welfare model & tunable conflict \\
 GDSC2 dose-response (Class C)         & \multicolumn{2}{l}{286 drugs $\times$ 969 lines} & 966 lines (SciPlex3 lines held out) & 35 matched compounds \\
+Tahoe-100M plate 3 (Zhang 2025)       & 4{,}158{,}278 & 2{,}304 HVG & 50 cancer cell lines & 93 compounds, 1 dose \\
 \bottomrule
 \end{tabular}
 \end{table}

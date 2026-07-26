@@ -1,4 +1,4 @@
-\begin{thebibliography}{40}
+\begin{thebibliography}{41}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -285,6 +285,24 @@ Kalervo J{\"a}rvelin and Jaana Kek{\"a}l{\"a}inen.
 \newblock \emph{{ACM} Transactions on Information Systems}, 20\penalty0
   (4):\penalty0 422--446, 2002.
 \newblock \doi{10.1145/582415.582418}.
+
+\bibitem[Zhang et~al.(2025)Zhang, Ubas, de~Borja, Svensson, Thomas, Thakar,
+  Winters, Khan, Jones, Thompson, Tran, Pangallo, Papalexi, Sapre, Nguyen,
+  Sanderson, Nigos, Kaplan, Schroeder, Hariadi, Marrujo, Salvino,
+  Gallareta~Olivares, Koehler, Geiss, Rosenberg, Roco, Merico, Alidoust,
+  Goodarzi, and Yu]{Tahoe100M}
+Jesse Zhang, Airol~A. Ubas, Richard de~Borja, Valentine Svensson, Nicole
+  Thomas, Neha Thakar, Ian Winters, Umair Khan, Matthew~G. Jones, John~D.
+  Thompson, Vuong Tran, Joseph Pangallo, Efthymia Papalexi, Aakash Sapre, Huy
+  Nguyen, Oliver Sanderson, Maria Nigos, Olivier Kaplan, Sarah Schroeder,
+  Bertrand Hariadi, Susana Marrujo, Carlos C.~A. Salvino, Gabriel
+  Gallareta~Olivares, Ryan Koehler, Gary Geiss, Alexander Rosenberg, Charles
+  Roco, Daniele Merico, Nima Alidoust, Hani Goodarzi, and Johnny Yu.
+\newblock {Tahoe-100M}: a giga-scale single-cell perturbation atlas for
+  context-dependent gene function and cellular modeling.
+\newblock \emph{bioRxiv}, 2025.
+\newblock \doi{10.1101/2025.02.20.639398}.
+\newblock Preprint, version 3 (2025-05-10).
 
 \bibitem[Benjamini and Hochberg(1995)]{BenjaminiHochberg}
 Yoav Benjamini and Yosef Hochberg.
