@@ -21,15 +21,23 @@ times because it printed a COUNT that nobody could check.
 So the panel now plots the DISTRIBUTION, states the mean, and circles only the two tasks
 that survive seed resampling. A count of threshold crossings on this data is a count of noise
 excursions, and this figure no longer reports one. See CORRECTIONS.md R13.
+
+2026-07-26, presentation only. The distribution used to be drawn as a 5 x 90 heat map on a colour
+scale running to the largest task (|delta| = 0.087). Since 43% of tasks are exactly zero and the
+median |delta| is 0.0002, every cell that carried the actual finding rendered as white on white:
+the panel was unreadable, and the only legible thing in it was the one outlier. The same numbers
+are now one dot per task on a common linear axis, one row per dataset regime, so the reader sees
+directly what the claim says: the mass sits on zero, the constructed cross-line mixtures carry a
+thin positive tail, and the natural datasets carry none. Nothing is rescaled, clipped or binned;
+row means are printed rather than inferred from colour.
 """
 import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 
 FOCAL, COMP, GREY, INK = "#5185C0", "#E99D4E", "#7A7A7A", "#1A1A1A"
-DIVMAP = LinearSegmentedColormap.from_list("dart_div", [COMP, "#f7f7f7", FOCAL])
+LIGHT_GREY = "#C9C9C9"
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 PROJ = f"{REPO}/results/exp13_real_data_projection/projection.csv"
 
@@ -40,10 +48,17 @@ REPLICATION_STABLE = {
     "A549->MCF7:Belinostat (PXD101)",
 }
 
-DS_ORDER = ["sciplex3_within_line", "sciplex3_cross_line", "cd34", "frangieh",
+# Constructed mixtures first: the tail lives there, and the natural datasets below it are the
+# control the claim rests on.
+DS_ORDER = ["sciplex3_cross_line", "sciplex3_within_line", "cd34", "frangieh",
             "sciplex3_predicted_mean"]
-DS_LAB = {"sciplex3_within_line": "SP3 within", "sciplex3_cross_line": "SP3 cross",
-          "cd34": "CD34+", "frangieh": "Frangieh", "sciplex3_predicted_mean": "SP3 pred-mean"}
+DS_LAB = {"sciplex3_cross_line": "SciPlex3 cross-line (constructed)",
+          "sciplex3_within_line": "SciPlex3 within-line",
+          "cd34": "CD34+", "frangieh": "Frangieh",
+          "sciplex3_predicted_mean": "SciPlex3, predicted candidates"}
+JITTER = 0.11          # vertical spread within a row, so overlapping tasks stay countable
+LABEL_OFF = 0.29       # row label baseline, in row units above the row's dots
+RNG_SEED = 0           # jitter is cosmetic, but it is still seeded so the panel is reproducible
 
 
 def draw_4g(ax):
@@ -57,37 +72,58 @@ def draw_4g(ax):
             f"sanity run as the real-data result.")
 
     present = [d for d in DS_ORDER if (p.dataset == d).any()]
-    width = max(int((p.dataset == d).sum()) for d in present)
-    M = np.full((len(present), width), np.nan)
-    stable = []
+    rng = np.random.default_rng(RNG_SEED)
+    # Dashed and pale, so it cannot be confused with the column of grey dots sitting on it: 43%
+    # of tasks have a difference of exactly zero, and that column is data, not an axis.
+    ax.axvline(0, color=LIGHT_GREY, lw=0.7, ls=(0, (3, 2)), zorder=1)
+
     for i, ds in enumerate(present):
-        sub = p[p.dataset == ds].reset_index(drop=True)
-        for j, r in sub.iterrows():
-            M[i, j] = r["delta"]
-            base = ":".join(str(r["task_id"]).split(":")[:2])   # drop the :sN suffix
-            if base in REPLICATION_STABLE:
-                stable.append((j, i))
+        sub = p[p.dataset == ds]
+        dv = sub["delta"].to_numpy()
+        yy = i + rng.uniform(-JITTER, JITTER, size=len(dv))
+        cols = np.where(dv > 0, FOCAL, np.where(dv < 0, COMP, GREY))
+        ax.scatter(dv, yy, s=5.5, c=cols, alpha=0.75, linewidths=0, zorder=2)
 
-    vmax = float(np.nanmax(np.abs(M)))
-    im = ax.imshow(M, cmap=DIVMAP, vmin=-vmax, vmax=vmax, aspect="auto")
+        base = sub["task_id"].astype(str).str.split(":").str[:2].str.join(":")
+        keep = base.isin(REPLICATION_STABLE).to_numpy()
+        if keep.any():                       # the two tasks that survive seed resampling
+            ax.scatter(dv[keep], yy[keep], s=13, facecolors="none", edgecolors=INK,
+                       linewidths=0.8, zorder=4)
 
-    if stable:
-        xs, ys = zip(*stable)
-        ax.scatter(xs, ys, s=16, facecolors="none", edgecolors=INK, linewidths=0.9, zorder=3)
+        m = float(dv.mean())
+        ax.plot([m], [i], marker="D", ms=3.0, mfc=INK, mec="white", mew=0.4, zorder=5)
+        # Row name and row mean as one direct label in the empty strip above each row's dots.
+        # As y-tick labels they were wide enough to run into panel f's axis, and a separate
+        # right-hand column of means left a third of the panel empty.
+        # The pale dashed zero rule runs the full height of the axes and every one of these five
+        # labels crosses x = 0, so at print size the rule struck through the glyphs (clearest in
+        # "n=12"). Knocked out behind the text, as in panel 2d, rather than moved: the label has to
+        # start at the left spine and the row means are what make it worth printing.
+        ax.text(-0.0615, i - LABEL_OFF, f"{DS_LAB[ds]}   mean {m:+.5f}, n={len(dv)}",
+                fontsize=5.8, color=INK, va="bottom", ha="left", zorder=3,
+                bbox=dict(facecolor="white", edgecolor="none", pad=0.6))
 
-    ax.set_yticks(range(len(present)))
-    ax.set_yticklabels([DS_LAB.get(d, d) for d in present], fontsize=6)
-    ax.set_xlabel(
-        f"task index within dataset\n"
-        f"mean gain {p.delta.mean():+.4f} over {len(p)} tasks; "
-        f"circled = survives seed resampling (2)", fontsize=5.4)
-    cb = ax.figure.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-    cb.set_label("DART $-$ mean\nminority cov", fontsize=5.5)
-    cb.ax.tick_params(labelsize=5)
+    ax.set_yticks([])
+    # The row pitch has to clear the label (0.47 row units of 5.8 pt text), the jitter and the
+    # marker radius on both sides of it; at the printed panel height that is the tightest
+    # vertical constraint in the panel, so the limits are set from those quantities.
+    ax.set_ylim(len(present) - 0.55, -0.85)        # first dataset on top
+    ax.set_xlim(-0.065, 0.095)
+    ax.set_xticks([-0.05, 0.0, 0.05])
+    ax.tick_params(axis="x", labelsize=5.8)
+    ax.tick_params(axis="y", length=0)
+    # 1:1 re-cut: the old second label line ("all 239 tasks; overall mean ...; circled, above 0.01
+    # in 10 of 10 seeds") was 2.4 in of 5.6 pt text on what is now a 2.4 in panel, and the Fig. 4
+    # caption states all of it, so it is dropped rather than shrunk. What the caption does NOT
+    # carry is the diamond key and the per-row means and n, so those stay on the panel.
+    ax.set_xlabel("minority-state coverage gain, distributional $-$ mean"
+                  "\none dot per task; diamond, dataset mean", fontsize=5.6)
+    for sp in ("right", "top", "left"):
+        ax.spines[sp].set_visible(False)
 
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(figsize=(3.8, 3.0))
+    fig, ax = plt.subplots(figsize=(4.2, 2.2))
     draw_4g(ax)
     fig.savefig(os.path.join(os.path.dirname(__file__), "4g.png"), dpi=200, bbox_inches="tight")
     print("wrote 4g.png")

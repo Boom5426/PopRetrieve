@@ -27,6 +27,35 @@ scale detail also lives in Supplementary Table 1.
 - ED3 predictor collapse from exp09 structure diagnostics (real subpop_variance_ratio 0.046
   vs predictors ~0.009). Phase diagram from upgrade/identifiability_phase_diagram.csv.
 
+## BLOCKER: this deck is not synced to the manuscript, and must not be until it is re-cut
+
+`manuscript/latex/figures/edfig{1..4}.pdf` are the **2026-07-12** build. Running `ed_panels.py`
+today produces different files, and copying them over would be a **regression**, not an update.
+
+The main deck (Figs 1-6) was re-authored at its printed width so that nominal size equals printed
+size; see the geometry docstring in `fig6/fig6_assemble.py`. This deck never received that
+treatment. Its canvases are declared in `FIGS` at 10.2-12.6 in against a 6.93 in (498.6 pt) SI
+text block, so `\includegraphics[width=\textwidth]` scales them **down** and the type prints far
+below the Nature Portfolio 5 pt floor:
+
+| Fig | canvas | scale at `\textwidth` | min nominal | **printed** |
+|-----|--------|----------------------|-------------|-------------|
+| ED1 | 734.4 pt | 0.679 | 5.0 pt | **3.39 pt** |
+| ED2 | 734.4 pt | 0.679 | 5.0 pt | **3.39 pt** |
+| ED3 | 907.2 pt | 0.550 | 5.0 pt | **2.75 pt** |
+| ED4 | 734.4 pt | 0.679 | 5.2 pt | **3.53 pt** |
+
+These figures are also outside `build_all.py`, so no gate reports this: `FIGS` in `build_all.py`
+covers only 1-6, and `assert_min_fontsize` measures the nominal size anyway, which is the exact
+blind spot documented for the main deck.
+
+Fixing it means re-authoring at 6.93 in, which is a re-layout and not a resize: at 0.68x canvas
+the labels grow 1.47x relative to their panels and will collide, which is why the main deck's
+re-cut rewrapped every label rather than shrinking type. Until that is done, the shipped SI keeps
+the 07-12 build, and **two label edits made on 2026-07-26 (ED2c and ED4c, "DART - mean" ->
+"distributional - mean", to match the relabelled main deck) are present in this source and not yet
+visible in the SI PDF.**
+
 ## Files
 - ed_panels.py (all draw functions), ed1..ed4 .{png,pdf}
 - source data: ../source_data/ed*.csv

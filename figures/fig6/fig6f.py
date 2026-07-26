@@ -2,12 +2,13 @@
 
 Source data: results/upgrade/gate2_supervised_upper_bound.csv
 
-Panel 5e reports that on this CONSTRUCTED mixture the supervised ceiling (0.692) and the best
+Panel 6e reports that on this CONSTRUCTED mixture the supervised ceiling (0.692) and the best
 unsupervised method (0.674) are 0.018 apart, so within that benchmark the limit is informational
-rather than algorithmic. (On natural patient-tumour heterogeneity the ceiling is 0.964: the
-information limit was a property of the benchmark, not of biology. See main-text Fig. 5c.) That conclusion is only safe if the probe is capable of pulling away from
-clustering WHEN THERE IS SOMETHING TO PULL AWAY WITH. Otherwise "no gap" could simply mean the
-probe is insensitive, and the whole argument collapses.
+rather than algorithmic. (Posed as the same drug-versus-drug question in a patient's tumour the
+ceiling is 0.923 against 0.777 unsupervised: the information limit was a property of the benchmark,
+not of biology. See main-text Fig. 5d and CORRECTIONS.md R21.) That conclusion is only safe if the
+probe is capable of pulling away from clustering WHEN THERE IS SOMETHING TO PULL AWAY WITH.
+Otherwise "no gap" could simply mean the probe is insensitive, and the whole argument collapses.
 
 This panel is that control. Artificially raise the separation between the two source populations
 and the gap opens exactly as it should: +0.114 at 1.5x, +0.162 at 2.0x, before both saturate at
@@ -46,45 +47,49 @@ def draw_6f(ax):
     ceil = np.array([float(g.get_group(s).probe_acc.median()) for s in seps])
     best = np.array([max(float(g.get_group(s)[c].median()) for c in UNSUP) for s in seps])
 
-    ax.fill_between(seps, best, ceil, color=COMP, alpha=0.18, zorder=1,
-                    label="unreachable by clustering")
-    ax.plot(seps, ceil, "-o", color=GREEN, ms=4, lw=1.5, zorder=3,
-            label="supervised ceiling")
-    ax.plot(seps, best, "-s", color=FOCAL, ms=4, lw=1.5, zorder=3,
-            label="best unsupervised")
+    ax.fill_between(seps, best, ceil, color=COMP, alpha=0.18, zorder=1)
+    ax.plot(seps, ceil, "-o", color=GREEN, ms=4, lw=1.5, zorder=3)
+    ax.plot(seps, best, "-s", color=FOCAL, ms=4, lw=1.5, zorder=3)
     ax.axhline(0.5, ls="--", lw=0.8, color=GREY, zorder=1)
+    ax.text(7.9, 0.508, "chance", ha="right", va="bottom", fontsize=5.5, color=GREY)
 
-    # the real-data regime: the gap is closed, and that is the finding
+    # Direct labels on the two curves, in their own colours, instead of a boxed legend: the
+    # widest part of the wedge is the only place in this panel with room, and it is also the
+    # place a reader is looking when the panel's point lands.
+    ax.text(2.0, 0.948, "supervised ceiling", ha="right", va="bottom", fontsize=5.8,
+            color=GREEN, fontweight="bold")
+    ax.text(2.2, 0.700, "best unsupervised", ha="left", va="center", fontsize=5.8,
+            color=FOCAL, fontweight="bold")
+    ax.text(2.02, 0.843, "gap", ha="center", va="center", fontsize=6.2,
+            color=COMP, fontweight="bold")
+    ax.text(2.35, 0.615, "shaded: what clustering\ncannot reach", ha="left", va="top",
+            fontsize=5.5, color=COMP, linespacing=1.25)
+
+    # the real-data regime: the gap is closed, and that is what panel e measures
     ax.axvline(1.0, ls=":", lw=1.0, color=INK, zorder=2)
-    ax.annotate(f"real data\ngap {ceil[0] - best[0]:+.3f}",
-                xy=(1.0, (ceil[0] + best[0]) / 2), xytext=(1.75, 0.565),
-                fontsize=5.6, color=INK, fontweight="bold",
+    ax.annotate(f"real separation:\ngap {ceil[0] - best[0]:+.3f}",
+                xy=(1.0, (ceil[0] + best[0]) / 2), xytext=(1.30, 0.545),
+                fontsize=5.8, color=INK, fontweight="bold", linespacing=1.25,
                 arrowprops=dict(arrowstyle="->", lw=0.8, color=INK))
-    # ... and the control: raise separation and the probe DOES pull away
-    i = int(np.argmax(ceil - best))
-    ax.annotate(f"probe pulls away\nwhen structure exists\n(gap {ceil[i] - best[i]:+.3f})",
-                xy=(seps[i], (ceil[i] + best[i]) / 2), xytext=(2.6, 0.72),
-                fontsize=5.6, color=COMP, fontweight="bold",
-                arrowprops=dict(arrowstyle="->", lw=0.8, color=COMP))
 
     ax.set_xlabel(r"source separation ($\times$ real)", fontsize=6)
     ax.set_ylabel("accuracy recovering the true partition", fontsize=6)
     ax.set_xscale("log")
     ax.set_xticks(seps)
     ax.set_xticklabels([f"{s:g}" for s in seps], fontsize=5.6)
+    ax.set_xlim(0.93, 8.7)
     ax.set_ylim(0.45, 1.06)
     ax.tick_params(axis="y", labelsize=5.6)
     ax.minorticks_off()
     for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)
-    ax.legend(fontsize=5.5, loc="lower right", frameon=True, framealpha=0.92,
-              edgecolor="none", labelspacing=0.25, handlelength=1.5,
-              bbox_to_anchor=(1.0, 0.02))
 
 
 if __name__ == "__main__":
     fig, ax = plt.subplots(figsize=(3.6, 3.0))
     draw_6f(ax)
-    ax.set_title("The probe can see structure when it is there", loc="left", fontsize=8)
+    # Must stay identical to fig6_assemble.TITLES["f"], which overrides whatever this file sets
+    # when the panel is composited.
+    ax.set_title("The probe pulls away when structure is there", loc="left", fontsize=8)
     fig.savefig(os.path.join(os.path.dirname(__file__), "6f.png"), dpi=200, bbox_inches="tight")
     print("wrote 6f.png")

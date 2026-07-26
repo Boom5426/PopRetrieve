@@ -34,3 +34,27 @@ already-processed tensors directly.
 
 > Note: `data/` on the original dev machine is a symlink to a shared data tree; that
 > symlink is git-ignored. Clone users create their own `data/processed/`.
+
+## Tahoe-100M (the unconstructed-heterogeneity check)
+
+Used only by `analysis/tahoe_pilot/`, and only **plate 3**. No other result in this repository
+depends on it, and no retrieval is run on it.
+
+```
+data/
+  tahoe/
+    plate3_filt_Vevo_Tahoe100M_WServicesFrom_ParseGigalab_preprocessed_cpu.h5ad
+    metadata/sample_metadata.parquet          # optional, for the dose and plate audit
+```
+
+The preprocessed plate is 4,158,278 cells x 2,304 highly variable genes in log1p space, a complete
+50 cell line x 93 compound grid at one dose per compound, with a `DMSO_TF` vehicle arm in every
+line and a cell-cycle call on every cell. The scripts read it as it ships and refit nothing.
+
+- **Source** — Zhang et al. 2025, *Tahoe-100M: a giga-scale single-cell perturbation atlas*,
+  bioRxiv [10.1101/2025.02.20.639398](https://doi.org/10.1101/2025.02.20.639398). Released under
+  **CC0** by Vevo Therapeutics and the Arc Institute; distributed through the Arc Virtual Cell
+  Atlas and Hugging Face (`tahoebio/Tahoe-100M`).
+- **Why this plate** — it is one of the smaller ones and still a complete grid, so it carries the
+  full cell-line axis without the other thirteen plates. Using more plates would add compounds, not
+  contexts.

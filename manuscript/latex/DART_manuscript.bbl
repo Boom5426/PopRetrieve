@@ -1,4 +1,4 @@
-\begin{thebibliography}{26}
+\begin{thebibliography}{41}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -6,171 +6,317 @@
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
 \bibitem[Bunne et~al.(2024)Bunne, Roohani, Rosen, et~al.]{AIVirtualCell}
-C~Bunne, Y~Roohani, Y~Rosen, et~al.
+Charlotte Bunne, Yusuf Roohani, Yanay Rosen, et~al.
 \newblock How to build the virtual cell with artificial intelligence:
   priorities and opportunities.
-\newblock \emph{Cell}, 187:\penalty0 7045--7063, 2024.
+\newblock \emph{Cell}, 187\penalty0 (25):\penalty0 7045--7063, 2024.
 \newblock \doi{10.1016/j.cell.2024.11.015}.
 
-\bibitem[Cui et~al.(2024)]{ref7}
-H~Cui et~al.
-\newblock scgpt: toward building a foundation model for single-cell multi-omics
-  using generative ai.
-\newblock \emph{Nature Methods}, 21:\penalty0 1470--1480, 2024.
+\bibitem[Cui et~al.(2024)Cui, Wang, Maan, Pang, Luo, Duan, and Wang]{ref7}
+Haotian Cui, Chloe Wang, Hassaan Maan, Kuan Pang, Fengning Luo, Nan Duan, and
+  Bo~Wang.
+\newblock {scGPT}: toward building a foundation model for single-cell
+  multi-omics using generative {AI}.
+\newblock \emph{Nature Methods}, 21\penalty0 (8):\penalty0 1470--1480, 2024.
+\newblock \doi{10.1038/s41592-024-02201-0}.
 
 \bibitem[Hao et~al.(2024)]{ref8}
-M~Hao et~al.
+Minsheng Hao et~al.
 \newblock Large-scale foundation model on single-cell transcriptomics.
-\newblock \emph{Nature Methods}, 21:\penalty0 1481--1491, 2024.
+\newblock \emph{Nature Methods}, 21\penalty0 (8):\penalty0 1481--1491, 2024.
+\newblock \doi{10.1038/s41592-024-02305-7}.
 
 \bibitem[Theodoris et~al.(2023)]{ref9}
-C~V Theodoris et~al.
+Christina~V. Theodoris et~al.
 \newblock Transfer learning enables predictions in network biology.
-\newblock \emph{Nature}, 618:\penalty0 616--624, 2023.
+\newblock \emph{Nature}, 618\penalty0 (7965):\penalty0 616--624, 2023.
+\newblock \doi{10.1038/s41586-023-06139-9}.
 
 \bibitem[Lotfollahi et~al.(2019)Lotfollahi, Wolf, and Theis]{ref4}
-M~Lotfollahi, F~A Wolf, and F~J Theis.
-\newblock scgen predicts single-cell perturbation responses.
-\newblock \emph{Nature Methods}, 16:\penalty0 715--721, 2019.
+Mohammad Lotfollahi, F.~Alexander Wolf, and Fabian~J. Theis.
+\newblock {scGen} predicts single-cell perturbation responses.
+\newblock \emph{Nature Methods}, 16\penalty0 (8):\penalty0 715--721, 2019.
+\newblock \doi{10.1038/s41592-019-0494-8}.
 
 \bibitem[Lotfollahi et~al.(2023)]{ref5}
-M~Lotfollahi et~al.
+Mohammad Lotfollahi et~al.
 \newblock Predicting cellular responses to complex perturbations in
   high-throughput screens.
-\newblock \emph{Molecular Systems Biology}, 19:\penalty0 e11517, 2023.
+\newblock \emph{Molecular Systems Biology}, 19\penalty0 (6):\penalty0 e11517,
+  2023.
+\newblock \doi{10.15252/msb.202211517}.
 
 \bibitem[Roohani et~al.(2024)Roohani, Huang, and Leskovec]{ref10}
-Y~Roohani, K~Huang, and J~Leskovec.
+Yusuf Roohani, Kexin Huang, and Jure Leskovec.
 \newblock Predicting transcriptional outcomes of novel multigene perturbations
-  with gears.
-\newblock \emph{Nature Biotechnology}, 42:\penalty0 927--935, 2024.
+  with {GEARS}.
+\newblock \emph{Nature Biotechnology}, 42\penalty0 (6):\penalty0 927--935,
+  2024.
+\newblock \doi{10.1038/s41587-023-01905-6}.
 
 \bibitem[Lamb et~al.(2006)]{ref1}
-J~Lamb et~al.
-\newblock The connectivity map: using gene-expression signatures to connect
+Justin Lamb et~al.
+\newblock The {C}onnectivity {M}ap: using gene-expression signatures to connect
   small molecules, genes, and disease.
-\newblock \emph{Science}, 313:\penalty0 1929--1935, 2006.
+\newblock \emph{Science}, 313\penalty0 (5795):\penalty0 1929--1935, 2006.
+\newblock \doi{10.1126/science.1132939}.
 
 \bibitem[Subramanian et~al.(2017)]{ref2}
-A~Subramanian et~al.
-\newblock A next generation connectivity map: L1000 platform and the first
-  1,000,000 profiles.
-\newblock \emph{Cell}, 171:\penalty0 1437--1452, 2017.
+Aravind Subramanian et~al.
+\newblock A next generation {C}onnectivity {M}ap: {L1000} platform and the
+  first 1,000,000 profiles.
+\newblock \emph{Cell}, 171\penalty0 (6):\penalty0 1437--1452.e17, 2017.
+\newblock \doi{10.1016/j.cell.2017.10.049}.
 
 \bibitem[Peidli et~al.(2024)]{ref3}
-S~Peidli et~al.
-\newblock scperturb: harmonized single-cell perturbation data.
-\newblock \emph{Nature Methods}, 21:\penalty0 531--540, 2024.
+Stefan Peidli et~al.
+\newblock {scPerturb}: harmonized single-cell perturbation data.
+\newblock \emph{Nature Methods}, 21\penalty0 (3):\penalty0 531--540, 2024.
+\newblock \doi{10.1038/s41592-023-02144-y}.
 
 \bibitem[Ahlmann-Eltze et~al.(2025)Ahlmann-Eltze, Huber, and Anders]{ref13}
-C~Ahlmann-Eltze, W~Huber, and S~Anders.
+Constantin Ahlmann-Eltze, Wolfgang Huber, and Simon Anders.
 \newblock Deep-learning-based gene perturbation effect prediction does not yet
   outperform simple linear baselines.
-\newblock \emph{Nature Methods}, 2025.
+\newblock \emph{Nature Methods}, 22\penalty0 (8):\penalty0 1657--1661, 2025.
+\newblock \doi{10.1038/s41592-025-02772-6}.
 
 \bibitem[Wei et~al.(2026)]{ref15}
-X~Wei et~al.
+Zhiting Wei et~al.
 \newblock Benchmarking algorithms for generalizable single-cell perturbation
   response prediction.
-\newblock \emph{Nature Methods}, 2026.
+\newblock \emph{Nature Methods}, 23\penalty0 (2):\penalty0 451--464, 2026.
+\newblock \doi{10.1038/s41592-025-02980-0}.
 
-\bibitem[Hetzel et~al.(2022)]{ref6}
-L~Hetzel et~al.
+\bibitem[Thomas and Uminsky(2022)]{MetricGaming}
+Rachel~L. Thomas and David Uminsky.
+\newblock Reliance on metrics is a fundamental challenge for {AI}.
+\newblock \emph{Patterns}, 3\penalty0 (5):\penalty0 100476, 2022.
+\newblock \doi{10.1016/j.patter.2022.100476}.
+
+\bibitem[Hetzel et~al.(2022)Hetzel, B{\"o}hm, Kilbertus, G{\"u}nnemann,
+  Lotfollahi, and Theis]{ref6}
+Leon Hetzel, Simon B{\"o}hm, Niki Kilbertus, Stephan G{\"u}nnemann, Mohammad
+  Lotfollahi, and Fabian~J. Theis.
 \newblock Predicting cellular responses to novel drug perturbations at a
   single-cell resolution.
 \newblock In \emph{Advances in Neural Information Processing Systems},
   volume~35, 2022.
+\newblock {NeurIPS} 2022 proceedings register no {DOI}.
 
-\bibitem[Guney et~al.(2016)]{ref11}
-E~Guney et~al.
+\bibitem[Guney et~al.(2016)Guney, Menche, Vidal, and Barab{\'a}si]{ref11}
+Emre Guney, J{\"o}rg Menche, Marc Vidal, and Albert-L{\'a}szl{\'o}
+  Barab{\'a}si.
 \newblock Network-based in silico drug efficacy screening.
-\newblock \emph{Nature Communications}, 7:\penalty0 10331, 2016.
+\newblock \emph{Nature Communications}, 7\penalty0 (1):\penalty0 10331, 2016.
+\newblock \doi{10.1038/ncomms10331}.
 
-\bibitem[Gonzalez et~al.(2025)]{ref12}
-G~Gonzalez et~al.
+\bibitem[Gonzalez et~al.(2026)Gonzalez, Lin, Herath, Veselkov, Bronstein, and
+  Zitnik]{ref12}
+Guadalupe Gonzalez, Xiang Lin, Isuru Herath, Kirill Veselkov, Michael
+  Bronstein, and Marinka Zitnik.
 \newblock Combinatorial prediction of therapeutic perturbations using causally
   inspired neural networks.
-\newblock \emph{Nature Machine Intelligence}, 2025.
+\newblock \emph{Nature Biomedical Engineering}, 10\penalty0 (5):\penalty0
+  1008--1025, 2026.
+\newblock \doi{10.1038/s41551-025-01481-x}.
 
 \bibitem[Bunne et~al.(2023)]{CellOT}
-C~Bunne et~al.
+Charlotte Bunne et~al.
 \newblock Learning single-cell perturbation responses using neural optimal
   transport.
-\newblock \emph{Nature Methods}, 20:\penalty0 1759--1768, 2023.
+\newblock \emph{Nature Methods}, 20\penalty0 (11):\penalty0 1759--1768, 2023.
+\newblock \doi{10.1038/s41592-023-01969-x}.
 
-\bibitem[Chi et~al.(2025)]{Departures}
-C~Chi et~al.
+\bibitem[Chi et~al.(2025)Chi, Huang, Xia, Zheng, Liu, Zang, and Li]{Departures}
+Changxi Chi, Yufei Huang, Jun Xia, Jiangbin Zheng, Yunfan Liu, Zelin Zang, and
+  Stan~Z. Li.
 \newblock Departures: distributional transport for single-cell perturbation
-  prediction with neural {Schr\"odinger} bridges.
+  prediction with neural {S}chr{\"o}dinger bridges.
 \newblock \emph{arXiv}, 2025.
-\newblock preprint arXiv:2511.13124.
+\newblock \doi{10.48550/arXiv.2511.13124}.
+\newblock preprint {arXiv}:2511.13124.
 
-\bibitem[Ji et~al.(2023)Ji, Green, Peidli, et~al.]{OptimalMetrics}
-Y~Ji, T~D Green, S~Peidli, et~al.
+\bibitem[Ji et~al.(2023)Ji, Green, Peidli, Bahrami, Liu, Zappia, Hrovatin,
+  Sander, and Theis]{OptimalMetrics}
+Yuge Ji, Tessa~D. Green, Stefan Peidli, Mojtaba Bahrami, Meiqi Liu, Luke
+  Zappia, Karin Hrovatin, Chris Sander, and Fabian~J. Theis.
 \newblock Optimal distance metrics for single-cell {RNA}-seq populations.
 \newblock \emph{bioRxiv}, 2023.
 \newblock \doi{10.1101/2023.12.26.572833}.
-\newblock preprint.
+\newblock preprint, {bioRxiv}.
 
 \bibitem[Rubbi et~al.(2026)Rubbi, Di~Francesco, Lotfollahi, and
   Li{\`o}]{StandardizedEval}
-A~Rubbi, A~G Di~Francesco, M~Lotfollahi, and P~Li{\`o}.
+Andrea Rubbi, Andrea~Giuseppe Di~Francesco, Mohammad Lotfollahi, and Pietro
+  Li{\`o}.
 \newblock A standardized framework for evaluating gene expression generative
   models.
 \newblock \emph{arXiv}, 2026.
-\newblock preprint arXiv:2603.11244.
+\newblock \doi{10.48550/arXiv.2603.11244}.
+\newblock preprint {arXiv}:2603.11244.
 
 \bibitem[Heidari et~al.(2026)Heidari, Karimpour, Srivatsa, and
   Montazeri]{ref16}
-M~Heidari, M~Karimpour, S~Srivatsa, and H~Montazeri.
+Mahshid Heidari, Mina Karimpour, Sumana Srivatsa, and Hesam Montazeri.
 \newblock Evaluating single-cell perturbation response models is far from
   straightforward.
 \newblock \emph{bioRxiv}, 2026.
 \newblock \doi{10.64898/2026.02.14.705879}.
-\newblock preprint.
+\newblock preprint, {bioRxiv}.
 
 \bibitem[Agarwal and Bisht(2026)]{ref17}
-D~Agarwal and R~Bisht.
+Dhruv Agarwal and Riya Bisht.
 \newblock The metric picks the winner: evaluation choice flips model rankings
   for drug-response prediction in unseen chemistry.
 \newblock \emph{arXiv}, 2026.
-\newblock preprint arXiv:2606.12639.
+\newblock \doi{10.48550/arXiv.2606.12639}.
+\newblock preprint {arXiv}:2606.12639.
+
+\bibitem[Yang et~al.(2013)]{GDSC}
+Wanjuan Yang et~al.
+\newblock Genomics of {D}rug {S}ensitivity in {C}ancer ({GDSC}): a resource for
+  therapeutic biomarker discovery in cancer cells.
+\newblock \emph{Nucleic Acids Research}, 41\penalty0 (D1):\penalty0 D955--D961,
+  2013.
+\newblock \doi{10.1093/nar/gks1111}.
+
+\bibitem[Iorio et~al.(2016)]{GDSCLandscape}
+Francesco Iorio et~al.
+\newblock A landscape of pharmacogenomic interactions in cancer.
+\newblock \emph{Cell}, 166\penalty0 (3):\penalty0 740--754, 2016.
+\newblock \doi{10.1016/j.cell.2016.06.017}.
 
 \bibitem[Klein et~al.(2025)]{CellFlow}
-D~Klein et~al.
+Dominik Klein et~al.
 \newblock {CellFlow} enables generative single-cell phenotype modeling with
   flow matching.
 \newblock \emph{bioRxiv}, 2025.
-\newblock preprint 2025.04.11.648220.
+\newblock \doi{10.1101/2025.04.11.648220}.
+\newblock preprint, {bioRxiv}.
 
-\bibitem[Kedzierska et~al.(2025)]{ref14}
-K~Z Kedzierska et~al.
+\bibitem[Roohani et~al.(2025)]{VirtualCellChallenge}
+Yusuf~H. Roohani et~al.
+\newblock Virtual {C}ell {C}hallenge: toward a {T}uring test for the virtual
+  cell.
+\newblock \emph{Cell}, 188\penalty0 (13):\penalty0 3370--3374, 2025.
+\newblock \doi{10.1016/j.cell.2025.06.008}.
+
+\bibitem[Kedzierska et~al.(2025)Kedzierska, Crawford, Amini, and Lu]{ref14}
+Kasia~Z. Kedzierska, Lorin Crawford, Ava~P. Amini, and Alex~X. Lu.
 \newblock Zero-shot evaluation reveals limitations of single-cell foundation
   models.
-\newblock \emph{Genome Biology}, 26, 2025.
+\newblock \emph{Genome Biology}, 26\penalty0 (1):\penalty0 101, 2025.
+\newblock \doi{10.1186/s13059-025-03574-x}.
+
+\bibitem[Kapoor and Narayanan(2023)]{Leakage}
+Sayash Kapoor and Arvind Narayanan.
+\newblock Leakage and the reproducibility crisis in machine-learning-based
+  science.
+\newblock \emph{Patterns}, 4\penalty0 (9):\penalty0 100804, 2023.
+\newblock \doi{10.1016/j.patter.2023.100804}.
+
+\bibitem[Squair et~al.(2021)]{PseudoRep}
+Jordan~W. Squair et~al.
+\newblock Confronting false discoveries in single-cell differential expression.
+\newblock \emph{Nature Communications}, 12\penalty0 (1):\penalty0 5692, 2021.
+\newblock \doi{10.1038/s41467-021-25960-2}.
 
 \bibitem[Srivatsan et~al.(2020)]{dataSciPlex3}
-S~R Srivatsan et~al.
+Sanjay~R. Srivatsan et~al.
 \newblock Massively multiplex chemical transcriptomics at single-cell
   resolution.
-\newblock \emph{Science}, 367:\penalty0 45--51, 2020.
+\newblock \emph{Science}, 367\penalty0 (6473):\penalty0 45--51, 2020.
+\newblock \doi{10.1126/science.aax6234}.
 
 \bibitem[Frangieh et~al.(2021)]{dataFrangieh}
-C~J Frangieh et~al.
-\newblock Multimodal pooled perturb-cite-seq screens in patient models define
-  mechanisms of cancer immune evasion.
-\newblock \emph{Nature Genetics}, 53:\penalty0 332--341, 2021.
+Chris~J. Frangieh et~al.
+\newblock Multimodal pooled {P}erturb-{CITE}-seq screens in patient models
+  define mechanisms of cancer immune evasion.
+\newblock \emph{Nature Genetics}, 53\penalty0 (3):\penalty0 332--341, 2021.
+\newblock \doi{10.1038/s41588-021-00779-1}.
 
-\bibitem[Zhao et~al.(2021)Zhao, Dovas, Spinazzi, Levitin, Bush, Zhao,
-  Rosenfeld, Bruce, Canoll, and Sims]{dataZhao}
-Wenting Zhao, Athanassios Dovas, Eleonora~F. Spinazzi, Hanna~Mendes Levitin,
-  Matei~A. Bush, Peter Zhao, Steven~S. Rosenfeld, Jeffrey~N. Bruce, Peter
-  Canoll, and Peter~A. Sims.
-\newblock Single-cell analysis of glioblastoma tissue slices reveals
-  drug-response heterogeneity across malignant and immune compartments.
-\newblock \emph{Genome Medicine}, 13:\penalty0 82, 2021.
+\bibitem[DeMeo et~al.(2025)]{dataCD34}
+Benjamin DeMeo et~al.
+\newblock Active learning framework leveraging transcriptomics identifies
+  modulators of disease phenotypes.
+\newblock \emph{Science}, 390\penalty0 (6776):\penalty0 eadi8577, 2025.
+\newblock \doi{10.1126/science.adi8577}.
+
+\bibitem[Sz{\'e}kely and Rizzo(2013)]{EnergyDistance}
+G{\'a}bor~J. Sz{\'e}kely and Maria~L. Rizzo.
+\newblock Energy statistics: a class of statistics based on distances.
+\newblock \emph{Journal of Statistical Planning and Inference}, 143\penalty0
+  (8):\penalty0 1249--1272, 2013.
+\newblock \doi{10.1016/j.jspi.2013.03.018}.
+
+\bibitem[Gretton et~al.(2012)Gretton, Borgwardt, Rasch, Sch{\"o}lkopf, and
+  Smola]{MMD}
+Arthur Gretton, Karsten~M. Borgwardt, Malte~J. Rasch, Bernhard Sch{\"o}lkopf,
+  and Alexander Smola.
+\newblock A kernel two-sample test.
+\newblock \emph{Journal of Machine Learning Research}, 13\penalty0
+  (25):\penalty0 723--773, 2012.
+
+\bibitem[Rabin et~al.(2012)Rabin, Peyr{\'e}, Delon, and
+  Bernot]{SlicedWasserstein}
+Julien Rabin, Gabriel Peyr{\'e}, Julie Delon, and Marc Bernot.
+\newblock {W}asserstein barycenter and its application to texture mixing.
+\newblock In \emph{Scale Space and Variational Methods in Computer Vision
+  ({SSVM} 2011)}, pages 435--446, 2012.
+\newblock \doi{10.1007/978-3-642-24785-9_37}.
+
+\bibitem[Traag et~al.(2019)Traag, Waltman, and van Eck]{Leiden}
+V.~A. Traag, L.~Waltman, and N.~J. van Eck.
+\newblock From {L}ouvain to {L}eiden: guaranteeing well-connected communities.
+\newblock \emph{Scientific Reports}, 9\penalty0 (1):\penalty0 5233, 2019.
+\newblock \doi{10.1038/s41598-019-41695-z}.
+
+\bibitem[Campello et~al.(2013)Campello, Moulavi, and Sander]{HDBSCAN}
+Ricardo J. G.~B. Campello, Davoud Moulavi, and Joerg Sander.
+\newblock Density-based clustering based on hierarchical density estimates.
+\newblock In \emph{Advances in Knowledge Discovery and Data Mining ({PAKDD}
+  2013)}, pages 160--172, 2013.
+\newblock \doi{10.1007/978-3-642-37456-2_14}.
+
+\bibitem[J{\"a}rvelin and Kek{\"a}l{\"a}inen(2002)]{nDCG}
+Kalervo J{\"a}rvelin and Jaana Kek{\"a}l{\"a}inen.
+\newblock Cumulated gain-based evaluation of {IR} techniques.
+\newblock \emph{{ACM} Transactions on Information Systems}, 20\penalty0
+  (4):\penalty0 422--446, 2002.
+\newblock \doi{10.1145/582415.582418}.
+
+\bibitem[Zhang et~al.(2025)Zhang, Ubas, de~Borja, Svensson, Thomas, Thakar,
+  Winters, Khan, Jones, Thompson, Tran, Pangallo, Papalexi, Sapre, Nguyen,
+  Sanderson, Nigos, Kaplan, Schroeder, Hariadi, Marrujo, Salvino,
+  Gallareta~Olivares, Koehler, Geiss, Rosenberg, Roco, Merico, Alidoust,
+  Goodarzi, and Yu]{Tahoe100M}
+Jesse Zhang, Airol~A. Ubas, Richard de~Borja, Valentine Svensson, Nicole
+  Thomas, Neha Thakar, Ian Winters, Umair Khan, Matthew~G. Jones, John~D.
+  Thompson, Vuong Tran, Joseph Pangallo, Efthymia Papalexi, Aakash Sapre, Huy
+  Nguyen, Oliver Sanderson, Maria Nigos, Olivier Kaplan, Sarah Schroeder,
+  Bertrand Hariadi, Susana Marrujo, Carlos C.~A. Salvino, Gabriel
+  Gallareta~Olivares, Ryan Koehler, Gary Geiss, Alexander Rosenberg, Charles
+  Roco, Daniele Merico, Nima Alidoust, Hani Goodarzi, and Johnny Yu.
+\newblock {Tahoe-100M}: a giga-scale single-cell perturbation atlas for
+  context-dependent gene function and cellular modeling.
+\newblock \emph{bioRxiv}, 2025.
+\newblock \doi{10.1101/2025.02.20.639398}.
+\newblock Preprint, version 3 (2025-05-10).
+
+\bibitem[Benjamini and Hochberg(1995)]{BenjaminiHochberg}
+Yoav Benjamini and Yosef Hochberg.
+\newblock Controlling the false discovery rate: a practical and powerful
+  approach to multiple testing.
+\newblock \emph{Journal of the Royal Statistical Society: Series B},
+  57\penalty0 (1):\penalty0 289--300, 1995.
+\newblock \doi{10.1111/j.2517-6161.1995.tb02031.x}.
+
+\bibitem[Zhao et~al.(2021)]{dataZhao}
+Wenting Zhao et~al.
+\newblock Deconvolution of cell type-specific drug responses in human tumor
+  tissue with single-cell {RNA}-seq.
+\newblock \emph{Genome Medicine}, 13\penalty0 (1):\penalty0 82, 2021.
 \newblock \doi{10.1186/s13073-021-00894-y}.
-\newblock \TODO{verify title and author list against the source before
-  submission}.
 
 \end{thebibliography}

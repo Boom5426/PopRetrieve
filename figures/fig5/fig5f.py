@@ -37,7 +37,11 @@ CMAP = LinearSegmentedColormap.from_list("auc", [COMP, "#f7f7f7", FOCAL])
 
 ROWS = [("observable", "observable\nat query time"),
         ("oracle_derived", "oracle-derived\n(circular)")]
-COLS = [("label_determining_cells", "28 label-determining\ncells (honest)"),
+# 2026-07-26: the column labels used to spell out "28 label-determining cells (honest)". At the
+# figure's print width one matrix cell is ~0.5 in across and that label was 0.58 in of text, so the
+# two columns' labels ran into each other. The caption names the two cross-validation units in
+# full; the axis only has to distinguish them.
+COLS = [("label_determining_cells", "28 cells\n(honest)"),
         ("instance_grid_id_LEAKY", "672 instances\n(leaky)")]
 
 
@@ -65,21 +69,28 @@ def draw_5f(ax):
         dlt = M[i, 1] - M[i, 0]
         ax.annotate("", xy=(0.80, i + 0.36), xytext=(0.20, i + 0.36),
                     arrowprops=dict(arrowstyle="-|>", lw=0.8, color=INK))
-        ax.text(0.5, i + 0.28, f"{dlt:+.3f}", ha="center", va="center", fontsize=5.8,
+        ax.text(0.5, i + 0.27, f"{dlt:+.3f}", ha="center", va="center", fontsize=6.0,
                 fontweight="bold", color=INK)
 
     ax.set_xticks([0, 1])
-    ax.set_xticklabels([c[1] for c in COLS], fontsize=5.0)
+    ax.set_xticklabels([c[1] for c in COLS], fontsize=5.8)
     ax.set_yticks([0, 1])
-    ax.set_yticklabels([r[1] for r in ROWS], fontsize=5.0)
-    ax.set_xlabel("cross-validation unit", fontsize=6)
+    ax.set_yticklabels([r[1] for r in ROWS], fontsize=5.8)
+    # the "cross-validation unit" axis label is gone: the two column labels are the two units, the
+    # caption names the axis ("two feature sets x two cross-validation units"), and the line it
+    # occupied is the clearance row 1 needs above the row-2 banner at this figure's print size
     ax.tick_params(length=0)
     for sp in ax.spines.values():
         sp.set_visible(False)
 
-    cb = ax.figure.colorbar(im, ax=ax, fraction=0.045, pad=0.03)
-    cb.set_label("pooled out-of-fold AUC", fontsize=5.4)
-    cb.ax.tick_params(labelsize=5.5)
+    cb = ax.figure.colorbar(im, ax=ax, fraction=0.050, pad=0.04)
+    # The rule on the bar is the majority-class rate. It used to be keyed only in the caption,
+    # because the in-panel footnote that keyed it was below the 5 pt floor; folding it into the
+    # colour-bar label keys it on the figure at a legal size and costs no extra space.
+    # rotated, this label is as long as the colour bar is tall (1.02 in at print size), so the
+    # word "majority-class rate" is cut to "majority rate"; the caption gives it in full
+    cb.set_label(f"pooled out-of-fold AUC\n(rule: {base:.3f} majority rate)", fontsize=5.8)
+    cb.ax.tick_params(labelsize=5.8)
     # the rule on the colour bar marks the majority-class rate; it is keyed in the caption, because
     # the 4.6 pt footnote that used to key it here was below Nature's 5 pt floor. The caveat it
     # carried (effective n = 28 parameter cells, single-class folds, so the 0.400-vs-0.5 gap is not

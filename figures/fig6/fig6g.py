@@ -49,22 +49,34 @@ def draw_6g(ax):
 
     lo = float((vals - errs).min())
     hi = float((vals + errs).max())
-    pad = max(abs(lo), abs(hi)) * 0.45
-    ax.set_ylim(lo - pad, hi + pad)
-    for x, m, q in zip(xs, vals, qs):
+    pad = max(abs(lo), abs(hi)) * 0.55
+    ax.set_ylim(lo - pad, hi + pad * 1.15)
+    # Value labels go on the far side of each bar from zero (below a negative bar, above a
+    # positive one) so no label is ever printed on top of the bar it belongs to.
+    for x, m, e, q in zip(xs, vals, errs, qs):
         star = "*" if q < 0.05 else "ns"
-        ax.text(x, m + pad * 0.12, f"{m:+.3f} {star}", ha="center", va="bottom",
-                fontsize=5.2, color=INK)
+        if m < 0:
+            ax.text(x, m - e - pad * 0.12, f"{m:+.3f} {star}".replace("-", "\u2212"), ha="center", va="top",
+                    fontsize=5.6, color=INK)
+        else:
+            ax.text(x, m + e + pad * 0.12, f"{m:+.3f} {star}".replace("-", "\u2212"), ha="center", va="bottom",
+                    fontsize=5.6, color=INK)
 
     ax.set_xticks(xs)
-    ax.set_xticklabels([f"{s}\ndiv={dm:.2f}" for s, dm in
-                        zip(d["stratum"], d["divergence_median"])], fontsize=5.4)
-    ax.set_xlabel("true response-divergence quartile")
-    ax.set_ylabel("DART $-$ mean MoA-nDCG")
-    ax.text(0.97, 0.05,
-            "gate stays closed: no positive\neffect at any divergence level",
-            transform=ax.transAxes, ha="right", va="bottom", fontsize=5.2, color=COMP,
-            bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="0.8", lw=0.5, alpha=0.9))
+    ax.set_xticklabels([f"{s}\ndiv {dm:.2f}" for s, dm in
+                        zip(d["stratum"], d["divergence_median"])], fontsize=5.6)
+    # labelpad 1.5, not the default: row 2 reserves 0.38 in under its axes and the two-line
+    # x tick labels ("Q1 / div 0.02") already spend most of it, so at the default pad this
+    # label hung 0.03 in BELOW the canvas. bbox_inches="tight" would then have expanded the
+    # exported media box past the authored 6.90 in and reintroduced a LaTeX rescale.
+    ax.set_xlabel("true response-divergence quartile (median divergence)", labelpad=1.5)
+    ax.set_ylabel("MoA-nDCG gain,\ndistributional $-$ mean")
+    # Direct label on the null line: what "zero" means here, and what the stars mean.
+    ax.set_xlim(-0.62, len(xs) - 0.38)
+    ax.text(-0.57, pad * 0.10, "no difference", ha="left", va="bottom",
+            fontsize=5.5, color=GREY)
+    ax.text(0.015, 0.02, "* $q<0.05$ (Benjamini$-$Hochberg);  ns, not significant",
+            transform=ax.transAxes, ha="left", va="bottom", fontsize=5.4, color=GREY)
     for sp in ["right", "top"]:
         ax.spines[sp].set_visible(False)
 

@@ -1,85 +1,442 @@
+%% =====================================================================
+%%  DART reference list
+%%
+%%  Every entry below was checked against a fetched authoritative record
+%%  (Crossref REST, PubMed E-utilities, arXiv, bioRxiv, or the publisher
+%%  landing page) rather than from memory. Conventions, applied uniformly:
+%%
+%%    * field order: author, title, journal/booktitle, volume, number,
+%%      pages, year, doi, note
+%%    * author lists are spelled out in full when the paper has seven or
+%%      fewer authors, and given as "First, Author and others" when longer
+%%    * every entry carries its DOI where the venue registers one; NeurIPS
+%%      2022 proceedings register none, so ref6 has no doi field
+%%    * proper nouns, acronyms and gene/assay names are brace-protected so
+%%      the bibliography style cannot down-case them
+%%    * preprints cite the preprint DOI and name the server in the note;
+%%      each was re-checked for a journal version at audit time
+%% =====================================================================
+
+%% ---- Signature retrieval and perturbation resources ----
+
 @article{ref1,
-  author = {Lamb, J and others}, title = {The Connectivity Map: using gene-expression signatures to connect small molecules, genes, and disease}, journal = {Science}, volume = {313}, pages = {1929--1935}, year = {2006}}
+  author = {Lamb, Justin and others},
+  title = {The {C}onnectivity {M}ap: using gene-expression signatures to connect small molecules, genes, and disease},
+  journal = {Science},
+  volume = {313},
+  number = {5795},
+  pages = {1929--1935},
+  year = {2006},
+  doi = {10.1126/science.1132939}}
 
 @article{ref2,
-  author = {Subramanian, A and others}, title = {A Next Generation Connectivity Map: L1000 platform and the first 1,000,000 profiles}, journal = {Cell}, volume = {171}, pages = {1437--1452}, year = {2017}}
+  author = {Subramanian, Aravind and others},
+  title = {A next generation {C}onnectivity {M}ap: {L1000} platform and the first 1,000,000 profiles},
+  journal = {Cell},
+  volume = {171},
+  number = {6},
+  pages = {1437--1452.e17},
+  year = {2017},
+  doi = {10.1016/j.cell.2017.10.049}}
 
 @article{ref3,
-  author = {Peidli, S and others}, title = {scPerturb: harmonized single-cell perturbation data}, journal = {Nature Methods}, volume = {21}, pages = {531--540}, year = {2024}}
+  author = {Peidli, Stefan and others},
+  title = {{scPerturb}: harmonized single-cell perturbation data},
+  journal = {Nature Methods},
+  volume = {21},
+  number = {3},
+  pages = {531--540},
+  year = {2024},
+  doi = {10.1038/s41592-023-02144-y}}
+
+%% ---- Perturbation-response predictors and foundation models ----
 
 @article{ref4,
-  author = {Lotfollahi, M and Wolf, F A and Theis, F J}, title = {scGen predicts single-cell perturbation responses}, journal = {Nature Methods}, volume = {16}, pages = {715--721}, year = {2019}}
+  author = {Lotfollahi, Mohammad and Wolf, F. Alexander and Theis, Fabian J.},
+  title = {{scGen} predicts single-cell perturbation responses},
+  journal = {Nature Methods},
+  volume = {16},
+  number = {8},
+  pages = {715--721},
+  year = {2019},
+  doi = {10.1038/s41592-019-0494-8}}
 
 @article{ref5,
-  author = {Lotfollahi, M and others}, title = {Predicting cellular responses to complex perturbations in high-throughput screens}, journal = {Molecular Systems Biology}, volume = {19}, pages = {e11517}, year = {2023}}
+  author = {Lotfollahi, Mohammad and others},
+  title = {Predicting cellular responses to complex perturbations in high-throughput screens},
+  journal = {Molecular Systems Biology},
+  volume = {19},
+  number = {6},
+  pages = {e11517},
+  year = {2023},
+  doi = {10.15252/msb.202211517}}
 
 @inproceedings{ref6,
-  author = {Hetzel, L and others}, title = {Predicting cellular responses to novel drug perturbations at a single-cell resolution}, booktitle = {Advances in Neural Information Processing Systems}, volume = {35}, year = {2022}}
+  author = {Hetzel, Leon and B{\"o}hm, Simon and Kilbertus, Niki and G{\"u}nnemann, Stephan and Lotfollahi, Mohammad and Theis, Fabian J.},
+  title = {Predicting cellular responses to novel drug perturbations at a single-cell resolution},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume = {35},
+  year = {2022},
+  note = {{NeurIPS} 2022 proceedings register no {DOI}}}
 
 @article{ref7,
-  author = {Cui, H and others}, title = {scGPT: toward building a foundation model for single-cell multi-omics using generative AI}, journal = {Nature Methods}, volume = {21}, pages = {1470--1480}, year = {2024}}
+  author = {Cui, Haotian and Wang, Chloe and Maan, Hassaan and Pang, Kuan and Luo, Fengning and Duan, Nan and Wang, Bo},
+  title = {{scGPT}: toward building a foundation model for single-cell multi-omics using generative {AI}},
+  journal = {Nature Methods},
+  volume = {21},
+  number = {8},
+  pages = {1470--1480},
+  year = {2024},
+  doi = {10.1038/s41592-024-02201-0}}
 
 @article{ref8,
-  author = {Hao, M and others}, title = {Large-scale foundation model on single-cell transcriptomics}, journal = {Nature Methods}, volume = {21}, pages = {1481--1491}, year = {2024}}
+  author = {Hao, Minsheng and others},
+  title = {Large-scale foundation model on single-cell transcriptomics},
+  journal = {Nature Methods},
+  volume = {21},
+  number = {8},
+  pages = {1481--1491},
+  year = {2024},
+  doi = {10.1038/s41592-024-02305-7}}
 
 @article{ref9,
-  author = {Theodoris, C V and others}, title = {Transfer learning enables predictions in network biology}, journal = {Nature}, volume = {618}, pages = {616--624}, year = {2023}}
+  author = {Theodoris, Christina V. and others},
+  title = {Transfer learning enables predictions in network biology},
+  journal = {Nature},
+  volume = {618},
+  number = {7965},
+  pages = {616--624},
+  year = {2023},
+  doi = {10.1038/s41586-023-06139-9}}
 
 @article{ref10,
-  author = {Roohani, Y and Huang, K and Leskovec, J}, title = {Predicting transcriptional outcomes of novel multigene perturbations with GEARS}, journal = {Nature Biotechnology}, volume = {42}, pages = {927--935}, year = {2024}}
+  author = {Roohani, Yusuf and Huang, Kexin and Leskovec, Jure},
+  title = {Predicting transcriptional outcomes of novel multigene perturbations with {GEARS}},
+  journal = {Nature Biotechnology},
+  volume = {42},
+  number = {6},
+  pages = {927--935},
+  year = {2024},
+  doi = {10.1038/s41587-023-01905-6}}
+
+%% ---- Graph-based and target-centric inverse design ----
 
 @article{ref11,
-  author = {Guney, E and others}, title = {Network-based in silico drug efficacy screening}, journal = {Nature Communications}, volume = {7}, pages = {10331}, year = {2016}}
+  author = {Guney, Emre and Menche, J{\"o}rg and Vidal, Marc and Barab{\'a}si, Albert-L{\'a}szl{\'o}},
+  title = {Network-based in silico drug efficacy screening},
+  journal = {Nature Communications},
+  volume = {7},
+  number = {1},
+  pages = {10331},
+  year = {2016},
+  doi = {10.1038/ncomms10331}}
 
+%% Journal version. An earlier bibliography entry placed this in Nature Machine
+%% Intelligence (2025); the peer-reviewed article appeared in Nature Biomedical
+%% Engineering, and the venue was corrected against the PubMed and Crossref records.
 @article{ref12,
-  author = {Gonzalez, G and others}, title = {Combinatorial prediction of therapeutic perturbations using causally inspired neural networks}, journal = {Nature Machine Intelligence}, year = {2025}}
+  author = {Gonzalez, Guadalupe and Lin, Xiang and Herath, Isuru and Veselkov, Kirill and Bronstein, Michael and Zitnik, Marinka},
+  title = {Combinatorial prediction of therapeutic perturbations using causally inspired neural networks},
+  journal = {Nature Biomedical Engineering},
+  volume = {10},
+  number = {5},
+  pages = {1008--1025},
+  year = {2026},
+  doi = {10.1038/s41551-025-01481-x}}
+
+%% ---- Independent benchmarking and evaluation of these methods ----
 
 @article{ref13,
-  author = {Ahlmann-Eltze, C and Huber, W and Anders, S}, title = {Deep-learning-based gene perturbation effect prediction does not yet outperform simple linear baselines}, journal = {Nature Methods}, year = {2025}}
+  author = {Ahlmann-Eltze, Constantin and Huber, Wolfgang and Anders, Simon},
+  title = {Deep-learning-based gene perturbation effect prediction does not yet outperform simple linear baselines},
+  journal = {Nature Methods},
+  volume = {22},
+  number = {8},
+  pages = {1657--1661},
+  year = {2025},
+  doi = {10.1038/s41592-025-02772-6}}
 
 @article{ref14,
-  author = {Kedzierska, K Z and others}, title = {Zero-shot evaluation reveals limitations of single-cell foundation models}, journal = {Genome Biology}, volume = {26}, year = {2025}}
+  author = {Kedzierska, Kasia Z. and Crawford, Lorin and Amini, Ava P. and Lu, Alex X.},
+  title = {Zero-shot evaluation reveals limitations of single-cell foundation models},
+  journal = {Genome Biology},
+  volume = {26},
+  number = {1},
+  pages = {101},
+  year = {2025},
+  doi = {10.1186/s13059-025-03574-x}}
 
 @article{ref15,
-  author = {Wei, X and others}, title = {Benchmarking algorithms for generalizable single-cell perturbation response prediction}, journal = {Nature Methods}, year = {2026}}
+  author = {Wei, Zhiting and others},
+  title = {Benchmarking algorithms for generalizable single-cell perturbation response prediction},
+  journal = {Nature Methods},
+  volume = {23},
+  number = {2},
+  pages = {451--464},
+  year = {2026},
+  doi = {10.1038/s41592-025-02980-0}}
 
 @article{ref16,
-  author = {Heidari, M and Karimpour, M and Srivatsa, S and Montazeri, H}, title = {Evaluating single-cell perturbation response models is far from straightforward}, journal = {bioRxiv}, note = {preprint}, year = {2026}, doi = {10.64898/2026.02.14.705879}}
+  author = {Heidari, Mahshid and Karimpour, Mina and Srivatsa, Sumana and Montazeri, Hesam},
+  title = {Evaluating single-cell perturbation response models is far from straightforward},
+  journal = {bioRxiv},
+  year = {2026},
+  doi = {10.64898/2026.02.14.705879},
+  note = {preprint, {bioRxiv}}}
 
 @article{ref17,
-  author = {Agarwal, D and Bisht, R}, title = {The metric picks the winner: evaluation choice flips model rankings for drug-response prediction in unseen chemistry}, journal = {arXiv}, note = {preprint arXiv:2606.12639}, year = {2026}}
+  author = {Agarwal, Dhruv and Bisht, Riya},
+  title = {The metric picks the winner: evaluation choice flips model rankings for drug-response prediction in unseen chemistry},
+  journal = {arXiv},
+  year = {2026},
+  doi = {10.48550/arXiv.2606.12639},
+  note = {preprint {arXiv}:2606.12639}}
+
+%% ---- Datasets analysed in this study ----
 
 @article{dataSciPlex3,
-  author = {Srivatsan, S R and others}, title = {Massively multiplex chemical transcriptomics at single-cell resolution}, journal = {Science}, volume = {367}, pages = {45--51}, year = {2020}}
+  author = {Srivatsan, Sanjay R. and others},
+  title = {Massively multiplex chemical transcriptomics at single-cell resolution},
+  journal = {Science},
+  volume = {367},
+  number = {6473},
+  pages = {45--51},
+  year = {2020},
+  doi = {10.1126/science.aax6234}}
 
 @article{dataFrangieh,
-  author = {Frangieh, C J and others}, title = {Multimodal pooled Perturb-CITE-seq screens in patient models define mechanisms of cancer immune evasion}, journal = {Nature Genetics}, volume = {53}, pages = {332--341}, year = {2021}}
+  author = {Frangieh, Chris J. and others},
+  title = {Multimodal pooled {P}erturb-{CITE}-seq screens in patient models define mechanisms of cancer immune evasion},
+  journal = {Nature Genetics},
+  volume = {53},
+  number = {3},
+  pages = {332--341},
+  year = {2021},
+  doi = {10.1038/s41588-021-00779-1}}
+
+%% Title and author list corrected against the Crossref record for this DOI: an
+%% earlier entry carried a title that does not exist in the literature and three
+%% author names that are not authors of this paper.
+@article{dataZhao,
+  author = {Zhao, Wenting and others},
+  title = {Deconvolution of cell type-specific drug responses in human tumor tissue with single-cell {RNA}-seq},
+  journal = {Genome Medicine},
+  volume = {13},
+  number = {1},
+  pages = {82},
+  year = {2021},
+  doi = {10.1186/s13073-021-00894-y}}
+
+@article{dataCD34,
+  author = {DeMeo, Benjamin and others},
+  title = {Active learning framework leveraging transcriptomics identifies modulators of disease phenotypes},
+  journal = {Science},
+  volume = {390},
+  number = {6776},
+  pages = {eadi8577},
+  year = {2025},
+  doi = {10.1126/science.adi8577}}
+
+%% ---- Distributional prediction: optimal transport, flow and bridges ----
 
 @article{CellOT,
-  author = {Bunne, C and others}, title = {Learning single-cell perturbation responses using neural optimal transport}, journal = {Nature Methods}, volume = {20}, pages = {1759--1768}, year = {2023}}
+  author = {Bunne, Charlotte and others},
+  title = {Learning single-cell perturbation responses using neural optimal transport},
+  journal = {Nature Methods},
+  volume = {20},
+  number = {11},
+  pages = {1759--1768},
+  year = {2023},
+  doi = {10.1038/s41592-023-01969-x}}
 
 @article{Departures,
-  author = {Chi, C and others}, title = {Departures: distributional transport for single-cell perturbation prediction with neural {Schr\"odinger} bridges}, journal = {arXiv}, note = {preprint arXiv:2511.13124}, year = {2025}}
+  author = {Chi, Changxi and Huang, Yufei and Xia, Jun and Zheng, Jiangbin and Liu, Yunfan and Zang, Zelin and Li, Stan Z.},
+  title = {Departures: distributional transport for single-cell perturbation prediction with neural {S}chr{\"o}dinger bridges},
+  journal = {arXiv},
+  year = {2025},
+  doi = {10.48550/arXiv.2511.13124},
+  note = {preprint {arXiv}:2511.13124}}
 
 @article{CellFlow,
-  author = {Klein, D and others}, title = {{CellFlow} enables generative single-cell phenotype modeling with flow matching}, journal = {bioRxiv}, note = {preprint 2025.04.11.648220}, year = {2025}}
+  author = {Klein, Dominik and others},
+  title = {{CellFlow} enables generative single-cell phenotype modeling with flow matching},
+  journal = {bioRxiv},
+  year = {2025},
+  doi = {10.1101/2025.04.11.648220},
+  note = {preprint, {bioRxiv}}}
+
+%% ---- Evaluation metrics for generative and distributional models ----
 
 @article{OptimalMetrics,
-  author = {Ji, Y and Green, T D and Peidli, S and others}, title = {Optimal distance metrics for single-cell {RNA}-seq populations}, journal = {bioRxiv}, note = {preprint}, year = {2023}, doi = {10.1101/2023.12.26.572833}}
+  author = {Ji, Yuge and Green, Tessa D. and Peidli, Stefan and Bahrami, Mojtaba and Liu, Meiqi and Zappia, Luke and Hrovatin, Karin and Sander, Chris and Theis, Fabian J.},
+  title = {Optimal distance metrics for single-cell {RNA}-seq populations},
+  journal = {bioRxiv},
+  year = {2023},
+  doi = {10.1101/2023.12.26.572833},
+  note = {preprint, {bioRxiv}}}
 
 @article{StandardizedEval,
-  author = {Rubbi, A and Di Francesco, A G and Lotfollahi, M and Li{\`o}, P}, title = {A standardized framework for evaluating gene expression generative models}, journal = {arXiv}, note = {preprint arXiv:2603.11244}, year = {2026}}
+  author = {Rubbi, Andrea and Di Francesco, Andrea Giuseppe and Lotfollahi, Mohammad and Li{\`o}, Pietro},
+  title = {A standardized framework for evaluating gene expression generative models},
+  journal = {arXiv},
+  year = {2026},
+  doi = {10.48550/arXiv.2603.11244},
+  note = {preprint {arXiv}:2603.11244}}
+
+@article{VirtualCellChallenge,
+  author = {Roohani, Yusuf H. and others},
+  title = {Virtual {C}ell {C}hallenge: toward a {T}uring test for the virtual cell},
+  journal = {Cell},
+  volume = {188},
+  number = {13},
+  pages = {3370--3374},
+  year = {2025},
+  doi = {10.1016/j.cell.2025.06.008}}
 
 @article{AIVirtualCell,
-  author = {Bunne, C and Roohani, Y and Rosen, Y and others}, title = {How to build the virtual cell with artificial intelligence: priorities and opportunities}, journal = {Cell}, volume = {187}, pages = {7045--7063}, year = {2024}, doi = {10.1016/j.cell.2024.11.015}}
+  author = {Bunne, Charlotte and Roohani, Yusuf and Rosen, Yanay and others},
+  title = {How to build the virtual cell with artificial intelligence: priorities and opportunities},
+  journal = {Cell},
+  volume = {187},
+  number = {25},
+  pages = {7045--7063},
+  year = {2024},
+  doi = {10.1016/j.cell.2024.11.015}}
 
-@article{dataZhao,
-  title   = {Single-cell analysis of glioblastoma tissue slices reveals drug-response heterogeneity across malignant and immune compartments},
-  author  = {Zhao, Wenting and Dovas, Athanassios and Spinazzi, Eleonora F. and Levitin, Hanna Mendes and Bush, Matei A. and Zhao, Peter and Rosenfeld, Steven S. and Bruce, Jeffrey N. and Canoll, Peter and Sims, Peter A.},
-  journal = {Genome Medicine},
-  volume  = {13},
-  pages   = {82},
-  year    = {2021},
-  doi     = {10.1186/s13073-021-00894-y},
-  note    = {\TODO{verify title and author list against the source before submission}}
+%% ---- Statistical and algorithmic tools this study computes ----
+
+@article{EnergyDistance,
+  author = {Sz{\'e}kely, G{\'a}bor J. and Rizzo, Maria L.},
+  title = {Energy statistics: a class of statistics based on distances},
+  journal = {Journal of Statistical Planning and Inference},
+  volume = {143},
+  number = {8},
+  pages = {1249--1272},
+  year = {2013},
+  doi = {10.1016/j.jspi.2013.03.018}}
+
+@article{MMD,
+  author = {Gretton, Arthur and Borgwardt, Karsten M. and Rasch, Malte J. and Sch{\"o}lkopf, Bernhard and Smola, Alexander},
+  title = {A kernel two-sample test},
+  journal = {Journal of Machine Learning Research},
+  volume = {13},
+  number = {25},
+  pages = {723--773},
+  year = {2012}}
+
+@inproceedings{SlicedWasserstein,
+  author = {Rabin, Julien and Peyr{\'e}, Gabriel and Delon, Julie and Bernot, Marc},
+  title = {{W}asserstein barycenter and its application to texture mixing},
+  booktitle = {Scale Space and Variational Methods in Computer Vision ({SSVM} 2011)},
+  pages = {435--446},
+  year = {2012},
+  doi = {10.1007/978-3-642-24785-9_37}}
+
+@article{nDCG,
+  author = {J{\"a}rvelin, Kalervo and Kek{\"a}l{\"a}inen, Jaana},
+  title = {Cumulated gain-based evaluation of {IR} techniques},
+  journal = {{ACM} Transactions on Information Systems},
+  volume = {20},
+  number = {4},
+  pages = {422--446},
+  year = {2002},
+  doi = {10.1145/582415.582418}}
+
+@article{Leiden,
+  author = {Traag, V. A. and Waltman, L. and van Eck, N. J.},
+  title = {From {L}ouvain to {L}eiden: guaranteeing well-connected communities},
+  journal = {Scientific Reports},
+  volume = {9},
+  number = {1},
+  pages = {5233},
+  year = {2019},
+  doi = {10.1038/s41598-019-41695-z}}
+
+@inproceedings{HDBSCAN,
+  author = {Campello, Ricardo J. G. B. and Moulavi, Davoud and Sander, Joerg},
+  title = {Density-based clustering based on hierarchical density estimates},
+  booktitle = {Advances in Knowledge Discovery and Data Mining ({PAKDD} 2013)},
+  pages = {160--172},
+  year = {2013},
+  doi = {10.1007/978-3-642-37456-2_14}}
+
+@article{BenjaminiHochberg,
+  author = {Benjamini, Yoav and Hochberg, Yosef},
+  title = {Controlling the false discovery rate: a practical and powerful approach to multiple testing},
+  journal = {Journal of the Royal Statistical Society: Series B},
+  volume = {57},
+  number = {1},
+  pages = {289--300},
+  year = {1995},
+  doi = {10.1111/j.2517-6161.1995.tb02031.x}}
+
+%% ---- The external functional oracle ----
+
+@article{GDSC,
+  author = {Yang, Wanjuan and others},
+  title = {Genomics of {D}rug {S}ensitivity in {C}ancer ({GDSC}): a resource for therapeutic biomarker discovery in cancer cells},
+  journal = {Nucleic Acids Research},
+  volume = {41},
+  number = {D1},
+  pages = {D955--D961},
+  year = {2013},
+  doi = {10.1093/nar/gks1111}}
+
+@article{GDSCLandscape,
+  author = {Iorio, Francesco and others},
+  title = {A landscape of pharmacogenomic interactions in cancer},
+  journal = {Cell},
+  volume = {166},
+  number = {3},
+  pages = {740--754},
+  year = {2016},
+  doi = {10.1016/j.cell.2016.06.017}}
+
+%% ---- Evaluation-culture context: leakage, pseudo-replication, metric reliance ----
+
+@article{Leakage,
+  author = {Kapoor, Sayash and Narayanan, Arvind},
+  title = {Leakage and the reproducibility crisis in machine-learning-based science},
+  journal = {Patterns},
+  volume = {4},
+  number = {9},
+  pages = {100804},
+  year = {2023},
+  doi = {10.1016/j.patter.2023.100804}}
+
+@article{PseudoRep,
+  author = {Squair, Jordan W. and others},
+  title = {Confronting false discoveries in single-cell differential expression},
+  journal = {Nature Communications},
+  volume = {12},
+  number = {1},
+  pages = {5692},
+  year = {2021},
+  doi = {10.1038/s41467-021-25960-2}}
+
+@article{MetricGaming,
+  author = {Thomas, Rachel L. and Uminsky, David},
+  title = {Reliance on metrics is a fundamental challenge for {AI}},
+  journal = {Patterns},
+  volume = {3},
+  number = {5},
+  pages = {100476},
+  year = {2022},
+  doi = {10.1016/j.patter.2022.100476}}
+
+@article{Tahoe100M,
+  author  = {Zhang, Jesse and Ubas, Airol A. and de Borja, Richard and Svensson, Valentine and
+             Thomas, Nicole and Thakar, Neha and Winters, Ian and Khan, Umair and Jones, Matthew G.
+             and Thompson, John D. and Tran, Vuong and Pangallo, Joseph and Papalexi, Efthymia and
+             Sapre, Aakash and Nguyen, Huy and Sanderson, Oliver and Nigos, Maria and Kaplan, Olivier
+             and Schroeder, Sarah and Hariadi, Bertrand and Marrujo, Susana and
+             Salvino, Carlos C. A. and Gallareta Olivares, Gabriel and Koehler, Ryan and
+             Geiss, Gary and Rosenberg, Alexander and Roco, Charles and Merico, Daniele and
+             Alidoust, Nima and Goodarzi, Hani and Yu, Johnny},
+  title   = {{Tahoe-100M}: a giga-scale single-cell perturbation atlas for context-dependent gene
+             function and cellular modeling},
+  journal = {bioRxiv},
+  year    = {2025},
+  doi     = {10.1101/2025.02.20.639398},
+  note    = {Preprint, version 3 (2025-05-10)}
 }

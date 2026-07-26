@@ -8,12 +8,17 @@ figures is exact, not a strong-vs-weak-baseline setup.
 
 | Panel | Message | Type | Source data | Status |
 |-------|---------|------|-------------|--------|
-| a | Mean is the zero-variance limit of X = mu + lambda*eps | schematic (seed 0) | none | done |
-| b | Scaling residual variance with the mean fixed | schematic (seed 1) | none | done |
-| c | Energy retrieval collapses to the mean-distance floor as spread to 0 | data | source_data/fig2c_energy_collapse.csv | done |
-| d | mean-cosine = CMap-cosine exactly (0.3885); WTCS 0.463 is the rank-based sibling | data | source_data/fig2d_operation_identity.csv | done |
+| a | Two populations under X = mu + lambda*eps; at lambda -> 0 the population score becomes the mean-to-mean score | schematic (seed 0) | none | done |
+| b | Scaling lambda changes only the residual; the sample mean is identical at every lambda | schematic (seed 1) | none | done |
+| c | Energy distance meets the mean-distance floor (98.50) at lambda = 0 | data | source_data/fig2c_energy_collapse.csv | done |
+| d | mean-cosine = CMap-cosine exactly (0.3885); WTCS 0.4635 is the rank-based sibling | data | source_data/fig2d_operation_identity.csv | done |
 | e | Coverage temperature beta spans mean-aggregation (0.7125) to worst-case (1.300); energy = coverage_{K=1} | data | source_data/fig2e_beta_spectrum.csv | done |
-| f | Metric-family hierarchy and its limits | schematic | none | done |
+| f | The family drawn as one axis of variance sensitivity, mean retrieval at its zero end | schematic | none | done |
+
+The panels share one visual grammar so the argument reads as a chain: a defines lambda, b
+isolates it, c measures the collapse along it, e shows the same collapse along beta, f is the
+synthesis. Orange is reserved for mean / collapsed quantities and blue for distributional ones,
+which is why the mean-cosine and CMap-cosine points in panel d are orange rather than blue.
 
 ## Verified numbers (traceable to source CSVs)
 
@@ -23,16 +28,36 @@ figures is exact, not a strong-vs-weak-baseline setup.
 
 ## Honesty notes
 
-- 2b/2c residual-variance illustrations use synthetic gaussians (seeds fixed); they illustrate the
-  algebra, they are not an experiment.
-- The energy = coverage_{K=1} identity has one real drug on disk (Panobinostat, diff 0); the
-  main-figure claim rests on the synthetic multi-point curve, real point noted in caption.
+- 2a/2b residual-variance illustrations use seeded gaussians and re-centre the residual so the
+  plotted sample mean is exactly mu at every lambda; they illustrate the algebra, they are not an
+  experiment. Panel c is the measured version of the same statement.
+- The energy = coverage_{K=1} identity has one real drug on disk (Panobinostat, 0.1099 vs 0.1099,
+  diff 0, degenerate_limit_real.csv), and that is the instance the manuscript text quotes. Panel e
+  annotates the SYNTHETIC instance (8.229 vs 8.229) and now says so in the annotation, so the two
+  numbers cannot be confused. If the author prefers figure and text to quote the same instance,
+  swap the panel-e annotation to the real drug; that is a content decision, not a styling one.
+- Panel f deliberately does not draw a beta -> 0 edge into mean retrieval. beta -> 0 returns the
+  mean-AGGREGATED coverage value (0.7125 in panel e), not the mean-signature score, so beta is
+  drawn as the span within the coverage member and lambda -> 0 is the only collapse edge. The
+  previous box-stack version drew beta -> 0 straight into "mean retrieval (CMap)", which conflated
+  the two.
+- Panel f also puts energy, MMD and sliced-Wasserstein on one rung. Nothing in the manuscript
+  orders those three by variance sensitivity, so separate rungs would assert an unmeasured ranking.
+- Panel d truncates the Hit@1 axis at 0.365 and marks the truncation with an axis-break glyph; the
+  dotted row guides span the full axis so nothing in the panel encodes length.
 
 ## Files
 
 - fig2a.py ... fig2f.py : per-panel draw functions (each runs standalone: `python fig2c.py`).
-- fig2_assemble.py : tiles a-f into fig2_unification.{png,pdf} (3x2 grid).
-- fig2_unification.{png,pdf} : the composite.
+- fig2_assemble.py : tiles a-f into fig2_collapse.{png,pdf} on a 3-row x 12-column grid, split 7/5
+  so the claim-carrying panels a, c, e hold the wide column. It owns the module-level `STEM`.
+- fig2_collapse.{pdf,svg,png} : the composite, and the only stem this figure is written under.
+  `python figures/build_all.py --write` enforces the 5 pt floor, writes these, and copies the PDF to
+  manuscript/latex/figures/fig2.pdf, which is the file the manuscript compiles. The assemble used to
+  write the same composite a second time as `fig2_unification.*`, so the figure sat on disk twice
+  under two names with nothing to say which one the manuscript used; that duplicate stem is gone and
+  build_all now fails if the two names drift apart again.
+- 2a.png ... 2f.png are standalone per-panel previews, not inputs to the composite.
 
 ## Editor lens
 
