@@ -200,7 +200,7 @@ def draw_ed2c(ax, D):
     ax.set_xticks(x)
     ax.set_xticklabels([f"{s}\ndiv={dm:.2f}" for s, dm in zip(d["stratum"], d["divergence_median"])],
                        fontsize=5.0)
-    ax.set_ylabel("MoA-nDCG gain (DART $-$ mean)")
+    ax.set_ylabel("MoA-nDCG gain\n(distributional $-$ mean)")
     lo, hi = float(min(vals)), float(max(vals))
     pad = max(abs(lo), abs(hi)) * 0.30
     ax.set_ylim(lo - pad, hi + pad)
@@ -345,7 +345,7 @@ def draw_ed4c(ax, D):
                alpha=0.7, edgecolors="none")
     lim = [0, max(d["mean_top_minority_cov"].max(), d["dart_top_minority_cov"].max()) * 1.1]
     ax.plot(lim, lim, ls="--", lw=0.8, color=GREY)
-    ax.set_xlabel("mean-pick minority coverage"); ax.set_ylabel("DART-pick minority coverage")
+    ax.set_xlabel("mean-pick minority coverage"); ax.set_ylabel("distributional-pick\nminority coverage")
     ax.set_xlim(lim); ax.set_ylim(lim); ax.set_aspect("equal")
     ax.text(0.05, 0.9, f"n={len(d)} queries\nnear-null rescue", transform=ax.transAxes,
             fontsize=5.2, color=GREY, va="top")

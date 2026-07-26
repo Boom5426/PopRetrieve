@@ -13,6 +13,7 @@ import os
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.patches import Rectangle
 
 MM = 1.0 / 25.4
 COL1_MM, COL2_MM = 89.0, 183.0
@@ -59,6 +60,31 @@ def apply_style(sizes=(8, 7, 6)):
 def apply_rcparams():
     """Backwards-compatible alias for the panel scripts that call it with no arguments."""
     apply_style(sizes=(7, 7, 6))
+
+
+def pin_canvas(fig):
+    """Pin ``bbox_inches="tight"`` to the AUTHORED canvas, so the exported width is deterministic.
+
+    Every main figure is authored at the final printed width (~6.90 in, a hair under the 6.93 in
+    manuscript text block) so that nominal point size equals printed point size. ``savefig`` then
+    writes with ``bbox_inches="tight"``, which crops the page back to the ink and hands LaTeX a
+    figure NARROWER than the authored canvas; ``\\includegraphics[width=\\textwidth]`` magnifies it
+    again and the printed sizes are no longer the authored ones. Worse, the crop makes the exported
+    width an emergent property of whatever text happens to sit furthest out, so a later annotation
+    can move the page width, and past 6.93 in it silently reintroduces DOWN-scaling and the deck
+    drops back under the 5 pt production floor.
+
+    This appends a transparent, unstroked, full-canvas rectangle. It contributes extent and no ink,
+    so the tight bbox is the canvas: the exported media box is the authored size plus
+    ``savefig.pad_inches`` on each side, whatever the panels later grow into.
+
+    Two obligations come with it. The canvas is now the page, so (1) nothing may hang OUTSIDE the
+    canvas, since the bbox is the union of the patch and the ink and an overhang still enlarges the
+    page, and (2) empty canvas margin is no longer cropped away, so the margins are authored.
+    """
+    fig.patches.append(Rectangle((0, 0), 1, 1, transform=fig.transFigure,
+                                 fill=False, ec="none", lw=0, zorder=-10))
+    return fig
 
 
 def panel_letter(ax, letter, dx=-0.11, dy=1.06, case="lower"):

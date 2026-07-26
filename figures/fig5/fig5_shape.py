@@ -33,9 +33,12 @@ GREEN = "#55966B"
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SRC = f"{REPO}/results/upgrade/oracle_shape_test.json"
 
-ROWS = [("energy", "energy\n(distributional)", FOCAL),
-        ("mean", "mean cosine\n(incumbent)", COMP),
-        ("magmatch", "magnitude scalar\n(no distributions)", GREY)]
+# 2026-07-26: the legend labels were two lines each. Three two-line entries is 0.54 in of legend
+# inside a 1.02 in tall axes at this figure's print size, which covered the left bar group. One line
+# each fits in the empty upper-left corner and says the same thing.
+ROWS = [("energy", "energy (distributional)", FOCAL),
+        ("mean", "mean cosine (incumbent)", COMP),
+        ("magmatch", "magnitude scalar (control)", GREY)]
 
 
 def draw_shape(ax):
@@ -53,27 +56,36 @@ def draw_shape(ax):
         ax.bar(x + off, v, w, color=col, alpha=0.88, label=lab, zorder=3,
                hatch=hatch, edgecolor="white", linewidth=0.6)
         for xx, vv in zip(x + off, v):
-            ax.text(xx, vv + 0.012, f"{vv:+.2f}", ha="center", va="bottom",
-                    fontsize=5.2, fontweight="bold", color=INK)
+            # three decimals, because these are the six numbers the caption quotes verbatim
+            ax.text(xx, vv + 0.012, f"{vv:+.3f}", ha="center", va="bottom",
+                    fontsize=5.6, fontweight="bold", color=INK)
 
-    # the swap is the finding: mark which bar wins in each column
+    # the swap is the finding: mark which bar wins in each column, and say so in words rather
+    # than leaving a bare triangle for the reader to decode
     for xi, key in [(0, "mean"), (1, "energy")]:
         i = [r[0] for r in ROWS].index(key)
         v = d[f"{key}_vs_oracle{'MEAN' if xi == 0 else 'DIST'}"]
-        ax.plot(xi + (i - 1) * w, v + 0.055, marker="v", ms=5,
+        # marker and word clear the printed value above the bar: at print size the 5.6 pt value
+        # label is 0.06 of this axis's range, and the marker used to sit on top of it
+        ax.plot(xi + (i - 1) * w, v + 0.108, marker="v", ms=4.0,
                 color=ROWS[i][2], zorder=6, clip_on=False)
+        ax.text(xi + (i - 1) * w, v + 0.134, "wins", ha="center", va="bottom", fontsize=5.8,
+                fontweight="bold", color=ROWS[i][2], zorder=6)
 
-    ax.axhline(0, lw=0.8, color=INK, zorder=2)
+    # above the bars: the bars carry a white edge, which was punching gaps in a baseline drawn
+    # underneath them and leaving black only in the inter-bar gutters
+    ax.axhline(0, lw=0.8, color=INK, zorder=5)
     ax.set_xticks(x)
     ax.set_xticklabels(["oracle built as a\nMEAN", "oracle built as a\nDISTRIBUTION"],
-                       fontsize=6, fontweight="bold")
-    ax.set_ylabel(r"Spearman $\rho$ with the protein oracle", fontsize=6)
-    ax.set_ylim(0, 0.66)
-    ax.tick_params(axis="y", labelsize=5.6)
+                       fontsize=6.2, fontweight="bold")
+    # two lines: rotated, the one-line version is 1.4 in of text against a 1.02 in axes
+    ax.set_ylabel("Spearman $\\rho$ with\nthe protein oracle", fontsize=6.2)
+    ax.set_ylim(0, 0.76)
+    ax.tick_params(axis="y", labelsize=6)
     for s in ("right", "top"):
         ax.spines[s].set_visible(False)
-    ax.legend(fontsize=5.0, loc="upper left", frameon=False, handlelength=1.2,
-              labelspacing=0.3, borderpad=0.2)
+    ax.legend(fontsize=5.8, loc="upper left", frameon=False, handlelength=1.2,
+              labelspacing=0.30, borderpad=0.2, handletextpad=0.5)
 
 
 if __name__ == "__main__":

@@ -76,6 +76,20 @@
 \hypersetup{colorlinks=true,linkcolor=MidnightBlue,citecolor=MidnightBlue,urlcolor=MidnightBlue}
 \setlength{\emergencystretch}{3em}
 
+%% ---- Float placement ----
+%% Without these, a figure that is tall relative to the text block gets promoted to a float page and
+%% strands the rest of the sheet blank (Fig. 3 was doing exactly that). LaTeX's defaults reserve 20%
+%% of every page for text (textfraction) and refuse to let a top float exceed 70% (topfraction), so a
+%% 6.9 in figure plus a legend has nowhere legal to sit and is deferred. These values let a large
+%% float share its page with running text instead.
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\floatpagefraction}{0.65}
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{1}
+\setcounter{totalnumber}{3}
+
 \begin{document}
 
 %% =====================================================================
@@ -108,7 +122,7 @@ objective--utility mismatch; benchmark design; virtual cell
 
 \bigskip
 \noindent\textbf{Word count:} abstract 150 words; main text (Introduction, Results, Discussion,
-excluding figure captions) approximately 10{,}500 words; Methods 4{,}897 words. Display items: 6 main
+excluding figure captions) approximately 11{,}700 words; Methods 4{,}897 words. Display items: 6 main
 figures, no main-text tables. Supplementary Information: 6 Extended Data figures, 3 Supplementary
 Notes, 4 Supplementary Tables.
 
@@ -124,7 +138,7 @@ Notes, 4 Supplementary Tables.
 %% =====================================================================
 \begin{abstract}
 \noindent
-Single-cell drug retrieval is moving from mean signatures to distributional scores over treated populations, and routinely reports large gains under a metric of its own distributional kind. We introduce DART, a family of population-to-population scores, and show that mean-signature retrieval is its zero-variance limit, not a competitor. Holding rankings, scorer and queries fixed and changing only the judge, distributional retrieval is decisively ahead under objective-aligned metrics, reverses under mechanism recovery, and beats its incumbent against an external functional oracle, where a scalar comparing no distributions reproduces nearly all of it. Even blind external oracles reverse the winner by statistical form. We formalise when cell-level structure can pay off as two gates, differential response and recoverability; in patient tumours nobody constructed both open, yet no advantage appears: the mean already ranks most of what a subpopulation does. Distributional information here is real, and much smaller than objective-aligned evaluation makes it appear.
+Single-cell drug retrieval is moving from mean signatures to distributional scores over treated populations, and routinely reports large gains under a metric of its own kind. We audit that practice under increasingly independent criteria, and show that mean-signature retrieval is the distributional family's zero-variance limit, not a competitor. Holding rankings, scorer and queries fixed and changing only the judge, distributional retrieval is decisively ahead under objective-aligned metrics, reverses under mechanism recovery, and beats its incumbent against an external functional oracle, where a scalar comparing no distributions reproduces most of it. Even blind external oracles reverse the winner by statistical form. We formalise when cell-level structure can pay off as two gates, differential response and recoverability; in patient tumours nobody constructed both open, yet no advantage appears: the mean already ranks most of what a subpopulation does. Distributional information here is real, and much smaller than objective-aligned evaluation makes it appear.
 \end{abstract}
 
 \bigskip\noindent\rule{\textwidth}{0.4pt}\bigskip
@@ -136,15 +150,17 @@ Single-cell drug retrieval is moving from mean signatures to distributional scor
 
 Single-cell technologies have changed what it means to describe a drug's effect: it is not a single number but a distribution. Within a treated population, distinct subpopulations can respond in opposite directions, and the state that governs therapeutic outcome is often a minority one, a persister cell or a resistant clone. This premise drives the current wave of investment in virtual-cell models\cite{AIVirtualCell}, single-cell foundation models\cite{ref7,ref8,ref9}, and perturbation-response predictors\cite{ref4,ref5,ref10}: if responses can be characterized at single-cell resolution, one should be able to rank candidate drugs better than methods that average the population into a mean signature, as the Connectivity Map does\cite{ref1,ref2}.
 
-That premise is rapidly becoming method. Recent work has brought population-to-population distributional distances, optimal transport, maximum-mean-discrepancy, energy distance and the Wasserstein metric, into single-cell perturbation modeling, and these methods commonly report substantial gains over mean-based approaches. Yet they are almost always scored by distributional metrics of their own kind. When a distributional model is graded by a distributional yardstick, how much of the reported gain is a genuine improvement in decisions, and how much is the method and the yardstick sharing a mathematical target, has been asked too rarely\cite{ref3,ref13,ref15}. We name this an objective--utility mismatch, and are deliberate about how strong a word that licenses. Training on an objective and testing with a metric of the same family is not, by itself, a defect: a classifier fit by cross-entropy and scored by held-out log loss is honestly evaluated, because held-out data still tests generalization and the model can still lose. Retrieval is different, and sharper. There is no fitting step and no held-out set; the candidate is chosen by \emph{maximizing a score}, and the evaluation then measures \emph{that same score's} ground truth on \emph{those same candidates}, so the ranking function and the evaluation function are one function evaluated once, with no estimation error to expose and no way to lose. We reserve the word circular for exactly this condition, and state it formally in Results.
+That premise is rapidly becoming method. Recent work has brought population-to-population distributional distances, optimal transport, maximum-mean-discrepancy, energy distance and the Wasserstein metric, into single-cell perturbation modeling, and these methods commonly report substantial gains over mean-based approaches. Yet they are almost always scored by distributional metrics of their own kind. When a distributional model is graded by a distributional yardstick, how much of the reported gain is a genuine improvement in decisions, and how much is the method and the yardstick sharing a mathematical target, has been asked too rarely\cite{ref3,ref13,ref15}, though the general hazard of steering by a proxy is not new\cite{MetricGaming}. We name this an objective--utility mismatch, and define it narrowly: \emph{a retrieval system is evaluated by a criterion that measures the same statistical property its ranking maximised, so fidelity to the objective is read as evidence of downstream utility}. The term is scoped to retrieval evaluation and we do not extend it beyond that here. We are equally deliberate about how strong a word it licenses. Training on an objective and testing with a metric of the same family is not, by itself, a defect: a classifier fit by cross-entropy and scored by held-out log loss is honestly evaluated, because held-out data still tests generalization and the model can still lose. Retrieval is different, and sharper. There is no fitting step and no held-out set; the candidate is chosen by \emph{maximizing a score}, and the evaluation then measures \emph{that same score's} ground truth on \emph{those same candidates}, so the ranking function and the evaluation function are one function evaluated once, with no estimation error to expose and no way to lose. We reserve the word circular for exactly this condition, and state it formally in Results.
 
 Deciding whether ``distributional methods are better'' survives past the field's own metrics requires an oracle that is both independent of the score and \emph{semantically matched to the retrieval task}; getting the second requirement wrong is its own trap, since a similarity retriever graded on absolute potency is being asked a question it was never posed. The distinction we hold throughout is between objective fidelity and independent utility (Fig.~\ref{fig:1}). Objective-aligned metrics (Class A) legitimately test whether a method computes its own objective; task-proximal metrics such as mechanism-of-action recovery (Class B) are more independent but remain derived from the same upstream data; oracle-independent utility metrics (Class C), such as dose-response viability or longitudinal survival, are what a therapeutic claim ultimately requires, and are largely absent from the benchmarks these methods are evaluated on. An audit across six published method families, spanning signature retrieval\cite{ref1,ref2}, expression prediction\cite{ref4,ref5,ref6} and graph-based inverse design\cite{ref10,ref11,ref12}, finds objective-aligned evaluation to be the default in each. The central question is therefore not whether distribution-aware retrieval beats mean retrieval, but where objective fidelity ends and independent utility begins.
 
-To make that boundary measurable we introduce DART (Distributional Auditing of Retrieval Transfer), a family of population-to-population retrieval scores. Mean-signature retrieval, including Connectivity-Map cosine, is not a competitor but the zero-variance collapsed member of this same family: under the implemented kernel the two are numerically identical, with Hit@1 agreeing to three decimals. That unification lets us use DART as a controlled probe, changing only the judge while the rankings, the scorer and the queries stay fixed, and watching where the conclusion moves. Under objective-aligned metrics distributional retrieval looks decisively ahead; re-scored for mechanism recovery on the identical rankings the lead does not merely shrink but reverses; against an external functional oracle it does beat its incumbent, yet a scalar that compares no distributions reproduces almost the whole margin. The mismatch even reaches past metrics a method can see: two oracles built from the same proteins in the same cells, differing only in whether each is computed as a mean or as a distribution, hand victory to opposite methods.
+Making that boundary measurable calls for an instrument rather than a proposal: one family of population-to-population retrieval scores whose candidate rankings can be re-graded under criteria of increasing independence without being recomputed. We implement that family as DART (Distributional Auditing of Retrieval Transfer) and release it with the code, and it is used here as a probe rather than offered as a method. Mean-signature retrieval, including Connectivity-Map cosine, is not a competitor but the zero-variance collapsed member of this same family: under the implemented kernel the two are numerically identical, with Hit@1 agreeing to three decimals. That unification is what makes the probe a controlled one, since only the judge then changes while the rankings, the scorer and the queries stay fixed, and we watch where the conclusion moves. Under objective-aligned metrics distributional retrieval looks decisively ahead; re-scored for mechanism recovery on the identical rankings the lead does not merely shrink but reverses; against an external functional oracle it does beat its incumbent, yet a scalar that compares no distributions reproduces almost the whole margin. The mismatch even reaches past metrics a method can see: two oracles built from the same proteins in the same cells, differing only in whether each is computed as a mean or as a distribution, hand victory to opposite methods.
 
-What bounds the distributional gain is mechanistic, and it is the affirmative payload of this work. A predictor that adds a \emph{single} delta vector to every cell has, by algebra rather than by experiment, two subpopulations with identical responses, so a distributional score has nothing to exploit; usefulness therefore requires that subpopulations both respond \emph{differently} and can be \emph{told apart} at all. We formalize this as a two-gate criterion, differential response and recoverability, and test it where it matters: in patient-derived glioblastoma tumours that nobody constructed, rather than in the cell-line mixtures we had assembled, which turned out to distort the biology in both directions at once and to flatter the premise both times. In real tissue both gates open, and the advantage still fails to appear, because the mean already ranks most of what the compartments do. The two gates are necessary, not sufficient.
+What bounds the distributional gain is mechanistic, and it is the affirmative payload of this work. A predictor that adds a \emph{single} delta vector to every cell has, by algebra rather than by experiment, two subpopulations with identical responses, so a distributional score has nothing to exploit; usefulness therefore requires that subpopulations both respond \emph{differently} and can be \emph{told apart} at all. We formalize this as a two-gate criterion, differential response and recoverability, and test it where it matters: in patient-derived glioblastoma tumours that nobody constructed, rather than in the cell-line mixtures we had assembled, which turned out to distort the biology in both directions at once and to flatter the premise both times. In real tissue both gates open, and the advantage still fails to appear, because the mean already ranks most of what the compartments do. The two gates are necessary, not sufficient, and what they omit is a third condition we name but do not measure as we measure them: the differential response must change \emph{which candidate is preferred}, and in this tumour it largely does not.
 
-Our angle differs from two adjacent lines of work. One provides distributional \emph{prediction} methods, using optimal-transport or Schr\"odinger-bridge formulations to model perturbation responses\cite{CellOT,Departures}; these ask how to predict outcomes better, not how to rank candidate drugs, and do not test whether the evaluation is circular. A second compares distributional evaluation metrics for generative models\cite{OptimalMetrics,StandardizedEval}, asking which metric better measures whether a generated distribution matches a real one; we ask the orthogonal question of how much of a reported gain is self-fulfilling when the retrieval score and the evaluation metric are the same object. To our knowledge neither this circularity nor the zero-variance identity has been stated before. The work therefore offers this field a test for deciding whether a distributional gain is real or circular, a diagnosis of a failure mode that likely inflates results well beyond drug retrieval\cite{ref16,ref17}, and a roadmap of two measurable gates. The roadmap points somewhere specific, and it is the one encouraging thing we found: in a real tumour the subpopulation information a distributional score would need is \emph{present}, and it is unsupervised clustering, not the data, that fails to recover it. That is an engineering problem, and engineering problems get solved. As single-cell foundation models proliferate, the question will only become more pressing.
+Our angle differs from two adjacent lines of work. One provides distributional \emph{prediction} methods, using optimal-transport or Schr\"odinger-bridge formulations to model perturbation responses\cite{CellOT,Departures}; these ask how to predict outcomes better, not how to rank candidate drugs, and do not test whether the evaluation is circular. A second compares distributional evaluation metrics for generative models\cite{OptimalMetrics,StandardizedEval}, asking which metric better measures whether a generated distribution matches a real one; we ask the orthogonal question of how much of a reported gain is self-fulfilling when the retrieval score and the evaluation metric are the same object. To our knowledge neither this circularity nor the zero-variance identity has been stated before.
+
+Three contributions follow, in the order the Results establish them. First, mean and distributional retrieval form one continuous spectrum of variance sensitivity rather than competing method classes, with mean-signature retrieval as its zero-variance endpoint; that is algebra, and it is what licenses holding the scorer fixed while the judge changes. Second, how large a distributional gain looks depends on how independent that judge is: decisive under an objective-aligned metric, reversed under mechanism recovery, and, for one pair of external oracles, settled by the oracle's statistical form alone. Third, independent validation leaves a distributional contribution that is smaller than reported rather than absent, since against a semantically matched functional oracle the distributional score does beat its incumbent while a scalar comparing no distributions reproduces most of that margin. What this offers the field is a test for deciding whether a distributional gain is real or circular, a diagnosis of a failure mode that likely inflates results well beyond drug retrieval\cite{ref16,ref17}, and a roadmap of measurable conditions under which cell-level structure can pay off. The roadmap points somewhere specific, and it is the one encouraging thing we found: in a real tumour the subpopulation information a distributional score would need is \emph{present}, and it is unsupervised clustering, not the data, that fails to recover it. That is an engineering problem, and engineering problems get solved. As single-cell foundation models proliferate, the question will only become more pressing.
 
 %% =====================================================================
 %%  RESULTS
@@ -152,10 +168,11 @@ Our angle differs from two adjacent lines of work. One provides distributional \
 \section*{Results}
 
 Separating objective fidelity from independent utility requires an apparatus that varies the
-evaluator while holding everything else fixed. DART provides it: a single family of
-population-to-population retrieval scores whose candidate rankings can be re-graded by criteria of
-increasing independence without recomputing the rankings themselves (Fig.~\ref{fig:1}). The same
-candidates, ranked once, are scored by DART's own distributional objective (Class A), by a
+evaluator while holding everything else fixed. The apparatus is a single family of
+population-to-population retrieval scores, implemented as DART, whose candidate rankings can be
+re-graded by criteria of increasing independence without recomputing the rankings themselves
+(Fig.~\ref{fig:1}). The same
+candidates, ranked once, are scored by the retrieval score's own distributional objective (Class A), by a
 task-proximal biological criterion such as mechanism recovery (Class B), and by an
 oracle-independent functional readout (Class C), so that from one analysis to the next the
 rankings, the scorer and the queries are held fixed and only the evaluator changes. Each apparent
@@ -164,21 +181,21 @@ should survive a more independent judge, whereas one that reflects only the scor
 with a metric of its own kind should not.
 
 % FIGURE 1
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig1.pdf}
-\caption{\textbf{Distributional differences are visible, but their value depends on the evaluator.} \textbf{a}, Concept: within a treated population, subpopulations respond differently and the outcome-governing state is often a minority one. \textbf{b}, Mean-signature retrieval collapses a population to one vector; distributional retrieval keeps the full population. \textbf{c}, A target population and candidate library define the inverse retrieval task. \textbf{d}, Two candidates can share a mean yet differ in distribution. \textbf{e}, Evidence tiers: objective-aligned (Class A), task-proximal (Class B), oracle-independent (Class C). This study reports all three. Its Class-C readout is an imported, semi-real functional oracle built from dose-response profiles in cell lines the transcriptional data never saw; a Class-C claim measured on the same cells would require wet-lab validation.}
+\caption{\textbf{Distributional differences are visible, but their value depends on the evaluator.} \textbf{a}, The premise, drawn on one response coordinate: two drugs produce an identical mean shift, but under drug B the resistant minority does not move and the responding bulk overshoots to compensate, so the population mean is preserved while the two drugs do opposite things to the cells that matter. Schematic. \textbf{b}, The inverse retrieval task and the two ways to score it: a distributional score keeps the whole candidate population, whereas mean-signature cosine collapses it to a single delta vector, and both return one ranked candidate list. \textbf{c}, Two candidate populations placed on the same sample mean, with the marginal densities above the scatter showing that one is bimodal and the other unimodal: means tie, distributions separate. \textbf{d}, When an evaluator is independent. A retrieval score graded by a metric of its own kind is one function evaluated once (coupled, Class A), so the ranking cannot lose; the same ranking sent to an outside judge can be confirmed or overturned (Class B/C). \textbf{e}, The three evidence classes ordered by independence from the retrieval objective, with the headline metric of published method families (filled for Class A only) against what this study reports (all three, its Class-C readout imported). Its Class-C readout is an imported, semi-real functional oracle built from dose-response profiles in cell lines the transcriptional data never saw; a Class-C claim measured on the same cells would require wet-lab validation.}
 \label{fig:1}
 \end{figure}
 
-\subsection*{Mean retrieval is the zero-variance limit of DART}
+\subsection*{Mean and distributional retrieval are one continuum of variance sensitivity}
 
 We define the inverse retrieval task at the level of populations. For a target
 population $Q$ and a library of candidate perturbation populations $\{P_d\}$, a
 retrieval score $s(P_d, Q)$ ranks candidates by similarity of effect. Mean-signature
 retrieval replaces each population with its mean differential-expression vector and
 scores the cosine (or correlation) between mean signatures, the CMap operation.
-DART instead scores the full populations with a distributional distance (energy,
+Distributional retrieval instead scores the full populations with a distributional distance (energy,
 MMD, sliced-Wasserstein, or a subpopulation-coverage aggregate) and ranks by the
 negative distance.
 
@@ -208,16 +225,16 @@ algebraic fact about the scoring rules, not a claim about which method is
 therapeutically better. Two scope limits are explicit. First, the exact identity is
 specific to the cosine connectivity kernel; the canonical L1000 WTCS score is a
 rank-based (GSEA-style) enrichment of the same mean-collapsed signature, monotone in the
-same quantity but not algebraically identical to DART's cosine (cmap\_wtcs Hit@1
+same quantity but not algebraically identical to the cosine kernel implemented here (cmap\_wtcs Hit@1
 0.4635, which differs). Second, the identity concerns the scoring operation, not the
 choice of input population; the value of retaining the full distribution is exactly what
 the remaining results interrogate.
 
 % FIGURE 2
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig2.pdf}
-\caption{\textbf{Mean-signature retrieval is the zero-variance limit of distribution-aware retrieval.} \textbf{a}, Generative model $X=\mu+\lambda\epsilon$: the mean signature is the $\lambda\to0$ limit. \textbf{b}, Scaling only residual variance leaves the mean fixed. \textbf{c}, Energy distance converges to the mean-distance floor as residual spread vanishes. \textbf{d}, Under the implemented cosine kernel, mean cosine and CMap cosine are numerically identical (0.389); WTCS is a rank-based sibling. \textbf{e}, The $\beta$-interpolation spectrum from mean-aggregation to worst-case, with energy equal to single-cluster coverage. \textbf{f}, Metric-family hierarchy: every limit collapses to the mean.}
+\caption{\textbf{Mean and distributional retrieval form a continuous spectrum of variance sensitivity.} \textbf{a}, Generative model $X=\mu+\lambda\epsilon$: the mean signature is the $\lambda\to0$ limit. \textbf{b}, Scaling only residual variance leaves the mean fixed. \textbf{c}, Energy distance converges to the mean-distance floor as residual spread vanishes. \textbf{d}, Under the implemented cosine kernel, mean cosine and CMap cosine are numerically identical (0.388); WTCS is a rank-based sibling. \textbf{e}, The $\beta$-interpolation spectrum from mean-aggregation to worst-case, with energy equal to single-cluster coverage. \textbf{f}, Metric-family hierarchy: every limit collapses to the mean.}
 \label{fig:2}
 \end{figure}
 
@@ -226,7 +243,7 @@ the remaining results interrogate.
 The collapse identity above has an empirical face. Across all retrieval metrics, mean cosine and
 Connectivity-Map cosine are perfectly correlated ($\rho = 1.00$), while the energy and coverage
 scores form a separate, near-orthogonal block (Extended Data Fig.~1, which also gives dataset scale
-and the DART metric definitions). The correlation is computed over the 54,180
+and the distributional metric definitions). The correlation is computed over the 54,180
 query--candidate scores that the 1,260 retrieval queries generate against their candidate
 libraries, at 43 candidates per query. The unit is the scored pair, not the query: an earlier draft
 called these ``54,180 real queries'', which overstates the independent sample size by a factor
@@ -234,7 +251,7 @@ of 43.
 
 When candidate responses are \textit{observed}, so that full candidate populations are
 available rather than predicted, distributional retrieval looks decisively stronger than mean
-retrieval. Energy-distance retrieval reaches Hit@1 0.837 against 0.389 for
+retrieval. Energy-distance retrieval reaches Hit@1 0.837 against 0.388 for
 mean-cosine and the numerically identical CMap cosine; PCA-distance retrieval reaches 0.778 against
 PCA-mean's 0.518 (Fig.~\ref{fig:3}). These are unweighted macro-means over the seven (task
 $\times$ setting) cells of the three retrieval tasks. Weighting cells by their query counts gives
@@ -252,7 +269,7 @@ queries), and selecting a headline on a gate-selected subset would be exactly th
 of freedom this paper audits.
 
 By the standard of these metrics, distributional retrieval is far ahead. But the metric
-here is objective-aligned: the energy welfare regret and the DART energy score measure
+here is objective-aligned: the energy welfare regret and the energy retrieval score measure
 the same distributional object. This result establishes objective fidelity: distributional retrieval computes a
 discriminative objective, and observed heterogeneous populations contain real distributional
 signal. It is a \textit{distributional retrieval signal under an objective-aligned proxy}, not
@@ -260,10 +277,10 @@ evidence of independent therapeutic utility. Whether that signal survives a more
 judge is the question the next sections answer.
 
 % FIGURE 3
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/fig3.pdf}
-\caption{\textbf{Under objective-aligned metrics, distributional retrieval looks decisively stronger.} \textbf{a}, Hit@1 ladder: energy 0.837 down to mean/CMap cosine 0.389, unweighted macro-mean over the seven (task $\times$ setting) cells of three retrieval tasks. \textbf{b}, Per-task Hit@1. The advantage holds on the controlled and cross-line SciPlex3 tasks but \emph{not} on Frangieh, the only natural real dataset in the macro-mean, where mean/CMap cosine (0.600) beats energy (0.578). The macro-mean hides this counterexample; we state it here and in the text. \textbf{c}, Per-query regret reduction over \emph{all} 765 partial-observed queries: median $+0.118$, 72\% improved (the $+0.119$ quoted elsewhere is the 621-query gate-recommended subset, and the two are indistinguishable, which is panel \textbf{d}'s point). \textbf{d}, Recommended ($+0.119$) versus non-recommended ($+0.122$) subsets: the gate does not concentrate the gain. \textbf{e}, Alpha-crossover: the energy advantage narrows as subpopulations merge. \textbf{f}, All five DART metrics show positive Class-A regret reduction.}
+\caption{\textbf{Under objective-aligned metrics, distributional retrieval looks decisively stronger.} \textbf{a}, Hit@1 ladder: energy 0.837 down to mean/CMap cosine 0.388, unweighted macro-mean over the seven (task $\times$ setting) cells of three retrieval tasks. \textbf{b}, Per-task Hit@1. The advantage holds on the controlled and cross-line SciPlex3 tasks but \emph{not} on Frangieh, the only natural real dataset in the macro-mean, where mean/CMap cosine (0.600) beats energy (0.578). The macro-mean hides this counterexample; we state it here and in the text. \textbf{c}, Per-query regret reduction over \emph{all} 765 partial-observed queries: median $+0.118$, 72\% improved (the $+0.119$ quoted elsewhere is the 621-query gate-recommended subset, and the two are indistinguishable, which is panel \textbf{d}'s point). \textbf{d}, Recommended ($+0.119$) versus non-recommended ($+0.122$) subsets: the gate does not concentrate the gain. \textbf{e}, Alpha-crossover. The energy advantage does not close monotonically as the two subpopulations merge, and it does so in only one of the three cell lines (K562, from $1.00$ to $0.05$ in Hit@1 as $\alpha$ rises from $0.5$ to $0.9$); in A549 and MCF7 the gap is as large or larger at high $\alpha$. We report the per-line curves rather than a pooled trend for that reason. \textbf{f}, All five distributional metrics show positive Class-A regret reduction.}
 \label{fig:3}
 \end{figure}
 
@@ -283,8 +300,8 @@ rankings under mechanism-of-action recovery nDCG, the same two statistics are 0.
 different things and both are load-bearing: on the median query the advantage does not shrink
 but vanishes \emph{exactly}, and averaged over queries it turns \emph{negative}. The reversal is
 not an artefact of a heavy tail: 41.3\% of queries \emph{lose} mechanism recovery under the
-distributional score against 34.2\% that gain it (Wilcoxon $p = 2.4\times10^{-4}$). DART is not
-merely no better; it is worse. All five DART variants behave the same way (Class-A gain $+$0.056
+distributional score against 34.2\% that gain it (Wilcoxon $p = 2.4\times10^{-4}$). The distributional score
+is not merely no better; it is worse. All five distributional variants behave the same way (Class-A gain $+$0.056
 to $+$0.129, Class-B loss $-$0.011 to $-$0.037), so the conclusion does not depend on which
 variant is chosen.
 
@@ -302,22 +319,18 @@ An independent divergence audit reaches the same verdict and numerically the
 same effect: a coverage gain that is real, monotone in divergence, and around $+$0.002,
 which is to say too small to act on. Two analyses that share no code path converge on it.
 
-\textbf{A dominance count on this data counts noise excursions.} The conventional summary
-would be a count of tasks whose gain clears a threshold, here $+0.01$. That count is not
-interpretable (Methods), for two reasons. The threshold sits at 0.77 standard deviations of the
-nonzero-difference distribution, inside its noise band, and it is one-sided, so 11 tasks clear it
-for DART while 2 clear it for the mean. And the seed is not a replicate: it re-draws which drugs
-are held out and re-clusters the minority subpopulation. Holding the drug fixed and resampling the
-seed ten times, only \textbf{2 of the 10} threshold-crossing cross-line tasks remain above it in at
-least 8 of 10 seeds, while control drugs that clear it at \emph{no} seed in the recorded run clear
-it in \CONTROLRANGE{} of 10 resamples. The distribution is what we report.
-
-The two survivors are worth naming as a hypothesis rather than a result: A549$\rightarrow$MCF7
-Abexinostat ($+0.090 \pm 0.013$, 10 of 10 seeds) and Belinostat
-($+0.081 \pm 0.027$, 10 of 10), both HDAC inhibitors, both roughly seven standard deviations above
-the noise band. With $n = 2$, one cell-line pair and one drug class, this is suggestive and no
-more, but it is the only place in this study where a distributional advantage on real data
-survives being checked.
+\textbf{A dominance count on this data counts noise excursions.} The conventional summary would
+count tasks whose gain clears a threshold, here $+0.01$. That count is not interpretable
+(Methods): the threshold sits inside the noise band of the difference distribution and is
+one-sided, and the seed is not a replicate, since it re-draws which drugs are held out and
+re-clusters the minority subpopulation. Holding the drug fixed and resampling the seed ten times,
+only \textbf{2 of the 10} threshold-crossing cross-line tasks stay above it in at least 8 of 10
+seeds, while control drugs that clear it at \emph{no} recorded seed clear it in \CONTROLRANGE{} of
+10 resamples. We report the distribution instead. The two survivors are a hypothesis rather than a
+result: A549$\rightarrow$MCF7 Abexinostat ($+0.090 \pm 0.013$) and Belinostat
+($+0.081 \pm 0.027$), both HDAC inhibitors, both above threshold in 10 of 10 seeds. With $n = 2$,
+one cell-line pair and one drug class, this is the only place in this study where a distributional
+advantage on real data survives being checked, and it is suggestive and no more.
 
 Crucially, a diagnostic gate designed to \textit{concentrate} the advantage onto the
 queries where distributional information should help does not do so. The median
@@ -331,7 +344,7 @@ The simplest demonstration is at the dataset level. The divergence criterion hol
 distributional retrieval can help only when subpopulation responses diverge,
 operationalized as a response cosine below $\approx$0.9. Measuring where each dataset
 actually sits on that axis, cross-line SciPlex3 lies at cosine 0.032, Frangieh
-at 0.709, and CD34$+$ at 0.186. All three clear the gate. Yet DART wins
+at 0.709, and CD34$+$ at 0.186. All three clear the gate. Yet the distributional score wins
 only on cross-line: on Frangieh, the only natural real dataset, the mean-signature
 incumbent wins (Hit@1 0.600 versus 0.578), and CD34$+$ is our \emph{negative control},
 where the mean wins decisively. A criterion that admits the positive anchor and
@@ -349,7 +362,8 @@ $+$0.0009 in the lowest quartile to $+$0.0018 in the highest, all Benjamini--Hoc
 $q \approx 0$, against a metric operating range of $[0.89, 0.99]$: about 0.13 standard
 deviations). Mechanism recovery is null in the highest stratum ($q = 0.57$, $n = 143$) and
 \emph{significantly negative} in the lowest (median gap $-$0.030, $q = 5.8\times10^{-5}$,
-$n = 166$): where responses are least divergent, DART actively degrades annotation recovery.
+$n = 166$): where responses are least divergent, the distributional score actively degrades annotation
+recovery.
 The deficit is in the data and the task, not only in the gate.
 
 The obvious objection is that a null is merely an underpowered study, and the two metric
@@ -358,7 +372,7 @@ powered (achieved power 1.00), while MoA recovery is not (0.06; 80\% power would
 20,800 queries against the 143 available). We therefore do \emph{not} claim to have proven the
 absence of a small MoA effect. We claim something weaker and sufficient: where the theory
 predicts the largest gain there is no detectable gain, and where responses are least divergent
-the effect that \emph{is} detectable runs against DART.
+the effect that \emph{is} detectable runs against the distributional score.
 
 The conclusion is deliberately strong and deliberately bounded: apparent
 distributional gains are metric-dependent and cannot be interpreted as therapeutic
@@ -367,13 +381,13 @@ rankings is ``far ahead'' or ``worse than the incumbent'' depending only on whic
 class judges it. That dependence, not a verdict on any single method, is the finding.
 
 % FIGURE 4
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=\textwidth,height=0.44\textheight,keepaspectratio]{figures/fig4.pdf}
-\caption{\textbf{The apparent gains do not survive independent evaluation.} The metric-class ladder, read row by row.
-\textbf{Row 1, Class A $\rightarrow$ Class B.} \textbf{a}, One scorer, one query set, only the class of metric changes: a Class-A regret reduction of $+0.129$ becomes a Class-B MoA-nDCG gain of $-0.037$. \textbf{b}, MoA-nDCG gain by cell line, uniformly at or below zero. \textbf{c}, Minority-coverage gain by divergence quartile: significant, and negligible. \textbf{d}, The gate does not concentrate the advantage ($+0.119$ on 621 recommended queries versus $+0.122$ on 133 non-recommended).
-\textbf{Row 2, why the gate cannot rescue it.} \textbf{e}, The gate's structure-reliability axis is \emph{anti}-correlated with true response divergence ($\rho=-0.21$), moving opposite to the quantity it is meant to track. \textbf{f}, Recommended and non-recommended queries have indistinguishable divergence (Mann--Whitney $p=0.09$). \textbf{g}, The real-data coverage advantage, task by task, across all 239 tasks: real but negligible (mean $+0.0018$) and confined to the constructed cell-line mixtures ($+0.0043$, against $+0.0003$ in the natural data and $+0.00003$ under predicted candidates). We plot the difference rather than a count of ``dominant'' tasks: the conventional $0.01$ threshold sits at 0.77 s.d.\ of the nonzero-difference distribution, inside its noise band, and under seed resampling only 2 of the 10 threshold-crossing cross-line tasks survive (circled: A549$\rightarrow$MCF7 Abexinostat and Belinostat, both HDAC inhibitors, above threshold in 10 of 10 seeds).
-\textbf{Row 3, Class C, an independent functional oracle.} \NCQUERIES\ leave-one-drug-out queries, SciPlex3 at 10\,$\mu$M. The oracle is \emph{drug--drug functional similarity}, not absolute potency: the rank correlation of two compounds' GDSC2 dose-response AUC profiles across the \CTXLINES\ cell lines left once the three SciPlex3 lines are excluded, so it is measured out of context (Methods). \textbf{h}, Energy reaches $\rho=\ENERGYFUNC$ against $\MEANCTRLFUNC$ for the correctly specified mean incumbent: the first oracle-invisible criterion here on which the distributional score wins. It is not a \emph{distributional} win. A query-dependent scalar matching only the \emph{size} of a candidate's response reaches $\MAGMATCHFUNC$ (hatched), and partialling that channel out leaves energy with $\ENERGYPARTIAL$ (dotted). Open circles, per-cell-line medians. \textbf{i}, Per query, energy against that scalar. The cloud straddles the diagonal: energy wins $\ENERGYWINS$ of \NCQUERIES$\,$queries, and the nominal $p=\ENERGYWINSP$ is anticonservative because queries within a line share a candidate pool. Scored against \emph{absolute} potency instead, every ranking inverts and the magnitude scalar wins outright; that comparison poses a question a similarity retriever was never asked and is reported only as a confounder audit (Extended Data Fig.~5).}
+\includegraphics[width=\textwidth]{figures/fig4.pdf}
+\caption{\textbf{Independent evaluation collapses the apparent advantage, and what survives it is mostly magnitude.} The metric-class ladder, read row by row.
+\textbf{Row 1, Class A $\rightarrow$ Class B.} \textbf{a}, One scorer, one query set, only the class of metric changes: a Class-A regret reduction of $+0.129$ becomes a Class-B MoA-nDCG gain of $-0.037$. \textbf{b}, MoA-nDCG gain by cell line, uniformly at or below zero. \textbf{c}, Minority-coverage gain by divergence quartile: significant (all Benjamini--Hochberg $q \approx 0$) and negligible, every bar $\leq 0.006$ on a metric whose values run 0.89 to 0.99. Bars are quartile means with s.e.m.; dashes mark the medians the text quotes. \textbf{d}, The gate does not concentrate the advantage ($+0.119$ on 621 recommended queries versus $+0.122$ on 133 non-recommended).
+\textbf{Row 2, why the gate cannot rescue it.} \textbf{e}, The gate's structure-reliability axis is \emph{anti}-correlated with true response divergence ($\rho=-0.21$), moving opposite to the quantity it is meant to track. \textbf{f}, Recommended and non-recommended queries have indistinguishable divergence (Mann--Whitney $p=0.09$). \textbf{g}, The real-data coverage advantage, one dot per task across all 239 tasks: real but negligible (overall mean $+0.0018$) and confined to the constructed cell-line mixtures ($+0.0043$ against $+0.0003$ in the natural data and $+0.00003$ under predicted candidates). We plot the difference rather than a dominance count; only 2 of the 10 threshold-crossing cross-line tasks survive seed resampling (circled).
+\textbf{Row 3, Class C, an independent functional oracle.} \NCQUERIES\ leave-one-drug-out queries, SciPlex3 at 10\,$\mu$M. The oracle is \emph{drug--drug functional similarity} measured out of context, not absolute potency (Methods). \textbf{h}, Energy reaches $\rho=\ENERGYFUNC$ against $\MEANCTRLFUNC$ for the correctly specified mean incumbent, the first oracle-invisible criterion here on which the distributional score wins. It is not a \emph{distributional} win: a query-dependent scalar matching only response \emph{size} reaches $\MAGMATCHFUNC$ (hatched), and partialling that channel out leaves energy with $\ENERGYPARTIAL$ (dotted). The longest bar, potency matching at $\POTMATCHFUNC$, is a diagnostic rather than a recommender, since it needs the query drug's own measured potency. Open circles, per-cell-line medians. \textbf{i}, Per query, energy against that scalar: energy wins $\ENERGYWINS$ of \NCQUERIES\ queries, and the nominal $p=\ENERGYWINSP$ is anticonservative because queries within a line share a candidate pool. The mismatched absolute-potency comparison is reported only as a confounder audit (Extended Data Fig.~5).}
 \label{fig:4}
 \end{figure}
 
@@ -392,7 +406,7 @@ conclusion it invites, that retrieval is anti-aligned with therapeutic value, do
 from it.
 
 The oracle that does match the task is drug--drug functional similarity: do the query
-and the candidate \emph{behave} alike in an independent assay? GDSC2 supplies this directly.
+and the candidate \emph{behave} alike in an independent assay? GDSC2\cite{GDSC,GDSCLandscape} supplies this directly.
 Each compound has a dose-response AUC profile across roughly a thousand cell lines, and two
 drugs with similar cross-cell-line sensitivity patterns are functionally similar however potent
 either happens to be. We define
@@ -457,37 +471,32 @@ within the oracle, and there two thirds of the distributional score's advantage 
 Objective fidelity does not make the distributional gain imaginary. It makes it look far larger
 than it is.
 
-Two operational lessons follow. First, \emph{the magnitude control belongs in every distributional
-retrieval paper}: rank the candidates by the size of their own response, look at nothing else,
-and show that you beat it. On the semantically matched oracle we do not beat it significantly, and
-on the mismatched one we lose to it outright. Second, a mean-signature baseline scored
-\emph{without} control subtraction reaches $\MEANRAWFUNC$, close to energy and far above the
-correctly specified incumbent's $\MEANCTRLFUNC$, because it measures baseline cell identity rather
-than drug response. A study using it as its incumbent is comparing against a broken baseline and
-will overstate its own margin.
+One operational lesson is specific to baselines, and the other is deferred to the Discussion,
+where we state the controls this study recommends. A mean-signature baseline scored \emph{without}
+control subtraction reaches $\MEANRAWFUNC$, close to energy and far above the correctly specified
+incumbent's $\MEANCTRLFUNC$, because it measures baseline cell identity rather than drug response.
+A study using it as its incumbent compares against a broken baseline and will overstate its own
+margin.
 
 \textbf{Confounder audit: why the mismatched oracle inverts.} Scored against \emph{absolute}
-potency, energy retrieval is anti-correlated ($\rho = -0.520$, same sign in all three lines) and
+potency, energy retrieval is anti-correlated ($\rho = -0.520$, same sign in all three lines) while
 the query-independent magnitude scalar reaches $+0.692$. This is arithmetic, not pathology.
-Response magnitude predicts potency on its own ($\rho = -0.58$ to $-0.71$ by line), and the
-energy \emph{distance} between query and candidate is largely a function of the candidate's own
-magnitude ($\rho = +0.791$), because big-response populations sit far from everything. Ranking
-nearest-first therefore returns the smallest-response, weakest candidates. The finding is that
-the same magnitude channel drives both oracles; it is not evidence that retrieval opposes
-therapeutic value, and we do not claim that it is.
+Response magnitude predicts potency on its own, and the energy \emph{distance} between query and
+candidate largely tracks the candidate's own magnitude ($\rho = +0.791$), because big-response
+populations sit far from everything, so ranking nearest-first returns the weakest candidates. The
+same magnitude channel drives both oracles; this is not evidence that retrieval opposes therapeutic
+value, and we do not claim that it is.
 
-\textbf{Scope.} This oracle is semi-real. Viability is measured in a separate bulk assay, joined
-by compound identity rather than shared cells, under a different dose regime, so it constrains
-what a transcriptional score recovers about drug function without being a clinical endpoint. The
+\textbf{Scope.} This oracle is semi-real: viability is measured in a separate bulk assay, joined by
+compound identity rather than shared cells, under a different dose regime, so it constrains what a
+transcriptional score recovers about drug function without being a clinical endpoint. The
 \NCQUERIES\ queries within a cell line share a candidate pool, so paired tests across them are
-anticonservative and are reported as such; the honest unit is the three cell lines, and we give
-per-line values throughout. The strongest limit on this section is the one stated above:
-the affirmative result is not robust to the cell-line centering. Under the uncorrected oracle
-energy reaches only $+0.097$, below both the mean-signature incumbent ($+0.138$) and the magnitude
-scalar ($+0.217$), so the claim that a distributional score beats its incumbent on an external
-criterion holds under one construction of that criterion and not the other. What survives both
-constructions is the negative: under neither oracle does the distributional score beat the scalar
-that compares no distributions.
+anticonservative; the honest unit is the three cell lines, and we give per-line values throughout.
+The strongest limit is the one stated above, that the affirmative result is not robust to the
+cell-line centering: under the uncorrected oracle energy reaches only $+0.097$, below both the
+incumbent ($+0.138$) and the magnitude scalar ($+0.217$). What survives both constructions is the
+negative, that under neither oracle does the distributional score beat the scalar that compares no
+distributions.
 
 \subsection*{Oracle shape not biology decides which method wins}
 
@@ -535,12 +544,12 @@ distributional}. Whether that makes it a real advantage or an unfalsifiable one 
 paper leaves open, and we prefer to leave it open than to answer it with a criterion of our own
 choosing.
 
-\begin{figure}[p]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=\textwidth,height=0.30\textheight,keepaspectratio]{figures/fig5.pdf}
-\caption{\textbf{The criterion decides the answer, from the inside and from the outside.}
-\textbf{Row 1, the criterion decides.} \textbf{a}, HIR-Bench's analytic flip boundary $\alpha^*=B/(A+B)$ separates the regime in which the mean is a sufficient statistic from the one in which subpopulation structure can change the decision. \textbf{b}, Circularity measured rather than argued, on the 13,440-instance grid: two feature sets $\times$ two cross-validation units. Features a method can \emph{observe} at query time reach AUC 0.788 against a 0.643 majority-class rate (the rule on the colour bar); features derived from the benchmark's own latent utility matrix, of which the label is also a function, are no better than chance (0.400). Arrows give the interaction: pseudo-replication inflates the circular feature set by $+0.240$ and the honest one by only $+0.048$. Effective $n$ is 28 parameter cells, not 13,440, and every fold is single-class, so the 0.400-versus-0.5 gap is not itself interpretable. HIR-Bench's phase boundary is designed into its generator and its transfer to real data fails (Supplementary Note 1); its remaining panels are in Extended Data Fig.~6. \textbf{c}, The same effect between two \emph{real, external} criteria. An oracle is built twice from the same 20 surface proteins in the same 218,331 cells, changing only its statistical form (mean protein delta cosine, or energy distance between protein-response cell clouds), and the same two RNA rankings are scored against both. \textbf{The winner swaps}: the mean incumbent leads under the mean-shaped oracle ($+0.242$ against $+0.146$), the distributional score under the distribution-shaped one ($+0.529$ against $+0.334$), independently in each of the three immune conditions. No scorer sees protein data, so alignment operates here between external, blind criteria. Hatched, the mandatory control: a query-dependent scalar matching only response magnitude, which compares no distributions. It climbs from $+0.125$ to $+0.352$ as the oracle turns distributional, the known magnitude channel ($\rho=+0.791$) behaving as predicted, yet energy still leads it by $+0.177$ there against $+0.022$ under the mean-shaped oracle.
-\textbf{Row 2, from the outside.} The two gates on ZhaoSims2021, slice culture and biopsy from ten glioblastoma patients (validated marker assignment; Methods, Supplementary Table 3). \textbf{d}, Gate 2, asked the same question in both settings: one drug against another \emph{within one compartment of one patient} (36 splits, 4 patients), against the like-for-like constructed split. Bars are marginal medians; the annotated gap is the median \emph{paired} difference, the correct and smaller statistic. The constructed ceiling of 0.692 was largely an artefact of \emph{pooling} drugs into classes (grey): one drug against one drug, the same cells give 0.879. In a real tumour the information is present (ceiling \textbf{0.923}) but unsupervised clustering cannot reach it (\textbf{0.777}; gap \textbf{$+$0.117}, 95\% CI $[+0.115, +0.135]$ from a patient-level cluster bootstrap, against $+0.007$ $[-0.008, +0.065]$ constructed; $k$-means 0.638, Leiden 0.780). The gap does not depend on the maximisation: with every fixed probe-clusterer pair and no selection anywhere it is $+0.122$ in the tumour against $-0.002$ constructed. Dropping the patient that supplies 30 of the 36 splits leaves $+0.123$ $[+0.098, +0.138]$ on the other three. \textbf{Gate 2 in real tissue is an algorithmic bottleneck, not an informational one}, contradicting both our original claim and the cell-type comparison (0.964) with which we first tried to correct it; both are withdrawn. 30 of the 36 splits come from one patient and 39.9\% of cells are dropped by the assignment margin, so both numbers are optimistic. \textbf{e}, Gate 1: induced response cosine, median \textbf{0.566} over 17 patient-drug pairs, against \textbf{0.014--0.044} in our constructed mixtures. On a divergence scale ($1-\cos$: 0.99 against 0.43) the overstatement is roughly twofold; the ratio of the cosines is not a meaningful measure of it. \textbf{f}, The premise: over 18 within-patient drug pairs, mean-signature similarity ranks malignant-compartment response similarity at Spearman $\rho = \mathbf{+0.878}$. \emph{No $p$-value is given}: 15 of the 18 pairs come from one patient and reuse the same six drugs, so a test treating them as independent would be anticonservative. Both gates open here and the distributional advantage still does not appear: the two gates are necessary, not sufficient.}
+\includegraphics[width=\textwidth]{figures/fig5.pdf}
+\caption{\textbf{The statistical form of the criterion, not the biology, decides which method wins; and in real tissue both gates open without an advantage following.}
+\textbf{Row 1.} \textbf{a}, HIR-Bench's analytic flip boundary $\alpha^*=B/(A+B)$ separates the regime in which the mean is a sufficient statistic from the one in which subpopulation structure can change the decision. \textbf{b}, Circularity measured rather than argued: features a method can observe at query time reach AUC 0.788 against a 0.643 majority-class rate, whereas features derived from the benchmark's own latent utility matrix, of which the label is also a function, are at chance (0.400). Pseudo-replication inflates the circular set by $+0.240$ and the honest one by only $+0.048$. Effective $n$ is 28 parameter cells, not 13,440 (Methods). \textbf{c}, The same effect between two external criteria built from the same proteins in the same cells, differing only in statistical form. \textbf{The winner swaps}: the mean incumbent leads under the mean-shaped oracle ($+0.242$ against $+0.146$), the distributional score under the distribution-shaped one ($+0.529$ against $+0.334$), in each of the three immune conditions. Hatched, the magnitude-matching control, which compares no distributions: it climbs from $+0.125$ to $+0.352$ as the oracle turns distributional, yet energy still leads it by $+0.177$ there against $+0.022$ under the mean-shaped oracle.
+\textbf{Row 2}, the two gates on ZhaoSims2021, ten glioblastoma patients (Methods). \textbf{d}, Gate 2 posed as the same drug-response question in both settings (36 splits, 4 patients). Pooling drugs into classes holds the constructed ceiling at 0.700 (grey); one drug against one drug, the same cells give 0.879. All three arms are measured at the same granularity and under the same representation, so they are like for like; the 0.692 quoted for this construct elsewhere is the earlier in-fold run (Fig.~\ref{fig:6}e). In a real tumour the information is present (ceiling \textbf{0.923}) and unsupervised clustering does not reach it (\textbf{0.777}; median paired gap \textbf{$+$0.117}, 95\% CI $[+0.115, +0.135]$ by patient-level bootstrap, against $+0.007$ constructed; $+0.122$ against $-0.002$ with no method selection anywhere; $+0.123$ $[+0.098, +0.138]$ without the dominant patient). \textbf{Gate 2 in real tissue is an algorithmic bottleneck, not an informational one.} 30 of the 36 splits come from one patient and 39.9\% of cells fail the assignment margin, so both numbers are optimistic. \textbf{e}, Gate 1: induced response cosine, median \textbf{0.566} over 17 patient-drug pairs, against \textbf{0.014--0.044} in our constructed mixtures. \textbf{f}, The premise: over 18 within-patient drug pairs, mean-signature similarity ranks malignant-compartment response similarity at Spearman $\rho = \mathbf{+0.878}$. \emph{No $p$-value is given}, since 15 of the 18 pairs come from one patient. Both gates open here and the distributional advantage still does not appear: the two gates are necessary, not sufficient, and the condition that fails is the third one, decision relevance (Results).}
 \label{fig:5}
 \end{figure}
 
@@ -557,13 +566,28 @@ rather than an operating point there. That qualifier is load-bearing and we did 
 have it: on natural patient tumours both gates turn out to be open, and the last Results section
 is the one that corrected us.
 
+\textbf{A third condition, which we name here rather than measure as we measure the first two.}
+Gates 1 and 2 concern whether the information a distributional score needs is present and
+reachable. Neither asks whether it \emph{matters}. We therefore name a \textbf{Gate 3, decision
+relevance}: the differential response must change \emph{which candidate is preferred} under the
+outcome the decision is judged on, over and above what the mean signature already ranks. Its
+status in this paper is different from the other two and we mark that difference wherever it
+appears. Gates 1 and 2 are measured directly, on labelled mixtures and on patient tumours. Gate 3
+is inferred, from three lines of evidence that were collected to answer other questions: in a real
+tumour mean-signature similarity already ranks malignant-compartment response similarity at
+Spearman $\rho = +0.878$, a value dominated by one patient (Fig.~\ref{fig:5}f); against the
+independent functional oracle a scalar comparing no distributions reproduces most of the
+distributional score's margin (Fig.~\ref{fig:4}h,i); and no true-divergence stratum shows a
+positive mechanism-recovery gain (Fig.~\ref{fig:6}g). We propose Gate 3 as the condition that
+explains why opening the first two is not enough, and we do not claim to have tested it as such.
+
 \textbf{Gate 1, differential response.} We test what generated candidate populations actually
 contain, using predict-then-rank experiments in which candidate responses are produced by a
 perturbation predictor rather than observed (Fig.~\ref{fig:6}). Across three predictor families
 the distributional advantage over mean retrieval is small and \emph{not consistent in sign}: the
 nDCG@10 delta is $-$0.016 (average-effect), $-$0.071 (nearest-neighbour) and \textbf{$+$0.027}
 (CPA-style linear-latent, a surrogate for the latent-arithmetic family; we do not benchmark a
-trained scGen). DART also wins on Hit@1 for two of the three. We therefore do not claim the
+trained scGen). The distributional score also wins on Hit@1 for two of the three. We therefore do not claim the
 advantage is uniformly absent under prediction, only that it is small, unstable, and does not
 survive the independent metrics of the previous sections.
 
@@ -615,142 +639,86 @@ in principle}, and Gate 1 is essentially shut for it.
 \textbf{A genuinely non-additive predictor does open Gate 1, but only a crack.} A predictor whose
 displacement depends on the cell it is applied to should, if the two-gate account is right, show a
 divergence below the additive ceiling of 1. We tested an entropic optimal-transport map, the
-non-parametric core of the neural-OT perturbation models\cite{CellOT,Departures}. Run naively in
-gene space it failed its learning check (cosine $0.057$ between predicted and true mean delta), a
-failure of the curse of dimensionality and a cross-context baseline confound rather than of the
-idea; run in a latent space, as every deployed neural-OT model is, and with each fit context
-centred on its own control, it passes ($0.352$, above the $0.30$ bar; the configuration was fixed
-by this learning check, not by the divergence it is used to measure). Its \emph{true} induced
-divergence is then $\mathbf{0.900 \pm 0.101}$, significantly below the additive ceiling of $1$
-(about five standard errors below the mean over $n=30$), so a non-additive predictor
-genuinely gives different subpopulations different responses. But real treated cells sit at
-$0.205$, so the map closes only about an eighth of the distance from the additive ceiling to what
-biology shows, and its learning is itself weak, so part even of that crack is prediction noise.
+non-parametric core of the neural-OT perturbation models\cite{CellOT,Departures}, run in a latent
+space as every deployed neural-OT model is. It passes its learning check ($0.352$, above the $0.30$
+bar) and its \emph{true} induced divergence is $\mathbf{0.900 \pm 0.101}$, significantly below the
+additive ceiling, so a non-additive predictor genuinely gives different subpopulations different
+responses. But real treated cells sit at $0.205$, so the map closes only about an eighth of the
+distance from the ceiling to what biology shows, and its learning is weak enough that part even of
+that crack is prediction noise.
 
-The published CPA model behaves differently and no better: it reconstructs cells acceptably
-($R^2 \approx 0.39$) but does not learn the drug-specific effect, its predicted mean delta
-correlating with the true one at only $0.08$, so it is below the learning bar and its induced
-divergence is not reportable. Raising the per-drug training data fivefold, from sixty to three
-hundred cells, leaves this unchanged (learning $0.08$ either way): with 189 drugs the adversarial
-objective holds the per-drug signal near chance, and more cells do not rescue it. Nor does
-conditioning its perturbation embedding on the same 2048-bit fingerprints in place of a freely
-learned vector (learning $0.03$); the failure is the adversarial objective, not the drug
-representation.
+Two deployed models meet the same wall from opposite sides. The published CPA reconstructs cells
+acceptably ($R^2 \approx 0.39$) but does not learn the drug-specific effect (predicted-versus-true
+mean-delta correlation $0.08$), so it sits below the learning bar and its divergence is not
+reportable; neither five times more cells per drug nor conditioning its perturbation embedding on
+2048-bit Morgan fingerprints in place of a learned vector rescues it (learning $0.08$ and $0.03$),
+which locates the failure in the adversarial objective rather than the drug representation.
+CellFlow\cite{CellFlow}, an optimal-transport flow-matching model conditioned on the same
+fingerprints, does learn within context (mean-delta cosine $0.24$ over twenty drugs, $0.81$ for the
+HDAC inhibitor AR-42) and opens Gate 1 (induced divergence $0.85$). But the clean test requires
+prediction into a held-out context, and there its learning collapses to $0.03$ at a matched budget.
+That collapse is not an artefact of a mean-based check: re-scored with the gene-resolved and
+distributional metrics used by community virtual-cell evaluations\cite{VirtualCellChallenge}, the held-out-context predictions match the true differential-expression
+direction only at chance ($0.52$ against $0.70$ within context), recover $7\%$ of the true
+differential genes, and sit farther from the true treated population than the unperturbed control
+does (energy ratio $2.1$ against $0.98$). It is instead mechanistic: per drug, leave-one-context-out
+learning tracks that drug's cross-context response similarity (Pearson $r = 0.85$), so a predictor
+conditioned on chemistry alone recovers only the context-shared part of a response, which on this
+dataset is small (median cross-context cosine $0.04$) and near zero for exactly the
+response-divergent drugs the retrieval task selects.
 
-A modern flow-matching predictor meets the same wall from the opposite side, and shows why.
-CellFlow\cite{CellFlow}, an optimal-transport flow-matching model conditioned on 2048-bit Morgan
-(ECFP4) fingerprints of each compound, learns drug responses when trained on all three cell lines
-(mean-delta cosine $0.24$ over twenty drugs, reaching $0.81$ for the HDAC inhibitor AR-42, though
-the twenty-drug average sits below our $0.30$ bar) and opens Gate 1 (induced divergence $0.85$).
-But the clean test requires prediction into a held-out context, and there its learning collapses to
-$0.03$ at the identical training budget and drug set, an $8.4\times$ drop. This holds beyond the
-mean: re-scored with gene-resolved and distributional metrics, the held-out-context predictions
-match the true differential-expression direction only at chance ($0.52$), recover $7\%$ of the true
-differential genes, and sit on average farther from the true treated population than the unperturbed
-control does (energy ratio $2.1$). Within context the same metrics are informative ($0.70$
-direction, energy ratio $0.98$), so the collapse is a real loss of the response, not an artefact of
-the mean-based check. The collapse is
-mechanistic: per drug, leave-one-context-out learning tracks that drug's cross-context response
-similarity (Pearson $r = 0.85$), so a predictor conditioned on chemistry alone recovers only the
-context-shared part of a response. On this dataset that shared part is small (median cross-context
-cosine $0.04$) and near zero for exactly the response-divergent drugs the retrieval task selects.
+\textbf{Whether opening Gate 1 buys retrieval gain therefore stays open, for an instructive reason.}
+Re-running the cross-line predict-then-rank with the OT map as the candidate-response source, its
+predictions are too poor to retrieve with at all: Hit@1 is $0.05$ under \emph{every} rule, mean
+cosine included, against $0.88$ for the additive average-effect predictor. \textbf{We lack a
+predictor that both predicts accurately across contexts and opens Gate 1}, which is exactly what a
+clean test of the second half of the two-gate account needs. That we could not build one is
+consistent with the rest of this paper, in which the accurate part of every predictor is its mean
+and the part that departs from the mean is noise, but it is a limitation rather than a falsification
+and we present it as such.
 
-None of the three non-additive predictors we could run therefore serves as a clean test: the
-optimal-transport map and the flow-matching model open Gate 1 but do not carry their learning
-across contexts, and CPA reconstructs cells but not responses.
-
-\textbf{We then asked the decisive question, does opening Gate 1 this far buy any retrieval gain,
-and could not answer it, for an instructive reason.} Re-running the cross-line predict-then-rank
-with the OT map as the candidate-response source, its predictions are too poor to retrieve with at
-all: Hit@1 is $0.05$ under \emph{every} rule, mean cosine included, against $0.88$ for the additive
-average-effect predictor. The leave-two-contexts-out transfer this retrieval task demands is harder
-than the within-context divergence measurement, and the same weak learning that lets the OT map only
-crack Gate 1 open leaves it near chance as a predictor here. We therefore lack a predictor
-that both predicts accurately and opens Gate 1, which is exactly what a clean Part-B test needs, so
-the question stays open. That we could not build one is consistent with the rest of this paper, in
-which the accurate part of every predictor is its mean and the part that departs from the mean is
-noise, but it is a limitation rather than a falsification and we present it as such.
-
-\textbf{Why the measured values are not 1, and what we got wrong about that twice.} An earlier
-version of this paper attributed the shortfall to the second gate, arguing that a scorer must
-estimate the partition and does so imperfectly. That is incorrect, and the experiment's own
-calibration check exposed it: an additive predictor is required by the algebra above to return
-exactly 1.000, and it returned 0.267. When a control that is additive \emph{by construction} misses
-its algebraic value, the instrument is broken and no number from the run may be reported.
-
-The first cause was that the candidate populations were alpha-blends of two different cell
-lines, so their two subpopulations sit in two different contexts. An additive predictor adds one
-delta \emph{per context}, so the quantity measured was
-$\cos(\delta_{\mathrm{A549}}, \delta_{\mathrm{K562}})$: the similarity of two contexts' deltas,
-which has no reason to be 1 and is not a test of additivity. The theorem is a
-\emph{within-context} statement, and only a within-context experiment can test it. We therefore
-re-ran it with both subpopulations drawn from one cell line's own control cells and the predictor
-run separately on each, so the partition is true by construction (Methods).
-
-\textbf{The second cause is a result in its own right, and it sharpens the argument rather than
-weakening it.} With the construct fixed, the gene-space additive predictor returns
-$\cos = 1.000000$ exactly, as required. The \emph{latent} additive predictor does not. It returns
-values as low as $-0.13$, and the reason is that a latent model does not add a delta to a cell: it
-\emph{reconstructs} the cell and adds a delta to the reconstruction, returning
-$P(C) + W\delta_z$ where $P$ is the autoencoder's reconstruction. Referred to the model's own
-decoded baseline the reconstruction term cancels, and the induced cosine is exactly
-$1.000000$: the theorem holds and the model is additive, as claimed. Referred to the \emph{real}
-control cells, which is what a retrieval scorer necessarily does, the response carries
-$\mathrm{mean}(P(C_k)) - \mathrm{mean}(C_k)$, the reconstruction bias of subpopulation
-$k$, which is cell-state dependent, differs between subpopulations (their biases are themselves
-near-orthogonal, $\cos = -0.05$ to $-0.18$), and does not cancel.
-
-\textbf{So an additive latent predictor induces exactly zero real response divergence and yet, to
-any scorer that measures it, appears to induce a great deal.} That apparent divergence is the
-generator's reconstruction error. A distributional score run on such a candidate population is not
-merely blind to subpopulation structure that is not there; it is confidently scoring an
-autoencoder's artefacts and returning a number about nothing. This is the same lesson as the rest
-of the paper, reached a third way: what you measure against decides what you find. It also means
-that a structure-preservation or divergence diagnostic evaluated on a latent model's output against
-real controls measures the autoencoder, not the perturbation, and that includes the diagnostics we
-report above.
+\textbf{One measured value is an artefact of the generator, not of the biology.} An additive
+predictor is pinned by the algebra to return exactly $1.000000$, and asserting that value is what
+exposed two errors in our own first design: the candidate populations were cross-context blends,
+and a latent model's response must be referred to the right baseline (Methods). The second of those
+is a result rather than a correction. A latent model does not add a delta to a cell, it
+\emph{reconstructs} the cell and adds a delta to the reconstruction, returning $P(C) + W\delta_z$.
+Referred to its own decoded baseline the reconstruction term cancels and the induced cosine is
+exactly $1.000000$, as the theorem requires. Referred to the \emph{real} control cells, which is
+what a retrieval scorer necessarily does, it carries each subpopulation's reconstruction bias,
+which is cell-state dependent and does not cancel, and the model then appears to induce a great
+deal of divergence while inducing exactly none. \textbf{A distributional score run on such a
+candidate population is confidently scoring an autoencoder's artefacts}, and that includes the
+structure diagnostics reported above whenever they are taken against real controls.
 
 \textbf{Gate 2, recoverability.} Even where differential structure exists, a decision layer must be
 able to resolve it. We test this on a controlled mixture with ground-truth labels (K562 at
 10\,$\mu$M, HDAC-class versus JAK-class cells), where the bimodal structure exists by construction.
-The question that matters is not whether clustering succeeds, but \emph{why it fails}, and those
-are two very different papers. If the information is absent from the representation, no method can
-help. If it is present and only the unsupervised assignment step cannot reach it, the bottleneck is
-an algorithm and is solvable. Distinguishing them requires an upper bound, which prior work in this
-area, ours included, has not reported.
+The question that matters is not whether clustering succeeds but \emph{why it fails}, and those are
+two very different papers: if the information is absent from the representation no method can help,
+whereas if it is present and only the unsupervised assignment step cannot reach it, the bottleneck
+is an algorithm and is solvable. Distinguishing them requires an upper bound, which prior work in
+this area, ours included, has not reported. We therefore score every method in one unit,
+best-permutation accuracy against the true labels, with label matching given to each clusterer for
+free (Fig.~\ref{fig:6}e).
 
-We therefore give every method the same representation and score them all in the same unit,
-best-permutation accuracy against the true labels, granting each clustering its label matching for
-free. Unsupervised recovery is poor: $k$-means 0.632, Gaussian mixtures 0.661,
-Leiden 0.674, and HDBSCAN 0.500, which finds no density structure at all and
-assigns every cell to noise (Fig.~\ref{fig:6}e). The first two are handed the true $k$; the last two
-are the graph- and density-based methods whose absence was the obvious objection to our earlier
-analysis, and adding them does not change the answer.
-
-The supervised ceiling is the informative number. Handing a classifier the ground-truth
-partition and fitting the representation inside the training fold, held-out accuracy reaches only
-\textbf{0.692} (AUC 0.752), and a nonlinear learner does not beat a linear one (random forest 0.669,
-$k$-nearest-neighbours 0.605, logistic regression 0.685). The boundary is not a hidden nonlinear one
-that our probe was too weak to find. It is barely there.
-
-\textbf{The gap between the ceiling and the best unsupervised method is $\mathbf{+0.018}$ accuracy.}
-Unsupervised clustering is already extracting essentially everything this representation contains
-about this partition, so \emph{within this benchmark} the limit is informational rather than
-algorithmic. Two later results retract almost everything one might conclude from that
-sentence, and we flag them here rather than let a reader carry it forward. The gap is an
-\emph{underestimate}: the design gives the clusterers the easier transductive representation and
-the probe the harder in-fold one, which shrinks the gap and so flatters this very conclusion (we had
-stated that bias backwards; Methods). And the 0.692 ceiling is itself largely an artefact of
-\emph{pooling} several HDAC and several JAK compounds into two classes: split the same cells one
-drug against one drug and the ceiling rises to 0.879 (Fig.~\ref{fig:5}d). The informational reading
-does not survive either correction, and it does not survive contact with tissue.
-
-The probe is not simply insensitive: raise the separation between the two states artificially and it
-pulls away from clustering exactly as it should (ceiling 0.828 versus 0.714 at $1.5\times$
-separation, 0.924 versus 0.762 at $2\times$; Fig.~\ref{fig:6}f), so its failure to pull away here is
-a measurement rather than a null result. Consistent with it, across the 529 (cell line, drug) pairs in SciPlex3 with enough cells to cluster (188 drugs $\times$ three lines, less those too small; the unit is the pair, not the drug) the median
-silhouette of a two-way split is 0.034, with only 0.4\% of drugs exceeding 0.1, and the earlier
-nine-column clustering sweep this analysis supersedes is reported in Extended Data Fig.~3.
+Unsupervised recovery is poor, the best of four methods reaching $0.674$, but the informative number
+is the \textbf{supervised ceiling}, which reaches only \textbf{0.692} (AUC 0.752); a nonlinear
+learner does not beat a linear one, so the boundary is not a hidden nonlinearity our probe was too
+weak to find. \textbf{The gap between the ceiling and the best unsupervised method is
+$\mathbf{+0.018}$ accuracy}, so \emph{within this benchmark} clustering already extracts essentially
+everything the representation holds and the limit is informational rather than algorithmic. Two
+later results retract almost everything one might conclude from that sentence, and we flag them here
+rather than let a reader carry it forward. The gap is an \emph{underestimate}, because the design
+gives the clusterers the easier transductive representation and the probe the harder in-fold one
+(we had stated that bias backwards; Methods). And the $0.692$ ceiling is largely an artefact of
+\emph{pooling} several HDAC and several JAK compounds into two classes: split one drug against one
+drug, the same cells give $0.879$ (Fig.~\ref{fig:5}d). The informational reading survives neither
+correction, and it does not survive contact with tissue. It is nonetheless a measurement rather
+than an insensitive probe: raising the separation between the two states artificially makes the
+ceiling pull away from clustering exactly as it should (Fig.~\ref{fig:6}f), and across 529
+(cell line, drug) pairs in SciPlex3 the median silhouette of a two-way split is $0.034$ (Extended
+Data Fig.~3).
 
 \textbf{But this benchmark is one we built, and the next section shows that it misled us.} An
 HDAC-treated and a JAK-treated K562 cell are a mixture we assembled; they are not a subpopulation
@@ -759,27 +727,22 @@ that real subpopulations sit at an information ceiling no method can exceed, and
 that conclusion before testing it. It is wrong.
 
 \textbf{What Gate 2 does and does not constrain.} Energy distance, MMD and sliced-Wasserstein are
-\emph{cluster-free}: they compare whole populations and never form a partition, so Gate 2 cannot be
-read as a claim that they require one. The constraint it imposes is subtler and it closes the loop
-with the functional-oracle result. A distributional distance is a single number into which every
-source of population difference is summed. Where the subpopulation signal sits at an information
-ceiling as low as the one measured here, that signal cannot be what dominates the distance;
-something else must, and we have measured what: the candidate's own response magnitude, which
-tracks the energy distance at $\rho = +0.791$. This is why the distributional score behaves like a
-magnitude scalar on the independent oracle. Gate 2 does not stop a cluster-free score from being
-computed. It determines whether the number that score returns is about subpopulation structure or
-about something else entirely.
+\emph{cluster-free}: they compare whole populations and never form a partition, so Gate 2 is not a
+claim that they require one. The constraint is subtler, and it closes the loop with the
+functional-oracle result. A distributional distance sums every source of population difference into
+a single number, so where the subpopulation signal sits at a ceiling as low as the one measured
+here, that signal cannot be what dominates the distance. Something else must, and we have measured
+what: the candidate's own response magnitude, which tracks the energy distance at
+$\rho = +0.791$. Gate 2 does not stop a cluster-free score from being computed; it determines
+whether the number that score returns is about subpopulation structure or about something else.
 
-The two gates therefore compound, and their consequences differ by score type. A
-distributional decision layer cannot exploit subpopulations that do not respond differently (Gate 1),
-and where they do respond differently it cannot rely on telling them apart (Gate 2). Note what Gate
-1 is \emph{not}: it is not structure preservation. Every predictor we tested preserves structure and
-every one still fails, so a generator validated on a structure-preservation metric would pass a test
-that does not bear on the question. Coverage-type scores, which need the partition explicitly, are
-blocked by Gate 2 \emph{wherever it is shut}, which in this study is the constructed cell-line
-mixtures and not the patient tumours of the next section. Global scores, which do not need a
-partition, are never blocked but are left measuring whatever channel is largest, which is not the
-one their advocates intend.
+The two gates compound, and their consequences differ by score type. Note what Gate 1 is
+\emph{not}: it is not structure preservation. Every predictor we tested preserves structure and
+every one still fails, so a generator validated on a structure-preservation metric would pass a
+test that does not bear on the question. Coverage-type scores, which need the partition explicitly,
+are blocked wherever Gate 2 is shut, which in this study is the constructed mixtures and not the
+patient tumours of the next section. Global scores are never blocked, but are left measuring
+whatever channel is largest, which is not the one their advocates intend.
 
 Two further tests, both consistent with the criterion and neither rescuing it, are given in
 Supplementary Note 2: coverage performance rises with query identifiability but only weakly and
@@ -787,10 +750,10 @@ not monotonically, and when queries are stratified by the Gate-2 variable itself
 distributional advantage is flat.
 
 % FIGURE 5
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=\textwidth,height=0.32\textheight,keepaspectratio]{figures/fig6.pdf}
-\caption{\textbf{The information condition is a two-gate criterion: candidate populations must show differential response, and that structure must be identifiable.} \textbf{a}, The predict-then-rank design: a held-out query is scored against candidate populations that are either observed or produced by a perturbation predictor, and the two gates are the two properties such a candidate population must have. \textbf{b}, Predictor-specific retrieval gain (nDCG@10, DART minus mean). The gain is small and \emph{not} consistent in sign: $-0.071$ (nearest-neighbour), $-0.016$ (average-effect), $+0.027$ (latent-linear). \textbf{c}, Gate 1. Predicted candidate populations \emph{retain} baseline subpopulation structure (variance ratio 0.142 versus 0.138 for real ones, left axis) but do not reproduce \emph{divergence}: the induced response cosine between the two subpopulations is 0.19--0.37 for predicted populations against 0.014 for real ones (right axis). An additive predictor adds one delta vector to every cell of a context, so within that context its two subpopulations have identical responses: cosine exactly 1, divergence exactly zero. That algebraic ceiling is marked on the right axis. \textbf{The predicted values shown here do not measure it, and we do not interpret them.} These candidate populations are blends of two cell lines, so their subpopulations sit in different contexts and an additive predictor emits a different delta for each; and for a latent model the response taken against real control cells also carries the generator's reconstruction bias. Measured within one context and against the model's own baseline, an additive predictor returns exactly 1.000000, as the algebra requires (Methods). \textbf{d}, Structure diagnostics, predicted relative to real. \textbf{e}, Gate 2, on a known bimodal mixture (K562, HDAC-class versus JAK-class cells). All methods are scored in one unit, best-permutation accuracy against the true labels, with the label matching given to each clusterer for free. Unsupervised recovery is poor ($k$-means 0.632 and Gaussian mixtures 0.661, both handed the true $k$; Leiden 0.674; HDBSCAN 0.500, finding no density structure at all), but the \emph{supervised ceiling}, a classifier given the ground-truth partition with its representation fit inside the training fold, reaches only 0.692 (AUC 0.752), and a nonlinear learner does not beat a linear one (forest 0.669, $k$NN 0.605, logistic 0.685). The gap between the ceiling and the best unsupervised method is \textbf{0.018}: clustering is already extracting essentially everything this representation holds, so \emph{within this benchmark} the limit is informational rather than algorithmic. That qualifier is load-bearing, and two later corrections dismantle what it appears to license. The gap is an \emph{underestimate}, because the clusterers are given the easier transductive representation and the probe the harder in-fold one, which shrinks it (Methods). And this 0.692 ceiling is largely an artefact of \emph{pooling} several HDAC and several JAK compounds into two classes: the same cells split one drug against one drug give 0.879, and in a patient's tumour the same drug-response question gives a ceiling of 0.923 with unsupervised clustering reaching only 0.777 (Fig.~\ref{fig:5}d). In real tissue the limit is algorithmic, not informational, and the reading offered here is withdrawn. \textbf{f}, The control that licenses reading panel \textbf{e} at all. Raise the separation between the two states artificially and the probe pulls away from clustering exactly as it should (ceiling 0.828 versus 0.714 at $1.5\times$; 0.924 versus 0.762 at $2\times$), so its failure to pull away on this mixture (leftmost, separation $=1$) is a measurement rather than an insensitive probe. \textbf{g}, The conditional advantage a working information condition would produce is absent. DART-minus-mean MoA-nDCG gain by \emph{true} response-divergence quartile (bars are means; Benjamini--Hochberg corrected). No stratum is positive. The lowest-divergence quartile is significantly \emph{negative} (mean $-0.082$, median $-0.030$, $q = 5.8\times10^{-5}$, $n = 166$); the rest have a median of exactly zero and means of $-0.041$, $-0.020$ and $+0.003$, none significant. Where the theory predicts the largest gain there is none. Stratifying instead by the Gate-2 variable leaves the advantage flat (Supplementary Note 2).}
+\includegraphics[width=\textwidth]{figures/fig6.pdf}
+\caption{\textbf{When can distributional information matter? Two measured gates, and a third condition they do not cover.} Candidate populations must show differential response (Gate 1) and that structure must be identifiable (Gate 2); neither asks whether the difference changes the decision (Gate 3). \textbf{a}, The predict-then-rank design and the conditions a candidate population must satisfy: a held-out query is scored against candidate populations that are either observed or produced by a perturbation predictor. Gates 1 and 2 are measured in panels \textbf{b}--\textbf{f}. \textbf{Gate 3 is drawn dashed because it is proposed here rather than tested as the other two are}; its evidence is Fig.~\ref{fig:5}f and Fig.~\ref{fig:4}h,i, and it is what panel \textbf{g} is consistent with. \textbf{b}, Predictor-specific retrieval gain (nDCG@10, distributional minus mean). The gain is small and \emph{not} consistent in sign: $-0.071$ (nearest-neighbour), $-0.016$ (average-effect), $+0.027$ (latent-linear); one task, so no dispersion is available. \textbf{c}, Gate 1. Predicted candidate populations \emph{retain} baseline subpopulation structure (variance ratio 0.142 versus 0.138 for real ones, left axis) but do not reproduce \emph{divergence}: the induced response cosine is 0.19--0.37 for predicted populations against 0.014 for real ones (right axis), where an additive predictor is pinned at exactly 1 by algebra. \textbf{The predicted values here do not measure that ceiling and we do not interpret them}, because these populations are cross-context blends and a latent model's response against real controls also carries its reconstruction bias (Methods). \textbf{d}, Structure diagnostics, predicted relative to real. \textbf{e}, Gate 2 on a known bimodal mixture (K562, HDAC-class versus JAK-class cells), every method scored in one unit, best-permutation accuracy against the true labels. Unsupervised recovery is poor (best 0.674) and the \emph{supervised ceiling} reaches only 0.692 (AUC 0.752), a gap of \textbf{0.018}, so \emph{within this benchmark} clustering already extracts what the representation holds. That reading is superseded: the ceiling is largely an artefact of \emph{pooling} drugs into classes, and in a patient's tumour the same question gives 0.923 against 0.777 unsupervised, an algorithmic limit rather than an informational one (Fig.~\ref{fig:5}d). \textbf{f}, The control that licenses reading panel \textbf{e}: raising the separation between the two states makes the ceiling pull away from clustering as it should, so the absence of a gap at real separation is a measurement rather than an insensitive probe. \textbf{g}, The conditional advantage a working information condition would produce is absent. Distributional-minus-mean MoA-nDCG gain by \emph{true} response-divergence quartile (bars are means, error bars s.e.m.; Benjamini--Hochberg corrected). No stratum is positive and the lowest-divergence quartile is significantly \emph{negative} (mean $-0.082$, $q = 5.8\times10^{-5}$, $n = 166$). Where the theory predicts the largest gain there is none.}
 \label{fig:6}
 \end{figure}
 
@@ -890,8 +853,10 @@ within one patient}, which is the K562 construct transplanted into tissue nobody
 clusterers actually receive, because the in-fold representation used earlier deflates the ceiling
 and so \emph{shrinks} the very gap the conclusion rests on.
 
-\textbf{Two things follow, and the second one reverses us.} First, the constructed ceiling of
-0.692 was substantially an artefact of \emph{pooling drugs within a class}. Splitting the same
+\textbf{Two things follow, and the second one reverses us.} First, the constructed ceiling was
+substantially an artefact of \emph{pooling drugs within a class}: run at this comparison's own
+granularity and representation the pooled construct gives 0.700, against the 0.692 the earlier
+in-fold run of the same construct reported. Splitting the same
 K562 cells one drug against one drug, as the natural test necessarily does, lifts the ceiling to
 0.879 with unsupervised clustering at 0.837. Much of what we read as an
 information limit was the within-class heterogeneity of several distinct compounds we had merged.
@@ -915,32 +880,25 @@ where the news for distributional retrieval is constructive rather than cautiona
 opposite of what we concluded from our own benchmark twice.
 
 \textbf{We attacked that gap three ways before believing it, because it is the only constructive
-claim in this paper and it was the least defended number in it.} First, it is a difference of two
-\emph{maxima} (best of three probes minus best of four clusterers), and a maximum over methods is
-upward-biased. Recomputing every fixed (probe, clusterer) pair, so that no selection occurs
-anywhere, gives $+0.122$ in the tumour against $-0.002$ on the constructed split: the same
-conclusion, and the maximisation moves the natural number by only $-0.005$. (Pairs involving
-HDBSCAN are excluded from that figure and reported separately: it assigns every cell to noise and
-scores exactly $0.500$, so a large ``gap'' against it means only that the clusterer did nothing.)
-Second, the 36 splits are not 36 independent observations, since 30 come from one patient and reuse
-the same six drugs; a bootstrap over splits would be the pseudo-replication this paper criticises,
-so we resample \emph{patients}. The gap is $+0.117$ with a 95\% interval of $[+0.115, +0.135]$, and
-the natural-minus-constructed difference is $+0.109$ $[+0.052, +0.129]$, with none of 5,000
-bootstrap draws at or below zero. Third, dropping PW030 altogether leaves six splits in three
-patients, and the gap there is $+0.123$ $[+0.098, +0.138]$: slightly \emph{larger}, not smaller.
+claim in this paper.} It is a difference of two \emph{maxima}, so we recomputed every fixed
+(probe, clusterer) pair with no selection anywhere; the 36 splits are not independent, since 30
+come from one patient, so we bootstrap over \emph{patients} rather than splits, the
+pseudo-replication this paper criticises elsewhere; and we dropped the dominant patient entirely.
+The gap survives all three, and dropping that patient makes it slightly \emph{larger}, not smaller
+(values in Fig.~\ref{fig:5}d; none of 5,000 bootstrap draws lies at or below zero).
 
-\textbf{Three limits nonetheless bound it.} A cluster bootstrap with only \emph{four} clusters is
-known to under-cover, so the interval above should be read as a floor on the true uncertainty rather
-than a faithful estimate of it. \emph{Cells were dropped}: 39.9\% fail the compartment-assignment
-margin and are excluded rather than reassigned (Methods, Supplementary Table 3), and because the
-discarded cells are by construction the hardest to place, both the ceiling and the clustering
-accuracy are optimistic. \emph{The drug panels differ}: the constructed split contrasts HDAC with
-JAK inhibitors and the natural one six unrelated compounds, so response magnitude is not matched
-across the arms. We report the comparison because it is the closest to like-for-like these data
-permit, and we claim no more precision for it than four patients and one drug panel can support.
+\textbf{Three limits nonetheless bound it.} A cluster bootstrap with only \emph{four} clusters
+under-covers, so the interval is a floor on the uncertainty rather than an estimate of it.
+\emph{Cells were dropped}: 39.9\% fail the compartment-assignment margin and are excluded rather
+than reassigned (Methods, Supplementary Table 3), and since the discarded cells are by construction
+the hardest to place, both the ceiling and the clustering accuracy are optimistic. \emph{The drug
+panels differ}: the constructed split contrasts HDAC with JAK inhibitors and the natural one six
+unrelated compounds, so response magnitude is not matched across the arms. We report the comparison
+because it is the closest to like-for-like these data permit, and claim no more precision for it
+than four patients and one drug panel can support.
 
 \textbf{Gate 1 opens too, and the same benchmark misled us in the opposite direction}
-(Fig.~\ref{fig:5}d). Naturally co-existing compartments do respond in different directions to the
+(Fig.~\ref{fig:5}e). Naturally co-existing compartments do respond in different directions to the
 same drug, but far less so than our mixtures implied: the induced response cosine has a median of
 0.566 across 17 patient-drug pairs, where our constructed mixtures sit at
 0.014--0.044, essentially orthogonal. One drug pushes two unrelated cell lines in unrelated
@@ -952,31 +910,35 @@ measure of divergence when one cosine is near zero.) Both distortions
 flatter this paper's premise, and neither was intentional.
 
 \textbf{Both gates are therefore open in real tissue, and the two-gate account predicts that a
-distributional advantage should follow. The mechanism that would produce one is missing.} The
+distributional advantage should follow. The mechanism that would produce one is missing, and its
+absence is what Gate 3 names.} The
 paper's motivating scenario, that two drugs can share a mean signature and do opposite things to a
 subpopulation, can be tested directly on a real tumour. Across 18 within-patient drug pairs, the
 similarity of two drugs' \emph{mean} signatures ranks the similarity of their
-\emph{malignant-compartment} responses at Spearman $\rho = \mathbf{+0.878}$ (Fig.~\ref{fig:5}e).
+\emph{malignant-compartment} responses at Spearman $\rho = \mathbf{+0.878}$ (Fig.~\ref{fig:5}f).
 Where the mean says two drugs are alike, the malignant compartment mostly agrees. Of the five drug
 pairs most similar on the mean, two have a malignant response meaningfully less similar than their
-mean suggests, so the residual is real; it is also small.
+mean suggests, so the residual is real; it is also small. This is as close to a direct reading of
+Gate 3 as these data allow: where the mean already ranks what the subpopulation does, the
+differential response has little left to change about the decision. The two limits below are what
+stop it from being a measurement of Gate 3 rather than an indication of one.
 
-\textbf{Two limits on that number, and they are severe.} First, \emph{it is close to a
-single-patient result}: 15 of the 18 pairs come from one patient (PW030, the only one given more
-than two compounds) and reuse the same six drugs, and the remaining three patients contribute one
-pair each. A $p$-value computed as though the 18 pairs were independent is anticonservative by a
-wide margin, and we therefore do not quote one; the honest description is a strong association in
-one patient, consistent in sign with three single-pair observations in three others. Testing the
-premise properly needs a cohort in which many patients receive many drugs, which this dataset is
-not. Second, a rank correlation between two similarity scores is not a fraction of variance and
-not a statement that the response vectors are collinear, and we do not read it as either.
+\textbf{Two limits on that number, and they are severe.} It is close to a \emph{single-patient
+result}: 15 of the 18 pairs come from PW030, the only patient given more than two compounds, and
+reuse the same six drugs, while three patients contribute one pair each. A $p$-value computed as
+though the 18 pairs were independent would be anticonservative by a wide margin, so we do not quote
+one; the honest description is a strong association in one patient, consistent in sign with three
+single-pair observations elsewhere. Testing the premise properly needs a cohort in which many
+patients receive many drugs, which this dataset is not. And a rank correlation between two
+similarity scores is neither a fraction of variance nor a statement that the response vectors are
+collinear, and we read it as neither.
 
-\textbf{And we did not run retrieval here, so we do not report a retrieval result.} ZhaoSims2021
-supports six compounds with only one patient receiving more than two; a leave-one-drug-out Hit@1
-computed on that would be an anecdote wearing a benchmark's clothes. What this section shows is
-that the \emph{mechanism} a distributional advantage would have to run through, mean-similar drugs
-diverging inside a subpopulation, is largely absent in real tissue. That is an inference about why
-an advantage should not be expected, not a measurement of its absence.
+\textbf{We did not run retrieval here, so we report no retrieval result.} ZhaoSims2021 supports six
+compounds with only one patient receiving more than two, and a leave-one-drug-out Hit@1 computed on
+that would be an anecdote wearing a benchmark's clothes. What this section shows is that the
+\emph{mechanism} a distributional advantage would run through, mean-similar drugs diverging inside
+a subpopulation, is largely absent in real tissue: an inference about why an advantage should not
+be expected, not a measurement of its absence.
 
 \textbf{The two gates are necessary but not sufficient, and this is how we found out.} Opening them
 does not deliver a distributional advantage, because in real tissue the compartment-specific
@@ -984,7 +946,8 @@ response is mostly ranked by the mean already. The independent functional oracle
 compatible conclusion by an entirely different route: energy retrieval beats the mean incumbent
 there, and a scalar magnitude control then reproduces almost the whole of that margin. The two
 lines of evidence share no data, no metric and no code path, and they do not share a number
-either, so we do not claim they converge on one. What they agree on is a direction: distributional
+either, so we do not claim they converge on one. Both are consistent with Gate 3 being the binding
+one here, and neither was designed to test it. What they agree on is a direction: distributional
 information in this domain is real, positive, and much smaller than objective-aligned evaluation
 makes it appear.
 
@@ -1077,6 +1040,30 @@ predictors did not outperform deliberately simple baselines for perturbation
 prediction\cite{ref13,ref14}: objective-aligned reconstruction accuracy need not translate into an
 advantage over mean or linear baselines.
 
+\subsection*{When distributional information can matter}
+
+The question a practitioner actually asks is not whether distribution-aware retrieval is
+defensible in principle but when it is worth reaching for, and the results here answer it as three
+conditions that must hold together:
+
+\begin{quote}
+\emph{heterogeneous responses exist} (Gate 1, differential response) $+$
+\emph{those responses are recoverable} (Gate 2, recoverability) $+$
+\emph{they change which candidate is preferred} (Gate 3, decision relevance)
+\end{quote}
+
+\noindent Each is necessary and none is sufficient, which is the practical content of the result:
+we found a setting, patient glioblastoma, in which the first two hold and no advantage follows.
+The three are not on equal evidential footing and we do not present them as though they were.
+Gates 1 and 2 are measured here, on constructed mixtures and on patient tumours, and Gate 1 in
+addition has an algebraic form that needs no benchmark: an additive predictor shuts it by
+construction. Gate 3 is proposed rather than measured, and rests on evidence gathered to answer
+other questions, chief among it a within-patient correlation dominated by a single patient
+(Results). A study reporting a distributional gain can nonetheless check all three, and the third
+is the cheapest of them: show that the ranking the distribution produces differs from the ranking
+the mean produces on the outcome being claimed. Where it does not, the distribution is being
+computed but is not deciding anything.
+
 \subsection*{What independent validation would require}
 
 The external functional readout we could reach, GDSC dose-response profiles matched to our drug
@@ -1132,7 +1119,7 @@ must ask tissue the same question.
 
 \subsection*{Field-level evaluation implications}
 
-The broader lesson is that the central distinction is not DART versus mean retrieval, but
+The broader lesson is that the central distinction is not distributional versus mean retrieval, but
 objective fidelity versus independent utility. Our field-level audit shows that
 objective-aligned evaluation is the default across signature retrieval, expression
 prediction, and graph-based inverse design: the headline metric is usually a restatement of
@@ -1142,7 +1129,7 @@ answer a narrower question than they are often read to answer.
 
 Two corollaries follow. A benchmark whose cross-validation grouping is finer than its
 label-determining axes will manufacture apparent predictability from nothing, as ours does for
-oracle-derived features; and a distributional score's apparent link to therapeutic value can be a
+oracle-derived features\cite{Leakage,PseudoRep}; and a distributional score's apparent link to therapeutic value can be a
 response-magnitude confound, so any such claim should be required to beat a query-independent
 magnitude baseline. Neither failure mode is specific to this work. This reading is corroborated by
 recent metric-focused studies: the distributional metrics used here have documented failure modes,
@@ -1153,30 +1140,59 @@ interpretation of our own Class-A scores. The contribution is to make the
 objective-fidelity/independent-utility distinction explicit and measurable on a single task set, a
 template other inverse-retrieval methods could adopt.
 
+\textbf{The same distinction may matter outside retrieval, and we raise it as a question rather
+than as a result.} Objective--utility mismatch as we define it is a property of retrieval
+evaluation, and it is the only place we have measured it. The ingredient it needs is not peculiar
+to retrieval, however: a surrogate objective standing in for a functional outcome nobody measured.
+Virtual-cell and perturbation-prediction models are scored on held-out reconstruction of the
+quantity they were trained to reconstruct, and whether that tracks downstream decision quality is
+a separate question that independent benchmarks have already begun to
+raise\cite{ref13,ref14,VirtualCellChallenge}. Biomarker discovery selects features by an
+association statistic and is frequently validated by the same statistic in a new cohort, which
+tests transportability rather than clinical utility. Molecular design optimises a computed
+property and is commonly evaluated by that property recomputed. We have tested none of these and
+claim nothing about them. What transfers is the check, not the finding: report a result under at
+least one criterion the method's own objective did not define, and say which class the headline
+number belongs to.
+
 \subsection*{Limitations and scope of claims}
 
-\begin{tcolorbox}[colback=gray!5,colframe=gray!40,boxrule=0.4pt,left=3pt,right=3pt,top=3pt,bottom=3pt]
-What this study does not claim\\[2pt]
-\begin{enumerate}[leftmargin=1.4em,itemsep=1pt,topsep=1pt]
-\item \textbf{We do not claim that the predictors tested here represent the field.} The in-repository linear-latent model (PCA encoder, additive latent delta, linear decoder) is additive \emph{by construction}, so its Gate-1 value demonstrates an algebraic property rather than surveying deployed models. We \emph{do} now report one deployed model: the published scGen variational autoencoder passes its learning check and returns a true induced divergence of 0.972 against an additive ceiling of 1.000, so it is near-additive in practice. That is one model, not a field.
-\item \textbf{We show that a non-additive predictor opens Gate 1, but not that opening it buys retrieval gain, and the second half is the experiment that would falsify us.} A latent-space entropic optimal-transport map passes its learning check ($0.352$) and reaches a true induced divergence of $0.900$, significantly below the additive ceiling of $1$, so Gate 1 does open; but only a crack, since real cells sit at $0.205$, and the map's learning is weak. The same map in gene space did not clear the bar, and the published CPA model, though it reconstructs cells at $R^2\approx0.39$, does not learn per-drug effects at either sixty or three hundred cells per drug (delta learning $0.08$ in both) and is therefore void. We did re-run the predict-then-rank retrieval with this Gate-1-opening map, and it was inconclusive: the OT map's cross-line predictions are too poor to retrieve with at all (Hit@1 $0.05$ under every rule, against $0.88$ for the additive predictor), so we lack a predictor that both predicts accurately and opens Gate 1, and whether opening Gate 1 buys a distributional advantage stays untested. A modern flow-matching model, CellFlow\cite{CellFlow}, conditioned on ECFP4 compound fingerprints, learns within context (mean-delta cosine $0.24$, opening Gate 1 at induced divergence $0.85$) but collapses to $0.03$ under leave-one-context-out at a matched budget; per drug this transfer tracks cross-context response similarity ($r = 0.85$), so it too cannot serve as the clean cross-context predictor the falsification requires. The collapse holds under distributional (energy) and differential-expression metrics, not only the mean-delta check; and conditioning CPA on the same ECFP fingerprints instead of a learned embedding does not rescue it (learning $0.03$), locating that failure in the adversarial objective rather than the drug representation.
-\item \textbf{We do not claim that DART provides better therapeutic recommendations.} Every gain in this study is measured under an objective-aligned (Class A), task-proximal (Class B), or semi-real functional (Class C) criterion. None is a clinical or same-cell endpoint.
-\item \textbf{We do not claim that the functional-oracle advantage is a distributional effect, nor that it is robust to how the oracle is built.} Energy retrieval does beat the correctly specified mean incumbent under the cell-line-centered GDSC oracle ($+0.276$ versus $+0.083$), but a query-dependent scalar that compares no distributions reaches $+0.232$, energy beats it on only 62 of 103 queries ($p = 0.073$, itself anticonservative), and partialling that magnitude channel out leaves $+0.097$: the gain is real and mostly not distributional. It is also conditional on the centering, since under the uncorrected oracle energy falls to $+0.097$ and loses to both the mean incumbent ($+0.138$) and the scalar (Supplementary Table 4). We specified the centering in advance and argue it is correct, but only the negative survives both constructions: under neither oracle does the distributional score significantly beat a scalar that compares no distributions.
-\item \textbf{We do not claim that retrieval similarity is anti-aligned with therapeutic utility.} An earlier framing of this work graded the rankings against \emph{absolute potency} and drew that conclusion. It does not follow: a similarity retriever handed a weak query should return other weak drugs, and potency is largely driven by response magnitude, so a magnitude scalar is near-guaranteed to win that comparison. The absolute-potency analysis is retained only as a confounder audit exposing the magnitude channel.
-\item \textbf{We do not claim an improvement under the task-proximal metric.} On the same scorer and the same queries that earn a Class-A gain of $+0.129$ (median), the mechanism-recovery gain is $0.000$ (median) and $-$0.037 (mean). Across 239 real-data tasks the coverage advantage is statistically real and negligible (mean $+0.0018$) and lives only in constructed cell-line mixtures.
-\item \textbf{We do not report a count of ``distributionally dominant'' real tasks, and no such count should be quoted from this work.} The conventional threshold sits inside the noise band of the difference distribution, and the seed re-draws which drugs are tested and re-clusters the minority subpopulation, so it is not a replicate. Under resampling only 2 of the 10 threshold-crossing cross-line tasks survive, while drugs that cross the threshold at no seed in the recorded run cross it in \CONTROLRANGE{} of 10 resamples.
-\item \textbf{We do not claim that HDAC inhibitors are a validated regime for distributional retrieval.} Exactly two tasks survive seed resampling, both HDAC inhibitors in one cell-line pair. With $n = 2$ that is a hypothesis, not a result.
-\item \textbf{We do not claim that minority-state coverage is oracle-independent.} It is a mean-based cosine proxy and is not DART's own score, but it rewards covering the minority state, which is what the worst-case coverage scorer optimizes. It is task-proximal, not independent. Of the judges used here, MoA recovery is annotation-derived and the GDSC functional oracle is the only externally grounded one; DART is worse than the incumbent on the first and better on the second, by a margin a scalar reproduces.
-\item \textbf{We do not claim that the current gate reliably transfers to real retrieval tasks.} The gate is experimental; it does not isolate oracle-independent gains in partial-observed real data, its reliability axis is anti-correlated with true divergence ($\rho = -0.21$), and the dataset-level divergence criterion admits our negative control (CD34$+$, cosine 0.186) just as readily as our positive anchor. Its apparent success at flagging mean-collapsed predicted responses is a tautology: the rule returns no-DART unconditionally for that information condition.
-\item \textbf{We do not claim that HIR-Bench is a biological ground truth.} It is a constructive synthetic benchmark whose phase boundary is expected by design.
-\item \textbf{We do not claim that subpopulation identifiability is an information limit, and we do not claim the opposite either.} Both readings appeared in earlier drafts and both are withdrawn. The first came from a constructed mixture that pooled several drugs into each class, which lowered its ceiling for reasons unrelated to biology. The second came from comparing that drug-response partition with a \emph{cell-type} partition in a tumour, which is an easier question and returned a reassuring 0.964 that meant nothing. Posed as the same question in both settings, the tumour ceiling is 0.923 and unsupervised clustering reaches 0.777: the information is present and the clustering step cannot reach it, so in real tissue the limit is algorithmic. That result rests on 4 patients, 30 of its 36 splits from one of them, and a compartment assignment that discards 39.9\% of cells, and it should be treated accordingly.
-\item \textbf{We do not claim that our structure-preservation and induced-divergence diagnostics measure the perturbation rather than the generator.} A latent predictor returns $P(C) + W\delta_z$, the autoencoder's reconstruction plus the decoded delta. Referred to its own decoded baseline, an additive latent model induces \emph{exactly zero} response divergence ($\cos = 1.000000$). Referred to the \emph{real} control cells, which is what any retrieval scorer does, the same model shows apparent divergence as low as $-0.13$, and every bit of it is reconstruction bias. Our subpopulation-variance-ratio and induced-cosine diagnostics are computed against real controls and therefore inherit this contamination. We report both baselines and flag the affected numbers rather than quietly choosing the flattering one.
-\item \textbf{We do not claim that the distributional score is better on the surface-protein oracle, nor that the mean is.} The winner is determined by whether that oracle is built as a mean or as a distribution, from the same proteins in the same cells. We report the reversal, not a victor. What the reversal does establish is that objective alignment is not confined to a method grading its own objective: it operates between external, blind criteria, and it therefore threatens external validations too, including ours.
-\item \textbf{We do not claim that DART predicts resistance.} The resistance analysis is exploratory and hypothesis-generating; there is no timecourse or survival readout, and the minority-rescue contrast is near-null.
-\item \textbf{We do not benchmark live PDGrapher, and no number in this paper derives from LINCS.} Perturbation predictors are treated as candidate-response sources, not as models under test.
-\item \textbf{We do not claim that all CMap implementations are algebraically identical to DART;} the exact identity is limited to the implemented cosine mean-signature kernel.
-\end{enumerate}
-\end{tcolorbox}
+A full statement of what this study does \emph{not} claim, seventeen items covering the scope of
+every result reported here, is given as Supplementary Note 4. The load-bearing ones are these. No
+gain in this study is measured on a clinical or same-cell endpoint. The Class-C positive is
+conditional on the cell-line centering of its oracle and does not survive the uncorrected
+construction, and under neither construction does the distributional score significantly beat a
+scalar that compares no distributions. We do not claim that the predictors tested here represent
+the field, nor that opening Gate 1 buys retrieval gain, since we could not build a predictor that
+both transfers across contexts and opens it. And we do not report a count of distributionally
+dominant real tasks, because the conventional threshold sits inside the noise band of the
+difference distribution.
+
+Three limits bound the scope of the whole study rather than any single result, and we state them
+as such.
+
+\textbf{First, the external oracle is imperfect, and its imperfection is not incidental to the
+argument.} The Class-C readout is semi-real: viability measured in a separate bulk assay, joined
+to the transcriptional data by compound identity rather than by shared cells, under a different
+dose regime. A paper whose thesis is that the choice of criterion decides the winner cannot exempt
+its own criterion, and we do not: the affirmative Class-C result holds under the cell-line-centered
+oracle we argue is correct and reverses under the uncorrected one, and both are given in
+Supplementary Table 4. The oracle-shape test makes the same point sharper, since two external
+criteria built from the same proteins in the same cells hand victory to opposite methods.
+
+\textbf{Second, this study audits retrieval, not prediction.} Every result here concerns how
+candidates are \emph{ranked} and how that ranking is \emph{graded}. Perturbation predictors enter
+only as candidate-response sources, and the one statement we make about a model class, that
+additivity shuts Gate 1, is algebraic rather than a benchmark of any implementation. Nothing here
+measures whether distributional \emph{prediction} objectives improve prediction, which is a
+different question with its own literature\cite{CellOT,Departures,CellFlow}.
+
+\textbf{Third, prospective validation remains outstanding, and it is what would settle the
+question.} No endpoint in this study is measured on the cells a method is asked to treat.
+Converting the conditional claim made here, that distributional information is present and modestly
+useful, into a therapeutic one requires same-cell readouts: dose-response viability \emph{in situ},
+longitudinal treatment survival, and post-treatment clone expansion. Until such a readout exists,
+the affirmative content of this paper is bounded by the semi-real oracle that produced it.
 
 %% =====================================================================
 %%  METHODS
@@ -1188,7 +1204,7 @@ What this study does not claim\\[2pt]
 Three single-cell datasets carry every result reported here. SciPlex3\cite{dataSciPlex3}: 276,325 cells $\times$ 2,000 genes across three contexts (A549, K562, MCF7) and 188
 drugs, all present in all three contexts. Frangieh melanoma Perturb-CITE-seq\cite{dataFrangieh}: 218,023 cells $\times$ 2,000 highly variable genes across Control,
 IFN$\gamma$, and Co-culture conditions with 239 CRISPR knockouts. CD34$+$
-(GSE306429): 33,984 cells $\times$ 2,000 genes, 36 drugs, used as an honest negative
+(GSE306429)\cite{dataCD34}: 33,984 cells $\times$ 2,000 genes, 36 drugs, used as an honest negative
 control. A fourth resource, the LINCS closed-loop / PDGrapher benchmark (41,070 rows
 across A549, MCF7 and PC3, 1,369 drugs), was prepared for a graph-based inverse-design comparison
 that we do not report; \emph{no number in this paper is derived from it}, and we name it only
@@ -1201,9 +1217,9 @@ construction are tabulated in Supplementary Table 1.
 \subsection*{DART retrieval task and distributional metrics}
 
 Given a target population $Q$ and candidate populations $\{P_d\}$, DART ranks by a
-population-to-population distance. Implemented scores: the energy distance (subsampled to a fixed maximum cell
-count with a fixed seed), an RBF maximum-mean-discrepancy, a
-sliced-Wasserstein distance (128 projections), and a
+population-to-population distance. Implemented scores: the energy distance\cite{EnergyDistance} (subsampled to a fixed maximum cell
+count with a fixed seed), an RBF maximum-mean-discrepancy\cite{MMD}, a
+sliced-Wasserstein distance (128 projections)\cite{SlicedWasserstein}, and a
 subpopulation-coverage aggregate with a temperature parameter $\beta$
 interpolating from mean aggregation ($\beta \to 0$) to worst-case
 ($\beta \to \infty$). Mean-signature retrieval, by cosine or by Euclidean distance between
@@ -1300,7 +1316,8 @@ REAL control cells: what a scorer measures}}, \qquad
 \underbrace{d_k = W\delta_z}_{\text{against the model's own decoded control}} .
 \]
 The first carries $\mathrm{mean}(P(C_k)) - \mathrm{mean}(C_k)$, the reconstruction bias of
-subpopulation $k$, which is cell-state dependent and does not cancel. The second cancels it exactly.
+subpopulation $k$, which is cell-state dependent and does not cancel; the two subpopulations' biases are
+themselves near-orthogonal ($\cos = -0.05$ to $-0.18$). The second cancels it exactly.
 We report both. The additivity theorem is a statement about the second, and the calibration check is
 asserted on it: an additive predictor must return $1.000000$, and a run in which it does not is
 discarded. A predictor that does not reconstruct its input (the gene-space average-effect predictor,
@@ -1339,9 +1356,9 @@ strictly generous, since an over-partitioning method is never penalised for spli
 HDBSCAN noise is treated as its own cluster and likewise assigned its majority class, which is
 generous again. Clusterers thus receive their label matching for free.
 
-\emph{Unsupervised methods:} $k$-means and Gaussian mixtures, both handed the true $k = 2$; Leiden
-(graph-based, resolution 1.0, which selects its own $k$); HDBSCAN (density-based, which selects its
-own $k$ and may return none). The last two are the field's actual defaults and were absent from our
+\emph{Unsupervised methods:} $k$-means and Gaussian mixtures, both handed the true $k = 2$; Leiden\cite{Leiden}
+(graph-based, resolution 1.0, which selects its own $k$); HDBSCAN\cite{HDBSCAN} (density-based, which
+selects its own $k$ and may return none). The last two are the field's actual defaults and were absent from our
 earlier analysis; adding them does not change the answer. All four see the same PCA representation
 (30 components) fit on the full mixture, which is the transductive setting an unsupervised pipeline
 would in fact have.
@@ -1414,7 +1431,7 @@ AUC is the only available statistic.
 
 The partial-observed protocol scores candidates by an energy-based welfare regret against
 the latent objective and records both the objective-aligned regret (Class A) and
-task-proximal metrics (Class B: MoA-recovery nDCG, minority-state coverage) per query.
+task-proximal metrics (Class B: MoA-recovery nDCG\cite{nDCG}, minority-state coverage) per query.
 
 \textbf{Held-out unit, and what it does not license.} The held-out unit in the gate audit
 is a cell line (A549, K562, MCF7), and all three come from SciPlex3, so they share
@@ -1702,7 +1719,7 @@ bootstrap would treat dependent observations as independent and return an interv
 narrow, which is precisely the pseudo-replication this paper criticises elsewhere. With only four
 clusters the bootstrap is coarse and is known to under-cover, so the interval is reported as a floor
 on the uncertainty rather than a faithful estimate of it. (iii) The dominant patient is dropped
-entirely and the analysis repeated on the remaining three.
+entirely and the analysis repeated on the remaining three. The resulting values are given in Fig.~\ref{fig:5}d, with two that appear only here: the maximisation moves the natural number by only $-0.005$, and the natural-minus-constructed difference is $+0.109$ $[+0.052, +0.129]$, with none of 5{,}000 bootstrap draws at or below zero.
 
 \textbf{The premise.} For every pair of drugs within a patient, we compute the cosine between their
 population \emph{mean} signatures and the cosine between their \emph{malignant-compartment}
@@ -1729,7 +1746,7 @@ harder with more cells.
 
 Paired comparisons use the Wilcoxon signed-rank test; group comparisons use Mann--Whitney U;
 monotone associations use Spearman correlation. Multiple comparisons across strata use
-Benjamini--Hochberg false-discovery-rate control, and we report achieved statistical power and
+Benjamini--Hochberg false-discovery-rate control\cite{BenjaminiHochberg}, and we report achieved statistical power and
 the sample size required for 80\% power where effects are small. Effect sizes are reported
 alongside $p$-values throughout, and statistically significant but negligible effects are
 labeled as such. Where an effect is reported as negligible, the operating range of the metric

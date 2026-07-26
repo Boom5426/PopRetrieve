@@ -95,25 +95,30 @@ def draw_b(ax):
     v = g1.induced_response_cosine.dropna().values
 
     ax.axhspan(CONSTRUCTED["cos_lo"], CONSTRUCTED["cos_hi"], color=FOCAL, alpha=0.20, zorder=1)
-    ax.text(0.42, 0.075, "constructed mixtures\n0.014 - 0.044 (near-orthogonal)", fontsize=5.2,
+    ax.text(0.60, 0.075, "constructed mixtures\n0.014 - 0.044 (near-orthogonal)", fontsize=5.6,
             color=FOCAL, va="bottom", ha="left")
 
     rng = np.random.default_rng(0)
     ax.scatter(rng.normal(1.0, 0.045, len(v)), v, s=16, color=COMP, alpha=0.75, lw=0, zorder=3)
     ax.plot([0.82, 1.18], [np.median(v)] * 2, color=COMP, lw=2.2, zorder=4)
-    ax.text(1.24, np.median(v), f"median\n{np.median(v):.3f}", va="center", fontsize=5.8,
+    ax.text(1.24, np.median(v), f"median\n{np.median(v):.3f}", va="center", fontsize=6.0,
             color=COMP, fontweight="bold")
 
     ax.axhline(1.0, ls="-", lw=1.0, color=INK, alpha=0.5, zorder=1)
-    ax.text(1.42, 0.985, "additive-predictor limit (cos = 1):\nno divergence at all",
-            ha="right", va="top", fontsize=5.0, color=INK, style="italic")
+    ax.text(1.62, 0.985, "additive-predictor limit (cos = 1):\nno divergence at all",
+            ha="right", va="top", fontsize=5.6, color=INK, style="italic")
 
-    ax.set_xlim(0.3, 1.45)
-    ax.set_ylim(-0.05, 1.08)
+    # n is load-bearing and was previously dropped for being below the 5 pt floor; at 5.8 pt it is
+    # legal, so the panel carries its own sample size again instead of leaning on the caption.
+    ax.text(0.60, 1.06, f"n = {len(v)} patient-drug pairs", fontsize=5.8, color=INK,
+            fontweight="bold", ha="left", va="top")
+
+    ax.set_xlim(0.55, 1.66)
+    ax.set_ylim(-0.05, 1.10)
     ax.set_xticks([])
     ax.set_ylabel(r"induced response cosine  $\cos(d_{\rm malignant}, d_{\rm myeloid})$",
-                  fontsize=6)
-    ax.tick_params(axis="y", labelsize=5.6)
+                  fontsize=6.2)
+    ax.tick_params(axis="y", labelsize=6)
     for s in ("right", "top", "bottom"):
         ax.spines[s].set_visible(False)
     # The sampling footnote ("one point per patient-drug pair (n = ...), 10 GBM patients") was
@@ -135,9 +140,9 @@ def draw_c(ax):
     ax.set_xlim(lo, hi)
     ax.set_ylim(lo, hi)
     ax.set_aspect("equal", adjustable="box")
-    ax.set_xlabel("cos(mean signature of drug A, drug B)", fontsize=6)
-    ax.set_ylabel("cos(MALIGNANT-compartment\nresponse of A, B)", fontsize=6)
-    ax.tick_params(labelsize=5.6)
+    ax.set_xlabel("cos(mean signature of drug A, drug B)", fontsize=6.2)
+    ax.set_ylabel("cos(MALIGNANT-compartment\nresponse of A, B)", fontsize=6.2)
+    ax.tick_params(labelsize=6)
     for s in ("right", "top"):
         ax.spines[s].set_visible(False)
 
@@ -149,13 +154,14 @@ def draw_c(ax):
     n_top = int((p.patient == p.patient.mode()[0]).sum()) if "patient" in p else 0
     ax.text(0.04, 0.96, f"Spearman $\\rho$ = {r.statistic:+.3f}\n"
                         f"n = {len(p)} drug pairs\n{n_top} of them from ONE patient",
-            transform=ax.transAxes, ha="left", va="top", fontsize=5.8, fontweight="bold",
+            transform=ax.transAxes, ha="left", va="top", fontsize=6.0, fontweight="bold",
             color=INK)
-    ax.text(0.96, 0.06,
-            "Points near the diagonal mean the MEAN\nalready ranks what the compartment does.\n"
-            "In a real tumour, most of them are.",
-            transform=ax.transAxes, ha="right", va="bottom", fontsize=5.0, color=GREY,
-            style="italic")
+    # The three-line italic gloss that used to sit here ("points near the diagonal mean the MEAN
+    # already ranks what the compartment does") is the panel's claim, and it now lives in the panel
+    # title where it costs no plot area and cannot crowd the point cloud. Only the key to the
+    # dashed line stays, because that is a legend, not an interpretation.
+    ax.text(0.97, 0.03, "dashed: equal similarity", transform=ax.transAxes, ha="right",
+            va="bottom", fontsize=5.6, color=GREY, style="italic")
 
 
 def build(apply_style=None, panel_letter=None):

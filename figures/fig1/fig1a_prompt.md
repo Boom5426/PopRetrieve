@@ -1,29 +1,79 @@
-# Figure 1a AI schematic prompt
+# Figure 1a — AI schematic prompt (optional alternative to the drawn panel)
 
-## Purpose
-Concept art for the paper's opening biological tension: two drugs that look identical by average
-(mean) transcriptomic signature but have OPPOSITE effects on a hidden resistant minority
-subpopulation. This is the phenomenon that mean-signature retrieval cannot see and that motivates
-distribution-aware retrieval.
+## Status
 
-## Suggested prompt (for an image model, e.g. DALL-E / Imagen / Midjourney)
+Panel 1a is currently a **real matplotlib schematic** (`fig1a.py`), which is what the deck builds
+and what the manuscript ships. This file is kept as a ready-to-run alternative for producing an
+illustrated concept panel instead. It is not part of the build; nothing imports it.
 
-"A clean scientific figure illustration, flat vector style, white background, for a Nature Methods
-paper. Two drug molecules on the left (labeled Drug 1 and Drug 2), each with an arrow pointing to a
-population of cells. Both populations have the SAME average color/state (shown as an identical mean
-bar or centroid). But zoomed in, Drug 1's population is uniformly healthy blue cells, while Drug 2's
-population contains a small cluster of red 'resistant minority' cells that are getting worse. A small
-inset shows the two mean signatures as nearly identical bars (to emphasize they look the same on
-average), while the full distributions differ. Muted palette: blue (#2166ac) for majority/healthy,
-red (#b2182b) for the resistant minority, grey for context. Minimalist, publication-quality, no
-photorealism, clear labels, generous whitespace."
+If an AI-generated panel is ever used, it must be treated as a **conceptual illustration, not
+evidence**: it carries no measured values, and the caption must say so. Save the returned image as
+`fig1/fig1a.png` and have `fig1_assemble.py` place it in the panel-a axes.
 
-## Consistency requirements (must match the data panels)
-- Blue = #2166ac (distributional / majority), Red = #b2182b (minority / collapse), Grey = context.
-- The "same mean, different distribution" idea must be unmistakable: show identical mean markers.
-- The minority must be visually small (a fraction alpha of the population) and marked as worsening.
-- Keep glyphs consistent with panel 1c (two clouds vs a single shared-mean blob).
+## Prompt contract
 
-## Placement
-Drop the returned image as fig1/fig1a.png. The assembly script (fig1_assemble.py) will replace the
-placeholder box with the real image if fig1/fig1a.png exists.
+**Central claim the panel must defend.** Two drugs can produce the *same* mean transcriptomic
+response while doing *opposite* things to a small resistant subpopulation, so a mean signature is a
+sufficient statistic only when every cell responds alike.
+
+**Entities.** Two compounds (Drug A, Drug B); one untreated cell population containing a majority
+state and a small minority state; the two treated populations; the two mean-shift vectors.
+
+**Mechanism to show.** Both drugs shift the population mean by the same vector. Under Drug A the
+minority moves with the majority. Under Drug B the minority moves the opposite way and worsens.
+The two mean shifts stay visually identical.
+
+**Layout.** Left to right, two parallel tracks that start from one shared untreated population and
+end at a shared "identical mean signature" marker. Majority and minority must be distinguishable at
+a glance, and the minority must read as a small fraction of the cells.
+
+**Required labels (short, spelled exactly).** `Drug A`, `Drug B`, `majority`, `resistant minority`,
+`identical mean signature`. No other text.
+
+**Aspect ratio / format.** 4:3, PNG, opaque white background, 2K, high quality.
+
+## Prompt text
+
+> A clean scientific concept schematic for a Nature-style paper figure, flat vector look, white
+> background, no photorealism, no 3D, no shadows, generous whitespace. One untreated cell
+> population on the left, drawn as a loose cloud of small round cells: most cells in muted blue
+> (#5185C0) labelled `majority`, plus a clearly smaller cluster in muted orange (#E99D4E) labelled
+> `resistant minority`. Two arrows lead right to two treated populations, one labelled `Drug A` and
+> one labelled `Drug B`. Under Drug A the orange minority cells move in the same direction as the
+> blue majority. Under Drug B the orange minority cells move in the opposite direction and appear
+> stressed. At the right, a single marker labelled `identical mean signature` shows that both drugs
+> produced the same average shift, drawn as two overlapping identical arrows or two identical short
+> bars. Muted, restrained palette: blue #5185C0 for the majority, orange #E99D4E for the resistant
+> minority, grey #7A7A7A for context and arrows. Thin clean lines, small sans-serif labels, minimal
+> text, publication quality.
+
+## Scientific constraints (state these to the model, then verify them afterwards)
+
+- No numbers, axis values, p-values, error bars or scale bars of any kind. This panel is conceptual.
+- No extra cell types, organs, tissue, molecular structures or pathway arrows beyond those listed.
+- No logos, journal marks, watermarks, author names or institutional marks.
+- The minority must read as a small fraction of the population, not an equal second group.
+- The two mean shifts must be visually identical; that identity is the entire point of the panel.
+
+## Style constraints tying it to the rest of the deck
+
+- Palette must match the house style exactly: `#5185C0` (majority / distributional), `#E99D4E`
+  (minority / mean-collapse), `#7A7A7A` (context), ink `#1A1A1A`. An earlier version of this file
+  specified `#2166ac` and `#b2182b`, which match no other panel in the deck; do not use them.
+- Glyph logic should match panel 1c: clouds of cells plus an explicit shared-mean marker.
+- Panel letters are added by the assembly script, not by the image model.
+
+## How to generate
+
+Call an image-generation API (for example OpenRouter's Images API with `openai/gpt-image-2`),
+passing the prompt text above verbatim, with `aspect_ratio 4:3`, `resolution 2K`, `quality high`,
+`output_format png`, `background opaque`. Keep the returned image and its request metadata together
+so the panel's provenance stays auditable.
+
+## Post-generation QA (all five, before the image is used)
+
+1. Look at the image and confirm the same-mean / opposite-minority contrast is unmistakable.
+2. Check that every required label is present and correctly spelled; image models often misspell.
+3. List any invented content (extra cells, numbers, structures) and regenerate if any is present.
+4. Redraw labels and arrows as vector objects if they will not survive print at 89-183 mm width.
+5. State in the caption that panel a is a schematic, so no reader can mistake it for data.

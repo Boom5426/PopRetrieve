@@ -13,6 +13,7 @@ text under the floor is reported rather than silently written.
 """
 import argparse
 import importlib
+import shutil
 import sys
 from pathlib import Path
 
@@ -26,8 +27,40 @@ import matplotlib.pyplot as plt
 from figstyle import apply_style, panel_letter, assert_min_fontsize, MIN_PT, save
 
 FIGS = [1, 2, 3, 4, 5, 6]
+# The single canonical output stem per figure. This is the name that gets copied to
+# manuscript/latex/figures/figN.pdf, so it is the authority; each figN_assemble.py declares the
+# same string as its own module-level STEM and _check_stem below refuses to build if the two
+# disagree. Figures 2 and 3 used to write themselves under a SECOND stem (fig2_unification,
+# fig3_apparent_gains) from inside build(), so each composite sat on disk twice under two names
+# with nothing to say which one the manuscript compiled.
 STEMS = {1: "fig1_problem", 2: "fig2_collapse", 3: "fig3_temptation",
          4: "fig4_collapse", 5: "fig5_benchmarks", 6: "fig6_two_gate"}
+
+
+def _check_stem(n, mod):
+    """Fail loudly if an assemble module writes under a stem other than the canonical one."""
+    declared = getattr(mod, "STEM", None)
+    if declared is not None and declared != STEMS[n]:
+        raise ValueError(
+            f"fig{n}_assemble.STEM is {declared!r} but build_all.STEMS[{n}] is {STEMS[n]!r}; "
+            f"one figure, one stem. Fix the assemble, not this dict: STEMS is the name that syncs "
+            f"to manuscript/latex/figures/fig{n}.pdf.")
+
+# The figure the manuscript COMPILES is a second copy under manuscript/latex/figures/figN.pdf, and
+# nothing kept it in step with the panel sources. Every one of the six had drifted: three were
+# months-old renders of panel code that has since been rewritten, and the three that had been
+# hand-copied went stale again on the next rebuild. A figure deck that is "regenerable from code"
+# but reaches the PDF through a manual copy is not reproducible, so --write does the copy.
+MANUSCRIPT_FIGDIR = HERE.parent / "manuscript" / "latex" / "figures"
+
+
+def _sync_to_manuscript(n, stem_path):
+    """Copy the freshly written PDF to the path \\includegraphics actually reads."""
+    if not MANUSCRIPT_FIGDIR.is_dir():
+        return None
+    dst = MANUSCRIPT_FIGDIR / f"fig{n}.pdf"
+    shutil.copyfile(str(stem_path) + ".pdf", dst)
+    return dst
 
 
 def main():
@@ -40,6 +73,7 @@ def main():
         sys.path.insert(0, str(HERE / f"fig{n}"))
         try:
             mod = importlib.import_module(f"fig{n}.fig{n}_assemble")
+            _check_stem(n, mod)
             plt.close("all")
             out = mod.build(apply_style, panel_letter)
             fig = out if hasattr(out, "savefig") else plt.figure(plt.get_fignums()[-1])
@@ -54,7 +88,10 @@ def main():
                 print(f"  fig{n}: CLEAN")
 
             if args.write and not bad:
-                save(fig, HERE / f"fig{n}" / STEMS[n])
+                stem = save(fig, HERE / f"fig{n}" / STEMS[n])
+                dst = _sync_to_manuscript(n, stem)
+                if dst is not None:
+                    print(f"         -> {dst.relative_to(HERE.parent)}")
         except Exception as exc:
             violations += 1
             print(f"  fig{n}: BUILD FAILED  {type(exc).__name__}: {str(exc)[:110]}")

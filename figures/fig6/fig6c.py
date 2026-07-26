@@ -19,8 +19,11 @@ REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 DIAG = f"{REPO}/results/exp09_structure_diagnostics"
 ORDER = ["real_blend", "average_effect", "scgen", "nearest_neighbor"]
-LABS = {"real_blend": "real", "average_effect": "avg-effect",
-        "scgen": "latent\n(scGen-fam.)", "nearest_neighbor": "nearest\nneighbor"}
+# "avg-effect" is wrapped for geometry only: Figure 6 is authored at its printed width, so this
+# panel is 1.86 in wide and one x category is 0.465 in, while "avg-effect" is 0.42 in at 6 pt and
+# butted against its neighbour. Wrapped, the widest single line here is "(scGen-fam.)".
+LABS = {"real_blend": "real", "average_effect": "avg-\neffect",
+        "scgen": "latent\n(scGen-fam.)", "nearest_neighbor": "nearest\nneighbour"}
 
 
 def _pick(df, pred, col):
@@ -42,6 +45,11 @@ def draw_6c(ax):
     verr = [_pick(sd, p, "subpop_variance_ratio_std") for p in ORDER]
     cos = [_pick(g1, p, "mean") for p in ORDER]
     cerr = [_pick(g1, p, "std") for p in ORDER]
+
+    # A quiet band separates the one observed reference from the three predicted candidates,
+    # so the reader does not have to read four x-labels to see which is which. This replaces
+    # three leader-line annotations that used to cross the error bars.
+    ax.axvspan(0.5, len(ORDER) - 0.5, color="#F2F2F2", zorder=0, lw=0)
 
     # left axis: baseline structure — flat across real and predicted (structure IS preserved)
     ax.errorbar(xs - 0.09, var, yerr=verr, fmt="o", color=FOCAL, ms=6, capsize=3, lw=1.3,
@@ -65,37 +73,34 @@ def draw_6c(ax):
     # Short label only: this marks the algebraic ceiling so the line is not mistaken for data.
     # The full statement (additive predictor => identical subpopulation responses => cosine
     # exactly 1, divergence exactly zero) belongs in the caption, where it already is.
-    ax2.text(-0.42, 0.955,
-             "additive limit:  $\\cos = 1$",
-             ha="left", va="top", fontsize=5.5, color=COMP, style="italic")
+    ax2.text(len(ORDER) - 0.58, 1.025, "additive limit, $\\cos = 1$",
+             ha="right", va="bottom", fontsize=5.5, color=COMP, style="italic")
     ax2.errorbar(xs + 0.09, cos, yerr=cerr, fmt="s", color=COMP, ms=5, capsize=3, lw=1.3,
                  zorder=3, label=r"induced $\cos(d_{maj}, d_{min})$")
     ax2.axhline(cos[0], ls=":", lw=1.0, color=COMP, alpha=0.7, zorder=1)
+    ax2.text(-0.44, cos[0] + 0.02, "real", ha="left", va="bottom", fontsize=5.5, color=COMP)
     ax2.set_ylabel(r"induced response cosine", color=COMP)
     ax2.tick_params(axis="y", colors=COMP)
-    ax2.set_ylim(-0.05, 1.12)
+    ax2.set_ylim(-0.05, 1.20)
     ax2.set_yticks([0, 0.25, 0.5, 0.75, 1.0])
     ax2.spines["top"].set_visible(False)
 
     ax.set_xticks(xs)
     ax.set_xticklabels([LABS[p] for p in ORDER], fontsize=6)
     ax.set_xlim(-0.5, len(ORDER) - 0.5)
+    ax.set_ylim(0, max(var) * 1.42)
     for sp in ["right", "top"]:
         ax.spines[sp].set_visible(False)
 
-    ax.annotate("structure preserved", xy=(2.0, var[0]), xytext=(1.15, var[0] * 0.45),
-                fontsize=5.5, color=FOCAL,
-                arrowprops=dict(arrowstyle="->", lw=0.7, color=FOCAL))
-    ax2.annotate("no differential response\nto exploit", xy=(3.09, cos[3]),
-                 xytext=(1.35, 0.62), fontsize=5.3, color=COMP,
-                 arrowprops=dict(arrowstyle="->", lw=0.7, color=COMP))
-    ax2.annotate("real: responses\nnear-orthogonal", xy=(0.09, cos[0]), xytext=(0.02, 0.30),
-                 fontsize=5.3, color=COMP,
-                 arrowprops=dict(arrowstyle="->", lw=0.7, color=COMP))
+    # Group headers, inside the axes (above every marker) so they cannot hit the panel title.
+    ax.text(0.125, 0.955, "observed", transform=ax.transAxes,
+            ha="center", va="center", fontsize=5.8, color=GREY)
+    ax.text(0.625, 0.955, "predicted", transform=ax.transAxes,
+            ha="center", va="center", fontsize=5.8, color=GREY)
 
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(figsize=(3.8, 3.0))
+    fig, ax = plt.subplots(figsize=(1.86, 1.80))   # the slot it occupies in fig6_assemble
     draw_6c(ax)
     ax.set_title("Structure survives; divergence does not", loc="left")
     fig.savefig(os.path.join(os.path.dirname(__file__), "6c.png"), dpi=200, bbox_inches="tight")
