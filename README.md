@@ -1,4 +1,4 @@
-# DART, Distributional Auditing of Retrieval Transfer
+# Objective-aligned evaluation inflates the distributional gain in single-cell drug retrieval
 
 <p align="center">
   <img alt="tests" src="https://img.shields.io/badge/tests-99%20passed-brightgreen">
@@ -9,21 +9,30 @@
   <img alt="status" src="https://img.shields.io/badge/status-research%20code-orange">
 </p>
 
-> **Rank candidate drugs for a *heterogeneous* single-cell population by a
-> population-to-population distance instead of a mean-signature match, and use
-> that comparison as a probe for when distributional information is trustworthy,
-> when it is misleading, and when an evaluation metric is quietly circular.**
+Code, analyses and manuscript sources for **an audit of how distribution-aware single-cell drug
+retrieval is evaluated**.
 
-DART is **not** advertised as a universally better drug-ranking method. It is a
-**distributional retrieval probe**. Its headline empirical finding is a
-methodological warning as much as a method:
+> **Single-cell drug retrieval is moving from mean signatures to distributional scores over
+> treated populations, and routinely reports large gains under a metric of its own kind. Hold the
+> rankings, the scorer and the queries fixed, change only the judge, and watch where the
+> conclusion moves.**
 
-> *Objective-aligned proxy metrics can show large apparent gains for
-> distributional retrieval that **do not transfer** to oracle-independent utility
-> criteria.*
+**This repository does not propose a better drug-ranking method.** The distributional retrieval
+scores it implements are an *instrument*: one family of population-to-population scores whose
+rankings can be re-graded under criteria of increasing independence without being recomputed. They
+are released as **DART** (Distributional Auditing of Retrieval Transfer), and the name refers to
+the implementation, not to a contribution.
 
-We report both sides honestly, where the distributional signal is real, and
-where it collapses.
+What the audit finds, in one line:
+
+> *Distributional information in this domain is real, and much smaller than objective-aligned
+> evaluation makes it appear.*
+
+Under a metric of its own distributional kind the advantage is large. Under a task-proximal
+mechanism criterion it is absent. Under an independent, semantically matched functional oracle it
+is real but small, and almost all of what remains is a response-magnitude channel that a scalar
+comparing no distributions reproduces. Same rankings, same scorer, same queries: only the judge
+changes. Both sides are reported, where the signal is real and where it collapses.
 
 ---
 
@@ -56,7 +65,7 @@ provably, the CMap connectivity score), is the **degenerate zero-spread special
 case** of this: it discards every within-population subpopulation. When drug
 responses split a population into diverging subpopulations, the mean match is
 majority-biased and can miss the drug that actually covers all subpopulations.
-DART's contribution is the **retrieval / ranking decision layer**, *not* another
+The object under audit is the **retrieval / ranking decision layer**, *not* another
 perturbation predictor or generator.
 
 > An earlier version of this paragraph also claimed a **divergence-gated boundary**
@@ -76,10 +85,10 @@ cells of three retrieval tasks** (controlled SciPlex3, cross-line, Frangieh;
 
 | scorer | Hit@1 (macro) | Hit@1 (query-weighted) | what it is |
 |---|---:|---:|---|
-| **global energy** (DART) | **0.837** | 0.887 | K=1 population-to-population distance |
-| pca-dist (DART-style) | 0.778 | 0.760 | distance in PCA latent |
-| coverage-mean (DART) | 0.773 | 0.796 | subpopulation-matched aggregate |
-| coverage-worst (DART) | 0.589 | 0.629 | worst-subpopulation aggregate |
+| **global energy** (distributional) | **0.837** | 0.887 | K=1 population-to-population distance |
+| pca-dist (distributional) | 0.778 | 0.760 | distance in PCA latent |
+| coverage-mean (distributional) | 0.773 | 0.796 | subpopulation-matched aggregate |
+| coverage-worst (distributional) | 0.589 | 0.629 | worst-subpopulation aggregate |
 | cmap-wtcs | 0.464 | 0.487 | rank-based connectivity |
 | **mean-cosine** = **cmap-cosine** | **0.389** | 0.421 | the mean-signature incumbent |
 
@@ -159,10 +168,10 @@ experiment CSVs against the constants in `src/experiments/common.py`, **not** an
 end-to-end re-execution: `recompute_all.py` runs no experiment. Run
 `scripts/run_all_core.sh` for that.
 
-**Bottom line.** DART is most valuable as a *diagnostic*: it makes the gap between
-objective-aligned and oracle-independent evaluation measurable, and it shows that
-a distributional signal exists but its independent utility is limited. Treat "DART
-beats mean" as true *only* under the proxy that DART optimizes.
+**Bottom line.** The value of this comparison is *diagnostic*: it makes the gap between
+objective-aligned and oracle-independent evaluation measurable, and it shows that a
+distributional signal exists while its independent utility is limited. Treat "the
+distributional score beats the mean" as true *only* under the proxy that score optimizes.
 
 ---
 
