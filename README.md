@@ -9,35 +9,72 @@
   <img alt="status" src="https://img.shields.io/badge/status-research%20code-orange">
 </p>
 
-Code, analyses and manuscript sources for **an audit of how distribution-aware single-cell drug
-retrieval is evaluated**.
+**If you build or evaluate distribution-aware methods for single-cell perturbation data, this
+repository is here to answer one question you probably cannot answer from your own benchmark:**
 
-> **Single-cell drug retrieval is moving from mean signatures to distributional scores over
-> treated populations, and routinely reports large gains under a metric of its own kind. Hold the
-> rankings, the scorer and the queries fixed, change only the judge, and watch where the
-> conclusion moves.**
+> ### Is my reported gain real, or does it only exist because I graded it with a metric that measures the same thing my method optimises?
 
-**This repository does not propose a better drug-ranking method.** The distributional retrieval
-scores it implements are an *instrument*: one family of population-to-population scores whose
-rankings can be re-graded under criteria of increasing independence without being recomputed. They
-are released as **DART** (Distributional Auditing of Retrieval Transfer), and the name refers to
-the implementation, not to a contribution.
+We ran that check on ourselves, on three datasets and one synthetic benchmark, and the answer was
+uncomfortable enough to reorganise the whole project around it.
 
-What the audit finds, in one line:
+## The finding, in one table
+
+Same candidate rankings. Same scorer. Same queries. **Only the judge changes.**
+
+| who is asked | what the distributional score does |
+|---|---|
+| its own distributional objective | **far ahead**: Hit@1 0.837 against 0.388 for the mean-signature incumbent |
+| mechanism-of-action recovery | **gone**: MoA-nDCG gain of −0.037, and 41% of queries get *worse* |
+| an external functional oracle (GDSC) | **wins**, ρ +0.276 against +0.083, but a scalar comparing no distributions reaches +0.232 |
+| the same proteins, same cells, scored as a *mean* instead of a distribution | **loses**, +0.146 against +0.242 |
+
+That last row is the one to take away: two external, blind, independent criteria built from
+identical material hand victory to opposite methods, purely by their own statistical form.
+
+## What you can take from here
+
+| you want to | go to |
+|---|---|
+| **check whether your own gain is circular** | [`analysis/diagnostics/`](analysis/diagnostics/): four probes, one command, each falsifying a specific objection |
+| **decide if distribution-aware retrieval is worth it for your data** | [the three conditions](#when-does-distributional-retrieval-help-three-conditions), measurable before you build anything |
+| **avoid the four mistakes we made** | the controls below, each of which caught an error of ours |
+| **reproduce a number from the paper** | [Reproduce the numbers](#reproduce-the-numbers-in-the-paper): one script per claim |
+| **see what we got wrong** | [`CORRECTIONS.md`](CORRECTIONS.md): 42 entries covering 38 distinct corrections, two of which retract mechanisms we had asserted |
+
+### The four controls, if you read nothing else
+
+1. **Match the oracle to the task.** A similarity retriever graded on absolute potency is being
+   asked a question it was never posed, and it will fail in a way that looks like a finding. We
+   drew a conclusion from exactly that, and had to withdraw it.
+2. **Beat the magnitude scalar.** Rank candidates by how closely their response *size* matches the
+   query's, comparing no distributions at all. If your method does not beat that, you have not
+   shown the distribution is doing the work. Ours does not, significantly.
+3. **Vary the *shape* of your external oracle, not just its identity.** External, independent and
+   invisible to the method is not enough, as the table above shows. Compute your criterion in at
+   least two statistical forms and report both.
+4. **Do not let a benchmark you built decide a claim about biology**, and check that the two things
+   you are comparing are the same question. Our own constructed mixtures distorted the biology in
+   both directions at once, and both distortions happened to flatter the premise we were testing.
+
+## What this repository is not
+
+**It is not a proposal for a better drug-ranking method.** The population-to-population retrieval
+scores here are the *instrument*: one family of scores whose rankings can be re-graded under
+criteria of increasing independence without being recomputed. They ship as **DART** (Distributional
+Auditing of Retrieval Transfer); the name refers to the implementation, not to a contribution.
+
+The honest one-line summary of the whole thing:
 
 > *Distributional information in this domain is real, and much smaller than objective-aligned
 > evaluation makes it appear.*
-
-Under a metric of its own distributional kind the advantage is large. Under a task-proximal
-mechanism criterion it is absent. Under an independent, semantically matched functional oracle it
-is real but small, and almost all of what remains is a response-magnitude channel that a scalar
-comparing no distributions reproduces. Same rankings, same scorer, same queries: only the judge
-changes. Both sides are reported, where the signal is real and where it collapses.
 
 ---
 
 ## Table of contents
 
+- [The finding, in one table](#the-finding-in-one-table)
+- [What you can take from here](#what-you-can-take-from-here)
+- [What this repository is not](#what-this-repository-is-not)
 - [The one-paragraph idea](#the-one-paragraph-idea)
 - [Key results (the honest version)](#key-results-the-honest-version)
 - [The four-probe diagnostic protocol](#the-four-probe-diagnostic-protocol)
