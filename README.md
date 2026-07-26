@@ -32,13 +32,12 @@ where it collapses.
 - [The one-paragraph idea](#the-one-paragraph-idea)
 - [Key results (the honest version)](#key-results-the-honest-version)
 - [The four-probe diagnostic protocol](#the-four-probe-diagnostic-protocol)
-- [When does distributional retrieval help? A two-gate criterion](#when-does-distributional-retrieval-help-a-two-gate-criterion)
+- [When does distributional retrieval help? Three conditions](#when-does-distributional-retrieval-help-three-conditions)
 - [Install](#install)
 - [Quickstart](#quickstart)
-- [What's in the box](#whats-in-the-box)
-- [Reproduce everything](#reproduce-everything)
-- [How the evaluation avoids fooling itself](#how-the-evaluation-avoids-fooling-itself)
 - [Repository map](#repository-map)
+- [Reproduce the numbers in the paper](#reproduce-the-numbers-in-the-paper)
+- [How this repository tries not to fool itself](#how-this-repository-tries-not-to-fool-itself)
 - [Citing](#citing)
 - [License](#license)
 
@@ -196,7 +195,7 @@ not under-crediting it.
 
 ---
 
-## When does distributional retrieval help? A two-gate criterion
+## When does distributional retrieval help? Three conditions
 
 Distributional retrieval can only beat the mean when **both** gates are open:
 
@@ -234,20 +233,57 @@ Distributional retrieval can only beat the mean when **both** gates are open:
    > candidate the scorer actually ranks. Both are fixed; see
    > `src/baselines/population_synthesis.py`.
 
-2. **Structure identifiability (Gate 2).** That structure must be recoverable
-   from the data. On a controlled bimodal mixture with known labels, **no
-   unsupervised clustering method succeeds** (best median ARI 0.106, none above
-   0.15; [`analysis/identifiability/`](analysis/identifiability/)). Note the honest
-   method count: the nine columns include one exact duplicate
-   (`response_kmeans_k2` is bit-identical to `raw_kmeans_k2`, since k-means is
-   translation-invariant) and three names for one best-k method, so there are
-   **6-7 distinct algorithms**, all centroid- or Gaussian-based. No density
-   (DBSCAN/HDBSCAN) or graph (Leiden/Louvain) method was tried. The best median,
-   0.106, is also computed over only **4 of 20 seeds** (the seeds where k=4 won);
-   the dense columns sit at 0.037-0.078 and the global maximum is 0.149.
+2. **Recoverability (Gate 2).** That structure must be resolvable by the decision
+   layer. The question is not whether clustering succeeds but **why it fails**, and
+   the two answers have opposite implications: if the information is absent from the
+   representation no method can help, whereas if it is present and only the
+   unsupervised step cannot reach it, the bottleneck is an algorithm and is solvable.
+   Separating them needs a **supervised ceiling**, which is scored in the same unit
+   (best-permutation accuracy, label matching free for every method).
 
-On observed real data both gates are closed, which is why the observed-population
-advantage (Result 2) is an upper bound rather than an operating point.
+   | setting | ceiling | best unsupervised | gap |
+   |---|---:|---:|---:|
+   | constructed K562 mixture, drug classes pooled | 0.692 | 0.674 | 0.018 |
+   | constructed K562 mixture, one drug vs one drug | 0.879 | 0.837 | 0.042 |
+   | **patient glioblastoma, one drug vs one drug** | **0.923** | **0.777** | **0.117** |
+   | **Tahoe-100M plate 3, 960 drug pairs, 48 lines** | **0.853** | **0.611** | **0.157** |
+
+   In a real tumour the information is **present** and off-the-shelf clustering does
+   not reach it, so the limit is **algorithmic, not informational**. That reversed an
+   earlier reading of this repository twice over; see `CORRECTIONS.md`. The Tahoe row
+   replicates it at 26x the sample size with no method family rescuing the partition
+   (k-means 0.592, Gaussian mixtures 0.582, Leiden 0.563, all near the 0.5 null).
+
+   > **Superseded.** This section previously reported "no unsupervised clustering
+   > method succeeds (best median ARI 0.106)". That number is a nine-column sweep of
+   > only 6-7 distinct algorithms, all centroid- or Gaussian-based, with the best
+   > median taken over the 4 of 20 seeds where its column won. Clustering failure
+   > alone is consistent with the information being absent *and* with its being
+   > present but unreachable, which is exactly the ambiguity the ceiling resolves.
+   > The old sweep is kept as Extended Data Fig. 3a for completeness.
+
+3. **Decision relevance (Gate 3), proposed rather than measured as the first two are.**
+   The differential response must change **which candidate is preferred**, over and
+   above what the mean already ranks. It is the condition that explains why opening
+   the first two is not enough. Ranking one compartment's response similarity by
+   another's, on **disjoint** cells:
+
+   | material | partition | Spearman |
+   |---|---|---:|
+   | patient glioblastoma | myeloid -> malignant | **0.835** |
+   | Tahoe-100M plate 3, 44 lines | G1 -> G2M | **0.841** |
+   | Tahoe-100M plate 3, 45 lines | control-state k=2 | **0.778** |
+
+   The bulk already ranks most of what the minority does. It is **not universal**:
+   under the control-state partition 2 of 45 contexts fall below 0.5 (lowest 0.236),
+   and those are the contexts where a distributional score should pay off. A
+   condition that is usually met and sometimes not is a condition; one that is always
+   met would have been a verdict.
+
+Both gates are **open** in patient tissue and the advantage still does not appear, so
+they are **necessary, not sufficient**. On the constructed mixtures both are closed,
+which is why the observed-population advantage (Result 2) is an upper bound there
+rather than an operating point.
 
 **Class C (`analysis/class_c/`): the distributional gain is real, and a scalar reproduces it.**
 
@@ -283,4 +319,102 @@ energy with **+0.097**. The gain is real and almost none of it is distributional
 **Oracle 2, surface protein** (`class_c_protein_oracle.py`). Frangieh Perturb-CITE-seq measures RNA
 and 24 surface proteins in the **same cells**, barcode-for-barcode. The retrieval score sees only
 RNA; the oracle is the cosine of CLR-normalized protein responses (isotype controls dropped). Same
-controls, and the same question: does the distributional score beat the scalar?
+controls, and the same question: does the distributional score beat the scalar? Energy reaches
+**+0.529** against the mean's **+0.334** under a distribution-shaped protein oracle, and the
+ordering **reverses** to +0.146 against +0.242 when the same proteins in the same cells are
+collapsed to a mean before scoring. Two external, blind, independent criteria built from identical
+material hand victory to opposite methods purely by their own statistical form
+(`analysis/class_c/oracle_shape_test.py`).
+
+That is the sharpest result here, and it is why the manuscript's third recommended control is
+**vary the shape of your external oracle, not just its identity**: compute the criterion in at
+least two statistical forms and report both, and if a method wins only under the form that matches
+its own objective, say so.
+
+---
+
+## Install
+
+```bash
+git clone https://github.com/Boom5426/DART.git && cd DART
+python -m venv .venv && source .venv/bin/activate      # Python 3.11
+pip install -r requirements.txt
+```
+
+The processed single-cell tensors are large and are **not** in git. See
+[`DATA.md`](DATA.md) for what to place under `data/processed/` and where each file comes from.
+Without them the test suite still runs; the experiments do not.
+
+## Quickstart
+
+```bash
+python tests/run_tests.py                       # test suite, no pytest required
+bash scripts/run_all_core.sh                    # the retrieval experiments
+bash scripts/run_hir_benchmark.sh               # the synthetic benchmark
+python figures/build_all.py --write             # rebuild the six main figures and sync them to the manuscript
+cd manuscript/latex && make && make si          # build both PDFs
+```
+
+## Repository map
+
+| path | what is in it |
+|---|---|
+| `src/` | retrieval scores, baselines, data loaders, the HIR-Bench generator |
+| `oracle/` | the mixture-construction and evaluation scripts behind the controlled experiments |
+| `analysis/` | the analyses that carry the paper's claims, one directory per question (below) |
+| `results/` | per-experiment summary tables; the large per-query dumps are gitignored |
+| `figures/` | one directory per figure, each panel a standalone script, plus `build_all.py` |
+| `manuscript/latex/` | the manuscript and Supplementary Information sources and their Makefile |
+| `tests/` | 99 tests, including the ones that pin the algebraic claims |
+| `CORRECTIONS.md` | every number this project has retracted or revised, and why |
+
+Inside `analysis/`:
+
+| directory | question it answers |
+|---|---|
+| `class_c/` | does the gain survive an external functional oracle, and is it distributional? |
+| `natural/` | do the conditions hold in patient tissue rather than in mixtures we built? |
+| `tahoe_pilot/` | do they hold at scale in unconstructed, non-tissue material? |
+| `identifiability/` | is the subpopulation structure recoverable at all? |
+| `predictors/` | do generated candidate populations carry differential response? |
+| `hir_bench/` | is retrieval failure predictable, and from features a method can actually see? |
+| `audit/` | the field-level evaluation audit behind Supplementary Table 2 |
+| `diagnostics/` | the four-probe protocol as a runnable check |
+
+## Reproduce the numbers in the paper
+
+Every headline figure in the manuscript is quoted through a LaTeX macro whose value is produced by
+a script in this repository, so a doubted number is rechecked by running that script rather than by
+trusting the text:
+
+```bash
+python analysis/class_c/class_c_functional_oracle.py     # the Class-C oracle, both constructions
+python analysis/class_c/oracle_shape_test.py             # the oracle-shape reversal
+python analysis/natural/zhao_two_gates.py                # the patient-tissue conditions
+python analysis/natural/zhao_premise_disjoint.py         # the premise correlation, disjoint compartments
+python analysis/tahoe_pilot/tahoe_summary_numbers.py     # every Tahoe number quoted in the paper
+```
+
+## How this repository tries not to fool itself
+
+- **`CORRECTIONS.md` is part of the deliverable.** Forty-two entries covering thirty-eight
+  distinct corrections, each recording what a number was, what it is, and why it changed. Several retract mechanisms the earlier drafts asserted. A
+  paper arguing that objective-aligned evaluation inflates results cannot ship numbers it has not
+  itself checked.
+- **Algebraic claims are pinned by tests, not by runs.** An additive predictor induces exactly zero
+  response divergence; that is asserted to `1.000000` in the test suite rather than measured.
+- **Single-source numbers.** Values quoted in more than one place in the manuscript are LaTeX
+  macros defined once, so the text, a figure caption and the Methods cannot drift apart.
+- **Figures rebuild from committed code**, and `figures/build_all.py` fails the build if any
+  rendered text would print below the 5 pt floor at the manuscript's actual column width.
+
+## Citing
+
+The manuscript is in preparation. Until it is posted, cite this repository and the commit you
+used. The dataset citations are listed in the manuscript's Data availability section and in
+[`DATA.md`](DATA.md).
+
+## License
+
+MIT, see [`LICENSE`](LICENSE). The datasets are covered by their own licences and are not
+redistributed here.
