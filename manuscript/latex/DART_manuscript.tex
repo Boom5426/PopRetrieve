@@ -48,6 +48,14 @@
 %% places this range is quoted; see the seed-stability table in the code release.
 \newcommand{\CONTROLRANGE}{1 to 4}
 
+%% The premise correlation, in two forms (analysis/natural/zhao_premise_disjoint.py;
+%% results/zhao_gbm/premise_disjoint.csv). The first correlates the mean signature with the
+%% malignant-compartment response, and the mean signature CONTAINS 43% of those cells, so part of
+%% it is arithmetic. The second correlates two compartments that share no cells. Both are quoted;
+%% the disjoint one is the load-bearing figure.
+\newcommand{\PREMISEOVERLAP}{+0.878}
+\newcommand{\PREMISEDISJOINT}{+0.835}
+
 %% Class C, semantically matched functional oracle (analysis/class_c/class_c_functional_oracle.py;
 %% results/upgrade/class_c_functional_oracle.json). Defined once so no number can drift between
 %% the text, the figure caption and the Methods.
@@ -549,7 +557,7 @@ choosing.
 \includegraphics[width=\textwidth]{figures/fig5.pdf}
 \caption{\textbf{The statistical form of the criterion, not the biology, decides which method wins; and in real tissue both gates open without an advantage following.}
 \textbf{Row 1.} \textbf{a}, HIR-Bench's analytic flip boundary $\alpha^*=B/(A+B)$ separates the regime in which the mean is a sufficient statistic from the one in which subpopulation structure can change the decision. \textbf{b}, Circularity measured rather than argued: features a method can observe at query time reach AUC 0.788 against a 0.643 majority-class rate, whereas features derived from the benchmark's own latent utility matrix, of which the label is also a function, are at chance (0.400). Pseudo-replication inflates the circular set by $+0.240$ and the honest one by only $+0.048$. Effective $n$ is 28 parameter cells, not 13,440 (Methods). \textbf{c}, The same effect between two external criteria built from the same proteins in the same cells, differing only in statistical form. \textbf{The winner swaps}: the mean incumbent leads under the mean-shaped oracle ($+0.242$ against $+0.146$), the distributional score under the distribution-shaped one ($+0.529$ against $+0.334$), in each of the three immune conditions. Hatched, the magnitude-matching control, which compares no distributions: it climbs from $+0.125$ to $+0.352$ as the oracle turns distributional, yet energy still leads it by $+0.177$ there against $+0.022$ under the mean-shaped oracle.
-\textbf{Row 2}, the two gates on ZhaoSims2021, ten glioblastoma patients (Methods). \textbf{d}, Gate 2 posed as the same drug-response question in both settings (36 splits, 4 patients). Pooling drugs into classes holds the constructed ceiling at 0.700 (grey); one drug against one drug, the same cells give 0.879. All three arms are measured at the same granularity and under the same representation, so they are like for like; the 0.692 quoted for this construct elsewhere is the earlier in-fold run (Fig.~\ref{fig:6}e). In a real tumour the information is present (ceiling \textbf{0.923}) and unsupervised clustering does not reach it (\textbf{0.777}; median paired gap \textbf{$+$0.117}, 95\% CI $[+0.115, +0.135]$ by patient-level bootstrap, against $+0.007$ constructed; $+0.122$ against $-0.002$ with no method selection anywhere; $+0.123$ $[+0.098, +0.138]$ without the dominant patient). \textbf{Gate 2 in real tissue is an algorithmic bottleneck, not an informational one.} 30 of the 36 splits come from one patient and 39.9\% of cells fail the assignment margin, so both numbers are optimistic. \textbf{e}, Gate 1: induced response cosine, median \textbf{0.566} over 17 patient-drug pairs, against \textbf{0.014--0.044} in our constructed mixtures. \textbf{f}, The premise: over 18 within-patient drug pairs, mean-signature similarity ranks malignant-compartment response similarity at Spearman $\rho = \mathbf{+0.878}$. \emph{No $p$-value is given}, since 15 of the 18 pairs come from one patient. Both gates open here and the distributional advantage still does not appear: the two gates are necessary, not sufficient, and the condition that fails is the third one, decision relevance (Results).}
+\textbf{Row 2}, the two gates on ZhaoSims2021, ten glioblastoma patients (Methods). \textbf{d}, Gate 2 posed as the same drug-response question in both settings (36 splits, 4 patients). Pooling drugs into classes holds the constructed ceiling at 0.700 (grey); one drug against one drug, the same cells give 0.879. All three arms are measured at the same granularity and under the same representation, so they are like for like; the 0.692 quoted for this construct elsewhere is the earlier in-fold run (Fig.~\ref{fig:6}e). In a real tumour the information is present (ceiling \textbf{0.923}) and unsupervised clustering does not reach it (\textbf{0.777}; median paired gap \textbf{$+$0.117}, 95\% CI $[+0.115, +0.135]$ by patient-level bootstrap, against $+0.007$ constructed; $+0.122$ against $-0.002$ with no method selection anywhere; $+0.123$ $[+0.098, +0.138]$ without the dominant patient). \textbf{Gate 2 in real tissue is an algorithmic bottleneck, not an informational one.} 30 of the 36 splits come from one patient and 39.9\% of cells fail the assignment margin, so both numbers are optimistic. \textbf{e}, Gate 1: induced response cosine, median \textbf{0.566} over 17 patient-drug pairs, against \textbf{0.014--0.044} in our constructed mixtures. \textbf{f}, The premise: over 18 within-patient drug pairs, mean-signature similarity ranks malignant-compartment response similarity at Spearman $\rho = \mathbf{\PREMISEOVERLAP}$, and the disjoint form of the same question, ranking the malignant compartment by the \emph{myeloid} compartment rather than by a mean that contains 43\% of the malignant cells, gives $\mathbf{\PREMISEDISJOINT}$. \emph{No $p$-value is given}, since 15 of the 18 pairs come from one patient. Both gates open here and the distributional advantage still does not appear: the two gates are necessary, not sufficient, and the condition that fails is the third one, decision relevance (Results).}
 \label{fig:5}
 \end{figure}
 
@@ -574,8 +582,8 @@ outcome the decision is judged on, over and above what the mean signature alread
 status in this paper is different from the other two and we mark that difference wherever it
 appears. Gates 1 and 2 are measured directly, on labelled mixtures and on patient tumours. Gate 3
 is inferred, from three lines of evidence that were collected to answer other questions: in a real
-tumour mean-signature similarity already ranks malignant-compartment response similarity at
-Spearman $\rho = +0.878$, a value dominated by one patient (Fig.~\ref{fig:5}f); against the
+tumour the response of one compartment already ranks the response of another at Spearman
+$\rho = \PREMISEDISJOINT$, a value dominated by one patient (Fig.~\ref{fig:5}f); against the
 independent functional oracle a scalar comparing no distributions reproduces most of the
 distributional score's margin (Fig.~\ref{fig:4}h,i); and no true-divergence stratum shows a
 positive mechanism-recovery gain (Fig.~\ref{fig:6}g). We propose Gate 3 as the condition that
@@ -915,10 +923,26 @@ absence is what Gate 3 names.} The
 paper's motivating scenario, that two drugs can share a mean signature and do opposite things to a
 subpopulation, can be tested directly on a real tumour. Across 18 within-patient drug pairs, the
 similarity of two drugs' \emph{mean} signatures ranks the similarity of their
-\emph{malignant-compartment} responses at Spearman $\rho = \mathbf{+0.878}$ (Fig.~\ref{fig:5}f).
+\emph{malignant-compartment} responses at Spearman $\rho = \mathbf{\PREMISEOVERLAP}$
+(Fig.~\ref{fig:5}f).
 Where the mean says two drugs are alike, the malignant compartment mostly agrees. Of the five drug
 pairs most similar on the mean, two have a malignant response meaningfully less similar than their
-mean suggests, so the residual is real; it is also small. This is as close to a direct reading of
+mean suggests, so the residual is real; it is also small.
+
+\textbf{That statistic has a mechanical component, and we report the corrected one alongside it.}
+The mean signature is taken over all called cells and malignant glioma is 41,314 of the 96,225 of
+them, so the two quantities being correlated share 43\% of their cells and part of the agreement
+is arithmetic rather than biology. Recomputed on compartments that share \emph{no} cells, ranking
+the malignant-compartment response by the \emph{myeloid}-compartment response instead of by the
+mean, the correlation is $\rho = \mathbf{\PREMISEDISJOINT}$ (\PREMISEOVERLAP\ to
+\PREMISEDISJOINT{}; on PW030 alone, $+0.821$ to $+0.804$). The finding survives the correction and
+the number moves, which is the honest way round. \emph{We treat the disjoint value as the
+load-bearing one}, because it is the one that answers the question actually posed: whether what
+the bulk of the tumour does already tells you what the compartment of interest does. A paper
+arguing that a scoring rule and its evaluator must not share their object cannot exempt its own
+premise statistic from the same rule.
+
+This is as close to a direct reading of
 Gate 3 as these data allow: where the mean already ranks what the subpopulation does, the
 differential response has little left to change about the decision. The two limits below are what
 stop it from being a measurement of Gate 3 rather than an indication of one.
@@ -1724,7 +1748,11 @@ entirely and the analysis repeated on the remaining three. The resulting values 
 \textbf{The premise.} For every pair of drugs within a patient, we compute the cosine between their
 population \emph{mean} signatures and the cosine between their \emph{malignant-compartment}
 responses, and report the Spearman correlation between the two across drug pairs. If the mean were a
-sufficient statistic these would be the same number. \emph{No pass/fail threshold is applied.} An
+sufficient statistic these would be the same number. Because the mean signature contains the
+malignant cells, 43\% of those called, we also report the \emph{disjoint} form, in which the
+malignant-compartment response is ranked by the myeloid-compartment response instead; the two
+compartments share no cells and each is referred to its own compartment-matched control
+(analysis/natural/zhao\_premise\_disjoint.py). \emph{No pass/fail threshold is applied.} An
 earlier version of the analysis script declared the premise supported if the correlation fell below
 0.9, and the observed value was 0.878. That threshold was ours, it was applied after seeing the
 number, and clearing it by 0.02 licenses nothing; the verdict has been removed from the code and

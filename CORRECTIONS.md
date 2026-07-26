@@ -1287,3 +1287,44 @@ results/exp14_nonadditive_predictors/cellflow_celleval.{csv,json}.)
 Manuscript: the Results Part-B paragraph now states the collapse holds under distributional and DE
 metrics and that ECFP does not rescue CPA; the Limitations item carries the same two clauses. No
 conclusion is revised; the mean-based claim is upgraded from provisional to multi-metric-confirmed.
+
+---
+
+## R42. The premise correlation shared 43% of its cells between the two quantities it correlated
+
+**Was:** "Across 18 within-patient drug pairs, the similarity of two drugs' *mean* signatures ranks
+the similarity of their *malignant-compartment* responses at Spearman rho = +0.878" (Results, the
+natural-heterogeneity section; Fig 5f caption; Methods).
+
+**Is:** rho = +0.878 for that statistic, and **rho = +0.835** for the disjoint form, which is now
+the load-bearing figure. On PW030 alone, +0.821 and +0.804.
+
+**Why it changed.** The mean signature is taken over all called cells, and malignant glioma is
+41,314 of the 96,225 called cells (Supplementary Table 3). The mean signature therefore *contains*
+43% of the very cells whose response it is being asked to rank, so part of the correlation is
+arithmetic rather than biology. This is the same structural error the project has already recorded
+twice in another guise (R28, R30: a subpopulation's response must be referred to its own matched
+baseline, or the baseline difference survives into the response). Here it is not a baseline error
+but an overlap error, and it is the same family.
+
+The corrected statistic asks the question the premise actually poses, which is whether what the
+bulk of the tumour does already tells you what the compartment of interest does. It ranks the
+malignant-compartment response by the **myeloid**-compartment response. The two compartments share
+no cells, and each response is referred to its own compartment-matched control, so neither the
+cells nor the baselines are shared.
+
+**Nothing is retracted.** The finding survives at a slightly lower value, and the direction, the
+interpretation and the severe single-patient caveat (15 of 18 pairs from PW030, no p-value quoted)
+are unchanged. What changes is that the number reported is now one the paper's own argument
+permits: a study whose thesis is that a scoring rule and its evaluator must not share their object
+cannot quote a premise statistic whose two sides share half their cells.
+
+**How it was found.** While recomputing the same statistic on Tahoe-100M plate 3, where the
+analogous overlap is 26% (G2M cells inside a mean taken over all cells) and is worth +0.064 of
+rho (0.905 overlapping, 0.841 disjoint). The tissue overlap is larger, 43%, but the effect on rho
+is smaller, -0.043.
+
+(analysis/natural/zhao_premise_disjoint.py; results/zhao_gbm/premise_disjoint.csv. The per-pair
+table results/zhao_gbm/premise_mean_vs_compartment.csv already carried the myeloid column, so the
+correction required no new computation on the tumour data and cannot have drifted from the
+published figure.)
