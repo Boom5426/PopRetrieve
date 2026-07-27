@@ -4,7 +4,7 @@
 Fixed version: includes component columns in query_sr selection.
 """
 
-# --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/JUDGE) ---
+# --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/DART) ---
 from pathlib import Path as _P
 REPO = _P(__file__).resolve().parents[2]
 SRC = str(REPO / "src")

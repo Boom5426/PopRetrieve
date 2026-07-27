@@ -25,7 +25,7 @@ def test_predict_regime_low_structure():
 
 def test_predict_regime_dart():
     m = _import()
-    # high structure + high conflict (above threshold) -> JUDGE
+    # high structure + high conflict (above threshold) -> EvalShift
     assert m.predict_regime(0.8, 0.7, "observed", 0.5) == "DART_recommended"
     # high structure + low conflict (below threshold) -> mean
     assert m.predict_regime(0.8, 0.3, "observed", 0.5) == "mean_sufficient"

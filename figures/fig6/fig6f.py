@@ -1,4 +1,4 @@
-"""JUDGE Figure 6 panel 6f: the separation ladder, and the positive control Gate 2 needs.
+"""EvalShift Figure 6 panel 6f: the separation ladder, and the positive control Gate 2 needs.
 
 Source data: results/upgrade/gate2_supervised_upper_bound.csv
 

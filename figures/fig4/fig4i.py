@@ -1,4 +1,4 @@
-"""JUDGE Figure 4 panel 4i: Class C per query, distributional score against the scalar it must beat.
+"""EvalShift Figure 4 panel 4i: Class C per query, distributional score against the scalar it must beat.
 
 Source data: source_data/fig4hi_class_c_functional.csv
 

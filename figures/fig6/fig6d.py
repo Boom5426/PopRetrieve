@@ -1,4 +1,4 @@
-"""JUDGE Figure 6 panel 6d: multi-dimensional structure diagnostics, predicted relative to real.
+"""EvalShift Figure 6 panel 6d: multi-dimensional structure diagnostics, predicted relative to real.
 Source data: results/exp09_structure_diagnostics/exp09_structure_diagnostics_summary.csv
 Run standalone: python fig6d.py
 

@@ -1,14 +1,14 @@
-# DART Manuscript — Statistical Reporting Checklist
+# EvalShift Manuscript — Statistical Reporting Checklist
 
 Per result: sample size, unit of analysis, test, effect size, CI, p-value, multiple-testing
 correction, and **metric class** (circular-risk / proxy / independent). The metric-class
 column is load-bearing for Claim 4's honesty.
 
 Metric-class legend:
-- **circular-risk** — outcome aligned with DART's own objective (energy/distributional).
+- **circular-risk** — outcome aligned with EvalShift's own objective (energy/distributional).
   Gains are suggestive, not conclusive.
 - **proxy** — synthetic/oracle-based welfare; internally valid, externally unvalidated.
-- **independent** — outcome DART does not directly optimize (MoA recovery, minority
+- **independent** — outcome EvalShift does not directly optimize (MoA recovery, minority
   coverage, marker enrichment). Closest to an unbiased test.
 
 ---
@@ -37,10 +37,10 @@ Metric-class legend:
 | field | value |
 |---|---|
 | unit of analysis | per query, per (predictor × retrieval); n = 720 per cell |
-| effect size | DART−mean nDCG delta: −0.004 / −0.097 / −0.029 |
+| effect size | EvalShift−mean nDCG delta: −0.004 / −0.097 / −0.029 |
 | test | paired comparison within predictor (delta of matched queries) |
-| metric class | **independent-ish** — nDCG on real-drug candidates; DART does not optimize it |
-| caveat | Hit@1 shows DART winning on 2/3 predictors — report the nDCG delta *and* the mixed Hit@1 (Supp. S4); do not summarize as "all negative" |
+| metric class | **independent-ish** — nDCG on real-drug candidates; EvalShift does not optimize it |
+| caveat | Hit@1 shows EvalShift winning on 2/3 predictors — report the nDCG delta *and* the mixed Hit@1 (Supp. S4); do not summarize as "all negative" |
 
 ## exp09 structure diagnostics
 
@@ -49,7 +49,7 @@ Metric-class legend:
 | unit | per (source × predictor × drug × seed) population |
 | effect size | subpop_var_ratio 0.046 vs 0.009; diversity 0.158 vs 0.057; isotropy 0.959 vs 0.998 |
 | test | group means (real vs predicted); report distributions, not just means |
-| metric class | **independent** (structural properties, no DART objective involved) |
+| metric class | **independent** (structural properties, no EvalShift objective involved) |
 
 ## HIR-Bench (FULL 13,440 cells)
 
@@ -68,8 +68,8 @@ Metric-class legend:
 | unit | per query; n = 621 (DART_recommended), 133 (mean_or_no_call), 11 (mean_sufficient) |
 | energy-proxy effect | DART_coverage_worst regret reduction: mean +0.264, **median +0.113**, 72% improved |
 | test | **paired Wilcoxon** signed-rank vs mean_cosine; p = 4.26e-56 |
-| multiple testing | 5 DART methods × 3 modes compared; report best-per-mode, note the family |
-| metric class (regret) | **circular-risk** — energy-based welfare proxy aligned with DART's objective |
+| multiple testing | 5 EvalShift methods × 3 modes compared; report best-per-mode, note the family |
+| metric class (regret) | **circular-risk** — energy-based welfare proxy aligned with EvalShift's objective |
 | non-circular effects | MoA-recovery nDCG gain −0.013; minority-coverage gain +0.005 (≈0) |
 | metric class (nDCG/coverage) | **independent** — near-null, reported alongside the positive |
 | gate discrimination | recommended +0.119 vs non-recommended +0.122 median (does not separate) |
@@ -80,8 +80,8 @@ Metric-class legend:
 |---|---|
 | unit | real task (dataset × held-out × seed); n = 37 (QUICK-scale projection) |
 | primary result | 70.3% projection agreement; predicted_mean→no-DART 100% |
-| independent criterion | **0 / 37 tasks DART-dominant** under minority-coverage outcome |
-| metric class | **independent** (minority coverage, not DART's objective) |
+| independent criterion | **0 / 37 tasks EvalShift-dominant** under minority-coverage outcome |
+| metric class | **independent** (minority coverage, not EvalShift's objective) |
 | test | agreement fraction; per-dataset PASS at ≥0.6 |
 
 ## exp15 — exploratory resistance divergence
@@ -93,7 +93,7 @@ Metric-class legend:
 | test | **Mann–Whitney U** (high- vs low-divergence split) + Pearson correlation |
 | p-values | AXL 0.003; IFN 1.9e-6; antigen 0.044; quiescence 7.7e-7 (sign-flips, not claimed) |
 | multiple testing | 5 programs tested — apply/report Benjamini–Hochberg; AXL/IFN survive, antigen marginal |
-| metric class | **exploratory / independent** — marker enrichment; no DART objective |
+| metric class | **exploratory / independent** — marker enrichment; no EvalShift objective |
 | hard limitation | no drug timecourse → Part B (survival) not evaluable; Part C rescue near-null |
 
 ---

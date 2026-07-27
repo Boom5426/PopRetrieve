@@ -52,7 +52,7 @@ blind spot documented for the main deck.
 Fixing it means re-authoring at 6.93 in, which is a re-layout and not a resize: at 0.68x canvas
 the labels grow 1.47x relative to their panels and will collide, which is why the main deck's
 re-cut rewrapped every label rather than shrinking type. Until that is done, the shipped SI keeps
-the 07-12 build, and **two label edits made on 2026-07-26 (ED2c and ED4c, "JUDGE - mean" ->
+the 07-12 build, and **two label edits made on 2026-07-26 (ED2c and ED4c, "EvalShift - mean" ->
 "distributional - mean", to match the relabelled main deck) are present in this source and not yet
 visible in the SI PDF.**
 

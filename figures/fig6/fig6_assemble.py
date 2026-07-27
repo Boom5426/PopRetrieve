@@ -1,4 +1,4 @@
-"""JUDGE Figure 6: Structure preservation and identifiability constrain distribution-aware retrieval.
+"""EvalShift Figure 6: Structure preservation and identifiability constrain distribution-aware retrieval.
 7-panel two-gate mechanism figure. Assembles a-g into fig6_two_gate.{png,pdf}.
 
 GEOMETRY, 2026-07-26: authored at the FINAL PRINTED WIDTH.

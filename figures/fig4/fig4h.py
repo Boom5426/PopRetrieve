@@ -1,4 +1,4 @@
-"""JUDGE Figure 4 panel 4h: Class C on a SEMANTICALLY MATCHED functional oracle.
+"""EvalShift Figure 4 panel 4h: Class C on a SEMANTICALLY MATCHED functional oracle.
 
 Source data: source_data/fig4hi_class_c_functional.csv
   103 leave-one-drug-out queries, SciPlex3 x GDSC2, 10 uM, 34-35 drugs per cell line.

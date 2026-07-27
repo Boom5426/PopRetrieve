@@ -1,4 +1,4 @@
-"""JUDGE Figure 3 panel 3e: alpha-crossover.
+"""EvalShift Figure 3 panel 3e: alpha-crossover.
 
 Source data: figures/source_data/fig3e_alpha_crossover.csv (exp01 controlled mixing sweep,
 three cell lines x five alpha levels). Higher alpha means the two constructed subpopulations

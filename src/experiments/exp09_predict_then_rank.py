@@ -15,7 +15,7 @@ retrieval decision layer is isolated:
 For each query we build a candidate library {covers-both (GT)} ∪ distractor drugs, ask the
 predictor for each candidate's response population in the query context, then score every
 candidate under all four retrieval rules. The money comparison: holding the PREDICTOR fixed,
-does swapping a mean/R² retrieval for JUDGE's distributional retrieval move the ground-truth
+does swapping a mean/R² retrieval for EvalShift's distributional retrieval move the ground-truth
 drug up the ranking? Reported per (predictor, retrieval) as Drug Hit@1/5, MRR, nDCG@10, and —
 versus the same predictor's mean-cosine retrieval as reference — top-1 flip, top-k overlap,
 delta-rank; divergence-stratified; with wall-clock runtime.
@@ -24,7 +24,7 @@ Outputs (results/exp09_predict_then_rank/):
     summary.csv                 per (task, predictor, retrieval) retrieval metrics
     predictor_ranker_matrix.csv compact predictor x retrieval Hit@1/MRR/nDCG matrix
     per_query_scores.csv        one row per (query, candidate) x (predictor,retrieval)
-    flip_vs_mean.csv            JUDGE vs mean/R² flip, overlap, Δrank (predictor held fixed)
+    flip_vs_mean.csv            EvalShift vs mean/R² flip, overlap, Δrank (predictor held fixed)
     divergence_stratified.csv   per (predictor, retrieval, divergence stratum) Hit@1
     runtime.csv                 predictor fit + per-query predict + retrieval wall-clock
     provenance.csv              scgen backend actually used ('scgen' | 'cpa_linear')
@@ -316,7 +316,7 @@ def run(n_seeds=8, n_drugs=10, alphas=(0.5, 0.7, 0.9), lines=("K562", "A549", "M
     ).reset_index()
     write_csv(mat, results_path(OUT, "predictor_ranker_matrix.csv"))
 
-    # --- JUDGE vs mean/R2 flip (predictor held fixed) ---
+    # --- EvalShift vs mean/R2 flip (predictor held fixed) ---
     flip = metrics[metrics.retrieval.isin(DART_RETRIEVALS)].groupby(
         ["task", "predictor", "retrieval"]).agg(
         top1_flip_rate=("top1_flip_vs_ref", "mean"),
@@ -365,7 +365,7 @@ def run(n_seeds=8, n_drugs=10, alphas=(0.5, 0.7, 0.9), lines=("K562", "A549", "M
     for pname in piv.index:
         best_sig = max(piv.loc[pname, "mean_cosine"], piv.loc[pname, "r2"])
         best_dart = max(piv.loc[pname, "dart_energy"], piv.loc[pname, "dart_coverage"])
-        log(f"  {pname:16s} best signature={best_sig:.3f}  best JUDGE={best_dart:.3f}  "
+        log(f"  {pname:16s} best signature={best_sig:.3f}  best EvalShift={best_dart:.3f}  "
             f"Δ={best_dart - best_sig:+.3f}")
     return {"matrix": piv.to_dict(), "scgen_backend": scgen_backend}
 

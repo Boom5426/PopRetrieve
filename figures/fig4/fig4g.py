@@ -1,4 +1,4 @@
-"""JUDGE Figure 4 panel 4g: the real-data coverage advantage, task by task.
+"""EvalShift Figure 4 panel 4g: the real-data coverage advantage, task by task.
 Source data: results/exp13_real_data_projection/projection.csv
 Run standalone: python fig4g.py
 
@@ -6,7 +6,7 @@ Rewritten 2026-07-13. This panel has now been wrong twice, in opposite direction
 times because it printed a COUNT that nobody could check.
 
   v1: titled "37 real tasks all mean-sufficient", axis label hard-coded "(0 / 37
-      JUDGE-dominant)". 37 is the task count of exp13's QUICK *sanity* configuration; the
+      EvalShift-dominant)". 37 is the task count of exp13's QUICK *sanity* configuration; the
       FULL configuration builds 239, and a sanity run had been quoted as the real-data
       result.
 

@@ -6,7 +6,7 @@ from the inside, where a synthetic benchmark's latent utility oracle is known an
 be quantified rather than argued. Row 2 measures it from the outside, by checking a benchmark we
 constructed against tissue nobody assembled (patient glioblastoma), which corrected us twice.
 
-**Authority.** The Figure 5 caption in `manuscript/latex/DART_manuscript.tex` is the authority for
+**Authority.** The Figure 5 caption in `manuscript/latex/EvalShift_manuscript.tex` is the authority for
 every number below, and `../../CORRECTIONS.md` for what has been retracted. If this file disagrees
 with either, this file is the bug. Layout, canvas geometry and the reasoning behind each title live
 in the `fig5_assemble.py` docstring; that is where those decisions are recorded, not here.
@@ -62,7 +62,7 @@ differs from the printed claim is the defect this figure was audited for.
   the 6.9 in canvas, each edit keyed to a substring of the original text so an upstream rewording
   fails the build instead of silently leaving a too-wide label on the page. There is exactly one
   copy of the plotting code.
-- Palette semantics are the deck's: blue distributional/JUDGE, orange mean/collapse, grey context,
+- Palette semantics are the deck's: blue distributional/EvalShift, orange mean/collapse, grey context,
   purple the natural-tissue arm. Green is *not* used in row 2: across the deck green marks readouts
   handed information the retrieval method does not have, and in panel d colour encodes the
   experimental arm, so both bars of every arm share one hue.

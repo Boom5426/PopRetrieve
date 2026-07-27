@@ -1,4 +1,4 @@
-"""JUDGE Figure 1 panel 1d: what makes an evaluator independent of the score it grades.
+"""EvalShift Figure 1 panel 1d: what makes an evaluator independent of the score it grades.
 
 Schematic (no external data). It states the manuscript's sharpest structural claim about
 retrieval evaluation: the candidate is chosen by MAXIMIZING a score, and an objective-aligned

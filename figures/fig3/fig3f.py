@@ -1,4 +1,4 @@
-"""JUDGE Figure 3 panel 3f: Class-A robustness across the five JUDGE metrics.
+"""EvalShift Figure 3 panel 3f: Class-A robustness across the five EvalShift metrics.
 
 Source data: figures/source_data/fig3f_classA_robustness.csv (exp12, the 621 gate-recommended
 partial-observed queries). The n differs from panel c on purpose: panel c reports the headline on
@@ -16,7 +16,7 @@ LABS = {'DART_energy': 'energy', 'DART_mmd': 'MMD', 'DART_sliced_wasserstein': '
 
 
 def draw_3f(ax):
-    """All five JUDGE metrics show a positive Class-A regret reduction."""
+    """All five EvalShift metrics show a positive Class-A regret reduction."""
     f = pd.read_csv(f"{REPO}/figures/source_data/fig3f_classA_robustness.csv")
     f = f.sort_values('median_regret_reduction')
     assert (f['median_regret_reduction'] > 0).all(), "panel title asserts all five are positive"

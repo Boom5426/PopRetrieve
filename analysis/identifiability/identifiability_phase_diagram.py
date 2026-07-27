@@ -1,7 +1,7 @@
 import torch, numpy as np, pandas as pd, os, json, time
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score, silhouette_score
-# --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/JUDGE) ---
+# --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/DART) ---
 from pathlib import Path as _P
 REPO = _P(__file__).resolve().parents[2]
 SRC = str(REPO / "src")

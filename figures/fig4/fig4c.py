@@ -1,4 +1,4 @@
-"""JUDGE Figure 4 panel 4c: minority coverage gain by divergence quartile
+"""EvalShift Figure 4 panel 4c: minority coverage gain by divergence quartile
 Source data: source_data/fig4ef_gate_divergence.csv
 Run standalone: python fig4c.py
 """

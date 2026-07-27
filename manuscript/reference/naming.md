@@ -1,8 +1,13 @@
-# DART paper, title and abbreviation decision
+# Paper title and abbreviation: decision record
 
-Version 2026-07-12. No em dashes.
+No em dashes.
 
-## Title (DECIDED, user-approved 2026-07-12)
+> **Sections 1 to 3 below are the 2026-07-12 record and are SUPERSEDED.** Neither the title nor
+> the name they decide is the one the manuscript now carries. They are kept because they document
+> why DrugDiT was rejected and why an audit-flavoured name was wanted at all, and both arguments
+> still govern. The current decisions are in "2026-07-27: EvalShift" at the end of this file.
+
+## 1. Title (2026-07-12, SUPERSEDED)
 
 **When is distributional information trustworthy? Auditing evaluation circularity in
 single-cell drug retrieval.**
@@ -12,7 +17,7 @@ answer a question the field is asking"); subtitle puts the citable knowledge ker
 ("evaluation circularity") in the title. Matches the audit-lens positioning; does not
 imply a retrieval method is being sold.
 
-## Abbreviation (DECIDED, user-approved 2026-07-12)
+## 2. Abbreviation (2026-07-12, SUPERSEDED)
 
 **DART = Distributional Auditing of Retrieval Transfer.**
 
@@ -42,7 +47,7 @@ Agent recommendation: **do not use DrugDiT.** Two hard problems.
    catchy method-style acronym (DrugDiT) pulls straight back toward "here is our model,"
    undercutting the title we just chose.
 
-## Options that fit the audit-lens positioning
+## 3. Options that fit the audit-lens positioning (2026-07-12)
 
 If an acronym is wanted, it should name the INSTRUMENT or the PHENOMENON, not a model:
 
@@ -55,7 +60,57 @@ If an acronym is wanted, it should name the INSTRUMENT or the PHENOMENON, not a 
   is not" metaphor matching evaluation circularity; slightly dramatic.
 - No acronym at all. A methodology/audit paper does not need one; the title carries it.
 
-## Recommendation
+### Recommendation as of 2026-07-12
 
 Keep DART with the audit-flavored expansion, OR drop the acronym entirely. Avoid DrugDiT.
 Decision pending user.
+
+---
+
+## 4. 2026-07-27: EvalShift (CURRENT)
+
+### Title (user-approved 2026-07-27)
+
+**Objective-aligned evaluation inflates distributional gains in single-cell drug retrieval.**
+
+Three candidates were put to the author. The two that led with the tool name were both rejected,
+for the reason section 2 of this file already gives: the whole repositioning is "not a method, an
+audit lens", and a title of the form "<Tool> shows that ..." pulls a reviewer straight back to
+reading it as a tool paper. The chosen title carries the finding and its direction (what is
+inflated, and by what), and never names the instrument. This is the title the manuscript already
+carried, changed only from "the distributional gain" to "distributional gains".
+
+Rejected, with the reason each was rejected:
+
+- *EvalShift shows that objective-aligned evaluation inflates distributional gains in single-cell
+  drug retrieval.* Complete, but 15 words, and the "<Tool> shows that" frame is in tension with the
+  Introduction's own "used here as a probe rather than offered as a method".
+- *EvalShift reveals objective--utility mismatch in single-cell drug retrieval.* Shortest, but
+  "mismatch" states that there is a discrepancy without stating its direction, so the paper's
+  actual result (objective-aligned evaluation inflates, rather than deflates) leaves the title. It
+  also duplicates the running title.
+
+### Name (user-decided 2026-07-27)
+
+**EvalShift. Not an acronym.** The GitHub repository was renamed first and the sources follow.
+
+The name states the study design rather than a property of the score: one fixed set of rankings is
+re-graded under criteria of increasing independence, so the rankings, the scorer and the queries
+hold still and the evaluation is the only thing that shifts. Both earlier names were acronyms
+whose expansion asserted something about the instrument (DART = Distributional Auditing of
+Retrieval Transfer; JUDGE = Judging Utility of Distributional Gains in Evaluation), and every such
+expansion had to be maintained in the abstract, the Introduction, README.md and CITATION.cff, where
+it kept going stale. Dropping the expansion removes that maintenance surface entirely.
+
+JUDGE was used for one day (2026-07-26) and abandoned for a specific reason worth recording: the
+manuscript's central sentence is "only the judge then changes", where *judge* means the evaluating
+criterion. Naming the instrument JUDGE made that sentence collide with itself, and sixteen sites in
+the manuscript and SI had to be reworded around the collision. Those rewordings are kept, because
+referring to the instrument as "the distributional score" or "this framework" near the word *judge*
+is better for the audit positioning regardless of what the tool is called.
+
+### What is deliberately NOT renamed
+
+The `DART_` prefix on method keys in `results/` and `src/` (`DART_energy`,
+`DART_coverage_worst`, ...) and the regime label `no_DART`. These are the keys under which every
+published number was computed and stored. See the "A note on the name" section of README.md.

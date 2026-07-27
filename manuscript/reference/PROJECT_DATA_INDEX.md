@@ -5,7 +5,7 @@
 > compared two different scorers. **Read [CORRECTIONS.md](../../CORRECTIONS.md) before using any
 > number below.** Where this file and CORRECTIONS.md disagree, CORRECTIONS.md is right.
 
-# DART Project Data Index
+# EvalShift Project Data Index
 
 A single grounded map of every experiment, its headline numbers, and the four core
 contributions they support. Every value below is read directly from the `results/`
@@ -14,7 +14,7 @@ the manuscript, the discrepancy is flagged and reconciled here. This file is the
 navigation layer over `manuscript_evidence_table.md` (the locked-numbers authority)
 and the per-experiment scripts in `src/experiments/`.
 
-Repository: https://github.com/Boom5426/DART  ·  Test suite: 95/95  ·  Phase-1
+Repository: https://github.com/Boom5426/EvalShift  ·  Test suite: 95/95  ·  Phase-1
 reproduction: 35/35 within tolerance.
 
 ---
@@ -50,7 +50,7 @@ reproduction: 35/35 within tolerance.
 | exp | question | key result (from CSV) | source |
 |---|---|---|---|
 | exp08 | signature/PCA baselines | **Hit@1 (mean over tasks): global_energy 0.837, pca_dist 0.778, coverage_mean 0.773, coverage_worst 0.589, pca_mean 0.518, cmap_wtcs 0.464, cmap_cosine = mean_cosine = 0.3885** | `exp08_signature_baselines/summary.csv` |
-| exp09 | predict-then-rank | predictor x ranker Hit@1: predictors reach 0.87-0.99 under mean_cosine/r2 but DART_coverage collapses (nn 0.383, avg 0.736); DART advantage does not appear on predicted candidates | `exp09_predict_then_rank/predictor_ranker_matrix.csv` |
+| exp09 | predict-then-rank | predictor x ranker Hit@1: predictors reach 0.87-0.99 under mean_cosine/r2 but DART_coverage collapses (nn 0.383, avg 0.736); EvalShift advantage does not appear on predicted candidates | `exp09_predict_then_rank/predictor_ranker_matrix.csv` |
 | exp09-struct | structure diagnostics | **subpopulation-variance ratio: real 0.0463 vs predictors 0.008-0.009 (~5x lower)**: predictors collapse structure | `exp09_structure_diagnostics/..._summary.csv` |
 | exp10 | PDGrapher comparison | unsupervised distance_reduction: drug Hit@5 = 1.0, target recall@5 = 1.0, target nDCG@10 = 0.431 (best unsupervised, still Class A) | `exp10_pdgrapher_comparison/{drug,target}_ranking_summary.csv` |
 
@@ -74,7 +74,7 @@ The same method, on the same recommended queries, judged by two metric classes:
 |---|---|---|---|
 | **A: objective-aligned** | energy Hit@1 (exp08) | **0.837** vs 0.389 mean/CMap | large gain |
 | **A: objective-aligned** | energy-welfare regret reduction (exp12, coverage_worst median) | **+0.1190** (p=4.26e-56, 72%/621) | large, highly significant gain |
-| **B: task-proximal** | MoA-recovery nDCG (exp12) | **-0.0134** (DART slightly loses) | no transfer |
+| **B: task-proximal** | MoA-recovery nDCG (exp12) | **-0.0134** (EvalShift slightly loses) | no transfer |
 | **B: task-proximal** | minority-state coverage gap (exp17 Q4 median) | **+0.0018** (significant, negligible) | no material transfer |
 | **B: task-proximal** | real-data dominance (exp13) | **0 of 37 tasks** | no transfer |
 | **gate** | recommended vs non-recommended regret (exp12) | +0.1190 vs +0.1219 | gate does not separate |
@@ -112,7 +112,7 @@ underpowered (achieved power 0.06, n for 80% power = 27,794), so it is reported 
    minority states and resistance-associated melanoma programs (AXL corr +0.134) is a
    hypothesis for future work, not a claim.
 
-**One-line thesis.** DART is best understood as a probe for evaluating when
+**One-line thesis.** EvalShift is best understood as a probe for evaluating when
 distributional information is trustworthy in heterogeneous inverse drug retrieval,
 not as a validated therapeutic recommender.
 

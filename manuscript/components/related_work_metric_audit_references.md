@@ -5,8 +5,8 @@ Verified citations grounding the field-level evaluation-circularity audit
 entry below was checked against the Crossref API (peer-reviewed) or the arXiv API
 (conference/preprint) and resolves to a real record; preprints are labeled as such.
 No reference is included that could not be verified. Each note states, in one line,
-what the paper supports in the DART audit and — where relevant — how it bounds
-DART's own claims.
+what the paper supports in the EvalShift audit and — where relevant — how it bounds
+EvalShift's own claims.
 
 Two tiers:
 - **Tier 1 — method-family anchors:** the canonical papers for each of the seven
@@ -28,13 +28,13 @@ Two tiers:
    https://doi.org/10.1126/science.1132939
    — *Original Connectivity Map; scoring is enrichment of a query signature against
    reference mean signatures. Class A (objective-aligned). Anchors the "mean
-   signature retrieval" family DART generalizes.*
+   signature retrieval" family EvalShift generalizes.*
 
 2. **Subramanian A, et al. (2017).** A Next Generation Connectivity Map: L1000
    platform and the first 1,000,000 profiles. *Cell* 171:1437–1452.
    https://doi.org/10.1016/j.cell.2017.10.049
    — *L1000-scale CMap; the weighted connectivity score (WTCS) is a GSEA-style rank
-   enrichment of the mean signature. Supports DART Result 1: WTCS is monotone in the
+   enrichment of the mean signature. Supports EvalShift Result 1: WTCS is monotone in the
    same mean-collapsed quantity but not algebraically identical to the cosine
    identity (cmap_wtcs 0.4635 vs mean_cosine = cmap_cosine 0.3885).*
 
@@ -43,7 +43,7 @@ Two tiers:
 3. **Peidli S, et al. (2024).** scPerturb: harmonized single-cell perturbation data.
    *Nature Methods* 21:531–540. https://doi.org/10.1038/s41592-023-02144-y
    — *Introduces E-distance (energy statistics) as a population-level perturbation
-   metric. Doubles as an external precedent for DART's energy score and for Result 1
+   metric. Doubles as an external precedent for EvalShift's energy score and for Result 1
    (the mean is the collapsed limit of a population distance), while remaining a
    Class A objective-aligned metric.*
 
@@ -53,7 +53,7 @@ Two tiers:
    perturbation responses. *Nature Methods* 16:715–721.
    https://doi.org/10.1038/s41592-019-0494-8
    — *VAE latent-vector arithmetic; evaluated by expression reconstruction
-   (objective-aligned, Class A). The latent-linear class DART's exp09 CPA-linear
+   (objective-aligned, Class A). The latent-linear class EvalShift's exp09 CPA-linear
    fallback represents.*
 
 5. **Lotfollahi M, et al. (2023).** Predicting cellular responses to complex
@@ -108,7 +108,7 @@ Two tiers:
     perturbations using causally inspired neural networks (PDGrapher). *Nature
     Biomedical Engineering.* https://doi.org/10.1038/s41551-025-01481-x
     — *Direct inverse-design end of the field; closed-loop target-ranking recall/nDCG
-    (Class A+B). Adapted into DART's retrieval frame in exp10.*
+    (Class A+B). Adapted into EvalShift's retrieval frame in exp10.*
 
 ---
 
@@ -120,7 +120,7 @@ Two tiers:
     — **Keystone.** *Compared five foundation models and two other deep-learning
     models against deliberately simple baselines for single/double perturbation
     prediction; none outperformed the baselines. Independent, peer-reviewed
-    reproduction of DART's exp09 finding — objective-aligned reconstruction gains do
+    reproduction of EvalShift's exp09 finding — objective-aligned reconstruction gains do
     not translate into an advantage over mean/linear baselines.*
 
 14. **Kedzierska KZ, et al. (2025).** Zero-shot evaluation reveals limitations of
@@ -135,17 +135,17 @@ Two tiers:
     https://doi.org/10.1038/s41592-025-02980-0
     — *Large multi-method benchmark using population-level metrics including
     E-distance/Wasserstein. Establishes that the field evaluates with the same
-    distributional metric class DART uses, and that generalization is hard.*
+    distributional metric class EvalShift uses, and that generalization is hard.*
 
 16. **"Evaluating Single-Cell Perturbation Response Models Is Far from
     Straightforward" (2026).** bioRxiv (preprint).
     https://doi.org/10.64898/2026.02.14.705879
-    — **Key for the metric-taxonomy claim, and cited against DART itself.** *Shows
+    — **Key for the metric-taxonomy claim, and cited against EvalShift itself.** *Shows
     common distributional distances are strongly affected by scale, sparsity, and
     dimensionality: the Wasserstein distance fails in high-dimensional expression
     space under variance scaling, and the energy distance can overlook disruptions in
     gene–gene dependencies. Also reports complex models often underperform simple
-    baselines. Substantiates the circularity thesis and honestly bounds DART's own
+    baselines. Substantiates the circularity thesis and honestly bounds EvalShift's own
     energy/coverage scores.*
 
 17. **"The Metric Picks the Winner: Evaluation Choice Flips Model Rankings for
@@ -153,7 +153,7 @@ Two tiers:
     (preprint). https://arxiv.org/abs/2606.12639
     — *Documents that the choice of evaluation metric flips model rankings for
     drug-response prediction in unseen chemistry — the same-method-different-verdict
-    phenomenon DART Result 3 demonstrates on a single task set.*
+    phenomenon EvalShift Result 3 demonstrates on a single task set.*
 
 ---
 

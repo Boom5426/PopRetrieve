@@ -6,13 +6,13 @@
 # `retrieval.metrics.score_energy` returns MINUS the energy distance, i.e. a
 # SIMILARITY (higher = more similar). This script ranks it ASCENDING
 # (rankdata(e_scores) / argmin(dart_scores)) under the comment "lowest energy =
-# top pick", so JUDGE's rank-1 candidate is the population FARTHEST from the
+# top pick", so EvalShift's rank-1 candidate is the population FARTHEST from the
 # query. The mean-cosine baseline in the same script is ranked correctly
-# (argmax). JUDGE is ranked backwards and its incumbent is not.
+# (argmax). EvalShift is ranked backwards and its incumbent is not.
 #
 # The inversion selects large-response candidates (energy distance tracks
 # candidate magnitude at rho = +0.79), and large response predicts potency, so
-# it manufactures an apparent +0.52 JUDGE-vs-potency correlation. The true value
+# it manufactures an apparent +0.52 EvalShift-vs-potency correlation. The true value
 # is -0.52.
 #
 # This script also pools all four doses (the rest of the paper uses 10 uM) and
@@ -23,7 +23,7 @@
 
 
 """Class C magnitude-confound control.
-Tests whether JUDGE energy's potency correlation is a response-magnitude artifact.
+Tests whether EvalShift energy's potency correlation is a response-magnitude artifact.
 For each matched drug: response magnitude m = ||mean_treated - mean_control||.
 Compares 4 rankings' Spearman correlation with true GDSC potency (AUC):
   1. energy (reproduce child)
@@ -33,7 +33,7 @@ Compares 4 rankings' Spearman correlation with true GDSC potency (AUC):
 Also: direct Spearman(m_cand, AUC) across drugs per line = can a scalar predict potency?
 """
 
-# --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/JUDGE) ---
+# --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/DART) ---
 from pathlib import Path as _P
 REPO = _P(__file__).resolve().parents[2]
 SRC = str(REPO / "src")

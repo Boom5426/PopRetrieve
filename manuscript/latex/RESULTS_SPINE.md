@@ -1,9 +1,9 @@
-# DART Results spine: claim -> Result -> figure -> panels
+# EvalShift Results spine: claim -> Result -> figure -> panels
 
 Editor pass 2026-07-12 (Nature-series editor lens). Lock this logic BEFORE writing prose or
 building figures. Source of truth for the paper's skeleton; figures serve it.
 
-Genre reminder: evaluation-methodology / methods-critique. DART is a probe, not a product.
+Genre reminder: evaluation-methodology / methods-critique. EvalShift is a probe, not a product.
 Every claim's prose weight must match its evidence weight. Honest ceiling: Nature Methods /
 Cell Reports Methods class; figure polish does not lift genre.
 

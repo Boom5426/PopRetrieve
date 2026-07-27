@@ -94,7 +94,7 @@ def test_n_for_power_positive_and_finite_for_real_effect():
 
 def test_minority_coverage_is_mean_based_noncircular():
     """Guard the audit's core assumption: the judge metric is a MEAN-based cosine proxy,
-    computed independently of any distributional (JUDGE-aligned) score. This mirrors the
+    computed independently of any distributional (EvalShift-aligned) score. This mirrors the
     exp12 _minority_state_coverage formula (cos(P_mean, minority_mean)+1)/2 in [0,1]."""
     rng = np.random.default_rng(4)
     query_X = rng.standard_normal((80, 15))

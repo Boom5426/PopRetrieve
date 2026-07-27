@@ -60,8 +60,9 @@ identical material hand victory to opposite methods, purely by their own statist
 
 **It is not a proposal for a better drug-ranking method.** The population-to-population retrieval
 scores here are the *instrument*: one family of scores whose rankings can be re-graded under
-criteria of increasing independence without being recomputed. They ship as **JUDGE** (Distributional
-Auditing of Retrieval Transfer); the name refers to the implementation, not to a contribution.
+criteria of increasing independence without being recomputed. They ship as **EvalShift**; the name
+refers to the implementation, not to a contribution, and to what the study finds: the rankings hold
+still and the evaluation is what shifts.
 
 The honest one-line summary of the whole thing:
 
@@ -145,10 +146,10 @@ numerically identical to within float32 rounding): both compute the cosine of
 mean-delta signatures. That equivalence is itself one of the paper's points.
 
 **2. Under an oracle-independent metric, the gain largely evaporates.** When the
-same rankings are judged by criteria that do *not* share JUDGE's objective, a
+same rankings are judged by criteria that do *not* share EvalShift's objective, a
 mean-to-minority coverage proxy and MoA-annotation nDCG, the advantage is either
 negligible or reversed. From the true-divergence stratification
-(`results/exp17_true_divergence_subset/divergence_stratified.csv`; JUDGE method =
+(`results/exp17_true_divergence_subset/divergence_stratified.csv`; EvalShift method =
 `coverage_worst` throughout):
 
 | oracle-independent metric | n | lowest-divergence Q1 | highest-divergence Q4 | verdict |
@@ -164,7 +165,7 @@ carried a `-1` sentinel that was differenced as if it were a measurement,
 exactly 0.000. See `exp16_common.mask_undefined`.)
 
 Q1's gap is now significantly **negative** on both the median (−0.030) and the
-mean (−0.082): at low divergence JUDGE actively *hurts* annotation recovery. The
+mean (−0.082): at low divergence EvalShift actively *hurts* annotation recovery. The
 coverage effect is real and mechanistically consistent (it grows monotonically
 with true response divergence) but **far too small to be practically useful**; the
 annotation-recovery effect is null at high divergence and severely underpowered
@@ -181,13 +182,13 @@ Measured rather than assumed (`results/exp02_divergence_gate/dataset_positions_o
 
 | dataset | measured typical cross-cosine | clears the ≲0.9 gate? | who actually wins |
 |---|---:|:---:|---|
-| cross-line (SciPlex3) | 0.032 | yes | **JUDGE** |
+| cross-line (SciPlex3) | 0.032 | yes | **EvalShift** |
 | **CD34+ lineages** | **0.186** | **yes** | **mean-cosine** |
 | Frangieh immune | 0.709 | yes | mean-cosine (0.600 vs 0.578) |
 
 CD34+ is the paper's honest negative control, and it sits at cosine **0.186**, i.e.
 strongly divergent and comfortably inside the gate. The gate therefore predicts that
-JUDGE *should* win there. It does not. Two of the three datasets clear the gate and
+EvalShift *should* win there. It does not. Two of the three datasets clear the gate and
 still favour the mean incumbent, so the ≲0.9 divergence criterion has no
 discriminative power on real data. This is an independent confirmation of the gate
 failure that exp16 finds directly (the gate's reliability axis is *anti*-correlated
@@ -215,13 +216,13 @@ distributional score beats the mean" as true *only* under the proxy that score o
 
 ## The four-probe diagnostic protocol
 
-The reusable core of the JUDGE audit is a small, dependency-light module
+The reusable core of the EvalShift audit is a small, dependency-light module
 ([`analysis/diagnostics/dart_diagnostic.py`](analysis/diagnostics/dart_diagnostic.py))
 that answers one question for any distributional retrieval method: **is a null
 result a REAL null, or an implementation artifact** (an unfair comparison, a
 broken metric, low power, or a hidden confound)?
 
-| probe | falsifies the objection | on JUDGE | source |
+| probe | falsifies the objection | on EvalShift | source |
 |-------|-------------------------|---------|--------|
 | `translation_invariance_probe` | "raw-vs-delta is an unfair comparison" | energy is translation-invariant, rho = 1.0 | `upgrade/protocol_validation.json` |
 | `subsampling_power_probe` | "the null is just low statistical power" | energy CV at n=120 is **3.8%** | `upgrade/protocol_validation.json` |
@@ -236,7 +237,7 @@ probe's own output. The probe reports 3.8%.)
 PYTHONPATH=src python analysis/diagnostics/protocol_validation.py   # reproduces all four verdicts
 ```
 
-Applied to JUDGE, all four probes point the same way: the oracle-independent null
+Applied to EvalShift, all four probes point the same way: the oracle-independent null
 is **real**, and the confirmed weaknesses had been *over*-crediting the method,
 not under-crediting it.
 
@@ -253,7 +254,7 @@ Distributional retrieval can only beat the mean when **both** gates are open:
 
    | candidate population | subpop-variance ratio | induced response cosine `cos(d_maj, d_min)` |
    |---|---:|---:|
-   | **real** (the population JUDGE actually ranks) | **0.138** | **0.014** |
+   | **real** (the population EvalShift actually ranks) | **0.138** | **0.014** |
    | predicted, average-effect | 0.142 | 0.186 |
    | predicted, latent (scGen-family) | 0.462 | 0.239 |
    | predicted, nearest-neighbor | 0.142 | 0.366 |
@@ -383,7 +384,7 @@ its own objective, say so.
 ## Install
 
 ```bash
-git clone https://github.com/Boom5426/JUDGE.git && cd JUDGE
+git clone https://github.com/Boom5426/EvalShift.git && cd EvalShift
 python -m venv .venv && source .venv/bin/activate      # Python 3.11
 pip install -r requirements.txt
 ```
@@ -444,9 +445,11 @@ python analysis/tahoe_pilot/tahoe_summary_numbers.py     # every Tahoe number qu
 
 ## A note on the name
 
-This project was called **DART** until July 2026 and is now **JUDGE** (Judging Utility of
-Distributional Gains in Evaluation). The rename follows a repositioning: what is released is an
-evaluation framework, not a proposed drug-ranking method.
+This project was called **DART** while it was still written as a method paper, and is now
+**EvalShift**. The rename follows a repositioning: what is released is an evaluation framework, not
+a proposed drug-ranking method. **EvalShift is not an acronym.** It names the result: one fixed set
+of rankings is re-graded under criteria of increasing independence, so the only thing that shifts
+across the whole study is the evaluation.
 
 **Identifiers inside `results/` and `src/` still carry the `DART_` prefix, and that is deliberate.**
 Method keys such as `DART_energy` and `DART_coverage_worst`, and the gate's regime label `no_DART`,

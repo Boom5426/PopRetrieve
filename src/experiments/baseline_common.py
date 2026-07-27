@@ -48,7 +48,7 @@ def query_divergence(nq: NormalizedQuery) -> float:
     Uses the query's own per-cell subpop labels (``labels_Q``). If unavailable or only one
     subpop present, returns NaN (query treated as 'unknown' divergence). Low cosine =>
     the subpopulations respond in near-orthogonal directions => a divergent query where
-    the mean signature is unrepresentative (JUDGE's regime).
+    the mean signature is unrepresentative (EvalShift's regime).
     """
     if nq.labels_Q is None:
         return float("nan")
@@ -70,7 +70,7 @@ def query_divergence(nq: NormalizedQuery) -> float:
 
 def dart_scores(q: dict, style: str, max_cells: Optional[int] = None,
                 seed: int = 0) -> dict[str, dict[str, float]]:
-    """The four JUDGE scorers for a raw task dict (controlled or labeled style)."""
+    """The four EvalShift scorers for a raw task dict (controlled or labeled style)."""
     if style == "controlled":
         return score_controlled(q, max_cells=max_cells, seed=seed)
     if style == "labeled":
@@ -99,7 +99,7 @@ def per_query_metrics(vals: np.ndarray, gt_index: int,
 
     ``vals``     : per-candidate scores of the method under test (higher = better).
     ``gt_index`` : index of the ground-truth candidate.
-    ``ref_vals`` : score vector of the reference ranker (JUDGE) for flip / overlap / Δrank.
+    ``ref_vals`` : score vector of the reference ranker (EvalShift) for flip / overlap / Δrank.
     """
     vals = np.asarray(vals, dtype=float)
     r = int((vals > vals[gt_index]).sum()) + 1

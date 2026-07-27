@@ -1,4 +1,4 @@
-"""JUDGE Extended Data figures (ED1-ED4), each blocking one anticipated reviewer attack.
+"""EvalShift Extended Data figures (ED1-ED4), each blocking one anticipated reviewer attack.
 
 ED1 reproducibility basis  | "your data/metrics are non-standard"
 ED2 Class B robustness     | "the null is just underpowered"  (the most important one for a
@@ -20,7 +20,7 @@ Two panels also asserted things their own source data contradict, and both are c
   (+0.003, not significant), and after the -1 sentinel fix the Q1 gap is significantly
   NEGATIVE (median -0.030, q=5.8e-5). The honest statement is stronger than the old one:
   the null is not a power artifact because at high divergence there is no effect, and at
-  low divergence the effect runs against JUDGE.
+  low divergence the effect runs against EvalShift.
 
   ED3c said "predictors collapse subpopulation variance 5.1x". That is retracted. It
   compared a single-context real population against populations we had synthesized as an

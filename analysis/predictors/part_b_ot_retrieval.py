@@ -71,7 +71,7 @@ def main():
 
     print(f"\n{'='*92}")
     print("PART B: distributional retrieval minus mean retrieval, by candidate-response source.")
-    print("If opening Gate 1 helps, the JUDGE-minus-mean delta is larger for ot_map than additive.")
+    print("If opening Gate 1 helps, the EvalShift-minus-mean delta is larger for ot_map than additive.")
     print(f"\n{'predictor':16s} {'metric':10s} {'mean_cosine':>12s} {'dart_energy':>12s} "
           f"{'dart_coverage':>14s} {'E - mean':>9s} {'C - mean':>9s}")
     print("-" * 92)
@@ -93,9 +93,9 @@ def main():
                   f"{en - base:>+9.3f} {cov - base:>+9.3f}")
     print("-" * 92)
 
-    # the decisive contrast: is the JUDGE advantage LARGER for the Gate-1-opening predictor?
+    # the decisive contrast: is the EvalShift advantage LARGER for the Gate-1-opening predictor?
     if "ot_map" in res and "average_effect" in res:
-        print("\nDOES OPENING GATE 1 HELP? JUDGE-minus-mean advantage, ot_map versus additive:")
+        print("\nDOES OPENING GATE 1 HELP? EvalShift-minus-mean advantage, ot_map versus additive:")
         res["contrast"] = {}
         for metric in ["hit@1", "ndcg@10"]:
             for ch, key in [("energy", "energy_minus_mean"), ("coverage", "coverage_minus_mean")]:

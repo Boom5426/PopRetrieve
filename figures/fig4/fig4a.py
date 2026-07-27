@@ -1,4 +1,4 @@
-"""JUDGE Figure 4 panel 4a: Class A vs Class B sign flip
+"""EvalShift Figure 4 panel 4a: Class A vs Class B sign flip
 Source data: source_data/fig4a_classA_vs_classB.csv
 Run standalone: python fig4a.py
 """

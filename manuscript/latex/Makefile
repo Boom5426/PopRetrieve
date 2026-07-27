@@ -1,5 +1,5 @@
-TEX  = JUDGE_manuscript
-SI   = JUDGE_SI
+TEX  = EvalShift_manuscript
+SI   = EvalShift_SI
 BIB  = references
 
 .PHONY: all si clean

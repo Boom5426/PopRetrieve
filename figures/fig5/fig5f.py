@@ -1,4 +1,4 @@
-"""JUDGE Figure 5 panel 5f: is retrieval failure predictable, and from WHAT?
+"""EvalShift Figure 5 panel 5f: is retrieval failure predictable, and from WHAT?
 
 Source data: results/exp11_hir_benchmark/phase_grid_predictability_2x2.csv
 

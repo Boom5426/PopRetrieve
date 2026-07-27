@@ -331,7 +331,7 @@ def run(quick: bool = False, n_seeds: int = None, grid_size: int = None,
         rows_sanity.append({"check": "median_boundary_margin", "value": err,
                              "threshold": 1.0, "pass": 1})
 
-    # Sanity 3: predicted_mean → JUDGE ≈ mean (Δhit@1 ≤ 0.05).
+    # Sanity 3: predicted_mean → EvalShift ≈ mean (Δhit@1 ≤ 0.05).
     # Needs the method-performance layer; it is absent when that loop is skipped.
     if not skip_method_perf:
         pm = df_perf[df_perf.information_condition == "predicted_mean"]

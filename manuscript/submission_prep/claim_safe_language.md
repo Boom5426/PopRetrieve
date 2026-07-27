@@ -1,4 +1,4 @@
-# DART Manuscript — Claim-Safe Language Guide
+# EvalShift Manuscript — Claim-Safe Language Guide
 
 Binding on all drafting. The manuscript's credibility rests on *not* overclaiming; a single
 therapeutic-superiority sentence invites the "so what does it actually do?" rejection.
@@ -11,7 +11,7 @@ therapeutic-superiority sentence invites the "so what does it actually do?" reje
 - "metric-dependent gain"
 - "boundary-aware / reliability-aware decision framework"
 - "moderately predictable failure regimes"
-- "diagnostic gate: recommend DART / mean-sufficient / no-call"
+- "diagnostic gate: recommend EvalShift / mean-sufficient / no-call"
 - "candidate-response information condition"
 - "the advantage is present under an energy-based proxy and absent under
   oracle-independent metrics"
@@ -34,7 +34,7 @@ Short, pre-emptive answers to embed in Discussion / rebuttal.
 No — the contribution is not the metric but the *information-condition framework*: (a) the
 unification showing mean/signature retrieval is the zero-variance limit, (b) the diagnostic
 gate that says when the distributional metric helps, and (c) the honest boundary audit.
-DART is a family (energy/MMD/sliced-Wasserstein/coverage), and the paper's message is about
+EvalShift is a family (energy/MMD/sliced-Wasserstein/coverage), and the paper's message is about
 *when* any of them helps, not that energy distance is novel.
 
 **2. "Isn't observed candidate response an oracle setting?"**
@@ -43,7 +43,7 @@ candidate populations are available; exp09/exp12/exp13 test the realistic
 partial-observed / predicted conditions. The point of the framework is precisely to
 distinguish these regimes rather than conflate them.
 
-**3. "Why does DART fail on predicted responses?"**
+**3. "Why does EvalShift fail on predicted responses?"**
 Because current predictors collapse candidate populations toward the mean: measured
 structure diagnostics show predicted populations have ~5× lower subpopulation-variance
 ratio, ~2.7× lower diversity, and higher isotropy than real populations (exp09). With no
@@ -51,7 +51,7 @@ reliable structure to exploit, the distributional signal has nothing to add — 
 thesis, not a defect.
 
 **4. "Are the gains circular because energy-based utility favors energy-based methods?"**
-We raise this ourselves. The energy-welfare regret proxy is aligned with DART's objective,
+We raise this ourselves. The energy-welfare regret proxy is aligned with EvalShift's objective,
 so we treat its gains as proxy evidence and test oracle-independent metrics (MoA-recovery
 nDCG, minority coverage) where the advantage is null (exp12: −0.013; exp13: 0/37). The
 honest conclusion is metric-dependent gain, not universal superiority — this is a

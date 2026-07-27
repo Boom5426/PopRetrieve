@@ -12,7 +12,7 @@ This is the k=1 instance-based analogue of transfer-learning perturbation predic
 capture context-specific response magnitude/direction where the neighbor context is
 informative, but — like any single-context predictor — it still emits ONE signature per
 (drug, query), so it too is blind to *within-query* subpopulation divergence. exp09
-contrasts mean/R² vs JUDGE retrieval on top of it.
+contrasts mean/R² vs EvalShift retrieval on top of it.
 
 Interface mirrors ``AverageEffectPredictor``: ``fit(dataset)`` then ``predict(drug, context)``
 where ``context`` supplies the query control mean used to pick the neighbor.

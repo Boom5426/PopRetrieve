@@ -1,7 +1,7 @@
 \documentclass[11pt,letterpaper]{article}
 
 %% =====================================================================
-%%  JUDGE -- submission version
+%%  EvalShift -- submission version
 %%
 %%  Placeholders that must be filled before submission are marked
 %%  \TODO{...} and render as [[ ... ]] in the PDF so none can be missed.
@@ -141,7 +141,7 @@
 \thispagestyle{empty}
 \begin{flushleft}
 
-{\LARGE\bfseries Objective-aligned evaluation inflates the distributional gain\\[2pt]
+{\LARGE\bfseries Objective-aligned evaluation inflates distributional gains\\[2pt]
 in single-cell drug retrieval\par}
 
 \bigskip
@@ -197,7 +197,7 @@ That premise is rapidly becoming method. Recent work has brought population-to-p
 
 Deciding whether ``distributional methods are better'' survives past the field's own metrics requires an oracle that is both independent of the score and \emph{semantically matched to the retrieval task}; getting the second requirement wrong is its own trap, since a similarity retriever graded on absolute potency is being asked a question it was never posed. The distinction we hold throughout is between objective fidelity and independent utility (Fig.~\ref{fig:1}). Objective-aligned metrics (Class A) legitimately test whether a method computes its own objective; task-proximal metrics such as mechanism-of-action recovery (Class B) are more independent but remain derived from the same upstream data; oracle-independent utility metrics (Class C), such as dose-response viability or longitudinal survival, are what a therapeutic claim ultimately requires, and are largely absent from the benchmarks these methods are evaluated on. An audit across six published method families, spanning signature retrieval\cite{ref1,ref2}, expression prediction\cite{ref4,ref5,ref6} and graph-based inverse design\cite{ref10,ref11,ref12}, finds objective-aligned evaluation to be the default in each. The central question is therefore not whether distribution-aware retrieval beats mean retrieval, but where objective fidelity ends and independent utility begins.
 
-Making that boundary measurable calls for an instrument rather than a proposal: one family of population-to-population retrieval scores whose candidate rankings can be re-graded under criteria of increasing independence without being recomputed. We implement that family as JUDGE (Judging Utility of Distributional Gains in Evaluation) and release it with the code, and it is used here as a probe rather than offered as a method. Mean-signature retrieval, including Connectivity-Map cosine, is not a competitor but the zero-variance collapsed member of this same family: under the implemented kernel the two are numerically identical, with Hit@1 agreeing to three decimals. That unification is what makes the probe a controlled one, since only the judge then changes while the rankings, the scorer and the queries stay fixed, and we watch where the conclusion moves. Under objective-aligned metrics distributional retrieval looks decisively ahead; re-scored for mechanism recovery on the identical rankings the lead does not merely shrink but reverses; against an external functional oracle it does beat its incumbent, yet a scalar that compares no distributions reproduces almost the whole margin. The mismatch even reaches past metrics a method can see: two oracles built from the same proteins in the same cells, differing only in whether each is computed as a mean or as a distribution, hand victory to opposite methods.
+Making that boundary measurable calls for an instrument rather than a proposal: one family of population-to-population retrieval scores whose candidate rankings can be re-graded under criteria of increasing independence without being recomputed. We implement that family as EvalShift and release it with the code, and it is used here as a probe rather than offered as a method; the name is the finding, not an acronym, since what shifts across this study is the evaluation and not the rankings. Mean-signature retrieval, including Connectivity-Map cosine, is not a competitor but the zero-variance collapsed member of this same family: under the implemented kernel the two are numerically identical, with Hit@1 agreeing to three decimals. That unification is what makes the probe a controlled one, since only the judge then changes while the rankings, the scorer and the queries stay fixed, and we watch where the conclusion moves. Under objective-aligned metrics distributional retrieval looks decisively ahead; re-scored for mechanism recovery on the identical rankings the lead does not merely shrink but reverses; against an external functional oracle it does beat its incumbent, yet a scalar that compares no distributions reproduces almost the whole margin. The mismatch even reaches past metrics a method can see: two oracles built from the same proteins in the same cells, differing only in whether each is computed as a mean or as a distribution, hand victory to opposite methods.
 
 What bounds the distributional gain is mechanistic, and it is the affirmative payload of this work. A predictor that adds a \emph{single} delta vector to every cell has, by algebra rather than by experiment, two subpopulations with identical responses, so a distributional score has nothing to exploit; usefulness therefore requires that subpopulations both respond \emph{differently} and can be \emph{told apart} at all. We formalize this as a two-gate criterion, differential response and recoverability, and test it where it matters: in patient-derived glioblastoma tumours that nobody constructed, rather than in the cell-line mixtures we had assembled, which turned out to distort the biology in both directions at once and to flatter the premise both times. In real tissue both gates open, and the advantage still fails to appear, because the mean already ranks most of what the compartments do. The two gates are necessary, not sufficient, and what they omit is a third condition we name but do not measure as we measure them: the differential response must change \emph{which candidate is preferred}, and in this tumour it largely does not.
 
@@ -212,7 +212,7 @@ Three contributions follow, in the order the Results establish them. First, mean
 
 Separating objective fidelity from independent utility requires an apparatus that varies the
 evaluator while holding everything else fixed. The apparatus is a single family of
-population-to-population retrieval scores, implemented as JUDGE, whose candidate rankings can be
+population-to-population retrieval scores, implemented as EvalShift, whose candidate rankings can be
 re-graded by criteria of increasing independence without recomputing the rankings themselves
 (Fig.~\ref{fig:1}). The same
 candidates, ranked once, are scored by the retrieval score's own distributional objective (Class A), by a
@@ -1332,7 +1332,7 @@ differential profiles against matched controls; per-context control means and tr
 rows are exposed through a common dataset interface. Dataset scale, preprocessing settings and query
 construction are tabulated in Supplementary Table 1.
 
-\subsection*{JUDGE retrieval task and distributional metrics}
+\subsection*{EvalShift retrieval task and distributional metrics}
 
 Given a target population $Q$ and candidate populations $\{P_d\}$, the retrieval score ranks by a
 population-to-population distance. Implemented scores: the energy distance\cite{EnergyDistance} (subsampled to a fixed maximum cell
@@ -1964,7 +1964,7 @@ the experiment output tables in the code repository.
 \section*{Code availability}
 
 All code, experiment scripts, and the evaluation-metric taxonomy are available at
-\url{https://github.com/Boom5426/JUDGE} (\TODO{archived DOI on Zenodo at acceptance}). The
+\url{https://github.com/Boom5426/EvalShift} (\TODO{archived DOI on Zenodo at acceptance}). The
 release includes a test suite and a numerical consistency check that re-derives every
 reported constant from the cached experiment outputs; the latter re-reads the cached
 experiment tables and diffs them against the recorded constants, and is a consistency check

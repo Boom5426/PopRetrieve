@@ -9,7 +9,7 @@ Step 2: Compare DART_energy-selected vs mean_cosine-selected drugs on both metri
 Output: audit_minority_coverage.csv, audit_minority_coverage_summary.json
 """
 
-# --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/JUDGE) ---
+# --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/DART) ---
 from pathlib import Path as _P
 REPO = _P(__file__).resolve().parents[2]
 SRC = str(REPO / "src")
@@ -161,11 +161,11 @@ def main():
                 dart_wins_cell_total += 1
             if mean_covs[dart_top1] > mean_covs[mean_sel_top1]:
                 dart_wins_mean_total += 1
-            print(f"  JUDGE selects: {dart_top1}, mean_cosine selects: {mean_sel_top1}")
-            print(f"    JUDGE-sel  cell_cov={cell_covs[dart_top1]:.4f}  mean_cov={mean_covs[dart_top1]:.4f}")
+            print(f"  EvalShift selects: {dart_top1}, mean_cosine selects: {mean_sel_top1}")
+            print(f"    EvalShift-sel  cell_cov={cell_covs[dart_top1]:.4f}  mean_cov={mean_covs[dart_top1]:.4f}")
             print(f"    Mean-sel  cell_cov={cell_covs[mean_sel_top1]:.4f}  mean_cov={mean_covs[mean_sel_top1]:.4f}")
         else:
-            print(f"  JUDGE and mean_cosine agree: {dart_top1}")
+            print(f"  EvalShift and mean_cosine agree: {dart_top1}")
         # (ties: same drug, coverage identical, neither strict win)
 
         # Per-candidate rows for CSV
@@ -198,8 +198,8 @@ def main():
     print(f"  Per-seed rhos: {[round(r,3) for r in rank_corrs]}")
     print(f"  Fraction top-1 disagree: {frac_disagree:.4f} ({top1_disagrees}/{total_queries})")
     print(f"\nStep 2 (over all {total_queries} queries):")
-    print(f"  JUDGE wins cell-level: {dart_wins_cell_total}/{total_queries} = {dart_cell_frac:.4f}")
-    print(f"  JUDGE wins mean-based: {dart_wins_mean_total}/{total_queries} = {dart_mean_frac:.4f}")
+    print(f"  EvalShift wins cell-level: {dart_wins_cell_total}/{total_queries} = {dart_cell_frac:.4f}")
+    print(f"  EvalShift wins mean-based: {dart_wins_mean_total}/{total_queries} = {dart_mean_frac:.4f}")
 
     blind_spot = (mean_rho < 0.7) or (frac_disagree > 0.3)
     print(f"\nConfirmed blind spot: {blind_spot}")
