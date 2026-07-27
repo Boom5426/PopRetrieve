@@ -6,7 +6,7 @@ every correction, what the number was, what it is, and why it changed. It exists
 paper's thesis is that objective-aligned evaluation inflates results, and a paper making
 that argument cannot itself ship numbers it has not checked.
 
-**None of the fourteen corrections overturns the paper's central claim.** The distributional gain is
+**None of them overturns the paper's central claim.** The distributional gain is
 still large under objective-aligned metrics and still fails to transfer to oracle-independent
 ones. Several corrections make the negative result *sharper*. Two retract a mechanism we had
 asserted, and one converts an apparent confirmation into a refutation.
@@ -1333,7 +1333,7 @@ published figure.)
 
 ---
 
-## R43. The DART-to-JUDGE rename (2026-07-26) broke one experiment and falsified fourteen comments
+## R43. The DART-to-JUDGE rename (2026-07-26) broke one experiment and falsified thirteen comments
 
 **What was wrong.** The pass that renamed the project from DART to JUDGE replaced the string
 `DART` globally in prose, but three classes of occurrence were not prose:
@@ -1375,3 +1375,162 @@ rename and is unaffected; the regression was that the script could no longer reg
 earlier names were acronyms; EvalShift is not, which removes the expansion string that had already
 gone stale once (see the entry above). The full rationale, including why JUDGE was abandoned after
 a day, is in `manuscript/reference/naming.md`.
+
+---
+
+## R44. A multi-agent audit of the whole repository. 86 defects confirmed, 60 fixed here
+
+**What this was.** After the EvalShift rename (R43), the repository was swept by eight independent
+auditors, one per dimension (rename integrity in executable code, manuscript numbers, manuscript
+structure, documents-versus-reality, the figure build, consistency against this file, claim hygiene,
+and data provenance). Every finding was then handed to an adversarial verifier instructed to refute
+it and to default to refuted when it could not independently reproduce the defect. 100 findings were
+raised, 86 survived refutation. What follows is what they found, grouped by kind. Nothing here
+changes a published number except where stated.
+
+**The paper asserted a measurement it did not make, in the abstract.** Six sites, including the
+abstract's own closing sentence, said that in patient glioblastoma both gates open "and no advantage
+appears". The Results say, in bold, "We did not run retrieval here, so we report no retrieval
+result", and the Methods repeat it. A reader of the abstract alone, and every paper citing it, would
+have reported that this study measured distributional retrieval on patient tumours with both gates
+open and found no gain. No such measurement exists. This is the exact class of overclaim the paper
+exists to criticise, in its most-read sentence. All six now say what the Results say: the mechanism
+an advantage would run through is largely absent, and no retrieval was run. The abstract is still
+exactly 150 words.
+
+**The one affirmative result was stated unconditionally in four places and conditionally in four
+others.** The Class-C positive holds under the cell-line-centred oracle and reverses under the
+uncorrected one (R23, Supplementary Table 4), which the Limitations and Results both say. The
+abstract, both Introduction statements and the Discussion said it flatly, and the Discussion used
+"establishes", the strongest verb in the paper. All four now carry the condition. The paper's own
+rule, "a paper arguing that the choice of criterion decides the winner cannot exempt its own
+criterion", now applies to itself.
+
+**"No stratum is positive" was false of the bars it described.** The Fig. 6g caption declares its
+bars to be means; the Q4 mean is $+0.003$. The SI states it correctly, with the significance
+qualifier ($q = 0.57$); the main text and caption had dropped it. Both now carry it.
+
+**Gate 3's proposed status was silently lifted at the highest-n site.** The paper says of Gate 3
+"we mark that difference wherever it appears", and the Tahoe-100M section did not: it said
+"re-measured all three conditions", "Gate 3 replicates", and titled ED Fig. 7 "The three conditions
+re-measured". What Tahoe recomputes is the premise statistic Gate 3 rests on, not decision
+relevance: no candidate ranking and no decision outcome enter that dataset. Corrected in the
+Results, the Methods and the ED Fig. 7 caption.
+
+**Every shipped Extended Data PDF was a stale render, and three printed retracted numbers that
+contradicted their own captions on the same page.** `edfig2.pdf` showed the pre-sentinel-fix power
+analysis (n = 191, 27,794 queries for 80% power) while its caption already gave the corrected 143
+and 20,844 (R2). `edfig3.pdf` printed "collapse structure 5.1x" and "9 clustering methods", both
+retracted (R1, R10), while its caption said the opposite. `edfig1.pdf` titled a panel "Metric
+correlation (54,180 queries)", the unit overstatement R29 corrects two sentences later in the same
+paper. `edfig6.pdf` could not be regenerated at all: `ed6.py` imported four panel functions from
+`fig6/`, which had since been re-cut into the two-gate figure, so it drew four panels unrelated to
+its own caption; the real panels were parked in `figures/fig5/_stale/`, one directory deeper than
+their own path resolution allowed. All seven now rebuild from source through `figures/build_ed.py`,
+and the compiled SI contains none of those strings.
+
+**The released per-panel source data had drifted from the figures it was supposed to let a reader
+check.** `figures/source_data/` was maintained by hand with no record of what each file mirrored.
+Four had drifted, two of them onto retracted values: the ED2 pair carried R2's superseded sample
+sizes, and `fig4g_exp13_projection.csv` held the 37-row QUICK subset behind the retracted "0 of 37"
+(R13) rather than the 239-row real run. In every case the panel was right, because panels read
+`results/` directly, and the file offered to check the panel was wrong. `figures/sync_source_data.py`
+now regenerates the mirrors, distinguishes them from hand-built derived views and from primary
+inputs, and fails on drift.
+
+**A "report only" dry run mutated the repository, before the gate that guards it.** `build()` in
+four of the six assemble modules called `fig.savefig()`, so `python figures/build_all.py` without
+`--write`, documented as a dry run, overwrote four tracked composites, and did so BEFORE
+`assert_min_fontsize` ran, so a figure that then failed the gate had already been written. Exports
+now go only through `figstyle.save()`, which applies the floor first.
+
+**The typography gate is blind in two directions, and two documents claimed otherwise.** It reads
+nominal point sizes, so it cannot see (a) the scale factor LaTeX applies to a figure authored wider
+than the text block, or (b) mathtext sub/superscripts, which matplotlib renders at 0.7x. Sixteen
+sub/superscripts across four main figures print between 3.9 and 4.9 pt while the gate reports CLEAN.
+`figstyle.mathtext_offenders()` now measures the second and `build_all.py` reports it per figure;
+it is reported rather than enforced, because compliance means raising nominal sizes to about 7.2 pt,
+which re-authors the panel. README.md and the manuscript build guide no longer claim the gate knows
+the column width.
+
+**Two shell entry points could not do what they said.** `scripts/run_all_figures.sh`, described as
+"one-click reproducible", drove the superseded v1 plotting pipeline: it reads
+`results/exp01_sciplex3_controlled/`, which does not exist, so it dies with FileNotFoundError on any
+clone, and would have written a different deck into a gitignored directory. It now drives
+`build_all.py`, `build_ed.py` and `sync_source_data.py`. `scripts/run_hir_benchmark.sh` in QUICK
+mode overwrote the tracked FULL tables in place, reproducing verbatim the incident this repository's
+own PROVENANCE.md records as having already happened once; it now refuses without an explicit
+`ALLOW_QUICK_OVERWRITE=1`.
+
+**Four retracted numbers were living in documents that bind drafting.** The submission-prep
+statistics checklist listed the retracted AUC 0.640 and the retracted 0.046-vs-0.009 collapse as
+current results; the reviewer risk register offered R1's retracted "~5x structure collapse" as the
+paper's prepared answer to a reviewer; the claim-safe language guide instructed authors to call the
+retracted AUC "moderate"; and the negative-claims box still asserted "no therapeutic-utility metric
+(Class C) is available in this study", the exact claim R14 calls "the most serious process failure
+recorded here". Each is corrected in place with a pointer to its entry, and every live working
+document under `manuscript/`, `analysis/` and `figures/` now carries a supersede banner naming
+CORRECTIONS.md as the authority. The build guide `manuscript/latex/README.md` was rewritten from
+scratch: it had presented the retracted AUC as the authoritative headline, described the Makefile
+and the bibliography as "TODO, not yet built", and carried a title the manuscript had not used for
+months.
+
+**Smaller corrections.**
+- `exp16_17_verdict.py` read its template from `paper/`, a gitignored author-local directory that
+  does not exist and never entered git history, so the last step of `scripts/run_exp16_17.sh` ended
+  in a traceback for everyone. Anchored to the repository; the verdict now regenerates, and does so
+  byte-identically apart from the deliberate rename. Its committed output had also been hand-edited
+  after generation; that edit is now in the template, so code and output agree.
+- `exp13_real_data_projection.py` could not run from a fresh clone: one `.gitignore` glob excluded
+  both a 3.8 MB table and the 60 KB grid layer the script reads unguarded. The small one is now
+  tracked.
+- `analysis/class_c/class_c_functional_oracle.py` looked for the GDSC2 workbook in
+  `results/_audit/`, which does not exist, while `match_drugs_v2.py` read the same workbook from
+  `results/upgrade/`. Unified.
+- `audit_minority_coverage.py` overrode its own declared output directory and wrote into the source
+  tree, leaving its consumer reading a stale copy under `results/upgrade/`.
+- The README headline table's query-weighted Hit@1 column was wrong in four of six rows, and two
+  macro values were misrounded. Recomputed from `results/exp08_signature_baselines/summary.csv`.
+- The ED3a y axis printed the raw dataframe column names `ari_gmm2_raw` and `ari_gmm2_pca50`,
+  because the display-name map keyed those two methods differently from the data. The silent
+  `.get(key, key)` fallback that allowed it now raises.
+- The Fig. 4c caption said "every bar $\leq 0.006$"; the Q3 bar is 0.006195.
+- The ED3b silhouette caption gave the unit as "drugs" (R29: the unit is the (cell line, drug) pair)
+  and attributed a SciPlex3-only median of 0.034 to both datasets; the pooled median is 0.040 and
+  Frangieh's is 0.084.
+- Both documents said there were three Supplementary Notes; there are four, and the fourth is the
+  one that states the scope of every claim in the paper. The Additional Information statement
+  announced Extended Data Figs. 1 to 6 of the seven that exist.
+- Supplementary Table 1's footnote pointed the predictability analysis at "Fig. 6b"; it is
+  main-text Fig. 5b.
+- The title page understated the Methods by 40% (4,897 words against about 6,900) and the main text
+  by about 1,300. Recounted with figure captions excluded.
+- The Frangieh cell count appears as both 218,331 and 218,023 with no statement that these are
+  different cell sets; they are, and the Data sources entry now says so.
+- `requirements.txt` omitted anndata, scanpy and hdbscan, so one of README's own reproduce commands
+  died at import; DATA.md omitted ZhaoSims2021, the GDSC2 workbook and the Frangieh protein
+  modality entirely.
+- `manuscript/latex/figures/fig7.pdf` was tracked in the directory documented as "the PDFs the
+  documents include", was referenced by no `.tex`, and plotted the 0.964 cell-type ceiling that the
+  ED3 caption explicitly withdraws. Removed. Its source, `figures/fig7/fig7_natural.py`, is live and
+  stays: it draws Fig. 5e and 5f.
+- `analysis/predictors/README.md` documented a `--nonadditive` flag that
+  `exp09_predict_then_rank.py` does not parse.
+- `CONTRIBUTING.md` told contributors that `results/**/per_query_scores.csv` is git-ignored; one
+  such file is deliberately un-ignored and tracked, because Fig. 3c is an ECDF over its rows.
+- `CITATION.cff` and `README.md` carried the pre-pluralisation title.
+
+**Not fixed, and why.** Reported rather than changed, so that nothing here is a number this pass
+invented:
+- The five-variant Class-A range is quoted as "$+0.056$ to $+0.129$". Recomputing per variant on
+  the 600-query MoA-defined set reproduces the Class-B range exactly ($-0.011$ to $-0.037$) but
+  gives Class-A $+0.0495$ to $+0.1183$, so the denominator behind $+0.056$ and $+0.129$ could not
+  be identified. Left alone; it needs the author to pin which subset the sentence means.
+- `results/exp11_hir_benchmark/phase_grid_predictability_2x2.csv`, which backs main-text Fig. 5b,
+  has no producer in the repository, and the regeneration command in that directory's PROVENANCE.md
+  destroys the layer exp13 needs. Both are provenance gaps that cannot be closed by editing text.
+- The CellFlow and CPA-ECFP artifacts behind one Results paragraph (R40, R41) were never committed.
+- ED1 to ED4 print at roughly 2.8 to 3.5 pt because they are authored far wider than the text block;
+  Fig. 6 overflows its page and Supplementary Table 1 runs into the right margin. These are layout
+  defects the author has deferred to a dedicated re-layout pass, and rebuilding at unchanged
+  authored geometry cannot fix them.

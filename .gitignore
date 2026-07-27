@@ -23,8 +23,11 @@ checkpoints/
 # (gitignore has no trailing comments: a '#' after a pattern becomes part of the pattern.)
 # 41 MB across all experiments:
 results/**/per_query_scores.csv
-# 7.6 MB of HIR-Bench per-instance rows:
-results/**/*method_independent*.csv
+# HIR-Bench per-instance rows. The big one is 3.8 MB and stays out; the 60 KB grid layer does NOT,
+# because exp13_real_data_projection.fit_hir_boundary() reads it unguarded and the whole script
+# dies on a fresh clone without it (audited 2026-07-27). One glob was excluding both.
+results/upgrade/exp11_lean/method_independent_full.csv
+!results/exp11_hir_benchmark/phase_grid_method_independent.csv
 results/exp11_hir_benchmark/FULL_reproduced_*/
 
 # ...with one deliberate exception. exp16 and exp17 read exp12's per-query scores DIRECTLY,

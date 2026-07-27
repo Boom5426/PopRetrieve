@@ -1,4 +1,4 @@
-# Objective-aligned evaluation inflates the distributional gain in single-cell drug retrieval
+# Objective-aligned evaluation inflates distributional gains in single-cell drug retrieval
 
 <p align="center">
   <img alt="tests" src="https://img.shields.io/badge/tests-99%20passed-brightgreen">
@@ -39,7 +39,7 @@ identical material hand victory to opposite methods, purely by their own statist
 | **decide if distribution-aware retrieval is worth it for your data** | [the three conditions](#when-does-distributional-retrieval-help-three-conditions), measurable before you build anything |
 | **avoid the four mistakes we made** | the controls below, each of which caught an error of ours |
 | **reproduce a number from the paper** | [Reproduce the numbers](#reproduce-the-numbers-in-the-paper): one script per claim |
-| **see what we got wrong** | [`CORRECTIONS.md`](CORRECTIONS.md): 42 entries covering 38 distinct corrections, two of which retract mechanisms we had asserted |
+| **see what we got wrong** | [`CORRECTIONS.md`](CORRECTIONS.md): 45 entries covering 39 distinct corrections, two of which retract mechanisms we had asserted |
 
 ### The four controls, if you read nothing else
 
@@ -125,11 +125,11 @@ cells of three retrieval tasks** (controlled SciPlex3, cross-line, Frangieh;
 | scorer | Hit@1 (macro) | Hit@1 (query-weighted) | what it is |
 |---|---:|---:|---|
 | **global energy** (distributional) | **0.837** | 0.887 | K=1 population-to-population distance |
-| pca-dist (distributional) | 0.778 | 0.760 | distance in PCA latent |
-| coverage-mean (distributional) | 0.773 | 0.796 | subpopulation-matched aggregate |
-| coverage-worst (distributional) | 0.589 | 0.629 | worst-subpopulation aggregate |
-| cmap-wtcs | 0.464 | 0.487 | rank-based connectivity |
-| **mean-cosine** = **cmap-cosine** | **0.389** | 0.421 | the mean-signature incumbent |
+| pca-dist (distributional) | 0.778 | 0.817 | distance in PCA latent |
+| coverage-mean (distributional) | 0.773 | 0.802 | subpopulation-matched aggregate |
+| coverage-worst (distributional) | 0.589 | 0.595 | worst-subpopulation aggregate |
+| cmap-wtcs | 0.463 | 0.499 | rank-based connectivity |
+| **mean-cosine** = **cmap-cosine** | **0.388** | 0.421 | the mean-signature incumbent |
 
 The two aggregations differ because the cells carry 12-fold different query
 counts (controlled n=30 each, cross-line n=360, Frangieh n=90). The direction of
@@ -460,7 +460,7 @@ paper and the files a reader can check them against. The historical drafts under
 
 ## How this repository tries not to fool itself
 
-- **`CORRECTIONS.md` is part of the deliverable.** Forty-two entries covering thirty-eight
+- **`CORRECTIONS.md` is part of the deliverable.** Forty-five entries covering thirty-nine
   distinct corrections, each recording what a number was, what it is, and why it changed. Several retract mechanisms the earlier drafts asserted. A
   paper arguing that objective-aligned evaluation inflates results cannot ship numbers it has not
   itself checked.
@@ -469,7 +469,12 @@ paper and the files a reader can check them against. The historical drafts under
 - **Single-source numbers.** Values quoted in more than one place in the manuscript are LaTeX
   macros defined once, so the text, a figure caption and the Methods cannot drift apart.
 - **Figures rebuild from committed code**, and `figures/build_all.py` fails the build if any
-  rendered text would print below the 5 pt floor at the manuscript's actual column width.
+  rendered text is authored below the 5 pt floor. Note what that gate does *not* do: it reads
+  nominal point sizes and knows nothing about the manuscript's column width, so a figure
+  authored wider than the text block is scaled down by LaTeX and can print below 5 pt with the
+  gate still reporting CLEAN. The six main figures are authored at the printed width so their
+  scale factor is 1.00; the Extended Data figures are not, and that is recorded as an open
+  defect in `figures/edfigs/README.md`.
 
 ## Citing
 

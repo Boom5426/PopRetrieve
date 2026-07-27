@@ -27,14 +27,22 @@ import sys
 import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FIG6 = os.path.abspath(os.path.join(HERE, "..", "fig6"))
-sys.path.insert(0, FIG6)
+sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..")))
 
-from fig6a import draw_6a
-from fig6c import draw_6c
-from fig6d import draw_6d
-from fig6e import draw_6e
+# BROKEN UNTIL 2026-07-27, and it would have produced a figure that silently disagreed with its own
+# caption. This file used to do `from fig6a import draw_6a` etc., which was correct only while
+# Figure 6 WAS the HIR-Bench figure. Figure 6 was later re-cut into the two-gate figure, so those
+# four names now draw the predict-then-rank schematic, Gate 1, the structure diagnostics and the
+# Gate 2 mixture: four panels with nothing to do with the four this figure's caption describes.
+# The real panels had been parked in figures/fig5/_stale/, whose own README already said they
+# "moved to Extended Data"; parking them one directory deeper also broke their
+# REPO = dirname/../.. path resolution, so they could not have run from there either. They now live
+# beside this file, at the directory depth they were authored for.
+from ed6_panel_a import draw_5a
+from ed6_panel_c import draw_5c
+from ed6_panel_d import draw_5d
+from ed6_panel_e import draw_5e
 
 TITLES = {
     "a": "Generative model",
@@ -46,7 +54,7 @@ TITLES = {
 
 def build():
     fig, axes = plt.subplots(2, 2, figsize=(9.4, 6.6))
-    fns = [draw_6a, draw_6c, draw_6d, draw_6e]
+    fns = [draw_5a, draw_5c, draw_5d, draw_5e]
     for ax, fn, k in zip(axes.ravel(), fns, "abcd"):
         fn(ax)
         ax.set_title(TITLES[k], loc="left", fontsize=8)

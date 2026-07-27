@@ -11,6 +11,8 @@ Palette (one edit here recolours the whole deck):
 """
 import os
 import matplotlib.pyplot as plt
+import re
+
 import matplotlib as mpl
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.patches import Rectangle
@@ -119,8 +121,38 @@ def _text_sizes(fig):
     return out
 
 
+# Matplotlib renders a mathtext sub/superscript at this fraction of the surrounding size. It is
+# not configurable through rcParams, and get_fontsize() reports the NOMINAL size of the whole
+# string, so a 5.6 pt label containing $P_{1}$ prints its subscript at 3.9 pt while the gate below
+# sees only 5.6. Audited 2026-07-27.
+MATHTEXT_SUBSUP_SCALE = 0.7
+_MATH_SUBSUP = re.compile(r"\$[^$]*[\^_][^$]*\$")
+
+
+def mathtext_offenders(fig, floor=MIN_PT):
+    """Text whose mathtext sub/superscript prints below `floor`, with its effective size.
+
+    Reported separately from assert_min_fontsize rather than folded into it: raising these to
+    compliance means raising the NOMINAL size to floor / 0.7 (about 7.2 pt for a 5 pt floor),
+    which is a re-authoring decision about the panel, not a one-line fix.
+    """
+    out = []
+    for t, sz, txt in _text_sizes(fig):
+        if _MATH_SUBSUP.search(str(t.get_text())):
+            eff = sz * MATHTEXT_SUBSUP_SCALE
+            if eff < floor - 1e-6:
+                out.append((round(eff, 2), sz, txt))
+    return sorted(out)
+
+
 def assert_min_fontsize(fig, floor=MIN_PT, strict=True):
-    """Raise if any rendered text is below the production floor. Returns the offenders."""
+    """Raise if any rendered text is below the production floor. Returns the offenders.
+
+    NOTE what this does NOT catch, and why the caller must also look at mathtext_offenders():
+    it compares NOMINAL point sizes, so it is blind to mathtext sub/superscript shrinkage, and it
+    knows nothing about the document's text width, so a figure authored wider than the text block
+    is scaled down by includegraphics and can print below the floor with this returning clean.
+    """
     bad = [(sz, txt) for _t, sz, txt in _text_sizes(fig) if sz < floor - 1e-6]
     if bad and strict:
         lines = "\n".join(f"    {sz:.1f} pt  {txt!r}" for sz, txt in sorted(bad)[:12])

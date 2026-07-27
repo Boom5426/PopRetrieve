@@ -1,5 +1,6 @@
 """EvalShift Figure 4 panel 4e: gate axis vs true divergence
-Source data: source_data/fig4ef_gate_divergence.csv
+Source data: results/exp16_gate_diagnosis/_merged_query_divergence.csv
+             (source_data/fig4ef_gate_divergence.csv is a hand-built column view of it, not read here)
 Run standalone: python fig4e.py
 """
 import os, numpy as np, pandas as pd, matplotlib as mpl, matplotlib.pyplot as plt

@@ -77,7 +77,11 @@ def main():
 
     N_SEEDS = 20
     ALPHA = 0.7
-    OUT_DIR = Path(__file__).resolve().parent
+    # Was Path(__file__).parent, i.e. the script wrote its outputs INTO analysis/audit/ while
+    # RESULTS_AUDIT (declared at the top of this file, and where its consumer looks) kept a
+    # stale copy. Audited 2026-07-27.
+    OUT_DIR = Path(RESULTS_AUDIT)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     task = ControlledMixtureTask(ds, cell_line="K562", class_a="HDAC",
                                  class_b="JAK", seed=42)

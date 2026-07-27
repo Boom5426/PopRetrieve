@@ -197,13 +197,17 @@ def build(apply_style, panel_letter):
                  fontsize=6.8, fontweight="bold", color="#1A1A1A", ha="left", va="baseline")
 
     out = os.path.dirname(os.path.abspath(__file__))
-    fig.savefig(os.path.join(out, STEM + ".png"), dpi=300)
-    fig.savefig(os.path.join(out, STEM + ".pdf"))
     return fig
 
 
 if __name__ == "__main__":
-    from figstyle import apply_style, panel_letter
-
-    build(apply_style, panel_letter)
+    # build() must NOT export. It used to call fig.savefig() here, which meant two things:
+    # `python figures/build_all.py` without --write, documented as a report-only dry run,
+    # silently overwrote four tracked composites; and it wrote them BEFORE
+    # assert_min_fontsize ran, so a figure that then FAILED the gate had already been
+    # deployed to disk. Every export now goes through figstyle.save(), which applies the
+    # 5 pt floor first. (Audited 2026-07-27; fig1 and fig5 already worked this way.)
+    from figstyle import apply_style, panel_letter, save
+    save(build(apply_style, panel_letter),
+         os.path.join(os.path.dirname(os.path.abspath(__file__)), STEM))
     print(f"wrote fig4 composite (9 panels, 3 rows) at {FIGW:.2f} x {FIGH:.2f} in")

@@ -33,7 +33,7 @@ there renders as `[?]`; SI references are written as plain author-year text on p
 | `Makefile` | the build above |
 | `EvalShift_manuscript.bbl` | committed on purpose: the one artifact a reader without `bibtex` still needs |
 | `EvalShift_manuscript.md`, `introduction_EN.md`, `introduction_zh.md` | superseded prose drafts, kept for provenance. **Not** the source of the PDF |
-| `RESULTS_SPINE.md` | the Results-section outline the `.tex` follows |
+| `RESULTS_SPINE.md` | superseded outline of an earlier six-figure deck, kept for provenance. Several of its panel specs are written in terms of retracted numbers; it carries its own banner |
 | `figures/` | the PDFs the documents `\includegraphics`. Written by the figure build, not by hand |
 
 ## Figures are generated, never edited here
@@ -47,17 +47,28 @@ python figures/build_all.py --write    # rebuild, then sync to manuscript/latex/
 
 `build_all.py` owns one canonical stem per figure (`fig1_problem`, `fig2_collapse`,
 `fig3_temptation`, `fig4_collapse`, `fig5_benchmarks`, `fig6_two_gate`) and refuses to build if a
-`figN_assemble.py` declares a different one. It also fails the build if any rendered text would
-print below the 5 pt floor at this document's actual text width.
+`figN_assemble.py` declares a different one. It also fails the build if any text is **authored**
+below 5 pt. It does **not** know this document's text width: the check reads nominal point
+sizes, so a figure authored wider than the text block is scaled down by
+`\includegraphics[width=\textwidth]` and can print below 5 pt while the gate reports CLEAN. The
+six main figures are authored at 6.90 in, i.e. the printed width, so their scale factor is 1.00
+and nominal equals printed. The Extended Data figures are not, which is the open defect below.
 
-Extended Data is **outside** `build_all.py` and is copied manually:
+Extended Data has its own driver, because copying it by hand did not work: on 2026-07-27 all
+seven shipped Extended Data PDFs were stale renders, and three printed numbers this project has
+retracted, each contradicting its own caption on the same page.
+
+```bash
+python figures/build_ed.py            # build all seven, report which shipped PDFs are stale
+python figures/build_ed.py --write    # build all seven and sync to manuscript/latex/figures/
+```
 
 | target | built by |
 |---|---|
-| `figures/edfig1.pdf` .. `edfig4.pdf` | `python figures/edfigs/ed_panels.py` (stems `ed1_reproducibility`, `ed2_classB_robustness`, `ed3_identifiability`, `ed4_resistance_exploratory`) |
-| `figures/edfig5.pdf` | `python figures/ed5/ed5.py` |
-| `figures/edfig6.pdf` | `python figures/ed6/ed6.py` |
-| `figures/edfig7.pdf` | `python figures/ed7/ed7_tahoe.py` (stem `ed7_tahoe`) |
+| `figures/edfig1.pdf` .. `edfig4.pdf` | `figures/edfigs/ed_panels.py` (stems `ed1_reproducibility`, `ed2_classB_robustness`, `ed3_identifiability`, `ed4_resistance_exploratory`) |
+| `figures/edfig5.pdf` | `figures/ed5/ed5.py` |
+| `figures/edfig6.pdf` | `figures/ed6/ed6.py` (panels in `ed6/ed6_panel_{a,c,d,e}.py`) |
+| `figures/edfig7.pdf` | `figures/ed7/ed7_tahoe.py` (stem `ed7_tahoe`) |
 
 Known outstanding issue, recorded in `figures/edfigs/README.md`: ED1 to ED4 are authored far wider
 than the text block, so LaTeX scales them down and their type prints at roughly 2.8 to 3.5 pt,

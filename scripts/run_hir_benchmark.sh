@@ -21,6 +21,19 @@ echo "============================================"
 echo ""
 
 if [ "$QUICK" = "1" ]; then
+    # QUICK and FULL write to the SAME directory (results/exp11_hir_benchmark/), so a QUICK run
+    # silently replaces the tracked FULL tables that the manuscript quotes. PROVENANCE.md in that
+    # directory records this having already happened once: results/ shipped a QUICK run reporting
+    # AUC 0.5 while the manuscript quoted the FULL grid, and nothing on disk recorded the swap.
+    # Refuse by default rather than repeat it.
+    if [ "${ALLOW_QUICK_OVERWRITE:-0}" != "1" ] && \
+       git ls-files --error-unmatch results/exp11_hir_benchmark/phase_grid_method_performance.csv >/dev/null 2>&1; then
+        echo "REFUSING: QUICK mode would overwrite the tracked FULL results in" >&2
+        echo "  results/exp11_hir_benchmark/  (see its PROVENANCE.md)." >&2
+        echo "Re-run with ALLOW_QUICK_OVERWRITE=1 if that is what you want, and re-stamp provenance" >&2
+        echo "afterwards with:  \$PY src/experiments/exp11_write_provenance.py" >&2
+        exit 1
+    fi
     echo "[1/2] Running HIR-Bench QUICK..."
     $PY src/experiments/exp11_hir_benchmark.py --quick --n-seeds 3
 else

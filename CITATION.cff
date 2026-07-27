@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this repository, please cite it as below."
-title: "Objective-aligned evaluation inflates the distributional gain in single-cell drug retrieval"
+title: "Objective-aligned evaluation inflates distributional gains in single-cell drug retrieval"
 abstract: >-
   Code, analyses and manuscript sources for an audit of how distribution-aware
   single-cell drug retrieval is evaluated. Holding the candidate rankings, the

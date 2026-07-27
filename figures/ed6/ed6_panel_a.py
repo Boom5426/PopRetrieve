@@ -1,4 +1,4 @@
-"""DART Figure 5 panel 5a: HIR-Bench generative model
+"""EvalShift Extended Data Fig. 6 panel a: HIR-Bench generative model
 Source data: (schematic)
 Run standalone: python fig5a.py
 """

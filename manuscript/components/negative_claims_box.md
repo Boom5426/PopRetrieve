@@ -1,3 +1,13 @@
+> **SUPERSEDED IN PART, audited 2026-07-27.** This is a working document. It predates the July
+> 2026 audit, which retracted or revised numbers this file may still quote, among them the
+> "5.1x structure collapse" (R1), the MoA-nDCG statistics computed over 165 undefined sentinel
+> values (R2), the Class A/B contrast that compared two different scorers (R4), the HIR-Bench
+> predictability AUC of 0.640 (R11), the claim that no Class C metric was available (R14), and
+> the "0 of 37 real-data tasks" count (R13). **Read [CORRECTIONS.md](../../CORRECTIONS.md) before quoting any
+> number below**, and treat `manuscript/latex/EvalShift_manuscript.tex` as the authority for
+> anything that reaches the paper. Where this file and CORRECTIONS.md disagree, CORRECTIONS.md
+> is right.
+
 # What This Study Does Not Claim
 
 *This box is a standalone guardrail file and is reproduced verbatim in the main
@@ -10,7 +20,10 @@ to make the paper's boundaries explicit and pre-empt over-reading.*
 >
 > 1. **We do not claim that EvalShift provides better therapeutic recommendations.**
 >    All positive gains are measured under an energy-based, objective-aligned proxy
->    (Class A); no therapeutic-utility metric (Class C) is available in this study.
+>    (Class A). The clause that used to stand here, "no therapeutic-utility metric (Class C) is
+>    available in this study", is **RETRACTED**: a Class C experiment against GDSC viability has
+>    been in the repository the whole time (CORRECTIONS.md R14). What the paper claims under
+>    Class C is stated in the Results and is conditional on the oracle's construction.
 >
 > 2. **We do not claim oracle-independent therapeutic utility improvement.** Under
 >    the oracle-independent metric (Class B) the advantage is absent or adverse: on
@@ -27,7 +40,7 @@ to make the paper's boundaries explicit and pre-empt over-reading.*
 >    tasks clear it for EvalShift, 2 for the mean). The seed is not a replicate: it re-draws
 >    which drugs are tested and re-clusters the minority subpopulation. Under
 >    resampling, only **2 of the 10** threshold-crossing cross-line tasks survive, while
->    drugs that do *not* cross it in the recorded run cross it in 2-4 of 10 resamples.
+>    drugs that do *not* cross it in the recorded run cross it in **1 to 4 of 10** resamples (R13 corrected the range from 2-4).
 >    (Earlier drafts said "0 of 37"; 37 is the QUICK sanity task count, quoted as if it
 >    were the real-data result. See CORRECTIONS.md R13.)
 >
@@ -62,10 +75,12 @@ to make the paper's boundaries explicit and pre-empt over-reading.*
 >    timecourse, survival, or post-treatment readout, and the EvalShift-versus-mean
 >    minority-rescue contrast is near-null.
 >
-> 9. **We do not benchmark live scGen or live PDGrapher.** Perturbation predictors
->    are treated as candidate-response *sources*, not as models under test; the
->    scGen result uses an in-repo CPA-linear fallback with the backend
->    provenance-stamped in all outputs.
+> 9. **We do not benchmark live PDGrapher.** Perturbation predictors are treated as
+>    candidate-response *sources*, not as models under test. The "we do not benchmark live
+>    scGen" half of this item is **SUPERSEDED**: the published scGen VAE was subsequently run
+>    within-context and is reported (learning check 0.420 PASS, induced divergence 0.972 against
+>    its own baseline, ~3% of the real divergence reproduced; CORRECTIONS.md R32). Published CPA
+>    was also attempted and did not converge, which is reported as such.
 >
 > 10. **We do not claim that all CMap implementations are algebraically identical to
 >    EvalShift.** The exact identity is limited to the implemented cosine mean-signature

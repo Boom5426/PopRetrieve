@@ -51,8 +51,8 @@ retrieval objective); the figure must NOT be read as independent validation, whi
   That holds for K562 (energy-minus-mean gap 1.00 -> 0.05) but NOT for A549 (0.40 -> 0.65) or MCF7
   (0.35 -> 0.45). The panel title therefore claims only the part that is true of all three lines.
   Either soften the caption or restrict it to K562.
-- The manuscript writes mean/CMap cosine as 0.389; the exact macro-mean is 0.388492, which rounds
-  to 0.388. The panel prints 0.388.
+- The exact macro-mean for mean/CMap cosine is 0.388492, which rounds to 0.388. The panel, the
+  manuscript and README all print 0.388. (An earlier manuscript draft wrote 0.389; that is fixed.)
 
 ## Print geometry (authored 1:1)
 The manuscript text block is 6.93 in and the figure enters with `\includegraphics[width=\textwidth]`.

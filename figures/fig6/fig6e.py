@@ -22,8 +22,14 @@ Every method is now scored in the SAME unit, best-permutation accuracy against t
 labels, with the label matching given to each clusterer for free (an over-partitioning method
 is never penalised for splitting a true class). The supervised ceiling is a classifier handed
 the ground-truth partition, with the representation fit INSIDE the training fold so nothing
-leaks; the unsupervised methods get the easier transductive representation, which biases the
-comparison against the conclusion drawn.
+leaks; the unsupervised methods get the easier transductive representation.
+
+CORRECTED (CORRECTIONS.md R22): this docstring used to say that arrangement "biases the comparison
+AGAINST the conclusion drawn". It biases it FOR. The conclusion is that the GAP is small, and
+inflating the unsupervised arm while deflating the supervised one makes the gap smaller, so the
++0.018 below is an underestimate that was presented as a conservative bound. The ceiling is now
+also reported under the MATCHED representation (the same transductive PCA the clusterers get,
+which leaks no labels because PCA never sees them), and that is the number the manuscript uses.
 
 THE ANSWER: ceiling 0.692, best unsupervised 0.674, gap 0.018. Unsupervised clustering already
 extracts essentially everything this representation contains about this partition, so WITHIN THIS

@@ -1,5 +1,6 @@
 """EvalShift Figure 5 panel 5b: analytic boundary alpha*=B/(A+B)
-Source data: source_data/fig5a_theoretical_boundary.csv
+Source data: results/exp11_hir_benchmark/theoretical_boundary.csv
+             (source_data/fig5a_theoretical_boundary.csv is a mirror of it, not read here)
 Run standalone: python fig5b.py
 """
 import os, numpy as np, pandas as pd, matplotlib as mpl, matplotlib.pyplot as plt

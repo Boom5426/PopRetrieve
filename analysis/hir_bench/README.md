@@ -1,3 +1,13 @@
+> **SUPERSEDED IN PART, audited 2026-07-27.** This is a working document. It predates the July
+> 2026 audit, which retracted or revised numbers this file may still quote, among them the
+> "5.1x structure collapse" (R1), the MoA-nDCG statistics computed over 165 undefined sentinel
+> values (R2), the Class A/B contrast that compared two different scorers (R4), the HIR-Bench
+> predictability AUC of 0.640 (R11), the claim that no Class C metric was available (R14), and
+> the "0 of 37 real-data tasks" count (R13). **Read [CORRECTIONS.md](../../CORRECTIONS.md) before quoting any
+> number below**, and treat `manuscript/latex/EvalShift_manuscript.tex` as the authority for
+> anything that reaches the paper. Where this file and CORRECTIONS.md disagree, CORRECTIONS.md
+> is right.
+
 # hir_bench/, failure predictability
 
 > **SUPERSEDED, 2026-07-12.** The scripts here produced the **retracted** AUC 0.640. The
@@ -35,10 +45,12 @@ Grouping on the label-determining axes, on the FULL grid:
 | feature set | AUC |
 |---|---:|
 | **observable** (variance ratio, isotropy, response diversity of query and candidates) | **0.788** |
-| oracle-derived (the four above) | **0.400**, worse than chance |
+| oracle-derived (the four above) | **0.400**, no better than chance |
 | majority-class rate | 0.643 |
 
-All of the reported 0.640 was pseudo-replication. The observable-feature result is better than
+Pseudo-replication accounts for $+0.240$ of the reported 0.640, and feature circularity for the
+rest: the same oracle-derived features under honest grouping give 0.400, which at $n_{\text{eff}}=28$
+is not distinguishable from chance (CORRECTIONS.md R11). The observable-feature result is better than
 the number it replaces, but effective n is 28, and because the label is deterministic within a
 cell every held-out fold is single-class, so no per-fold AUC distribution exists.
 

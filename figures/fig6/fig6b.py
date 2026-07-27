@@ -1,5 +1,6 @@
 """EvalShift Figure 6 panel 6b: predictor-specific retrieval gaps
-Source data: source_data/fig6b_predictor_gaps.csv
+Source data: results/exp09_predict_then_rank/summary.csv (+ provenance.csv)
+             (source_data/fig6b_predictor_gaps.csv is a hand-built per-predictor view, not read here)
 Run standalone: python fig6b.py
 
 Fixed 2026-07-12: this panel used to reindex on 'scgen_cpa_linear', but

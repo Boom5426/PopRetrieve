@@ -58,6 +58,10 @@ METHOD_DISP = {
     "raw_kmeans_bestk5": "k-means best-k", "response_kmeans_k2": "k-means k=2 (response)",
     "gmm_k2": "GMM k=2", "pca10_kmeans_k2": "PCA-10 + k-means",
     "pca50_kmeans_k2": "PCA-50 + k-means",
+    # The two GMM columns are stored as gmm2_*, not gmm_k2, so they matched nothing and the
+    # `.get(key, key)` fallback silently printed the raw dataframe column names "ari_gmm2_raw" and
+    # "ari_gmm2_pca50" onto ED3a's y axis in the shipped figure (audited 2026-07-27).
+    "gmm2_raw": "GMM k=2", "gmm2_pca50": "PCA-50 + GMM",
 }
 
 
@@ -225,8 +229,15 @@ def draw_ed3a(ax, D):
     ax.axvline(0.5, ls="--", lw=0.9, color=COMP)
     ax.text(0.5, len(med) - 0.3, "ARI 0.5\n(reliable)", fontsize=5.0, color=COMP, ha="center")
     ax.set_yticks(y)
-    ax.set_yticklabels([METHOD_DISP.get(str(c).replace("ari_", ""), str(c)) for c in med.index],
-                       fontsize=5.0)
+    # No silent fallback: an unmapped key used to be printed verbatim as a tick label, which is
+    # how "ari_gmm2_raw" reached the published figure. Fail instead, and say which key is missing.
+    keys = [str(c).replace("ari_", "") for c in med.index]
+    unmapped = [k for k in keys if k not in METHOD_DISP]
+    if unmapped:
+        raise KeyError(
+            f"ED3a: no display name for {unmapped} in METHOD_DISP. Add them rather than letting "
+            f"the raw column name be printed on the axis.")
+    ax.set_yticklabels([METHOD_DISP[k] for k in keys], fontsize=5.0)
     ax.set_xlabel("median ARI vs true labels"); ax.set_xlim(0, 0.6)
     # The asterisk footnote (response-space k=2 is bit-identical to raw k=2 because k-means is
     # translation-invariant) is in the ED Fig. 3a caption; at 4.6 pt it broke the 5 pt floor.

@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from utils.io import results_path                              # noqa: E402
+from utils.io import PKG_ROOT, results_path                    # noqa: E402
 
 ALPHA = 0.05
 E16 = "exp16_gate_diagnosis"
@@ -234,15 +234,28 @@ def main():
                          f"q={_fmt_p(r['bh_qvalue'])} — no significant advantage.")
     nulls_txt = "\n".join(nulls) if nulls else "- (none)"
 
-    tmpl = Path("paper/exp16_17_verdict_TEMPLATE.md").read_text()
+    # Repo-anchored, not CWD-relative. This used to read "paper/exp16_17_verdict_TEMPLATE.md":
+    # `paper/` is gitignored author-local scratch, does not exist even on the author's machine, and
+    # has never been in git history, so step [4/4] of scripts/run_exp16_17.sh ended in a traceback
+    # for everyone and results/exp16_17_verdict.md could not be regenerated at all (audited
+    # 2026-07-27). The only surviving copy of the template is the archived one, and it is the right
+    # one: its eight placeholders are exactly the eight substituted below.
+    tmpl_path = PKG_ROOT / "manuscript" / "_archive" / "audits" / "exp16_17_verdict_TEMPLATE.md"
+    if not tmpl_path.exists():
+        raise FileNotFoundError(
+            f"verdict template not found at {tmpl_path}. It carries the eight placeholders this "
+            f"function fills ({{IMPACT}} {{LESION}} {{NULLS}} {{OUTCOME}} {{PHASE1}} {{PHASE2}} "
+            f"{{PHASE3}} {{POWER}}); without it the verdict document cannot be regenerated.")
+    tmpl = tmpl_path.read_text()
     doc = (tmpl.replace("{LESION}", lesion).replace("{OUTCOME}", outcome)
            .replace("{PHASE1}", phase1).replace("{PHASE2}", phase2)
            .replace("{PHASE3}", phase3).replace("{POWER}", powertbl)
            .replace("{IMPACT}", impact).replace("{NULLS}", nulls_txt))
     # strip the template HTML comment header
     doc = doc.split("-->", 1)[1].lstrip() if "-->" in doc else doc
-    Path("results/exp16_17_verdict.md").write_text(doc)
-    print("wrote results/exp16_17_verdict.md")
+    out = results_path("exp16_17_verdict.md")
+    out.write_text(doc)
+    print(f"wrote {out}")
     print("OUTCOME:", "A" if outcome.startswith("**A") else "B" if outcome.startswith("**B") else "C")
     print("LESION aligned:", aligned, "fixable:", fixable, "underpowered:", underpowered)
 

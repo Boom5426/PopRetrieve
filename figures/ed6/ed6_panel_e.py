@@ -1,4 +1,4 @@
-"""DART Figure 5 panel 5e: benchmark QC
+"""EvalShift Extended Data Fig. 6 panel e: benchmark QC
 Source data: source_data/fig5e_sanity_checks.csv
 Run standalone: python fig5e.py
 """
@@ -12,7 +12,7 @@ def draw_5e(ax):
     """QC sanity checks panel."""
     sc=pd.read_csv(f"{H}/sanity_checks.csv")
     labs={'no_conflict_flip_rate':'no-conflict\nflip rate','median_boundary_margin':'median\nboundary margin',
-          'predicted_mean_dart_eq_mean':'pred-mean:\nDART=mean'}
+          'predicted_mean_dart_eq_mean':'pred-mean:\ndistributional=mean'}
     ys=np.arange(len(sc))
     for y,(_,row) in zip(ys,sc.iterrows()):
         passed=row['pass']==1

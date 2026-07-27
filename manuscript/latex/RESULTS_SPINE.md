@@ -1,7 +1,22 @@
+> **SUPERSEDED IN PART, audited 2026-07-27.** This is a working document. It predates the July
+> 2026 audit, which retracted or revised numbers this file may still quote, among them the
+> "5.1x structure collapse" (R1), the MoA-nDCG statistics computed over 165 undefined sentinel
+> values (R2), the Class A/B contrast that compared two different scorers (R4), the HIR-Bench
+> predictability AUC of 0.640 (R11), the claim that no Class C metric was available (R14), and
+> the "0 of 37 real-data tasks" count (R13). **Read [CORRECTIONS.md](../../CORRECTIONS.md) before quoting any
+> number below**, and treat `manuscript/latex/EvalShift_manuscript.tex` as the authority for
+> anything that reaches the paper. Where this file and CORRECTIONS.md disagree, CORRECTIONS.md
+> is right.
+
 # EvalShift Results spine: claim -> Result -> figure -> panels
 
 Editor pass 2026-07-12 (Nature-series editor lens). Lock this logic BEFORE writing prose or
-building figures. Source of truth for the paper's skeleton; figures serve it.
+building figures. **No longer the source of truth:** it describes an earlier six-figure deck
+(Fig 3 apparent gains / Fig 5 two-gate / Fig 6 formalization) that the current manuscript does
+not use, and several of the panel specifications below are written in terms of numbers that
+CORRECTIONS.md has since retracted (the 0.046-vs-0.009 collapse, R1; the +0.119-versus-0/37
+pairing, R4 and R13; the predictability AUC 0.640, R11). The authority is
+`EvalShift_manuscript.tex` for the prose and `figures/build_all.py` for the deck.
 
 Genre reminder: evaluation-methodology / methods-critique. EvalShift is a probe, not a product.
 Every claim's prose weight must match its evidence weight. Honest ceiling: Nature Methods /

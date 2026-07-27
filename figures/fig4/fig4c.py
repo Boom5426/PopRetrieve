@@ -1,5 +1,6 @@
 """EvalShift Figure 4 panel 4c: minority coverage gain by divergence quartile
-Source data: source_data/fig4ef_gate_divergence.csv
+Source data: results/exp16_gate_diagnosis/_merged_query_divergence.csv
+             (source_data/fig4ef_gate_divergence.csv is a hand-built column view of it, not read here)
 Run standalone: python fig4c.py
 """
 import os, numpy as np, pandas as pd, matplotlib as mpl, matplotlib.pyplot as plt
@@ -37,7 +38,7 @@ def draw_4c(ax):
     ax.set_yticks([0,0.004,0.008,0.012])
     ax.tick_params(labelsize=5.8)
     ax.text(0.03,0.99,'bar, mean $\\pm$ s.e.m.\ndash, median\n'
-                      'significant, all $\\leq$0.006\non a 0.89$-$0.99 metric',
+                      'significant, all $\\leq$0.0062\non a 0.89$-$0.99 metric',
             transform=ax.transAxes,ha='left',va='top',fontsize=5.6,color=GREY,linespacing=1.30)
     for sp in ['right','top']: ax.spines[sp].set_visible(False)
     ax.set_title("Minority-coverage gain is negligible", loc='left')

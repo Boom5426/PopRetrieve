@@ -8,6 +8,21 @@ torch>=2.0           # tested 2.5.1+cu121 (CPU build works; CUDA optional, speed
 matplotlib>=3.7      # tested 3.11.0   (figures only)
 pyyaml>=6.0          # tested           (config loading)
 
+# Needed by analysis/ (the natural-tissue, Gate-2 and Class-C oracle scripts). Omitting them
+# made `python analysis/natural/zhao_two_gates.py`, one of README's own reproduce commands,
+# die at import (audited 2026-07-27).
+anndata>=0.10        # .h5ad IO
+scanpy>=1.10         # neighbours + Leiden for the Gate-2 clusterer panel
+hdbscan>=0.8         # density clusterer in the Gate-2 like-for-like comparison
+
 # Optional: pytest for the test suite. The tests also run WITHOUT pytest via
 #   python tests/run_tests.py
 # pytest>=7.0
+
+# ---- Optional extras, imported lazily inside the function that needs them ----
+# Nothing above requires these. Each is imported inside the predictor that uses it, so the core
+# pipeline, the figure build and the test suite all run without them; only the named Part-B
+# comparison fails, and it fails with that module's own ImportError.
+#   scgen, scvi-tools   src/baselines/scgen_predictor.py, nonadditive_predictors.py (published scGen VAE)
+#   cpa-tools           src/baselines/nonadditive_predictors.py (published CPA)
+#   pot                 src/baselines/nonadditive_predictors.py (entropic OT map, imported as `ot`)

@@ -30,7 +30,7 @@ Judge metrics (both non-circular, computed independently of any DART-aligned sco
 ## Phase 1 — gate vs true divergence
 {PHASE1}
 
-## Phase 2 — gate-variant sweep (non-circular, LODO-CV, BH-corrected)
+## Phase 2 — gate-variant sweep (non-circular, leave-one-cell-line-out CV (all lines from SciPlex3; NOT cross-dataset), BH-corrected)
 {PHASE2}
 
 ## Phase 3 — true-divergence stratification (Q2)

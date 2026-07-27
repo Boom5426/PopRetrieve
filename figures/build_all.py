@@ -24,7 +24,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from figstyle import apply_style, panel_letter, assert_min_fontsize, MIN_PT, save
+from figstyle import (apply_style, panel_letter, assert_min_fontsize,
+                      mathtext_offenders, MIN_PT, save)
 
 FIGS = [1, 2, 3, 4, 5, 6]
 # The single canonical output stem per figure. This is the name that gets copied to
@@ -77,6 +78,16 @@ def main():
             plt.close("all")
             out = mod.build(apply_style, panel_letter)
             fig = out if hasattr(out, "savefig") else plt.figure(plt.get_fignums()[-1])
+
+            # Reported, not counted as a violation: see figstyle.mathtext_offenders. Bringing a
+            # sub/superscript to 5 pt means raising the nominal size to ~7.2 pt, which re-authors
+            # the panel. Printed here so it cannot be forgotten, and left to a human to decide.
+            mt = mathtext_offenders(fig)
+            if mt:
+                print(f"  fig{n}: NOTE {len(mt)} mathtext sub/superscript(s) print below "
+                      f"{MIN_PT} pt (nominal size passes; see figstyle.mathtext_offenders)")
+                for eff, nom, txt in mt[:3]:
+                    print(f"         {eff:.2f} pt effective (nominal {nom:.1f})  {txt!r}")
 
             bad = assert_min_fontsize(fig, strict=False)
             if bad:

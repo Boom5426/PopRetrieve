@@ -71,7 +71,11 @@ SCIPLEX_LINES = ["A549", "K562", "MCF7"]
 GDSC_NAMES_OF_SCIPLEX_LINES = ["A549", "K-562", "MCF7"]   # GDSC spelling; held out of the profile
 
 OUT = REPO / "results" / "upgrade"
-GDSC_XLSX = REPO / "results" / "_audit" / "GDSC2_fitted_dose_response.xlsx"
+# One canonical location, shared with analysis/class_c/match_drugs_v2.py, which reads it from
+# RESULTS_AUDIT = results/upgrade. This used to point at results/_audit/, a directory that does
+# not exist anywhere in the repository, so the two consumers of the same workbook disagreed and
+# the one feeding main-text Fig. 4h/4i could never find it (audited 2026-07-27).
+GDSC_XLSX = REPO / "results" / "upgrade" / "GDSC2_fitted_dose_response.xlsx"
 
 np.random.seed(SEED)
 
