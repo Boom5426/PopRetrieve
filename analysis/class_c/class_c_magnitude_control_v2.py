@@ -7,15 +7,15 @@ here and the v1 numbers must not be used.
 
   1. THE SIGN. `retrieval.metrics.score_energy` returns MINUS the energy distance, i.e. a
      SIMILARITY (higher = more similar). v1 ranked it ascending (`rankdata(e_scores)`,
-     `argmin(dart_scores)`) under the comment "lowest energy = top pick", so EvalShift's rank-1
+     `argmin(dart_scores)`) under the comment "lowest energy = top pick", so PopRetrieve's rank-1
      candidate was the population FARTHEST from the query. The mean-cosine baseline in the
-     same scripts was ranked correctly (`argmax`). EvalShift was therefore ranked backwards and
+     same scripts was ranked correctly (`argmax`). PopRetrieve was therefore ranked backwards and
      its incumbent was not.
 
      This is not a cosmetic bug. Candidates with large response magnitude sit far from the
      query (rank corr between energy distance and candidate magnitude = +0.83), and large
      response magnitude predicts potency. Ranking "farthest first" therefore selects potent
-     drugs, which is where v1's apparent +0.52 EvalShift-vs-potency correlation came from. It
+     drugs, which is where v1's apparent +0.52 PopRetrieve-vs-potency correlation came from. It
      was an artifact of the inversion.
 
   2. THE DOSE. v1 pooled all four SciPlex3 doses (10 nM to 10 uM) into each drug's

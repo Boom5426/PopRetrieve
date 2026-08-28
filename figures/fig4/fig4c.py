@@ -1,4 +1,4 @@
-"""EvalShift Figure 4 panel 4c: minority coverage gain by divergence quartile
+"""PopRetrieve Figure 4 panel 4c: minority coverage gain by divergence quartile
 Source data: results/exp16_gate_diagnosis/_merged_query_divergence.csv
              (source_data/fig4ef_gate_divergence.csv is a hand-built column view of it, not read here)
 Run standalone: python fig4c.py

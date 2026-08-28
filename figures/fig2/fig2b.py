@@ -1,4 +1,4 @@
-"""EvalShift Figure 2 panel 2b: scaling lambda moves the residual only, never the mean.
+"""PopRetrieve Figure 2 panel 2b: scaling lambda moves the residual only, never the mean.
 
 Source data: none. Seeded gaussian schematic (seed=1). The residual draw is explicitly
 re-centred, so the plotted sample mean is identical at every lambda: that identity is the

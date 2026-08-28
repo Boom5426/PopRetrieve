@@ -1,8 +1,8 @@
 # oracle/ — reference implementation (provenance only)
 
 This directory is a **read-only snapshot of the original GID-Flow implementation** that
-first produced the results EvalShift reports. It is kept for provenance and auditability and
-is **isolated from the main line** — nothing in `../src` (the self-contained EvalShift
+first produced the results PopRetrieve reports. It is kept for provenance and auditability and
+is **isolated from the main line** — nothing in `../src` (the self-contained PopRetrieve
 package) imports from here.
 
 - `src/gidflow/` — the original library (losses/distribution.py energy·MMD·sliced-W·
@@ -15,7 +15,7 @@ package) imports from here.
 - `FINDINGS.md` — the full honest experiment log (§1–§11); the reproduction targets in
   `../src/experiments/common.py` are transcribed from it.
 
-**Why it's here and not deleted:** the EvalShift package re-derives every headline number
+**Why it's here and not deleted:** the PopRetrieve package re-derives every headline number
 self-contained (see `../results/all_existing_results_recomputed.csv`, 35/35 within
 tolerance). This snapshot lets a reviewer diff the port against the source of truth.
 

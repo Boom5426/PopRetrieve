@@ -1,4 +1,4 @@
-"""EvalShift Figure 6 panel 6c: Gate 1 — structure is preserved, DIVERGENCE is not.
+"""PopRetrieve Figure 6 panel 6c: Gate 1 — structure is preserved, DIVERGENCE is not.
 Source data: results/exp09_structure_diagnostics/
 Run standalone: python fig6c.py
 
@@ -23,7 +23,7 @@ ORDER = ["real_blend", "average_effect", "scgen", "nearest_neighbor"]
 # panel is 1.86 in wide and one x category is 0.465 in, while "avg-effect" is 0.42 in at 6 pt and
 # butted against its neighbour. Wrapped, the widest single line here is "(scGen-fam.)".
 LABS = {"real_blend": "real", "average_effect": "avg-\neffect",
-        "scgen": "latent\n(scGen-fam.)", "nearest_neighbor": "nearest\nneighbour"}
+        "scgen": "linear-\nlatent", "nearest_neighbor": "nearest\nneighbour"}
 
 
 def _pick(df, pred, col):

@@ -4,7 +4,7 @@
 > values (R2), the Class A/B contrast that compared two different scorers (R4), the HIR-Bench
 > predictability AUC of 0.640 (R11), the claim that no Class C metric was available (R14), and
 > the "0 of 37 real-data tasks" count (R13). **Read [CORRECTIONS.md](../../CORRECTIONS.md) before quoting any
-> number below**, and treat `manuscript/latex/EvalShift_manuscript.tex` as the authority for
+> number below**, and treat `manuscript/latex/PopRetrieve_manuscript.tex` as the authority for
 > anything that reaches the paper. Where this file and CORRECTIONS.md disagree, CORRECTIONS.md
 > is right.
 
@@ -20,6 +20,6 @@
 - `identifiability_phase_diagram.py`, controlled bimodal mixture swept over source
   separation x cell budget. Only separation, not budget, lifts ARI; the real regime
   (separation ~1) stays unidentifiable at any budget.
-- `signal_decode_run.py`, decodes what EvalShift's real (non-circular) signal encodes by
-  comparing EvalShift-vs-mean drug picks against structural/target/MoA properties. The
+- `signal_decode_run.py`, decodes what PopRetrieve's real (non-circular) signal encodes by
+  comparing PopRetrieve-vs-mean drug picks against structural/target/MoA properties. The
   signal does not align with any measured drug property.

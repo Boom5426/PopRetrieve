@@ -1,4 +1,4 @@
-"""EvalShift Extended Data Fig. 6 panel d: information condition regret
+"""PopRetrieve Extended Data Fig. 6 panel d: information condition regret
 Source data: source_data/fig5d_method_dominance.csv
 Run standalone: python fig5d.py
 """

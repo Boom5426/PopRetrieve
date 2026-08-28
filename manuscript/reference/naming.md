@@ -5,7 +5,7 @@ No em dashes.
 > **Sections 1 to 3 below are the 2026-07-12 record and are SUPERSEDED.** Neither the title nor
 > the name they decide is the one the manuscript now carries. They are kept because they document
 > why DrugDiT was rejected and why an audit-flavoured name was wanted at all, and both arguments
-> still govern. The current decisions are in "2026-07-27: EvalShift" at the end of this file.
+> still govern. The current decisions are in "2026-07-27: PopRetrieve" at the end of this file.
 
 ## 1. Title (2026-07-12, SUPERSEDED)
 
@@ -67,7 +67,7 @@ Decision pending user.
 
 ---
 
-## 4. 2026-07-27: EvalShift (CURRENT)
+## 4. 2026-07-27: PopRetrieve (CURRENT)
 
 ### Title (user-approved 2026-07-27)
 
@@ -82,17 +82,17 @@ carried, changed only from "the distributional gain" to "distributional gains".
 
 Rejected, with the reason each was rejected:
 
-- *EvalShift shows that objective-aligned evaluation inflates distributional gains in single-cell
+- *PopRetrieve shows that objective-aligned evaluation inflates distributional gains in single-cell
   drug retrieval.* Complete, but 15 words, and the "<Tool> shows that" frame is in tension with the
   Introduction's own "used here as a probe rather than offered as a method".
-- *EvalShift reveals objective--utility mismatch in single-cell drug retrieval.* Shortest, but
+- *PopRetrieve reveals objective--utility mismatch in single-cell drug retrieval.* Shortest, but
   "mismatch" states that there is a discrepancy without stating its direction, so the paper's
   actual result (objective-aligned evaluation inflates, rather than deflates) leaves the title. It
   also duplicates the running title.
 
 ### Name (user-decided 2026-07-27)
 
-**EvalShift. Not an acronym.** The GitHub repository was renamed first and the sources follow.
+**PopRetrieve. Not an acronym.** The GitHub repository was renamed first and the sources follow.
 
 The name states the study design rather than a property of the score: one fixed set of rankings is
 re-graded under criteria of increasing independence, so the rankings, the scorer and the queries

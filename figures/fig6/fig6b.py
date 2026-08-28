@@ -1,4 +1,4 @@
-"""EvalShift Figure 6 panel 6b: predictor-specific retrieval gaps
+"""PopRetrieve Figure 6 panel 6b: predictor-specific retrieval gaps
 Source data: results/exp09_predict_then_rank/summary.csv (+ provenance.csv)
              (source_data/fig6b_predictor_gaps.csv is a hand-built per-predictor view, not read here)
 Run standalone: python fig6b.py
@@ -24,7 +24,7 @@ REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 # Wrapped and abbreviated to "(scGen-fam.)" (the form panel c already uses) they are <= 0.50 in.
 PREDICTORS = {
     "average_effect": "avg-effect",
-    "scgen": "latent-linear\n(scGen-fam.)",
+    "scgen": "linear-\nlatent",
     # British spelling, to match the Fig. 6 caption ("-0.071 (nearest-neighbour)") and the rest
     # of the manuscript, which uses "neighbour" throughout.
     "nearest_neighbor": "nearest-\nneighbour",

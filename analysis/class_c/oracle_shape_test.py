@@ -49,6 +49,7 @@ REPO = _P(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(REPO / "src"))
 
+import hashlib
 import json
 import warnings
 
@@ -79,6 +80,16 @@ def clr(X):
     return (L - L.mean(1, keepdims=True)).astype(np.float32)
 
 
+
+def _h5ad_provenance(path) -> dict:
+    """Size plus SHA-256 of a source h5ad, so a reader can prove they are on the same file."""
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return {"path": path.name, "bytes": path.stat().st_size, "sha256": h.hexdigest()}
+
+
 def main():
     import anndata as ad
     import scanpy as sc
@@ -87,6 +98,7 @@ def main():
     r = ad.read_h5ad(RAW / "FrangiehIzar2021_RNA.h5ad")
     # Hoist the lookup set out of the comprehension. Inline, the condition rebuilds a
     # 218k-element set on every one of 218k iterations, which is quadratic and does not finish.
+    n_prot_rows, n_rna_rows = p.n_obs, r.n_obs
     rna_barcodes = set(r.obs_names)
     shared = [b for b in p.obs_names if b in rna_barcodes]
     p, r = p[shared].copy(), r[shared].copy()
@@ -95,6 +107,33 @@ def main():
 
     keep = [i for i, v in enumerate(p.var_names) if str(v) not in ISOTYPES]
     P = clr(p.X.toarray() if hasattr(p.X, "toarray") else np.asarray(p.X))[:, keep]
+
+    # PERSIST THE JOIN AND PANEL PROVENANCE.
+    # Until 2026-07-29 these counts existed only on stdout, and the manuscript consequently
+    # quoted the PROTEIN file's row count as though it were the number of cells the scorers
+    # read. Three different numbers are involved and only the third is the analysis unit:
+    # the protein file, the RNA file, and their barcode intersection. The panel has the same
+    # problem: the assay measures len(p.var_names) markers, of which four are isotype controls.
+    join_prov = {
+        "n_cells_protein_file": int(n_prot_rows),
+        "n_cells_rna_file": int(n_rna_rows),
+        "n_cells_joined_by_barcode": int(len(shared)),
+        "n_markers_measured": int(len(p.var_names)),
+        "n_isotype_controls_dropped": int(len(ISOTYPES)),
+        "isotype_controls": list(ISOTYPES),
+        "n_markers_used": int(P.shape[1]),
+        "markers_used": [str(p.var_names[i]) for i in keep],
+        "join_rule": "inner join on obs_names (cell barcode); positional concatenation is unsafe "
+                     "because the two files are not in the same row order",
+        "adt_normalization": "centered log-ratio within each cell",
+        "source_files": {k: _h5ad_provenance(RAW / k) for k in
+                         ("FrangiehIzar2021_protein.h5ad", "FrangiehIzar2021_RNA.h5ad")},
+    }
+    (OUT / "oracle_shape_join_provenance.json").write_text(json.dumps(join_prov, indent=1))
+    print(f"protein panel: {join_prov['n_markers_measured']} markers measured, "
+          f"{join_prov['n_isotype_controls_dropped']} isotype controls dropped, "
+          f"{join_prov['n_markers_used']} used")
+    print(f"wrote {OUT / 'oracle_shape_join_provenance.json'}")
 
     sc.pp.normalize_total(r, target_sum=1e4)
     sc.pp.log1p(r)

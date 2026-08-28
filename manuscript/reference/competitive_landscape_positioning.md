@@ -1,4 +1,4 @@
-# EvalShift 竞争 landscape 与定位 memo
+# PopRetrieve 竞争 landscape 与定位 memo
 
 版本 2026-07-12。目的: 回答"我们是不是第一个做 distributional drug retrieval"这个定位问题, 并据此给出可辩护的高度定位。
 全文无 em dash。所有外部工作均来自 2026-07-12 文献检索, 引用见文末。
@@ -21,16 +21,16 @@
 
 结论: distributional 工具、mean 批判、metric 比较、CMap 批判、单细胞 repurposing, 五条线全部有人。
 
-## 2. 真正还开着的地盘 (EvalShift 的真实新意)
+## 2. 真正还开着的地盘 (PopRetrieve 的真实新意)
 
 1. **统一定理**: mean-signature/CMap cosine 是 distributional 家族在零方差处的塌缩成员, 在实现核下数值恒等 (Hit@1 三位一致 0.389)。我没有检索到任何工作陈述过这个代数恒等式。这是让"公平比较"成立的地基。
-2. **检索任务的循环性审计**: 现有 metric-comparison 论文比较度量在 generative model 评测里的表现, 但没有把它框成"当检索 SCORE 和评测 METRIC 是同一个 distributional 对象时, 提升是自我实现的"这个循环性问题。EvalShift 的 knife 在这里, 且针对 retrieval/ranking 任务, 不是 prediction。
+2. **检索任务的循环性审计**: 现有 metric-comparison 论文比较度量在 generative model 评测里的表现, 但没有把它框成"当检索 SCORE 和评测 METRIC 是同一个 distributional 对象时, 提升是自我实现的"这个循环性问题。PopRetrieve 的 knife 在这里, 且针对 retrieval/ranking 任务, 不是 prediction。
 3. **双门信息条件**: 结构保留 (predictor 塌缩 5x) + 结构可识别 (真实亚群 ARI<0.15), 作为 distributional 分辨率何时可能有回报的判据。未见先例。
 
 ## 3. 两篇必须正面区分的威胁论文 (否则会被当 prior art 引)
 
-- **"Optimal distance metrics for single-cell RNA-seq populations" (biorxiv 2023.12.26)**: 比较 distributional 距离度量。区分点: 它评的是 generative model 的 distribution 是否 match true; EvalShift 评的是 retrieval 排序, 且核心是 score 与 metric 同源导致的循环性, 不是"哪个度量更好"。
-- **"Standardized Framework for Evaluating Gene Expression Generative Models" (2026)**: distributional metric (OT/MMD/energy) 评 generative model。区分点同上: 它是 generative eval 的标准化, EvalShift 是 retrieval 评测的循环性诊断。
+- **"Optimal distance metrics for single-cell RNA-seq populations" (biorxiv 2023.12.26)**: 比较 distributional 距离度量。区分点: 它评的是 generative model 的 distribution 是否 match true; PopRetrieve 评的是 retrieval 排序, 且核心是 score 与 metric 同源导致的循环性, 不是"哪个度量更好"。
+- **"Standardized Framework for Evaluating Gene Expression Generative Models" (2026)**: distributional metric (OT/MMD/energy) 评 generative model。区分点同上: 它是 generative eval 的标准化, PopRetrieve 是 retrieval 评测的循环性诊断。
 
 手稿 related work 必须显式点名这两篇并划清 retrieval-vs-generative + circularity 这两条界线, 否则审稿人会说"metric comparison 已有人做"。
 
@@ -50,7 +50,7 @@
 
 - 引言 P1/P2 应显式挂到"distributional 方法正在涌入 + 都用 distributional 度量自评"这个 timely 张力上 (点名 CellOT 一类), 让 editor 第一段就看到领域热度 + 我们的独特角度。
 - 引言 related-work 段必须区分两篇威胁论文 (retrieval-vs-generative, circularity)。
-- Figure 1 的钩子可以强化为"领域在涌入 distributional, 但没人检验收益真假", 把 EvalShift 定位成透镜。
+- Figure 1 的钩子可以强化为"领域在涌入 distributional, 但没人检验收益真假", 把 PopRetrieve 定位成透镜。
 - 其余图不受影响, 证据链不变。
 
 ## 参考 (2026-07-12 检索)

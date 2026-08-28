@@ -1,4 +1,4 @@
-"""EvalShift Figure 4 panel 4d: recommended vs non-recommended
+"""PopRetrieve Figure 4 panel 4d: recommended vs non-recommended
 Source data: results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv
              (source_data/fig4d_recommendation_vs_outcome.csv is a mirror of it, not read here)
 Run standalone: python fig4d.py
@@ -23,12 +23,12 @@ def draw_4d(ax):
         ax.text(x,m+0.004,f'$+${m:.3f}\nn={n}',ha='center',va='bottom',fontsize=6,
                 color=INK,linespacing=1.30)
     ax.set_xticks(xs); ax.set_xticklabels(labs,fontsize=6.2)
-    ax.set_ylabel('median regret\nreduction (Class A)',fontsize=6.2)
+    ax.set_ylabel('median regret\nreduction\n(response matching)',fontsize=6.2)
     ax.set_ylim(0,0.185); ax.set_xlim(-0.45,1.45)
     ax.set_yticks([0,0.05,0.10,0.15])
     ax.tick_params(labelsize=5.8)
     ax.axhline(0,color=INK,lw=0.8)
-    ax.set_xlabel('information-condition gate',fontsize=6.2)
+    ax.set_xlabel('pre-specified diagnostic',fontsize=6.2)
     for sp in ['right','top']: ax.spines[sp].set_visible(False)
     ax.set_title("Non-recommended queries gain as much", loc='left')
 

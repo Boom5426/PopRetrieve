@@ -4,7 +4,7 @@
 > values (R2), the Class A/B contrast that compared two different scorers (R4), the HIR-Bench
 > predictability AUC of 0.640 (R11), the claim that no Class C metric was available (R14), and
 > the "0 of 37 real-data tasks" count (R13). **Read [CORRECTIONS.md](../../CORRECTIONS.md) before quoting any
-> number below**, and treat `manuscript/latex/EvalShift_manuscript.tex` as the authority for
+> number below**, and treat `manuscript/latex/PopRetrieve_manuscript.tex` as the authority for
 > anything that reaches the paper. Where this file and CORRECTIONS.md disagree, CORRECTIONS.md
 > is right.
 
@@ -18,7 +18,7 @@ to make the paper's boundaries explicit and pre-empt over-reading.*
 
 > ### What this study does not claim
 >
-> 1. **We do not claim that EvalShift provides better therapeutic recommendations.**
+> 1. **We do not claim that PopRetrieve provides better therapeutic recommendations.**
 >    All positive gains are measured under an energy-based, objective-aligned proxy
 >    (Class A). The clause that used to stand here, "no therapeutic-utility metric (Class C) is
 >    available in this study", is **RETRACTED**: a Class C experiment against GDSC viability has
@@ -37,7 +37,7 @@ to make the paper's boundaries explicit and pre-empt over-reading.*
 > 3. **We do not report a count of "distributionally dominant" real tasks, and no such
 >    count should be quoted from this work.** The 0.01 threshold sits at 0.77 sd of the
 >    nonzero-difference distribution, inside its noise band, and it is one-sided (11
->    tasks clear it for EvalShift, 2 for the mean). The seed is not a replicate: it re-draws
+>    tasks clear it for PopRetrieve, 2 for the mean). The seed is not a replicate: it re-draws
 >    which drugs are tested and re-clusters the minority subpopulation. Under
 >    resampling, only **2 of the 10** threshold-crossing cross-line tasks survive, while
 >    drugs that do *not* cross it in the recorded run cross it in **1 to 4 of 10** resamples (R13 corrected the range from 2-4).
@@ -51,14 +51,14 @@ to make the paper's boundaries explicit and pre-empt over-reading.*
 >    hypothesis, not a result.
 >
 > 5. **We do not claim that minority-state coverage is fully oracle-independent.**
->    It is a mean-based cosine proxy and is not EvalShift's own score, but it rewards
+>    It is a mean-based cosine proxy and is not PopRetrieve's own score, but it rewards
 >    covering the minority state, which is exactly what `coverage_worst` optimizes.
 >    It is *task-proximal*, not independent. MoA-nDCG is the only fully independent
->    judge here, and it is the one on which EvalShift shows nothing.
+>    judge here, and it is the one on which PopRetrieve shows nothing.
 >
 > 6. **We do not claim that the current gate reliably transfers to all real
 >    retrieval tasks.** The information-condition gate is experimental; it does not
->    isolate oracle-independent EvalShift gains in partial-observed real data; its
+>    isolate oracle-independent PopRetrieve gains in partial-observed real data; its
 >    reliability axis is anti-correlated with true response divergence (ρ = −0.21);
 >    and the dataset-level divergence criterion admits our **negative control**
 >    (CD34+, measured cosine 0.186) just as readily as our positive anchor. Its
@@ -70,9 +70,9 @@ to make the paper's boundaries explicit and pre-empt over-reading.*
 >    constructive synthetic benchmark with a specified latent welfare oracle; its
 >    phase boundary is expected by design.
 >
-> 8. **We do not claim that EvalShift predicts resistance.** The exp15 resistance
+> 8. **We do not claim that PopRetrieve predicts resistance.** The exp15 resistance
 >    analysis is exploratory and hypothesis-generating; there is no drug
->    timecourse, survival, or post-treatment readout, and the EvalShift-versus-mean
+>    timecourse, survival, or post-treatment readout, and the PopRetrieve-versus-mean
 >    minority-rescue contrast is near-null.
 >
 > 9. **We do not benchmark live PDGrapher.** Perturbation predictors are treated as
@@ -83,7 +83,7 @@ to make the paper's boundaries explicit and pre-empt over-reading.*
 >    was also attempted and did not converge, which is reported as such.
 >
 > 10. **We do not claim that all CMap implementations are algebraically identical to
->    EvalShift.** The exact identity is limited to the implemented cosine mean-signature
+>    PopRetrieve.** The exact identity is limited to the implemented cosine mean-signature
 >    kernel (`mean_cosine = cmap_cosine = 0.3885`); the rank-based WTCS variant is a
 >    monotone sibling of the same signature, not an algebraic identity.
 

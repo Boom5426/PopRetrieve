@@ -7,16 +7,16 @@ learned regime boundary to predict which method family should win, then compare
 to the method family that actually wins on that real task.
 
 Acceptance table (protocol §; the projection is "accepted" if these hold):
-  CD34+ / low-conflict            -> HIR predicts mean_sufficient          (EvalShift no win)
+  CD34+ / low-conflict            -> HIR predicts mean_sufficient          (PopRetrieve no win)
   exp09 mean-only predictors      -> HIR predicts no_DART / mean_sufficient
   cross-line high-heterogeneity   -> HIR predicts DART_recommended
   Frangieh IFN heterogeneous      -> HIR predicts DART_recommended
   partial-observed high-conflict  -> HIR predicts DART_recommended
 
 The HIR-Bench boundary (derived from results/exp11_hir_benchmark):
-  - low/mid preference_conflict  -> mean and EvalShift tie (regret ~0)  -> mean_sufficient
-  - high preference_conflict + reliable structure -> EvalShift lowers regret -> DART_recommended
-  - predicted_mean information condition -> EvalShift advantage shrinks -> no_DART
+  - low/mid preference_conflict  -> mean and PopRetrieve tie (regret ~0)  -> mean_sufficient
+  - high preference_conflict + reliable structure -> PopRetrieve lowers regret -> DART_recommended
+  - predicted_mean information condition -> PopRetrieve advantage shrinks -> no_DART
 
 Usage:
     QUICK=1 python src/experiments/exp13_real_data_projection.py
@@ -48,7 +48,7 @@ HIR = "results/exp11_hir_benchmark"
 # ── HIR-Bench regime boundary (fit from the benchmark grid) ──────────────────
 
 def fit_hir_boundary():
-    """Derive the conflict threshold at which EvalShift starts beating mean (worst
+    """Derive the conflict threshold at which PopRetrieve starts beating mean (worst
     welfare, observed) from the HIR-Bench grid. Returns dict with thresholds.
 
     This fit needs BOTH HIR-Bench layers, and they must come from the SAME grid. They can
@@ -91,9 +91,9 @@ def fit_hir_boundary():
     n = len(piv)
     conf_sorted = piv.weighted_kendall_conflict.values
     win_sorted = piv.dart_wins.values
-    # Crossover = the top of the low-conflict band in which EvalShift essentially never wins.
+    # Crossover = the top of the low-conflict band in which PopRetrieve essentially never wins.
     # Scan a sliding forward window; the crossover is the highest index i such that the
-    # cells BELOW i have < 15% EvalShift wins (the "mean-sufficient" band). Percentile = i/n.
+    # cells BELOW i have < 15% PopRetrieve wins (the "mean-sufficient" band). Percentile = i/n.
     crossover_idx = 0
     for i in range(1, n):
         if win_sorted[:i].mean() < 0.15:
@@ -116,11 +116,11 @@ def predict_regime(structure_reliability, preference_conflict, information_condi
 
     real_conflict_threshold : the real-data preference_conflict value at the
     HIR-Bench crossover percentile (percentile transfer — see fit_hir_boundary +
-    run()).  EvalShift is predicted only when conflict is in the upper part of the real
+    run()).  PopRetrieve is predicted only when conflict is in the upper part of the real
     distribution AND the query has reliable structure.
     """
     if information_condition in ("predicted_mean", "mean_only"):
-        return "no_DART"  # information condition kills EvalShift advantage (exp09 thesis)
+        return "no_DART"  # information condition kills PopRetrieve advantage (exp09 thesis)
     if structure_reliability < struct_threshold:
         return "mean_sufficient"  # no reliable structure to exploit
     if preference_conflict >= real_conflict_threshold:
@@ -131,11 +131,11 @@ def predict_regime(structure_reliability, preference_conflict, information_condi
 # ── project a real task onto the HIR-Bench plane ─────────────────────────────
 
 def _observed_best_family(cand_pops, query_X, query_states, ctrl, minority, seed=0):
-    """Which method family (EvalShift vs mean) better covers the minority subpopulation.
+    """Which method family (PopRetrieve vs mean) better covers the minority subpopulation.
 
     This is the biological target of the NM claim: does the selected drug reach the
     resistant/minority state that mean retrieval collapses away?  Coverage-of-minority
-    is the outcome, NOT energy regret (which EvalShift optimizes and would make circular).
+    is the outcome, NOT energy regret (which PopRetrieve optimizes and would make circular).
     """
     names = list(cand_pops.keys())
     fam_cov = {"DART": [], "mean": []}          # "DART_" is the frozen method-key prefix
@@ -366,7 +366,7 @@ def _acceptance_report(df, boundary):
     lines = ["# exp13 Real-Data Projection — Acceptance Report\n"]
     lines.append(f"HIR-Bench boundary transferred by percentile: crossover_percentile = "
                  f"{boundary['conflict_crossover_percentile']:.3f} "
-                 f"(fit on {boundary['n_cells']} grid cells; EvalShift wins in "
+                 f"(fit on {boundary['n_cells']} grid cells; PopRetrieve wins in "
                  f"{boundary['frac_cells_dart_wins']:.1%}). Real-data conflict threshold at that "
                  f"percentile = {boundary.get('real_conflict_threshold', float('nan')):.4f}.\n")
     lines.append(f"Overall projection accuracy: **{df.prediction_correct.mean():.1%}** "
@@ -403,7 +403,7 @@ def _acceptance_report(df, boundary):
         lines.append(
             "> The informative reading of the same data is the paper's own negative claim: "
             f"**0 of {len(df)} real-data tasks are distributionally dominant**. The largest "
-            "observed EvalShift-minus-mean coverage margin across all tasks is below the 0.01 "
+            "observed PopRetrieve-minus-mean coverage margin across all tasks is below the 0.01 "
             "decision threshold, which is the finding, not a failure of the projection.\n")
     else:
         lines.append("| dataset | agreement | n | beats majority baseline |")
@@ -426,12 +426,12 @@ def _acceptance_report(df, boundary):
                  "unconditionally whenever `information_condition` is 'predicted_mean' or "
                  "'mean_only' (see predict_regime), so this rate is 100% by construction and can "
                  "never be anything else. It restates the rule; it does not test it. The claim "
-                 "that mean-only predicted libraries offer no EvalShift advantage rests on exp09, not "
+                 "that mean-only predicted libraries offer no PopRetrieve advantage rests on exp09, not "
                  "on this line.")
     # Observed regime distribution per dataset (what the DATA says, independent of prediction)
     datasets = list(df.dataset.unique())
     lines.append("\n## Observed regime by dataset (data ground truth)\n")
-    lines.append("| dataset | observed EvalShift-favoured | observed mean-sufficient | conflict (mean) | structure (mean) |")
+    lines.append("| dataset | observed PopRetrieve-favoured | observed mean-sufficient | conflict (mean) | structure (mean) |")
     lines.append("|---|---|---|---|---|")
     for dsname in datasets:
         sub = df[df.dataset == dsname]
@@ -440,7 +440,7 @@ def _acceptance_report(df, boundary):
         lines.append(f"| {dsname} | {nd} | {nm} | {sub.preference_conflict.mean():.3f} | "
                      f"{sub.structure_reliability_score.mean():.3f} |")
     lines.append("\n*Note:* the observed regime is defined by minority-state coverage (not energy "
-                 "regret), so it does not mechanically favour EvalShift. Where the real data places a "
+                 "regret), so it does not mechanically favour PopRetrieve. Where the real data places a "
                  "dataset in the low-conflict band (e.g. cross-line, CD34+), mean retrieval is "
                  "genuinely sufficient — the projection reflects the data, not a prior expectation.\n")
     return "\n".join(lines)
@@ -450,7 +450,7 @@ def run(quick=False):
     section(f"EXP13 REAL-DATA PROJECTION ({'QUICK' if quick else 'FULL'})")
     boundary = fit_hir_boundary()
     log(f"  HIR boundary: crossover_percentile={boundary['conflict_crossover_percentile']:.3f}, "
-        f"EvalShift wins {boundary['frac_cells_dart_wins']:.1%} of {boundary['n_cells']} cells")
+        f"PopRetrieve wins {boundary['frac_cells_dart_wins']:.1%} of {boundary['n_cells']} cells")
 
     seeds = [0, 1] if quick else [0, 1, 2]
     all_tasks = []

@@ -1,4 +1,4 @@
-"""EvalShift Figure 4 panel 4a: Class A vs Class B sign flip
+"""PopRetrieve Figure 4 panel 4a: Class A vs Class B sign flip
 Source data: source_data/fig4a_classA_vs_classB.csv
 Run standalone: python fig4a.py
 """
@@ -68,7 +68,7 @@ def draw_4a(ax):
     ax.text(1.58,3.04,f'mean ${b.mean():+.3f}$\n{(b>0).mean():.0%} $>$ 0',
             ha='right',va='top',fontsize=6,color=COMP,linespacing=1.30)
     ax.set_xticks([0,1])
-    ax.set_xticklabels(['Class A\nregret reduction','Class B\nMoA-nDCG gain'],fontsize=6.2)
+    ax.set_xticklabels(['response matching\nregret reduction','mechanism recovery\nMoA-nDCG gain'],fontsize=6.2)
     ax.set_ylabel('distributional\n$-$ mean advantage',fontsize=6.5)
     # Centre the y label on the PLOTTED view rather than on the axes box. The box now runs to
     # AXES_TOP to carry the summary blocks, and a label centred on it would point at the blank

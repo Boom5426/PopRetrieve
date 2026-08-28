@@ -3,7 +3,7 @@
 # training drugs? Rising => "not enough data" hypothesis supported.
 set -e
 # Reference/oracle script from the original GID-Flow implementation (SubFlow scaling,
-# out of scope for EvalShift). Expects the original data/ + checkpoints/ layout; not wired
+# out of scope for PopRetrieve). Expects the original data/ + checkpoints/ layout; not wired
 # to run standalone in this repo — see oracle/README.md.
 cd "$(dirname "$0")/.."
 source .venv/bin/activate 2>/dev/null || true

@@ -1,4 +1,4 @@
-"""EvalShift Figure 3 panel 3d: gate-recommended vs not-recommended queries.
+"""PopRetrieve Figure 3 panel 3d: gate-recommended vs not-recommended queries.
 
 Source data: results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv
 (row DART_coverage_worst). The two medians the manuscript quotes are +0.119 on the 621
@@ -17,7 +17,7 @@ import os, numpy as np, pandas as pd, matplotlib as mpl, matplotlib.pyplot as pl
 FOCAL, COMP, GREY, INK = "#5185C0", "#E99D4E", "#7A7A7A", "#1A1A1A"
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-MODES = [('DART_recommended', 'gate-\nrecommended', FOCAL),
+MODES = [('DART_recommended', 'diagnostic-\npositive', FOCAL),
          ('mean_or_no_call', 'not\nrecommended', GREY)]
 
 
@@ -42,7 +42,7 @@ def draw_3d(ax):
 
     # Re-wrapped to three short lines: at 1:1 this panel is 1.45 in wide, and the 621 + 133 + 11
     # bookkeeping has to stay on the panel (the caption gives only the two plotted subsets).
-    ax.text(0.5, 0.99, "11 gate\n'mean-sufficient'\nqueries not shown",
+    ax.text(0.5, 0.99, "11 'mean-sufficient'\ndiagnostic queries\nnot shown",
             transform=ax.transAxes, ha='center', va='top', fontsize=6, color=GREY,
             linespacing=1.2)
 
@@ -56,7 +56,7 @@ def draw_3d(ax):
     for sp in ['right', 'top']:
         ax.spines[sp].set_visible(False)
     ax.spines['left'].set_bounds(0, 0.12)
-    ax.set_title("The gate does not\nconcentrate the gain", loc='left', linespacing=1.15)
+    ax.set_title("The diagnostic does not\nconcentrate the gain", loc='left', linespacing=1.15)
 
 
 if __name__ == "__main__":

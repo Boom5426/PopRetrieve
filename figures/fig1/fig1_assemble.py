@@ -1,4 +1,4 @@
-"""EvalShift Figure 1: Distributional differences are visible, but their value depends on the evaluator.
+"""PopRetrieve Figure 1: Distributional differences are visible, but their value depends on the evaluator.
 
 Five panels, all drawn from code, all schematic: Figure 1 sets the tension and reports no result
 from the analysis (no Fig-4 collapse numbers, no +0.119).
@@ -38,13 +38,13 @@ from fig1d import draw_1d
 from fig1e import draw_1e
 
 # Every title states a claim the manuscript makes. In particular e must not say Class C is
-# missing: the manuscript states "We report EvalShift under all three classes", with the Class-C
+# missing: the manuscript states "We report PopRetrieve under all three classes", with the Class-C
 # oracle imported and labelled semi-real.
 TITLES = {
     "a": "Same mean shift, opposite fate for a hidden minority",
     "b": "One query, one library, two ways to score",
     "c": "Means tie, distributions separate",
-    "d": "A score that grades itself cannot lose",
+    "d": "Aligned evaluation can reward itself",
     "e": "All three evidence classes, reported here",
 }
 #            row, col0, col1, panel-letter dx

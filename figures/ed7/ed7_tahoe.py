@@ -69,7 +69,7 @@ BOXES = {
 
 
 def draw_a(ax):
-    """Gate 1: where the constructed mixtures sit in the unconstructed distribution."""
+    """Differential response: where the constructed mixtures sit in the unconstructed distribution."""
     g1 = pd.read_csv(os.path.join(P, "gate1_per_condition.csv"))
     c = g1.induced_cosine_G1_vs_G2M.dropna().to_numpy()
     ax.hist(c, bins=40, range=(-0.1, 1.0), color=FOCAL, alpha=0.55, lw=0)
@@ -95,7 +95,7 @@ def draw_a(ax):
 
 
 def draw_b(ax):
-    """Gate 2: the information is there and off-the-shelf clustering does not reach it."""
+    """Recoverability: the information is there and off-the-shelf clustering does not reach it."""
     g2 = pd.read_csv(os.path.join(P, "g2panel", "gate2_clusterer_panel.csv"))
     ax.scatter(g2.best_unsupervised, g2.supervised_ceiling, s=2.0, color=FOCAL,
                alpha=0.28, lw=0, zorder=2)
@@ -128,7 +128,7 @@ def draw_b(ax):
 
 
 def draw_c(ax):
-    """Gate 3: two partitions, both on disjoint cell sets, against the tissue value."""
+    """State-ordering agreement: two partitions, both on disjoint cell sets, against the tissue value."""
     cc = pd.read_csv(os.path.join(P, "disjoint", "gate3_disjoint_cellcycle_G1_vs_G2M.csv"))
     st = pd.read_csv(os.path.join(P, "disjoint", "gate3_disjoint_controlstate_k2.csv"))
     rng = np.random.default_rng(0)
@@ -171,8 +171,8 @@ def draw_d(ax):
     b = np.polyfit(j.g1, j.spearman_rho, 1)
     xs = np.linspace(j.g1.min(), j.g1.max(), 20)
     ax.plot(xs, np.polyval(b, xs), color=GREY, lw=0.9, ls=(0, (2.2, 1.6)))
-    ax.set_xlabel("Gate 1\ninduced cosine (per line)", fontsize=6.2, labelpad=1.5)
-    ax.set_ylabel("Gate 3\nSpearman (per line)", fontsize=6.2)
+    ax.set_xlabel("differential response\ninduced cosine (per line)", fontsize=6.2, labelpad=1.5)
+    ax.set_ylabel("state-ordering\nSpearman (per line)", fontsize=6.2)
     ax.tick_params(labelsize=5.6)
     ax.text(0.04, 0.96, f"$\\rho$ = {r:+.2f}\n$R^2$ = {r ** 2:.2f}\nn = {len(j)} lines",
             transform=ax.transAxes, fontsize=5.5, color=INK, va="top", linespacing=1.3)
@@ -180,10 +180,10 @@ def draw_d(ax):
     # caption states it anyway; the rho and R2 above carry the panel.
 
 
-TITLES = {"a": "Gate 1: the mixtures\nare the outlier",
-          "b": "Gate 2: present,\nand out of reach",
-          "c": "Gate 3: mostly closed,\nnot always",
-          "d": "Gate 3 is not\nGate 1 restated"}
+TITLES = {"a": "Differential response:\nthe mixtures are the outlier",
+          "b": "Recoverability: present,\nand out of reach",
+          "c": "State-ordering agreement:\nmostly high, not always",
+          "d": "Ordering agreement is not\ndifferential response restated"}
 
 
 def build(apply_style_fn, panel_letter_fn):

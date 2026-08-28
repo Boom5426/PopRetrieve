@@ -14,7 +14,7 @@ mean - matched control, query mean - matched control):
                          CMap/L1000 uses, reduced to the two-tag mean form).
 
 Both collapse the query population to its MEAN, so — by construction — they are blind to
-query subpopulation structure. That is exactly the degenerate zero-spread limit EvalShift is
+query subpopulation structure. That is exactly the degenerate zero-spread limit PopRetrieve is
 designed to beat; this baseline makes the comparison explicit.
 """
 from __future__ import annotations

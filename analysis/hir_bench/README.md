@@ -4,7 +4,7 @@
 > values (R2), the Class A/B contrast that compared two different scorers (R4), the HIR-Bench
 > predictability AUC of 0.640 (R11), the claim that no Class C metric was available (R14), and
 > the "0 of 37 real-data tasks" count (R13). **Read [CORRECTIONS.md](../../CORRECTIONS.md) before quoting any
-> number below**, and treat `manuscript/latex/EvalShift_manuscript.tex` as the authority for
+> number below**, and treat `manuscript/latex/PopRetrieve_manuscript.tex` as the authority for
 > anything that reaches the paper. Where this file and CORRECTIONS.md disagree, CORRECTIONS.md
 > is right.
 

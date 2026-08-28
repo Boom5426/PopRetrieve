@@ -172,22 +172,22 @@ merged = dart_rows.merge(mean_rows, on=["seed", "held_drug"], suffixes=("_dart",
 # Mean-based coverage gap
 mb_gap = merged.mean_based_coverage_dart.values - merged.mean_based_coverage_mean.values
 print(f"\nMean-based coverage (original metric):")
-print(f"  EvalShift mean: {dart_rows.mean_based_coverage.mean():.4f}")
+print(f"  PopRetrieve mean: {dart_rows.mean_based_coverage.mean():.4f}")
 print(f"  Mean mean: {mean_rows.mean_based_coverage.mean():.4f}")
-print(f"  Gap (EvalShift - mean): {mb_gap.mean():.4f} (median {np.median(mb_gap):.4f})")
-print(f"  EvalShift wins: {(mb_gap > 0).mean():.1%}")
+print(f"  Gap (PopRetrieve - mean): {mb_gap.mean():.4f} (median {np.median(mb_gap):.4f})")
+print(f"  PopRetrieve wins: {(mb_gap > 0).mean():.1%}")
 
 # Cell-level coverage gap
 cl_gap = merged.cell_level_coverage_dart.values - merged.cell_level_coverage_mean.values
 print(f"\nCell-level coverage (FIXED metric):")
-print(f"  EvalShift mean: {dart_rows.cell_level_coverage.mean():.4f}")
+print(f"  PopRetrieve mean: {dart_rows.cell_level_coverage.mean():.4f}")
 print(f"  Mean mean: {mean_rows.cell_level_coverage.mean():.4f}")
-print(f"  Gap (EvalShift - mean): {cl_gap.mean():.4f} (median {np.median(cl_gap):.4f})")
-print(f"  EvalShift wins: {(cl_gap > 0).mean():.1%}")
+print(f"  Gap (PopRetrieve - mean): {cl_gap.mean():.4f} (median {np.median(cl_gap):.4f})")
+print(f"  PopRetrieve wins: {(cl_gap > 0).mean():.1%}")
 
 # MoA match
 print(f"\nMoA match rate:")
-print(f"  EvalShift: {dart_rows.moa_match.mean():.3f}")
+print(f"  PopRetrieve: {dart_rows.moa_match.mean():.3f}")
 print(f"  Mean: {mean_rows.moa_match.mean():.3f}")
 
 # Rank disagreement

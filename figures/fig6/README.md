@@ -6,7 +6,7 @@ A distributional score can only exploit subpopulation structure that (Gate 1) ac
 apart inside those populations at all. In the constructed cell-line data this figure uses, both
 gates are closed, so the advantage stays near zero: a criterion, not a tuning failure.
 
-**Authority.** The Figure 6 caption in `manuscript/latex/EvalShift_manuscript.tex` is the authority for
+**Authority.** The Figure 6 caption in `manuscript/latex/PopRetrieve_manuscript.tex` is the authority for
 every number below, and `../../CORRECTIONS.md` for what has been retracted. If this file disagrees
 with either, this file is the bug. Panel geometry and the reason each title is worded the way it is
 are documented in `fig6_assemble.py`; that docstring, not this one, is the place layout decisions
@@ -21,12 +21,12 @@ standalone claim and the printed claim must be the same claim.
 | Panel | Rendered title | What it shows | Source |
 |-------|----------------|---------------|--------|
 | a | Predict-then-rank, and the two gates | Design schematic: a held-out query scored against candidate populations that are either observed or produced by a perturbation predictor, and the two properties a candidate must have. No result is asserted. | schematic |
-| b | Gain is small and sign-inconsistent | nDCG@10 gain (EvalShift energy minus mean cosine) per predictor family: $-0.071$ nearest-neighbour, $-0.016$ average-effect, $+0.027$ latent-linear. One task, so no dispersion is available; bars are coloured by sign. | `results/exp09_predict_then_rank/summary.csv` |
+| b | Gain is small and sign-inconsistent | nDCG@10 gain (PopRetrieve energy minus mean cosine) per predictor family: $-0.071$ nearest-neighbour, $-0.016$ average-effect, $+0.027$ latent-linear. One task, so no dispersion is available; bars are coloured by sign. | `results/exp09_predict_then_rank/summary.csv` |
 | c | Structure survives; divergence does not | Gate 1, both halves at once. Predicted candidates *retain* baseline subpopulation structure (variance ratio 0.142 against 0.138 real, left axis) but do not reproduce *divergence* (induced response cosine 0.19--0.37 predicted against 0.014 real, right axis). | `results/exp09_structure_diagnostics/{exp09_structure_diagnostics_summary,gate1_response_divergence_summary}.csv` |
 | d | No predictor collapses structure | Three structure diagnostics x three predictors as predicted/real ratios on a log axis with the reference at 1, under the faithful (`cells`) synthesizer. | `results/exp09_structure_diagnostics/exp09_structure_diagnostics_summary.csv` |
 | e | In this mixture, even the ceiling is only 0.692 | Gate 2 on a known bimodal mixture (K562, HDAC-class against JAK-class cells), every method scored in one unit as best-permutation accuracy against the true labels. Supervised ceiling 0.692, best unsupervised 0.674, gap 0.018. | `results/upgrade/gate2_supervised_upper_bound.csv` (real separation, s = 1.0) |
 | f | The probe pulls away when structure is there | The positive control that licenses reading e: raise the separation between the two source states and the ceiling pulls away from clustering as it should ($+0.114$ at 1.5x, $+0.162$ at 2.0x, then both saturate). | `results/upgrade/gate2_supervised_upper_bound.csv` (separation ladder) |
-| g | Where theory predicts gain, there is none | The conditional advantage a working information condition would produce, and its absence. EvalShift-minus-mean MoA-nDCG gain by *true* response-divergence quartile (means, s.e.m., Benjamini--Hochberg corrected). No stratum is positive; the lowest quartile is significantly negative (mean $-0.082$, $q = 5.8\times10^{-5}$, $n = 166$). | `results/exp17_true_divergence_subset/divergence_stratified.csv` |
+| g | Where theory predicts gain, there is none | The conditional advantage a working information condition would produce, and its absence. PopRetrieve-minus-mean MoA-nDCG gain by *true* response-divergence quartile (means, s.e.m., Benjamini--Hochberg corrected). No stratum is positive; the lowest quartile is significantly negative (mean $-0.082$, $q = 5.8\times10^{-5}$, $n = 166$). | `results/exp17_true_divergence_subset/divergence_stratified.csv` |
 
 ## Honesty notes (the load-bearing caveats)
 
@@ -57,7 +57,7 @@ standalone claim and the printed claim must be the same claim.
 - **g's highest-divergence quartile mean is $+0.003$**, not significant and with median exactly 0.
   The title claims the absence of the *predicted* gain, which is what the panel shows; it does not
   claim every bar is negative.
-- Palette semantics are the deck's: blue distributional/EvalShift, orange mean/collapse, grey context,
+- Palette semantics are the deck's: blue distributional/PopRetrieve, orange mean/collapse, grey context,
   green for readouts handed information the retrieval method does not have (the supervised,
   label-given ceilings in e and f).
 

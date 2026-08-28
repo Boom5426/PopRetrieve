@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""signal_decode_run.py: EvalShift-vs-mean pick divergence + drug attributes on SciPlex3."""
+"""signal_decode_run.py: PopRetrieve-vs-mean pick divergence + drug attributes on SciPlex3."""
 
 # --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/DART) ---
 from pathlib import Path as _P
@@ -159,7 +159,7 @@ for cl in ("K562", "A549", "MCF7"):
             qd = drugs[qi]; qi_i = d2i[qd]
             qa = annd.get(qd, {"moa": None, "nt": 0}); qmoa = qa["moa"]
 
-            # EvalShift (energy) pick
+            # PopRetrieve (energy) pick
             es = emat[qi].copy()
             es[qi] = -np.inf if EHIS else np.inf
             dp = int(np.nanargmax(es) if EHIS else np.nanargmin(es))
@@ -184,7 +184,7 @@ for cl in ("K562", "A549", "MCF7"):
             rows.append(dict(
                 cell_line=cl, seed=seed, query_drug=qd, query_moa=qmoa,
                 dart_pick=dd, mean_pick=md, picks_differ=int(dd != md),
-                # EvalShift pick attributes
+                # PopRetrieve pick attributes
                 dart_tanimoto=tani(ddi, qi_i),
                 dart_ntargets=da["nt"],
                 dart_target_jaccard=tjac(ddi, qi_i),
@@ -197,7 +197,7 @@ for cl in ("K562", "A549", "MCF7"):
                 # welfare / regret
                 dart_welfare=dw, mean_welfare=mw,
                 dart_regret=mxw - dw, mean_regret=mxw - mw,
-                regret_advantage=dw - mw,  # positive = EvalShift lower regret
+                regret_advantage=dw - mw,  # positive = PopRetrieve lower regret
             ))
         print(f"  seed={seed} done {time.time() - ts:.0f}s", flush=True)
 
@@ -212,5 +212,5 @@ print(f"wall={time.time() - t0:.0f}s", flush=True)
 print(f"differ={df.picks_differ.mean():.4f}", flush=True)
 for f_ in ("tanimoto", "ntargets", "target_jaccard", "moa_match"):
     d_ = df[f"dart_{f_}"].mean(); m_ = df[f"mean_{f_}"].mean()
-    print(f"  {f_}: EvalShift={d_:.4f} Mean={m_:.4f}", flush=True)
+    print(f"  {f_}: PopRetrieve={d_:.4f} Mean={m_:.4f}", flush=True)
 print(f"regret_adv={df.regret_advantage.mean():.4f}", flush=True)

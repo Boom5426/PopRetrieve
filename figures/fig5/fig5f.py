@@ -1,4 +1,4 @@
-"""EvalShift Figure 5 panel 5f: is retrieval failure predictable, and from WHAT?
+"""PopRetrieve Figure 5 panel 5f: is retrieval failure predictable, and from WHAT?
 
 Source data: results/exp11_hir_benchmark/phase_grid_predictability_2x2.csv
 
@@ -36,7 +36,7 @@ PRED = f"{REPO}/results/exp11_hir_benchmark/phase_grid_predictability_2x2.csv"
 CMAP = LinearSegmentedColormap.from_list("auc", [COMP, "#f7f7f7", FOCAL])
 
 ROWS = [("observable", "observable\nat query time"),
-        ("oracle_derived", "oracle-derived\n(circular)")]
+        ("oracle_derived", "evaluator-derived\n(circular)")]
 # 2026-07-26: the column labels used to spell out "28 label-determining cells (honest)". At the
 # figure's print width one matrix cell is ~0.5 in across and that label was 0.58 in of text, so the
 # two columns' labels ran into each other. The caption names the two cross-validation units in

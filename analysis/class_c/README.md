@@ -4,14 +4,14 @@
 > values (R2), the Class A/B contrast that compared two different scorers (R4), the HIR-Bench
 > predictability AUC of 0.640 (R11), the claim that no Class C metric was available (R14), and
 > the "0 of 37 real-data tasks" count (R13). **Read [CORRECTIONS.md](../../CORRECTIONS.md) before quoting any
-> number below**, and treat `manuscript/latex/EvalShift_manuscript.tex` as the authority for
+> number below**, and treat `manuscript/latex/PopRetrieve_manuscript.tex` as the authority for
 > anything that reaches the paper. Where this file and CORRECTIONS.md disagree, CORRECTIONS.md
 > is right.
 
 # class_c/, semi-real viability oracle (and its confound)
 
 - `match_drugs_v2.py`, matches SciPlex3 drugs to GDSC dose-response (exact + substring).
-- `class_c_experiment.py`, ranks candidates by EvalShift energy vs mean cosine, scored
+- `class_c_experiment.py`, ranks candidates by PopRetrieve energy vs mean cosine, scored
   against GDSC viability (AUC/IC50) as an external oracle.
 - `class_c_functional_oracle.py`, **the one the paper uses.** The Class-C oracle is drug-drug
   *functional similarity*: the rank correlation between two compounds' GDSC2 dose-response AUC
@@ -38,6 +38,6 @@
 
 - `class_c_experiment.py`, `class_c_magnitude_control.py`: **SUPERSEDED, do not quote.**
   They rank `score_energy` ascending, but it returns MINUS the energy distance (a
-  similarity), so EvalShift's top pick was the population *farthest* from the query while the
+  similarity), so PopRetrieve's top pick was the population *farthest* from the query while the
   mean baseline was ranked correctly. That inversion manufactured an apparent +0.52. They
   also pooled all four doses and pooled GDSC1 with GDSC2. See CORRECTIONS.md R14.

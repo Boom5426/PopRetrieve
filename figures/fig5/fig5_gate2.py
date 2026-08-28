@@ -49,8 +49,13 @@ UNC = json.load(open(UNC_SRC)) if os.path.exists(UNC_SRC) else None
 # reported)", "(like for like)", "(within compartment)"). At this figure's print size one bar group
 # is 1.15 in wide and those glosses were 0.7-0.8 in of text on a third line; the caption states all
 # three in full, including that the natural comparison is within one compartment of one patient.
-ARMS = [("constructed_class", "CONSTRUCTED\nclasses pooled", GREY),
-        ("constructed_drug", "CONSTRUCTED\ndrug vs drug", FOCAL),
+# The "classes pooled" arm was dropped on 2026-08-28. It rested on a single split
+# (n_splits = 1) and reported 0.687/0.700, a second estimate of the same constructed
+# recoverability problem that main-text Fig. 6e reports as 0.674/0.692 under a different
+# protocol. Two numbers for one quantity is a contradiction a reader cannot resolve, and
+# the weaker of the two is the one to drop. The panel keeps the drug-vs-drug constructed
+# arm as the granularity comparator and the natural tumour as the finding.
+ARMS = [("constructed_drug", "CONSTRUCTED\ndrug vs drug", FOCAL),
         ("natural", "NATURAL TUMOUR\ndrug vs drug", PURPLE)]
 
 
@@ -182,7 +187,7 @@ if __name__ == "__main__":
     # (the same question in a constructed setting and a natural one) rather than restating that
     # claim, because standalone the panel is a diagnostic and the claim is scoped to one of its
     # three arms.
-    ax.set_title("Gate 2, asked the same question twice", loc="left", fontsize=8)
+    ax.set_title("Recoverability, asked the same question twice", loc="left", fontsize=8)
     fig.savefig(os.path.join(os.path.dirname(__file__), "6gate2.png"), dpi=200,
                 bbox_inches="tight")
     print("wrote 6gate2.png")

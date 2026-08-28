@@ -6,13 +6,13 @@
 # `retrieval.metrics.score_energy` returns MINUS the energy distance, i.e. a
 # SIMILARITY (higher = more similar). This script ranks it ASCENDING
 # (rankdata(e_scores) / argmin(dart_scores)) under the comment "lowest energy =
-# top pick", so EvalShift's rank-1 candidate is the population FARTHEST from the
+# top pick", so PopRetrieve's rank-1 candidate is the population FARTHEST from the
 # query. The mean-cosine baseline in the same script is ranked correctly
-# (argmax). EvalShift is ranked backwards and its incumbent is not.
+# (argmax). PopRetrieve is ranked backwards and its incumbent is not.
 #
 # The inversion selects large-response candidates (energy distance tracks
 # candidate magnitude at rho = +0.79), and large response predicts potency, so
-# it manufactures an apparent +0.52 EvalShift-vs-potency correlation. The true value
+# it manufactures an apparent +0.52 PopRetrieve-vs-potency correlation. The true value
 # is -0.52.
 #
 # This script also pools all four doses (the rest of the paper uses 10 uM) and
@@ -24,7 +24,7 @@
 
 """
 Class C Semi-Real Viability Oracle Experiment
-EvalShift energy vs mean_cosine ranking evaluated against GDSC AUC/IC50.
+PopRetrieve energy vs mean_cosine ranking evaluated against GDSC AUC/IC50.
 """
 
 # --- repo-root path resolution (added for public release; replaces hardcoded /data/boom/DART) ---
@@ -124,7 +124,7 @@ for cell_line in ['A549', 'K562', 'MCF7']:
         for cand_drug in candidate_drugs:
             cand_cells = drug_cells[cand_drug]
             
-            # EvalShift energy score (lower = more similar distributions)
+            # PopRetrieve energy score (lower = more similar distributions)
             e_score = score_energy(query_cells, cand_cells, max_cells=500, seed=SEED)
             # Mean cosine score (higher = more similar means)
             m_score = score_mean_cosine(query_cells, cand_cells)
@@ -139,15 +139,15 @@ for cell_line in ['A549', 'K562', 'MCF7']:
         cand_aucs = np.array(cand_aucs)
         cand_ic50s = np.array(cand_ic50s)
         
-        # Rank by EvalShift (lower energy = more similar = rank 1)
+        # Rank by PopRetrieve (lower energy = more similar = rank 1)
         dart_ranks = stats.rankdata(dart_scores, method='average')
         # Rank by mean cosine (higher = more similar = rank 1, so negate)
         mean_ranks = stats.rankdata(-mean_scores, method='average')
         # Potency rank: lower AUC = more potent = rank 1
         potency_ranks = stats.rankdata(cand_aucs, method='average')
         
-        # Spearman: correlation between EvalShift rank and potency rank
-        # Positive = EvalShift's most-similar also tends to be most-potent
+        # Spearman: correlation between PopRetrieve rank and potency rank
+        # Positive = PopRetrieve's most-similar also tends to be most-potent
         dart_spearman, dart_pval = stats.spearmanr(dart_ranks, potency_ranks)
         mean_spearman, mean_pval = stats.spearmanr(mean_ranks, potency_ranks)
         
@@ -213,33 +213,33 @@ print(f"Total queries: {len(res_df)}")
 for ln in res_df['cell_line'].unique():
     sub = res_df[res_df['cell_line'] == ln]
     print(f"\n--- {ln} ({len(sub)} queries) ---")
-    print(f"  EvalShift Spearman rho: median={sub['dart_spearman_rho'].median():.4f}, "
+    print(f"  PopRetrieve Spearman rho: median={sub['dart_spearman_rho'].median():.4f}, "
           f"mean={sub['dart_spearman_rho'].mean():.4f}")
     print(f"  Mean Spearman rho: median={sub['mean_spearman_rho'].median():.4f}, "
           f"mean={sub['mean_spearman_rho'].mean():.4f}")
-    print(f"  EvalShift Hit@1: {sub['dart_hit1'].mean():.4f}")
+    print(f"  PopRetrieve Hit@1: {sub['dart_hit1'].mean():.4f}")
     print(f"  Mean Hit@1: {sub['mean_hit1'].mean():.4f}")
-    print(f"  EvalShift Hit@3: {sub['dart_hit3'].mean():.4f}")
+    print(f"  PopRetrieve Hit@3: {sub['dart_hit3'].mean():.4f}")
     print(f"  Mean Hit@3: {sub['mean_hit3'].mean():.4f}")
-    print(f"  EvalShift top1 AUC: mean={sub['dart_top1_auc'].mean():.4f}")
+    print(f"  PopRetrieve top1 AUC: mean={sub['dart_top1_auc'].mean():.4f}")
     print(f"  Mean top1 AUC: mean={sub['mean_top1_auc'].mean():.4f}")
 
 # Overall
 print(f"\n--- OVERALL ---")
-print(f"EvalShift Spearman rho: median={res_df['dart_spearman_rho'].median():.4f}, "
+print(f"PopRetrieve Spearman rho: median={res_df['dart_spearman_rho'].median():.4f}, "
       f"mean={res_df['dart_spearman_rho'].mean():.4f}")
 print(f"Mean Spearman rho: median={res_df['mean_spearman_rho'].median():.4f}, "
       f"mean={res_df['mean_spearman_rho'].mean():.4f}")
 
-# Wilcoxon signed-rank: EvalShift-top1 AUC vs Mean-top1 AUC
-# Lower AUC = more potent; if EvalShift picks more potent drugs, its top1 AUC should be lower
+# Wilcoxon signed-rank: PopRetrieve-top1 AUC vs Mean-top1 AUC
+# Lower AUC = more potent; if PopRetrieve picks more potent drugs, its top1 AUC should be lower
 from scipy.stats import wilcoxon
 stat, p_wilcoxon = wilcoxon(res_df['dart_top1_auc'], res_df['mean_top1_auc'])
-print(f"\nWilcoxon EvalShift-top1 AUC vs Mean-top1 AUC: stat={stat:.1f}, p={p_wilcoxon:.6f}")
+print(f"\nWilcoxon PopRetrieve-top1 AUC vs Mean-top1 AUC: stat={stat:.1f}, p={p_wilcoxon:.6f}")
 dart_lower = (res_df['dart_top1_auc'] < res_df['mean_top1_auc']).sum()
 mean_lower = (res_df['dart_top1_auc'] > res_df['mean_top1_auc']).sum()
 ties = (res_df['dart_top1_auc'] == res_df['mean_top1_auc']).sum()
-print(f"  EvalShift picks more potent: {dart_lower}/{len(res_df)}, Mean picks more potent: {mean_lower}/{len(res_df)}, ties: {ties}")
+print(f"  PopRetrieve picks more potent: {dart_lower}/{len(res_df)}, Mean picks more potent: {mean_lower}/{len(res_df)}, ties: {ties}")
 
 # Hit rates
 print(f"\nDart Hit@1: {res_df['dart_hit1'].mean():.4f}")

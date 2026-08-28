@@ -1,4 +1,4 @@
-"""EvalShift Figure 4 panel 4e: gate axis vs true divergence
+"""PopRetrieve Figure 4 panel 4e: gate axis vs true divergence
 Source data: results/exp16_gate_diagnosis/_merged_query_divergence.csv
              (source_data/fig4ef_gate_divergence.csv is a hand-built column view of it, not read here)
 Run standalone: python fig4e.py
@@ -25,14 +25,14 @@ def draw_4e(ax):
     ax.text(0.985,0.98,f'Spearman $\\rho$ = ${rho:+.2f}$\nit should rise with divergence',
             transform=ax.transAxes,fontsize=6,color=COMP,va='top',ha='right',linespacing=1.30)
     ax.set_xlabel('true response divergence',fontsize=6.4)
-    ax.set_ylabel('gate score:\nstructure reliability',fontsize=6.4)
+    ax.set_ylabel('diagnostic score:\nstructure reliability',fontsize=6.4)
     ax.set_ylim(0.26,1.03); ax.set_xlim(0.30,1.95)
     ax.set_xticks([0.5,1.0,1.5]); ax.set_yticks([0.3,0.5,0.7])
     ax.tick_params(labelsize=5.8)
     for sp in ['right','top']: ax.spines[sp].set_visible(False)
     # the axis runs past the data only to carry the annotation, so the spine stops at the data
     ax.spines['left'].set_bounds(0.26,0.82)
-    ax.set_title("The gate axis points the wrong way", loc='left')
+    ax.set_title("The diagnostic axis points the wrong way", loc='left')
 
 
 if __name__ == "__main__":

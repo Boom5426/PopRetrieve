@@ -1,4 +1,4 @@
-"""EvalShift Figure 3: under objective-aligned metrics, distributional retrieval looks decisively stronger.
+"""PopRetrieve Figure 3: under objective-aligned metrics, distributional retrieval looks decisively stronger.
 
 Six panels in two rows. The top row carries the claim (a, the Hit@1 ladder), its counterexample
 (b, Frangieh) and its per-query distribution (c); the bottom row holds the three supporting controls

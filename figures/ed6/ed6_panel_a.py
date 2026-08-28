@@ -1,4 +1,4 @@
-"""EvalShift Extended Data Fig. 6 panel a: HIR-Bench generative model
+"""PopRetrieve Extended Data Fig. 6 panel a: HIR-Bench generative model
 Source data: (schematic)
 Run standalone: python fig5a.py
 """

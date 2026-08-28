@@ -1,11 +1,11 @@
-"""EvalShift Nature-Methods house style, shared across all figure panels.
+"""PopRetrieve Nature-Methods house style, shared across all figure panels.
 
 Mirrors the AllelePerturb manuscript config: sans-serif 6-7 pt, thin INK axes,
 no top/right spines, soft Okabe-Ito palette, true print geometry (183 mm double
 column), editable-text vector PDF + high-dpi PNG.
 
 Palette (one edit here recolours the whole deck):
-  FOCAL  = #5185C0  distributional / EvalShift / structure-preserved   (blue)
+  FOCAL  = #5185C0  distributional / PopRetrieve / structure-preserved   (blue)
   COMP   = #E99D4E  mean-signature / collapse / structure-lost     (orange)
   GREY   = #7A7A7A  context / neutral
 """
@@ -20,14 +20,14 @@ from matplotlib.patches import Rectangle
 MM = 1.0 / 25.4
 COL1_MM, COL2_MM = 89.0, 183.0
 
-FOCAL = "#5185C0"      # distributional / EvalShift
+FOCAL = "#5185C0"      # distributional / PopRetrieve
 COMP = "#E99D4E"       # mean / collapse
 GREY = "#7A7A7A"       # context
 LIGHT_GREY = "#D9D9D9"
 PURPLE = "#8281B9"
 GREEN = "#55966B"
 INK = "#1A1A1A"
-# signed EvalShift-minus-mean advantage: orange (mean) <- white -> blue (EvalShift)
+# signed PopRetrieve-minus-mean advantage: orange (mean) <- white -> blue (PopRetrieve)
 DIVMAP = LinearSegmentedColormap.from_list("dart_div", [COMP, "#f7f7f7", FOCAL])
 
 

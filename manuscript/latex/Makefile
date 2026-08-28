@@ -1,5 +1,5 @@
-TEX  = EvalShift_manuscript
-SI   = EvalShift_SI
+TEX  = PopRetrieve_manuscript
+SI   = PopRetrieve_SI
 BIB  = references
 
 .PHONY: all si clean

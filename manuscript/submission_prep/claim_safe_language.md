@@ -4,11 +4,11 @@
 > values (R2), the Class A/B contrast that compared two different scorers (R4), the HIR-Bench
 > predictability AUC of 0.640 (R11), the claim that no Class C metric was available (R14), and
 > the "0 of 37 real-data tasks" count (R13). **Read [CORRECTIONS.md](../../CORRECTIONS.md) before quoting any
-> number below**, and treat `manuscript/latex/EvalShift_manuscript.tex` as the authority for
+> number below**, and treat `manuscript/latex/PopRetrieve_manuscript.tex` as the authority for
 > anything that reaches the paper. Where this file and CORRECTIONS.md disagree, CORRECTIONS.md
 > is right.
 
-# EvalShift Manuscript — Claim-Safe Language Guide
+# PopRetrieve Manuscript — Claim-Safe Language Guide
 
 Binding on all drafting. The manuscript's credibility rests on *not* overclaiming; a single
 therapeutic-superiority sentence invites the "so what does it actually do?" rejection.
@@ -21,7 +21,7 @@ therapeutic-superiority sentence invites the "so what does it actually do?" reje
 - "metric-dependent gain"
 - "boundary-aware / reliability-aware decision framework"
 - "moderately predictable failure regimes"
-- "diagnostic gate: recommend EvalShift / mean-sufficient / no-call"
+- "diagnostic gate: recommend PopRetrieve / mean-sufficient / no-call"
 - "candidate-response information condition"
 - "the advantage is present under an energy-based proxy and absent under
   oracle-independent metrics"
@@ -46,7 +46,7 @@ Short, pre-emptive answers to embed in Discussion / rebuttal.
 No — the contribution is not the metric but the *information-condition framework*: (a) the
 unification showing mean/signature retrieval is the zero-variance limit, (b) the diagnostic
 gate that says when the distributional metric helps, and (c) the honest boundary audit.
-EvalShift is a family (energy/MMD/sliced-Wasserstein/coverage), and the paper's message is about
+PopRetrieve is a family (energy/MMD/sliced-Wasserstein/coverage), and the paper's message is about
 *when* any of them helps, not that energy distance is novel.
 
 **2. "Isn't observed candidate response an oracle setting?"**
@@ -55,7 +55,7 @@ candidate populations are available; exp09/exp12/exp13 test the realistic
 partial-observed / predicted conditions. The point of the framework is precisely to
 distinguish these regimes rather than conflate them.
 
-**3. "Why does EvalShift fail on predicted responses?"**
+**3. "Why does PopRetrieve fail on predicted responses?"**
 Because current predictors collapse candidate populations toward the mean: measured
 structure diagnostics show predicted populations have ~5× lower subpopulation-variance
 ratio, ~2.7× lower diversity, and higher isotropy than real populations (exp09). With no
@@ -63,7 +63,7 @@ reliable structure to exploit, the distributional signal has nothing to add — 
 thesis, not a defect.
 
 **4. "Are the gains circular because energy-based utility favors energy-based methods?"**
-We raise this ourselves. The energy-welfare regret proxy is aligned with EvalShift's objective,
+We raise this ourselves. The energy-welfare regret proxy is aligned with PopRetrieve's objective,
 so we treat its gains as proxy evidence and test oracle-independent metrics (MoA-recovery
 nDCG, minority coverage) where the advantage is null (exp12: −0.013; the companion "exp13: 0/37"
 is **RETRACTED**, R13, and must not be quoted). The

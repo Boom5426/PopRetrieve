@@ -8,7 +8,7 @@ independent (Class C) oracle where the distributional score does win, a scalar c
 distributions reproduces most of the win.
 
 Panel letters and every number below match the Fig. 4 caption in
-`manuscript/latex/EvalShift_manuscript.tex`. If a number here and a number there ever disagree, the
+`manuscript/latex/PopRetrieve_manuscript.tex`. If a number here and a number there ever disagree, the
 manuscript is the authority and this file is the bug.
 
 ## Panels

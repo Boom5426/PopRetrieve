@@ -165,11 +165,11 @@ def main():
                 dart_wins_cell_total += 1
             if mean_covs[dart_top1] > mean_covs[mean_sel_top1]:
                 dart_wins_mean_total += 1
-            print(f"  EvalShift selects: {dart_top1}, mean_cosine selects: {mean_sel_top1}")
-            print(f"    EvalShift-sel  cell_cov={cell_covs[dart_top1]:.4f}  mean_cov={mean_covs[dart_top1]:.4f}")
+            print(f"  PopRetrieve selects: {dart_top1}, mean_cosine selects: {mean_sel_top1}")
+            print(f"    PopRetrieve-sel  cell_cov={cell_covs[dart_top1]:.4f}  mean_cov={mean_covs[dart_top1]:.4f}")
             print(f"    Mean-sel  cell_cov={cell_covs[mean_sel_top1]:.4f}  mean_cov={mean_covs[mean_sel_top1]:.4f}")
         else:
-            print(f"  EvalShift and mean_cosine agree: {dart_top1}")
+            print(f"  PopRetrieve and mean_cosine agree: {dart_top1}")
         # (ties: same drug, coverage identical, neither strict win)
 
         # Per-candidate rows for CSV
@@ -202,8 +202,8 @@ def main():
     print(f"  Per-seed rhos: {[round(r,3) for r in rank_corrs]}")
     print(f"  Fraction top-1 disagree: {frac_disagree:.4f} ({top1_disagrees}/{total_queries})")
     print(f"\nStep 2 (over all {total_queries} queries):")
-    print(f"  EvalShift wins cell-level: {dart_wins_cell_total}/{total_queries} = {dart_cell_frac:.4f}")
-    print(f"  EvalShift wins mean-based: {dart_wins_mean_total}/{total_queries} = {dart_mean_frac:.4f}")
+    print(f"  PopRetrieve wins cell-level: {dart_wins_cell_total}/{total_queries} = {dart_cell_frac:.4f}")
+    print(f"  PopRetrieve wins mean-based: {dart_wins_mean_total}/{total_queries} = {dart_mean_frac:.4f}")
 
     blind_spot = (mean_rho < 0.7) or (frac_disagree > 0.3)
     print(f"\nConfirmed blind spot: {blind_spot}")

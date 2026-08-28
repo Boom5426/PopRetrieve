@@ -1,6 +1,6 @@
-"""Path resolution + small IO helpers for the EvalShift repo.
+"""Path resolution + small IO helpers for the PopRetrieve repo.
 
-EvalShift is a standalone repository; the package root IS the repo root. Processed tensors
+PopRetrieve is a standalone repository; the package root IS the repo root. Processed tensors
 are read from ``<repo>/data`` (large, git-ignored — see data/README.md). Set the
 ``DIDR_DATA_ROOT`` env var to point elsewhere (on the original dev machine a
 ``data -> ../data`` symlink makes this resolve to the shared data tree).
@@ -13,7 +13,7 @@ from typing import Any
 
 import pandas as pd
 
-PKG_ROOT = Path(__file__).resolve().parents[2]          # EvalShift/  (repo root == package root)
+PKG_ROOT = Path(__file__).resolve().parents[2]          # PopRetrieve/  (repo root == package root)
 REPO_ROOT = PKG_ROOT                                     # standalone repo
 DATA_ROOT = Path(os.environ.get("DIDR_DATA_ROOT", PKG_ROOT / "data"))
 RESULTS_ROOT = PKG_ROOT / "results"

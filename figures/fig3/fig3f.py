@@ -1,4 +1,4 @@
-"""EvalShift Figure 3 panel 3f: Class-A robustness across the five EvalShift metrics.
+"""PopRetrieve Figure 3 panel 3f: Class-A robustness across the five PopRetrieve metrics.
 
 Source data: figures/source_data/fig3f_classA_robustness.csv (exp12, the 621 gate-recommended
 partial-observed queries). The n differs from panel c on purpose: panel c reports the headline on
@@ -16,7 +16,7 @@ LABS = {'DART_energy': 'energy', 'DART_mmd': 'MMD', 'DART_sliced_wasserstein': '
 
 
 def draw_3f(ax):
-    """All five EvalShift metrics show a positive Class-A regret reduction."""
+    """All five PopRetrieve metrics show a positive Class-A regret reduction."""
     f = pd.read_csv(f"{REPO}/figures/source_data/fig3f_classA_robustness.csv")
     f = f.sort_values('median_regret_reduction')
     assert (f['median_regret_reduction'] > 0).all(), "panel title asserts all five are positive"
@@ -36,12 +36,12 @@ def draw_3f(ax):
     ax.tick_params(axis='y', length=0)
     # A clear band under the lowest bar, so the scope note sits beside no bar at 1:1.
     ax.set_ylim(-1.15, len(f) - 0.5)
-    ax.text(0.98, 0.02, f'Class-A metric\nn = {ns[0]} gate-recommended queries',
+    ax.text(0.98, 0.02, f'response-matching metric\nn = {ns[0]} diagnostic-positive queries',
             transform=ax.transAxes, ha='right', va='bottom', fontsize=6, color=GREY,
             linespacing=1.2)
     for sp in ['right', 'top']:
         ax.spines[sp].set_visible(False)
-    ax.set_title("All five distributional metrics\ngain under the Class-A metric", loc='left',
+    ax.set_title("All five distributional metrics\ngain under response matching", loc='left',
                  linespacing=1.15)
 
 

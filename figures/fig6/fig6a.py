@@ -84,10 +84,10 @@ def draw_6a(ax):
     arrow(0.25, 0.733, 0.40, 0.655, c=FOCAL)
     arrow(0.75, 0.733, 0.60, 0.655, c=COMP)
     box(0.50, 0.587, 0.96, 0.122,
-        "Gate 1: do subpopulations\nrespond differently?", INK, "#f2f2f2", fs=5.8)
+        "Differential response: do\nsubpopulations respond differently?", INK, "#f2f2f2", fs=5.8)
     arrow(0.50, 0.526, 0.50, 0.450, c=INK)
     box(0.50, 0.385, 0.96, 0.122,
-        "Gate 2: can that structure\nbe identified?", INK, "#f2f2f2", fs=5.8)
+        "Recoverability: can that\nstructure be identified?", INK, "#f2f2f2", fs=5.8)
     arrow(0.50, 0.324, 0.50, 0.252, c=INK)
 
     # --- the decision, and the condition asked OF the decision -------------------------------
@@ -97,7 +97,7 @@ def draw_6a(ax):
     # rather than measured, as the two gates above are (see module docstring and the caption).
     ax.plot([0.50, 0.50], [0.194, 0.154], ls=(0, (1.6, 1.4)), lw=0.9, color=GREY, zorder=1)
     box(0.50, 0.083, 0.96, 0.122,
-        "Gate 3 (proposed): does it\nchange the ranking?", GREY, "white", fs=5.8, ls="--")
+        "Decision relevance (proposed):\ndoes it change the ranking?", GREY, "white", fs=5.8, ls="--")
 
 
 if __name__ == "__main__":

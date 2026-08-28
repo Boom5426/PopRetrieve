@@ -1,4 +1,4 @@
-"""EvalShift Figure 3 panel 3c: per-query regret reduction, ECDF over ALL 765 queries.
+"""PopRetrieve Figure 3 panel 3c: per-query regret reduction, ECDF over ALL 765 queries.
 
 Source data: results/exp12_partial_observed_retrieval/per_query_scores.csv, paired per query
 (mean_cosine decision_regret minus DART_coverage_worst decision_regret).
@@ -24,7 +24,7 @@ N_QUERIES = 765          # all partial-observed queries; see module docstring
 
 
 def regret_reduction():
-    """Paired per-query regret reduction, mean-cosine minus EvalShift coverage-worst, all queries."""
+    """Paired per-query regret reduction, mean-cosine minus PopRetrieve coverage-worst, all queries."""
     d = pd.read_csv(f"{REPO}/results/exp12_partial_observed_retrieval/per_query_scores.csv")
     base = d[d.method == 'mean_cosine'].set_index(QUERY_KEY)['decision_regret']
     dart = d[d.method == 'DART_coverage_worst'].set_index(QUERY_KEY)['decision_regret']

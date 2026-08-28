@@ -96,7 +96,7 @@ power calculation.
 
 Total n for MoA-nDCG: **600**, not 765. Q4 n for 80% power: **20,844**, not 27,794.
 
-**This sharpens the negative result.** At the lowest divergence level EvalShift does not merely
+**This sharpens the negative result.** At the lowest divergence level PopRetrieve does not merely
 fail to help, it **significantly hurts** annotation recovery. `minority_state_coverage` is
 unaffected (it never used the sentinel): Q1 +0.0009, Q4 +0.0018 stand as published.
 
@@ -113,13 +113,13 @@ The table is the source data for Fig 1e and Fig 3e.
 
 | dataset | measured cosine | clears the ≲0.9 gate? | who actually wins |
 |---|---:|:---:|---|
-| cross-line (SciPlex3) | 0.032 | yes | **EvalShift** |
+| cross-line (SciPlex3) | 0.032 | yes | **PopRetrieve** |
 | **CD34+ lineages** | **0.186** | **yes** | **mean-cosine** |
 | Frangieh immune | 0.709 | yes | mean-cosine (0.600 vs 0.578) |
 
 The hand-entered 0.95 placed CD34+ *outside* the gate, which made our negative control look
 like a **confirmation** of the criterion. The measured value on the same cells is 0.186:
-strongly divergent, comfortably inside the gate. The gate therefore predicts EvalShift should win
+strongly divergent, comfortably inside the gate. The gate therefore predicts PopRetrieve should win
 on CD34+, and it does not. Two of three datasets clear the gate and still favour the mean.
 
 **The divergence criterion is refuted by our own negative control.** This agrees with the
@@ -197,7 +197,7 @@ longer offered as evidence.
 `per_query_scores.csv` gives 0.1190, and **the figures were built from the aggregate**. Cause:
 the paired lookup keyed on `(split_type, cell_line, heldout_drug, seed)`, which is not unique
 because the partial-library queries exist at three `observed_library_fraction` values; the
-subsequent `.iloc[0]` paired a EvalShift row at fraction 0.4 against a baseline row at fraction
+subsequent `.iloc[0]` paired a PopRetrieve row at fraction 0.4 against a baseline row at fraction
 0.2. The key now includes all six fields and raises on a non-unique index. Regenerated:
 +0.1190 (recommended, n=621) versus +0.1219 (non-recommended, n=133), matching the text.
 
@@ -327,13 +327,13 @@ er = stats.rankdata(e_scores)                   # "energy: low = similar"     <-
 ```
 
 The variable holds a negated distance, so `argmin` selects the candidate **farthest** from the
-query. The mean-cosine baseline in the same scripts was ranked **correctly** (`argmax`). EvalShift
+query. The mean-cosine baseline in the same scripts was ranked **correctly** (`argmax`). PopRetrieve
 was therefore ranked backwards and its incumbent was not.
 
 This is not cosmetic. Large-response candidates sit far from everything (rank corr between
 energy **distance** and candidate magnitude = **+0.79**), and large response predicts potency.
 Ranking "farthest first" therefore selects potent drugs. That, and nothing else, produced v1's
-apparent **+0.52** EvalShift-versus-potency correlation. It is the true value with the sign flipped.
+apparent **+0.52** PopRetrieve-versus-potency correlation. It is the true value with the sign flipped.
 
 Two further faults in v1, both fixed: it pooled **all four doses** (10 nM to 10 uM) while every
 other retrieval experiment in the paper runs at 10 uM, and it pooled **GDSC1 and GDSC2** AUCs,
@@ -475,7 +475,7 @@ direction.
 
 - The **threshold is not calibrated**. The 0.01 margin sits at **0.77 standard deviations**
   of the nonzero-difference distribution (sd = 0.0130), i.e. **inside its noise band**. It is
-  also **one-sided**: on the FULL run 11 tasks clear it for EvalShift and **2 clear it for the
+  also **one-sided**: on the FULL run 11 tasks clear it for PopRetrieve and **2 clear it for the
   mean**, and only the first number would ever be reported.
 - **The seed is not a replicate.** In exp13 it re-draws which drugs are held out
   (`rng.choice(common, n_drugs)`, exp13:234) and it **redefines the minority subpopulation**
@@ -510,7 +510,7 @@ direction.
   against a control set that partly contains it is not a control.
 
 **Is (what we now report): the distribution, not a count.** Across all 239 real-data tasks
-the EvalShift-minus-mean minority-state coverage is **statistically real and practically
+the PopRetrieve-minus-mean minority-state coverage is **statistically real and practically
 negligible**:
 
 | | |
@@ -518,7 +518,7 @@ negligible**:
 | mean over 239 tasks | **+0.0018** |
 | exactly zero (both families pick the same drug) | 102 / 239 |
 | nonzero (n=137): mean, sd | +0.0032, 0.0130 |
-| Wilcoxon, one-sided (H1: EvalShift > mean) | **p = 1.3e-07** |
+| Wilcoxon, one-sided (H1: PopRetrieve > mean) | **p = 1.3e-07** |
 | metric operating range | [0.60, 1.00] |
 
 And it is **confined to the mixtures we constructed**:
@@ -1125,7 +1125,7 @@ the fixed OT map, n=8 seeds, 720 queries).
 | **ot_map (Gate-1-opening)** | **0.053** | **0.007** | **0.008** |
 
 On OT candidates **every retrieval rule collapses to near chance, mean-cosine included** -- not just
-EvalShift. So the EvalShift-minus-mean contrast on OT candidates (all negative) measures nothing about Gate 1;
+PopRetrieve. So the PopRetrieve-minus-mean contrast on OT candidates (all negative) measures nothing about Gate 1;
 it measures that the predictor is unusable. The cross-line task is leave-two-contexts-out, harder
 than the within-context divergence measurement, and the same weak learning that lets the OT map only
 crack Gate 1 open (learning check 0.35) leaves it near chance as a predictor here.
@@ -1281,7 +1281,7 @@ distributional metric is even more damning than the mean, since leave-one-contex
 FARTHER from the true treated population than the unperturbed control is (energy ratio > 1). So the
 collapse is a genuine loss of the response, not an artefact of a first-moment score. Honest caveat:
 cell-eval's turnkey MetricsEvaluator could not run because it requires non-negative (log1p/count)
-input and EvalShift's HVG matrix is centred/scaled (min -2.05); we therefore computed the same metric
+input and PopRetrieve's HVG matrix is centred/scaled (min -2.05); we therefore computed the same metric
 FAMILIES directly (transparent, delta-based), and note this in the text rather than claiming the
 cell-eval pipeline itself was run. (cellflow_save_preds.py + celleval_metrics.py;
 results/exp14_nonadditive_predictors/cellflow_celleval.{csv,json}.)
@@ -1362,7 +1362,7 @@ could not distinguish a comment that *uses* the project name from one that *quot
 Neither error is visible to the checks that were run: `py_compile` passes on all three classes,
 and the LaTeX build and the figure typography gate never touch `src/experiments/`.
 
-**Fixed** in the same pass that renamed JUDGE to EvalShift: all five `exp13` sites restored to the
+**Fixed** in the same pass that renamed JUDGE to PopRetrieve: all five `exp13` sites restored to the
 frozen `DART_` prefix with a comment saying why, all three `no-JUDGE` strings restored to the
 literal `no_DART`, and all twelve path comments restored to `/data/boom/DART`. The exp13 fix was
 verified by re-running the boundary fit on the committed HIR-Bench CSVs, not by re-reading the
@@ -1371,8 +1371,8 @@ code.
 **No published number changes.** `results/exp13_real_data_projection/` was written before the
 rename and is unaffected; the regression was that the script could no longer regenerate it.
 
-**Naming, for the record.** DART (through 2026-07-26) to JUDGE (one day) to **EvalShift**. Both
-earlier names were acronyms; EvalShift is not, which removes the expansion string that had already
+**Naming, for the record.** DART (through 2026-07-26) to JUDGE (one day) to **PopRetrieve**. Both
+earlier names were acronyms; PopRetrieve is not, which removes the expansion string that had already
 gone stale once (see the entry above). The full rationale, including why JUDGE was abandoned after
 a day, is in `manuscript/reference/naming.md`.
 
@@ -1380,7 +1380,7 @@ a day, is in `manuscript/reference/naming.md`.
 
 ## R44. A multi-agent audit of the whole repository. 86 defects confirmed, 60 fixed here
 
-**What this was.** After the EvalShift rename (R43), the repository was swept by eight independent
+**What this was.** After the PopRetrieve rename (R43), the repository was swept by eight independent
 auditors, one per dimension (rename integrity in executable code, manuscript numbers, manuscript
 structure, documents-versus-reality, the figure build, consistency against this file, claim hygiene,
 and data provenance). Every finding was then handed to an adversarial verifier instructed to refute

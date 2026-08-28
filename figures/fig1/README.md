@@ -36,16 +36,16 @@ says so. There is no AI-generated panel in this figure any more.
 - **e** states this study's evidence coverage against the field audit. Two corrections were made
   here: the ladder used to put Class A at the top of an "evidence strength" arrow, which inverts
   the paper's own argument, and the status column used to read "this study: none" for Class C,
-  which contradicts "We report EvalShift under all three classes". Class C is now at the top of an
+  which contradicts "We report PopRetrieve under all three classes". Class C is now at the top of an
   axis named for what actually increases (independence from the retrieval objective), and the
   Class-C entry is marked reported-but-imported.
-- Palette semantics are the house ones: GREY context, FOCAL blue distributional/EvalShift signal,
+- Palette semantics are the house ones: GREY context, FOCAL blue distributional/PopRetrieve signal,
   COMP orange mean/collapse. No new hue family; GREEN and PURPLE are not used in this figure.
 - Per deck rule 5, Fig 1 sets tension only: no +0.119, no collapse statistics.
 
 ## Agreement with the manuscript caption
 
-The Figure 1 caption in `manuscript/latex/EvalShift_manuscript.tex` now assigns the same five letters
+The Figure 1 caption in `manuscript/latex/PopRetrieve_manuscript.tex` now assigns the same five letters
 this figure draws: a = the premise on one response coordinate, b = the inverse retrieval task and
 the two ways to score it, c = two candidate populations on a shared sample mean, d = when an
 evaluator is independent, e = the three evidence classes. An earlier version of this file recorded a

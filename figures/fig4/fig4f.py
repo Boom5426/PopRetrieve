@@ -1,4 +1,4 @@
-"""EvalShift Figure 4 panel 4f: recommendation cannot sort divergence
+"""PopRetrieve Figure 4 panel 4f: recommendation cannot sort divergence
 Source data: results/exp16_gate_diagnosis/_merged_query_divergence.csv
              (source_data/fig4ef_gate_divergence.csv is a hand-built column view of it, not read here)
 Run standalone: python fig4f.py
@@ -31,7 +31,7 @@ def draw_4f(ax):
     u_stat,pval=stats.mannwhitneyu(rec,nonrec)
     ax.set_xticks([0,1])
     ax.set_xticklabels([f'recommended\nn={len(rec)}',f'not recommended\nn={len(nonrec)}'],fontsize=6.0)
-    ax.set_xlabel('information-condition gate verdict',fontsize=6.2)
+    ax.set_xlabel('pre-specified diagnostic verdict',fontsize=6.2)
     ax.set_ylabel('true response\ndivergence',fontsize=6.2)
     # 1:1 re-cut: the top of the view is opened from 2.02 to 2.22 so the test statistic sits above
     # the two median labels instead of on them once they are printed at full size.

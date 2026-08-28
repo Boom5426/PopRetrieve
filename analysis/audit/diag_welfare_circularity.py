@@ -3,16 +3,16 @@
 
 Tests whether exp12's +0.119 energy-welfare regret reduction is a tautology
 by computing regret under an alternative welfare definition (mean-delta-cosine)
-that is independent of the energy distance used by EvalShift for selection.
+that is independent of the energy distance used by PopRetrieve for selection.
 
 Two welfare functions:
   1. Energy welfare (original): per-state score_energy, aggregate worst-case
   2. Mean-delta-cosine welfare (alternative): per-state cosine(cand_delta, state_delta),
      aggregate worst-case. cand_delta = cand_mean - ctrl, state_delta = state_mean - ctrl
 
-If EvalShift shows regret reduction only under (1) but not (2), then +0.119 is
-purely circular: EvalShift selects the drug with best energy, welfare IS energy,
-so EvalShift wins by definition.
+If PopRetrieve shows regret reduction only under (1) but not (2), then +0.119 is
+purely circular: PopRetrieve selects the drug with best energy, welfare IS energy,
+so PopRetrieve wins by definition.
 """
 from __future__ import annotations
 import sys
@@ -205,7 +205,7 @@ def main():
     summary = df.groupby("method")[["regret_energy_welfare", "regret_cosine_welfare"]].mean()
     print(summary)
 
-    # Regret reduction = mean_cosine_regret - DART_regret (positive = EvalShift better)
+    # Regret reduction = mean_cosine_regret - DART_regret (positive = PopRetrieve better)
     mean_regret = df[df.method == "mean_cosine"].set_index(["seed", "heldout_drug"])
     dart_regret = df[df.method == "DART_energy"].set_index(["seed", "heldout_drug"])
 
@@ -228,16 +228,16 @@ def main():
     frac_better_cosine = paired["dart_better_cosine"].mean()
 
     print(f"\n=== Regret Reduction (mean_cosine_regret - DART_regret) ===")
-    print(f"  Energy welfare:       {energy_reduction:.6f}  (frac EvalShift better: {frac_better_energy:.3f})")
-    print(f"  Delta-cosine welfare: {cosine_reduction:.6f}  (frac EvalShift better: {frac_better_cosine:.3f})")
+    print(f"  Energy welfare:       {energy_reduction:.6f}  (frac PopRetrieve better: {frac_better_energy:.3f})")
+    print(f"  Delta-cosine welfare: {cosine_reduction:.6f}  (frac PopRetrieve better: {frac_better_cosine:.3f})")
 
     confirmed = (cosine_reduction <= 0)
     print(f"\n=== Circularity confirmed: {confirmed} ===")
     if confirmed:
         print("  +0.119 energy-welfare regret reduction is purely circular.")
-        print("  EvalShift shows NO advantage under an oracle-independent welfare definition.")
+        print("  PopRetrieve shows NO advantage under an oracle-independent welfare definition.")
     else:
-        print("  EvalShift retains some advantage even under alternative welfare.")
+        print("  PopRetrieve retains some advantage even under alternative welfare.")
 
     # Save results
     out_dir = Path(__file__).parent

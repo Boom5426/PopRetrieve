@@ -1,4 +1,4 @@
-# EvalShift manuscript, build guide
+# PopRetrieve manuscript, build guide
 
 **Title:** Objective-aligned evaluation inflates distributional gains in single-cell drug
 retrieval.
@@ -7,15 +7,15 @@ retrieval.
 
 **Positioning:** an audit of how distribution-aware single-cell drug retrieval is *evaluated*,
 not a proposal for a better retrieval method. The population-to-population scores released as
-EvalShift are the instrument: one fixed set of rankings is re-graded under criteria of increasing
+PopRetrieve are the instrument: one fixed set of rankings is re-graded under criteria of increasing
 independence, so the rankings, the scorer and the queries hold still and only the evaluation
 shifts. See `../reference/competitive_landscape_positioning.md` and `../reference/naming.md`.
 
 ## Build
 
 ```bash
-make            # manuscript: pdflatex, bibtex, pdflatex x2  -> EvalShift_manuscript.pdf
-make si         # supplementary: pdflatex x2                 -> EvalShift_SI.pdf
+make            # manuscript: pdflatex, bibtex, pdflatex x2  -> PopRetrieve_manuscript.pdf
+make si         # supplementary: pdflatex x2                 -> PopRetrieve_SI.pdf
 make clean      # aux, bbl, blg, log, out, toc
 ```
 
@@ -27,12 +27,12 @@ there renders as `[?]`; SI references are written as plain author-year text on p
 
 | File | Role |
 |------|------|
-| `EvalShift_manuscript.tex` | the manuscript. Single source for every number, via macros defined in the preamble |
-| `EvalShift_SI.tex` | supplementary information: notes, supplementary tables, Extended Data captions |
+| `PopRetrieve_manuscript.tex` | the manuscript. Single source for every number, via macros defined in the preamble |
+| `PopRetrieve_SI.tex` | supplementary information: notes, supplementary tables, Extended Data captions |
 | `references.bib` | bibliography for the manuscript only |
 | `Makefile` | the build above |
-| `EvalShift_manuscript.bbl` | committed on purpose: the one artifact a reader without `bibtex` still needs |
-| `EvalShift_manuscript.md`, `introduction_EN.md`, `introduction_zh.md` | superseded prose drafts, kept for provenance. **Not** the source of the PDF |
+| `PopRetrieve_manuscript.bbl` | committed on purpose: the one artifact a reader without `bibtex` still needs |
+| `PopRetrieve_manuscript.md`, `introduction_EN.md`, `introduction_zh.md` | superseded prose drafts, kept for provenance. **Not** the source of the PDF |
 | `RESULTS_SPINE.md` | superseded outline of an earlier six-figure deck, kept for provenance. Several of its panel specs are written in terms of retracted numbers; it carries its own banner |
 | `figures/` | the PDFs the documents `\includegraphics`. Written by the figure build, not by hand |
 
@@ -77,7 +77,7 @@ below the 5 pt floor. The typography gate measures nominal size only and does no
 ## Numbers: this file quotes none, and neither should any other guide
 
 Every headline number in the manuscript is a **LaTeX macro defined once** in the preamble of
-`EvalShift_manuscript.tex`, so the text, a figure caption and the Methods cannot drift apart. New
+`PopRetrieve_manuscript.tex`, so the text, a figure caption and the Methods cannot drift apart. New
 prose must use the macro, never a literal.
 
 The authorities, in order:

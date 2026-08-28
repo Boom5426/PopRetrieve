@@ -4,7 +4,7 @@
 > statistics computed over 165 undefined sentinel values, and the Class A/B contrast that
 > compared two different scorers. **Read [CORRECTIONS.md](../CORRECTIONS.md) before using any
 > number below.** Where this file and CORRECTIONS.md disagree, CORRECTIONS.md is right.
-# EvalShift figure deck: 6-figure Nature Methods style plan (merged with external review)
+# PopRetrieve figure deck: 6-figure Nature Methods style plan (merged with external review)
 
 Editor pass 2026-07-12, merged with external NM-editor feedback (pasted-text-2026-07-12). Locked to
 RESULTS_SPINE.md (claim -> Result -> figure). Plan first, build second. No em dashes. Every panel
@@ -16,7 +16,7 @@ Extended Data set.
 ACCEPTED (the review was right):
 - Panel density 5-7 per figure (NM norm 4-9); each figure a complete evidence unit
   (setup -> headline -> mechanism -> robustness), not one summary panel.
-- Fig 5 REFRAME (the most valuable catch): plot the RELATIVE advantage EvalShift-minus-mean vs
+- Fig 5 REFRAME (the most valuable catch): plot the RELATIVE advantage PopRetrieve-minus-mean vs
   identifiability, NOT absolute coverage MoA-nDCG. Better-separated queries are easier for ALL
   methods; the distributional advantage is near-zero. Show the zero honestly.
 - Resistance coda LEAVES the main deck -> Extended Data Fig 8 (cleaner than an in-figure quarantine,
@@ -44,7 +44,7 @@ REJECTED / MODIFIED (editor override, with reason):
 - **Font ladder (exactly 3 sizes).** apply_figure_style(sizes=(8,7,6)): title/axis/series = 8;
   legend/annotation = 7; ticks = 6. Panel letters bold, top-left, outside axes, lowercase.
 - **Palette threading (one binding, whole deck)** (skill 4.1-4.5):
-  FOCAL blue #2166ac = distributional / EvalShift / energy / coverage; COMP red #b2182b =
+  FOCAL blue #2166ac = distributional / PopRetrieve / energy / coverage; COMP red #b2182b =
   mean-signature / CMap / collapse / null; META_GREY = context, reference lines, PCA/WTCS.
   CVD-safe, one alarm hue never a data color.
 - **Titles are takeaways** (skill 2.4): plain-language claim, metric names on axes not titles.
@@ -143,13 +143,13 @@ prediction -> structure preservation -> identifiability -> decision gain.
 
 | Panel | Content | Source | Notes |
 |-------|---------|--------|-------|
-| 5a [core] | Predict-then-rank schematic: observed vs predicted candidate population -> EvalShift/mean ranking | schematic | why predictor quality limits retrieval |
+| 5a [core] | Predict-then-rank schematic: observed vs predicted candidate population -> PopRetrieve/mean ranking | schematic | why predictor quality limits retrieval |
 | 5b [core] | Predictor-specific retrieval gaps: average-effect -0.004, nearest-neighbor -0.097, latent-linear -0.029 | exp09 | forest-style; extensible to SOTA predictors later |
 | 5c [core] | Subpopulation-variance preservation, per predictor: predicted/real ratio (real 0.046 vs predicted 0.009 = 5.1x collapse) | exp09 structure diagnostics | paired dots per predictor, not one bar |
 | 5d [core] | Multi-dim structure diagnostics heatmap: predictor x {variance ratio, diversity, isotropy}, predicted/real | exp09_structure_diagnostics.csv (960) | collapse not reliant on one metric |
 | 5e [core] | Identifiability recovery: 9 unsupervised methods on controlled two-source mixture with KNOWN source labels; seed points + median + null; best ARI 0.10, none >0.15 | upgrade/controlled_mixture_ari.csv | reworded per review (two-source w/ known labels, not "known bimodal"); ARI=0.5 shown as reference not "accepted threshold" |
 | 5f [core] | NEW identifiability phase diagram: cells-per-source {25..400} x separation {1..8}, color ARI; real-data anchor at separation=1 (ARI ~0.07 flat in budget) | upgrade/identifiability_phase_diagram.csv (600) | THE mechanism panel: is it the algorithm or the data regime? Answer: data regime |
-| 5g [core] | REFRAME: EvalShift-minus-mean Delta MoA-nDCG vs identifiability (silhouette/divergence/tertile); near zero -> draw the zero | upgrade/conditional_advantage (600 queries) | "better-separated queries are easier overall but show no stable distributional advantage"; replaces absolute-coverage 5c |
+| 5g [core] | REFRAME: PopRetrieve-minus-mean Delta MoA-nDCG vs identifiability (silhouette/divergence/tertile); near zero -> draw the zero | upgrade/conditional_advantage (600 queries) | "better-separated queries are easier overall but show no stable distributional advantage"; replaces absolute-coverage 5c |
 
 ## Figure 6: HIR-Bench formalizes when distributional retrieval can and cannot help (6 panels)
 Status: NEW, code-direct. Resistance analysis MOVED OUT to Extended Data Fig 8.
@@ -159,7 +159,7 @@ Status: NEW, code-direct. Resistance analysis MOVED OUT to Extended Data Fig 8.
 | 6a [core] | HIR-Bench generative model: two subpops, candidate treatments, latent welfare (A,B), mixture alpha, conflict, information condition | schematic | entry point for the phase diagram |
 | 6b [core] | Analytic boundary alpha* = B/(A+B) with a geometric decision interpretation (alpha < vs > alpha*) | exp11 theoretical_boundary.csv | show decision meaning, not just the formula |
 | 6c [core] | Full phase diagram over (alpha, conflict/lambda), color = Delta latent welfare, analytic boundary overlaid | exp11 phase_diagram_source.csv (108) | diverging map centered at boundary (skill 4.4) |
-| 6d [core] | Three information conditions side by side (observed / predicted_structure / predicted_mean): EvalShift gain or failure rate | exp11 method_dominance.csv (16) | structure preservation shifts the applicable region |
+| 6d [core] | Three information conditions side by side (observed / predicted_structure / predicted_mean): PopRetrieve gain or failure rate | exp11 method_dominance.csv (16) | structure preservation shifts the applicable region |
 | 6e [SUPP-CAND] | QC + transfer: no-conflict flip rate 0, median boundary margin 0.29, predicted_mean -> 100% no-DART | exp11 sanity_checks + uncertainty_band | compact quality-control panel |
 | 6f [core] | Failure predictability: ROC AUC 0.645 (FULL 13,440-cell, NOT QUICK 0.5) + top-feature inset (top-k disagreement). Title: "moderately predictable" | exp11 phase_grid_predictability (FULL) | caption states FULL provenance; honest title, not "gate succeeds" |
 
@@ -177,7 +177,7 @@ demotes to Supplementary Table 1.
 
 | ED Fig | Content | Blocks the attack | Source |
 |--------|---------|-------------------|--------|
-| ED 1 | Reproducibility basis: dataset ladder + EvalShift metric definitions + metric correlation matrix (merged old ED1+ED2) | "your data/metrics are non-standard" | fig1_E_dataset_ladder + exp08 per_query_scores |
+| ED 1 | Reproducibility basis: dataset ladder + PopRetrieve metric definitions + metric correlation matrix (merged old ED1+ED2) | "your data/metrics are non-standard" | fig1_E_dataset_ladder + exp08 per_query_scores |
 | ED 2 | Class B negative robustness: full statistics + power analysis + bootstrap CIs | "the null is just underpowered" (most important for a negative paper) | exp16/exp17 power_analysis |
 | ED 3 | Identifiability robustness: 9 clustering methods x k/space sensitivity + predictor structure-collapse diagnostics (merged old ED6+ED7) | "you just clustered badly; another method would find the subpops" | upgrade/kmeans_quality + subpop_identifiability + exp09 structure diagnostics |
 | ED 4 | Resistance exploratory: Frangieh contexts, AXL/mesenchymal +0.134 p=0.003, IFN p=1.9e-6, antigen-presentation p=0.04, minority-rescue near null | transparent home for the exploratory signal (kept out of main deck) | exp15 enrichment_summary + divergence_marker_enrichment |
@@ -229,7 +229,7 @@ manuscript template:
 - Palette: FOCAL #5185C0 (distributional/DART), COMP #E99D4E (mean/collapse), GREY #7A7A7A (context),
   INK #1A1A1A axes. Soft Okabe-Ito set, not the earlier saturated #2166ac/#b2182b diverging pair.
 - Signed-advantage heatmaps (4g, 5d, 6c) use the house orange-white-blue diverging map (DIVMAP),
-  blue = EvalShift-positive.
+  blue = PopRetrieve-positive.
 - Titles: regular descriptive phrases (what the panel shows), not bold declarative sentences.
 - Geometry: true print size, 183 mm double-column (7.2 in), 6-7 pt type, 0.5 pt spines.
 - Deliverable: editable-text vector PDF (fonttype 42) + high-dpi PNG.

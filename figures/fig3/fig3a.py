@@ -1,4 +1,4 @@
-"""EvalShift Figure 3 panel 3a: overall Hit@1 ladder.
+"""PopRetrieve Figure 3 panel 3a: overall Hit@1 ladder.
 
 Source data: results/exp08_signature_baselines/summary.csv (7 task x setting cells).
 The plotted quantity is the UNWEIGHTED macro-mean over those seven cells, which is what the

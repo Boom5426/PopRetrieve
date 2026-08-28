@@ -1,4 +1,4 @@
-"""EvalShift Figure 1 panel 1d: what makes an evaluator independent of the score it grades.
+"""PopRetrieve Figure 1 panel 1d: what makes an evaluator independent of the score it grades.
 
 Schematic (no external data). It states the manuscript's sharpest structural claim about
 retrieval evaluation: the candidate is chosen by MAXIMIZING a score, and an objective-aligned
@@ -44,7 +44,7 @@ def draw_1d(ax):
     # ============ coupled: a closed loop ============
     ax.text(0.0, 0.965, "coupled evaluation", ha="left", va="center",
             fontsize=6.4, color=COMP, fontweight="bold")
-    ax.text(1.0, 0.965, "Class A", ha="right", va="center", fontsize=6.0, color=COMP)
+    ax.text(1.0, 0.965, "Response matching", ha="right", va="center", fontsize=6.0, color=COMP)
 
     # Box widths are set by their longest line ("ranks the candidates", 6 pt): at the printed panel
     # width of ~2.6 in a 0.40 box left almost no inner padding, so both boxes are widened to 0.45
@@ -57,7 +57,7 @@ def draw_1d(ax):
     _arc(ax, (0.540, 0.720), (0.460, 0.720), COMP, -0.60)
     ax.text(0.500, 0.596, "one function, evaluated once", ha="center", va="center",
             fontsize=5.8, color=COMP)
-    ax.text(0.500, 0.520, "no way to lose", ha="center", va="center",
+    ax.text(0.500, 0.520, "the gain cannot be overturned", ha="center", va="center",
             fontsize=6.2, color=COMP, fontweight="bold")
 
     ax.plot([0.0, 1.0], [0.455, 0.455], lw=0.6, color=FAINT, zorder=1)
@@ -65,7 +65,7 @@ def draw_1d(ax):
     # ============ independent: an open chain that can end either way ============
     ax.text(0.0, 0.372, "independent evaluation", ha="left", va="center",
             fontsize=6.4, color=INK, fontweight="bold")
-    ax.text(1.0, 0.372, "Class B / C", ha="right", va="center", fontsize=6.0, color=GREY)
+    ax.text(1.0, 0.372, "Biological / functional", ha="right", va="center", fontsize=6.0, color=GREY)
 
     # "overturned" in bold 6 pt is ~0.19 of the printed panel width, so the chain is shifted left
     # to leave the verdict labels a full column rather than letting them run past the panel edge.

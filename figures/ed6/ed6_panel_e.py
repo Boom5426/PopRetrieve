@@ -1,4 +1,4 @@
-"""EvalShift Extended Data Fig. 6 panel e: benchmark QC
+"""PopRetrieve Extended Data Fig. 6 panel e: benchmark QC
 Source data: source_data/fig5e_sanity_checks.csv
 Run standalone: python fig5e.py
 """

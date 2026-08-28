@@ -1,4 +1,4 @@
-"""EvalShift Figure 6 panel 6d: multi-dimensional structure diagnostics, predicted relative to real.
+"""PopRetrieve Figure 6 panel 6d: multi-dimensional structure diagnostics, predicted relative to real.
 Source data: results/exp09_structure_diagnostics/exp09_structure_diagnostics_summary.csv
 Run standalone: python fig6d.py
 
@@ -22,7 +22,7 @@ FOCAL, COMP, GREY, INK = "#5185C0", "#E99D4E", "#7A7A7A", "#1A1A1A"
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 PREDS = [("average_effect", "avg-effect"),
-         ("scgen", "latent"),
+         ("scgen", "linear-latent"),
          ("nearest_neighbor", "NN")]
 REAL = "real_blend"          # the alpha-blended candidate a scorer actually ranks
 SYNTH = "cells"              # the faithful synthesizer; 'gaussian' is the retracted legacy one

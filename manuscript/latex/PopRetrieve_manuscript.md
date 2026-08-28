@@ -583,7 +583,7 @@ significant but negligible effects are labeled as such.
 ### Code and data availability
 
 All code, experiment scripts, and the evaluation-metric taxonomy are available at
-`https://github.com/Boom5426/EvalShift`. The test suite (`python tests/run_tests.py`)
+`https://github.com/Boom5426/PopRetrieve`. The test suite (`python tests/run_tests.py`)
 passes 95/95, and the Phase-1 headline numbers reproduce to within tolerance
 (35/35). Large single-cell tensors are obtained separately as described in the
 repository `DATA.md`.

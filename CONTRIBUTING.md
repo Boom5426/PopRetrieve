@@ -1,6 +1,6 @@
-# Contributing to EvalShift
+# Contributing to PopRetrieve
 
-Thanks for your interest. EvalShift is a research codebase accompanying a methods
+Thanks for your interest. PopRetrieve is a research codebase accompanying a methods
 manuscript, so contributions that improve **reproducibility, correctness, and
 clarity** are especially welcome.
 
@@ -13,7 +13,7 @@ clarity** are especially welcome.
   ranker, or experiment, re-run the relevant script and confirm
   `results/all_existing_results_recomputed.csv` still passes (35/35 within
   tolerance).
-- **Be honest about negatives.** EvalShift is framed as a *probe*, not a universally
+- **Be honest about negatives.** PopRetrieve is framed as a *probe*, not a universally
   better method. Do not add framing that overstates where the distributional
   signal helps; keep the null / negative results (CD34+, MoA-nDCG) in view.
 

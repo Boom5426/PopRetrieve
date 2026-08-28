@@ -1,4 +1,4 @@
-"""EvalShift Figure 4: the apparent gains do not survive independent evaluation.
+"""PopRetrieve Figure 4: the apparent gains do not survive independent evaluation.
 
 Nine panels, one argument, read row by row. This is the metric-class ladder and the paper's
 central figure.
@@ -79,7 +79,7 @@ TITLES = {
     "b": "MoA-nDCG gain\ncenters on zero",
     "c": "Minority-coverage\ngain is negligible",
     "d": "Non-recommended\nqueries gain as much",
-    "e": "The gate axis points\nthe wrong way",
+    "e": "The diagnostic axis points\nthe wrong way",
     "f": "Recommendation cannot\nsort by divergence",
     "g": "Real, negligible, confined to mixtures",
     "h": TITLE_4H,
@@ -87,11 +87,11 @@ TITLES = {
 }
 
 ROW_LABELS = [
-    "Class A $\\rightarrow$ Class B: the same rankings, judged by a metric that does not share "
-    "their objective",
-    "Why the gate cannot rescue it, and what 239 real-data tasks show",
-    "Class C: an independent functional oracle (drug$-$drug functional similarity, GDSC2 "
-    "dose-response)",
+    "Response matching $\\rightarrow$ mechanism recovery: the same rankings, judged by a metric "
+    "that does not share their objective",
+    "Why the diagnostic cannot rescue it, and what 239 real-data tasks show",
+    "External functional evaluation: an independent readout (drug$-$drug functional similarity, "
+    "GDSC2 dose-response)",
 ]
 
 # ------------------------------------------------------------------------------------------

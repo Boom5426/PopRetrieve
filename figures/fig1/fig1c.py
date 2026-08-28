@@ -1,4 +1,4 @@
-"""EvalShift Figure 1 panel 1c: two candidates that share a mean and differ in distribution.
+"""PopRetrieve Figure 1 panel 1c: two candidates that share a mean and differ in distribution.
 
 Synthetic, seeded (RandomState(3)); this is a labelled schematic, not a data panel, and the
 figure caption says so. Nothing here is read from results/.

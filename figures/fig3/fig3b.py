@@ -1,4 +1,4 @@
-"""EvalShift Figure 3 panel 3b: per-task Hit@1, and the Frangieh counterexample.
+"""PopRetrieve Figure 3 panel 3b: per-task Hit@1, and the Frangieh counterexample.
 
 Source data: results/exp08_signature_baselines/summary_by_task.csv (all 8 scorers x 3 tasks).
 

@@ -4,7 +4,7 @@
 a candidate drug library with controlled preference conflict, latent targets per subpop,
 and a utility matrix u[d,k] = -E||x - t_k||^2.
 
-The generator is method-neutral: EvalShift is one evaluated method entry, not the benchmark
+The generator is method-neutral: PopRetrieve is one evaluated method entry, not the benchmark
 definition.  Oracle welfare and flip risk are computed by ``oracle_utility``.
 """
 from __future__ import annotations

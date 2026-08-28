@@ -76,10 +76,10 @@ def draw_shape(ax):
     # underneath them and leaving black only in the inter-bar gutters
     ax.axhline(0, lw=0.8, color=INK, zorder=5)
     ax.set_xticks(x)
-    ax.set_xticklabels(["oracle built as a\nMEAN", "oracle built as a\nDISTRIBUTION"],
+    ax.set_xticklabels(["evaluator built as a\nMEAN", "evaluator built as a\nDISTRIBUTION"],
                        fontsize=6.2, fontweight="bold")
     # two lines: rotated, the one-line version is 1.4 in of text against a 1.02 in axes
-    ax.set_ylabel("Spearman $\\rho$ with\nthe protein oracle", fontsize=6.2)
+    ax.set_ylabel("Spearman $\\rho$ with\nthe protein evaluator", fontsize=6.2)
     ax.set_ylim(0, 0.76)
     ax.tick_params(axis="y", labelsize=6)
     for s in ("right", "top"):
@@ -91,7 +91,7 @@ def draw_shape(ax):
 if __name__ == "__main__":
     fig, ax = plt.subplots(figsize=(3.7, 3.0))
     draw_shape(ax)
-    ax.set_title("The oracle's shape picks the winner", loc="left", fontsize=8)
+    ax.set_title("The evaluator's shape picks the winner", loc="left", fontsize=8)
     fig.savefig(os.path.join(os.path.dirname(__file__), "6shape.png"), dpi=200,
                 bbox_inches="tight")
     print("wrote 6shape.png")

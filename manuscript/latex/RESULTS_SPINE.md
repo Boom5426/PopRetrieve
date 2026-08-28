@@ -4,11 +4,11 @@
 > values (R2), the Class A/B contrast that compared two different scorers (R4), the HIR-Bench
 > predictability AUC of 0.640 (R11), the claim that no Class C metric was available (R14), and
 > the "0 of 37 real-data tasks" count (R13). **Read [CORRECTIONS.md](../../CORRECTIONS.md) before quoting any
-> number below**, and treat `manuscript/latex/EvalShift_manuscript.tex` as the authority for
+> number below**, and treat `manuscript/latex/PopRetrieve_manuscript.tex` as the authority for
 > anything that reaches the paper. Where this file and CORRECTIONS.md disagree, CORRECTIONS.md
 > is right.
 
-# EvalShift Results spine: claim -> Result -> figure -> panels
+# PopRetrieve Results spine: claim -> Result -> figure -> panels
 
 Editor pass 2026-07-12 (Nature-series editor lens). Lock this logic BEFORE writing prose or
 building figures. **No longer the source of truth:** it describes an earlier six-figure deck
@@ -16,9 +16,9 @@ building figures. **No longer the source of truth:** it describes an earlier six
 not use, and several of the panel specifications below are written in terms of numbers that
 CORRECTIONS.md has since retracted (the 0.046-vs-0.009 collapse, R1; the +0.119-versus-0/37
 pairing, R4 and R13; the predictability AUC 0.640, R11). The authority is
-`EvalShift_manuscript.tex` for the prose and `figures/build_all.py` for the deck.
+`PopRetrieve_manuscript.tex` for the prose and `figures/build_all.py` for the deck.
 
-Genre reminder: evaluation-methodology / methods-critique. EvalShift is a probe, not a product.
+Genre reminder: evaluation-methodology / methods-critique. PopRetrieve is a probe, not a product.
 Every claim's prose weight must match its evidence weight. Honest ceiling: Nature Methods /
 Cell Reports Methods class; figure polish does not lift genre.
 

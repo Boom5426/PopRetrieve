@@ -55,6 +55,7 @@ REPO = _P(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(REPO / "src"))
 
+import hashlib
 import json
 import numpy as np
 import pandas as pd
@@ -82,6 +83,22 @@ np.random.seed(SEED)
 
 def dense(a):
     return a.toarray() if hasattr(a, "toarray") else np.asarray(a)
+
+
+def _gdsc_provenance() -> dict:
+    """Stable identifier for the GDSC2 workbook this run consumed.
+
+    The workbook is not redistributable (DATA.md), so a downstream reader cannot diff the file
+    itself. A size plus SHA-256 lets them prove they are on the same release the published
+    numbers were computed from, which release 8.5 (27Oct23) is.
+    """
+    h = hashlib.sha256()
+    with open(GDSC_XLSX, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return {"path": GDSC_XLSX.name, "bytes": GDSC_XLSX.stat().st_size,
+            "sha256": h.hexdigest(), "dataset": GDSC_SOURCE,
+            "expected_release": "GDSC2_fitted_dose_response_27Oct23.xlsx (release 8.5)"}
 
 
 def build_functional_oracle(gdsc_drugs):
@@ -148,6 +165,40 @@ def build_functional_oracle(gdsc_drugs):
           f"{int(np.median(n_shared.values[off]))}")
     print(f"centered oracle similarity: median {np.nanmedian(sim_cen.values[off]):+.3f}, "
           f"range [{np.nanmin(sim_cen.values[off]):+.3f}, {np.nanmax(sim_cen.values[off]):+.3f}]")
+
+    # PERSIST THE OFF-DIAGONAL SIMILARITY DISTRIBUTIONS.
+    # The manuscript justifies the cell-line centering by contrasting how similar drug pairs look
+    # before and after it ("almost every drug pair look alike"). Until 2026-07-29 those four
+    # numbers existed only on stdout, so the one statistic defending the centering choice, on
+    # which the entire affirmative Class-C result depends, had no saved provenance. Write them.
+    summary = {}
+    for tag, S in (("centered", sim_cen), ("uncentered", sim_raw)):
+        v = S.values[off]
+        v = v[np.isfinite(v)]
+        summary[tag] = {
+            "n_drug_pairs": int(len(v) // 2),          # the matrix is symmetric
+            "frac_positive": float((v > 0).mean()),
+            "median_similarity": float(np.median(v)),
+            "q25": float(np.percentile(v, 25)),
+            "q75": float(np.percentile(v, 75)),
+            "min": float(v.min()),
+            "max": float(v.max()),
+        }
+    summary["source_matrix"] = {
+        "n_drugs": int(len(sim_cen)),
+        "n_cell_lines_after_holdout": int(full.shape[1]),
+        "n_drugs_in_full_gdsc_matrix": int(full.shape[0]),
+        "min_shared_lines": MIN_SHARED_LINES,
+        "median_shared_lines": int(np.median(n_shared.values[off])),
+    }
+    summary["centering_rule"] = (
+        "Each cell line's mean AUC, estimated across ALL GDSC2 compounds in the held-out matrix "
+        "rather than only the matched ones, is subtracted from every entry of that line's column "
+        "before the drug-drug Spearman correlation is taken. The three SciPlex3 lines "
+        f"({', '.join(GDSC_NAMES_OF_SCIPLEX_LINES)}) are excluded from the profile entirely.")
+    summary["source_input"] = _gdsc_provenance()
+    (OUT / "class_c_oracle_similarity_summary.json").write_text(json.dumps(summary, indent=1))
+    print(f"wrote {OUT / 'class_c_oracle_similarity_summary.json'}")
     return sim_cen, sim_raw, n_shared
 
 

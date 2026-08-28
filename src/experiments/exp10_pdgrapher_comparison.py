@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Experiment 10 — PDGrapher-aligned comparison on the closed-loop benchmark.
 
-Direct inverse-design (PDGrapher family) ranks intervention *targets*; EvalShift ranks *drugs* by
+Direct inverse-design (PDGrapher family) ranks intervention *targets*; PopRetrieve ranks *drugs* by
 population retrieval. This experiment puts them on common ground using the repository's
 precomputed closed-loop benchmark (``data/benchmarks/pdgrapher_closed_loop_benchmark.parquet``
 + the CIGS signal parquets), so no PDGrapher training is needed — its ranked outputs for the
@@ -11,7 +11,7 @@ Method families mapped onto the benchmark's per-candidate signals:
     graph_proximity     PDGrapher-family inverse design (network proximity to the target field)
     target_overlap      PDGrapher-family (candidate-target vs query-target overlap)
     signature_reversal  CMap-style signature-reversal retrieval
-    distance_reduction  EvalShift-flavored distributional signal — source→target *population*
+    distance_reduction  PopRetrieve-flavored distributional signal — source→target *population*
                         distance reduction from response_rescue_labels_CIGS (how much a
                         candidate moves the diseased population toward the target state)
     field_match         upper-reference relevance signal (the field ground-truth itself)
@@ -106,11 +106,11 @@ KS = (1, 5, 10, 20)
 
 
 def _distance_reduction_ranking(query_id: str, repo_root: Path) -> pd.DataFrame:
-    """EvalShift-flavored signal: source→target population distance reduction per candidate.
+    """PopRetrieve-flavored signal: source→target population distance reduction per candidate.
 
     From response_rescue_labels_CIGS: higher relative distance reduction = candidate moves the
     diseased population closer to the target state = better (the population-distance analogue of
-    EvalShift's distributional retrieval on this closed-loop task). Joined to drug_name via the
+    PopRetrieve's distributional retrieval on this closed-loop task). Joined to drug_name via the
     benchmark's candidate_id (SMILES).
     """
     rr = pd.read_parquet(repo_root / "data" / "benchmarks" / "response_rescue_labels_CIGS.parquet")

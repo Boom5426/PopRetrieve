@@ -1,4 +1,4 @@
-"""EvalShift Figure 5: The benchmark decides the answer.
+"""PopRetrieve Figure 5: The benchmark decides the answer.
 
 WHY THESE TWO THINGS ARE NOW ONE FIGURE
 ---------------------------------------
@@ -76,17 +76,17 @@ TITLES = {
     # one is still a claim its own data supports; nothing was broadened, and no earlier title was
     # restored.
     "a": r"The mean suffices below $\alpha^*$",
-    "b": "Circularity, measured",
-    "c": "The oracle's shape picks the winner",
+    "b": "Objective alignment, measured",
+    "c": "The evaluator's shape picks the winner",
     # scoped to the tumour on purpose: the constructed arms in this same panel show a gap of
     # +0.007 and -0.002 (fixed pairs), i.e. there the limit is NOT algorithmic. An unscoped title
     # would contradict two of its own three bar groups.
-    "d": "Gate 2 in a tumour: an algorithmic limit",
-    "e": "Gate 1: divergence overstated",
+    "d": "Recoverability in a tumour: an algorithmic limit",
+    "e": "Divergence is overstated",
     "f": "The mean ranks most of it",
 }
 ROW_LABELS = [
-    "From the inside: analytically, inside a synthetic benchmark, and between two real oracles",
+    "From the inside: analytically, inside a synthetic benchmark, and between two real evaluators",
     "From the outside: our constructed benchmark, checked against tissue nobody assembled",
 ]
 

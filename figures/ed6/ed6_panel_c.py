@@ -1,4 +1,4 @@
-"""EvalShift Extended Data Fig. 6 panel c: distributional-advantage phase diagram
+"""PopRetrieve Extended Data Fig. 6 panel c: distributional-advantage phase diagram
 Source data: source_data/fig5c_dart_advantage_grid.csv
 Run standalone: python fig5c.py
 """

@@ -2,14 +2,14 @@
 
 Decouples the gate entirely. Instead of asking "does the gate pick good queries?",
 it asks the direct question: on genuinely high-divergence tasks (measured by TRUE
-subpopulation response divergence, not the gate), does EvalShift beat mean retrieval on the
+subpopulation response divergence, not the gate), does PopRetrieve beat mean retrieval on the
 two NON-CIRCULAR metrics?
 
 Q2 (stratified advantage):
   - Stratify all real per-query rows into quartiles of true_divergence.
-  - In each stratum, paired EvalShift-vs-mean gap on minority_state_coverage and moa_ndcg,
+  - In each stratum, paired PopRetrieve-vs-mean gap on minority_state_coverage and moa_ndcg,
     with paired Wilcoxon signed-rank + Benjamini-Hochberg across strata.
-  - Core question: in the HIGHEST-divergence stratum, is EvalShift significantly > mean on a
+  - Core question: in the HIGHEST-divergence stratum, is PopRetrieve significantly > mean on a
     non-circular metric?
 
 Q3 (power analysis):
@@ -54,7 +54,7 @@ N_STRATA = 4
 
 
 def _per_query_gaps():
-    """One row per query: true_divergence + paired EvalShift-mean gap on each non-circular metric.
+    """One row per query: true_divergence + paired PopRetrieve-mean gap on each non-circular metric.
 
     Undefined metrics are masked to NaN BEFORE differencing (see exp16_common.mask_undefined).
     Without this, exp12's -1 sentinel differences to an exact 0 and 165 of the 765 queries
@@ -81,7 +81,7 @@ def _per_query_gaps():
 
 
 def _paired_test(gaps):
-    """Paired Wilcoxon on the EvalShift-mean differences (gaps). Returns stat dict."""
+    """Paired Wilcoxon on the PopRetrieve-mean differences (gaps). Returns stat dict."""
     g = np.asarray(gaps, dtype=float)
     g = g[np.isfinite(g)]
     n = len(g)
@@ -104,7 +104,7 @@ def _paired_test(gaps):
 
 
 def stratified(df):
-    section("EXP17 Q2 — true-divergence-stratified EvalShift-vs-mean on non-circular metrics")
+    section("EXP17 Q2 — true-divergence-stratified PopRetrieve-vs-mean on non-circular metrics")
     # Quartile edges on true_divergence (rank-based; robust to skew).
     df = df.copy()
     try:
@@ -175,7 +175,7 @@ def power_analysis(df, strata):
 def run(quick=False):
     section(f"EXP17 TRUE-DIVERGENCE SUBSET ({'QUICK' if quick else 'FULL'})")
     df = _per_query_gaps()
-    log(f"  loaded {len(df)} queries with paired EvalShift/mean non-circular outcomes")
+    log(f"  loaded {len(df)} queries with paired PopRetrieve/mean non-circular outcomes")
     log(f"  true_divergence range [{df.true_divergence.min():.3f}, {df.true_divergence.max():.3f}]")
 
     strat, df_s, strata = stratified(df)

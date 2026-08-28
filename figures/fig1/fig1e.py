@@ -1,4 +1,4 @@
-"""EvalShift Figure 1 panel 1e: the three evidence classes, and who reports them.
+"""PopRetrieve Figure 1 panel 1e: the three evidence classes, and who reports them.
 
 Schematic (no external data). Two defects in the previous version are corrected here.
 
@@ -9,7 +9,7 @@ Schematic (no external data). Two defects in the previous version are corrected 
    in its own opening figure. Class C is now at the top and the axis is named for what actually
    increases: independence from the retrieval objective.
 
-2. The status column read "this study: none" for Class C. The manuscript says "We report EvalShift
+2. The status column read "this study: none" for Class C. The manuscript says "We report PopRetrieve
    under all three classes", with the Class-C oracle imported from GDSC2 dose-response data and
    labelled semi-real for that reason. "none" was false. The column now reports all three, and
    the Class-C qualification is stated rather than hidden.
@@ -33,11 +33,11 @@ X_FIELD, X_OURS = 0.735, 0.945         # the two status columns
 
 # name, one-line definition, examples, accent, field-headline?, this-study status
 TIERS = [
-    ("Class A", "objective-aligned", "energy regret, connectivity score", COMP,
+    ("Response matching", "objective-aligned", "energy regret, connectivity score", COMP,
      True, "full"),
-    ("Class B", "task-proximal", "MoA-nDCG, minority coverage", GREY,
+    ("Mechanism recovery", "task-proximal", "MoA-nDCG, minority coverage", GREY,
      False, "full"),
-    ("Class C", "oracle-independent", "dose-response viability", INK,
+    ("External functional", "evaluator-independent", "dose-response viability", INK,
      False, "imported"),
 ]
 Y = (0.185, 0.455, 0.725)              # A at the bottom, C at the top
@@ -83,14 +83,14 @@ def draw_1e(ax):
         _dot(ax, X_FIELD, y + 0.028, field, GREY)
         _dot(ax, X_OURS, y + 0.028, True, col)
         if ours == "imported":
-            ax.text(X_OURS, y - 0.048, "imported\noracle", ha="center", va="top",
+            ax.text(X_OURS, y - 0.048, "imported\nevaluator", ha="center", va="top",
                     fontsize=5.4, color=GREY, linespacing=1.2)
 
     ax.text(X_TIER + 0.032, Y[2] - 0.072, "required for a therapeutic claim",
             ha="left", va="center", fontsize=5.6, color=INK, style="italic")
     ax.text(X_TIER + 0.032, Y[1] - 0.072, "more independent, same upstream data",
             ha="left", va="center", fontsize=5.6, color=GREY, style="italic")
-    ax.text(X_TIER + 0.032, Y[0] - 0.072, "the field default; it cannot fail",
+    ax.text(X_TIER + 0.032, Y[0] - 0.072, "closely aligned with the retrieval objective",
             ha="left", va="center", fontsize=5.6, color=COMP, style="italic")
 
     # ---- the axis the ladder is ordered on ----

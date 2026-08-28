@@ -1,4 +1,4 @@
-"""EvalShift Figure 1 panel 1a: the biological motivation, drawn rather than rendered.
+"""PopRetrieve Figure 1 panel 1a: the biological motivation, drawn rather than rendered.
 
 The claim this panel has to carry, and the whole reason a distributional score could matter:
 two drugs can produce the SAME population mean shift and OPPOSITE consequences for a resistant

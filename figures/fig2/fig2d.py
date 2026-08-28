@@ -1,4 +1,4 @@
-"""EvalShift Figure 2 panel 2d: mean cosine and CMap cosine are the identical operation.
+"""PopRetrieve Figure 2 panel 2d: mean cosine and CMap cosine are the identical operation.
 
 Source data: results/exp08_signature_baselines/summary.csv, unweighted macro-mean of hit@1
 over the seven (task x setting) cells; mirrored in figures/source_data/fig2d_operation_identity.csv.

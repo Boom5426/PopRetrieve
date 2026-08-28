@@ -16,7 +16,7 @@ Three parts:
   B  honest-limit   : divergence -> post-treatment survival/expansion.  Frangieh has
                       NO drug timecourse / no post-treatment readout, so this is
                       reported as a limitation, not a result.
-  C  method-contrast: does the EvalShift-top perturbation cover the resistance-associated
+  C  method-contrast: does the PopRetrieve-top perturbation cover the resistance-associated
                       minority state that the mean-top perturbation collapses away?
 
 Usage:
@@ -175,10 +175,10 @@ def _enrichment_summary(dfA):
     return pd.DataFrame(rows).sort_values("high_minus_low", ascending=False)
 
 
-# ── Part C: EvalShift-top vs mean-top minority rescue ─────────────────────────────
+# ── Part C: PopRetrieve-top vs mean-top minority rescue ─────────────────────────────
 
 def run_part_C(ds, contexts, min_cells=40, seed=0, n_query=6):
-    """Does the EvalShift-selected KO cover the divergent resistance minority state that the
+    """Does the PopRetrieve-selected KO cover the divergent resistance minority state that the
     mean-selected KO collapses away?  Uses one held-out KO as the query, others as library."""
     rng = np.random.default_rng(seed)
     rows = []
@@ -213,7 +213,7 @@ def run_part_C(ds, contexts, min_cells=40, seed=0, n_query=6):
             if len(cand) < 5:
                 continue
             names = list(cand.keys())
-            # mean-cosine top vs EvalShift-energy top
+            # mean-cosine top vs PopRetrieve-energy top
             mean_sc = np.array([score_mean_cosine(cand[n], qX, control_P=ctrl_mean,
                                                   control_Q=ctrl_mean) for n in names])
             energy_sc = np.array([score_energy(cand[n], qX, max_cells=min(150, len(cand[n]), len(qX)),
@@ -266,15 +266,15 @@ def run(quick=False):
         log(f"  {sig} {r.program:26s} high-low={r.high_minus_low:+.3f} "
             f"corr={r.corr_divergence_enrichment:+.3f} p={r.mannwhitney_p:.3g}")
 
-    # Part C: EvalShift vs mean minority rescue
+    # Part C: PopRetrieve vs mean minority rescue
     dfC = run_part_C(ds, contexts, seed=seed, n_query=4 if quick else 8)
     write_csv(dfC, results_path(OUT, "dart_vs_mean_minority_rescue.csv"))
-    section("PART C — EvalShift-top vs mean-top minority rescue")
+    section("PART C — PopRetrieve-top vs mean-top minority rescue")
     if len(dfC) > 0:
         log(f"  queries: {len(dfC)}, different pick: {int((~dfC.same_pick).sum())}/{len(dfC)}")
-        log(f"  mean EvalShift minority rescue: {dfC.dart_minority_rescue.mean():+.4f} "
-            f"(>0 => EvalShift covers resistance minority better)")
-        log(f"  frac queries EvalShift rescues: {(dfC.dart_minority_rescue > 0).mean():.2f}")
+        log(f"  mean PopRetrieve minority rescue: {dfC.dart_minority_rescue.mean():+.4f} "
+            f"(>0 => PopRetrieve covers resistance minority better)")
+        log(f"  frac queries PopRetrieve rescues: {(dfC.dart_minority_rescue > 0).mean():.2f}")
 
     return dfA, dfE, dfC
 

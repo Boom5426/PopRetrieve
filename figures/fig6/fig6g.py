@@ -1,4 +1,4 @@
-"""EvalShift Figure 6 panel 6g: conditional advantage by response-divergence stratum.
+"""PopRetrieve Figure 6 panel 6g: conditional advantage by response-divergence stratum.
 Source data: results/exp17_true_divergence_subset/divergence_stratified.csv
 Run standalone: python fig6g.py
 
