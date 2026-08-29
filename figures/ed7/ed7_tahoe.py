@@ -1,5 +1,8 @@
 """Extended Data Fig. 7: the three conditions re-measured on unconstructed material.
 
+SINCE 2026-08-29 these four panels are Extended Data Fig. 3e-h, drawn by
+edfigs/ed_consolidated.py. build() here still assembles the standalone preview.
+
 WHAT THIS FIGURE IS FOR
 -----------------------
 Every gate statistic in the main text rests on either cell-line mixtures we assembled or a
@@ -79,7 +82,7 @@ def draw_a(ax):
     # Anchor labels go INSIDE the panel and rotated, at staggered heights. Placed above the axis
     # as horizontal text they collided with each other (0.03 and 0.205 are 0.17 apart on an axis
     # 1.17 wide, i.e. 0.19 in, and each label was 0.30 in) and with the two-line title.
-    for x, lab, col, yf in [(0.03, "constructed mixtures", COMP_SOFT, 0.97),
+    for x, lab, col, yf in [(0.014, "constructed mixtures", COMP_SOFT, 0.97),
                             (0.205, "real cells, state split", GREY, 0.97),
                             (0.566, "patient tissue", PURPLE_SOFT, 0.97),
                             (1.0, "additive ceiling", INK, 0.97)]:

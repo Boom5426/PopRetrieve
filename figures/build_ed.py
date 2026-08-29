@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-r"""Build the seven Extended Data figures and sync them into manuscript/latex/figures/.
+r"""Build the three Extended Data figures and sync them into manuscript/latex/figures/.
 
 WHY THIS EXISTS. `build_all.py` covers the six main figures and copies them into the manuscript.
 Extended Data was outside it and copied by hand, and the 2026-07-27 audit found what that costs:
@@ -19,8 +19,8 @@ has retracted, each contradicting its own caption on the same SI page.
 Rebuilding from the current sources removes all four. Run this whenever an experiment that feeds
 Extended Data is re-run, and before submitting.
 
-    python figures/build_ed.py            # build all seven, report, sync nothing
-    python figures/build_ed.py --write    # build all seven and sync to manuscript/latex/figures/
+    python figures/build_ed.py            # build all three, report, sync nothing
+    python figures/build_ed.py --write    # build all three and sync to manuscript/latex/figures/
 
 THE PRINT-WIDTH GATE. Every Extended Data figure enters the SI with
 `\includegraphics[width=\textwidth]`, so a canvas wider than the 6.93 in text block is scaled DOWN
@@ -47,33 +47,27 @@ REPO = HERE.parent
 MANUSCRIPT_FIGDIR = REPO / "manuscript" / "latex" / "figures"
 
 # Extended Data number -> (script to run, the file that script writes).
-# ED1 to ED3 come from one script that writes their stems in a single pass, so they share an entry.
 #
-# ED4 WAS SHIPPING THE WRONG FIGURE UNTIL 2026-08-29. This dict mapped 4 to
+# SEVEN FIGURES BECAME THREE ON 2026-08-29. The old deck spread 26 panels over seven figures at
+# about 5.9 in2 per panel, against the main deck's 3.7. Read back against the manuscript, the SI
+# tables and the Supplementary Notes, five of those panels were carried in full somewhere else
+# and are deleted rather than merged (old ED1a, ED1b, ED2c, ED3c and ED6a; edfigs/
+# ed_consolidated.py names what carries each one). The surviving twenty-one are drawn by that one
+# script, in three figures, at panel sizes the seven-figure split could not give them.
+#
+# ED4 WAS SHIPPING THE WRONG FIGURE UNTIL 2026-08-29. The dict here mapped 4 to
 # edfigs/ed4_resistance_exploratory.pdf, which draws programme enrichment, an AXL/divergence
-# scatter and a minority-rescue scatter. The Extended Data Fig. 4 caption describes four panels
-# of compartment-assignment validation and threshold robustness in ZhaoSims2021, and the one
-# sentence in the main text that cites Extended Data Fig. 4 is the glioblastoma paragraph
-# (supervised 0.923, unsupervised 0.777, gap +0.117). The figure that matches both already
-# existed as ed4/ed4_zhao_robustness.py, whose own docstring says it "replaces the retired
-# resistance-exploratory panel, whose figure body no longer matched its caption"; it had simply
-# never been wired in here. Every number the caption quotes is on it: unassigned 0.40 at the
-# 0.25 primary setting, differential-response cosine range 0.54-0.59, and a supervised/
-# unsupervised pair at 0.92/0.78 across the sweep.
-#
-# The resistance-exploratory figure is still built by ed_panels.py and is now referenced by
-# nothing: no sentence in the manuscript or the SI mentions AXL, mesenchymal programmes,
-# quiescence or minority rescue.
+# scatter and a minority-rescue scatter, while the Extended Data Fig. 4 caption described
+# compartment-assignment validation and threshold robustness in ZhaoSims2021. The figure that
+# matches the caption is ed4/ed4_zhao_robustness.py; its four panels are now ED3a-d. The
+# resistance-exploratory figure is referenced by nothing: no sentence in the manuscript or the SI
+# mentions AXL, mesenchymal programmes, quiescence or minority rescue.
 SPECS = {
-    (1, 2, 3): ("edfigs/ed_panels.py", {
-        1: "edfigs/ed1_reproducibility.pdf",
-        2: "edfigs/ed2_classB_robustness.pdf",
-        3: "edfigs/ed3_identifiability.pdf",
+    (1, 2, 3): ("edfigs/ed_consolidated.py", {
+        1: "edfigs/ed1_scores_and_limits.pdf",
+        2: "edfigs/ed2_identifiability_and_benchmark.pdf",
+        3: "edfigs/ed3_tissue_and_scale.pdf",
     }),
-    (4,): ("ed4/ed4_zhao_robustness.py", {4: "ed4/ed4_zhao_robustness.pdf"}),
-    (5,): ("ed5/ed5.py", {5: "ed5/edfig5.pdf"}),
-    (6,): ("ed6/ed6.py", {6: "ed6/edfig6.pdf"}),
-    (7,): ("ed7/ed7_tahoe.py", {7: "ed7/ed7_tahoe.pdf"}),
 }
 
 
@@ -157,7 +151,8 @@ def main() -> int:
         print(f"\n{len(stale)} of {len(produced)} shipped Extended Data PDF(s) differ from a fresh "
               f"build: {stale or 'none'}. Re-run with --write to sync.")
 
-    print(f"\n{'PASS' if failures == 0 else 'FAIL'}: {failures} failure(s) across 7 "
+    n_fig = sum(len(outputs) for _n, (_s, outputs) in SPECS.items())
+    print(f"\n{'PASS' if failures == 0 else 'FAIL'}: {failures} failure(s) across {n_fig} "
           f"Extended Data figures")
     return 1 if failures else 0
 

@@ -1,5 +1,17 @@
 """PopRetrieve Extended Data figures (ED1-ED4), each blocking one anticipated reviewer attack.
 
+PANEL LIBRARY ONLY SINCE 2026-08-29. The four figures assembled by FIGS at the bottom of this file
+are superseded: edfigs/ed_consolidated.py now draws the whole Extended Data deck, importing the
+draw functions here. Where each one went:
+    draw_ed1c -> ED1a    draw_ed1d -> ED1b    draw_ed1e -> ED1c
+    draw_ed2a -> ED1d    draw_ed2b -> ED1e
+    draw_ed3a -> ED2a    draw_ed3b -> ED2b    draw_ed3d -> ED2c
+    draw_ed1a, draw_ed1b, draw_ed2c, draw_ed3c   DELETED, see ed_consolidated.py for what carries
+                                                 each one instead
+    draw_ed4a-c   never deployed; the real ED4 was always ed4/ed4_zhao_robustness.py
+Running this file still writes its own previews, which nothing references. Keep FIGS in step with
+the draw functions or delete it; do not treat its output as the shipped figures.
+
 ED1 reproducibility basis  | "your data/metrics are non-standard"
 ED2 Class B robustness     | "the null is just underpowered"  (the most important one for a
                              paper whose core result is negative)
@@ -172,7 +184,7 @@ def draw_ed1c(ax, D):
             ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=5.5,
                     color="white" if abs(v) > 0.6 else INK)
     cb = ax.figure.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-    cb.set_label("Spearman rho", fontsize=5.5); cb.ax.tick_params(labelsize=5)
+    cb.set_label("Spearman $\\rho$", fontsize=5.5); cb.ax.tick_params(labelsize=5)
 
 
 def draw_ed1d(ax, D):

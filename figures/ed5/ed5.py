@@ -1,5 +1,8 @@
 """Extended Data Fig. 5: the absolute-potency confounder audit.
 
+SINCE 2026-08-29 draw_a and draw_b are Extended Data Fig. 2g and 2h, drawn by
+edfigs/ed_consolidated.py. build() here still assembles the standalone preview.
+
 This is the analysis that USED to be the paper's headline Class-C result, reported as "retrieval
 similarity is anti-aligned with therapeutic utility". That claim has been withdrawn, and this
 figure exists to show why, and to preserve the one thing the analysis genuinely establishes: the
@@ -77,7 +80,7 @@ def draw_a(ax, d):
         ax.spines[sp].set_visible(False)
     ax.legend(handles=[plt.Line2D([], [], ls="", marker=mk, ms=3.2, mfc="none", mec=INK,
                                   mew=0.8, label=ln) for ln, mk in zip(LINES, MARKS)],
-              loc="lower right", fontsize=5.2, frameon=False)
+              loc="upper right", fontsize=5.2, frameon=False)
     # The mismatched-oracle caveat lives in the Extended Data Fig. 5 caption, which already
     # carries it in full. It was set at 4.9 pt here, below the 5 pt Nature production floor.
 

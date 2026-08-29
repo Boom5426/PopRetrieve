@@ -1,4 +1,7 @@
 """Extended Data Fig. 4: validation and threshold robustness of the compartment
+
+SINCE 2026-08-29 these four panels are Extended Data Fig. 3a-d, drawn by
+edfigs/ed_consolidated.py. build() here still assembles the standalone preview.
 assignments in patient-derived glioblastoma (ZhaoSims2021).
 
 Replaces the retired resistance-exploratory panel, whose figure body no longer matched

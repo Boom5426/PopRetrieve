@@ -1,5 +1,9 @@
 """Extended Data Fig. 6: HIR-Bench, the panels demoted from the main text.
 
+SINCE 2026-08-29 draw_ed6b, draw_ed6c and draw_ed6d are Extended Data Fig. 2d, 2e and 2f, drawn by
+edfigs/ed_consolidated.py. draw_ed6a, the generative-model schematic, is deleted: it drew no data
+and main Fig. 4a plus Supplementary Note 1 already carry it.
+
 Main-text Fig. 5 keeps only the two HIR-Bench panels that carry argument: the analytic condition
 under which subpopulation structure can change a decision at all, and the 2x2 that MEASURES
 circularity (oracle-derived features versus observable ones, crossed with an honest versus a

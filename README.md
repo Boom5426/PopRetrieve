@@ -191,8 +191,9 @@ Inside `analysis/`, one directory per question:
   text is authored below the 5 pt floor. That gate reads nominal point sizes and knows nothing
   about the manuscript's column width, so a figure authored wider than the text block is scaled
   down by LaTeX and can print below 5 pt while the gate still reports CLEAN. The five main figures
-  are authored at the printed width, so their scale factor is 1.00; the Extended Data figures have
-  their own driver, `figures/build_ed.py`, which enforces the same width.
+  are authored at the printed width, so their scale factor is 1.00; the three Extended Data
+  figures have their own driver, `figures/build_ed.py`, which measures the exported media box and
+  enforces the same width, and which also checks that graphic plus caption still fit one page.
 - **A missing input raises**, rather than being replaced by a plausible default. That rule exists
   because it was once broken; see `CORRECTIONS.md`.
 
