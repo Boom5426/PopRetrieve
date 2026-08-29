@@ -27,15 +27,22 @@ import matplotlib.pyplot as plt
 from figstyle import (apply_style, panel_letter, assert_min_fontsize,
                       mathtext_offenders, MIN_PT, save)
 
-FIGS = [1, 2, 3, 4, 5, 6]
+FIGS = [1, 2, 3, 4, 5]
 # The single canonical output stem per figure. This is the name that gets copied to
 # manuscript/latex/figures/figN.pdf, so it is the authority; each figN_assemble.py declares the
 # same string as its own module-level STEM and _check_stem below refuses to build if the two
-# disagree. Figures 2 and 3 used to write themselves under a SECOND stem (fig2_unification,
-# fig3_apparent_gains) from inside build(), so each composite sat on disk twice under two names
+# disagree. Two figures used to write themselves under a SECOND stem (fig2_unification,
+# fig2_apparent_gains) from inside build(), so each composite sat on disk twice under two names
 # with nothing to say which one the manuscript compiled.
-STEMS = {1: "fig1_problem", 2: "fig2_collapse", 3: "fig3_temptation",
-         4: "fig4_collapse", 5: "fig5_benchmarks", 6: "fig6_two_gate"}
+#
+# FIVE main figures since 2026-08-29, not six. The old Figure 2 (the zero-variance-limit figure)
+# carried no measured value from real cells: every claim on it was either an algebraic identity
+# proved in Methods or a definitional property of the coverage score, and two of its six panels
+# duplicated Extended Data Fig. 1b,c, which shows the mean-cosine/CMap-cosine identity over 54,180
+# query-candidate scores rather than over three macro-means. Its two surviving panels are now
+# Extended Data Fig. 1d,e and the old figures 3-6 moved down one place.
+STEMS = {1: "fig1_problem", 2: "fig2_temptation", 3: "fig3_collapse",
+         4: "fig4_benchmarks", 5: "fig5_two_gate"}
 
 
 def _check_stem(n, mod):
@@ -78,6 +85,12 @@ def main():
             plt.close("all")
             out = mod.build(apply_style, panel_letter)
             fig = out if hasattr(out, "savefig") else plt.figure(plt.get_fignums()[-1])
+            # DRAW BEFORE MEASURING. Tick labels are created lazily at draw time, so a gate that
+            # walks Text artists on an undrawn figure never sees them. That blind spot hid a real
+            # violation for the life of this deck: matplotlib's LogFormatter writes an exponent as
+            # mathtext, so the "$10^{-3}$" labels on figure 2's log axes printed their exponents
+            # at 0.7 x 6 pt = 4.2 pt, under the production floor, while the gate reported CLEAN.
+            fig.canvas.draw()
 
             # Reported, not counted as a violation: see figstyle.mathtext_offenders. Bringing a
             # sub/superscript to 5 pt means raising the nominal size to ~7.2 pt, which re-authors

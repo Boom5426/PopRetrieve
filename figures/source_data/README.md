@@ -31,10 +31,10 @@ python figures/sync_source_data.py --check    # exit 1 on drift, write nothing
 | `ed3_method_ari.csv`, `ed3_predictor_collapse.csv`, `ed3_silhouette.csv` | ED3 |
 | `ed4_enrichment_summary.csv`, `ed4_marker_enrichment.csv`, `ed4_minority_rescue.csv` | ED4 |
 | `fig2c_energy_collapse.csv`, `fig2d_operation_identity.csv`, `fig2e_beta_spectrum.csv` | 2c, 2d, 2e |
-| `fig3e_alpha_crossover.csv`, `fig3f_classA_robustness.csv` | 3e, 3f |
-| `fig4a_classA_vs_classB.csv` | 4a, 4b |
-| `fig4hi_class_c_functional.csv` | 4h, 4i |
-| `fig4hi_class_c_potency.csv` | ED5 |
+| `fig2e_alpha_crossover.csv`, `fig2f_classA_robustness.csv` | 3e, 3f |
+| `fig3a_classA_vs_classB.csv` | 4a, 4b |
+| `fig3hi_class_c_functional.csv` | 4h, 4i |
+| `fig3hi_class_c_potency.csv` | ED5 |
 
 Note that several of these are *fallbacks* inside their panel: the script prefers a `results/` path
 and reads the file here only if that path is absent. Read the panel's docstring before assuming a
@@ -46,19 +46,19 @@ number here is what was plotted.
 |---|---|
 | `ed2_divergence_stratified.csv` | `results/exp17_true_divergence_subset/divergence_stratified.csv` |
 | `ed2_power_analysis.csv` | `results/exp17_true_divergence_subset/power_analysis.csv` |
-| `fig3b_task_heatmap.csv` | `results/exp08_signature_baselines/summary_by_task.csv` |
-| `fig4d_recommendation_vs_outcome.csv` | `results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv` |
-| `fig4g_exp13_projection.csv` | `results/exp13_real_data_projection/projection.csv` |
-| `fig5a_theoretical_boundary.csv` | `results/exp11_hir_benchmark/theoretical_boundary.csv` |
+| `fig2b_task_heatmap.csv` | `results/exp08_signature_baselines/summary_by_task.csv` |
+| `fig3d_recommendation_vs_outcome.csv` | `results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv` |
+| `fig3g_exp13_projection.csv` | `results/exp13_real_data_projection/projection.csv` |
+| `fig4a_theoretical_boundary.csv` | `results/exp11_hir_benchmark/theoretical_boundary.csv` |
 
 ## DERIVED, a hand-built view of one parent
 
 | file | derived from | what the view does |
 |---|---|---|
-| `fig3a_hit1_ladder.csv` | `results/exp08_signature_baselines/summary.csv` | one method-level Hit@1 column, aggregated over tasks and settings |
-| `fig3c_regret_reduction.csv` | `results/exp12_partial_observed_retrieval/per_query_scores.csv` | one scorer's per-query regret reduction, 765 of 6,885 rows |
-| `fig4ef_gate_divergence.csv` | `results/exp16_gate_diagnosis/_merged_query_divergence.csv` | column projection onto the gate and divergence axes |
-| `fig6b_predictor_gaps.csv` | `results/exp09_predict_then_rank/summary.csv` | the distributional-minus-mean gap per predictor, one row per predictor |
-| `fig6cd_structure_diagnostics.csv` | `results/exp09_structure_diagnostics/exp09_structure_diagnostics_summary.csv` | the `synth` axis collapsed to the faithful synthesizer |
+| `fig2a_hit1_ladder.csv` | `results/exp08_signature_baselines/summary.csv` | one method-level Hit@1 column, aggregated over tasks and settings |
+| `fig2c_regret_reduction.csv` | `results/exp12_partial_observed_retrieval/per_query_scores.csv` | one scorer's per-query regret reduction, 765 of 6,885 rows |
+| `fig3ef_gate_divergence.csv` | `results/exp16_gate_diagnosis/_merged_query_divergence.csv` | column projection onto the gate and divergence axes |
+| `fig5b_predictor_gaps.csv` | `results/exp09_predict_then_rank/summary.csv` | the distributional-minus-mean gap per predictor, one row per predictor |
+| `fig5cd_structure_diagnostics.csv` | `results/exp09_structure_diagnostics/exp09_structure_diagnostics_summary.csv` | the `synth` axis collapsed to the faithful synthesizer |
 
 `_stale/` holds superseded files kept for provenance. Nothing reads them.

@@ -41,8 +41,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import stats
 
-FOCAL, COMP, GREY, INK = "#5185C0", "#E99D4E", "#7A7A7A", "#1A1A1A"
-GREEN = "#55966B"
+# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
+# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
+# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
+GREEN_SOFT = "#55966B"
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SRC = f"{REPO}/results/zhao_gbm"
 
@@ -59,9 +64,9 @@ def draw_a(ax):
 
     xs = np.arange(2)
     w = 0.36
-    ax.bar(xs - w / 2, [CONSTRUCTED["unsup"], nat_unsup], w, color=FOCAL, alpha=0.85,
+    ax.bar(xs - w / 2, [CONSTRUCTED["unsup"], nat_unsup], w, color=FOCAL_SOFT, alpha=0.85,
            label="best unsupervised", zorder=3)
-    ax.bar(xs + w / 2, [CONSTRUCTED["ceiling"], nat_ceiling], w, color=GREEN, alpha=0.85,
+    ax.bar(xs + w / 2, [CONSTRUCTED["ceiling"], nat_ceiling], w, color=GREEN_SOFT, alpha=0.85,
            label="supervised ceiling", zorder=3)
     for x, (u, c) in zip(xs, [(CONSTRUCTED["unsup"], CONSTRUCTED["ceiling"]),
                               (nat_unsup, nat_ceiling)]):
@@ -72,10 +77,10 @@ def draw_a(ax):
     ax.text(1.48, 0.505, "chance", ha="right", va="bottom", fontsize=5.0, color=GREY)
     ax.annotate("", xy=(1 - w / 2 - 0.10, nat_unsup - 0.01),
                 xytext=(0 + w / 2 + 0.10, CONSTRUCTED["ceiling"] + 0.01),
-                arrowprops=dict(arrowstyle="-|>", lw=1.1, color=COMP,
+                arrowprops=dict(arrowstyle="-|>", lw=1.1, color=COMP_SOFT,
                                 connectionstyle="arc3,rad=-0.30"), zorder=5)
     ax.text(0.5, 0.795, "the 'information limit'\nwas OUR BENCHMARK,\nnot biology",
-            ha="center", va="center", fontsize=5.6, color=COMP, fontweight="bold", zorder=6,
+            ha="center", va="center", fontsize=5.6, color=INK, fontweight="bold", zorder=6,
             bbox=dict(fc="white", ec="none", alpha=0.92, pad=1.2))
 
     ax.set_xticks(xs)
@@ -94,15 +99,15 @@ def draw_b(ax):
     g1 = pd.read_csv(f"{SRC}/gate1_natural.csv")
     v = g1.induced_response_cosine.dropna().values
 
-    ax.axhspan(CONSTRUCTED["cos_lo"], CONSTRUCTED["cos_hi"], color=FOCAL, alpha=0.20, zorder=1)
+    ax.axhspan(CONSTRUCTED["cos_lo"], CONSTRUCTED["cos_hi"], color=FOCAL_SOFT, alpha=0.20, zorder=1)
     ax.text(0.60, 0.075, "constructed mixtures\n0.014 - 0.044 (near-orthogonal)", fontsize=5.6,
-            color=FOCAL, va="bottom", ha="left")
+            color=INK, va="bottom", ha="left")
 
     rng = np.random.default_rng(0)
-    ax.scatter(rng.normal(1.0, 0.045, len(v)), v, s=16, color=COMP, alpha=0.75, lw=0, zorder=3)
-    ax.plot([0.82, 1.18], [np.median(v)] * 2, color=COMP, lw=2.2, zorder=4)
+    ax.scatter(rng.normal(1.0, 0.045, len(v)), v, s=16, color=COMP_SOFT, alpha=0.75, lw=0, zorder=3)
+    ax.plot([0.82, 1.18], [np.median(v)] * 2, color=COMP_SOFT, lw=2.2, zorder=4)
     ax.text(1.24, np.median(v), f"median\n{np.median(v):.3f}", va="center", fontsize=6.0,
-            color=COMP, fontweight="bold")
+            color=INK, fontweight="bold")
 
     ax.axhline(1.0, ls="-", lw=1.0, color=INK, alpha=0.5, zorder=1)
     ax.text(1.62, 0.985, "additive-predictor limit (cos = 1):\nno divergence at all",
@@ -123,7 +128,7 @@ def draw_b(ax):
         ax.spines[s].set_visible(False)
     # The sampling footnote ("one point per patient-drug pair (n = ...), 10 GBM patients") was
     # 4.8 pt, below Nature's 5 pt floor. It is an n, so it is load-bearing and was not dropped:
-    # the Fig. 6 caption states both the pair count and the ten glioblastoma patients. If the
+    # the Fig. 5 caption states both the pair count and the ten glioblastoma patients. If the
     # source CSV ever changes, len(v) is no longer printed anywhere, so the caption's pair count
     # becomes the only record of n and must be re-checked against gate1_natural.csv.
 
@@ -136,12 +141,14 @@ def draw_c(ax):
 
     lo, hi = -0.2, 0.95
     ax.plot([lo, hi], [lo, hi], ls="--", lw=0.8, color=INK, zorder=2)
-    ax.scatter(x, y, s=18, color=FOCAL, alpha=0.8, lw=0, zorder=3)
+    ax.scatter(x, y, s=18, color=FOCAL_SOFT, alpha=0.8, lw=0, zorder=3)
     ax.set_xlim(lo, hi)
     ax.set_ylim(lo, hi)
     ax.set_aspect("equal", adjustable="box")
     ax.set_xlabel("cos(mean signature of drug A, drug B)", fontsize=6.2)
-    ax.set_ylabel("cos(MALIGNANT-compartment\nresponse of A, B)", fontsize=6.2)
+    # Sentence case: the compartment is named in the caption and caps-for-emphasis in an axis
+    # label is a slide idiom.
+    ax.set_ylabel("cos(malignant-compartment\nresponse of A, B)", fontsize=6.2)
     ax.tick_params(labelsize=6)
     for s in ("right", "top"):
         ax.spines[s].set_visible(False)
@@ -152,16 +159,16 @@ def draw_c(ax):
     # 1.6e-06 here would be the pseudo-replication this paper devotes a section to criticising.
     # The correlation is the measurement; the dependency structure is stated in the caption.
     n_top = int((p.patient == p.patient.mode()[0]).sum()) if "patient" in p else 0
-    ax.text(0.04, 0.96, f"Spearman $\\rho$ = {r.statistic:+.3f}\n"
-                        f"n = {len(p)} drug pairs\n{n_top} of them from ONE patient",
-            transform=ax.transAxes, ha="left", va="top", fontsize=6.0, fontweight="bold",
-            color=INK)
+    # n and the single-patient dependency are in the caption, where the dependency structure has
+    # to be stated in any case; the panel keeps the correlation it plots.
+    ax.text(0.04, 0.96, f"Spearman $\\rho$ = {r.statistic:+.3f}",
+            transform=ax.transAxes, ha="left", va="top", fontsize=6.0, color=INK)
+    _ = (len(p), n_top)
     # The three-line italic gloss that used to sit here ("points near the diagonal mean the MEAN
     # already ranks what the compartment does") is the panel's claim, and it now lives in the panel
     # title where it costs no plot area and cannot crowd the point cloud. Only the key to the
     # dashed line stays, because that is a legend, not an interpretation.
-    ax.text(0.97, 0.03, "dashed: equal similarity", transform=ax.transAxes, ha="right",
-            va="bottom", fontsize=5.6, color=GREY, style="italic")
+    # The dashed line is defined in the caption.
 
 
 def build(apply_style=None, panel_letter=None):

@@ -1,91 +1,75 @@
-"""PopRetrieve Figure 2 panel 2a: the mean signature is the lambda -> 0 limit (schematic).
+"""PopRetrieve Figure 2 panel 2a: overall Hit@1 ladder.
 
-Source data: none. Seeded gaussian schematic (seed=0) illustrating the algebra
-    X = mu + lambda * eps,  E[eps] = 0
-and its retrieval consequence: as lambda -> 0 each population collapses onto its mean
-signature and the population-to-population score becomes the mean-to-mean score. That
-mean-to-mean value is exactly the floor measured from data in panel c.
+Source data: results/exp08_signature_baselines/summary.csv (7 task x setting cells).
+The plotted quantity is the UNWEIGHTED macro-mean over those seven cells, which is what the
+manuscript reports (energy 0.837 vs mean/CMap cosine 0.389); the query-weighted variant
+(0.887 vs 0.421) is quoted in the text but deliberately not plotted here.
 
-Run standalone: python fig2a.py  (writes 2a.png)
+Run standalone: python fig2a.py
 """
-import os, numpy as np, matplotlib.pyplot as plt
-import sys; sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-FOCAL, COMP, GREY = "#5185C0", "#E99D4E", "#7A7A7A"
+import os, numpy as np, pandas as pd, matplotlib as mpl, matplotlib.pyplot as plt
+# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
+# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
+# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from figstyle import FOCAL_SOFT, COMP_SOFT, SLATE, TRACK, RULE, META, INK  # noqa: E402
+from matplotlib.patches import Rectangle  # noqa: E402
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-
-# Schematic geometry in axes fraction. The panel is wide and short, so the residual
-# clouds get an anisotropic sigma in order to render visually round.
-_ASPECT = 2.15
-_SD_X = 0.030
-_Y0 = 0.545          # cloud centre / mean-marker baseline
-_Y_LINK = 0.760      # mean-to-mean connector
-_N = 70
-
-
-def _cloud(ax, cx, color, rng, alpha=0.5):
-    pts = rng.normal([cx, _Y0], [_SD_X, _SD_X * _ASPECT], size=(_N, 2))
-    pts = pts - pts.mean(0) + np.array([cx, _Y0])       # sample mean is exactly mu
-    ax.scatter(pts[:, 0], pts[:, 1], s=3.4, color=color, alpha=alpha,
-               edgecolors="none", zorder=2)
-
-
-def _mean_marker(ax, cx):
-    ax.scatter([cx], [_Y0], marker="x", s=22, color=COMP, lw=1.3, zorder=5)
-
-
-def _link(ax, x0, x1, label):
-    ax.annotate("", xy=(x1, _Y_LINK), xytext=(x0, _Y_LINK),
-                arrowprops=dict(arrowstyle="<|-|>", lw=0.7, color=COMP,
-                                mutation_scale=6, shrinkA=0, shrinkB=0))
-    for x in (x0, x1):
-        ax.plot([x, x], [_Y0 + 0.06, _Y_LINK], lw=0.5, color=COMP, alpha=0.5, zorder=1)
-    ax.text((x0 + x1) / 2, _Y_LINK + 0.03, label, ha="center", va="bottom",
-            fontsize=6, color=COMP)
 
 
 def draw_2a(ax):
-    """X = mu + lambda*eps: at lambda -> 0 two populations become two mean signatures."""
-    ax.axis("off"); ax.set_xlim(0, 1); ax.set_ylim(0, 1)
-    rng = np.random.RandomState(0)
+    """Overall Hit@1 ladder by scorer (unweighted mean over the 7 task x setting cells)."""
+    s = pd.read_csv(f"{REPO}/results/exp08_signature_baselines/summary.csv")
+    cells = sorted(s.groupby('method').size().unique())
+    assert cells == [7], f"expected 7 task x setting cells per method, got {cells}"
+    agg = s.groupby('method')['hit@1'].mean().sort_values()
 
-    ax.text(0.0, 0.965, r"$X=\mu+\lambda\,\epsilon,\qquad \mathbb{E}[\epsilon]=0$",
-            ha="left", va="center", fontsize=7.5)
+    labs = {'global_energy': 'energy', 'pca_dist': 'PCA-dist', 'coverage_mean': 'coverage-mean',
+            'coverage_worst': 'coverage-worst', 'pca_mean': 'PCA-mean', 'cmap_wtcs': 'CMap WTCS',
+            'cmap_cosine': 'CMap cosine', 'mean_cosine': 'mean cosine'}
+    fam = {'global_energy': FOCAL_SOFT, 'coverage_mean': FOCAL_SOFT,
+           'coverage_worst': FOCAL_SOFT, 'pca_dist': SLATE, 'pca_mean': SLATE,
+           'cmap_wtcs': SLATE, 'cmap_cosine': COMP_SOFT, 'mean_cosine': COMP_SOFT}
 
-    # left: observed populations, lambda = 1
-    xP, xQ = 0.095, 0.305
-    _cloud(ax, xP, FOCAL, rng); _cloud(ax, xQ, GREY, rng, alpha=0.58)
-    _mean_marker(ax, xP); _mean_marker(ax, xQ)
-    ax.text(xP, 0.345, r"$P_d$", ha="center", va="top", fontsize=6.5, color=FOCAL)
-    ax.text(xQ, 0.345, r"$Q$", ha="center", va="top", fontsize=6.5, color="0.35")
-    _link(ax, xP, xQ, r"$d(\mu_P,\mu_Q)$")
-    ax.text((xP + xQ) / 2, 0.215, r"observed populations ($\lambda=1$)",
-            ha="center", va="top", fontsize=6.5, color="0.25")
+    ys = np.arange(len(agg))
+    for y, (m, v) in zip(ys, agg.items()):
+        # Full-extent track first, value bar on top. Hit@1 runs 0 to 1, so the track is the
+        # scale: it says how much of the attainable range each scorer reaches without the
+        # reader having to travel to the axis.
+        ax.barh(y, 1.0, color=TRACK, height=0.46, linewidth=0, zorder=1)
+        ax.barh(y, v, color=fam[m], height=0.46, linewidth=0, zorder=2)
+        # Right-aligned past the end of the track, not chasing the bar tip: one reading line.
+        ax.text(1.045, y, f'{v:.3f}', va='center', ha='left', fontsize=6, color=META)
 
-    # collapse
-    ax.annotate("", xy=(0.585, _Y0), xytext=(0.430, _Y0),
-                arrowprops=dict(arrowstyle="-|>", lw=1.0, color="0.45", mutation_scale=8))
-    ax.text(0.507, _Y0 + 0.055, r"$\lambda\to0$", ha="center", va="bottom",
-            fontsize=6.5, color="0.25")
+    ax.set_yticks(ys)
+    ax.set_yticklabels([labs[m] for m in agg.index], fontsize=6.5, color=INK)
+    # The label is not coloured. In this style the mark carries the family and the text does not,
+    # which is also what keeps every glyph on the panel above the contrast floor.
+    ax.set_xlabel('Hit@1  (macro-mean of 7 cells)')
+    ax.set_xlim(0, 1.27)
+    ax.set_xticks([0, 0.25, 0.5, 0.75, 1.0])
+    ax.set_ylim(-0.72, len(agg) - 0.5)
+    ax.tick_params(axis='y', length=0)
+    ax.tick_params(axis='x', length=2.2, color=RULE, labelcolor=INK)
+    for sp in ['right', 'top', 'left']:
+        ax.spines[sp].set_visible(False)
+    ax.spines['bottom'].set_color(RULE)
 
-    # right: mean signatures, lambda = 0
-    xP2, xQ2 = 0.695, 0.900
-    _mean_marker(ax, xP2); _mean_marker(ax, xQ2)
-    ax.text(xP2, 0.345, r"$\mu_P$", ha="center", va="top", fontsize=6.5, color=COMP)
-    ax.text(xQ2, 0.345, r"$\mu_Q$", ha="center", va="top", fontsize=6.5, color=COMP)
-    _link(ax, xP2, xQ2, "unchanged")
-    ax.text((xP2 + xQ2) / 2, 0.215, r"mean signatures ($\lambda=0$)",
-            ha="center", va="top", fontsize=6.5, color="0.25")
+    # Family key, as a metadata line rather than a legend box.
+    # x positions measured against the printed panel: "population" is 0.23 axis units wide at
+    # 5.6 pt, so the 0.30 slot the key first used put the next swatch inside it.
+    for x, col, lab in [(0.0, FOCAL_SOFT, 'population'), (0.42, COMP_SOFT, 'mean'),
+                        (0.72, SLATE, 'other')]:
+        ax.add_patch(Rectangle((x, -0.70), 0.055, 0.20, color=col, lw=0, clip_on=False,
+                               zorder=3))
+        ax.text(x + 0.075, -0.60, lab, fontsize=5.6, color=META, va='center', ha='left')
 
-    ax.text(0.5, 0.055,
-            r"the population score $s_{\mathrm{dist}}(P_d,Q)$ becomes the mean-to-mean "
-            r"score $s_{\mathrm{mean}}(\mu_P,\mu_Q)$",
-            ha="center", va="center", fontsize=6, color="0.3")
-
-    ax.set_title(r"The mean signature is the $\lambda\to0$ limit", loc="left")
+    ax.set_title("Distributional scorers top\nthe Hit@1 ladder", loc='left', linespacing=1.15)
 
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(figsize=(3.45, 1.65))
+    fig, ax = plt.subplots(figsize=(3.6, 3.0))
     draw_2a(ax)
     fig.savefig(os.path.join(os.path.dirname(__file__), "2a.png"), dpi=200, bbox_inches="tight")
     print("wrote 2a.png")

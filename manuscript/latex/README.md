@@ -38,20 +38,20 @@ there renders as `[?]`; SI references are written as plain author-year text on p
 
 ## Figures are generated, never edited here
 
-`figures/fig{1..6}.pdf` are **copied in by the figure build** and must not be edited in place:
+`figures/fig{1..5}.pdf` are **copied in by the figure build** and must not be edited in place:
 
 ```bash
 python figures/build_all.py            # dry run: typography gate only
 python figures/build_all.py --write    # rebuild, then sync to manuscript/latex/figures/
 ```
 
-`build_all.py` owns one canonical stem per figure (`fig1_problem`, `fig2_collapse`,
-`fig3_temptation`, `fig4_collapse`, `fig5_benchmarks`, `fig6_two_gate`) and refuses to build if a
+`build_all.py` owns one canonical stem per figure (`fig1_problem`, `fig2_temptation`,
+`fig3_collapse`, `fig4_benchmarks`, `fig5_two_gate`) and refuses to build if a
 `figN_assemble.py` declares a different one. It also fails the build if any text is **authored**
 below 5 pt. It does **not** know this document's text width: the check reads nominal point
 sizes, so a figure authored wider than the text block is scaled down by
 `\includegraphics[width=\textwidth]` and can print below 5 pt while the gate reports CLEAN. The
-six main figures are authored at 6.90 in, i.e. the printed width, so their scale factor is 1.00
+five main figures are authored at 6.90 in, i.e. the printed width, so their scale factor is 1.00
 and nominal equals printed. The Extended Data figures are not, which is the open defect below.
 
 Extended Data has its own driver, because copying it by hand did not work: on 2026-07-27 all

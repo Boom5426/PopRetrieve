@@ -1,62 +1,74 @@
-"""PopRetrieve Figure 2 panel 2e: the beta-interpolation spectrum, plus the K = 1 identity.
+"""PopRetrieve Figure 2 panel 2e: alpha-crossover.
 
-Source data:
-  results/exp06_theory_limits/beta_interpolation.csv  (controlled benchmark; D_beta rises
-      monotonically from 0.7125 at beta -> 0, the mean-aggregated value, to 1.300 at
-      beta -> inf, the worst-case value; mirrored in figures/source_data/fig2e_beta_spectrum.csv)
-  results/exp06_theory_limits/degenerate_limit_synthetic.csv rows prop2_K1 (global energy equals
-      the single-partition coverage aggregate exactly, 8.229259 at every beta).
+Source data: figures/source_data/fig2e_alpha_crossover.csv (exp01 controlled mixing sweep,
+three cell lines x five alpha levels). Higher alpha means the two constructed subpopulations
+overlap more; the energy advantage over mean cosine narrows as they merge.
 
-Note on provenance: the K = 1 identity annotation is the SYNTHETIC check. The manuscript quotes
-the real-data instance of the same identity (Panobinostat, 0.1099 vs 0.1099, difference 0), which
-lives in degenerate_limit_real.csv. The panel therefore labels its number as synthetic so the two
-cannot be confused.
-
-Run standalone: python fig2e.py  (writes 2e.png)
+Run standalone: python fig2e.py
 """
-import os, numpy as np, pandas as pd, matplotlib.pyplot as plt
-import sys; sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-FOCAL, COMP, GREY = "#5185C0", "#E99D4E", "#7A7A7A"
+import os, numpy as np, pandas as pd, matplotlib as mpl, matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
+# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
+# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from figstyle import FOCAL_SOFT, COMP_SOFT, RULE, META, INK  # noqa: E402
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+LINES = [('K562', 'o'), ('A549', 's'), ('MCF7', '^')]
 
 
 def draw_2e(ax):
-    """Coverage temperature beta interpolates mean aggregation to worst case."""
-    b = (pd.read_csv(f"{REPO}/results/exp06_theory_limits/beta_interpolation.csv")
-         .sort_values("beta"))
-    mlo, mhi = float(b["mean"].iloc[0]), float(b["max"].iloc[0])
+    """exp01 alpha-crossover: the energy advantage narrows as subpopulations merge."""
+    cr = pd.read_csv(f"{REPO}/figures/source_data/fig2e_alpha_crossover.csv")
+    for cl, mk in LINES:
+        d = cr[cr.cell_line == cl].sort_values('alpha')
+        e = d['global_energy_hit@1'].values
+        assert all(e[i] >= e[i + 1] for i in range(len(e) - 1)), \
+            f"{cl}: energy Hit@1 is not monotone in alpha, the panel title no longer holds"
+        ax.plot(d['alpha'], d['global_energy_hit@1'], '-', marker=mk, color=FOCAL_SOFT,
+                ms=3.0, lw=1.0, alpha=0.9, zorder=3, clip_on=False)
+        ax.plot(d['alpha'], d['mean_cosine_hit@1'], '--', marker=mk, color=COMP_SOFT,
+                ms=3.0, lw=0.9, alpha=0.85, zorder=3, clip_on=False)
 
-    k1 = pd.read_csv(f"{REPO}/results/exp06_theory_limits/degenerate_limit_synthetic.csv")
-    k1 = k1[k1["prop"] == "prop2_K1"]
-    e_glob = float(k1["global_energy"].iloc[0])
-    e_cov = float(k1["coverage_K1"].iloc[0])
+    # Two frameless keys in the header band. Both are META grey with the sample line or marker
+    # carrying the colour, which is the same rule the rest of this figure follows: a key entry is
+    # secondary text, not a coloured label.
+    fam = [Line2D([], [], color=FOCAL_SOFT, ls='-', lw=1.0, label='energy'),
+           Line2D([], [], color=COMP_SOFT, ls='--', lw=0.9, label='mean cosine')]
+    key = [Line2D([], [], color=META, ls='none', marker=mk, ms=3.0, label=cl)
+           for cl, mk in LINES]
+    leg1 = ax.legend(handles=fam, loc='upper left', bbox_to_anchor=(-0.01, 1.005),
+                     fontsize=6, frameon=False, handlelength=1.6, labelspacing=0.55,
+                     borderpad=0.0, handletextpad=0.5, labelcolor=META)
+    ax.add_artist(leg1)
+    ax.legend(handles=key, loc='upper right', bbox_to_anchor=(1.02, 1.005), ncol=3,
+              fontsize=6, frameon=False, handlelength=0.6, columnspacing=0.9,
+              borderpad=0.0, handletextpad=0.3, labelcolor=META)
 
-    ax.axhline(mlo, ls="--", lw=0.9, color=COMP, zorder=1)
-    ax.axhline(mhi, ls="--", lw=0.9, color="0.45", zorder=1)
-    xb = np.clip(b["beta"], 1e-3, 1e3)
-    ax.plot(xb, b["D_beta"], "-o", color=FOCAL, ms=3.2, lw=1.4, zorder=3)
-
-    ax.text(1.1e-3, mhi + 0.012, f"worst case, $\\beta\\to\\infty$   {mhi:.3f}",
-            ha="left", va="bottom", fontsize=6, color="0.35")
-    ax.text(1.1e-3, mlo - 0.032, f"mean aggregation, $\\beta\\to0$   {mlo:.4f}",
-            ha="left", va="top", fontsize=6, color=COMP)
-    ax.text(0.985, 0.20,
-            f"energy $=$ coverage$_{{K=1}}$ exactly\n"
-            f"(synthetic check, {e_glob:.3f} vs {e_cov:.3f})",
-            transform=ax.transAxes, ha="right", va="bottom", fontsize=6, color=FOCAL)
-
-    ax.set_xscale("log")
-    ax.set_xlim(8e-4, 2.2e3)
-    ax.set_xticks([1e-3, 1e-1, 1e1, 1e3])
-    ax.set_ylim(mlo - 0.105, mhi + 0.062)
-    ax.set_yticks([0.7, 0.9, 1.1, 1.3])
-    ax.set_xlabel(r"coverage temperature $\beta$")
-    ax.set_ylabel(r"aggregate distance $D_\beta$")
-    ax.set_title(r"$\beta$ interpolates mean aggregation to worst case", loc="left")
+    ax.set_xlabel('subpopulation mixing $\\alpha$\n(higher = more merged)', linespacing=1.2)
+    ax.set_ylabel('Hit@1')
+    ax.set_xlim(0.47, 0.93)
+    ax.set_xticks([0.5, 0.6, 0.7, 0.8, 0.9])
+    ax.set_ylim(-0.05, 1.42)
+    ax.set_yticks([0, 0.25, 0.5, 0.75, 1.0])
+    ax.tick_params(axis='both', length=2.2, color=RULE, labelcolor=INK)
+    for sp in ['right', 'top']:
+        ax.spines[sp].set_visible(False)
+    for sp in ['left', 'bottom']:
+        ax.spines[sp].set_color(RULE)
+    ax.spines['left'].set_bounds(0, 1.0)
+    # Deliberately weaker than the manuscript caption's "the energy advantage narrows as
+    # subpopulations merge". That is true of K562 (gap 1.00 -> 0.05) but NOT of A549
+    # (0.40 -> 0.65) or MCF7 (0.35 -> 0.45). What every line does show is energy Hit@1 falling
+    # monotonically with alpha, so that is what the title claims.
+    ax.set_title("Energy retrieval degrades as\nsubpopulations merge", loc='left',
+                 linespacing=1.15)
 
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(figsize=(3.45, 1.9))
+    fig, ax = plt.subplots(figsize=(3.6, 3.0))
     draw_2e(ax)
     fig.savefig(os.path.join(os.path.dirname(__file__), "2e.png"), dpi=200, bbox_inches="tight")
     print("wrote 2e.png")

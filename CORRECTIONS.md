@@ -36,7 +36,7 @@ distribution.
 
 **Was:** predicted candidate populations carry roughly fivefold less subpopulation-variance
 ratio than real data (real 0.046 versus predicted 0.009). Reported in the abstract, the
-introduction, Result 4, Fig 5c, and ED Fig 3c.
+introduction, Result 4, Fig 4c, and ED Fig 3c.
 
 **Is:** false, on both sides of the comparison.
 
@@ -107,7 +107,7 @@ unaffected (it never used the sentinel): Q1 +0.0009, Q4 +0.0018 stand as publish
 **Was:** a table in `exp02_divergence_gate.py` placed the three datasets on the divergence
 axis: CD34+ at cosine **0.95** ("below gate, no advantage"), Frangieh 0.65, cross-line 0.14.
 The comment above it read "from probes". **No probe ran.** The three values were typed in.
-The table is the source data for Fig 1e and Fig 3e.
+The table is the source data for Fig 1e and Fig 2e.
 
 **Is** (now computed, `results/exp02_divergence_gate/dataset_positions_on_gate.csv`):
 
@@ -142,18 +142,18 @@ of freedom this paper exists to criticize.
 **Corrected:** one scorer, one query set. On the 480 queries where both metric classes are
 defined, `coverage_worst` gives Class A **+0.129** and Class B **−0.037**. The collapse is
 *larger* under the disciplined comparison. All five variants behave the same way (Class A
-+0.056 to +0.129; Class B −0.011 to −0.037). Fig 4a had been plotting the honest pair all
++0.056 to +0.129; Class B −0.011 to −0.037). Fig 3a had been plotting the honest pair all
 along; the prose was the outlier.
 
 ---
 
 ## R5. FALSIFIED PANEL: "No predictor gives a positive gain"
 
-`figures/fig5/fig5b.py` reindexed on `'scgen_cpa_linear'` while
+`figures/fig4/fig4b.py` reindexed on `'scgen_cpa_linear'` while
 `results/exp09_predict_then_rank/summary.csv` keys that predictor as `'scgen'`. The reindex
 produced NaN, the predictor was silently dropped, and it rendered as a blank row labelled
 `+nan`. It is the **one predictor with a positive gain** (+0.027 nDCG@10, recorded in the
-deck's own `source_data/fig5b_predictor_gaps.csv`).
+deck's own `source_data/fig4b_predictor_gaps.csv`).
 
 The panel title is now "Gain is small and sign-inconsistent" and the three values are
 reported: −0.071 (nearest-neighbour), −0.016 (average-effect), **+0.027** (latent-linear).
@@ -384,7 +384,7 @@ Data: `results/upgrade/class_c_magnitude_control_v2.{csv,json}`, `results/upgrad
   **macro-mean over 7 (task × setting) cells of three tasks**. Query-weighted, the numbers are
   0.887 / 0.421 rather than 0.837 / 0.389. Both are now reported, and the Frangieh
   counterexample (mean-cosine 0.600 **beats** energy 0.578 on the only natural real dataset)
-  is stated in the README, the manuscript, and the Fig 3 caption.
+  is stated in the README, the manuscript, and the Fig 2 caption.
 - **"energy CV at n=120 is 6.3%"** cited the wrong file. The probe reports **3.8%**; 6.3% is
   the CV of a different quantity (the same-drug self-distance) in a different CSV.
 - **"83% of it is explained by response magnitude alone (rho = -0.83)"**: a Spearman rho is
@@ -428,7 +428,7 @@ scripts wrote the other.
 The top-level copy has been removed. `results/upgrade/` is now the single location, it holds
 the full set of audit artifacts, and **every figure panel reads it**. Two files were not
 carried over because they are superseded rather than lost: `conditional_advantage_per_query.csv`
-and `conditional_advantage_summary.csv`. Figure 5g now reads
+and `conditional_advantage_summary.csv`. Figure 4g now reads
 `results/exp17_true_divergence_subset/divergence_stratified.csv`, which is the same quantity
 computed on the corrected, sentinel-masked data and is the source the verdict document quotes.
 
@@ -447,8 +447,8 @@ a `git checkout` away. This is the single highest-value remaining fix.
 enough to record.**
 
 **Was:** "No real-data task is distributionally dominant (**0 of 37**)." A headline negative
-claim, in the abstract, the introduction, Result 3, the Methods, the Fig 4 caption, the
-negative-claims box, and the whole of panel Fig 4g.
+claim, in the abstract, the introduction, Result 3, the Methods, the Fig 3 caption, the
+negative-claims box, and the whole of panel Fig 3g.
 
 **Problem 1: 37 is the QUICK sanity task count.** Calling exp13's task builders directly:
 
@@ -1000,7 +1000,7 @@ now the baseline (real controls vs the model's own reconstruction).
 The claim that Gate 2 in real tissue is an *algorithmic* bottleneck (R21) rests entirely on the gap
 between the supervised ceiling (0.923) and the best unsupervised method (0.777). It was reported as
 a bare median with **no uncertainty of any kind**, and it had entered the abstract, the introduction,
-Fig. 6d and the discussion in that state. Three things were wrong with it and all three were tested
+Fig. 5d and the discussion in that state. Three things were wrong with it and all three were tested
 (`analysis/natural/gate2_uncertainty.py`).
 
 **1. The winner's curse.** The gap is `max(3 supervised probes) - max(4 unsupervised clusterers)`.
@@ -1296,7 +1296,7 @@ conclusion is revised; the mean-based claim is upgraded from provisional to mult
 
 **Was:** "Across 18 within-patient drug pairs, the similarity of two drugs' *mean* signatures ranks
 the similarity of their *malignant-compartment* responses at Spearman rho = +0.878" (Results, the
-natural-heterogeneity section; Fig 5f caption; Methods).
+natural-heterogeneity section; Fig 4f caption; Methods).
 
 **Is:** rho = +0.878 for that statistic, and **rho = +0.835** for the disjoint form, which is now
 the load-bearing figure. On PW030 alone, +0.821 and +0.804.
@@ -1406,7 +1406,7 @@ abstract, both Introduction statements and the Discussion said it flatly, and th
 rule, "a paper arguing that the choice of criterion decides the winner cannot exempt its own
 criterion", now applies to itself.
 
-**"No stratum is positive" was false of the bars it described.** The Fig. 6g caption declares its
+**"No stratum is positive" was false of the bars it described.** The Fig. 5g caption declares its
 bars to be means; the Q4 mean is $+0.003$. The SI states it correctly, with the significance
 qualifier ($q = 0.57$); the main text and caption had dropped it. Both now carry it.
 
@@ -1424,15 +1424,15 @@ and 20,844 (R2). `edfig3.pdf` printed "collapse structure 5.1x" and "9 clusterin
 retracted (R1, R10), while its caption said the opposite. `edfig1.pdf` titled a panel "Metric
 correlation (54,180 queries)", the unit overstatement R29 corrects two sentences later in the same
 paper. `edfig6.pdf` could not be regenerated at all: `ed6.py` imported four panel functions from
-`fig6/`, which had since been re-cut into the two-gate figure, so it drew four panels unrelated to
-its own caption; the real panels were parked in `figures/fig5/_stale/`, one directory deeper than
+`fig5/`, which had since been re-cut into the two-gate figure, so it drew four panels unrelated to
+its own caption; the real panels were parked in `figures/fig4/_stale/`, one directory deeper than
 their own path resolution allowed. All seven now rebuild from source through `figures/build_ed.py`,
 and the compiled SI contains none of those strings.
 
 **The released per-panel source data had drifted from the figures it was supposed to let a reader
 check.** `figures/source_data/` was maintained by hand with no record of what each file mirrored.
 Four had drifted, two of them onto retracted values: the ED2 pair carried R2's superseded sample
-sizes, and `fig4g_exp13_projection.csv` held the 37-row QUICK subset behind the retracted "0 of 37"
+sizes, and `fig3g_exp13_projection.csv` held the 37-row QUICK subset behind the retracted "0 of 37"
 (R13) rather than the 239-row real run. In every case the panel was right, because panels read
 `results/` directly, and the file offered to check the panel was wrong. `figures/sync_source_data.py`
 now regenerates the mirrors, distinguishes them from hand-built derived views and from primary
@@ -1494,15 +1494,15 @@ months.
 - The ED3a y axis printed the raw dataframe column names `ari_gmm2_raw` and `ari_gmm2_pca50`,
   because the display-name map keyed those two methods differently from the data. The silent
   `.get(key, key)` fallback that allowed it now raises.
-- The Fig. 4c caption said "every bar $\leq 0.006$"; the Q3 bar is 0.006195.
+- The Fig. 3c caption said "every bar $\leq 0.006$"; the Q3 bar is 0.006195.
 - The ED3b silhouette caption gave the unit as "drugs" (R29: the unit is the (cell line, drug) pair)
   and attributed a SciPlex3-only median of 0.034 to both datasets; the pooled median is 0.040 and
   Frangieh's is 0.084.
 - Both documents said there were three Supplementary Notes; there are four, and the fourth is the
   one that states the scope of every claim in the paper. The Additional Information statement
   announced Extended Data Figs. 1 to 6 of the seven that exist.
-- Supplementary Table 1's footnote pointed the predictability analysis at "Fig. 6b"; it is
-  main-text Fig. 5b.
+- Supplementary Table 1's footnote pointed the predictability analysis at "Fig. 5b"; it is
+  main-text Fig. 4b.
 - The title page understated the Methods by 40% (4,897 words against about 6,900) and the main text
   by about 1,300. Recounted with figure captions excluded.
 - The Frangieh cell count appears as both 218,331 and 218,023 with no statement that these are
@@ -1513,11 +1513,11 @@ months.
 - `manuscript/latex/figures/fig7.pdf` was tracked in the directory documented as "the PDFs the
   documents include", was referenced by no `.tex`, and plotted the 0.964 cell-type ceiling that the
   ED3 caption explicitly withdraws. Removed. Its source, `figures/fig7/fig7_natural.py`, is live and
-  stays: it draws Fig. 5e and 5f.
+  stays: it draws Fig. 4e and 4f.
 - `analysis/predictors/README.md` documented a `--nonadditive` flag that
   `exp09_predict_then_rank.py` does not parse.
 - `CONTRIBUTING.md` told contributors that `results/**/per_query_scores.csv` is git-ignored; one
-  such file is deliberately un-ignored and tracked, because Fig. 3c is an ECDF over its rows.
+  such file is deliberately un-ignored and tracked, because Fig. 2c is an ECDF over its rows.
 - `CITATION.cff` and `README.md` carried the pre-pluralisation title.
 
 **Not fixed, and why.** Reported rather than changed, so that nothing here is a number this pass
@@ -1526,11 +1526,11 @@ invented:
   the 600-query MoA-defined set reproduces the Class-B range exactly ($-0.011$ to $-0.037$) but
   gives Class-A $+0.0495$ to $+0.1183$, so the denominator behind $+0.056$ and $+0.129$ could not
   be identified. Left alone; it needs the author to pin which subset the sentence means.
-- `results/exp11_hir_benchmark/phase_grid_predictability_2x2.csv`, which backs main-text Fig. 5b,
+- `results/exp11_hir_benchmark/phase_grid_predictability_2x2.csv`, which backs main-text Fig. 4b,
   has no producer in the repository, and the regeneration command in that directory's PROVENANCE.md
   destroys the layer exp13 needs. Both are provenance gaps that cannot be closed by editing text.
 - The CellFlow and CPA-ECFP artifacts behind one Results paragraph (R40, R41) were never committed.
 - ED1 to ED4 print at roughly 2.8 to 3.5 pt because they are authored far wider than the text block;
-  Fig. 6 overflows its page and Supplementary Table 1 runs into the right margin. These are layout
+  Fig. 5 overflows its page and Supplementary Table 1 runs into the right margin. These are layout
   defects the author has deferred to a dedicated re-layout pass, and rebuilding at unchanged
   authored geometry cannot fix them.

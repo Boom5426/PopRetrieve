@@ -1,91 +1,96 @@
-# Figure 4: the apparent gains do not survive independent evaluation
+# Figure 4: The criterion decides the answer, from the inside and from the outside
 
-One-line message: the Class-A advantage (Fig. 3) does not survive a change to metrics that do not
-share the retrieval objective. The SAME queries flip sign from Class A to Class B, the
-information-condition gate correlates the WRONG way with true divergence, the real-data coverage
-advantage is statistically real but negligible and confined to constructed mixtures, and on the one
-independent (Class C) oracle where the distributional score does win, a scalar comparing no
-distributions reproduces most of the win.
+One-line message: whether distribution-aware retrieval "wins" is a property of the criterion used
+to judge it, and the same benchmark can be wrong in both directions at once. Row 1 measures that
+from the inside, where a synthetic benchmark's latent utility oracle is known and circularity can
+be quantified rather than argued. Row 2 measures it from the outside, by checking a benchmark we
+constructed against tissue nobody assembled (patient glioblastoma), which corrected us twice.
 
-Panel letters and every number below match the Fig. 4 caption in
-`manuscript/latex/PopRetrieve_manuscript.tex`. If a number here and a number there ever disagree, the
-manuscript is the authority and this file is the bug.
+**Authority.** The Figure 4 caption in `manuscript/latex/PopRetrieve_manuscript.tex` is the authority for
+every number below, and `../../CORRECTIONS.md` for what has been retracted. If this file disagrees
+with either, this file is the bug. Layout, canvas geometry and the reasoning behind each title live
+in the `fig4_assemble.py` docstring; that is where those decisions are recorded, not here.
 
 ## Panels
 
-| Panel | Message | Source | Status |
-|-------|---------|--------|--------|
-| a | Same 480 paired queries: Class A regret reduction median +0.129 (73%>0) vs Class B MoA-nDCG mean -0.037 (35%>0) | figures/source_data/fig4a_classA_vs_classB.csv | done |
-| b | MoA-nDCG gain ECDF per cell line; median 0.000 in all three | figures/source_data/fig4a_classA_vs_classB.csv | done |
-| c | Minority-coverage gain by divergence quartile: significant, and negligible | results/exp16_gate_diagnosis/_merged_query_divergence.csv | done |
-| d | Recommended +0.119 (n=621) vs non-recommended +0.122 (n=133): the gate does not concentrate the gain | results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv | done |
-| e | Gate structure-reliability vs true divergence, Spearman rho = -0.21 (WRONG sign) | results/exp16_gate_diagnosis/_merged_query_divergence.csv | done |
-| f | Binary recommendation does not separate true divergence: Mann-Whitney p = 0.09 | results/exp16_gate_diagnosis/_merged_query_divergence.csv | done |
-| g | All 239 real-data tasks, one dot per task: overall mean +0.0018, positive tail only in the constructed cross-line mixtures | results/exp13_real_data_projection/projection.csv | done |
-| h | Class C functional oracle: energy +0.276 beats the mean incumbent +0.083, but a query-dependent magnitude scalar reaches +0.232 and the partial leaves +0.097 | figures/source_data/fig4hi_class_c_functional.csv | done |
-| i | Per query, energy vs that scalar: energy better on 62 of 103 queries (nominal Wilcoxon p = 0.073, anticonservative) | figures/source_data/fig4hi_class_c_functional.csv | done |
+Titles below are exactly the strings in `fig4_assemble.TITLES`, which is what the composite renders.
+The panel modules deliberately do not set their own composite titles: a standalone claim that
+differs from the printed claim is the defect this figure was audited for.
 
-## Verified numbers
-- 4a: leave_drug_out subset, n=480 paired; Class A regret reduction median +0.1292 (73.1%>0); Class B MoA-nDCG gain mean -0.0369, median 0.0000 (35.0%>0); Class A max +2.82 (the panel view stops at +1.42 and says so).
-- 4c: quartile MEANS +0.0042, +0.0050, +0.0062, +0.0056 (bars, with s.e.m.); quartile MEDIANS +0.0009, +0.0015, +0.0017, +0.0018 (dashes). The manuscript quotes the medians; the panel draws both, because the earlier "<0.002" caption was true of the medians only and was printed over the means.
-- 4d: recommendation_vs_outcome.csv, DART_coverage_worst: recommended median +0.11900 (n=621), mean_or_no_call +0.12194 (n=133).
-- 4e: structure_reliability vs true_divergence Spearman rho = -0.2110, p = 3.79e-09, n = 765 unique query keys (computed in the panel, not hard-coded).
-- 4f: recommended median divergence 1.66 (n=621) vs not recommended 1.68 (n=144), Mann-Whitney p = 0.090 (computed in the panel).
-- 4g: exp13 projection.csv, 239 tasks. Dataset means: SciPlex3 cross-line +0.00426 (n=90), SciPlex3 within-line +0.00038 (n=90), CD34+ +0.00027 (n=12), Frangieh +0.00042 (n=23), SciPlex3 predicted candidates +0.00003 (n=24); overall +0.0018. Two circled tasks (A549->MCF7 Abexinostat, Belinostat) are the only ones above the 0.01 threshold in 10 of 10 seed resamples.
-- 4h/4i: 103 leave-one-drug-out queries, SciPlex3 x GDSC2 at 10 uM. Medians: energy +0.276, mean cosine control-subtracted +0.083, mean cosine raw +0.241, response-magnitude match +0.232, potency match +0.399, energy partialled on magnitude match +0.097. Energy better on 62 of 103 queries.
+**Row 1, from the inside**: analytically, inside a synthetic benchmark, and between two real oracles.
 
-## Honesty notes
-- This is the load-bearing negative. Every panel shows a DIFFERENT way the Class-A gain fails to
-  transfer to oracle-independent evaluation. No panel is padding.
-- 4a/4b: the flip is measured on the SAME queries, so it is not a population difference; it is the
-  metric changing the verdict.
-- 4c: the minority-coverage gain IS statistically significant (that is why it is not simply "zero"),
-  and it is a fraction of a metric whose own values run 0.89 to 0.99; the panel states both.
-- 4e: the negative correlation is the key. The gate axis moves opposite to the quantity it should
-  track, so it cannot be a valid trust signal.
-- 4g: the panel plots the distribution, never a count of "dominant" tasks. The conventional 0.01
-  threshold sits inside the noise band of this difference, and the exp13 seed is not a replicate.
-- 4h/4i: the oracle is drug-drug FUNCTIONAL SIMILARITY (GDSC2 dose-response AUC profile
-  correlation, the three SciPlex3 lines held out), not measured potency. The absolute-potency
-  comparison is a confounder audit and lives in Extended Data. Until 2026-07-26 the row-3 banner
-  and the h/i titles still described that withdrawn potency framing and contradicted the bars
-  beneath them; they now state what is plotted.
+| Panel | Rendered title | What it shows | Module | Source |
+|-------|----------------|---------------|--------|--------|
+| a | The mean suffices below $\alpha^*$ | HIR-Bench's analytic flip boundary $\alpha^* = B/(A+B)$, separating the regime in which the mean is a sufficient statistic (orange) from the one in which subpopulation structure can change the decision (blue). Closed form, not a fit. | `fig4b.py` | `results/exp11_hir_benchmark/theoretical_boundary.csv` |
+| b | Circularity, measured | A 2x2: {observable at query time, oracle-derived} features x {28 label-determining parameter cells, 672 instances}. Observable features reach AUC 0.788 against a 0.643 majority-class rate; features derived from the benchmark's own latent utility matrix are at chance (0.400). Pseudo-replication inflates the circular set by $+0.240$ and the honest one by only $+0.048$. | `fig4f.py` | `results/exp11_hir_benchmark/phase_grid_predictability_2x2.csv` |
+| c | The oracle's shape picks the winner | Same cells, same 20 surface proteins, same two RNA rankings; the only thing that changes is whether the external protein criterion is computed as a mean or as a distribution. **The winner swaps**: mean incumbent $+0.242$ against $+0.146$ under the mean-shaped oracle, distributional $+0.529$ against $+0.334$ under the distribution-shaped one, in each of the three immune conditions. Hatched, the magnitude-matching control ($+0.125 \to +0.352$). | `fig4_shape.py` | `results/upgrade/oracle_shape_test.json` |
 
-## Authored at print size (2026-07-26 re-cut)
+**Row 2, from the outside**: our constructed benchmark, checked against tissue nobody assembled
+(ZhaoSims2021, ten glioblastoma patients).
 
-The figure enters the manuscript as `\includegraphics[width=\textwidth]` into a 6.93 in text block.
-It used to be authored 11.7 in wide, so LaTeX scaled it by 0.59 on the page and its 5.6-8 pt source
-text printed at 3.3-4.7 pt, under the 5 pt floor Nature Portfolio enforces at FINAL printed size.
-`figures/build_all.py` measures NOMINAL point size, so it called the figure clean while the printed
-page failed. The canvas is now **6.90 x 5.36 in**, the width it is printed at: the scale factor is
-1.0 and nominal size is printed size. Panel geometry lives in `fig4_assemble.py` in INCHES, because
-at 1:1 the room a y-axis label or a panel letter needs is a fixed physical quantity.
+| Panel | Rendered title | What it shows | Module | Source |
+|-------|----------------|---------------|--------|--------|
+| d | Gate 2 in a tumour: an algorithmic limit | Gate 2 posed as the SAME drug-response question in both settings (36 splits, 4 patients). Pooling drugs into classes holds the constructed ceiling at 0.700 (grey, kept because deleting the number the paper previously reported would hide the correction); one drug against one drug, the same cells give 0.879 (gap $+0.007$). In a real tumour the information is present (ceiling **0.923**) and unsupervised clustering does not reach it (**0.777**, median paired gap **$+0.117$**, 95% CI $[+0.115, +0.135]$ by patient-level bootstrap). | `fig4_gate2.py` | `results/zhao_gbm/gate2_drug_response.json`, `results/zhao_gbm/gate2_uncertainty.json` |
+| e | Gate 1: divergence overstated | Induced response cosine on natural tissue, median **0.566** over 17 patient-drug pairs, against **0.014--0.044** in our constructed mixtures: mixing cell lines overstates the divergence a distributional score can exploit by roughly an order of magnitude. | `fig4_nat.py` -> `../fig7/fig7_natural.py` | `results/zhao_gbm/gate1_natural.csv` |
+| f | The mean ranks most of it | The Fig. 1a premise tested on real tumours: over 18 within-patient drug pairs, mean-signature similarity ranks malignant-compartment response similarity at Spearman $\rho = \mathbf{+0.878}$ when the mean contains 43\% of the malignant cells it is being used to rank, and $\mathbf{+0.835}$ in the disjoint form (ranking the malignant compartment by the *myeloid* one). The manuscript reports both and treats the disjoint value as the one its own argument permits; see CORRECTIONS.md R42. | `fig4_nat.py` -> `../fig7/fig7_natural.py` | `results/zhao_gbm/premise_mean_vs_compartment.csv` |
 
-No data value, statistic, panel or panel letter changed. What changed is geometry, plus on-panel
-prose that the Fig. 4 caption already carries:
+## Honesty notes (the load-bearing caveats)
 
-| Panel | Cut or moved | Where it now lives |
-|-------|--------------|--------------------|
-| a | summary blocks moved from beside the violins to above them; view opened to $+1.8$, left spine still stops at the plotted $+1.42$ | on panel |
-| b | per-line n moved out of the key labels into the median note (key order); key to the upper left, note to the lower right | on panel |
-| c | four-line key rewrapped; head-room opened to 0.0135 | on panel |
-| e | note moved out of a bolted-on right-hand strip (`xlim` ran to 2.62 with data ending at 1.90) into the data-free band above the cloud; x axis cropped to the data | on panel, shortened |
-| f | view opened to 2.22 so the test statistic clears the two median labels | on panel |
-| g | second x-label line ("all 239 tasks; overall mean ...; circled, above 0.01 in 10 of 10 seeds") | Fig. 4 caption; diamond key kept on panel |
-| h | two-line gloss on the dotted remainder; x-label line 2 (GDSC2 provenance) | caption + row-3 banner; the number $+0.097$ stays on panel |
-| i | "the scalar is better here" (it lay across the cloud); win count moved from an in-axes label into the title, **computed** from the source table | caption; title carries 62 of 103 |
+- **d is scoped to the tumour on purpose.** The two constructed arms in the same axes show gaps of
+  $+0.007$ and $-0.002$, i.e. there the limit is *not* algorithmic; an unscoped title would
+  contradict two of its own three bar groups. The 0.692 quoted for this construct elsewhere is the
+  earlier in-fold run (Fig. 5e), and the 0.964 once reported for natural tissue is **withdrawn**: it
+  separated malignant from myeloid *control* cells, a cell-type rather than a drug-response
+  partition (`CORRECTIONS.md` R18 and R21).
+- **d's bounds are optimistic and the panel says so.** 30 of the 36 splits come from one patient
+  (PW030) and 39.9% of cells are dropped by the compartment-assignment margin, so the discarded
+  cells are by construction the hardest to place. The drug panels also differ between arms.
+- **No $p$-value is given for f**, since 15 of the 18 pairs come from one patient. e and f are the
+  arm on which both gates turn out to be OPEN and the distributional advantage still does not
+  appear: the two gates are necessary, not sufficient.
+- **b's 0.400-versus-0.5 gap is not itself interpretable.** The label is a deterministic step
+  function of (alpha, conflict), so the 13,440 instances contain only 28 independent parameter cells
+  and every held-out fold is single-class; no per-fold AUC distribution exists. The comparison that
+  carries the claim is between the two feature sets and between the two CV units, not against 0.5.
+- **c is the sharpest result here because no scorer can see either oracle.** The magnitude scalar is
+  drawn as a third bar and is not decoration: an energy distance tracks a candidate's own response
+  magnitude ($\rho = +0.791$), so a magnitude-to-magnitude channel could in principle have produced
+  the swap with no distribution ever compared. It does not, quite; energy still leads it by $+0.177$
+  under the distributional oracle against $+0.022$ under the mean-shaped one.
+- **e and f are drawn by `fig7/fig7_natural.py`, not reimplemented here.** `fig4_nat.py` imports
+  those two draw functions unchanged and only retunes annotation text, positions and font sizes for
+  the 6.9 in canvas, each edit keyed to a substring of the original text so an upstream rewording
+  fails the build instead of silently leaving a too-wide label on the page. There is exactly one
+  copy of the plotting code.
+- Palette semantics are the deck's: blue distributional/PopRetrieve, orange mean/collapse, grey context,
+  purple the natural-tissue arm. Green is *not* used in row 2: across the deck green marks readouts
+  handed information the retrieval method does not have, and in panel d colour encodes the
+  experimental arm, so both bars of every arm share one hue.
 
-QA at print size: zero text-text bbox collisions, nothing outside the canvas, smallest nominal (and
-therefore printed) size 5.6 pt. Known residual: in panel a the stat blocks and the truncation note
-sit over the Class-A violin's hairline upper tail, as they did before the re-cut.
+## What is NOT in this figure any more
+
+Earlier versions of this document described the six-panel HIR-Bench-only figure, and none of those
+panels is here. For the record, so nobody looks for them in this directory: the generative-model
+schematic, the (alpha x conflict) Hit@1 phase grid, the boundary-margin comparison and the benchmark
+sanity checks all moved to Extended Data, and the failure-predictability **ROC curve** was replaced
+by the 2x2 in panel b, which reports the same experiment as an AUC per (feature set x CV unit) cell
+rather than as one curve. HIR-Bench keeps two main-text panels, a and b, because its phase boundary
+is designed in and its transfer to real data fails; the analytic condition and the circularity
+measurement are the parts that earn the space.
 
 ## Files
-- fig4a.py ... fig4i.py : per-panel draw functions (each runs standalone). `fig4_assemble.TITLES` is
-  what the composite renders; where a panel file also sets a title it is the same claim, wrapped, and
-  h and i import their titles from the panel modules (`TITLE_4H`, `TITLE_4I`) so there is one copy.
-- fig4_assemble.py : the 9-panel, 3-row layout in inches; it owns `TITLES`, `ROW_LABELS` and the
-  module-level `STEM`.
-- fig4_collapse.{pdf,svg,png} : the composite, and the only stem this figure is written under.
+
+- `fig4b.py`, `fig4f.py`, `fig4_shape.py`, `fig4_gate2.py`, `fig4_nat.py` : the panel modules, in
+  panel order a, b, c, d, then e and f. The names are historical (`fig4b`/`fig4f` predate the
+  re-lettering); the mapping above is the authoritative one and `fig4_assemble.py` states it too.
+- `fig4_assemble.py` : the 6-panel two-row layout, authored at the FINAL PRINTED width of 6.90 in so
+  LaTeX applies no scaling and nominal point size == printed point size. Panel rectangles are in
+  inches, not gridspec ratios. It owns `TITLES`, `ROW_LABELS` and the module-level `STEM`.
+- `fig4_benchmarks.{pdf,svg,png}` : the composite, and the only stem this figure is written under.
   `python figures/build_all.py --write` enforces the 5 pt floor, writes these, and copies the PDF to
-  manuscript/latex/figures/fig4.pdf, which is the file the manuscript compiles.
-- 4a.png ... 4i.png are standalone per-panel previews, not inputs to the composite.
+  `manuscript/latex/figures/fig4.pdf`, which is the file the manuscript compiles.
+- Superseded artefacts kept in this directory, none of them an input to the current figure:
+  `fig4_hir_bench.{png,pdf}` and `fig4_hir_bench_partial.png` (the old six-panel composite),
+  `_fig5_partial.png`, `fig4f_roc_curve.csv` and `fig4f_roc_summary.json` (source data for the
+  retired ROC panel), the `4b.png` / `4f.png` standalone previews, and `_stale/` (see
+  `_stale/README.md`).

@@ -38,7 +38,7 @@ Added 2026-07-27. Without them, two of README's own "Reproduce the numbers" comm
 from a fresh clone, and a reader could not tell that anything was missing.
 
 - **ZhaoSims2021 patient glioblastoma**: the natural-heterogeneity benchmark, and the source of
-  every two-gate number measured in real tissue (main-text Fig. 5d,e,f). Loader
+  every two-gate number measured in real tissue (main-text Fig. 4d,e,f). Loader
   `src/data/load_zhao_gbm.py` reads `data/raw/zhao2021/ZhaoSims2021.h5ad` and caches
   `data/processed/zhao_gbm.npz`. Compartment labels are assigned by validated marker scoring inside
   that loader, which refuses to proceed if its validation check fails. Consumers:
@@ -48,7 +48,7 @@ from a fresh clone, and a reader could not tell that anything was missing.
   data/raw/zhao2021/ZhaoSims2021.h5ad
   ```
 
-- **GDSC2 dose-response workbook**: the Class-C functional oracle (main-text Fig. 4h,i). Not
+- **GDSC2 dose-response workbook**: the Class-C functional oracle (main-text Fig. 3h,i). Not
   redistributable here; download the release from the GDSC portal and place it at the one path both
   consumers read:
 
@@ -60,7 +60,7 @@ from a fresh clone, and a reader could not tell that anything was missing.
   path above. `analysis/class_c/class_c_functional_oracle.py` raises with the download instructions
   if it is absent, and states which release its numbers were computed on.
 
-- **Frangieh surface-protein modality**: the two protein oracles (main-text Fig. 4, oracle-shape
+- **Frangieh surface-protein modality**: the two protein oracles (main-text Fig. 3, oracle-shape
   result) use the CITE-seq protein matrix, not just the RNA tensor listed above. It is joined to the
   RNA matrix **by cell barcode**, which is why the protein analyses report 218,331 cells against the
   218,023 of the expression tensor: the two matrices as distributed differ in row count, and a

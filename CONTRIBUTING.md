@@ -35,7 +35,7 @@ CUDA is optional (it accelerates the energy distance).
 3. **Keep diffs focused.** One logical change per PR. Do not commit large data
    files or model weights (git-ignored). `results/**/per_query_scores.csv` is git-ignored **with
    one deliberate exception**: `results/exp12_partial_observed_retrieval/per_query_scores.csv` is
-   un-ignored and tracked, because Fig. 3c is a per-query ECDF over exactly those rows and a
+   un-ignored and tracked, because Fig. 2c is a per-query ECDF over exactly those rows and a
    reader cannot check that panel without them (see .gitignore).
 4. **Explain the *why*** in the PR description, and note whether any reported
    number changed (it usually should not).

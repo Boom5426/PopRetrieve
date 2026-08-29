@@ -8,6 +8,12 @@
 > anything that reaches the paper. Where this file and CORRECTIONS.md disagree, CORRECTIONS.md
 > is right.
 
+> **SUPERSEDED NUMBERING, 2026-08-29.** The figure numbers below are the old six-figure deck.
+> The main deck is now five figures: the zero-variance-limit figure this file calls "Figure 2"
+> (the C1 theorem panel) was retired to Extended Data Fig. 1d,e, and figures 3-6 moved down one
+> place. This file is not renumbered, for the same reason it is not otherwise updated: it is a
+> record of a plan, and the .tex is the authority.
+
 # PopRetrieve Results spine: claim -> Result -> figure -> panels
 
 Editor pass 2026-07-12 (Nature-series editor lens). Lock this logic BEFORE writing prose or

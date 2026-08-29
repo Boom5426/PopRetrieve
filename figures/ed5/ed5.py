@@ -11,7 +11,7 @@ retriever handed a weak query SHOULD return other weak drugs. So grading retriev
 potency is not a neutral test: it is close to guaranteed to produce a negative correlation, and
 close to guaranteed to be won by a scalar that sorts candidates by response magnitude, because
 potency is largely driven by magnitude. The semantically matched oracle is drug-drug functional
-similarity (main text Fig. 4h,i).
+similarity (main text Fig. 3h,i).
 
 WHAT SURVIVES. The mechanism is real and is worth reporting on its own terms:
   a  response magnitude predicts potency by itself (rho = -0.58 to -0.71 per cell line)
@@ -22,25 +22,35 @@ WHAT SURVIVES. The mechanism is real and is worth reporting on its own terms:
 This is the confound that makes the magnitude control mandatory for any distributional retrieval
 method claiming a functional validation.
 
-Source data: source_data/fig4hi_class_c_potency.csv (the v2 analysis, correct energy sign)
+Source data: source_data/fig3hi_class_c_potency.csv (the v2 analysis, correct energy sign)
 Run standalone: python ed5.py
 """
 import os
+
+import sys
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-FOCAL, COMP, GREY, INK = "#5185C0", "#E99D4E", "#7A7A7A", "#1A1A1A"
-GREEN = "#55966B"
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")))
+from figstyle import apply_style, panel_letter, soften_axes  # noqa: E402
+
+# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
+# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
+# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
+GREEN_SOFT = "#55966B"
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-SRC = f"{REPO}/figures/source_data/fig4hi_class_c_potency.csv"
+SRC = f"{REPO}/figures/source_data/fig3hi_class_c_potency.csv"
 
 ROWS = [
-    ("energy_rho",           "energy\n(distributional retrieval)",     FOCAL),
+    ("energy_rho",           "energy\n(distributional retrieval)",     FOCAL_SOFT),
     ("mean_cosine_raw_rho",  "mean cosine\n(no control subtraction)",  GREY),
-    ("mean_cosine_ctrl_rho", "mean cosine\n(control-subtracted)",      COMP),
-    ("magnitude_only_rho",   "response magnitude alone\n(NO retrieval)", GREEN),
+    ("mean_cosine_ctrl_rho", "mean cosine\n(control-subtracted)",      COMP_SOFT),
+    ("magnitude_only_rho",   "response magnitude alone\n(no retrieval)", GREEN_SOFT),
 ]
 LINES, MARKS = ["A549", "K562", "MCF7"], ["o", "s", "^"]
 
@@ -56,11 +66,11 @@ def draw_a(ax, d):
         ax.plot([med, med], [y - 0.28, y + 0.28], color=c, lw=2.6, zorder=4,
                 solid_capstyle="butt")
         ax.text(med, y + 0.37, f"{med:+.2f}", ha="center", va="bottom", fontsize=6,
-                color=c, fontweight="bold")
+                color=INK)
     ax.axvline(0, ls="--", lw=0.8, color=INK, zorder=1)
     ax.set_yticks(ys)
     ax.set_yticklabels([r[1] for r in ROWS], fontsize=5.6)
-    ax.set_xlabel(r"Spearman $\rho$ with ABSOLUTE potency (GDSC AUC)", fontsize=6)
+    ax.set_xlabel(r"Spearman $\rho$ with absolute potency (GDSC AUC)", fontsize=6)
     ax.set_xlim(-0.95, 0.95)
     ax.set_ylim(-0.8, len(ROWS) - 0.25)
     for sp in ("right", "top"):
@@ -75,12 +85,12 @@ def draw_a(ax, d):
 def draw_b(ax, d):
     """Why it inverts: the energy DISTANCE is largely a candidate-magnitude ranking."""
     v = d.energydist_vs_candmag_rho.values
-    ax.hist(v, bins=18, color=FOCAL, alpha=0.75, edgecolor="white", lw=0.4)
+    ax.hist(v, bins=18, color=FOCAL_SOFT, alpha=0.75, edgecolor="white", lw=0.4)
     m = float(np.median(v))
     ax.axvline(m, color=INK, lw=1.4)
     ax.text(m - 0.01, ax.get_ylim()[1] * 0.94, f"median\n{m:+.3f}", ha="right", va="top",
-            fontsize=6, fontweight="bold", color=INK)
-    ax.set_xlabel("Spearman $\\rho$ (energy DISTANCE, candidate response magnitude)", fontsize=6)
+            fontsize=6, color=INK)
+    ax.set_xlabel("Spearman $\\rho$ (energy distance, candidate response magnitude)", fontsize=6)
     ax.set_ylabel("queries", fontsize=6)
     ax.tick_params(labelsize=5.6)
     for sp in ("right", "top"):
@@ -90,12 +100,20 @@ def draw_b(ax, d):
 
 
 def build():
+    # THE HOUSE STYLE IS APPLIED HERE, and was not before: this figure drew on matplotlib's
+    # defaults (10 pt DejaVu Sans, 1.5 pt lines, framed legends, four spines), roughly twice the
+    # type size of every other figure in the submission. Same call the main deck makes.
+    apply_style(sizes=(8, 7, 6))
     d = pd.read_csv(SRC)
-    fig, axes = plt.subplots(1, 2, figsize=(9.0, 3.1))
+    # Authored at the printed width. The SI text block is 6.93 in and this figure enters with
+    # \includegraphics[width=\textwidth], so the previous 9.0 in canvas printed at 0.83x and
+    # every nominal point size shrank with it. At 6.9 in the scale factor is 1.0.
+    fig, axes = plt.subplots(1, 2, figsize=(6.9, 2.6))
     draw_a(axes[0], d)
     draw_b(axes[1], d)
     for ax, k in zip(axes, "ab"):
-        ax.text(-0.16, 1.06, k, transform=ax.transAxes, fontsize=10, fontweight="bold")
+        panel_letter(ax, k, dx=-0.16, dy=1.08, case="lower")
+    soften_axes(fig)
     fig.subplots_adjust(wspace=0.42, bottom=0.30)
     out = os.path.dirname(os.path.abspath(__file__))
     fig.savefig(os.path.join(out, "edfig5.pdf"), bbox_inches="tight")
