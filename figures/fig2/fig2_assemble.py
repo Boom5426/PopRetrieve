@@ -1,27 +1,38 @@
-"""PopRetrieve Figure 2: mean-signature retrieval is the zero-variance limit of distribution-aware retrieval.
+"""PopRetrieve Figure 2: under objective-aligned metrics, distributional retrieval looks decisively stronger.
 
-Assembles panels a-f into fig2_collapse.{png,pdf}. Reproducible entry point; the build harness
-(figures/build_all.py) calls build() and additionally enforces the 5 pt typography floor.
+Six panels in two rows. The top row carries the claim (a, the Hit@1 ladder), its counterexample
+(b, Frangieh) and its per-query distribution (c); the bottom row holds the three supporting controls
+(d gate, e alpha sweep, f metric robustness).
 
-Layout logic. The claim runs left to right and top to bottom: a defines the generative model and
-shows that the population score becomes the mean-to-mean score, b isolates lambda as the only thing
-that moves, c measures that collapse on data, e shows the same collapse along the beta axis, and f
-is the synthesis. a/c/e therefore hold the wide (7/12) column and b/d/f the narrow (5/12) one, and
-the schematic first row is shorter than the two data rows. A 12-column grid gives that unequal
-split while keeping a single vertical alignment seam between the two columns.
+Geometry note (why the numbers below are in inches, not gridspec units)
+----------------------------------------------------------------------
+The manuscript text block is 6.93 in wide and the figure enters with
+``\\includegraphics[width=\\textwidth]``. This composite used to be authored 11.0 in wide, so LaTeX
+shrank it by 0.63x and the 6 pt panel annotations printed at 3.8 pt, under the 5 pt Nature Portfolio
+floor. The build-time gate in ``figstyle.save`` only sees NOMINAL sizes, so it reported CLEAN while
+the printed page failed. The fix is to author at final print width: the canvas is 6.9 in, the scale
+factor is 1.0, and nominal point size == printed point size.
+
+At 1:1 the horizontal budget is real, so the layout is specified as an explicit inch ledger rather
+than a uniform 12-column grid: panels a and f are horizontal bar charts whose category labels
+("coverage-worst") need ~0.62 in of clearance, which a uniform column gutter cannot give them
+without starving the other four panels. Each row is a 5-cell gridspec of
+``[panel, gutter, panel, gutter, panel]`` with ``wspace=0``, so every width below is literally
+inches on the printed page.
+
+This gain is objective-aligned (Class A); it is NOT independent validation, which is Figure 3.
 """
 import os, sys, matplotlib.pyplot as plt
 
-# ONE canonical output stem per figure. This file used to write fig2_unification.* while
-# build_all.py wrote the same figure as fig2_collapse.*, so the composite existed on disk twice
+# ONE canonical output stem per figure. This file used to write fig2_apparent_gains.* while
+# build_all.py wrote the same figure as fig2_temptation.*, so the composite existed on disk twice
 # under two names and nothing said which was current. build_all's STEMS entry is the one that is
 # copied to manuscript/latex/figures/fig2.pdf, so that is the name kept here; build_all checks
 # this constant against its own STEMS dict and fails the build if the two ever drift apart again.
-STEM = "fig2_collapse"
+STEM = "fig2_temptation"
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from figstyle import pin_canvas
 from fig2a import draw_2a
 from fig2b import draw_2b
 from fig2c import draw_2c
@@ -29,57 +40,58 @@ from fig2d import draw_2d
 from fig2e import draw_2e
 from fig2f import draw_2f
 
-# EXPORT GEOMETRY. The canvas is the authored print width and the tight bbox is pinned to it, so
-# the exported page is 6.92 x 5.80 in (canvas + savefig.pad_inches on each side) BY CONSTRUCTION.
-# It used to be a 7.09 x 5.95 in canvas whose exported width was whatever savefig's tight crop
-# happened to leave, which landed at 6.890 in: 0.035 in of slack to the 6.93 in text block, held by
-# nothing. Any later annotation reaching further right would have pushed the page past the text
-# block, LaTeX would have scaled the figure DOWN, and the deck's 5 pt floor would have been breached
-# again at printed size with the build still reporting CLEAN (the gate measures nominal sizes only).
-#
-# The panels did not move. The canvas was cropped to what the ink needs, and the gridspec span was
-# translated by the same amount, so every panel keeps its absolute position and size to <0.001 in;
-# only the empty margin the old crop discarded is gone.
-#
-# The span below is positioned so the ink is CENTRED in what is left: this figure's ink is 6.870 in
-# wide (measured off the rendered PDF, not off the Agg tight bbox, whose text metrics run ~0.013 in
-# narrower), so a 6.90 in canvas leaves 0.030 in of total slack and the ink clears each side edge by
-# 0.015 in. With the bbox pinned that clearance is the safety margin that matters: an overhang no
-# longer gets absorbed by the crop, it enlarges the exported page. Re-measure it after any change
-# that adds ink near an edge, by rasterising the deployed PDF and locating the first non-white
-# column, rather than by trusting get_tightbbox.
-FIG_W, FIG_H = 6.90, 5.78
-GS_LEFT_IN, GS_RIGHT_IN = 0.39408, 6.88852      # was 0.51048, 7.00492 on the 7.09 in canvas
-GS_TOP_IN, GS_BOTTOM_IN = 5.53775, 0.36125      # was 5.62275, 0.44625 on the 5.95 in canvas
+from figstyle import strip_titles  # noqa: E402
 
-# (row, col-slice, letter, draw fn, panel-letter x offset)
-PANELS = [
-    (0, slice(0, 7), "a", draw_2a, -0.030),
-    (0, slice(7, 12), "b", draw_2b, -0.185),
-    (1, slice(0, 7), "c", draw_2c, -0.098),
-    (1, slice(7, 12), "d", draw_2d, -0.085),
-    (2, slice(0, 7), "e", draw_2e, -0.098),
-    (2, slice(7, 12), "f", draw_2f, -0.085),
-]
+DRAW = {"a": draw_2a, "b": draw_2b, "c": draw_2c,
+        "d": draw_2d, "e": draw_2e, "f": draw_2f}
+
+# ---- the inch ledger -----------------------------------------------------------------------
+FIG_W, FIG_H = 6.9, 5.35           # 6.9 in <= 6.93 in text block: printed 1:1
+M_LEFT = 0.70                      # holds panel a "coverage-worst" y tick labels
+M_RIGHT = 0.06
+M_TOP = 0.38                       # panel letters only; the titles are in the caption
+M_BOT = 0.44                       # two-line x labels (c, e, f) and three-line x ticks (d)
+ROW_GAP = 0.72                     # row-1 x labels + row-2 letters (was 0.95, with titles)
+USABLE = FIG_W - M_LEFT - M_RIGHT  # 6.14 in of drawable width per row
+
+# [panel, gutter, panel, gutter, panel]; gutters sized by what the RIGHT neighbour needs
+ROW1 = [1.757, 0.42, 1.757, 0.45, 1.756]      # a | b | c
+ROW2 = [1.450, 0.50, 1.830, 0.74, 1.620]      # d | e | f   (0.74 = f's long category labels)
+assert abs(sum(ROW1) - USABLE) < 1e-6, sum(ROW1)
+assert abs(sum(ROW2) - USABLE) < 1e-6, sum(ROW2)
+
+ROW_H = (FIG_H - M_TOP - M_BOT - ROW_GAP) / 2.0
+LETTER_OFFSET_IN = 0.22            # panel letters sit a constant 0.22 in left of their axes
 
 
 def build(apply_style, panel_letter):
-    apply_style(sizes=(8, 7, 6))
+    apply_style(sizes=(8, 7, 6))   # deck-wide type ladder; no titles are drawn
     fig = plt.figure(figsize=(FIG_W, FIG_H))
-    # Pin the tight bbox to the authored canvas (see EXPORT GEOMETRY in the module docstring).
-    pin_canvas(fig)
-    # The gridspec span is given in inches and converted, because what has to stay fixed under the
-    # canvas change is the ABSOLUTE panel geometry, not the fractions.
-    gs = fig.add_gridspec(3, 12, height_ratios=[0.90, 1.0, 1.0],
-                          hspace=0.66, wspace=0.60,
-                          left=GS_LEFT_IN / FIG_W, right=GS_RIGHT_IN / FIG_W,
-                          top=GS_TOP_IN / FIG_H, bottom=GS_BOTTOM_IN / FIG_H)
-    for r, cs, k, fn, dx in PANELS:
-        ax = fig.add_subplot(gs[r, cs])
-        fn(ax)
-        panel_letter(ax, k, dx=dx, dy=1.20, case="lower")
-    out = os.path.dirname(os.path.abspath(__file__))
-    return fig
+
+    left, right = M_LEFT / FIG_W, 1.0 - M_RIGHT / FIG_W
+    r1_top = 1.0 - M_TOP / FIG_H
+    r1_bot = r1_top - ROW_H / FIG_H
+    r2_top = r1_bot - ROW_GAP / FIG_H
+    r2_bot = r2_top - ROW_H / FIG_H
+
+    gs1 = fig.add_gridspec(1, 5, width_ratios=ROW1, wspace=0,
+                           left=left, right=right, top=r1_top, bottom=r1_bot)
+    gs2 = fig.add_gridspec(1, 5, width_ratios=ROW2, wspace=0,
+                           left=left, right=right, top=r2_top, bottom=r2_bot)
+
+    # panel -> (gridspec, cell index, axes width in inches)
+    PLACE = {"a": (gs1, 0, ROW1[0]), "b": (gs1, 2, ROW1[2]), "c": (gs1, 4, ROW1[4]),
+             "d": (gs2, 0, ROW2[0]), "e": (gs2, 2, ROW2[2]), "f": (gs2, 4, ROW2[4])}
+
+    for k, (gs, col, w_in) in PLACE.items():
+        ax = fig.add_subplot(gs[0, col])
+        DRAW[k](ax)
+        panel_letter(ax, k, dx=-LETTER_OFFSET_IN / w_in, dy=1.19, case="lower")
+
+    # Nature panels carry no titles: the six claims each panel used to state over itself are
+    # now the six entries of this figure's caption. Panel scripts keep their set_title calls
+    # so a standalone preview still labels itself; the composite strips them.
+    return strip_titles(fig)
 
 
 if __name__ == "__main__":
@@ -88,7 +100,7 @@ if __name__ == "__main__":
     # silently overwrote four tracked composites; and it wrote them BEFORE
     # assert_min_fontsize ran, so a figure that then FAILED the gate had already been
     # deployed to disk. Every export now goes through figstyle.save(), which applies the
-    # 5 pt floor first. (Audited 2026-07-27; fig1 and fig5 already worked this way.)
+    # 5 pt floor first. (Audited 2026-07-27; fig1 and fig4 already worked this way.)
     from figstyle import apply_style, panel_letter, save
     save(build(apply_style, panel_letter),
          os.path.join(os.path.dirname(os.path.abspath(__file__)), STEM))

@@ -1,213 +1,170 @@
-"""PopRetrieve Figure 4: the apparent gains do not survive independent evaluation.
+"""PopRetrieve Figure 4: The benchmark decides the answer.
 
-Nine panels, one argument, read row by row. This is the metric-class ladder and the paper's
-central figure.
+WHY THESE TWO THINGS ARE NOW ONE FIGURE
+---------------------------------------
+This used to be HIR-Bench alone (six panels), with the natural-heterogeneity test as a separate
+Figure 7 (three panels). They are the same argument approached from opposite ends, and splitting
+them hid that:
 
-  Row 1 (a-d)  Class A -> Class B. One scorer, one query set: the only thing that changes is
-               the class of metric doing the judging. A Class-A gain of +0.129 becomes a
-               Class-B loss of -0.037, and the gate meant to concentrate the advantage does
-               not concentrate it.
-  Row 2 (e-g)  Why the gate cannot rescue it, and what the real data actually show. The
-               gate's own reliability axis is anti-correlated with true response divergence,
-               and across 239 real-data tasks the coverage advantage is statistically real,
-               practically negligible, and confined to the mixtures we constructed. Panel g
-               plots the DISTRIBUTION, not a count of "dominant" tasks: the threshold sits
-               inside the noise band and the seed is not a replicate.
-  Row 3 (h-i)  Class C, an independent functional oracle: drug-drug functional similarity from
-               GDSC2 dose-response AUC profiles, with the three SciPlex3 lines held out. Energy
-               retrieval BEATS the correctly specified mean incumbent here (+0.276 vs +0.083),
-               the one such win in the study, but a query-dependent scalar that compares no
-               distributions reaches +0.232 and partialling it out leaves energy +0.097.
+  ROW 1, FROM THE INSIDE. In a synthetic benchmark the latent utility oracle is known, so
+  circularity stops being something one argues about and becomes something one measures: every
+  feature can be labelled oracle-derived or observable and the inflation read off a dial.
 
-TITLES ARE CLAIMS, AND THEY WERE WRONG HERE
--------------------------------------------
-Until 2026-07-26 this file still carried the row-3 titles of the WITHDRAWN potency framing:
-"Class C: an external functional oracle (measured drug potency)", "similarity is anti-aligned
-with potency", "a scalar that ignores the query wins every query". The panels below them had
-already been rebuilt on the functional-similarity oracle and showed the opposite: energy leads
-(+0.276) and wins 62 of 103 queries against a scalar that is itself query-DEPENDENT. A title that
-contradicts its own axes is the exact failure this paper is about, so all three now state what
-the plotted numbers show, and match Fig. 4's caption in the manuscript.
+  ROW 2, FROM THE OUTSIDE. Take a benchmark we constructed (cell-line mixtures) and check it
+  against tissue nobody assembled (patient glioblastoma). It misled us in BOTH directions at once,
+  and both distortions happened to flatter our own premise.
 
-AUTHORED AT PRINT SIZE (2026-07-26 re-cut)
-------------------------------------------
-The manuscript's text block is 6.93 in wide and every figure enters with
-\\includegraphics[width=\\textwidth]. This figure used to be authored 11.4 in wide, so LaTeX
-shrank it by 0.605x on the page and its 5.6-8 pt source text printed at 3.4-4.8 pt: below the
-5 pt floor Nature Portfolio enforces at FINAL PRINTED SIZE. The build-time gate in figstyle.py
-measures NOMINAL size, so it reported the figure clean while the printed page failed.
+HIR-Bench is also cut from six panels to two, which is the right size for it. Its phase boundary is
+designed in and its transfer to real data fails, so it earns main-text space only for the analytic
+condition and for the circularity measurement, which is the one place in this paper where
+circularity is quantified rather than asserted. The generative schematic (old 6a), the Hit@1 grid
+(6c), the regret decomposition (6d) and the sanity checks (6e) move to Extended Data.
 
-The canvas is therefore 6.90 in wide, the width it is printed at, and the scale factor is 1.0:
-nominal point size IS printed point size. Panel geometry is set in INCHES here rather than
-through gridspec ratios, because at 1:1 the space a y-axis label or a panel letter needs is a
-fixed physical quantity (about 0.5 in and 0.34 in) and does not scale with the panel it belongs
-to; expressing it as a fraction of a 12-column grid is what produced the uneven gutters and the
-collisions in the 11.4 in version.
+Earlier titles for 6c/6d/6f described panels other than the ones drawn; a title that contradicts
+its own axes is the same class of error this paper is about, and they were fixed on 2026-07-12.
 
-The canvas is 0.605x its old width, so annotation that used to be shrunk by LaTeX now competes
-with the panels for real space. Every panel and every panel letter is kept. What was cut is
-on-panel prose that the Fig. 4 caption already carries verbatim: panel g's second x-label line,
-panel h's two-line gloss on the dotted remainder, and panel i's "the scalar is better here".
-Nothing was rescued by shrinking type below the floor.
+GEOMETRY, 2026-07-26: AUTHORED AT FINAL PRINT WIDTH
+---------------------------------------------------
+This figure used to be authored 11.6 in wide and entered the manuscript through
+``\\includegraphics[width=\\textwidth]`` into a 6.93 in text block, i.e. LaTeX shrank it by 0.60x.
+Every point size in it therefore reached the page at 60% of its nominal value: the 6 pt tick labels
+printed at 3.6 pt, well under the 5 pt Nature Portfolio production floor, while the build-time gate
+in ``figstyle.py`` measured only the NOMINAL sizes and reported the figure clean.
 
-Rebuild: python fig4_assemble.py
+The canvas is now 6.9 in wide, a hair under the text block, so the scale factor is 1.0 and the
+nominal sizes below ARE the printed sizes. Nothing about what the panels plot changed. What changed
+is that the annotation load had to come down to match the real area available: at 0.6x the old
+width every on-panel sentence was suddenly full size against a panel half as wide, so the
+interpretive glosses were cut and the numbers the Results text sends readers to were kept. The
+caption carries what was cut.
+
+Panel rectangles are given in INCHES rather than as gridspec ratios. At this size the binding
+constraints are the widths of specific pieces of text (b's two-line row labels, c's y-axis label,
+d's robustness block), and inches are the units those constraints are actually measured in.
 """
 import os
 import sys
 
 import matplotlib.pyplot as plt
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..")))
+sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..", "fig7")))
 
-# The one canonical output stem for this figure; must equal build_all.STEMS[4], which build_all
-# asserts, because that is the name copied to manuscript/latex/figures/fig4.pdf.
-STEM = "fig4_collapse"
+# The one canonical output stem for this figure; must equal build_all.STEMS[5], which build_all
+# asserts, because that is the name copied to manuscript/latex/figures/fig4.pdf. The legacy
+# fig4_hir_bench.* files in this directory are the SUPERSEDED six-panel HIR-Bench figure, not
+# another copy of this one.
+STEM = "fig4_benchmarks"
 
-from fig4a import draw_4a
-from fig4b import draw_4b
-from fig4c import draw_4c
-from fig4d import draw_4d
-from fig4e import draw_4e
-from fig4f import draw_4f
-from fig4g import draw_4g
-from fig4h import draw_4h, TITLE_4H
-from fig4i import draw_4i, TITLE_4I
+from figstyle import pin_canvas, soften_axes, strip_titles
+from fig4b import draw_4b                        # analytic flip boundary
+from fig4f import draw_4f                        # 2x2: observable vs oracle-derived x CV unit
+from fig4_shape import draw_shape                # the oracle's SHAPE picks the winner (real data)
+from fig4_gate2 import draw_gate2                # Gate 2, same construct in both settings
+from fig4_nat import draw_nat_gate1, draw_nat_premise   # natural-tissue arm, retuned for 6.9 in
 
 TITLES = {
-    "a": "Same queries,\nopposite verdicts",
-    "b": "MoA-nDCG gain\ncenters on zero",
-    "c": "Minority-coverage\ngain is negligible",
-    "d": "Non-recommended\nqueries gain as much",
-    "e": "The diagnostic axis points\nthe wrong way",
-    "f": "Recommendation cannot\nsort by divergence",
-    "g": "Real, negligible, confined to mixtures",
-    "h": TITLE_4H,
-    "i": TITLE_4I,
+    # Every title is a claim that must survive being read against its own panel. The 2026-07-12
+    # audit found three in this figure that described panels other than the ones drawn; the risk
+    # is highest for d, where the same axes carry a constructed arm and a natural one that reach
+    # opposite conclusions, so d names the setting its claim holds in.
+    #
+    # 2026-07-26: the titles are shorter because the panels are now 1.3-2.5 in wide rather than
+    # 2-4 in, and an 8 pt title that overruns its own panel lands on the next panel's letter. Each
+    # one is still a claim its own data supports; nothing was broadened, and no earlier title was
+    # restored.
+    "a": r"The mean suffices below $\alpha^*$",
+    "b": "Objective alignment, measured",
+    "c": "The evaluator's shape picks the winner",
+    # scoped to the tumour on purpose: the constructed arms in this same panel show a gap of
+    # +0.007 and -0.002 (fixed pairs), i.e. there the limit is NOT algorithmic. An unscoped title
+    # would contradict two of its own three bar groups.
+    "d": "Recoverability in a tumour: an algorithmic limit",
+    "e": "Divergence is overstated",
+    "f": "The mean ranks most of it",
 }
-
 ROW_LABELS = [
-    "Response matching $\\rightarrow$ mechanism recovery: the same rankings, judged by a metric "
-    "that does not share their objective",
-    "Why the diagnostic cannot rescue it, and what 239 real-data tasks show",
-    "External functional evaluation: an independent readout (drug$-$drug functional similarity, "
-    "GDSC2 dose-response)",
+    "From the inside: analytically, inside a synthetic benchmark, and between two real evaluators",
+    "From the outside: our constructed benchmark, checked against tissue nobody assembled",
 ]
 
-# ------------------------------------------------------------------------------------------
-# Geometry, in inches on the printed page
-# ------------------------------------------------------------------------------------------
-FIGW = 6.90                 # the width the figure is printed at; text block is 6.93 in
-
-PAD_TOP = 0.02              # trimmed away by savefig's tight bbox; kept so nothing touches an edge
-PAD_BOT = 0.02
-BANNER_H = 0.072            # ink height of one line of 6.8 pt bold row-banner text
-BANNER_GAP = 0.055          # banner baseline -> top of the row's tallest panel title
-TITLE_BLOCK = 0.293         # title pad (4 pt) + two 8 pt lines; every row has a two-line title
-ROW_GAP = 0.09              # bottom of one row's x-label -> top of the next row's banner
-
-# Per panel: (key, left pad, axes width). The left pad is the physical room the panel's y-axis
-# apparatus and its bold letter need, which is why it is a constant and not a share of the row.
-# ``below`` is the room the row's x tick labels and x label need under the deepest axes in it.
+# LAYOUT, in inches on a 6.9 x 3.58 in canvas.
+#   x0, y0 measured from the bottom-left corner; w, h are the AXES box (titles, tick labels, axis
+#   labels and panel letters live outside it, in the gutters).
+# Panel widths are deliberately unequal: c (the swap between two real external oracles) and d (the
+# one constructive finding in the paper, and the panel the Results text sends readers to for the
+# robustness numbers) carry the two rows and are the two widest panels; a, e and f are supporting.
+# The gutters are sized by the text that has to fit in them, not by a uniform wspace:
+#   1.91 -> 2.46  b's two-line row labels ("observable / at query time")
+#   3.82 -> 4.78  b's colour-bar label, then c's two-line y-axis label
+#   3.05 -> 3.38  e's y-axis label;   5.02 -> 5.45  f's two-line y-axis label
+# Vertically, the two rows are packed against their own text: 0.30 in below row 1 for tick labels
+# and a's axis label, then the row-2 banner, then row 2's titles.
 #
-# RESIDUAL PASS (2026-07-26). Three numbers here changed, all of them clearances measured on the
-# rendered page rather than judged by eye. Row widths are unchanged panel by panel where they
-# matter, so the exported PDF is the same width as before and LaTeX still prints it at 1:1.
-#   * row 1 axh 0.78 -> 1.05. Panel a's two summary blocks sat on the Class-A violin's real
-#     kernel tail. The fix needs a data-free band above the plotted view (see fig4a.py), and
-#     0.27 in more height is what buys that band WITHOUT flattening the violins.
-#   * panel c pad 0.50 -> 0.59, width 1.08 -> 0.99. Panel b's three-line note cleared panel c's
-#     rotated y label by 1.2 pt, the tightest text-to-text gap in the deck. The two changes
-#     cancel, so panel c's right edge, panel d and the row's right edge do not move; panel c's
-#     y-axis apparatus moves 0.09 in right, for a measured 7.7 pt gap. Note the direction: the
-#     first attempt narrowed panel b instead, which does open the same gap, but panel b's note
-#     is anchored at 0.97 of ITS axes and there is only 0.575 in of free zone right of that
-#     panel's dashed zero line, so moving the note left put it 0.8 pt off the zero line. The
-#     free space has to come from panel c, which has it.
-#   * panel h pad 1.05 -> 1.51, width 4.03 -> 3.57. Its five category labels are one line each
-#     now instead of two (see fig4h.py) and the longest is 1.38 in, so the label column has to
-#     be 1.51 in wide to hold them without reaching further left than the labels already did.
-#     The 0.46 in comes out of the axes, whose right 40% is data-free.
-ROWS = [
-    dict(banner=0, axh=1.05, below=0.39,
-         panels=[("a", 0.50, 1.44), ("b", 0.46, 1.24), ("c", 0.59, 0.99), ("d", 0.50, 1.12)]),
-    dict(banner=1, axh=1.05, below=0.38,
-         panels=[("e", 0.50, 1.55), ("f", 0.50, 1.48), ("g", 0.38, 2.43)]),
-    dict(banner=2, axh=1.00, below=0.28,
-         panels=[("h", 1.51, 3.57), ("i", 0.46, 1.30)]),
-]
-
-FNS = {"a": draw_4a, "b": draw_4b, "c": draw_4c, "d": draw_4d, "e": draw_4e,
-       "f": draw_4f, "g": draw_4g, "h": draw_4h, "i": draw_4i}
-
-GUTTER_LEAD = 0.16          # inches from the previous panel's right edge to the letter's left edge
-
-
-def _layout():
-    """Resolve the inch geometry into (figure height, per-panel rect, per-panel letter x, banner y).
-
-    ``rects[key]`` is (axes left, axes top from the figure top, width, height) in inches and
-    ``letters[key]`` is the letter's left edge, one GUTTER_LEAD in from where the panel to its
-    left ends. Aligning the letters on the gutter rather than on a fixed offset from their own
-    axes is what puts a, e and h in one column: panel h reserves 1.51 in for its categorical y
-    labels and a fixed -0.34 in offset left its letter floating over them.
-    """
-    rects, letters, banners = {}, {}, []
-    y = PAD_TOP
-    for row in ROWS:
-        y += BANNER_H
-        banners.append(y)                                   # banner baseline, from the top
-        ax_top = y + BANNER_GAP + TITLE_BLOCK
-        x = 0.0
-        for key, pad, w in row["panels"]:
-            letters[key] = x + GUTTER_LEAD
-            x += pad
-            rects[key] = (x, ax_top, w, row["axh"])
-            x += w
-        y = ax_top + row["axh"] + row["below"] + ROW_GAP
-    figh = y - ROW_GAP + PAD_BOT
-    return figh, rects, letters, banners
-
-
-FIGH, RECTS, LETTER_X, BANNER_Y = _layout()
-FIGSIZE = (FIGW, FIGH)
+# The canvas was 3.50 in tall with row 2 at y0 = 0.36, which left row 2 too little room underneath:
+# panel f's x-axis label hung 4.2 pt (0.059 in) BELOW the bottom edge of the canvas. The export was
+# correct only because savefig's tight bbox grew downwards to absorb the overhang, i.e. the exported
+# height was set by a collision rather than authored, and the same accident would have silently
+# absorbed a wider overhang later. Row 2 is now at y0 = 0.44 on a 3.58 in canvas: the canvas gained
+# 0.08 in at the BOTTOM and every panel and banner moved up with it, so nothing changed relative to
+# anything else, and the label now sits 0.021 in inside the canvas.
+#
+# With the overhang gone the tight bbox is pinned to the canvas (see pin_canvas), so the exported
+# page is 6.92 x 3.60 in by construction: LaTeX scales it by 6.93/6.92 = 1.001 and the nominal sizes
+# below are the printed sizes. It used to export 6.81 x 3.54 in and be scaled UP by 1.018, which was
+# harmless for the floor but meant the printed size of every glyph depended on which annotation
+# happened to stick out furthest. The typeset float height is unchanged at 3.60 in.
+# THE 0.36 IN FREED BY DROPPING THE BANNERS AND TITLES WENT INTO THE PANELS, not into a shorter
+# canvas. Every panel here was 1.02-1.18 in tall, which is the shortest row in the deck and the
+# reason panel d had to give up its robustness block; the height is worth more to the figure than
+# a smaller float is. Row heights are 1.18 and 1.34 in, the footprint is unchanged.
+W, H = 6.9, 3.55
+RECTS = {                     # x0,   y0,   w,    h     (inches)
+    "a": (0.45, 2.22, 1.46, 1.18),
+    "b": (2.46, 2.22, 1.36, 1.18),   # includes the colour bar, which is stolen from this box
+    "c": (4.78, 2.22, 2.07, 1.18),
+    "d": (0.50, 0.44, 2.55, 1.34),
+    "e": (3.38, 0.44, 1.64, 1.34),
+    "f": (5.45, 0.44, 1.27, 1.34),
+}
+BANNER_Y = {0: 3.56, 1: 1.93}        # inches from the bottom, va="top"
+# the panel letter must clear its own panel's y-axis furniture, which differs a lot between a bare
+# strip (e) and a heat map with two-line row labels (b); given here in inches to the LEFT of the
+# axes box and converted to the axes-fraction dx that panel_letter() wants
+# a: 0.32, not 0.21. With no title above the axes the letter sits on the top tick label's
+# baseline, and 0.21 in put it on panel a's "1.0".
+LETTER_IN = {"a": 0.32, "b": 0.56, "c": 0.36, "d": 0.42, "e": 0.30, "f": 0.44}
 
 
 def build(apply_style, panel_letter):
     apply_style(sizes=(8, 7, 6))
-    fig = plt.figure(figsize=FIGSIZE)
+    fig = plt.figure(figsize=(W, H))
+    # Pin the tight bbox to the authored canvas, so the exported page size is authored rather than
+    # emergent (see the height note above the RECTS table).
+    pin_canvas(fig)
+    fns = {"a": draw_4b, "b": draw_4f, "c": draw_shape,
+           "d": draw_gate2, "e": draw_nat_gate1, "f": draw_nat_premise}
 
-    axes = {}
-    for key, (x, top, w, h) in RECTS.items():
-        ax = fig.add_axes([x / FIGW, 1.0 - (top + h) / FIGH, w / FIGW, h / FIGH])
-        FNS[key](ax)
-        ax.set_title(TITLES[key], loc="left", pad=4.0)
-        axes[key] = ax
+    for k, (x0, y0, w, h) in RECTS.items():
+        ax = fig.add_axes([x0 / W, y0 / H, w / W, h / H])
+        fns[k](ax)
+        panel_letter(ax, k, dx=-LETTER_IN[k] / w, dy=1.06, case="lower")
 
-    # Panel letters in the gutter to the left of each panel, on one baseline per row. A fixed
-    # axes-fraction offset (the old dx=-0.11) placed the letter twice as far out on a double-width
-    # panel as on a narrow one, so the row never lined up.
-    for key, ax in axes.items():
-        x_in, _top, w_in, h_in = RECTS[key]
-        panel_letter(ax, key, dx=(LETTER_X[key] - x_in) / w_in,
-                     dy=1.0 + TITLE_BLOCK / h_in, case="lower")
-
-    for row, y_in in zip(ROWS, BANNER_Y):
-        fig.text(GUTTER_LEAD / FIGW, 1.0 - y_in / FIGH, ROW_LABELS[row["banner"]],
-                 fontsize=6.8, fontweight="bold", color="#1A1A1A", ha="left", va="baseline")
-
-    out = os.path.dirname(os.path.abspath(__file__))
-    return fig
+    # Nature panels carry no titles and Nature figures carry no row banners; both are in the
+    # caption. TITLES and ROW_LABELS are kept as the statement of what each panel and each row
+    # argues, because the caption has to be checkable against them.
+    return strip_titles(soften_axes(fig))
 
 
 if __name__ == "__main__":
-    # build() must NOT export. It used to call fig.savefig() here, which meant two things:
-    # `python figures/build_all.py` without --write, documented as a report-only dry run,
-    # silently overwrote four tracked composites; and it wrote them BEFORE
-    # assert_min_fontsize ran, so a figure that then FAILED the gate had already been
-    # deployed to disk. Every export now goes through figstyle.save(), which applies the
-    # 5 pt floor first. (Audited 2026-07-27; fig1 and fig5 already worked this way.)
+    # build() must not write the composite itself. It used to call fig.savefig() for
+    # fig4_benchmarks.{png,pdf} at the end, i.e. the standalone `python fig4_assemble.py` shipped
+    # the figure that build_all.py deploys WITHOUT ever running figstyle.save()'s 5 pt typography
+    # gate: the one export path that skipped the check wrote to exactly the stem that is copied to
+    # manuscript/latex/figures/fig4.pdf. Writing only through save() means every path that can
+    # produce that file also has to pass the floor.
     from figstyle import apply_style, panel_letter, save
-    save(build(apply_style, panel_letter),
-         os.path.join(os.path.dirname(os.path.abspath(__file__)), STEM))
-    print(f"wrote fig4 composite (9 panels, 3 rows) at {FIGW:.2f} x {FIGH:.2f} in")
+    save(build(apply_style, panel_letter), os.path.join(HERE, STEM))
+    print(f"wrote {STEM}.pdf / .svg / .png")

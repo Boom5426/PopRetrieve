@@ -1,57 +1,69 @@
-"""PopRetrieve Figure 4 panel 4b: MoA-nDCG gain by cell line
-Source data: source_data/fig4a_classA_vs_classB.csv
+"""PopRetrieve Figure 4 panel 4b: analytic boundary alpha*=B/(A+B)
+Source data: results/exp11_hir_benchmark/theoretical_boundary.csv
+             (source_data/fig4a_theoretical_boundary.csv is a mirror of it, not read here)
 Run standalone: python fig4b.py
 """
-import os, numpy as np, pandas as pd, matplotlib as mpl, matplotlib.pyplot as plt
-FOCAL, COMP, GREY, INK = "#5185C0", "#E99D4E", "#7A7A7A", "#1A1A1A"
+import os, sys, numpy as np, pandas as pd, matplotlib as mpl, matplotlib.pyplot as plt
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from figstyle import PT_MATH
+# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
+# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
+# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-key=["split_type","cell_line","heldout_drug","observed_library_fraction","seed"]
+H = os.path.join(REPO, "results", "exp11_hir_benchmark")
+S = os.path.join(REPO, "results", "exp11_synthetic_phase_diagram")
 
 def draw_4b(ax):
-    """Class-B gain ECDF per cell line.
+    """Analytic boundary alpha* = B/(A+B) with decision regions.
 
-    Presentation note (2026-07-26). The three cell lines were coloured FOCAL / GREY / COMP, i.e.
-    the deck's blue "distributional" and orange "mean" roles were spent on cell-line identity,
-    which invites the reader to read a method contrast into a within-PopRetrieve stratification. They
-    are now three tints of the same blue, and the shared median is labelled directly.
+    Colour semantics follow the deck: the regime in which subpopulation structure can change the
+    decision is FOCAL_SOFT blue (distributional), the regime in which the mean is a sufficient statistic
+    is COMP_SOFT orange (mean / collapse). Those two fills were swapped until 2026-07-26, so this panel
+    read against the palette used by every other panel in the paper.
     """
-    p=pd.read_csv(f"{REPO}/figures/source_data/fig4a_classA_vs_classB.csv")
-    shades=['#2C5A87',FOCAL,'#9DC1E2']; ns=[]
-    for cl,col in zip(['A549','K562','MCF7'],shades):
-        d=p[p.cell_line==cl]['classB_moa_ndcg_gain'].sort_values().values
-        if len(d)>3:
-            ys=np.arange(1,len(d)+1)/len(d)
-            ns.append(len(d))
-            ax.plot(d,ys,color=col,lw=1.5,label=cl)
-    ax.axvline(0,ls='--',lw=0.9,color=INK,zorder=1)
-    # 1:1 re-cut. An ECDF that jumps at zero leaves two free corners, upper left and lower right,
-    # and at the printed panel width the key and the median note no longer both fit in one of
-    # them: the key takes the upper left (no curve rises above 0.15 left of -0.2) and the note
-    # takes the lower right (no curve falls below 0.7 right of +0.02). The per-line n moves
-    # out of the key labels and into that note, in key order, because 'A549 n=157' set three
-    # times is 0.7 in of text on a 1.2 in panel and ran onto the curves at zero.
-    #
-    # Residual pass (2026-07-26): that note is 0.53 in wide and anchored at 0.97 of the axes, so
-    # its right edge came within 1.2 pt of panel c's rotated y label, the tightest text-to-text
-    # gap in the six-figure deck. Nothing here changed, deliberately: this panel has only 0.575 in
-    # of free zone between its dashed zero line and its right spine for a 0.53 in note, so pulling
-    # the note left to open the gap just moves the collision onto the zero line. The clearance is
-    # taken out of panel c's left pad instead (fig4_assemble.ROWS row 1). Measured after: 7.7 pt
-    # to panel c's y label, 3.8 pt to this panel's own zero line (unchanged).
-    ax.legend(fontsize=5.8,loc='upper left',frameon=False,handlelength=1.0,labelspacing=0.24,
-              borderaxespad=0.05,handletextpad=0.25)
-    ax.set_xlabel('MoA-nDCG gain,\ndistributional $-$ mean',fontsize=6.2)
-    ax.set_ylabel('cumulative\nfraction',fontsize=6.5)
-    ax.set_xlim(-0.62,0.62); ax.set_ylim(0,1.02)
-    ax.set_xticks([-0.5,-0.25,0,0.25,0.5]); ax.tick_params(labelsize=5.8)
-    ax.text(0.97,0.03,'median 0.000 in\nall three lines\nn = '+'/'.join(str(n) for n in ns),
-            transform=ax.transAxes,
-            fontsize=5.8,color=GREY,ha='right',va='bottom',linespacing=1.30)
-    for sp in ['right','top']: ax.spines[sp].set_visible(False)
+    tb = pd.read_csv(f"{H}/theoretical_boundary.csv")
+    if tb.empty:                      # provenance check: the boundary is analytic, but the grid
+        raise ValueError(             # it was verified on must exist for this panel to be honest
+            f"{H}/theoretical_boundary.csv is empty; the analytic boundary panel is not drawn "
+            f"without the grid it was checked against.")
+    # boundary curve: alpha_star vs ratio (perfect identity) -> decision line in (ratio, alpha) space
+    xx = np.linspace(0, 1, 200)
+    ax.fill_between(xx, xx, 1, color=FOCAL_SOFT, alpha=0.14, lw=0)   # alpha>alpha*: structure matters
+    ax.fill_between(xx, 0, xx, color=COMP_SOFT, alpha=0.14, lw=0)    # alpha<alpha*: mean sufficient
+    ax.plot(xx, xx, color=INK, lw=1.4, zorder=3)
+    # 2026-07-26: the region labels used to read "minority optimal / structure matters" and
+    # "majority optimal / mean is sufficient". At the figure's print width this panel is 1.46 in
+    # wide and those two lines were 0.73 in of text each, i.e. half the panel, overlapping the
+    # boundary line and the alpha* box. Which side is the minority-optimal one is already given by
+    # the y axis (minority fraction alpha) and stated in the caption; what the reader needs on the
+    # panel is which regime each fill means.
+    ax.text(0.28, 0.80, 'structure\nmatters', fontsize=6.2, color=INK,
+            ha='center', va='center')
+    ax.text(0.73, 0.17, 'mean is\nsufficient', fontsize=6.2, color=INK,
+            ha='center', va='center')
+    # PT_MATH, not 7: matplotlib prints a superscript at 0.7x nominal, so this label set at
+    # 7 pt printed its star at 4.9 pt, under the 5 pt production floor.
+    ax.text(0.5, 0.5, r'$\alpha^*=B/(A{+}B)$', fontsize=PT_MATH, color=INK, ha='center',
+            va='center',
+            zorder=4, bbox=dict(fc='white', ec='none', pad=1.6))
+    # tight label pad: this axis label is the last line of row 1 and the row-2 banner is
+    # 0.30 in below it on the 6.9 in canvas
+    ax.set_xlabel(r'welfare ratio $B/(A{+}B)$', fontsize=6.2, labelpad=2.0)
+    ax.set_ylabel(r'minority fraction $\alpha$', fontsize=6.2, labelpad=2.0)
+    ax.set_xlim(0, 1); ax.set_ylim(0, 1)
+    ax.set_xticks([0, 0.5, 1.0]); ax.set_yticks([0, 0.5, 1.0])
+    ax.tick_params(labelsize=6)
+    for sp in ['right', 'top']: ax.spines[sp].set_visible(False)
+    # the composite sets the title (fig4_assemble.TITLES); it is set here only so the panel can be
+    # run standalone, and the composite overwrites it
 
 
 if __name__ == "__main__":
     fig, ax = plt.subplots(figsize=(3.5,3.0))
     draw_4b(ax)
+    ax.set_title(r"The mean suffices below $\alpha^*$", loc='left', fontsize=8)
     fig.savefig(os.path.join(os.path.dirname(__file__), "4b.png"), dpi=200, bbox_inches="tight")
     print("wrote 4b.png")

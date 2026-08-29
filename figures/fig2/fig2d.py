@@ -1,62 +1,73 @@
-"""PopRetrieve Figure 2 panel 2d: mean cosine and CMap cosine are the identical operation.
+"""PopRetrieve Figure 2 panel 2d: gate-recommended vs not-recommended queries.
 
-Source data: results/exp08_signature_baselines/summary.csv, unweighted macro-mean of hit@1
-over the seven (task x setting) cells; mirrored in figures/source_data/fig2d_operation_identity.csv.
-mean_cosine and cmap_cosine agree to every printed digit (0.388492); cmap_wtcs (0.463492) is the
-rank-based sibling and deliberately differs.
+Source data: results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv
+(row DART_coverage_worst). The two medians the manuscript quotes are +0.119 on the 621
+gate-recommended queries and +0.122 on the 133 "mean or no call" queries: the gate does not
+concentrate the Class-A gain.
 
-Run standalone: python fig2d.py  (writes 2d.png)
+Scope note kept visible on the panel: the 765 partial-observed queries of panel c split
+621 + 133 + 11, the last being the gate's "mean-sufficient" verdict (median regret reduction
+exactly 0.000, n = 11). Those 11 are not part of the manuscript's two-way comparison and are
+therefore not plotted, but they are named on the panel so 621 + 133 does not silently fail to
+add up to 765.
+
+Run standalone: python fig2d.py
 """
-import os, numpy as np, pandas as pd, matplotlib.pyplot as plt
-import sys; sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-FOCAL, COMP, GREY = "#5185C0", "#E99D4E", "#7A7A7A"
+import os, numpy as np, pandas as pd, matplotlib as mpl, matplotlib.pyplot as plt
+# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
+# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
+# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from figstyle import FOCAL_SOFT, SLATE, RULE, META, INK  # noqa: E402
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+MODES = [('DART_recommended', 'diagnostic-\npositive', FOCAL_SOFT),
+         ('mean_or_no_call', 'not\nrecommended', SLATE)]
+TRACK_MAX = 0.15          # y limit, round above the larger value (+0.122)
 
 
 def draw_2d(ax):
-    """Three signature baselines on one truncated Hit@1 axis; two of them coincide."""
-    s = pd.read_csv(f"{REPO}/results/exp08_signature_baselines/summary.csv")
-    agg = s.groupby("method")["hit@1"].mean()
-    rows = [("mean cosine", float(agg["mean_cosine"]), COMP, 2),
-            ("CMap cosine", float(agg["cmap_cosine"]), COMP, 1),
-            ("CMap WTCS", float(agg["cmap_wtcs"]), GREY, 0)]
+    """Median regret reduction inside vs outside the gate's recommendation."""
+    rvo = pd.read_csv(f"{REPO}/results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv")
+    cw = rvo[rvo.dart_method == 'DART_coverage_worst'].set_index('recommendation_mode')
 
-    x_lo, x_hi = 0.365, 0.512
-    for lab, val, col, y in rows:
-        # full-width guide, not a bar: the axis is truncated, so nothing here encodes length
-        ax.plot([x_lo, x_hi], [y, y], ls=":", lw=0.5, color="0.82", zorder=1)
-        ax.scatter([val], [y], s=34, color=col, zorder=3)
-        ax.text(val - 0.004, y + 0.20, lab, ha="left", va="bottom",
-                fontsize=6.5, color=col)
-        # white knockout: the row guide is drawn full width, so at 1:1 print size it would
-        # otherwise strike through the digits of the value it labels.
-        ax.text(val + 0.009, y, f"{val:.4f}", ha="left", va="center",
-                fontsize=6, color=col, zorder=3,
-                bbox=dict(facecolor="white", edgecolor="none", pad=0.9))
+    for i, (mode, lab, col) in enumerate(MODES):
+        med = float(cw.loc[mode, 'median_regret_reduction'])
+        n = int(cw.loc[mode, 'n_queries'])
+        # NO TRACK HERE. Panel a and panel f draw one because a horizontal track reads as the
+        # attainable range. Drawn vertically above a bar the same block reads as a stacked
+        # remainder, i.e. as a second quantity, which is exactly what this panel must not say.
+        # The near-equality of the two bars is carried by the hairline at the first median.
+        ax.bar(i, med, width=0.44, color=col, linewidth=0, zorder=3)
+        ax.text(i, med + 0.005, f'+{med:.3f}', ha='center', va='bottom', fontsize=6.5,
+                color=INK)
+        # Name in ink, n on a grey line below. Two slots of "diagnostic-positive  .  n = 621"
+        # are 0.62 in each in a 1.2 in panel, so the one-line form collided; the pair is split
+        # the way the reference splits its own narrow slots.
+        ax.text(i, -0.020, lab, transform=ax.get_xaxis_transform(), ha='center',
+                va='top', fontsize=6, color=INK, linespacing=1.25)
+        ax.text(i, -0.215, f'n = {n}', transform=ax.get_xaxis_transform(),
+                ha='center', va='top', fontsize=5.6, color=META)
 
-    # bracket tying the two coincident rows together
-    xb = 0.436
-    ax.plot([xb, xb], [1, 2], color="0.2", lw=0.8, zorder=4)
-    ax.plot([xb - 0.004, xb], [2, 2], color="0.2", lw=0.8, zorder=4)
-    ax.plot([xb - 0.004, xb], [1, 1], color="0.2", lw=0.8, zorder=4)
-    ax.text(xb + 0.005, 1.5, "identical\noperation", va="center", ha="left", fontsize=6)
-
-    ax.set_xlim(x_lo, x_hi)
-    ax.set_ylim(-0.75, 2.75)
-    ax.set_yticks([]); ax.spines["left"].set_visible(False)
-    ax.set_xticks([0.38, 0.42, 0.46, 0.50])
-    ax.set_xlabel(r"Hit@1 (macro-mean, 7 task $\times$ setting cells)")
-
-    # axis-break glyph: the x axis starts at 0.365, not 0
-    for xf in (0.014, 0.028):
-        ax.plot([xf - 0.006, xf + 0.006], [-0.028, 0.028], transform=ax.transAxes,
-                lw=0.7, color="0.2", clip_on=False, zorder=6)
-
-    ax.set_title(r"Mean cosine $=$ CMap cosine, exactly", loc="left")
+    ax.axhline(float(cw.loc[MODES[0][0], 'median_regret_reduction']), ls=':', lw=0.8,
+               color=RULE, zorder=2)
+    ax.set_xticks([])
+    ax.set_xlim(-0.62, 1.62)
+    ax.set_ylabel('median regret reduction')
+    ax.set_ylim(0, TRACK_MAX * 1.02)
+    ax.set_yticks([0, 0.05, 0.10, 0.15])
+    ax.tick_params(axis='x', length=0)
+    ax.tick_params(axis='y', length=2.2, color=RULE, labelcolor=INK)
+    for sp in ['right', 'top', 'bottom']:
+        ax.spines[sp].set_visible(False)
+    ax.spines['left'].set_color(RULE)
+    ax.spines['left'].set_bounds(0, TRACK_MAX)
+    ax.set_title("The diagnostic does not\nconcentrate the gain", loc='left', linespacing=1.15)
 
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(figsize=(2.4, 1.9))
+    fig, ax = plt.subplots(figsize=(3.6, 3.0))
     draw_2d(ax)
     fig.savefig(os.path.join(os.path.dirname(__file__), "2d.png"), dpi=200, bbox_inches="tight")
     print("wrote 2d.png")

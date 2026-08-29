@@ -46,7 +46,7 @@ from scipy.stats import spearmanr
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(REPO, "figures"))
-from figstyle import FOCAL, COMP, GREY, INK, PURPLE, apply_style, panel_letter, save  # noqa: E402
+from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK, PURPLE_SOFT, apply_style, panel_letter, save, soften_axes, strip_titles  # noqa: E402
 
 P = os.path.join(REPO, "results", "tahoe_pilot")
 STEM = "ed7_tahoe"
@@ -72,22 +72,22 @@ def draw_a(ax):
     """Differential response: where the constructed mixtures sit in the unconstructed distribution."""
     g1 = pd.read_csv(os.path.join(P, "gate1_per_condition.csv"))
     c = g1.induced_cosine_G1_vs_G2M.dropna().to_numpy()
-    ax.hist(c, bins=40, range=(-0.1, 1.0), color=FOCAL, alpha=0.55, lw=0)
+    ax.hist(c, bins=40, range=(-0.1, 1.0), color=FOCAL_SOFT, alpha=0.55, lw=0)
     top = ax.get_ylim()[1]
     ax.set_ylim(0, top * 1.02)
-    ax.axvline(float(np.median(c)), color=FOCAL, lw=1.1)
+    ax.axvline(float(np.median(c)), color=FOCAL_SOFT, lw=1.1)
     # Anchor labels go INSIDE the panel and rotated, at staggered heights. Placed above the axis
     # as horizontal text they collided with each other (0.03 and 0.205 are 0.17 apart on an axis
     # 1.17 wide, i.e. 0.19 in, and each label was 0.30 in) and with the two-line title.
-    for x, lab, col, yf in [(0.03, "constructed mixtures", COMP, 0.97),
+    for x, lab, col, yf in [(0.03, "constructed mixtures", COMP_SOFT, 0.97),
                             (0.205, "real cells, state split", GREY, 0.97),
-                            (0.566, "patient tissue", PURPLE, 0.97),
+                            (0.566, "patient tissue", PURPLE_SOFT, 0.97),
                             (1.0, "additive ceiling", INK, 0.97)]:
         ax.axvline(x, color=col, lw=0.8, ls=(0, (2.2, 1.6)))
         ax.text(x - 0.022, top * yf, lab, ha="right", va="top", rotation=90,
-                fontsize=5.0, color=col)
+                fontsize=5.0, color=INK)
     ax.text(float(np.median(c)) + 0.025, top * 0.97, f"median {np.median(c):.2f}",
-            ha="left", va="top", rotation=90, fontsize=5.4, color=FOCAL)
+            ha="left", va="top", rotation=90, fontsize=5.4, color=INK)
     ax.set_xlim(-0.12, 1.06)
     ax.set_xlabel("induced response cosine\nbetween subpopulations", fontsize=6.2, labelpad=1.5)
     ax.set_ylabel(f"conditions (n = {len(c):,})", fontsize=6.2)
@@ -97,7 +97,7 @@ def draw_a(ax):
 def draw_b(ax):
     """Recoverability: the information is there and off-the-shelf clustering does not reach it."""
     g2 = pd.read_csv(os.path.join(P, "g2panel", "gate2_clusterer_panel.csv"))
-    ax.scatter(g2.best_unsupervised, g2.supervised_ceiling, s=2.0, color=FOCAL,
+    ax.scatter(g2.best_unsupervised, g2.supervised_ceiling, s=2.0, color=FOCAL_SOFT,
                alpha=0.28, lw=0, zorder=2)
     ax.plot([0.45, 1.0], [0.45, 1.0], ls=(0, (2.2, 1.6)), lw=0.8, color=GREY, zorder=1)
     ax.text(0.985, 0.965, "no gap", fontsize=5.2, color=GREY, ha="right", va="top", rotation=41)
@@ -105,16 +105,19 @@ def draw_b(ax):
     # 0.23 in y, so a common label offset put "patient tissue" straight through
     # "constructed, drug vs drug". Each is pushed to the side with room.
     for x, y, lab, col, dx, dy, ha, va in [
-            (0.674, 0.692, "constructed,\npooled", COMP, -0.020, 0.0, "right", "center"),
-            (0.837, 0.879, "constructed,\ndrug vs drug", COMP, 0.018, -0.010, "left", "top"),
-            (0.777, 0.923, "patient tissue", PURPLE, -0.018, 0.010, "right", "bottom")]:
+            (0.674, 0.692, "constructed,\npooled", COMP_SOFT, -0.020, 0.0, "right", "center"),
+            (0.837, 0.879, "constructed,\ndrug vs drug", COMP_SOFT, 0.018, -0.010, "left", "top"),
+            (0.777, 0.923, "patient tissue", PURPLE_SOFT, -0.018, 0.010, "right", "bottom")]:
         ax.plot([x], [y], "D", ms=3.4, color=col, mec="white", mew=0.5, zorder=4)
-        ax.text(x + dx, y + dy, lab, fontsize=5.2, color=col, ha=ha, va=va,
+        ax.text(x + dx, y + dy, lab, fontsize=5.2, color=INK, ha=ha, va=va,
                 linespacing=1.15, zorder=4)
     med = (g2.best_unsupervised.median(), g2.supervised_ceiling.median())
-    ax.plot([med[0]], [med[1]], "o", ms=4.6, color=FOCAL, mec="white", mew=0.7, zorder=5)
-    ax.text(med[0] - 0.015, med[1] + 0.030, f"Tahoe median\ngap {g2.gap_vs_best.median():.3f}",
-            fontsize=5.3, color=FOCAL, ha="right", va="bottom", linespacing=1.2, zorder=5)
+    ax.plot([med[0]], [med[1]], "o", ms=4.6, color=FOCAL_SOFT, mec="white", mew=0.7, zorder=5)
+    # Below and to the RIGHT of the median marker. Right-aligned above it, the two-line label is
+    # 0.165 in data units wide against a left limit of 0.45, so its left edge fell outside the
+    # axes and landed on the y tick labels; and its top line ran into "patient tissue".
+    ax.text(med[0] + 0.016, med[1] - 0.012, f"Tahoe median\ngap {g2.gap_vs_best.median():.3f}",
+            fontsize=5.3, color=INK, ha="left", va="top", linespacing=1.2, zorder=5)
     ax.set_xlim(0.45, 1.0); ax.set_ylim(0.45, 1.02)
     ax.set_xlabel("best unsupervised accuracy", fontsize=6.2, labelpad=1.5)
     ax.set_ylabel("supervised ceiling", fontsize=6.2)
@@ -132,15 +135,15 @@ def draw_c(ax):
     cc = pd.read_csv(os.path.join(P, "disjoint", "gate3_disjoint_cellcycle_G1_vs_G2M.csv"))
     st = pd.read_csv(os.path.join(P, "disjoint", "gate3_disjoint_controlstate_k2.csv"))
     rng = np.random.default_rng(0)
-    for i, (d, lab, col) in enumerate([(cc, "cell cycle", FOCAL), (st, "cell state", PURPLE)]):
+    for i, (d, lab, col) in enumerate([(cc, "cell cycle", FOCAL_SOFT), (st, "cell state", PURPLE_SOFT)]):
         y = d.spearman_rho.to_numpy()
         ax.scatter(np.full(len(y), i) + rng.uniform(-0.16, 0.16, len(y)), y,
                    s=5, color=col, alpha=0.55, lw=0, zorder=2)
         ax.plot([i - 0.30, i + 0.30], [np.median(y)] * 2, color=col, lw=1.4, zorder=3)
         ax.text(i, 1.035, f"{np.median(y):.3f}", ha="center", va="bottom",
-                fontsize=5.8, color=col)
-    ax.axhline(0.835, color=PURPLE, lw=0.8, ls=(0, (2.2, 1.6)), zorder=1)
-    ax.text(-0.82, 0.848, "tissue 0.835", fontsize=5.2, color=PURPLE, ha="left", va="bottom")
+                fontsize=5.8, color=INK)
+    ax.axhline(0.835, color=PURPLE_SOFT, lw=0.8, ls=(0, (2.2, 1.6)), zorder=1)
+    ax.text(-0.82, 0.848, "tissue 0.835", fontsize=5.2, color=INK, ha="left", va="bottom")
     ax.axhline(0.5, color=GREY, lw=0.7, ls=":", zorder=1)
     ax.text(-0.44, 0.5, "0.5", fontsize=5.2, color=GREY, ha="right", va="center")
     n_open = int((st.spearman_rho < 0.5).sum())
@@ -167,7 +170,7 @@ def draw_d(ax):
     med = g1.groupby("cell_line").induced_cosine_G1_vs_G2M.median().rename("g1")
     j = cc.set_index("cell_line").join(med, how="inner").dropna(subset=["g1", "spearman_rho"])
     r, _ = spearmanr(j.g1, j.spearman_rho)
-    ax.scatter(j.g1, j.spearman_rho, s=9, color=FOCAL, alpha=0.7, lw=0)
+    ax.scatter(j.g1, j.spearman_rho, s=9, color=FOCAL_SOFT, alpha=0.7, lw=0)
     b = np.polyfit(j.g1, j.spearman_rho, 1)
     xs = np.linspace(j.g1.min(), j.g1.max(), 20)
     ax.plot(xs, np.polyval(b, xs), color=GREY, lw=0.9, ls=(0, (2.2, 1.6)))
@@ -195,7 +198,9 @@ def build(apply_style_fn, panel_letter_fn):
         fns[k](ax)
         ax.set_title(TITLES[k], loc="left", fontsize=7)
         panel_letter_fn(ax, k, case="lower", dx=-0.40 / w, dy=1.20)
-    return fig
+    # See ed6.py: the caption carries four per-panel entries, so the drawn titles go and TITLES
+    # stays as the declaration each panel is checked against.
+    return strip_titles(soften_axes(fig))
 
 
 if __name__ == "__main__":

@@ -4,10 +4,24 @@ Mirrors the AllelePerturb manuscript config: sans-serif 6-7 pt, thin INK axes,
 no top/right spines, soft Okabe-Ito palette, true print geometry (183 mm double
 column), editable-text vector PDF + high-dpi PNG.
 
-Palette (one edit here recolours the whole deck):
-  FOCAL  = #5185C0  distributional / PopRetrieve / structure-preserved   (blue)
-  COMP   = #E99D4E  mean-signature / collapse / structure-lost     (orange)
-  GREY   = #7A7A7A  context / neutral
+Palette (one edit here recolours the whole deck; as of 2026-08-29 that is actually true, because
+every panel file imports these names instead of re-declaring the hex values):
+
+  FOCAL  = #0072B2  distributional / PopRetrieve / structure-preserved   (blue)
+  COMP   = #D55E00  mean-signature / collapse / structure-lost     (vermillion)
+  GREY   = #767676  context / neutral
+  GREEN  = #009E73  handed information the retrieval method does not have (controls, ceilings)
+  PURPLE = #CC79A7  a second experimental arm carrying no other semantics
+
+These are the Okabe-Ito colourblind-safe hues. This docstring claimed "soft Okabe-Ito" for months
+while the values were #5185C0 / #E99D4E / #55966B / #8281B9, which are not Okabe-Ito and are not
+independently documented as colourblind-safe. They were also light: #E99D4E has a relative
+luminance of 0.42, so 5.6 pt annotation text set in it sat at roughly 2:1 contrast on white, under
+any legibility threshold worth naming. The Okabe-Ito pair is darker (0.16 and 0.19), which is why
+the small coloured annotations this deck relies on are legible in it.
+
+Colour is never the only channel: every panel that uses hue also separates its series by position,
+shape or fill, as Nature requires.
 """
 import os
 import matplotlib.pyplot as plt
@@ -20,13 +34,94 @@ from matplotlib.patches import Rectangle
 MM = 1.0 / 25.4
 COL1_MM, COL2_MM = 89.0, 183.0
 
-FOCAL = "#5185C0"      # distributional / PopRetrieve
-COMP = "#E99D4E"       # mean / collapse
-GREY = "#7A7A7A"       # context
-LIGHT_GREY = "#D9D9D9"
-PURPLE = "#8281B9"
-GREEN = "#55966B"
+FOCAL = "#0072B2"      # distributional / PopRetrieve
+COMP = "#D55E00"       # mean / collapse
+GREY = "#767676"       # context
+LIGHT_GREY = "#D4D4D4"
+PURPLE = "#CC79A7"     # second experimental arm, no other semantics
+GREEN = "#009E73"      # given information the retrieval method does not have
 INK = "#1A1A1A"
+# Pale fills for the handful of places that need a wash rather than a stroke. Derived from the
+# hues above at about 12% over white, so a recolour of FOCAL/COMP carries them along by intent
+# even though they are written out: an alpha-composited fill inherits the hue automatically, but
+# these are used where an explicit opaque colour is needed (behind text, under a marker).
+FOCAL_TINT = "#DDEBF5"
+COMP_TINT = "#FAE6D9"
+# ---------------------------------------------------------------------------
+# Presentation layer, adopted 2026-08-29 from the AllelePerturb figure 1 style.
+#
+# It is a RENDERING of the semantics above, not a second set of semantics: blue still means
+# population-level, orange still means mean-level. What changes is where the ink goes.
+#
+#   * The marks carry the colour and the text does not. Every label is INK or META; a coloured
+#     5.6 pt annotation is what forced the deck off #E99D4E in the first place (relative
+#     luminance 0.66 against white is roughly 2:1, under any readability threshold), and the
+#     rule below sidesteps that instead of trading the hue away for it.
+#   * A value bar sits on a full-extent TRACK, and every value label is right-aligned past the
+#     end of the track rather than chasing its own bar tip. One vertical reading line, not eight.
+#   * Groups are separated by a RULE hairline, not by a box.
+#   * Secondary information is META grey.
+#
+# NO MIDDLE-DOT TOKEN. The reference joins a name and its n on one line ("controlled  .  n = 90"),
+# and that was tried here and removed: the form needs about 0.55 in per slot, and this deck's
+# panels give three slots 0.53 in each, so all three labels overlapped by more than half their
+# width. Where a slot is narrow the reference splits the pair over two lines too (its panel d),
+# and that is what the panels here do. A convention no panel can follow is not a convention.
+#
+# ADOPTED BY the whole deck: main figures 1-5 and Extended Data 1-7. Nothing is left on the
+# saturated FOCAL/COMP pair, and no figure colours its text. The two enforcement passes that
+# hold this are in figures/build_all.py and figures/build_ed.py.
+#
+# Figure 1 needed one exception and got it as a mark rather than as a licence: its panel c row
+# labels ("Mean", "Population") name whole rows and have no single adjacent mark to bind them to
+# a family, so each carries a swatch. Every other label in the deck sits beside a coloured mark
+# and is simply set in ink.
+#
+# These four ARE this project's original palette, which the reference figure also uses: the soft
+# family was never invented, it was replaced deck-wide in an earlier pass and is now back under
+# names that say what they are for. An earlier draft of this block reserved them for large
+# filled areas and kept the saturated pair for thin strokes; that exception was tried and
+# dropped, because the reference draws its own 1 pt lines and 2.6 pt dots in exactly these tones
+# and they hold at print size. The contrast objection that motivated the exception applies to
+# TEXT, and the first rule above already removes coloured text.
+FOCAL_SOFT = "#5185C0"     # population-level, as a filled area
+COMP_SOFT = "#E99D4E"      # mean-level, as a filled area
+GREEN_SOFT = "#55966B"     # given information the retrieval method does not have
+PURPLE_SOFT = "#8281B9"    # second experimental arm, no other semantics
+SLATE = "#4F6D7A"          # a filled bar carrying no family semantics
+TRACK = "#EDEDED"          # the full-extent track a value bar is drawn on
+RULE = "#E6E6E6"           # hairline group separator
+META = "#7A7A7A"           # secondary text: units, n, provenance
+ACCENT = "#2A7F78"         # RESERVED, unused in the current deck: the emphasised element
+ACCENT_TINT = "#E6F1EF"
+FOCAL_SOFT_TINT = "#E4EDF6"
+COMP_SOFT_TINT = "#FBF0E4"
+# The signed advantage map, in the soft family. DIVMAP is kept as it is: it is still what the
+# figures that have not adopted this layer use, and a colormap swapped underneath them would
+# change their meaning silently.
+DIVMAP_SOFT = LinearSegmentedColormap.from_list("dart_div_soft",
+                                                [COMP_SOFT, "#f7f7f7", FOCAL_SOFT])
+
+
+def soften_axes(fig, exclude=()):
+    """Put every axes in the figure on hairline spines and short RULE-grey ticks.
+
+    Centralised on purpose. The alternative is the same four lines pasted into twenty-two panel
+    modules, which is how the palette itself came to be duplicated across forty-three files and
+    silently drifted. Colorbar axes and any axes passed in ``exclude`` are left alone: a colorbar
+    outline in RULE grey reads as a rendering artifact rather than as a frame.
+    """
+    for ax in fig.axes:
+        if ax in exclude or getattr(ax, "_colorbar", None) is not None:
+            continue
+        for side, sp in ax.spines.items():
+            if sp.get_visible():
+                sp.set_color(RULE)
+                sp.set_linewidth(0.6)
+        ax.tick_params(which="both", length=2.2, width=0.6, color=RULE, labelcolor=INK)
+    return fig
+
+
 # signed PopRetrieve-minus-mean advantage: orange (mean) <- white -> blue (PopRetrieve)
 DIVMAP = LinearSegmentedColormap.from_list("dart_div", [COMP, "#f7f7f7", FOCAL])
 
@@ -89,6 +184,57 @@ def pin_canvas(fig):
     return fig
 
 
+def strip_titles(fig):
+    """Remove every axes title from a composite. A Nature panel carries no title.
+
+    The explanation belongs to the caption. A Nature-family panel carries axis labels, tick
+    labels, direct labels on the marks themselves and a key, and nothing else; the figure legend
+    is a bold one-sentence title for the whole figure followed by one entry per panel letter, and
+    text on the panel that repeats the caption is what production asks authors to delete.
+
+    This deck was authored the other way, with a claim sentence set over each of its 40 panels.
+    Every one of those claims now lives in its figure's caption. Calling this at the end of a
+    composite's ``build()`` is what guarantees a panel script cannot put a title back into the
+    figure that ships: the panel scripts keep their own ``set_title`` calls, so a standalone
+    ``python figNx.py`` still labels its preview, and the composite strips them.
+
+    Titles set with ``loc="left"`` live in a different artist from centred ones, which is why all
+    three locations are cleared rather than just ``ax.set_title("")``.
+    """
+    for ax in fig.axes:
+        for loc in ("left", "center", "right"):
+            ax.set_title("", loc=loc)
+    return fig
+
+
+def text_run(ax, x0, y, parts, fontsize, gap=0.008, va="center"):
+    """Lay out a left-to-right run of differently styled text fragments by MEASURED width.
+
+    ``parts`` is a sequence of ``(text, colour)`` or ``(text, colour, kwargs)`` tuples, where
+    ``kwargs`` reaches ``ax.text`` (``fontweight``, ``style``, ...). Returns the x cursor after the
+    last fragment, in data coordinates, so a following arrow or marker can be placed against it.
+
+    Hard-coding the x of each fragment is only correct for one axes width and one font: schematic
+    panels that did it overlapped their own labels as soon as the panel was resized, and clipped
+    them when a fallback font measured wider than the one they were tuned on. Measuring in display
+    space and converting back removes both failure modes.
+
+    The panel must be drawn on a canvas with a renderer (Agg is what the build uses); this calls
+    ``fig.canvas.draw()`` once per run.
+    """
+    fig = ax.figure
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    inv = ax.transData.inverted()
+    x = x0
+    for part in parts:
+        txt, colour = part[0], part[1]
+        kw = part[2] if len(part) > 2 else {}
+        t = ax.text(x, y, txt, ha="left", va=va, fontsize=fontsize, color=colour, **kw)
+        x = inv.transform((t.get_window_extent(renderer=renderer).x1, 0))[0] + gap
+    return x
+
+
 def panel_letter(ax, letter, dx=-0.11, dy=1.06, case="lower"):
     s = letter.lower() if case == "lower" else letter.upper()
     ax.text(dx, dy, s, transform=ax.transAxes, fontsize=8, fontweight="bold",
@@ -125,6 +271,13 @@ def _text_sizes(fig):
 # not configurable through rcParams, and get_fontsize() reports the NOMINAL size of the whole
 # string, so a 5.6 pt label containing $P_{1}$ prints its subscript at 3.9 pt while the gate below
 # sees only 5.6. Audited 2026-07-27.
+# The smallest NOMINAL size at which a label containing a mathtext sub/superscript still prints
+# its subscript at or above MIN_PT: 5.0 / 0.7 = 7.15, rounded up. Any label carrying "$..._x$" or
+# "$...^x$" is set at this size rather than at the 5.4-7.0 pt of the plain annotations around it,
+# because get_fontsize() reports the nominal size and the gate in save() cannot see the shrunk
+# glyph. Two tenths of a point is invisible next to a 7 pt axis label; a 4.2 pt subscript is not.
+PT_MATH = 7.2
+
 MATHTEXT_SUBSUP_SCALE = 0.7
 _MATH_SUBSUP = re.compile(r"\$[^$]*[\^_][^$]*\$")
 

@@ -1,93 +1,208 @@
-"""PopRetrieve Figure 3: under objective-aligned metrics, distributional retrieval looks decisively stronger.
+"""PopRetrieve Figure 3: the apparent gains do not survive independent evaluation.
 
-Six panels in two rows. The top row carries the claim (a, the Hit@1 ladder), its counterexample
-(b, Frangieh) and its per-query distribution (c); the bottom row holds the three supporting controls
-(d gate, e alpha sweep, f metric robustness).
+Nine panels, one argument, read row by row. This is the metric-class ladder and the paper's
+central figure.
 
-Geometry note (why the numbers below are in inches, not gridspec units)
-----------------------------------------------------------------------
-The manuscript text block is 6.93 in wide and the figure enters with
-``\\includegraphics[width=\\textwidth]``. This composite used to be authored 11.0 in wide, so LaTeX
-shrank it by 0.63x and the 6 pt panel annotations printed at 3.8 pt, under the 5 pt Nature Portfolio
-floor. The build-time gate in ``figstyle.save`` only sees NOMINAL sizes, so it reported CLEAN while
-the printed page failed. The fix is to author at final print width: the canvas is 6.9 in, the scale
-factor is 1.0, and nominal point size == printed point size.
+  Row 1 (a-d)  Class A -> Class B. One scorer, one query set: the only thing that changes is
+               the class of metric doing the judging. A Class-A gain of +0.129 becomes a
+               Class-B loss of -0.037, and the gate meant to concentrate the advantage does
+               not concentrate it.
+  Row 2 (e-g)  Why the gate cannot rescue it, and what the real data actually show. The
+               gate's own reliability axis is anti-correlated with true response divergence,
+               and across 239 real-data tasks the coverage advantage is statistically real,
+               practically negligible, and confined to the mixtures we constructed. Panel g
+               plots the DISTRIBUTION, not a count of "dominant" tasks: the threshold sits
+               inside the noise band and the seed is not a replicate.
+  Row 3 (h-i)  Class C, an independent functional oracle: drug-drug functional similarity from
+               GDSC2 dose-response AUC profiles, with the three SciPlex3 lines held out. Energy
+               retrieval BEATS the correctly specified mean incumbent here (+0.276 vs +0.083),
+               the one such win in the study, but a query-dependent scalar that compares no
+               distributions reaches +0.232 and partialling it out leaves energy +0.097.
 
-At 1:1 the horizontal budget is real, so the layout is specified as an explicit inch ledger rather
-than a uniform 12-column grid: panels a and f are horizontal bar charts whose category labels
-("coverage-worst") need ~0.62 in of clearance, which a uniform column gutter cannot give them
-without starving the other four panels. Each row is a 5-cell gridspec of
-``[panel, gutter, panel, gutter, panel]`` with ``wspace=0``, so every width below is literally
-inches on the printed page.
+TITLES ARE CLAIMS, AND THEY WERE WRONG HERE
+-------------------------------------------
+Until 2026-07-26 this file still carried the row-3 titles of the WITHDRAWN potency framing:
+"Class C: an external functional oracle (measured drug potency)", "similarity is anti-aligned
+with potency", "a scalar that ignores the query wins every query". The panels below them had
+already been rebuilt on the functional-similarity oracle and showed the opposite: energy leads
+(+0.276) and wins 62 of 103 queries against a scalar that is itself query-DEPENDENT. A title that
+contradicts its own axes is the exact failure this paper is about, so all three now state what
+the plotted numbers show, and match Fig. 3's caption in the manuscript.
 
-This gain is objective-aligned (Class A); it is NOT independent validation, which is Figure 4.
+AUTHORED AT PRINT SIZE (2026-07-26 re-cut)
+------------------------------------------
+The manuscript's text block is 6.93 in wide and every figure enters with
+\\includegraphics[width=\\textwidth]. This figure used to be authored 11.4 in wide, so LaTeX
+shrank it by 0.605x on the page and its 5.6-8 pt source text printed at 3.4-4.8 pt: below the
+5 pt floor Nature Portfolio enforces at FINAL PRINTED SIZE. The build-time gate in figstyle.py
+measures NOMINAL size, so it reported the figure clean while the printed page failed.
+
+The canvas is therefore 6.90 in wide, the width it is printed at, and the scale factor is 1.0:
+nominal point size IS printed point size. Panel geometry is set in INCHES here rather than
+through gridspec ratios, because at 1:1 the space a y-axis label or a panel letter needs is a
+fixed physical quantity (about 0.5 in and 0.34 in) and does not scale with the panel it belongs
+to; expressing it as a fraction of a 12-column grid is what produced the uneven gutters and the
+collisions in the 11.4 in version.
+
+The canvas is 0.605x its old width, so annotation that used to be shrunk by LaTeX now competes
+with the panels for real space. Every panel and every panel letter is kept. What was cut is
+on-panel prose that the Fig. 3 caption already carries verbatim: panel g's second x-label line,
+panel h's two-line gloss on the dotted remainder, and panel i's "the scalar is better here".
+Nothing was rescued by shrinking type below the floor.
+
+Rebuild: python fig3_assemble.py
 """
-import os, sys, matplotlib.pyplot as plt
+import os
+import sys
 
-# ONE canonical output stem per figure. This file used to write fig3_apparent_gains.* while
-# build_all.py wrote the same figure as fig3_temptation.*, so the composite existed on disk twice
-# under two names and nothing said which was current. build_all's STEMS entry is the one that is
-# copied to manuscript/latex/figures/fig3.pdf, so that is the name kept here; build_all checks
-# this constant against its own STEMS dict and fails the build if the two ever drift apart again.
-STEM = "fig3_temptation"
+import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+# The one canonical output stem for this figure; must equal build_all.STEMS[4], which build_all
+# asserts, because that is the name copied to manuscript/latex/figures/fig3.pdf.
+STEM = "fig3_collapse"
+
 from fig3a import draw_3a
 from fig3b import draw_3b
 from fig3c import draw_3c
 from fig3d import draw_3d
 from fig3e import draw_3e
 from fig3f import draw_3f
+from fig3g import draw_3g
+from fig3h import draw_3h, TITLE_4H
+from fig3i import draw_3i, TITLE_4I
 
-DRAW = {"a": draw_3a, "b": draw_3b, "c": draw_3c,
-        "d": draw_3d, "e": draw_3e, "f": draw_3f}
+TITLES = {
+    "a": "Same queries,\nopposite verdicts",
+    "b": "MoA-nDCG gain\ncenters on zero",
+    "c": "Minority-coverage\ngain is negligible",
+    "d": "Non-recommended\nqueries gain as much",
+    "e": "The diagnostic axis points\nthe wrong way",
+    "f": "Recommendation cannot\nsort by divergence",
+    "g": "Real, negligible, confined to mixtures",
+    "h": TITLE_4H,
+    "i": TITLE_4I,
+}
 
-# ---- the inch ledger -----------------------------------------------------------------------
-FIG_W, FIG_H = 6.9, 5.8            # 6.9 in <= 6.93 in text block: printed 1:1
-M_LEFT = 0.70                      # holds panel a "coverage-worst" y tick labels
-M_RIGHT = 0.06
-M_TOP = 0.42                       # two-line panel titles + panel letters
-M_BOT = 0.60                       # two-line x labels (c, e, f) and three-line x ticks (d)
-ROW_GAP = 0.95                     # row-1 x labels + row-2 titles and letters
-USABLE = FIG_W - M_LEFT - M_RIGHT  # 6.14 in of drawable width per row
+ROW_LABELS = [
+    "Response matching $\\rightarrow$ mechanism recovery: the same rankings, judged by a metric "
+    "that does not share their objective",
+    "Why the diagnostic cannot rescue it, and what 239 real-data tasks show",
+    "External functional evaluation: an independent readout (drug$-$drug functional similarity, "
+    "GDSC2 dose-response)",
+]
 
-# [panel, gutter, panel, gutter, panel]; gutters sized by what the RIGHT neighbour needs
-ROW1 = [1.757, 0.42, 1.757, 0.45, 1.756]      # a | b | c
-ROW2 = [1.450, 0.50, 1.830, 0.74, 1.620]      # d | e | f   (0.74 = f's long category labels)
-assert abs(sum(ROW1) - USABLE) < 1e-6, sum(ROW1)
-assert abs(sum(ROW2) - USABLE) < 1e-6, sum(ROW2)
+# ------------------------------------------------------------------------------------------
+# Geometry, in inches on the printed page
+# ------------------------------------------------------------------------------------------
+from figstyle import soften_axes, strip_titles  # noqa: E402
 
-ROW_H = (FIG_H - M_TOP - M_BOT - ROW_GAP) / 2.0
-LETTER_OFFSET_IN = 0.22            # panel letters sit a constant 0.22 in left of their axes
+FIGW = 6.90                 # the width the figure is printed at; text block is 6.93 in
+
+PAD_TOP = 0.02              # trimmed away by savefig's tight bbox; kept so nothing touches an edge
+PAD_BOT = 0.06
+# THE ROW BANNERS AND THE PANEL TITLES ARE BOTH GONE. Both were text on the figure that a
+# Nature-family figure puts in its legend instead: the banners were three sentences organising the
+# rows, and every panel carried a claim over itself. The caption now opens each row's first entry
+# with what its banner said, and every panel entry with what its title said. The three constants
+# survive so the ledger below still reads as a ledger, with BANNER_H and BANNER_GAP at zero and
+# TITLE_BLOCK reduced to the height of the panel letter alone, which still sits above the axes.
+BANNER_H = 0.0              # was 0.072 in, one line of 6.8 pt row-banner text
+BANNER_GAP = 0.0            # was 0.055 in, banner baseline -> top of the row's panel title
+TITLE_BLOCK = 0.14          # was 0.293 in (4 pt pad + two 8 pt title lines); now the letter only
+ROW_GAP = 0.09              # bottom of one row's x-label -> top of the next row's banner
+
+# Per panel: (key, left pad, axes width). The left pad is the physical room the panel's y-axis
+# apparatus and its bold letter need, which is why it is a constant and not a share of the row.
+# ``below`` is the room the row's x tick labels and x label need under the deepest axes in it.
+#
+# RESIDUAL PASS (2026-07-26). Three numbers here changed, all of them clearances measured on the
+# rendered page rather than judged by eye. Row widths are unchanged panel by panel where they
+# matter, so the exported PDF is the same width as before and LaTeX still prints it at 1:1.
+#   * row 1 axh 0.78 -> 1.05. Panel a's two summary blocks sat on the Class-A violin's real
+#     kernel tail. The fix needs a data-free band above the plotted view (see fig3a.py), and
+#     0.27 in more height is what buys that band WITHOUT flattening the violins.
+#   * panel c pad 0.50 -> 0.59, width 1.08 -> 0.99. Panel b's three-line note cleared panel c's
+#     rotated y label by 1.2 pt, the tightest text-to-text gap in the deck. The two changes
+#     cancel, so panel c's right edge, panel d and the row's right edge do not move; panel c's
+#     y-axis apparatus moves 0.09 in right, for a measured 7.7 pt gap. Note the direction: the
+#     first attempt narrowed panel b instead, which does open the same gap, but panel b's note
+#     is anchored at 0.97 of ITS axes and there is only 0.575 in of free zone right of that
+#     panel's dashed zero line, so moving the note left put it 0.8 pt off the zero line. The
+#     free space has to come from panel c, which has it.
+#   * panel h pad 1.05 -> 1.51, width 4.03 -> 3.57. Its five category labels are one line each
+#     now instead of two (see fig3h.py) and the longest is 1.38 in, so the label column has to
+#     be 1.51 in wide to hold them without reaching further left than the labels already did.
+#     The 0.46 in comes out of the axes, whose right 40% is data-free.
+ROWS = [
+    dict(banner=0, axh=1.05, below=0.39,
+         panels=[("a", 0.50, 1.44), ("b", 0.46, 1.24), ("c", 0.59, 0.99), ("d", 0.50, 1.12)]),
+    dict(banner=1, axh=1.05, below=0.38,
+         panels=[("e", 0.50, 1.55), ("f", 0.50, 1.48), ("g", 0.38, 2.43)]),
+    dict(banner=2, axh=1.00, below=0.28,
+         panels=[("h", 1.51, 3.57), ("i", 0.46, 1.30)]),
+]
+
+FNS = {"a": draw_3a, "b": draw_3b, "c": draw_3c, "d": draw_3d, "e": draw_3e,
+       "f": draw_3f, "g": draw_3g, "h": draw_3h, "i": draw_3i}
+
+GUTTER_LEAD = 0.16          # inches from the previous panel's right edge to the letter's left edge
+
+
+def _layout():
+    """Resolve the inch geometry into (figure height, per-panel rect, per-panel letter x, banner y).
+
+    ``rects[key]`` is (axes left, axes top from the figure top, width, height) in inches and
+    ``letters[key]`` is the letter's left edge, one GUTTER_LEAD in from where the panel to its
+    left ends. Aligning the letters on the gutter rather than on a fixed offset from their own
+    axes is what puts a, e and h in one column: panel h reserves 1.51 in for its categorical y
+    labels and a fixed -0.34 in offset left its letter floating over them.
+    """
+    rects, letters, banners = {}, {}, []
+    y = PAD_TOP
+    for row in ROWS:
+        y += BANNER_H
+        banners.append(y)                                   # banner baseline, from the top
+        ax_top = y + BANNER_GAP + TITLE_BLOCK
+        x = 0.0
+        for key, pad, w in row["panels"]:
+            letters[key] = x + GUTTER_LEAD
+            x += pad
+            rects[key] = (x, ax_top, w, row["axh"])
+            x += w
+        y = ax_top + row["axh"] + row["below"] + ROW_GAP
+    figh = y - ROW_GAP + PAD_BOT
+    return figh, rects, letters, banners
+
+
+FIGH, RECTS, LETTER_X, BANNER_Y = _layout()
+FIGSIZE = (FIGW, FIGH)
 
 
 def build(apply_style, panel_letter):
-    apply_style(sizes=(8, 7, 6))   # 8 pt titles, matching figs 1, 2, 4 and 6
-    fig = plt.figure(figsize=(FIG_W, FIG_H))
+    apply_style(sizes=(8, 7, 6))
+    fig = plt.figure(figsize=FIGSIZE)
 
-    left, right = M_LEFT / FIG_W, 1.0 - M_RIGHT / FIG_W
-    r1_top = 1.0 - M_TOP / FIG_H
-    r1_bot = r1_top - ROW_H / FIG_H
-    r2_top = r1_bot - ROW_GAP / FIG_H
-    r2_bot = r2_top - ROW_H / FIG_H
+    axes = {}
+    for key, (x, top, w, h) in RECTS.items():
+        ax = fig.add_axes([x / FIGW, 1.0 - (top + h) / FIGH, w / FIGW, h / FIGH])
+        FNS[key](ax)
+        axes[key] = ax
 
-    gs1 = fig.add_gridspec(1, 5, width_ratios=ROW1, wspace=0,
-                           left=left, right=right, top=r1_top, bottom=r1_bot)
-    gs2 = fig.add_gridspec(1, 5, width_ratios=ROW2, wspace=0,
-                           left=left, right=right, top=r2_top, bottom=r2_bot)
+    # Panel letters in the gutter to the left of each panel, on one baseline per row. A fixed
+    # axes-fraction offset (the old dx=-0.11) placed the letter twice as far out on a double-width
+    # panel as on a narrow one, so the row never lined up.
+    for key, ax in axes.items():
+        x_in, _top, w_in, h_in = RECTS[key]
+        panel_letter(ax, key, dx=(LETTER_X[key] - x_in) / w_in,
+                     dy=1.0 + TITLE_BLOCK / h_in, case="lower")
 
-    # panel -> (gridspec, cell index, axes width in inches)
-    PLACE = {"a": (gs1, 0, ROW1[0]), "b": (gs1, 2, ROW1[2]), "c": (gs1, 4, ROW1[4]),
-             "d": (gs2, 0, ROW2[0]), "e": (gs2, 2, ROW2[2]), "f": (gs2, 4, ROW2[4])}
-
-    for k, (gs, col, w_in) in PLACE.items():
-        ax = fig.add_subplot(gs[0, col])
-        DRAW[k](ax)
-        panel_letter(ax, k, dx=-LETTER_OFFSET_IN / w_in, dy=1.19, case="lower")
-
-    out = os.path.dirname(os.path.abspath(__file__))
-    return fig
+    # Nature panels carry no titles and Nature figures carry no row banners; both are in the
+    # caption. ROW_LABELS is kept as the statement of what each row argues, because the caption
+    # has to be checkable against it.
+    return strip_titles(soften_axes(fig))
 
 
 if __name__ == "__main__":
@@ -96,8 +211,8 @@ if __name__ == "__main__":
     # silently overwrote four tracked composites; and it wrote them BEFORE
     # assert_min_fontsize ran, so a figure that then FAILED the gate had already been
     # deployed to disk. Every export now goes through figstyle.save(), which applies the
-    # 5 pt floor first. (Audited 2026-07-27; fig1 and fig5 already worked this way.)
+    # 5 pt floor first. (Audited 2026-07-27; fig1 and fig4 already worked this way.)
     from figstyle import apply_style, panel_letter, save
     save(build(apply_style, panel_letter),
          os.path.join(os.path.dirname(os.path.abspath(__file__)), STEM))
-    print("wrote fig3 composite")
+    print(f"wrote fig3 composite (9 panels, 3 rows) at {FIGW:.2f} x {FIGH:.2f} in")

@@ -25,7 +25,8 @@ import pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(REPO, "figures"))
-from figstyle import FOCAL, COMP, GREY, INK, PURPLE, apply_style, panel_letter, save  # noqa: E402
+from figstyle import (FOCAL_SOFT, COMP_SOFT, GREY, INK, META, PURPLE_SOFT, apply_style,
+                      panel_letter, save, soften_axes, strip_titles)  # noqa: E402
 
 P = os.path.join(REPO, "results", "zhao_gbm")
 STEM = "ed4_zhao_robustness"
@@ -63,7 +64,7 @@ def draw_a(ax):
     w = 0.26
     for j, m in enumerate(COMPART):
         ax.bar(x + (j - 1) * w, M[:, j], width=w,
-               color=[FOCAL, COMP, PURPLE][j], alpha=0.9, label=f"{SHORT[m]} markers")
+               color=[FOCAL_SOFT, COMP_SOFT, PURPLE_SOFT][j], alpha=0.9, label=f"{SHORT[m]} markers")
     ax.set_xticks(x)
     ax.set_xticklabels([SHORT[c] for c in COMPART], fontsize=6.2)
     ax.set_xlabel("called compartment", fontsize=6.2, labelpad=1.5)
@@ -78,13 +79,13 @@ def draw_b(ax):
     d = _sweep()
     t = d["floor"].values
     un = d["frac_unassigned"].values
-    ax.plot(t, 1 - un, "o-", color=FOCAL, ms=4, lw=1.3, label="retained")
-    ax.plot(t, un, "s--", color=COMP, ms=3.6, lw=1.2, label="unassigned")
+    ax.plot(t, 1 - un, "o-", color=FOCAL_SOFT, ms=4, lw=1.3, label="retained")
+    ax.plot(t, un, "s--", color=COMP_SOFT, ms=3.6, lw=1.2, label="unassigned")
     pap = d[d["is_paper_setting"]]
     if len(pap):
         ax.axvline(float(pap["floor"].iloc[0]), ls=":", lw=0.9, color=GREY)
         ax.text(float(pap["floor"].iloc[0]) + 0.012, 0.92, "primary",
-                fontsize=5.2, color=GREY, rotation=90, va="top")
+                fontsize=5.2, color=META, rotation=90, va="top")
     ax.set_ylim(0, 1)
     ax.set_xlabel("marker floor = margin", fontsize=6.2, labelpad=1.5)
     ax.set_ylabel("fraction of cells", fontsize=6.2)
@@ -95,9 +96,9 @@ def draw_b(ax):
 def draw_c(ax):
     """Malignant vs myeloid induced-response cosine; low = compartments diverge."""
     d = _sweep()
-    ax.plot(d["floor"], d["gate1_cos"], "o-", color=FOCAL, ms=4, lw=1.3)
+    ax.plot(d["floor"], d["gate1_cos"], "o-", color=FOCAL_SOFT, ms=4, lw=1.3)
     lo, hi = float(d["gate1_cos"].min()), float(d["gate1_cos"].max())
-    ax.axhspan(lo, hi, color=FOCAL, alpha=0.10, lw=0)
+    ax.axhspan(lo, hi, color=FOCAL_SOFT, alpha=0.10, lw=0)
     ax.text(0.98, 0.04, f"range {lo:.2f}-{hi:.2f}", fontsize=5.2, color=INK,
             ha="right", va="bottom", transform=ax.transAxes)
     ax.set_ylim(0, 1)
@@ -110,8 +111,8 @@ def draw_d(ax):
     d = _sweep()
     t = d["floor"].values
     ax.fill_between(t, d["gate2_unsup"], d["gate2_ceiling"], color=GREY, alpha=0.16, lw=0)
-    ax.plot(t, d["gate2_ceiling"], "o-", color=FOCAL, ms=4, lw=1.3, label="supervised")
-    ax.plot(t, d["gate2_unsup"], "s-", color=COMP, ms=3.6, lw=1.2, label="unsupervised")
+    ax.plot(t, d["gate2_ceiling"], "o-", color=FOCAL_SOFT, ms=4, lw=1.3, label="supervised")
+    ax.plot(t, d["gate2_unsup"], "s-", color=COMP_SOFT, ms=3.6, lw=1.2, label="unsupervised")
     ax.set_ylim(0.5, 1.0)
     ax.set_xlabel("marker floor = margin", fontsize=6.2, labelpad=1.5)
     ax.set_ylabel("drug-response\nrecovery accuracy", fontsize=6.2)
@@ -128,7 +129,9 @@ def build(apply_style_fn, panel_letter_fn):
         fns[k](ax)
         ax.set_title(TITLES[k], loc="left", fontsize=7)
         panel_letter_fn(ax, k, case="lower", dx=-0.40 / w, dy=1.20)
-    return fig
+    # Same rule as the rest of the deck: the caption carries the four per-panel entries, so the
+    # drawn titles go and TITLES stays as the declaration each panel is checked against.
+    return strip_titles(soften_axes(fig))
 
 
 if __name__ == "__main__":

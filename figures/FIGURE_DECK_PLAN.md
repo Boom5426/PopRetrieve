@@ -4,6 +4,14 @@
 > statistics computed over 165 undefined sentinel values, and the Class A/B contrast that
 > compared two different scorers. **Read [CORRECTIONS.md](../CORRECTIONS.md) before using any
 > number below.** Where this file and CORRECTIONS.md disagree, CORRECTIONS.md is right.
+>
+> ⚠️ **SUPERSEDED NUMBERING, 2026-08-29.** Every figure number below is the OLD six-figure
+> numbering. The main deck is now five figures: the zero-variance-limit figure (Figure 2 in
+> this plan) was retired to Extended Data Fig. 1d,e because it carried no measured value from
+> real cells and two of its panels duplicated Extended Data Fig. 1b,c, and figures 3-6 moved
+> down one place. This file is not renumbered: it is a record of a plan, and half its
+> references are to file stems from a still earlier deck. `figures/build_all.py` `STEMS` is
+> the authority for what the deck currently is.
 # PopRetrieve figure deck: 6-figure Nature Methods style plan (merged with external review)
 
 Editor pass 2026-07-12, merged with external NM-editor feedback (pasted-text-2026-07-12). Locked to
@@ -88,16 +96,19 @@ small-sample KMeans artifact irrelevant to the real regime row.)
 
 ---
 
-## Figure 1: Distributional differences are visible, but their value depends on the evaluator (5 panels)
-Status: NEW. 1a AI, 1b-1e code/schematic. NO Fig-4 numbers (tension only).
+## Figure 1: Distributional differences are visible, but their value depends on the evaluator (6 panels)
+Status: NEW. All six panels code/schematic; no AI raster is placed in the figure. NO Fig-4 numbers
+(tension only). A pipeline overview was inserted as 1a and every later letter moved back one, so
+this table's letters differ from the plan's first draft.
 
 | Panel | Content | Source | Notes |
 |-------|---------|--------|-------|
-| 1a [core] | Biology: two drugs, similar mean signature, opposite subpopulation responses (one has a worsening resistant minority) | AI schematic (fig1/fig1a_prompt.md) | concept art; glyph/word consistent with data panels |
-| 1b [core] | Inverse-retrieval task schematic: Q -> {P_d} -> s(P_d,Q) -> drug ranking, showing mean-signature vs distributional score paths | schematic | the task diagram the review flagged as missing; editors need it |
-| 1c [core] | Toy 2D: candidates whose MEANS tie with the target but whose DISTRIBUTIONS differ; d_mean ties, d_dist separates | synthetic gaussians (labeled schematic) | coincident mean marker, two clouds; FOCAL vs COMP |
-| 1d [core] | Evaluation coupling: retrieval objective / evaluation metric / external outcome as 3 nodes; coupled (energy->energy regret) vs independent (energy->MoA/viability) | schematic | defines the paper's core question directly |
-| 1e [core] | Metric evidence ladder: Class A objective-aligned / B task-proximal / C externally-grounded, with 2-3 examples each, and this study's coverage (A full, B partial, C none) | schematic | shows we do not confuse evidence tiers; review's strongest Fig 1 add |
+| 1a [core] | Pipeline overview: d_q -> single-cell response population -> mean signature OR full population -> both score the same candidate library, shown as one ranked library column | schematic (fig1/fig1a.py) | redrawn in code from a generated concept image kept at fig1/fig1a_reference.png; the raster is a reference, not an input |
+| 1b [core] | Biology: two drugs, similar mean signature, opposite subpopulation responses (one has a worsening resistant minority) | schematic (fig1/fig1b.py) | was to be AI concept art; the prompt is archived unused at fig1/fig1b_prompt.md |
+| 1c [core] | One (Q, P_d) pair scored at two resolutions: collapse to centroids and take a cosine, or compare the empirical populations. Ends at a score, not a ranking | schematic | the operator panel. It used to redraw 1a's task and ranking; the library and the ranked list were removed so 1a owns the pipeline, 1c the operator, 1d the consequence |
+| 1d [core] | Toy 2D: candidates whose MEANS tie with the target but whose DISTRIBUTIONS differ; d_mean ties, d_dist separates | synthetic gaussians (labeled schematic) | coincident mean marker, two clouds; FOCAL vs COMP |
+| 1e [core] | Evaluation coupling: retrieval objective / evaluation metric / external outcome as 3 nodes; coupled (energy->energy regret) vs independent (energy->MoA/viability) | schematic | defines the paper's core question directly |
+| 1f [core] | Metric evidence ladder: Class A objective-aligned / B task-proximal / C externally-grounded, with 2-3 examples each, and this study's coverage | schematic | shows we do not confuse evidence tiers; review's strongest Fig 1 add |
 
 ## Figure 2: Mean retrieval is the variance-collapsed limit of distribution-aware retrieval (6 panels)
 Status: NEW (absorbs exp06 theory). Editor override: theory STAYS in main figure.
@@ -198,8 +209,10 @@ Supplementary Table 1: dataset scale, preprocessing, query construction (SciPlex
 
 ## code-direct vs AI split
 
-- AI: Fig 1a only (biological schematic). Prompt to figures/fig1/fig1a_prompt.md.
-- Schematic (code/vector, no AI): 1b, 1c, 1d, 1e, 2a, 2b, 2f, 5a, 6a, 6b.
+- AI: none in the shipped deck. Fig 1a was designed as a generated image and then redrawn in
+  matplotlib (reference kept at figures/fig1/fig1a_reference.png); the archived prompt for what is
+  now 1b is at figures/fig1/fig1b_prompt.md. Both are references, neither is read by the build.
+- Schematic (code/vector, no AI): 1a, 1b, 1c, 1d, 1e, 1f, 2a, 2b, 2f, 5a, 6a, 6b.
 - Data panels (code-direct): all remaining, code kept in figures/figN/.
 - Reuse+renumber: Fig 4 core (=current fig3_metric_collapse), Fig 5 a-e (=current
   fig4_information_condition, + new 5f/5g). Fig 3 rebuilds from fig2_class_a_gains.
@@ -207,9 +220,11 @@ Supplementary Table 1: dataset scale, preprocessing, query construction (SciPlex
 ## Execution order (after sign-off)
 
 1. Fig 2 (theory anchor) + Fig 5f/5g (the new mechanism panels, data now in hand).
-2. Fig 6 (HIR-Bench) + Fig 1 schematics (1b-1e).
+2. Fig 6 (HIR-Bench) + Fig 1 schematics (now 1b-1f).
 3. Fig 3 rebuild + Fig 4 expand.
-4. Fig 1a AI prompt handed to you; drop returned image into fig1/.
+4. DONE, differently: no returned image is dropped into the figure. The generated 1a concept
+   image was redrawn in matplotlib (fig1/fig1a.py) and the raster kept as a reference only;
+   fig1/README.md records why a pasted raster fails at this figure's size.
 5. Per-figure README (message + panel table + verified numbers + source CSV) per AllelePerturb
    template; extract each panel's code into figures/figN/.
 6. Extended Data figures ED1-ED4 (trimmed from 9; see ED section).

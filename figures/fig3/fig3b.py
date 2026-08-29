@@ -1,87 +1,63 @@
-"""PopRetrieve Figure 3 panel 3b: per-task Hit@1, and the Frangieh counterexample.
-
-Source data: results/exp08_signature_baselines/summary_by_task.csv (all 8 scorers x 3 tasks).
-
-This panel exists to make one thing unmissable: the distributional advantage does NOT hold on
-Frangieh, the only natural real dataset entering the macro-mean, where mean/CMap cosine (0.600)
-beats energy (0.578) and is in fact the best of all eight scorers. A colour-scaled heatmap hides a
-0.02 reversal; the paired dot-and-gap layout below cannot.
-
+"""PopRetrieve Figure 3 panel 3b: MoA-nDCG gain by cell line
+Source data: source_data/fig3a_classA_vs_classB.csv
 Run standalone: python fig3b.py
 """
 import os, numpy as np, pandas as pd, matplotlib as mpl, matplotlib.pyplot as plt
-FOCAL, COMP, GREY, INK = "#5185C0", "#E99D4E", "#7A7A7A", "#1A1A1A"
-LIGHT_GREY = "#D9D9D9"
+# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
+# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
+# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-
-TASKS = [("controlled", "controlled"),
-         ("crossline", "cross-line"),
-         ("frangieh", "Frangieh")]
-CONTEXT = ['coverage_mean', 'coverage_worst', 'pca_dist', 'pca_mean', 'cmap_wtcs']
-
-# Within-category x offsets. At 1:1 the "six other scorers" caption is 0.33 in wide and has to sit
-# under the grey cloud without touching the energy-to-mean connector, so the cloud and the pair are
-# further apart than they were on the 11 in canvas (0.20 / 0.10 -> 0.20 / 0.28).
-CLOUD_DX, PAIR_DX = -0.20, 0.28
-GAP_LABEL_DX = PAIR_DX + 0.10
-
+key=["split_type","cell_line","heldout_drug","observed_library_fraction","seed"]
 
 def draw_3b(ax):
-    """Per-task Hit@1: energy vs mean/CMap cosine, against the other six scorers."""
-    sbt = pd.read_csv(f"{REPO}/results/exp08_signature_baselines/summary_by_task.csv")
-    pv = sbt.pivot_table(index='method', columns='task', values='hit@1')
-    nq = sbt.pivot_table(index='method', columns='task', values='n_queries')
-    # mean_cosine and cmap_cosine are numerically identical (Fig. 2d); assert rather than assume
-    assert np.allclose(pv.loc['mean_cosine'].values, pv.loc['cmap_cosine'].values), \
-        "mean_cosine and cmap_cosine are no longer identical; panel 3b must be relabelled"
+    """Class-B gain ECDF per cell line.
 
-    for i, (task, lab) in enumerate(TASKS):
-        e = pv.loc['global_energy', task]
-        m = pv.loc['mean_cosine', task]
-        win = e > m
-        col = FOCAL if win else COMP
-        # six other scorers, as a quiet context cloud
-        ax.scatter([i + CLOUD_DX] * len(CONTEXT), [pv.loc[c, task] for c in CONTEXT],
-                   s=11, color=GREY, alpha=0.55, linewidths=0, zorder=2)
-        # the pair that carries the claim
-        ax.plot([i + PAIR_DX, i + PAIR_DX], [m, e], color=col, lw=1.6, alpha=0.9, zorder=2)
-        ax.scatter([i + PAIR_DX], [e], s=34, color=FOCAL, zorder=4, linewidths=0)
-        ax.scatter([i + PAIR_DX], [m], s=34, color=COMP, zorder=4, linewidths=0)
-        d = e - m
-        ax.text(i + GAP_LABEL_DX, (e + m) / 2, f'{d:+.2f}', ha='left', va='center',
-                fontsize=6, color=col, fontweight='bold' if not win else 'normal')
-
-    # direct labels instead of a legend (placed in the empty upper/lower bands)
-    ax.text(-0.30, pv.loc['global_energy', 'controlled'] + 0.055, 'energy',
-            fontsize=6.5, color=FOCAL, ha='left', va='bottom')
-    ax.text(-0.30, pv.loc['mean_cosine', 'controlled'] - 0.055, 'mean / CMap cosine',
-            fontsize=6.5, color=COMP, ha='left', va='top')
-    ax.text(CLOUD_DX, min(pv.loc[c, 'controlled'] for c in CONTEXT) - 0.045,
-            'six other\nscorers', fontsize=6, color=GREY, ha='center', va='top',
-            linespacing=1.1)
-    ax.annotate('mean wins', xy=(2 + PAIR_DX, 0.600), xytext=(1.76, 0.87),
-                fontsize=6.5, color=COMP, ha='center', va='bottom',
-                arrowprops=dict(arrowstyle='-|>', color=COMP, lw=0.8,
-                                shrinkA=1, shrinkB=3))
-
-    # At 1:1 the three category slots are ~0.59 in wide, so the dataset provenance that used to
-    # ride on a second tick line ("SciPlex3" / "natural") no longer fits without the three labels
-    # colliding. It is stated in the caption and in the panel title instead; only n stays here.
-    ax.set_xticks(range(3))
-    ax.set_xticklabels([f'{lab}\nn = {int(nq.loc["global_energy", t])}'
-                        for t, lab in TASKS], fontsize=6, linespacing=1.35)
-    ax.set_xlim(-0.60, 2.95)
-    ax.set_ylim(0.18, 1.02)
-    ax.set_yticks([0.2, 0.4, 0.6, 0.8, 1.0])
-    ax.set_ylabel('Hit@1 (per task)')
-    ax.tick_params(axis='x', length=0)
-    for sp in ['right', 'top']:
-        ax.spines[sp].set_visible(False)
-    ax.set_title("The advantage does not\nhold on Frangieh", loc='left', linespacing=1.15)
+    Presentation note (2026-07-26). The three cell lines were coloured FOCAL_SOFT / GREY / COMP_SOFT, i.e.
+    the deck's blue "distributional" and orange "mean" roles were spent on cell-line identity,
+    which invites the reader to read a method contrast into a within-PopRetrieve stratification. They
+    are now three tints of the same blue, and the shared median is labelled directly.
+    """
+    p=pd.read_csv(f"{REPO}/figures/source_data/fig3a_classA_vs_classB.csv")
+    shades=['#2C5A87',FOCAL_SOFT,'#9DC1E2']; ns=[]
+    for cl,col in zip(['A549','K562','MCF7'],shades):
+        d=p[p.cell_line==cl]['classB_moa_ndcg_gain'].sort_values().values
+        if len(d)>3:
+            ys=np.arange(1,len(d)+1)/len(d)
+            ns.append(len(d))
+            ax.plot(d,ys,color=col,lw=1.5,label=cl)
+    ax.axvline(0,ls='--',lw=0.9,color=INK,zorder=1)
+    # 1:1 re-cut. An ECDF that jumps at zero leaves two free corners, upper left and lower right,
+    # and at the printed panel width the key and the median note no longer both fit in one of
+    # them: the key takes the upper left (no curve rises above 0.15 left of -0.2) and the note
+    # takes the lower right (no curve falls below 0.7 right of +0.02). The per-line n moves
+    # out of the key labels and into that note, in key order, because 'A549 n=157' set three
+    # times is 0.7 in of text on a 1.2 in panel and ran onto the curves at zero.
+    #
+    # Residual pass (2026-07-26): that note is 0.53 in wide and anchored at 0.97 of the axes, so
+    # its right edge came within 1.2 pt of panel c's rotated y label, the tightest text-to-text
+    # gap in the six-figure deck. Nothing here changed, deliberately: this panel has only 0.575 in
+    # of free zone between its dashed zero line and its right spine for a 0.53 in note, so pulling
+    # the note left to open the gap just moves the collision onto the zero line. The clearance is
+    # taken out of panel c's left pad instead (fig3_assemble.ROWS row 1). Measured after: 7.7 pt
+    # to panel c's y label, 3.8 pt to this panel's own zero line (unchanged).
+    ax.legend(fontsize=5.8,loc='upper left',frameon=False,handlelength=1.0,labelspacing=0.24,
+              borderaxespad=0.05,handletextpad=0.25)
+    ax.set_xlabel('MoA-nDCG gain,\ndistributional $-$ mean',fontsize=6.2)
+    ax.set_ylabel('cumulative\nfraction',fontsize=6.5)
+    ax.set_xlim(-0.62,0.62); ax.set_ylim(0,1.02)
+    ax.set_xticks([-0.5,-0.25,0,0.25,0.5]); ax.tick_params(labelsize=5.8)
+    # The medians and the three n are in the caption; the ECDFs and their direct labels stay.
+    _UNUSED_NOTE = (lambda *a, **k: None)(0.97,0.03,'',
+            transform=ax.transAxes,
+            fontsize=5.8,color=GREY,ha='right',va='bottom',linespacing=1.30)
+    for sp in ['right','top']: ax.spines[sp].set_visible(False)
 
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(figsize=(3.6, 3.0))
+    fig, ax = plt.subplots(figsize=(3.5,3.0))
     draw_3b(ax)
     fig.savefig(os.path.join(os.path.dirname(__file__), "3b.png"), dpi=200, bbox_inches="tight")
     print("wrote 3b.png")

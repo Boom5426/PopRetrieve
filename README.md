@@ -190,9 +190,9 @@ Inside `analysis/`, one directory per question:
 - **Figures rebuild from committed code.** `figures/build_all.py` fails the build if any rendered
   text is authored below the 5 pt floor. That gate reads nominal point sizes and knows nothing
   about the manuscript's column width, so a figure authored wider than the text block is scaled
-  down by LaTeX and can print below 5 pt while the gate still reports CLEAN. The six main figures
-  are authored at the printed width, so their scale factor is 1.00; the Extended Data figures are
-  not, and that is recorded as an open defect in `figures/edfigs/README.md`.
+  down by LaTeX and can print below 5 pt while the gate still reports CLEAN. The five main figures
+  are authored at the printed width, so their scale factor is 1.00; the Extended Data figures have
+  their own driver, `figures/build_ed.py`, which enforces the same width.
 - **A missing input raises**, rather than being replaced by a plausible default. That rule exists
   because it was once broken; see `CORRECTIONS.md`.
 

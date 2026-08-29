@@ -9,9 +9,9 @@ was no record of what each one mirrored, and they drifted. The 2026-07-27 audit 
     MoA-nDCG sample sizes (n = 191 per stratum, n for 80% power = 27,794). Those are exactly the
     numbers CORRECTIONS.md R2 retracts, and the Extended Data Fig. 2 caption already states the
     corrected ones, so the released source data contradicted the caption above it.
-  * fig4g_exp13_projection.csv held the 37-row QUICK sanity subset rather than the 239-row real
+  * fig3g_exp13_projection.csv held the 37-row QUICK sanity subset rather than the 239-row real
     run, i.e. the denominator behind the retracted "0 of 37" (R13).
-  * fig5a_theoretical_boundary.csv was 104 rows against the live 120.
+  * fig4a_theoretical_boundary.csv was 104 rows against the live 120.
 
 In every case the PANEL was right (it reads results/ directly) and the released mirror was wrong,
 which is the worst way round: the figure is defensible and the file offered to check it is not.
@@ -47,19 +47,19 @@ SD = REPO / "figures" / "source_data"
 MIRRORS: dict[str, str] = {
     "ed2_divergence_stratified.csv": "results/exp17_true_divergence_subset/divergence_stratified.csv",
     "ed2_power_analysis.csv":        "results/exp17_true_divergence_subset/power_analysis.csv",
-    "fig3b_task_heatmap.csv":        "results/exp08_signature_baselines/summary_by_task.csv",
-    "fig4d_recommendation_vs_outcome.csv": "results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv",
-    "fig4g_exp13_projection.csv":    "results/exp13_real_data_projection/projection.csv",
-    "fig5a_theoretical_boundary.csv": "results/exp11_hir_benchmark/theoretical_boundary.csv",
+    "fig2b_task_heatmap.csv":        "results/exp08_signature_baselines/summary_by_task.csv",
+    "fig3d_recommendation_vs_outcome.csv": "results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv",
+    "fig3g_exp13_projection.csv":    "results/exp13_real_data_projection/projection.csv",
+    "fig4a_theoretical_boundary.csv": "results/exp11_hir_benchmark/theoretical_boundary.csv",
 }
 
 # derived view -> the parent it was built from. Not rewritten; existence-checked only.
 DERIVED: dict[str, str] = {
-    "fig3a_hit1_ladder.csv":          "results/exp08_signature_baselines/summary.csv",
-    "fig3c_regret_reduction.csv":     "results/exp12_partial_observed_retrieval/per_query_scores.csv",
-    "fig4ef_gate_divergence.csv":     "results/exp16_gate_diagnosis/_merged_query_divergence.csv",
-    "fig6b_predictor_gaps.csv":       "results/exp09_predict_then_rank/summary.csv",
-    "fig6cd_structure_diagnostics.csv": "results/exp09_structure_diagnostics/exp09_structure_diagnostics_summary.csv",
+    "fig2a_hit1_ladder.csv":          "results/exp08_signature_baselines/summary.csv",
+    "fig2c_regret_reduction.csv":     "results/exp12_partial_observed_retrieval/per_query_scores.csv",
+    "fig3ef_gate_divergence.csv":     "results/exp16_gate_diagnosis/_merged_query_divergence.csv",
+    "fig5b_predictor_gaps.csv":       "results/exp09_predict_then_rank/summary.csv",
+    "fig5cd_structure_diagnostics.csv": "results/exp09_structure_diagnostics/exp09_structure_diagnostics_summary.csv",
 }
 
 
