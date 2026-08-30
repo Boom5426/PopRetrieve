@@ -1,7 +1,8 @@
 """Extended Data Fig. 5: the absolute-potency confounder audit.
 
-SINCE 2026-08-29 draw_a and draw_b are Extended Data Fig. 2g and 2h, drawn by
-edfigs/ed_consolidated.py. build() here still assembles the standalone preview.
+SINCE 2026-08-30 draw_a and draw_b are main-text Fig. 3l and 3m, drawn by fig3/fig3_assemble.py,
+where they sit beside the functional-similarity evaluation in Fig. 3h,i that they are a control
+on. build() here still assembles the standalone preview.
 
 This is the analysis that USED to be the paper's headline Class-C result, reported as "retrieval
 similarity is anti-aligned with therapeutic utility". That claim has been withdrawn, and this
@@ -17,11 +18,21 @@ potency is largely driven by magnitude. The semantically matched oracle is drug-
 similarity (main text Fig. 3h,i).
 
 WHAT SURVIVES. The mechanism is real and is worth reporting on its own terms:
-  a  response magnitude predicts potency by itself (rho = -0.58 to -0.71 per cell line)
+  a  response magnitude predicts potency by itself (rho = +0.58 to +0.71 per cell line:
+     A549 +0.692, K562 +0.708, MCF7 +0.583, from magnitude_only_rho)
   b  the energy DISTANCE between query and candidate largely tracks the candidate's own
      magnitude (rho = +0.791), because big-response populations sit far from everything
   c  therefore ranking nearest-first systematically returns the smallest-response candidates,
-     and every ranking's correlation with potency inverts
+     and the two similarity rankings that subtract no control lose their sign against potency
+     (energy -0.520, raw mean cosine -0.533)
+
+TWO CLAIMS HERE WERE WRONG UNTIL 2026-08-30, and both are corrected above. The magnitude range
+was written with the opposite sign, a leftover from the convention change the source-data note
+below records. And "every ranking's correlation with potency inverts" is not what the file
+plots: the control-subtracted mean cosine is +0.105, so it collapses towards zero rather than
+changing sign, and only two of the four rows are negative. Neither statement ever reached the
+manuscript or the SI, but this panel is now main-text Fig. 3l, so its provenance has to be
+right.
 This is the confound that makes the magnitude control mandatory for any distributional retrieval
 method claiming a functional validation.
 
@@ -59,7 +70,7 @@ LINES, MARKS = ["A549", "K562", "MCF7"], ["o", "s", "^"]
 
 
 def draw_a(ax, d):
-    """The mismatched oracle: every ranking inverts and the trivial scalar wins."""
+    """The mismatched oracle: the similarity rankings lose their sign and the trivial scalar wins."""
     ys = np.arange(len(ROWS))[::-1]
     for y, (col, _l, c) in zip(ys, ROWS):
         med = float(d[col].median())
@@ -86,7 +97,7 @@ def draw_a(ax, d):
 
 
 def draw_b(ax, d):
-    """Why it inverts: the energy DISTANCE is largely a candidate-magnitude ranking."""
+    """Why they lose their sign: the energy DISTANCE is largely a candidate-magnitude ranking."""
     v = d.energydist_vs_candmag_rho.values
     ax.hist(v, bins=18, color=FOCAL_SOFT, alpha=0.75, edgecolor="white", lw=0.4)
     m = float(np.median(v))

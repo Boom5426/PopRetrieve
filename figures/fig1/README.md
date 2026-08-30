@@ -5,14 +5,17 @@ so distribution-aware retrieval can see structure mean-signature retrieval canno
 structure HELPS depends on the evaluator, which is the question the paper answers. This figure sets
 the tension; it contains NO Fig-4 collapse numbers.
 
-All six panels are drawn from committed code (`fig1a.py` ... `fig1f.py`, composed by
-`fig1_assemble.py`). None of them reads from `results/`; all six are schematic, and the caption
-says so. No AI-generated raster is placed in this figure; see "Panel a provenance" below.
+Panels a-f are drawn from committed code (`fig1a.py` ... `fig1f.py`, composed by
+`fig1_assemble.py`) and none of them reads from `results/`: all six are schematic, and the caption
+says so. Panels g and h were added when the Extended Data deck was retired and are the two
+exceptions: they are MEASURED, drawn by `figures/edfigs/ed_panels.py` off
+`results/exp06_theory_limits/`. No AI-generated raster is placed in this figure; see "Panel a
+provenance" below.
 
 **No panel carries a title.** A Nature-family panel carries axis labels, tick labels, direct
 labels on the marks and a key, and the explanation is the caption's job; `figstyle.strip_titles`
 is called at the end of `build()` and removes any title a panel script sets, so the claims in the
-table below reach the reader as the caption's six entries. The panel scripts keep their own
+table below reach the reader as the caption's entries, one per letter. The panel scripts keep their own
 `set_title` calls, which is what labels a standalone `python fig1x.py` preview.
 
 ## Panels
@@ -25,6 +28,8 @@ table below reach the reader as the caption's six entries. The panel scripts kee
 | d | Means tie, distributions separate | synthetic, seeded RandomState(3) |
 | e | Aligned evaluation can reward itself | schematic |
 | f | All three evidence classes, reported here | schematic |
+| g | Mean retrieval is the zero-variance limit of population retrieval | measured, `exp06_theory_limits/degenerate_limit_synthetic.csv` |
+| h | One temperature spans mean aggregation and worst case | measured, `exp06_theory_limits/beta_interpolation.csv` |
 
 ## Design notes
 
@@ -65,14 +70,29 @@ table below reach the reader as the caption's six entries. The panel scripts kee
   are separated by hairline rules, and the ordinal axis is encoded by a short vertical tick in a
   grey RAMP, which is the right encoding for an ordinal quantity where three unrelated hues were
   not.
+- **g and h are the figure's only measured panels**, and they are here because each is the
+  quantitative form of a claim a and c only draw. g measures the limit that makes a mean signature
+  and a population the same object, the energy distance meeting the mean-to-mean distance at
+  lambda = 0 (98.50 against 98.50), so mean-signature retrieval is the zero-variance corner of the
+  task in a rather than a rival to it. h shows that c's "two resolutions" are one score at two
+  temperatures, D_beta running from the arithmetic mean over subpopulations (0.7125) to the
+  worst-matched subpopulation (1.300). Both came from `edfigs/ed_panels.py` (ED1b and ED1c there,
+  main-text Fig. 2c and Fig. 2e before that) and are still drawn by it, not copied here, so the
+  four endpoint numbers have one source.
 - **Row 1 is two panels wide, not two rows.** Giving a and b a full row each was tried and
   rejected on a measurement: at four rows the canvas needs 7.9 in, and pdflatex then reports
   `Float too large for page by 147.66pt` for this float, because the 681 pt text block has to hold
-  the figure AND a six-entry caption. Three rows at 6.15 in fits, with the caption trimmed by about
-  four lines. Halving the width of a and b cost each of them a redesign, both recorded above and
-  in the panel sources: a merged the library and the ranked list into one ranked column, and b
-  wrapped its two right-flank minority labels onto two lines so they stopped overrunning the
-  canvas.
+  the figure AND a six-entry caption. That constraint has since been lifted, since captions now set
+  on a following page and the graphic owns 9.30 in on its own, which is what made room for the
+  fourth row. The redesign it forced is kept rather than undone: a merged the library and the
+  ranked list into one ranked column, and b wrapped its two right-flank minority labels onto two
+  lines so they stopped overrunning the canvas. Both are recorded above and in the panel sources.
+- **Row 4 starts one grid column in**, at columns 1-6 and 7-12. g and h are the only panels here
+  with a y axis, one y apparatus measures about 0.35 in, and the left margin leaves 0.31 in; at
+  columns 0-6 the y label of g would be drawn outside the canvas, and `pin_canvas` makes the
+  exported page the union of canvas and ink, so that overhang would widen the PDF past the text
+  block. Widening the left margin instead would narrow a, b, c, e and f by about 2 per cent each,
+  which panel b cannot afford.
 - Palette semantics are the house ones: GREY context, FOCAL blue distributional/PopRetrieve signal,
   COMP orange mean/collapse. No new hue family; GREEN and PURPLE are not used in this figure.
   **Colour appears only in a-d**, where those meanings apply. Panels e and f are about
@@ -118,17 +138,27 @@ or a ranked list.
 
 ## Agreement with the manuscript caption
 
-The Figure 1 caption in `manuscript/latex/PopRetrieve_manuscript.tex` assigns the same six letters
-this figure draws: a = the retrieval pipeline and the representation fork, b = the premise on one
-response coordinate, c = the inverse retrieval task and the two ways to score it, d = two candidate
-populations on a shared sample mean, e = when an evaluator is independent, f = the three evidence
-classes. If the two ever disagree, the manuscript is the authority and this file is the bug.
+The Figure 1 caption in `manuscript/latex/PopRetrieve_manuscript.tex` assigns the first six
+letters this figure draws: a = the retrieval pipeline and the representation fork, b = the premise
+on one response coordinate, c = the inverse retrieval task and the two ways to score it, d = two
+candidate populations on a shared sample mean, e = when an evaluator is independent, f = the three
+evidence classes. If the two ever disagree, the manuscript is the authority and this file is the
+bug.
+
+**Open, and known:** the caption has six entries and the figure now has eight. g and h still need
+their entries written, and they carry measured numbers, so the caption must also state the source
+(`results/exp06_theory_limits/`) and the four endpoints (98.50 against 98.50 at lambda = 0; 0.7125
+and 1.300 for D_beta). Their claims are in `TITLES` in `fig1_assemble.py`, which is what the
+caption should be checked against.
 
 ## Files
 
 - `fig1a.py` ... `fig1f.py`, `fig1_assemble.py` (which owns `TITLES`, the layout and the
   module-level `STEM`). The filename letter always equals the panel letter; when a panel is
-  inserted or removed the modules are renamed with it.
+  inserted or removed the modules are renamed with it. g and h break that rule on purpose: they
+  have no `fig1g.py` or `fig1h.py`, because `fig1_assemble.py` imports
+  `ed_panels.draw_ed1d` and `ed_panels.draw_ed1e` directly and a local copy would be a second
+  place for their numbers to drift.
 - `fig1_problem.{pdf,svg,png}` : the composite, and the only stem this figure is written under.
   `python figures/build_all.py --write` enforces the 5 pt floor, writes these, and copies the PDF to
   `manuscript/latex/figures/fig1.pdf`, which is the file the manuscript compiles. That copy is part
@@ -138,8 +168,9 @@ classes. If the two ever disagree, the manuscript is the authority and this file
   image; panel b is matplotlib code and the prompt is unused.
 - `1a.png` ... `1f.png` are standalone per-panel previews, not inputs to the composite.
   `fig1a.py`, `fig1b.py` and `fig1c.py` draw their previews on the SAME axes geometry the
-  composite gives those panels (3.167 x 1.670 in for a and b, 3.724 x 1.733 in for c, no subplot
-  margins), because an x position tuned against a preview of a different width is wrong in the
+  composite gives those panels (3.167 x 1.530 in for a and b, 3.724 x 1.580 in for c, no subplot
+  margins; the heights recorded here were 1.670 and 1.733, which were the values of a canvas two
+  revisions ago), because an x position tuned against a preview of a different width is wrong in the
   figure that ships, which is how the first draft of panel a overlapped its own footer and how
   panel c's row label was clipped. The other three previews still use matplotlib's default margins
   and are therefore approximate; treat the composite as the authority for spacing.

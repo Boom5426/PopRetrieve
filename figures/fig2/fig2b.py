@@ -35,8 +35,9 @@ def draw_2b(ax):
     sbt = pd.read_csv(f"{REPO}/results/exp08_signature_baselines/summary_by_task.csv")
     pv = sbt.pivot_table(index='method', columns='task', values='hit@1')
     nq = sbt.pivot_table(index='method', columns='task', values='n_queries')
-    # mean_cosine and cmap_cosine are numerically identical (Extended Data Fig. 1c, Spearman
-    # rho = 1.000 over 54,180 query-candidate scores); assert rather than assume
+    # mean_cosine and cmap_cosine are numerically identical (panel g of this figure, Spearman
+    # rho = 1.000 over 54,180 query-candidate scores; it was Extended Data Fig. 1 until the ED
+    # deck was retired, and it now sits in the same float as the claim); assert rather than assume
     assert np.allclose(pv.loc['mean_cosine'].values, pv.loc['cmap_cosine'].values), \
         "mean_cosine and cmap_cosine are no longer identical; panel 2b must be relabelled"
 

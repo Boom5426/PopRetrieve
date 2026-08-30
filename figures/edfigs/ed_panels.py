@@ -1,16 +1,20 @@
 """PopRetrieve Extended Data figures (ED1-ED4), each blocking one anticipated reviewer attack.
 
-PANEL LIBRARY ONLY SINCE 2026-08-29. The four figures assembled by FIGS at the bottom of this file
-are superseded: edfigs/ed_consolidated.py now draws the whole Extended Data deck, importing the
-draw functions here. Where each one went:
-    draw_ed1c -> ED1a    draw_ed1d -> ED1b    draw_ed1e -> ED1c
-    draw_ed2a -> ED1d    draw_ed2b -> ED1e
-    draw_ed3a -> ED2a    draw_ed3b -> ED2b    draw_ed3d -> ED2c
-    draw_ed1a, draw_ed1b, draw_ed2c, draw_ed3c   DELETED, see ed_consolidated.py for what carries
-                                                 each one instead
+PANEL LIBRARY ONLY. The four figures assembled by FIGS at the bottom of this file are superseded
+twice over: the Extended Data deck they belonged to was consolidated on 2026-08-29 and retired
+outright on 2026-08-30, when all 21 surviving panels moved into the five main figures. The draw
+functions here are imported by fig1_assemble, fig2_assemble, fig3_assemble and fig5_assemble.
+Where each one went:
+    draw_ed1c -> Fig. 2g     draw_ed1d -> Fig. 1g     draw_ed1e -> Fig. 1h
+    draw_ed2a -> Fig. 3j     draw_ed2b -> Fig. 3k
+    draw_ed3a -> Fig. 5h     draw_ed3b -> Fig. 5i     draw_ed3d -> Fig. 5j
+    draw_ed1a, draw_ed1b, draw_ed2c, draw_ed3c   DELETED. Each was carried in full elsewhere:
+        ed1a by Supplementary Table 1, ed1b by Supplementary Table 2(a) plus Fig. 2a's own colour
+        key, ed2c by Fig. 5g (same file, same filter, same BH rule, and Fig. 5g adds s.e.m.),
+        ed3c by Fig. 5c (the same _pick over the same two CSVs, and Fig. 5c adds +/- s.d.).
     draw_ed4a-c   never deployed; the real ED4 was always ed4/ed4_zhao_robustness.py
 Running this file still writes its own previews, which nothing references. Keep FIGS in step with
-the draw functions or delete it; do not treat its output as the shipped figures.
+the draw functions or delete it; do not treat its output as a shipped figure.
 
 ED1 reproducibility basis  | "your data/metrics are non-standard"
 ED2 Class B robustness     | "the null is just underpowered"  (the most important one for a
@@ -69,8 +73,15 @@ METRIC_LABELS = {
 METHOD_DISP = {
     "raw_kmeans_k2": "k-means k=2", "raw_kmeans_k3": "k-means k=3",
     "raw_kmeans_k4": "k-means k=4", "raw_kmeans_k5": "k-means k=5",
-    "raw_kmeans_bestk3": "k-means best-k", "raw_kmeans_bestk4": "k-means best-k",
-    "raw_kmeans_bestk5": "k-means best-k", "response_kmeans_k2": "k-means k=2 (response)",
+    # bestk3/4/5 are ONE method, not three: analysis/identifiability/
+    # subpop_identifiability_landscape.py runs k-means at k = 3, 4 and 5, keeps whichever wins on
+    # silhouette, and names the column after the k that won on that run. Mapping all three to the
+    # bare string "k-means best-k" printed three identical tick labels against three different bar
+    # lengths, which reads as an error; CORRECTIONS.md R10 already records that the nine columns
+    # are 6-7 distinct algorithms. The label now says which k won, so the axis states what the
+    # column is instead of hiding it.
+    "raw_kmeans_bestk3": "k-means best-k (k=3)", "raw_kmeans_bestk4": "k-means best-k (k=4)",
+    "raw_kmeans_bestk5": "k-means best-k (k=5)", "response_kmeans_k2": "k-means k=2 (response)",
     "gmm_k2": "GMM k=2", "pca10_kmeans_k2": "PCA-10 + k-means",
     "pca50_kmeans_k2": "PCA-50 + k-means",
     # The two GMM columns are stored as gmm2_*, not gmm_k2, so they matched nothing and the

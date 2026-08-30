@@ -1,7 +1,8 @@
 """Extended Data Fig. 7: the three conditions re-measured on unconstructed material.
 
-SINCE 2026-08-29 these four panels are Extended Data Fig. 3e-h, drawn by
-edfigs/ed_consolidated.py. build() here still assembles the standalone preview.
+SINCE 2026-08-30 these four panels are main-text Fig. 5k-n, drawn by fig5/fig5_assemble.py, where
+they measure all three of Fig. 5a's requirements on 4,158,278 unconstructed cells. build() here
+still assembles the standalone preview.
 
 WHAT THIS FIGURE IS FOR
 -----------------------
@@ -49,7 +50,7 @@ from scipy.stats import spearmanr
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(REPO, "figures"))
-from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK, PURPLE_SOFT, apply_style, panel_letter, save, soften_axes, strip_titles  # noqa: E402
+from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK, PURPLE_SOFT, apply_style, panel_letter, save, soften_axes, strip_titles, PT_MATH  # noqa: E402
 
 P = os.path.join(REPO, "results", "tahoe_pilot")
 STEM = "ed7_tahoe"
@@ -181,7 +182,8 @@ def draw_d(ax):
     ax.set_ylabel("state-ordering\nSpearman (per line)", fontsize=6.2)
     ax.tick_params(labelsize=5.6)
     ax.text(0.04, 0.96, f"$\\rho$ = {r:+.2f}\n$R^2$ = {r ** 2:.2f}\nn = {len(j)} lines",
-            transform=ax.transAxes, fontsize=5.5, color=INK, va="top", linespacing=1.3)
+            transform=ax.transAxes, fontsize=PT_MATH, color=INK, va="top",
+            linespacing=1.3)
     # The interpretive sentence that used to sit here overlapped the leftmost point and the
     # caption states it anyway; the rho and R2 above carry the panel.
 

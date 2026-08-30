@@ -70,7 +70,7 @@ COMP_TINT = "#FAE6D9"
 #
 # ADOPTED BY the whole deck: main figures 1-5 and Extended Data 1-7. Nothing is left on the
 # saturated FOCAL/COMP pair, and no figure colours its text. The two enforcement passes that
-# hold this are in figures/build_all.py and figures/build_ed.py.
+# hold this is figures/build_all.py.
 #
 # Figure 1 needed one exception and got it as a mark rather than as a licence: its panel c row
 # labels ("Mean", "Population") name whole rows and have no single adjacent mark to bind them to

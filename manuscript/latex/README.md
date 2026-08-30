@@ -52,21 +52,20 @@ below 5 pt. It does **not** know this document's text width: the check reads nom
 sizes, so a figure authored wider than the text block is scaled down by
 `\includegraphics[width=\textwidth]` and can print below 5 pt while the gate reports CLEAN. The
 five main figures are authored at 6.90 in, i.e. the printed width, so their scale factor is 1.00
-and nominal equals printed. So are the three Extended Data figures, and `build_ed.py` measures the
-exported media box and fails the build if one exceeds the text block.
+and nominal equals printed.
 
-Extended Data has its own driver, because copying it by hand did not work: on 2026-07-27 all
-seven shipped Extended Data PDFs were stale renders, and three printed numbers this project has
-retracted, each contradicting its own caption on the same page. On 2026-08-29 those seven figures
-became three: five panels that were carried in full by a main figure or a Supplementary Table were
-deleted, and the surviving twenty-one were redrawn at larger panel sizes by one script,
-`figures/edfigs/ed_consolidated.py`, which also prints the graphic-plus-caption page arithmetic on
-every build.
+The five figures are 7.19 to 9.26 in tall on the page and their captions run 277 to 648 words, so
+graphic and caption cannot share a page and are two floats each: a `[p]` float holding only the
+`\includegraphics`, then a `[p]` float holding only the `\caption` and `\label`. The figure
+counter advances on `\caption`, not on `\begin{figure}`, so the graphic float leaves the number
+alone and the caption float takes it.
 
-```bash
-python figures/build_ed.py            # build all three, report which shipped PDFs are stale
-python figures/build_ed.py --write    # build all seven and sync to manuscript/latex/figures/
-```
+Extended Data no longer exists. It had its own driver because copying it by hand did not work: on
+2026-07-27 all seven shipped Extended Data PDFs were stale renders, and three printed numbers this
+project has retracted, each contradicting its own caption on the same page. On 2026-08-29 the
+seven became three, and on 2026-08-30 the deck was retired: five panels that a main figure or a
+Supplementary Table already carried in full were deleted, and the surviving 21 moved into the five
+main figures. `figures/build_all.py` is now the only figure driver.
 
 | target | built by |
 |---|---|

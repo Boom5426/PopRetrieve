@@ -4,10 +4,11 @@
 > statistics computed over 165 undefined sentinel values, and the Class A/B contrast that
 > compared two different scorers. **Read [CORRECTIONS.md](../../CORRECTIONS.md) before using any
 > number below.** Where this file and CORRECTIONS.md disagree, CORRECTIONS.md is right.
-> ⚠️ **SUPERSEDED, 2026-08-29.** The Extended Data deck is now three figures, not seven, built by
-> [`ed_consolidated.py`](ed_consolidated.py); that file's docstring is the current map and names
-> the five panels that were deleted rather than merged. Everything below describes the retired
-> layout and is kept for provenance.
+> ⚠️ **RETIRED, 2026-08-30.** There is no Extended Data deck. It went from seven figures to three
+> on 2026-08-29, and on 2026-08-30 all 21 surviving panels moved into the five main figures.
+> [`ed_panels.py`](ed_panels.py)'s docstring is the current map: it names the main-figure panel
+> each draw function now feeds, and the five panels that were deleted rather than moved, with what
+> carries each one instead. Everything below describes a retired layout and is kept for provenance.
 
 # Extended Data figures (ED1-ED4)
 
