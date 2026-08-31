@@ -1,6 +1,7 @@
 """PopRetrieve Figure 2: cell populations carry retrievable information beyond mean signatures.
 
-Seven panels, read in one order:
+ARCHETYPE: quantitative grid with one hero panel (a, at 30 per cent of panel area). Seven panels,
+read in one order:
 
     HOW BIG IS IT?
       a  The Hit@1 ladder          every population-level scorer above every mean-level one
@@ -113,14 +114,34 @@ from fig2g import draw_2g  # noqa: E402
 FIGW = 6.90
 
 PAD_TOP, PAD_BOT = 0.05, 0.08
-LETTER_BLOCK = 0.26        # the band above each row holding the bold letter and the panel phrase
-ROW_GAP = 0.28
+# The panel letter alone. It was 0.26 in while every panel also stated a bold conclusion phrase;
+# removing those (see fig2_style) returns 0.36 in to the four rows, and the row gap tightens with
+# them. The height a figure spends on sentences is height it does not spend on evidence.
+LETTER_BLOCK = 0.17
+ROW_GAP = 0.22
 
 # (panel keys in the row, row height in inches). A one-key row is full width.
-ROWS = [(("a",), 1.80),
+# HIERARCHY, MEASURED 2026-08-31. Panel a is a proper hero at 30 per cent of panel area, but below
+# it the page was flat and in one place inverted: panel d, a diagnostic, was the SECOND LARGEST
+# panel in the figure at 14.1 per cent, larger than c, which is one of the figure's two main
+# results, and larger than every robustness panel. Row 3 was also the tallest row on the page and
+# it holds the two diagnostics. d is now the smallest panel at 8.7 per cent, which is what it
+# should be, and the tier averages run 18.6 / 11.3 / 10.8 instead of 20.2 / 12.0 / 11.8.
+#
+# The third tier is only just below the second, and that is honest rather than fixable: with seven
+# panels and a 30 per cent hero the remaining six share 70 per cent, so they land between 9 and 13
+# per cent whatever is done. Panel e sits at the top of that band because of its composition strip,
+# which exists because alpha was being described as the wrong quantity until CORRECTIONS.md R45,
+# and shrinking it away would undo that fix.
+ROWS = [(("a",), 1.66),
         (("b", "c"), 1.58),
-        (("d", "e"), 1.95),
-        (("f", "g"), 1.86)]
+        (("d", "e"), 1.50),
+        (("f", "g"), 1.54)]
+
+# Box widths per row, in inches, summing to FIGW. A row of one is full width; a row of two is
+# split evenly unless named here. Row 3 is deliberately uneven: d is two point estimates and does
+# not need half the page, while e carries five alpha points under a composition strip.
+ROW_WIDTHS = {("d", "e"): (2.85, 4.05)}
 
 # (left, right, bottom) pad in inches inside the panel BOX. Top is always zero: the panel phrase
 # is drawn at transAxes y = 1.0 and lives in the LETTER_BLOCK band above the axes. Left pads are
@@ -137,7 +158,7 @@ PADS = {"a": (0.94, 0.08, 0.46),
 
 # e is a curve under a schematic strip that says what its x axis physically means, the same
 # construction figure 1 uses for its two continuum panels.
-E_STRIP_H, E_STRIP_GAP = 0.42, 0.08
+E_STRIP_H, E_STRIP_GAP = 0.34, 0.08
 
 
 def _boxes():
@@ -146,9 +167,11 @@ def _boxes():
     y = PAD_TOP
     for keys, row_h in ROWS:
         y += LETTER_BLOCK
-        box_w = FIGW / len(keys)
+        widths = ROW_WIDTHS.get(keys, tuple(FIGW / len(keys) for _ in keys))
+        assert abs(sum(widths) - FIGW) < 1e-9, (keys, widths)
         for i, k in enumerate(keys):
-            x0 = i * box_w
+            box_w = widths[i]
+            x0 = sum(widths[:i])
             letters[k] = (x0, y)
             left, right, bottom = PADS[k]
             ax_x, ax_w = x0 + left, box_w - left - right
@@ -205,6 +228,33 @@ def _assert_floor(fig, floor=PT_FLOOR):
     return fig
 
 
+
+def _assert_no_titles(fig, cap=PT_ANNOT):
+    """Refuse to return a figure in which any PANEL draws text above ``cap``.
+
+    The mechanical form of the rule in fig2_style: the panels carry evidence and the caption
+    carries the argument. A conclusion sentence set over a panel is always the largest text on it,
+    so capping panel text at the annotation size is what stops one coming back. The panel letters
+    are exempt because fig2_assemble draws them, not the panels, and they are navigation rather
+    than claims.
+
+    It is deliberately a size gate and not a wording gate. Nothing here can tell a claim from a
+    label, but a claim that has to fit at 7.2 pt beside the marks it describes is a caption
+    sentence that has already lost the argument for being on the panel.
+    """
+    letters = set(fig.texts)
+    bad = []
+    for t in fig.findobj(mtext.Text):
+        if t in letters or not str(t.get_text()).strip() or not t.get_visible():
+            continue
+        if t.get_fontsize() > cap + 1e-6:
+            bad.append((round(t.get_fontsize(), 2), str(t.get_text()).replace("\n", "/")[:44]))
+    assert not bad, (
+        f"Figure 2 caps panel text at {cap} pt and these are above it: {sorted(bad)[:8]}. "
+        f"A panel states no conclusion; move the sentence to the caption.")
+    return fig
+
+
 def build(apply_style, panel_letter):
     # This figure's ladder sits one step above the deck's (8, 7, 6); see fig2_style. panel_letter
     # is accepted to keep build_all's contract and deliberately not used: its size is fixed at
@@ -228,7 +278,7 @@ def build(apply_style, panel_letter):
     # strip_titles clears rc titles so a panel's standalone preview can label itself without the
     # composite inheriting it. The one phrase each panel states over itself here is drawn ink via
     # fig2_style.title and survives on purpose.
-    return _assert_floor(strip_titles(fig))
+    return _assert_no_titles(_assert_floor(strip_titles(fig)))
 
 
 if __name__ == "__main__":

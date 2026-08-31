@@ -8,7 +8,7 @@ that population into a signature. The claim is carried by a separation, not by a
 population-level scorer sits above every mean-level scorer on macro-average Hit@1, so the ladder
 is sorted by value and grouped by family at the same time and the grouping costs the sort nothing.
 That separation is ASSERTED at draw time (`_load`), because it is the whole design: if new data
-broke it, the grouping, the family washes and the panel phrase would all start lying quietly.
+broke it, the grouping and the two family washes would start lying quietly.
 
 Everything here is objective-aligned (Class A). Hit@1 rewards correspondence between response
 populations, which is the information population-level retrieval uses. Whether that information is
@@ -59,10 +59,53 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
     forbids shrinking it. The unabbreviated names belong in the caption.
 6.  The headline bracket compares the best population scorer with the worst mean scorer, which is
     the widest honest pair on the panel. The narrowest pair, the two rows either side of the
-    family gap, is visible as a gap the reader can read off the same axis, and the panel phrase
-    states the separation that holds for ALL pairs.
+    family gap, is visible as a gap the reader can read off the same axis. Nothing on the panel
+    now STATES the separation that holds for ALL pairs; the two washes do it, by not overlapping
+    along the axis, and the caption says it in words.
 7.  The difference is printed from unrounded values, +0.448, not as the difference of the two
     printed three-decimal values, which would read +0.449.
+
+THE RESTRAINT PASS AND THE SHORTER BOX (2026-08-31)
+---------------------------------------------------
+The panel stated one bold sentence over itself, "Every population scorer beats every mean scorer".
+It is deleted, not shrunk: seven panels each stating a conclusion is seven claims competing for one
+page, and the figure carries evidence while the legend carries the argument. That phrase now opens
+this panel's caption entry. fig2_style.title() is gone and fig2_assemble._assert_no_titles caps
+panel text at PT_ANNOT, so it cannot come back at a smaller size. Nothing on the panel replaces it.
+
+"+0.448 Hit@1" came down with it, from PT_TITLE (8.5 pt) to PT_ANNOT (7.2 pt). It is a statistic
+rather than a sentence, so it survived the deletion, but the cap applies to statistics too. It is
+still meant to be the most prominent thing here, and it is now carried by three things that are not
+type size: bold weight against a page of regular text, its isolation in the right-hand block that
+nothing else occupies, and the bracket, whose stroke went from 0.7 to 0.9 so it ranks visibly above
+every hairline on the panel while staying below a plotted mark.
+
+The box went from 5.88 x 1.34 in to 5.88 x 1.20 in. Two consequences were re-measured rather than
+scaled by eye:
+
+  * Every vertical offset that used to be a fraction of the axes height, the x label and the
+    provenance key at -0.175 in axes coordinates and the two headline lines at +-0.55 row units,
+    is now written in INCHES and converted through ``_v`` / ``AXES_H_IN``. A fraction of a height
+    that moved is a constant that quietly means something else.
+  * The row pitch fell from 0.1537 to 0.1361 in. The scorer names set at PT_TICK, so the pitch is
+    asserted against that type size (``ROW_IN``) rather than eyeballed off the render, and the two
+    bar heights stay in row units so they tighten with the pitch instead of colliding with it.
+    BAR_H rose from 0.46 to 0.50 row units and BAR_H_HEAD from 0.66 to 0.70 so the bars keep close
+    to their old PRINTED thickness on the tighter pitch; the family gap rose from 0.60 to 0.70 row
+    units for the same reason, which leaves the white channel between the two families slightly
+    wider in inches than it was on the taller panel. That channel is the separation the deleted
+    sentence used to assert, so it is the last thing that should have been allowed to shrink.
+
+Two things the audit of that pass changed. The tie marker read "identical on all 7 settings
+(panel g)", which states the asserted fact as a phrase rather than as a statistic and was the
+longest string of ink inside the plotting area. It now reads "identical, 7/7 settings (panel g)",
+the same fact as a count, 1.28 in wide against 1.42 in, in the part of the panel the eye crosses
+on its way to the headline. And AXES_IN / AXES_H_IN were an unchecked copy of fig2_assemble's
+ledger, which every inch offset in this module is derived from, so a ledger change would have
+moved the x label, the provenance key and the two headline lines without a word. draw_2a now
+asserts that the axes it is handed IS the box it was authored against. The check is made against
+the axes rather than against the ledger because fig2_assemble imports this module and cannot be
+imported back.
 
 Run standalone: python fig2a.py
 """
@@ -78,26 +121,43 @@ from matplotlib.patches import Rectangle
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig2_style import (FAMILY_NAME, HAIRLINE, LW_HAIR, MEAN, MEAN_WASH,  # noqa: E402
                         POP, POP_WASH, PT_ANNOT, PT_SMALL, PT_TICK, PT_TITLE,
-                        SCORERS, SHARED, SUBTLE, TEXT, title)
+                        SCORERS, SHARED, SUBTLE, TEXT)
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SRC = os.path.join(REPO, "results", "exp08_signature_baselines", "summary.csv")
 
 # ------------------------------------------------------------------------------ geometry
-# Authored against the composite's own box for panel a: 5.88 x 1.34 in. The tracks deliberately
-# do NOT run the full width. x = 1 (the attainable Hit@1 maximum) sits at TRACK_IN inches, and
-# everything right of it is the headline block, so the panel reads as bars on the left and the
-# claim on the right.
+# Authored against the composite's own box for panel a: 5.88 x 1.20 in, which is fig2_assemble's
+# row height 1.66 less its 0.46 in bottom pad. The tracks deliberately do NOT run the full width.
+# x = 1 (the attainable Hit@1 maximum) sits at TRACK_IN inches, and everything right of it is the
+# headline block, so the panel reads as bars on the left and the comparison on the right.
 TRACK_IN = 3.55             # inches spanned by Hit@1 = 0 .. 1
 AXES_IN = 5.88              # the panel's axes width, from fig2_assemble's ledger
+AXES_H_IN = 1.20            # the panel's axes height, same ledger. 1.34 before the compaction.
 XMAX = AXES_IN / TRACK_IN   # right edge of the axes, in Hit@1 units
 
 def _u(inches: float) -> float:
     """Inches on the printed page -> x-axis (Hit@1) units. Keeps the ledger readable."""
     return inches / TRACK_IN
 
-FAM_GAP = 0.60              # blank rows between the two family blocks
-BAR_H, BAR_H_HEAD = 0.46, 0.66
+FAM_GAP = 0.70              # blank rows between the two family blocks
+Y_PAD = 0.56                # air above the top wash and below the bottom one, in row units
+BAR_H, BAR_H_HEAD = 0.50, 0.70
+assert BAR_H_HEAD < 1.0, "a bar taller than the row pitch would touch its neighbour"
+
+# The y axis is measured in ROW UNITS, one per scorer, so the printed pitch is whatever the box
+# height divides into. It is derived here rather than left implicit, because the box lost 0.14 in
+# and the pitch is what has to clear the scorer names.
+Y_SPAN = (len(SCORERS) - 1) + FAM_GAP + 2 * Y_PAD
+ROW_IN = AXES_H_IN / Y_SPAN          # printed inches per row unit: 0.1361 at 1.20 in
+assert ROW_IN * 72.0 >= PT_TICK * 1.30, (
+    f"the ladder's row pitch is {ROW_IN * 72.0:.2f} pt and the scorer names set at {PT_TICK} pt; "
+    "adjacent rows would crowd. Drop a row, widen the box, or take the names into the caption.")
+
+def _v(inches: float) -> float:
+    """Inches -> y-axis (row) units. The box height moved once; it can move again."""
+    return inches / ROW_IN
+
 X_LABEL_R = -_u(0.062)      # right edge of the scorer-name column
 X_DAGGER = -_u(0.030)       # the published-baseline glyph, on its own fixed column
 X_FAMILY = -_u(0.845)       # the rotated family label
@@ -106,7 +166,8 @@ X_VALUE_R = 1.0 + _u(0.300)  # right edge of the value column
 X_BRACKET = 1.0 + _u(0.500)  # the headline bracket's spine
 X_ARM = 1.0 + _u(0.375)     # where the bracket's arms stop, clear of the value column
 X_HEAD = 1.0 + _u(0.620)    # left edge of the headline text
-LW_HEAD = 0.7               # headline bracket: one notch above LW_HAIR, so the two brackets rank
+LW_HEAD = 0.9               # headline bracket: above LW_HAIR, and inked, so the brackets rank
+FOOT_IN = 0.245             # drop of the x label and the provenance key below the axes, in inches
 
 
 def _load():
@@ -171,6 +232,18 @@ def _load():
 
 def draw_2a(ax):
     """The Hit@1 ladder: every population-level scorer above every mean-level one."""
+    # Everything below is positioned in INCHES and converted through ROW_IN, _u and _v, so the
+    # panel is only correct inside the box it was authored for. fig2_assemble owns that box and
+    # cannot be imported here (it imports this module), so the ledger is checked against the axes
+    # actually handed in. Without this the two constants above are a copy that can go stale in
+    # silence, and a stale AXES_H_IN moves the x label, the key and the headline lines together.
+    fig_w, fig_h = ax.figure.get_size_inches()
+    box = ax.get_position()
+    got_w, got_h = box.width * fig_w, box.height * fig_h
+    assert abs(got_w - AXES_IN) < 0.01 and abs(got_h - AXES_H_IN) < 0.01, (
+        f"panel a is authored against a {AXES_IN} x {AXES_H_IN} in axes and was handed "
+        f"{got_w:.3f} x {got_h:.3f} in. Update AXES_IN / AXES_H_IN from fig2_assemble's ledger "
+        "and re-measure FOOT_IN and the headline offsets; do not let the inch constants drift.")
     agg, pop, mean, tied, best, worst, n_cells = _load()
     rows = [(m, "pop") for m in pop] + [(m, "mean") for m in mean]
     ys = {m: (i if f == "pop" else i + FAM_GAP) for i, (m, f) in enumerate(rows)}
@@ -198,8 +271,11 @@ def draw_2a(ax):
             ax.text(X_DAGGER, y, "†", fontsize=PT_SMALL, color=SUBTLE, ha="center",
                     va="center", clip_on=False)
         # Value column, right-aligned past the end of the block rather than chasing each bar tip.
+        # The two bracketed rows are emphasised by WEIGHT and by ink, not by size: they used to set
+        # at PT_ANNOT, which put two more 7.2 pt bold strings on the panel and left the headline
+        # number competing with the very values it is the difference of.
         ax.text(X_VALUE_R, y, f"{v:.3f}", ha="right", va="center", clip_on=False,
-                fontsize=PT_ANNOT if big else PT_SMALL, color=TEXT if big else SUBTLE,
+                fontsize=PT_SMALL, color=TEXT if big else SUBTLE,
                 fontweight="bold" if big else "normal")
 
     # Family labels: ink letters plus a swatch, which is the one place this figure lets a label
@@ -222,32 +298,37 @@ def draw_2a(ax):
     for y in (y_hi, y_lo):
         ax.plot([x_t - _u(0.045), x_t], [y, y], color=SHARED, lw=LW_HAIR, zorder=3, clip_on=False)
     ax.text(x_t + _u(0.045), 0.5 * (y_hi + y_lo),
-            f"identical on all {n_cells} settings (panel g)", fontsize=PT_SMALL, color=TEXT,
+            f"identical, {n_cells}/{n_cells} settings (panel g)", fontsize=PT_SMALL, color=TEXT,
             ha="left", va="center")
 
     # ---------------------------------------------------------------- the headline comparison
     d = float(agg[best]) - float(agg[worst])          # unrounded, so this prints +0.448 not +0.449
     ratio = float(agg[best]) / float(agg[worst])
     y_b, y_w = ys[best], ys[worst]
-    ax.plot([X_BRACKET, X_BRACKET], [y_b, y_w], color=SHARED, lw=LW_HEAD, zorder=3,
+    # Ink, where the tie marker is grey: the two brackets do different jobs and now rank by both
+    # weight and tone. This one is the only structural mark on the panel that is not machinery.
+    ax.plot([X_BRACKET, X_BRACKET], [y_b, y_w], color=TEXT, lw=LW_HEAD, zorder=3,
             clip_on=False)
     for y in (y_b, y_w):
-        ax.plot([X_ARM, X_BRACKET], [y, y], color=SHARED, lw=LW_HEAD, zorder=3, clip_on=False)
+        ax.plot([X_ARM, X_BRACKET], [y, y], color=TEXT, lw=LW_HEAD, zorder=3, clip_on=False)
     y_mid = 0.5 * (y_b + y_w)
-    ax.text(X_HEAD, y_mid - 0.55, f"+{d:.3f} Hit@1", fontsize=PT_TITLE, fontweight="bold",
+    # PT_ANNOT, not PT_TITLE: the cap applies to statistics too. What makes this the loudest thing
+    # on the panel is the bold weight, the empty block around it, and the bracket, not the size.
+    ax.text(X_HEAD, y_mid - _v(0.075), f"+{d:.3f} Hit@1", fontsize=PT_ANNOT, fontweight="bold",
             color=TEXT, ha="left", va="center", clip_on=False)
-    ax.text(X_HEAD, y_mid + 0.55,
+    ax.text(X_HEAD, y_mid + _v(0.075),
             f"{SCORERS[best]['label']} above {SCORERS[worst]['label']}, {ratio:.2f}x",
             fontsize=PT_SMALL, color=SUBTLE, ha="left", va="center", clip_on=False)
 
     # ---------------------------------------------------------------- axes furniture
     ax.set_xlim(0.0, XMAX)
-    ax.set_ylim(ys[rows[-1][0]] + 0.56, ys[rows[0][0]] - 0.56)     # inverted: best scorer on top
+    ax.set_ylim(ys[rows[-1][0]] + Y_PAD, ys[rows[0][0]] - Y_PAD)   # inverted: best scorer on top
     ax.set_xticks([0.0, 0.25, 0.5, 0.75, 1.0])
     ax.set_yticks([])
     ax.set_xlabel(f"Hit@1, macro-average across {n_cells} task settings")
-    # Centred under the TRACK rather than under the axes, which extends past it.
-    ax.xaxis.set_label_coords(0.5 / XMAX, -0.175)
+    # Centred under the TRACK rather than under the axes, which extends past it, and dropped by a
+    # measured 0.245 in rather than by a fraction of a height that has already changed once.
+    ax.xaxis.set_label_coords(0.5 / XMAX, -FOOT_IN / AXES_H_IN)
     ax.tick_params(axis="y", length=0)
     ax.tick_params(axis="x", length=2.2, width=0.6, color=HAIRLINE, labelcolor=TEXT,
                    labelsize=PT_TICK)
@@ -257,18 +338,16 @@ def draw_2a(ax):
     ax.spines["bottom"].set_linewidth(LW_HAIR)
     ax.spines["bottom"].set_bounds(0.0, 1.0)       # the scale exists only under the tracks
     # Key for the provenance glyph, kept off the ladder and out of a legend box.
-    ax.text(1.0, -0.175, "† published baseline", transform=ax.transAxes, fontsize=PT_SMALL,
-            color=SUBTLE, ha="right", va="center")
-
-    title(ax, "Every population scorer beats every mean scorer")
+    ax.text(1.0, -FOOT_IN / AXES_H_IN, "† published baseline", transform=ax.transAxes,
+            fontsize=PT_SMALL, color=SUBTLE, ha="right", va="center")
 
 
 if __name__ == "__main__":
     sys.path.insert(0, os.path.join(REPO, "figures"))
     from figstyle import apply_style
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
-    fig = plt.figure(figsize=(6.90, 1.60))
-    ax = fig.add_axes([0.94 / 6.90, 0.46 / 1.60, 5.88 / 6.90, 1.34 / 1.60])
+    fig = plt.figure(figsize=(6.90, 1.66))
+    ax = fig.add_axes([0.94 / 6.90, 0.46 / 1.66, 5.88 / 6.90, AXES_H_IN / 1.66])
     draw_2a(ax)
     out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "2a.png")
     fig.savefig(out, dpi=300)

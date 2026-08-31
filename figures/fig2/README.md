@@ -12,17 +12,54 @@ Read in four movements: how big, how general, can we predict it, is it one score
 
 | Panel | What the reader should see in three seconds | Reads |
 |---|---|---|
-| a | "Every population scorer beats every mean scorer" | `results/exp08_signature_baselines/summary.csv` |
-| b | "Large on both mixtures, reversed on Frangieh" | `results/exp08_signature_baselines/summary_by_task.csv` |
-| c | "The gain survives partial observation" | `results/exp12_partial_observed_retrieval/per_query_scores.csv` |
-| d | "Recommendation does not enrich the gain" | same per-query file |
-| e | "K562 collapses; A549 and MCF7 do not" | `results/exp01_sciplex3_controlled/metrics_summary.csv` |
-| f | "All five intervals clear zero" | same per-query file |
-| g | "Score families agree within, not across" | `figures/source_data/ed1_metric_correlation.csv` |
+| a | four blue bars all longer than four orange, with a white channel between the bands | `results/exp08_signature_baselines/summary.csv` |
+| b | two long paired jumps, then one that goes the other way | `results/exp08_signature_baselines/summary_by_task.csv` |
+| c | a step curve lying almost entirely in the blue half-plane | `results/exp12_partial_observed_retrieval/per_query_scores.csv` |
+| d | two estimates with overlapping intervals, and a difference sitting on zero | same per-query file |
+| e | one curve falling to the axis while two do not | `results/exp01_sciplex3_controlled/metrics_summary.csv` |
+| f | five intervals, none touching zero | same per-query file |
+| g | two saturated blocks on the diagonal, near-white everywhere else | `figures/source_data/ed1_metric_correlation.csv` |
 
-Each phrase is drawn ink at 8.5 pt, not an rc title, and each is asserted against the data it
-describes: if the data stopped supporting the sentence, the build breaks rather than the panel
-quietly printing a false one. Panels e and f build their phrases from the drawn values.
+## No panel states a conclusion
+
+Every panel used to carry one bold phrase over itself, seven in all. They are gone, and
+`fig2_style.title()` is deleted rather than deprecated so none can come back. Only four kinds of
+text may appear on a panel: axis and group names, statistics (median, rho, P, n, and the values
+being compared), a two or three word direction hint, and nothing else. Every deleted phrase's
+content is already in the Fig. 2 caption.
+
+`fig2_assemble._assert_no_titles` enforces this mechanically: **no panel may draw text above
+7.2 pt**, and the build fails if one does. It is a size gate rather than a wording gate, because no
+code can tell a claim from a label, but a claim that has to fit at 7.2 pt beside the marks it
+describes has already lost the argument for being on the panel.
+
+One casualty is worth naming. Panel a's `+0.448 Hit@1` was set at 8.5 pt because it is the headline
+number of the whole figure rather than a sentence. It is now 7.2 pt like every other statistic, and
+stays prominent through weight, isolation in the right-hand block, and the bracket tying it to the
+two rows it compares.
+
+## Archetype and panel hierarchy
+
+**Archetype: quantitative grid with one hero panel.** Panel a holds 30 per cent of panel area,
+which is a genuine hero; the question was what sits under it.
+
+Measured on 2026-08-31, the page below the hero was flat and in one place inverted: **panel d, a
+diagnostic reporting a null, was the second largest panel in the figure at 14.1 per cent**, larger
+than c, which is one of the figure's two main results, and larger than every robustness panel. Row
+3 was also the tallest row on the page and it holds the two diagnostics. d is now the smallest
+panel at 8.7 per cent.
+
+| tier | panels | share of panel area, each |
+|---|---|---|
+| 1, the results | a, b, c | 18.6% |
+| 2, robustness and structure | f, g | 11.3% |
+| 3, diagnostics | d, e | 10.8% |
+
+**The third tier is only just below the second, and that is honest rather than fixable.** With
+seven panels and a 30 per cent hero the remaining six share 70 per cent, so they land between 9 and
+13 per cent whatever is done. Panel e sits at the top of that band because of its composition
+strip, which exists because alpha was described as the wrong quantity until CORRECTIONS.md R45;
+shrinking it away would undo that fix.
 
 ## Verified numbers
 
@@ -85,16 +122,19 @@ quietly printing a false one. Panels e and f build their phrases from the drawn 
 ## Print geometry, authored 1:1
 
 The manuscript text block is 6.951 in and the figure enters with
-`\includegraphics[width=\textwidth]`. The canvas is **6.90 x 9.20 in** and exports 6.92 x 9.22, so
-LaTeX scales it by 1.004 and nominal point size is printed point size. The float budget is the
-9.461 in text block less about 16/72 in of overhead, i.e. 9.238 in, so the height has 0.018 in of
-margin: **do not grow the canvas without re-checking `Float too large` in the build log.**
+`\includegraphics[width=\textwidth]`. The canvas is **6.90 x 7.75 in** and exports 6.92 x 7.77
+(176 x 197 mm), so LaTeX scales it by 1.004 and nominal point size is printed point size. The float
+budget is the 9.461 in text block less about 16/72 in of overhead, i.e. 9.238 in, so there is now
+1.47 in of headroom; it was 0.018 in before the 2026-08-31 compaction took the page from 234 mm.
 
 Layout is an explicit inch ledger in `fig2_assemble.py`: four rows, `a` alone at full width, then
 `b|c`, `d|e`, `f|g`. It was three panels per row until 2026-08-31, which left each about 1.7 in
 wide and forced six annotations down to 5.6 pt. Two per row buys the **6.5 pt floor** that
-`fig2_assemble._assert_floor` now enforces, above the deck's 5 pt production limit, and mathtext
-is measured at its effective 0.7x size.
+`fig2_assemble._assert_floor` enforces, above the deck's 5 pt production limit, with mathtext
+measured at its effective 0.7x size.
+
+Row 3 is the one row with uneven box widths (`ROW_WIDTHS`): d is two point estimates and does not
+need half the page, while e carries five alpha points under a composition strip.
 
 ## Files
 

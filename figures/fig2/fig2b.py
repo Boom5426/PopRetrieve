@@ -21,7 +21,7 @@ producing a false panel:
     marker is labelled "mean cosine" while cmap_cosine sits in the grey background: they are the
     same score, so drawing both at full weight would double-count one representation.
   * energy beats mean cosine on both constructed tasks and loses on Frangieh, which is what the
-    panel phrase says.
+    three signed difference labels say, in sign and in size.
   * on Frangieh, mean cosine is the maximum over ALL EIGHT scorers, which is what "mean wins"
     says. If it were only beating energy, that label would be too strong and the assert fires.
   * that reversal is at most SMALL_REVERSAL wide, which is what judgement call 7 tells the reader.
@@ -29,6 +29,33 @@ producing a false panel:
   * the two protagonists still belong to the families whose colours they are drawn in, as
     fig2_style classifies them and panel a draws them.
   * no Hit@1 value falls outside the fixed y range, so no dot is clipped without a trace.
+
+THE RESTRAINT PASS (2026-08-31)
+-------------------------------
+One piece of text is gone: the phrase "Large on both mixtures, reversed on Frangieh", set over the
+axes at PT_TITLE by the fig2_style.title() helper that this pass deleted. It is not preserved
+anywhere on the panel. It was a conclusion, the figure's panels carry evidence and its caption
+carries the argument, and the caption entry already carries what the phrase said, in numbers
+rather than in the word: "The advantage is +0.56 on the controlled mixture and +0.50 on the
+cross-line mixture, and reverses to -0.02 on Frangieh". The word "large" itself now appears in no
+caption and on no panel; it survives as prose in this module's opening claim and in
+figures/fig2/README.md's panel-b row. See the comment block in fig2_style where title() used
+to be.
+
+Nothing else moved. The panel BOX lost 0.09 in from the top, all of it the band the phrase sat in
+above the axes; the axes rect is 2.63 x 1.08 in, exactly what it was, so every constant tuned
+against it (XLIM, LABEL_DX, the n line's -0.275, the separator's 0.52 top) still holds against the
+measurement that set it and none was rescaled. The standalone canvas below was re-cut from 1.84 to
+1.75 in so that running this file alone reproduces the printed box rather than the old one.
+
+What the deletion cost, and what pays for it: the phrase named the two mixture gains "large" and
+the Frangieh result "reversed". The marks say both without it. Large is the two connectors that
+climb most of the axis with "+0.56" and "+0.50" written beside them; reversed is the one connector
+that falls, its "-0.02" set bold, and "mean wins" under it. What is genuinely no longer on the
+panel is the word "large" itself, which was a judgement about the size and not a reading of it.
+LARGE_GAIN survives the phrase deliberately: it now guards the two prose statements named
+above rather than a drawn label, so the word cannot outlive the numbers just because it moved
+off the panel.
 
 JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
 -------------------------------------------------------
@@ -51,10 +78,11 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    rule under the axis would be more explicit, but the panel's bottom band is 0.50 in and already
    holds a two-line task name and the n line; a fourth row would have pushed text below the
    figure's 6.5 pt floor or outside the panel box.
-6. "mean wins" is set bold, which makes it the heaviest ink among the MARKS (the panel phrase
-   above the axes is heavier still, and is meant to be). The Frangieh MARKERS are drawn at exactly
-   the same size and weight as every other task's, deliberately: size is not a channel this figure
-   uses, and enlarging the winning marker would read as a larger value.
+6. "mean wins" and the bold "-0.02" beside it are now the heaviest ink on the panel, with the
+   conclusion phrase that used to outweigh them gone. That is deliberate and it is the one place
+   the panel points: Frangieh is the task this panel exists to show. The Frangieh MARKERS are
+   still drawn at exactly the same size and weight as every other task's: size is not a channel
+   this figure uses, and enlarging the winning marker would read as a larger value.
 7. The reversal is written as -0.02 and it is small in absolute terms: 2 of Frangieh's 90 queries.
    This panel draws no interval, because the source table carries none, so "mean wins" is a
    statement about the point estimates that are drawn and must not be read as a tested difference.
@@ -92,8 +120,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # the marker size that carries a claim and the two scorer names it prints in ink from there. Every
 # panel used to carry its own copy of the palette, which made "one edit recolours the deck" untrue.
 from fig2_style import (FAINT, HAIRLINE, LW_HAIR, LW_LINE, MEAN, MS_DOT,  # noqa: E402
-                        POP, PT_ANNOT, PT_SMALL, PT_TICK, SCORERS, SHARED, SUBTLE, TEXT,
-                        title)
+                        POP, PT_ANNOT, PT_SMALL, PT_TICK, SCORERS, SHARED, SUBTLE, TEXT)
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SRC = "results/exp08_signature_baselines/summary_by_task.csv"
@@ -106,9 +133,13 @@ POP_METHOD, MEAN_METHOD = "global_energy", "mean_cosine"
 CONTEXT = ["coverage_mean", "coverage_worst", "pca_dist", "pca_mean", "cmap_wtcs", "cmap_cosine"]
 ANCHOR = "controlled"       # the slot the two direct labels hang off; see the note where drawn
 
-# The word "large" in the panel phrase stands on this threshold. It is a choice, not a measurement,
-# so it is named and asserted rather than left implicit: both mixture gains currently clear it, at
-# +0.56 and +0.50.
+# The word "large" is no longer drawn: it survives in this module's opening claim and in
+# figures/fig2/README.md's panel-b row, and it stands on this threshold in both. It is a choice,
+# not a measurement, so it is named and asserted rather than left implicit: both mixture gains
+# currently clear it, at +0.56 and +0.50. The assert outlives the drawn phrase because prose off
+# the panel goes stale exactly as easily, and nothing else would catch it. The manuscript caption
+# for b states the three differences as numbers and uses no such word, so it needs no guard here
+# beyond the three drawn values themselves.
 LARGE_GAIN = 0.40
 # The reversal is asserted to stay this small, so nobody can inherit the restrained wording of the
 # panel for a gap that has grown into a finding. 0.05 of 90 queries is between 4 and 5 of them.
@@ -169,12 +200,13 @@ def draw_2b(ax):
     e = hit.loc[POP_METHOD, tasks].astype(float)
     m = hit.loc[MEAN_METHOD, tasks].astype(float)
     d = e - m
-    # The panel phrase, and the "mean wins" label, are claims about these numbers. Assert them so
-    # neither can outlive the data.
-    assert d["controlled"] > LARGE_GAIN and d["crossline"] > LARGE_GAIN, \
-        f"the mixture gains are no longer above {LARGE_GAIN}; the panel phrase says 'large'"
+    # The three drawn differences, the "mean wins" label and the prose that survives off the
+    # panel are all claims about these numbers. Assert them so none can outlive the data.
+    assert d["controlled"] > LARGE_GAIN and d["crossline"] > LARGE_GAIN, (
+        f"the mixture gains are no longer above {LARGE_GAIN}, so the word 'large' in this "
+        f"module's opening claim and in figures/fig2/README.md's panel-b row is now false")
     assert d["frangieh"] < 0, \
-        "energy no longer trails on Frangieh; the panel phrase says 'reversed'"
+        "energy no longer trails on Frangieh; the drawn difference and 'mean wins' say it does"
     # mean cosine ties with its own duplicate cmap_cosine on Frangieh, so idxmax could return
     # either name; compare on value instead.
     assert m["frangieh"] >= hit["frangieh"].max() - 1e-12, \
@@ -255,8 +287,6 @@ def draw_2b(ax):
         ax.spines[side].set_color(HAIRLINE)
         ax.spines[side].set_linewidth(LW_HAIR)
 
-    title(ax, "Large on both mixtures, reversed on Frangieh")
-
 
 if __name__ == "__main__":
     sys.path.insert(0, os.path.join(REPO, "figures"))
@@ -264,8 +294,10 @@ if __name__ == "__main__":
 
     from fig2_style import PT_TITLE
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
-    fig = plt.figure(figsize=(3.45, 1.84))
-    ax = fig.add_axes([0.72 / 3.45, 0.50 / 1.84, 2.63 / 3.45, 1.08 / 1.84])
+    # The printed box: 2.63 x 1.08 in of axes, with fig2_assemble's pads and its 0.17 in
+    # letter band around it. It was 1.84 in tall while the panel also stated a conclusion.
+    fig = plt.figure(figsize=(3.45, 1.75))
+    ax = fig.add_axes([0.72 / 3.45, 0.50 / 1.75, 2.63 / 3.45, 1.08 / 1.75])
     draw_2b(ax)
     out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "2b.png")
     fig.savefig(out, dpi=300)

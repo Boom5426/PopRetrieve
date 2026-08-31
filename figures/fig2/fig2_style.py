@@ -86,7 +86,7 @@ MEAN_WASH = "#FBF0E4"
 
 # ---------------------------------------------------------------------------------- type
 PT_LETTER = 9.5             # bold panel letter, drawn by fig2_assemble
-PT_TITLE = 8.5              # the one phrase a panel is allowed to state over itself
+PT_TITLE = 8.5              # RETIRED with title(); kept only so the gate can name it
 PT_ANNOT = 7.2              # ordinary annotation
 PT_TICK = 6.8               # axis tick labels
 PT_EQ = 9.3                 # any label containing mathtext; see the note above
@@ -117,15 +117,31 @@ FAMILY_COLOUR = {"pop": POP, "mean": MEAN}
 FAMILY_NAME = {"pop": "Population-level", "mean": "Mean-level"}
 
 
-def title(ax, text, x=0.0, y=1.0, ha="left", va="bottom", color=TEXT, weight="bold", **kw):
-    """The single phrase a panel states over itself. Everything longer belongs in the caption.
-
-    Drawn ink, not an rc title: figstyle.strip_titles clears rc titles from every composite, and
-    this figure wants the phrase to survive that on purpose. It must be literally true of what is
-    drawn, short enough for one line at half width, and never a restatement of the axis label.
-    """
-    return ax.text(x, y, text, transform=ax.transAxes, fontsize=PT_TITLE, ha=ha, va=va,
-                   color=color, fontweight=weight, **kw)
+# THERE IS NO title() HELPER, AND THAT IS THE POINT.
+#
+# Every panel used to state one bold phrase over itself: "Every population scorer beats every mean
+# scorer", "Gate does not enrich", and five more. Seven conclusion sentences on one page is seven
+# claims competing for the reader's attention, and it is not what a Nature-family main figure does:
+# the figure carries visual evidence and the legend carries the argument. Each of those phrases now
+# opens its panel's caption entry, where it costs no space and can be qualified properly. Figure 3
+# was cleared the same way on the same day.
+#
+# The helper is deleted rather than deprecated, and fig2_assemble._assert_no_titles enforces what
+# its absence intends: no panel may draw text above PT_ANNOT. Only four kinds of text are allowed.
+#
+#   1. the panel letter          drawn by fig2_assemble, not by the panel
+#   2. axis and group names      what the quantity is, and what the rows or groups are
+#   3. necessary statistics      median, rho, P, n, and the values being compared
+#   4. a very short direction    "mean better" / "population better", two or three words
+#
+# Anything else belongs in the caption. When a panel feels like it needs a sentence, that is the
+# signal that the drawing is not carrying its own weight yet.
+#
+# One casualty is worth naming. Panel a's "+0.448 Hit@1" was set at PT_TITLE, because it is the
+# headline number of the whole figure rather than a sentence. It now sets at PT_ANNOT like every
+# other statistic. It is still the most prominent thing on that panel, carried by weight, by
+# isolation in the right-hand block, and by the bracket that ties it to the two rows it compares,
+# rather than by being the only large type on the page.
 
 
 def zero_rule(ax, x=0.0, vertical=True, color=SUBTLE, lw=0.8, zorder=2, ls="-"):

@@ -1,8 +1,8 @@
 """PopRetrieve Figure 2 panel 2g: the eight scorers are two families, and the families do not talk.
 
-WHAT THE PANEL CLAIMS
----------------------
-One claim, about SCORING RULES and nothing else: the six scorers this export covers split into two
+WHAT THE PANEL SHOWS
+--------------------
+One thing, about SCORING RULES and nothing else: the six scorers this export covers split into two
 blocks whose members agree strongly inside a block and essentially not at all across blocks. Every
 within-family Spearman rho is at least 0.72; the largest cross-family |rho| is 0.076 over nine
 pairs. That is why Figure 2 draws two colour families instead of eight separate methods.
@@ -20,8 +20,42 @@ WHAT THE PANEL DOES NOT CLAIM, AND THIS MATTERS
 This is a similarity between SCORING RULES. Two rules can agree perfectly and both be wrong. The
 panel is therefore NOT independent evidence that population-level retrieval works; that evidence
 is panels a to f, and whether the retrieved neighbours are biologically better is Figure 3. The
-phrase over the panel and the note under it both say "scoring rules", never "retrieval", for that
-reason. Nothing here reaches past response matching.
+first note under the matrix says "scoring rules", never "retrieval", for that reason. Nothing here
+reaches past response matching.
+
+WHAT CHANGED IN THE 2026-08-31 RESTRAINT AND RESIZE PASS
+--------------------------------------------------------
+The panel used to state its conclusion over itself, "Score families agree within, not across", set
+in ink above the matrix. Seven such sentences on one page is seven competing claims, so
+fig2_style.title() was deleted and fig2_assemble._assert_no_titles now refuses to build a figure in
+which a panel draws text above PT_ANNOT. That phrase is now the opening of this panel's caption
+entry, where it can be qualified; nothing on the panel replaces it. The block structure is the only
+thing left to say it, which is the point: two saturated blocks on the diagonal, two blocks that are
+white because their values are near zero, and a white gutter between them.
+
+The box also changed. The page was compacted from 234 mm to 197 mm and the panel hierarchy was
+corrected, so the axes went from 2.49 x 1.36 in to 2.49 x 1.04 in: same width, 24 per cent shorter.
+Four consequences, none of them touching the file read, the statistic, any asserted relationship or
+the colour semantics:
+
+  * CELL HEIGHT IS NO LONGER SET BY A CONSTANT. It used to be whatever was left after a fixed
+    MATRIX_BOTTOM = 0.240 in reserve, a number tuned against the old height. It is now DERIVED:
+    the furniture under the matrix is costed in printed points (two lines of column label, three
+    note lines, the gaps between them, and BOX_SLACK of white above the box floor) and the matrix
+    takes every inch that is left, including the 0.50 in of bottom pad the panel box holds below
+    the axes floor. At this box that gives ch = 0.148 in against 0.178 in before, a 17 per cent
+    loss where the box lost 24 per cent, and it re-derives itself if the ledger moves again.
+  * THE FAMILY KEY MOVED ABOVE THE MATRIX, into the 0.17 in letter band, beside the panel letter.
+    It names the two column blocks, so it now sits where the reader meets them rather than three
+    text lines below. Moving it returned 0.14 in to the cells, which is where the height belongs
+    once the sentence is gone.
+  * TWO NEW GEOMETRY ASSERTIONS, both measured in inches on the resolved box. A printed value must
+    clear its cell edge by CELL_CLEAR above and below, and the family gutter must stay at least a
+    quarter of a cell high so it reads as a break rather than as a hairline. If a future ledger
+    makes either untrue the panel fails to build instead of quietly printing ink on its own edges.
+  * The coverage note lost one word, "of the 8" to "of 8", so that at 6.5 pt it measures 2.41 in
+    and fits inside the 2.49 in axes rather than leaning into the right pad. The count and the
+    names in it are still computed.
 
 WHICH FILE IT READS
 -------------------
@@ -35,7 +69,8 @@ COVERAGE, STATED BECAUSE IT IS INCOMPLETE
 The export holds six of the eight scorers panel a ranks. pca_dist and pca_mean, the two PCA-latent
 baselines, are NOT in it and are not invented here: the panel counts what is present, names the two
 that are missing on its own bottom line, and refuses to draw if the missing set stops being exactly
-those two. So the block structure shown is a statement about six rules, not about all eight.
+those two. So the block structure shown is a statement about six rules, not about all eight. That
+line is the one note that may never be traded for space.
 
 The correlation is over 54,180 query-candidate scored pairs (1,260 queries against 43 candidates
 each; the unit is the scored PAIR, not the query, which is the correction CORRECTIONS.md R29
@@ -53,11 +88,11 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
     The cost is that sign is no longer in the colour, which is paid for by note 2.
  2. SIGN IS CARRIED BY THE PRINTED NUMBER, NOT BY THE COLOUR. Legitimate only because every
     off-diagonal value with |rho| >= 0.5 is positive, which is asserted: no dark cell hides a
-    negative. The four negative values in the matrix are all cross-family and all above -0.06, so
+    negative. The six negative pairs in the matrix are all cross-family and all above -0.06, so
     they are drawn as very nearly white either way.
  3. CROSS-FAMILY CELLS ARE GREY. Grey is this figure's SHARED colour and there is deliberately no
     third family hue. A cross-family pair that did correlate would still go visibly dark, in grey,
-    so the encoding cannot hide a contradiction of the panel's own claim.
+    so the encoding cannot hide a contradiction of what the panel shows.
  4. THE NINE CROSS-FAMILY NUMBERS ARE NOT PRINTED. One computed line, "9 cross-family pairs / max
     |rho| = 0.076", stands over that block instead. Nine near-zero numbers would have been the
     densest text on the panel while carrying the least information, and the bound is the stronger
@@ -75,18 +110,24 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
     immediately below the diagonal, so both rings sit on the sub-diagonal. Sorting by value
     instead would have scattered them.
  8. "cov-mean" AND "cov-worst" ARE ABBREVIATED. Six columns share 2.49 in, so a column is 0.40 in
-    and the string "coverage-" alone measures 0.427 in at 6.8 pt: the full names do not fit and
+    and the string "coverage-" alone measures 0.41 in at 6.8 pt: the full names do not fit and
     shrinking them below the 6.5 pt floor is not an option. Panel f abbreviates sliced-Wasserstein
     for the same reason. The caption spells both out. The abbreviation is a SUBSTITUTION on the
     fig2_style label ("coverage-" to "cov-"), not a second spelling stored here, and the number of
     labels it fires on is asserted; a rename in fig2_style therefore reaches panel g or breaks the
     build, and cannot leave a and g naming one scorer two ways. Every other label is
     fig2_style.SCORERS verbatim.
- 9. NO aspect="equal". At 2.49 x 1.36 in a square matrix would be a small square in a wide box.
-    Cells are 0.40 x 0.178 in; a symmetric correlation matrix has no geometric content that
-    square cells would preserve, and the rectangle lets every printed value sit at 7.2 pt.
+ 9. NO aspect="equal". At 2.49 x 1.04 in a square matrix would be a small square in a wide box.
+    Cells are 0.40 x 0.148 in; a symmetric correlation matrix has no geometric content that square
+    cells would preserve, and the rectangle lets every printed value sit at 7.2 pt with about 2 pt
+    of white above and below it.
 10. NO COLORBAR. Every within-family value is printed and the cross block carries its bound, so a
     ramp would only restate them. The one-line key "cell shade = |rho|" replaces it.
+11. THE FAMILY KEY SITS IN THE LETTER BAND. That band is 0.17 in of panel box above the axes, and
+    it held each panel's conclusion phrase until those were deleted. Using it for two group names
+    at 6.8 pt is a use of the box the ledger gives this panel, not a reintroduction of a title:
+    the strings name the two column blocks and state nothing. The alternative, keeping the key
+    below the column labels, cost the cells 0.14 in of the 1.04 in the panel has.
 
 Palette comes from fig2_style; do NOT re-declare hex values here.
 
@@ -105,8 +146,7 @@ from matplotlib.patches import Rectangle
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig2_style import (FAMILY_COLOUR, FAMILY_NAME, PT_ANNOT,  # noqa: E402
-                        PT_SMALL, PT_TICK, REPO, SCORERS, SHARED, SUBTLE, TEXT,
-                        title)
+                        PT_SMALL, PT_TICK, REPO, SCORERS, SHARED, SUBTLE, TEXT)
 
 SRC = f"{REPO}/figures/source_data/ed1_metric_correlation.csv"
 
@@ -126,23 +166,44 @@ N_ABBREV = 2         # coverage-mean and coverage-worst, the only labels too wid
 ALPHA_MAX = 0.85     # fill alpha at |rho| = 1. Above this, 7.2 pt ink on POP blue loses contrast.
 SHADE_MID = 0.5      # the midpoint of the shading ramp; the block gap is asserted to straddle it
 GUT_X, GUT_Y = 0.090, 0.055        # white gutter between the two families, in inches
-MATRIX_BOTTOM = 0.240              # inches above the axes floor, reserved for the column labels
 CELL_EDGE = 0.5                    # white hairline articulating the cells inside a dark block
+
+# The two halves of the panel BOX that lie outside the axes, from fig2_assemble's ledger for g:
+# PADS["g"] = (0.86 left, 0.10 right, 0.50 bottom) and LETTER_BLOCK = 0.17 above every row. They
+# are duplicated rather than imported because importing fig2_assemble would import every sibling
+# panel; the standalone preview at the foot of this file draws the same two numbers, and the
+# harness fails the panel if either is wrong, because ink would then leave the box.
+BOTTOM_PAD = 0.500                 # box below the axes floor: column labels and the note block
+TOP_BAND = 0.170                   # box above the axes top: the panel letter and the family key
+BOX_SLACK = 0.020                  # white kept between the lowest note and the box floor
 
 LAB_GAP = 0.050      # row label to matrix, in inches
 COL_GAP = 0.045      # matrix floor to the top of the column labels
-FAM_GAP = 0.050      # column labels to the family key
-NOTE_GAP = 0.045     # family key to the first note line
-NOTE_STEP = 0.100    # note line pitch
+COL_LINESP = 1.05    # line spacing inside a two-line column label
+NOTE_GAP = 0.050     # column labels to the first note line
+NOTE_STEP = 0.096    # note line pitch; a 6.5 pt line sets a 0.090 in box, so this is 1.07 lines
+HEAD_GAP = 0.028     # matrix top to the foot of the family key, upward into the letter band
 SW_W, SW_H = 0.075, 0.055          # family swatch, in inches
 SW_GAP = 0.030
+SW_RISE = 0.017      # swatch foot above the key's text box, so the two centre on each other
+
+# A "0.00" label at PT_ANNOT sets a 0.0938 in line box in the deck face (Arial; measured with the
+# Agg renderer, 2026-08-31), rounded UP here so the cell-clearance assertion below can never pass
+# on a box it has under-stated. CELL_CLEAR is the white demanded above and below that box inside
+# its cell: at 0.020 in it is about 1.4 pt, which is what stops the ink reading as touching the
+# cell edge.
+NUM_BOX = 0.094      # inches
+CELL_CLEAR = 0.020
+# The family gutter has to read as a break in the matrix rather than as a wide cell edge, so it is
+# held to at least this fraction of a cell height.
+GUT_MIN_FRAC = 0.25
 
 
 def _stack(label: str) -> str:
     """Break a scorer label into at most two lines, at the space or after the hyphen.
 
     A column is 0.40 in wide and the longest single token after the break ("coverage" is already
-    abbreviated away) is 0.29 in at 6.8 pt, so two lines always clear their column.
+    abbreviated away) is 0.28 in at 6.8 pt, so two lines always clear their column.
     """
     if " " in label:
         head, tail = label.split(" ", 1)
@@ -197,9 +258,10 @@ def draw_2g(ax):
     cross = [(i, j) for i, j in lower if fams[i] != fams[j]]
     assert len(within) == 6 and len(cross) == 9, "the 3 + 3 blocking changed shape"
 
-    # The panel's whole claim, refusing to draw itself if the file stops supporting it: every
-    # within-family pair sits above the middle of the shading ramp and every cross-family pair
-    # below it, so the two dark blocks and the two white blocks are a property of the data.
+    # What the drawing has to carry on its own now that no phrase states it, refusing to draw
+    # itself if the file stops supporting it: every within-family pair sits above the middle of the
+    # shading ramp and every cross-family pair below it, so the two dark blocks and the two white
+    # blocks are a property of the data rather than of the palette.
     w_min = min(v[i, j] for i, j in within)
     c_max = max(abs(v[i, j]) for i, j in cross)
     assert w_min > SHADE_MID > c_max, (
@@ -222,6 +284,14 @@ def draw_2g(ax):
     assert v[ring_mean] == max(v[p] for p in lower), "1.00 is no longer the largest off-diagonal"
 
     # -------------------------------------------------------------------- geometry, in inches
+    # Three grey lines, in the order a reader needs them: what the number is, how to read the
+    # drawing, what the drawing does not cover. The coverage line counts the scorers rather than
+    # stating a total, so it cannot outlive a change to the export. It is also the line that stays
+    # if the box ever shrinks again: a reader must not take this matrix for all eight scorers.
+    notes = ["Spearman $\\rho$ between scoring rules, not retrieval evidence",
+             "Cell shade = $|\\rho|$; ring = each family's closest pair",
+             f"{n} of {len(SCORERS)} scorers in panel a; {' and '.join(missing)} absent"]
+
     fig = ax.figure
     w_in = ax.get_position().width * fig.get_figwidth()
     h_in = ax.get_position().height * fig.get_figheight()
@@ -233,8 +303,22 @@ def draw_2g(ax):
         ax.spines[side].set_visible(False)
     ax.set_facecolor("none")
 
+    # The cell height is what is LEFT once the furniture below the matrix is costed in printed
+    # points, not a constant tuned against an earlier box. The matrix hangs from the axes top and
+    # is allowed to run past the axes floor into the panel box's bottom pad, which is where the
+    # column labels and the notes have always been drawn.
+    col_h = 2 * COL_LINESP * PT_TICK / 72.0
+    notes_h = (len(notes) - 1) * NOTE_STEP + PT_SMALL / 72.0
+    below = COL_GAP + col_h + NOTE_GAP + notes_h + BOX_SLACK
     cw = (w_in - GUT_X) / n
-    ch = (h_in - MATRIX_BOTTOM - GUT_Y) / n
+    ch = (h_in + BOTTOM_PAD - GUT_Y - below) / n
+    assert ch >= NUM_BOX + 2 * CELL_CLEAR, (
+        f"a cell is {ch:.4f} in high and a printed value needs "
+        f"{NUM_BOX + 2 * CELL_CLEAR:.4f} in to clear both edges; the values would touch")
+    assert GUT_Y >= GUT_MIN_FRAC * ch, (
+        f"the family gutter is {GUT_Y:.4f} in against a {ch:.4f} in cell, so the two blocks "
+        "are no longer separated by a readable band of white")
+
     grp_x = [j * cw + (GUT_X if j >= 3 else 0.0) for j in range(n)]          # cell left edges
     grp_y = [h_in - i * ch - (GUT_Y if i >= 3 else 0.0) for i in range(n)]   # cell top edges
 
@@ -249,7 +333,7 @@ def draw_2g(ax):
             fill = mcolors.to_rgba(base, ALPHA_MAX * abs(v[i, j]))
             x0, y0 = cell_xy(i, j)
             ax.add_patch(Rectangle((x0, y0), cw, ch, facecolor=fill, edgecolor="white",
-                                   linewidth=CELL_EDGE, zorder=2))
+                                   linewidth=CELL_EDGE, zorder=2, clip_on=False))
 
     # values, lower triangle only, within-family cells only
     for i, j in within:
@@ -257,66 +341,77 @@ def draw_2g(ax):
         heavy = (i, j) in (ring_mean, ring_pop)
         ax.text(x0 + cw / 2, y0 + ch / 2, f"{v[i, j]:.2f}", ha="center", va="center",
                 fontsize=PT_ANNOT, color=TEXT, fontweight="bold" if heavy else "normal",
-                zorder=4)
+                zorder=4, clip_on=False)
 
     # the nine cross-family pairs, as one computed bound instead of nine near-zero numbers
     cx = (grp_x[0] + grp_x[2] + cw) / 2
     cy = (grp_y[3] + grp_y[5] - ch) / 2
     ax.text(cx, cy, f"{len(cross)} cross-family pairs\nmax $|\\rho|$ = {c_max:.3f}",
-            ha="center", va="center", fontsize=PT_ANNOT, color=TEXT, linespacing=1.25, zorder=4)
+            ha="center", va="center", fontsize=PT_ANNOT, color=TEXT, linespacing=1.25, zorder=4,
+            clip_on=False)
 
     # the two rings: emphasis by keyline and weight, never by a third colour
     for i, j in (ring_mean, ring_pop):
         x0, y0 = cell_xy(i, j)
         ax.add_patch(Rectangle((x0, y0), cw, ch, facecolor="none", edgecolor=TEXT,
-                               linewidth=0.9, zorder=5))
+                               linewidth=0.9, zorder=5, clip_on=False))
 
     # -------------------------------------------------------------------- labels
     for i, lab in enumerate(labels):
         ax.text(-LAB_GAP, grp_y[i] - ch / 2, lab, ha="right", va="center",
                 fontsize=PT_TICK, color=TEXT, clip_on=False)
 
-    col_top = MATRIX_BOTTOM - COL_GAP
+    mat_floor = grp_y[n - 1] - ch
+    col_top = mat_floor - COL_GAP
     for j, lab in enumerate(labels):
         ax.text(grp_x[j] + cw / 2, col_top, _stack(lab), ha="center", va="top",
-                fontsize=PT_TICK, color=TEXT, linespacing=1.05, clip_on=False)
+                fontsize=PT_TICK, color=TEXT, linespacing=COL_LINESP, clip_on=False)
 
-    # family key: a swatch at the left edge of each block of columns, at the same strength the
-    # block itself is drawn at. This is the one place colour may sit beside letters, because the
-    # label names a whole family and has no mark of its own.
-    fam_top = col_top - 2 * PT_TICK * 1.05 / 72 - FAM_GAP
+    # Family key, above the matrix and beside the panel letter: a swatch at the left edge of each
+    # block of columns, at the same strength the block itself is drawn at. This is the one place
+    # colour may sit beside letters, because the label names a whole family and has no mark of its
+    # own. See docstring note 11 for why it is up here rather than under the column labels.
     for start, fam in ((0, "mean"), (3, "pop")):
-        ax.add_patch(Rectangle((grp_x[start], fam_top - SW_H - 0.012), SW_W, SW_H,
+        ax.add_patch(Rectangle((grp_x[start], h_in + HEAD_GAP + SW_RISE), SW_W, SW_H,
                                facecolor=mcolors.to_rgba(FAMILY_COLOUR[fam], ALPHA_MAX),
                                edgecolor="none", clip_on=False, zorder=3))
-        ax.text(grp_x[start] + SW_W + SW_GAP, fam_top, FAMILY_NAME[fam], ha="left", va="top",
-                fontsize=PT_TICK, color=TEXT, clip_on=False)
+        ax.text(grp_x[start] + SW_W + SW_GAP, h_in + HEAD_GAP, FAMILY_NAME[fam],
+                ha="left", va="bottom", fontsize=PT_TICK, color=TEXT, clip_on=False)
 
-    # Three grey lines, in the order a reader needs them: what the number is, how to read the
-    # drawing, what the drawing does not cover. The coverage line counts the scorers rather than
-    # stating a total, so it cannot outlive a change to the export.
-    notes = ["Spearman $\\rho$ between scoring rules, not retrieval evidence",
-             "Cell shade = $|\\rho|$; the ring marks each family's closest pair",
-             f"{n} of the {len(SCORERS)} scorers in panel a; "
-             f"{' and '.join(missing)} absent"]
-    y = fam_top - PT_TICK / 72 - NOTE_GAP
+    y = col_top - col_h - NOTE_GAP
     for line in notes:
         ax.text(0.0, y, line, ha="left", va="top", fontsize=PT_SMALL, color=SUBTLE,
                 clip_on=False)
         y -= NOTE_STEP
 
-    title(ax, "Score families agree within, not across")
+    # The stack is built downward from the axes top, so both ends have to be checked against the
+    # panel box the ledger gives g. Ink outside it enlarges the exported page and collides with f.
+    note_floor = y + NOTE_STEP - PT_SMALL / 72.0
+    assert note_floor >= -BOTTOM_PAD, (
+        f"the note block ends {-note_floor:.4f} in below the axes floor and the box holds only "
+        f"{BOTTOM_PAD:.3f} in")
+    key_top = h_in + HEAD_GAP + max(SW_RISE + SW_H, PT_TICK / 72.0)
+    assert key_top <= h_in + TOP_BAND, (
+        f"the family key reaches {key_top - h_in:.4f} in above the axes and the letter band is "
+        f"{TOP_BAND:.3f} in")
 
 
 if __name__ == "__main__":
     # The standalone preview is drawn at panel g's real box and real pads, so the inch geometry
-    # above is the geometry on the page. These four numbers mirror fig2_assemble's ledger for g
-    # (half of a 6.90 in canvas; PADS["g"] = 0.86 left, 0.10 right, 0.50 bottom; the 1.86 in row
-    # plus its 0.26 in letter block) and are duplicated rather than imported because importing
-    # fig2_assemble would import every sibling panel.
-    BOX_W, BOX_H = 3.45, 2.12
+    # above is the geometry on the page. These numbers mirror fig2_assemble's ledger for g (half of
+    # a 6.90 in canvas; PADS["g"] = 0.86 left, 0.10 right, 0.50 bottom; the 1.54 in row plus its
+    # 0.17 in letter block) and are duplicated rather than imported because importing fig2_assemble
+    # would import every sibling panel.
+    sys.path.insert(0, os.path.join(REPO, "figures"))
+    from figstyle import apply_style
+    from fig2_style import PT_TITLE
+
+    # Without this the preview sets in matplotlib's default face, which is wider than the deck's
+    # and would have every width on the page read 6 per cent long.
+    apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
+    BOX_W, BOX_H = 3.45, 1.71
     fig = plt.figure(figsize=(BOX_W, BOX_H))
-    ax = fig.add_axes([0.86 / BOX_W, 0.50 / BOX_H, 2.49 / BOX_W, 1.36 / BOX_H])
+    ax = fig.add_axes([0.86 / BOX_W, BOTTOM_PAD / BOX_H, 2.49 / BOX_W, 1.04 / BOX_H])
     draw_2g(ax)
     fig.savefig(os.path.join(os.path.dirname(__file__), "2g.png"), dpi=300)
     print("wrote 2g.png")
