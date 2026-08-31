@@ -198,7 +198,13 @@ MINUS = "\u2212"
 # asserted against. Both lines are drawn from these constants, so the guard cannot describe a
 # block that is no longer where the text is.
 STAT_X = 0.018
-STAT_Y_RHO, STAT_Y_P = 0.175, 0.030
+# The two lines are separate artists so the rho keeps its mathtext and the P label can carry
+# its own formatting. Their spacing is therefore a layout constant, not a linespacing, and it
+# was set against a 0.65 in axes. The 2026-08-31 hierarchy pass took this panel to 0.58 in,
+# which is a 0.07 in loss on a gap that was 0.145 axes units, and the two boxes then
+# overlapped by 17 per cent of the smaller one. Reopened to 0.205 axes units, which is
+# 0.119 in at the current height, the same PRINTED gap the pair had before the shrink.
+STAT_Y_RHO, STAT_Y_P = 0.210, 0.005
 STAT_BOX = (0.000, 0.336, 0.000, 0.374)
 # What the block is allowed to cover: the ink itself sits over two raw queries, and the guard box
 # is padded outward by 0.03 of the view, which admits a third at (0.68, 0.45). No conditional

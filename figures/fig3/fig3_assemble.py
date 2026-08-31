@@ -1,7 +1,8 @@
 """PopRetrieve Figure 3: the population advantage weakens, and can change direction, once the
 judge stops sharing the retrieval objective.
 
-Thirteen panels, six rows, one argument. Four numbers are its skeleton, and everything else on the
+ARCHETYPE: quantitative grid with two hero panels (a and h). Thirteen panels, six rows,
+one argument. Four numbers are its skeleton, and everything else on the
 page exists to support or to qualify one of them:
 
     +0.129   response matching: population retrieval wins, decisively        (a)
@@ -110,13 +111,23 @@ LETTER_BLOCK = 0.17
 ROW_GAP = 0.22
 
 # (row height in inches, [(key, box width in inches), ...]). Box widths sum to FIGW per row.
+# TWO HERO ROWS, 2026-08-31. Row heights are not a taste decision: they were measured against
+# this figure's own tiering and found inverted. The five tier-3 diagnostics (d, j, k, l, m)
+# averaged 6.6 per cent of panel area against 6.1 per cent for the four tier-2 panels, and k and
+# m were drawn as large as i, a discovery panel. A page that gives its diagnostics discovery
+# weight tells the reader the wrong thing before they read a single label.
+#
+# Rows 1 and 4 hold the four numbers that are this figure's skeleton, so they take the height,
+# and the two diagnostic rows give it up. The total is unchanged at 6.95 in, so nothing outside
+# these six numbers moves. Resulting area share: a 13.1 -> 15.6 per cent, h 11.0 -> 13.1,
+# k 7.9 -> 5.9, m 7.7 -> 6.0; tier 1 averages 12.0 per cent against tier 3's 5.2.
 ROWS = [
-    (1.34, [("a", 4.00), ("b", 2.90)]),
-    (1.18, [("c", 2.75), ("g", 4.15)]),
-    (1.07, [("d", 2.10), ("e", 2.40), ("f", 2.40)]),
-    (1.28, [("h", 4.10), ("i", 2.80)]),
-    (1.01, [("j", 3.20), ("k", 3.70)]),
-    (1.07, [("l", 3.60), ("m", 3.30)]),
+    (1.52, [("a", 4.00), ("b", 2.90)]),
+    (1.20, [("c", 2.75), ("g", 4.15)]),
+    (1.00, [("d", 2.10), ("e", 2.40), ("f", 2.40)]),
+    (1.46, [("h", 4.10), ("i", 2.80)]),
+    (0.85, [("j", 3.20), ("k", 3.70)]),
+    (0.92, [("l", 3.60), ("m", 3.30)]),
 ]
 
 # (left, right, bottom) pad in inches inside the panel BOX. Top is always zero: the phrase is

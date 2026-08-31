@@ -33,6 +33,52 @@ the manuscript is the authority and this file is the bug.
 | 6 | l | two negative, one near zero, one strongly positive | `source_data/fig3hi_class_c_potency.csv` |
 | 6 | m | a density piled up near +1 | same |
 
+## Archetype and panel hierarchy
+
+**Archetype: quantitative grid with two hero panels.** Declared here because the figure contract
+requires it and this figure went a long time without one.
+
+Row heights are set against the figure's own tiering, not by taste. Panels a, g, h and i carry the
+argument; b, c, e and f explain why the biological gain is absent; d, j, k, l and m are diagnostics
+answering anticipated objections. On 2026-08-31 that hierarchy was measured and found INVERTED:
+the five tier-3 diagnostics averaged 6.6 per cent of panel area against 6.1 per cent for the four
+tier-2 panels, and k and m were drawn as large as i. A page that gives its diagnostics discovery
+weight tells the reader the wrong thing before they read a label.
+
+Rows 1 and 4, which hold the four skeleton numbers, took the height; rows 5 and 6 gave it up. The
+total is unchanged, so nothing outside those six numbers moved.
+
+| tier | panels | share of panel area, each |
+|---|---|---|
+| 1, discovery | a, g, h, i | 12.3% |
+| 2, why the gain is absent | b, c, e, f | 6.3% |
+| 3, diagnostics | d, j, k, l, m | 5.1% |
+
+## Audit findings NOT acted on
+
+Recorded so they are decisions rather than oversights.
+
+- **Panel letters are 9.5 pt against the 8 pt convention** for Nature-family panel labels. This
+  deck sets its whole type ladder one step up (Figures 1, 2 and 3 all use 9.5), and changing one
+  figure would break that consistency. Revisit deck-wide or not at all.
+- **The caption is 692 words against a 300-word guideline.** All five figures are over. The
+  guideline comes from a Nature Communications corpus; Nature main-text legends routinely run 400
+  to 700. At thirteen panels, 300 words is 23 words per panel including the figure title and every
+  statistic, and the QA contract separately requires n, centre, spread and test to be IN the
+  legend. The two rules conflict at this panel count, and the statistics won. Cut from 943 on
+  2026-08-31; the remaining candidates were all honesty qualifications rather than prose.
+- **POP blue and EXT green differ by 0.025 in relative luminance**, so they are indistinguishable
+  in grayscale. Every panel that uses both (h, i, l) separates them by fill and position as well,
+  which is what the grayscale rule actually requires, but the margin is thin: do not introduce a
+  panel where blue and green appear as the same mark type.
+- **No TIFF export.** `figstyle.save` writes PDF, SVG and PNG. These are vector line-art figures,
+  for which Nature prefers vector; a 600 dpi TIFF of a 13-panel vector page would be large and
+  worse. Add one only if the production workflow asks.
+- **The legends carry no "Source data are provided as a Source Data file" line.** The Data
+  availability section states that source-data tables underlying each figure panel are provided,
+  so the substance is there; the per-legend boilerplate is venue-specific and can be added at
+  submission.
+
 ## No panel states a conclusion
 
 Every panel used to carry one bold sentence over itself, thirteen in all. They are gone, and
