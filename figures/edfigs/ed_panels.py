@@ -12,11 +12,13 @@ Where each one went:
         imported by any main figure: it orders the six scorers so that the mean family is
         split across the matrix, and it sets 5.2 pt ticks and 5.5 pt cell values, both
         under Figure 2's 6.5 pt floor.
-    draw_ed2a, draw_ed2b   SUPERSEDED 2026-08-31 by figures/fig3/fig3j.py and fig3k.py,
-        which read the same results/exp17_true_divergence_subset/power_analysis.csv. No
-        longer imported by any main figure: both set type under Figure 3's 6.5 pt floor,
-        and both drew the MoA-nDCG evaluator in the deck's mean-RETRIEVAL orange, which
-        says an evaluator is a retrieval method.
+    draw_ed2a, draw_ed2b   NOT IN ANY MAIN FIGURE since 2026-08-31. They were adopted as
+        Fig. 3j and 3k, re-authored, and then removed from the page altogether: the power
+        analysis they carry is a third-tier diagnostic and it cost a whole row on a page
+        whose argument is elsewhere. Its numbers now live in Supplementary Note 2, in full.
+        These two remain the only code that reads
+        results/exp17_true_divergence_subset/power_analysis.csv, so do not delete them:
+        they are how that table is regenerated and checked.
     draw_ed3a -> Fig. 5h     draw_ed3b -> Fig. 5i     draw_ed3d -> Fig. 5j
     draw_ed1a, draw_ed1b, draw_ed2c, draw_ed3c   DELETED. Each was carried in full elsewhere:
         ed1a by Supplementary Table 1, ed1b by Supplementary Table 2(a) plus Fig. 2a's own colour

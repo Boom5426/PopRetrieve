@@ -1,330 +1,417 @@
-"""PopRetrieve Figure 3 panel 3j: what size of gap was within reach in the top divergence quartile?
+"""PopRetrieve Figure 3 panel 3j: the same four rankings scored against ABSOLUTE potency.
 
-WHAT THIS PANEL SHOWS
----------------------
-In the highest quartile of true response divergence, the stratum the pre-specified gate says the
-population advantage should be largest in, two achieved powers computed at the gap each Class-B
-evaluator actually observed there: minority-state coverage 0.9999 at n = 191, MoA-nDCG 0.0562 at
-n = 143. One dot lands to the right of the conventional 0.80 rule and one to the left of it, and
-that contrast is the whole panel. Both numbers are recomputed at draw time from the source columns
-rather than read from the achieved_power column alone, and the relationship the caption states is
-asserted in code before anything is drawn, so no label can outlive its data.
+WHAT THIS PANEL SHOWS, AND WHAT IT NO LONGER SAYS
+-------------------------------------------------
+Four rankings, each summarised by its median Spearman rho against absolute GDSC2 potency across
+103 leave-one-drug-out queries, with the interquartile range. Two rankings that keep the
+candidate's raw response scale sit on the negative side of zero, the control-subtracted mean
+cosine sits just above zero, and the ranking that compares no distributions at all, sorting
+candidates by their own response magnitude, is highest and positive in every one of the 103
+queries.
 
-THE 2026-08-31 PASS: THE SENTENCE IS GONE
------------------------------------------
-This panel used to set the phrase "Top quartile: only coverage clears 80%" over itself through
-fig3_style.title(). That helper is deleted (its former site in fig3_style carries the reasoning)
-and fig3_assemble._assert_no_titles now refuses to build a figure in which any panel draws text
-above PT_ANNOT. Thirteen conclusion sentences on one page is thirteen claims competing for the
-reader, so the phrase moved into the caption, where it costs no page height and can be qualified.
+2026-08-31 REVISION: the drawn phrase "Absolute potency is a different endpoint" is DELETED, along
+with the fig3_style.title() call that set it. A panel states no conclusion; the figure carries
+visual evidence and the legend carries the argument, and thirteen conclusion sentences on one page
+were thirteen claims competing for attention. The phrase now opens this panel's caption entry,
+where it costs no page space and can be qualified. Removing it returned 0.42 in to the six rows,
+of which this panel's axes took 0.05 (0.64 to 0.69 in of height); the height went to the marks,
+not to replacement text. The interval rule went from 1.4 to 1.8 pt and the median dot from 4.6 to
+5.4 pt, with the open rings' edge from 1.0 to 1.1 pt so the two encodings still read as one pair.
+The medians and the side of zero each falls on are therefore the first thing read, which is what
+the phrase used to do in words. Nothing else about the drawing changed. Four kinds of text remain:
+the four row names, the four medians, the x ticks and the axis name.
 
-Only four kinds of text remain here: the two metric names with their n, the two power values, the
-reference rule's "80% power", and the axis name with its three tick labels. Removing the sentence
-returned height to the row, and it was spent on the marks rather than on new text:
+2026-08-31 AUDIT, two things the trim left behind. The two negative value labels were formatted
+with the ASCII hyphen while this panel's own x ticks print U+2212, so one axis carried two minus
+glyphs of different widths, side by side; the values now go through _fmt, the helper fig3d added
+for exactly this. And the standalone preview called savefig with the deck's rc savefig.bbox still
+set to "tight", so the PNG it wrote was cropped back to its ink at 3.40 x 0.99 in rather than
+being the 3.60 x 1.07 in printed rect the geometry comment claims; __main__ now pins the canvas
+the way fig3c and fig3d do, so the preview is 1:1 with the panel box again.
 
-  * the two dot rows moved apart, from 0.331 in of separation to 0.353 in, which is the gap the
-    two 7.2 pt row labels needed and did not have;
-  * the lower lead lifted from 0.068 in above the x axis to 0.107 in, so its dot no longer reads
-    as sitting on the spine, and the rule both dots are judged against is 0.059 in longer
-    (0.442 to 0.501 in);
-  * nothing was enlarged. The dot is still MS_DOT, the lead is still a 0.8 pt hairline, and no
-    type moved off the 7.2 / 6.8 / 6.5 ladder.
+WHAT THE PANEL IS AND IS NOT EVIDENCE FOR (this reading lives in the caption, not on the panel)
+----------------------------------------------------------------------------------------------
+Absolute GDSC2 potency is a different endpoint from the drug-drug functional similarity that
+panels h and i are graded on, and it rewards a different thing. This panel is a CONTROL ON THE
+ENDPOINT CHOICE in h and i. It is not evidence that retrieval fails, and it must not be read as a
+method comparison in the paper's sense. A similarity retriever is asked which candidate RESEMBLES
+the query; absolute potency asks which candidate kills hardest. Handed a weak query, a correctly
+working retriever SHOULD return other weak candidates, so a negative association here is the
+expected behaviour of a working instrument on a mismatched endpoint, not a failure of it. That is
+not left as an argument: across the 103 queries the energy ranking's agreement with potency tracks
+the QUERY's own potency (Spearman rho = -0.55 against the query's GDSC2 AUC, the same sign in all
+three cell lines), which is what "returns candidates like the query" predicts and what a broken
+retriever would not produce. It is asserted below. Panel m carries the other half of the
+mechanism: the energy distance between query and candidate largely tracks the candidate's own
+magnitude (median rho +0.791).
 
-The claim the deleted phrase made is not restated anywhere on the panel. It is carried by the
-drawing: two dots on one [0, 1] gauge, on opposite sides of a dashed rule that is named.
+WHICH WAY IS UP ON THIS AXIS
+----------------------------
+GDSC2 AUC runs OPPOSITE to potency: a low AUC is a potent drug. The plotted quantity is the
+Spearman correlation between a ranking and the potency ranking built by the source script as
+`rankdata(auc)`, rank 1 = lowest AUC = most potent, so POSITIVE means "puts the most potent
+candidates first" and negative means "puts the least potent first". The axis label therefore says
+"GDSC2 potency (low AUC)" and not "absolute potency (GDSC2 AUC)": the second wording equates
+potency with AUC, which is backwards, so a GDSC-literate reader would take every sign on this
+axis the wrong way round. The v2 source script exists because of a sign inversion and this figure
+will not reintroduce one in a label. This wording survived the 2026-08-31 trim unchanged; it is
+the one piece of text on the panel that must not be shortened further, because "(low AUC)" is
+what makes the axis readable in the right direction. "Absolute" is not lost: it is the first word
+of the caption sentence this panel used to draw over itself, and the axis's shorter form is what
+leaves the label 0.25 in of margin inside its box instead of 0.05 in.
 
-WHY THE AXIS LABEL NAMES THE QUARTILE, RATHER THAN LEAVING THE SCOPE TO THE CAPTION
------------------------------------------------------------------------------------
-Because the unscoped reading is false of the study, and false in the direction that flatters the
-paper least. MoA-nDCG is not a blunt instrument in this design. Over all 600 queries its mean gap
-is -0.0371 at s.d. 0.1959, which is achieved power 0.996 and Wilcoxon p = 2.5e-4; in Q1 it is
--0.0822 at power 0.999, in Q2 0.702, in Q3 0.249. The evaluator resolves MoA-nDCG gaps when they
-are large, and what it cannot resolve is a gap the size of Q4's +0.0032. So "only the coverage gap
-is detectable", read as a statement about the mechanism-recovery comparison rather than about this
-stratum, is not a cautious reading of the panel: it is a wrong one, because the whole-query
-MoA-nDCG gap IS resolved and it runs the other way, toward mean retrieval. Q4 is not a flattering
-subset picked after the fact, it is the stratum the gate pre-specified and the one panel k draws,
-but the panel must still say which queries these two dots are. The stratum is therefore the second
-line of the x label, which is a scope statement and not a conclusion, and _load asserts against
-divergence_stratified.csv both that Q4 really is the highest-divergence quartile and that
-MoA-nDCG clears the rule over all queries, which is the fact that makes the scoping load-bearing
-rather than decorative.
-
-What this panel does NOT claim: that the Q4 MoA-nDCG null is therefore secure. Read alone it says
-the opposite, that a gap of the size MoA-nDCG observed is out of this study's reach. What makes
-the null informative is the size of the gap that WOULD be reachable, and that is panel k's
-number, not this one's. This panel is a statistical diagnostic and is drawn at a diagnostic's
-weight: one axis, two dots, one reference rule.
-
-SOURCE
-------
-results/exp17_true_divergence_subset/power_analysis.csv        the two Q4 rows that are drawn
-results/exp17_true_divergence_subset/divergence_stratified.csv never drawn, read only to
-    ASSERT three things: that Q4 is the highest-divergence quartile, that its per-metric n agree
-    with the power file, and that MoA-nDCG clears the rule on the ALL row. The first two check the
-    words "highest response-divergence quartile" against the file that defines them; the third
-    checks that scoping line against the sentence it is there to prevent.
-Both are written by src/experiments/exp17_true_divergence_subset.py, whose power_two_sided is a
-two-sided one-sample normal approximation at alpha = 0.05 with the effect and s.d. estimated from
-the same sample. _achieved_power below reimplements it and the loader asserts agreement.
+Source data: figures/source_data/fig3hi_class_c_potency.csv
+  103 leave-one-drug-out queries, SciPlex3 x GDSC2 at 10 uM, three cell lines, the v2 analysis
+  with the corrected energy sign. Every number drawn is a median or a quartile computed from that
+  file at draw time; nothing here is typed in.
+Also read at draw time: figures/source_data/fig3hi_class_c_functional.csv, because the CAPTION's
+  opening phrase is a claim about TWO endpoints and is asserted against both. The phrase left the
+  panel; the assertion that keeps it true did not.
 
 JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
 -------------------------------------------------------
-1. ACHIEVED (post-hoc, observed-effect) POWER IS A CRITICISED STATISTIC. Computed at the observed
-   effect it is a monotone function of the p-value and adds no information to it, and it must
-   never be read as evidence for the null. It is drawn because the reviewer's question is about
-   the DESIGN rather than about this sample: at these n and these variances, what size of gap was
-   within reach. The axis says "at the observed gap" so the reader can apply that discount. An
-   alternative panel, the minimum detectable effect at 80% power, would carry the same content
-   without the post-hoc framing; it is not drawn here because panel k already carries the
-   sample-size form of exactly that quantity and two panels should not say one thing twice.
-2. THE TWO ROW NAMES ARE NOT SET FROM A COMMON LEFT MARGIN. Each name goes in its row's empty
-   half so that neither crosses the rule: the coverage name is left-aligned at x = 0.015, and the
-   MoA-nDCG name is RIGHT-aligned at the rule less NAME_PAD, which is where it already sat. The
-   alignment differs on purpose. A left edge fixed at 0.28 put the name clear of the rule only
-   for the string "MoA-nDCG, n = 143"; right-aligning against the rule makes "nothing crosses the
-   rule" true of any name, and moves the remaining failure mode, a collision with the value
-   label, into something the preview harness measures. A reader could still want one label
-   column, which would cost the panel a left margin it does not have at 2.36 in.
-3. THE TWO DOTS ARE NOT COMPUTED ON THE SAME QUERIES. Both are the Q4 stratum, but MoA-nDCG is
-   undefined for 48 of its 191 queries, so it is a 143-query subset. The n are on the panel for
-   that reason; they also block the misreading that the low power is a sample-size difference,
-   which 143 against 191 cannot produce.
-4. BOTH DOTS ARE SHARED GREY. Neither is a retrieval method: both are evaluators judging the same
-   rankings, so neither may take POP blue or MEAN orange. The retired Extended Data version
-   (figures/edfigs/ed_panels.draw_ed2a) drew MoA-nDCG in mean-retrieval orange and minority
-   coverage in population blue, which said these were two competing methods. They are not, and
-   nothing here is a signed difference either, so no half-plane wash applies.
-5. 0.80 IS A CONVENTION, NOT A PRE-REGISTERED CRITERION OF THIS STUDY. It is drawn as a dashed
-   reference and named once beside it, in per-cent because that is how the convention is stated.
-   A reader who rejects the convention can ignore the rule and read the two powers off the axis;
-   nothing else on the panel depends on it, now that the panel states no verdict in words.
-6. POWERS ARE PRINTED TO FOUR DECIMALS. 0.99992 printed as "1.00" would read as an exactness the
-   estimate does not have, and 0.056191 needs the precision to be distinguishable from zero.
-7. THE HAIRLINE LEAD FROM ZERO TO EACH DOT is a fifth element the brief for this panel did not
-   ask for: axis, two dots, one rule. It is kept at 0.8 pt in FAINT because without it the two
-   dots do not read as fractions of the same [0, 1] gauge, and it is a hairline rather than a bar
-   because a bar would give a statistical diagnostic the ink of a result.
-8. THE AXIS LABEL IS SET AT PT_TICK (6.8), not at PT_ANNOT. It is an axis name, which is what
-   PT_TICK is for, and it is two lines because both are load-bearing. The preview harness cannot
-   check it either way: ax.xaxis reports a zero-size window extent, so neither the tick labels nor
-   the axis label are ever measured against the panel box. Measured by hand against the current
-   ledger (row 1.01 in, bottom pad 0.38 in) the label's lower edge clears the box bottom by
-   0.0226 in at 6.8 pt and by 0.0103 in at 7.2 pt. The previous version of this note claimed 7.2
-   pt overflowed the box by 0.011 in; that does not reproduce under the row heights this pass
-   left, so the note is corrected rather than repeated. 6.8 stands on the ladder argument and on
-   the 0.012 in of clearance it buys, not on an overflow.
-9. THE PANEL DOES NOT DRAW THE VARIANCES that explain the two positions (s.d. 0.0135 against
-   0.1632, a factor of 12). At 2.36 x 0.63 in a second quantity would crowd the gauge, and the
-   ratio belongs to panel k and to this figure's caption.
-10. "minority-state coverage" and "MoA-nDCG" are named without their metric class. Both are
-   Class B, task-proximal biological, so a class label would separate nothing here.
-11. THE WHOLE-QUERY MoA-nDCG ROW IS NOT DRAWN, only asserted. A third dot at power 0.996 on all
-   600 queries would make the scoping visible instead of verbal, and would be the honest way to
-   show that this evaluator is not blind. The height this pass returned to the row is 0.06 in,
-   which is a third of what a legible third row needs, and a whole-query dot would also need its
-   own sign annotation to avoid reading as a THIRD null rather than a resolved NEGATIVE gap. It
-   remains the first thing to add here if the row ever gains a real 0.2 in.
+1. BLUE AND ORANGE ARE OBJECT COLOURS HERE, AND THE HALF-PLANES ARE NOT WASHED. fig3_style makes
+   blue and orange a statement about sign wherever a signed population-minus-mean advantage is
+   plotted, and object colours only where retrieval families are genuinely compared. Two families
+   are genuinely compared on this axis, so they take the object colours. But the SIGN on this
+   axis does not mean what the wash means: negative here says "ranks the least potent candidates
+   first", not "mean-signature retrieval is favoured". Washing the half-planes would attach the
+   population-versus-mean reading to an axis that does not carry it, so fig3_style.sign_field is
+   deliberately not called and neither side is labelled. Zero is drawn as a bare datum rule.
+2. FILL SEPARATES THE TWO MEAN COSINES, and it is doing double duty. Within the orange family,
+   filled is the raw mean cosine and open is the control-subtracted one, which is the pair the
+   panel needs to distinguish because control subtraction is what removes the magnitude channel.
+   The green control is also open, for the different reason that it performs no retrieval, which
+   is the encoding panel h already uses. Colour separates the two meanings; the labels state both.
+   Anyone who wanted one meaning per channel would need a hue this figure has already spent.
+3. MEDIAN AND INTERQUARTILE RANGE ACROSS THE 103 QUERIES, not the per-cell-line medians panel h
+   draws and not the full per-query cloud. The 0.05 in this panel gained in the 2026-08-31 trim
+   does not change that: at 0.69 in of axes height the four rows are 11.8 pt apart, where 103
+   jittered points per row are still unreadable, so the height went into the weight of the marks
+   instead. The quartiles carry the part of the distribution the claim rests on: the
+   control-subtracted interval straddles zero while the magnitude interval is nowhere near it.
+   The sign is consistent across all three cell lines for all four rows, which is asserted below
+   and stated in the caption rather than drawn.
+4. THE FOURTH ROW'S INTERVAL IS NOT THE SAME KIND OF QUANTITY AS THE OTHER THREE, and the panel
+   cannot show that. The magnitude ranking is QUERY-INDEPENDENT: it produces one ordering per
+   cell line, so within a line its per-query rho is all but constant (mean within-line IQR 0.026)
+   and nearly all of the drawn width (pooled IQR 0.115) is the difference BETWEEN the three cell
+   lines. The three retrieval rows are the opposite: their within-line IQR is currently wider than
+   their pooled one (0.344 against 0.281, 0.356 against 0.286, 0.459 against 0.449), so their
+   intervals really are query-to-query spread. Both relations are asserted below, at the loose
+   threshold of half the pooled IQR, because what has to hold is the direction of the contrast
+   and not today's exact ratio. A reader comparing interval WIDTHS across the four rows would
+   conclude the magnitude ranking is the steadiest across queries; it is constant across queries
+   by construction, and the caption has to say so. The row is kept in the same grammar because
+   the panel's claim is about where the four medians sit, not about how wide they are.
+5. ROW ORDER IS FIXED BY FAMILY AND STORY, not sorted by median. Energy (-0.520) and the raw mean
+   cosine (-0.533) differ by 0.013, which is not an ordering, and sorting on it would invite a
+   reader to rank them.
+6. THE FUNCTIONAL-SIMILARITY COUNTERPARTS ARE NOT DRAWN, although the same 103 queries carry them
+   in fig3hi_class_c_functional.csv (energy +0.276, raw mean cosine +0.241, control-subtracted
+   mean cosine +0.083, magnitude alone -0.330). Drawing arrows from those to these would put the
+   study's one external win, +0.276, on the page being dragged across zero, which competes with
+   the number panel h exists to make and reads as a refutation rather than as a control. The
+   endpoint-to-endpoint comparison belongs to the caption. Run this module standalone and it
+   prints both endpoints side by side, so the docstring above can be checked against the files.
+   ONE CAVEAT THE CAPTION MUST CARRY: the two tables share the 103 query keys but not every
+   candidate pool. Five MCF7 queries score fewer candidates under the functional oracle than
+   under potency (four at 33 against 34, one at 30 against 34), because the functional oracle
+   needs a GDSC2 dose-response profile for the candidate as well as for the query. The
+   endpoint-to-endpoint medians are therefore near-paired, not exactly paired. Standalone output
+   counts the mismatched queries rather than asserting an equality that is not true.
+7. VALUE LABELS SIT ON THE OUTER SIDE OF THE INTERVAL, past the first quartile for a negative
+   median and past the third for a positive one, so each number lies in empty space on the side
+   its effect points. The number is the MEDIAN, not the interval end it sits beside.
+8. NO DIRECTION HINT IS DRAWN, although the trim's rules allow a two-word one. On this axis the
+   direction that matters is which candidates a ranking puts first, and naming it costs more than
+   two words ("most potent first" against "least potent first") because the endpoint is absolute
+   potency rather than a population-versus-mean advantage. "(low AUC)" in the axis name already
+   fixes the sign for the reader who needs it fixed, so a hint would be a second, shorter
+   statement of the same thing, in the panel's scarcest space.
+
+THE CAPTION'S PHRASE IS A TWO-ENDPOINT CLAIM, AND IT IS STILL GUARDED FROM HERE. "Absolute potency
+is a different endpoint" cannot be read off this panel's ink alone; its other half is in panel h.
+That is why it is now a caption sentence and not drawn ink. It is still not left unchecked:
+_assert_endpoints_differ reads the functional table at draw time and requires the three sign
+changes below to still be there. If the endpoints ever stop disagreeing, the build fails instead
+of leaving a caption the numbers no longer support.
+
+BE EXACT ABOUT WHAT CHANGES SIGN. Between the functional endpoint and this one, energy (+0.276 to
+-0.520), the raw mean cosine (+0.241 to -0.533) and magnitude alone (-0.330 to +0.692) all change
+sign; the control-subtracted mean cosine does NOT, moving from +0.083 to +0.105, a collapse
+towards zero. The retired ed5.py phrasing "every ranking's correlation with potency inverts" is
+wrong on the third row of this panel and is not reproduced here or in the caption.
 
 Run standalone: python fig3j.py
 """
 from __future__ import annotations
 
 import os
-import sys
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fig3_style import (FAINT, MS_DOT, PT_ANNOT, PT_SMALL, PT_TICK, REPO,  # noqa: E402
-                        SHARED, SUBTLE, TEXT, bare_axes)
+from fig3_style import (EXT, HAIRLINE, MEAN, POP, PT_ANNOT, PT_TICK, REPO, SUBTLE, TEXT,
+                        bare_axes, zero_rule)
 
-POWER_CSV = os.path.join(REPO, "results", "exp17_true_divergence_subset", "power_analysis.csv")
-STRAT_CSV = os.path.join(REPO, "results", "exp17_true_divergence_subset",
-                         "divergence_stratified.csv")
+SRC = os.path.join(REPO, "figures", "source_data", "fig3hi_class_c_potency.csv")
+FUNCTIONAL = os.path.join(REPO, "figures", "source_data", "fig3hi_class_c_functional.csv")
 
-STRATUM = "Q4"          # the label exp17 gives the top quartile of true_divergence
-ALPHA = 0.05            # exp16_common.power_two_sided default, two-sided
-POWER_RULE = 0.80       # the conventional criterion, drawn as a reference and named once
+N_QUERIES = 103
 
-# (column name in the source file, the name drawn on the panel). Order is top row first.
-METRICS = (("minority_state_coverage", "minority-state coverage"),
-           ("moa_ndcg", "MoA-nDCG"))
+# (column, short label, colour, filled). Labels are short because the left pad is 1.20 in; the
+# caption expands "ctrl-subtr." to control-subtracted and "magnitude" to candidate response
+# magnitude. "no retrieval" stays on the panel: it is what stops the green row being read as a
+# rival method that beat the paper's own.
+ROWS = [
+    ("energy_rho",           "energy",                   POP,  True),
+    ("mean_cosine_raw_rho",  "mean cosine, raw",         MEAN, True),
+    ("mean_cosine_ctrl_rho", "mean cosine, ctrl-subtr.", MEAN, False),
+    ("magnitude_only_rho",   "magnitude, no retrieval",  EXT,  False),
+]
+
+# The two rankings that keep the candidate's raw response scale, i.e. the ones the magnitude
+# channel is expected to drag negative against an absolute-potency endpoint.
+KEEPS_RAW_SCALE = ("energy_rho", "mean_cosine_raw_rho")
+CTRL = "mean_cosine_ctrl_rho"
+NO_RETRIEVAL = "magnitude_only_rho"
+# The query's own potency, on the axis the source table stores it on. Low AUC = potent.
+QUERY_AUC = "query_auc"
+
+# Axis: the spine spans the drawn data, the view is wider so each median's value label has empty
+# space to sit in on the side its effect points.
+SPINE_LO, SPINE_HI = -0.75, 0.75
+XLIM_LO, XLIM_HI = -0.95, 1.00
+LABEL_GAP = 0.050
+
+# Mark weights. The 0.05 in of axes height returned by deleting the drawn phrase is spent here:
+# with no sentence to lead the eye, the medians and the side of zero they fall on have to be the
+# first thing seen. Row pitch is 11.8 pt, so a 5.4 pt dot on a 1.8 pt rule stays clear of its
+# neighbours.
+LW_IQR = 1.8
+MS_MEDIAN = 5.4
+MEW_MEDIAN = 1.1            # the open rings' edge, raised with the dot so filled and open match
 
 
-def _achieved_power(effect: float, sd: float, n: int, alpha: float = ALPHA) -> float:
-    """Reimplementation of src/experiments/exp16_common.power_two_sided.
+def _fmt(v):
+    """Signed value with a typographic minus, so the panel never mixes hyphens and minuses.
 
-    Power of a two-sided one-sample (paired-difference) test at the OBSERVED effect and s.d.,
-    normal approximation. Present so the loader can assert that the achieved_power column is
-    this quantity and not some other one, which is what licenses the axis label.
+    The x tick labels take U+2212 from the deck's rc, so a value label built by f"{v:+.2f}" puts a
+    second, visibly shorter minus glyph on the same axis, one row above the tick that uses the
+    other one. Same helper, and same reason, as fig3d._fmt.
     """
-    from scipy.stats import norm
-    if not (np.isfinite(effect) and np.isfinite(sd)) or sd <= 0 or n < 2:
-        raise ValueError(f"power undefined for effect={effect}, sd={sd}, n={n}")
-    z = abs(effect) / (sd / np.sqrt(n))
-    zcrit = norm.ppf(1.0 - alpha / 2.0)
-    return float(norm.cdf(z - zcrit) + norm.cdf(-z - zcrit))
+    return f"{v:+.2f}".replace("-", "−")
 
 
-def _load():
-    """Return [(drawn name, n, achieved power), ...] for the Q4 rows, everything checked.
+def _iqr(x):
+    q1, q3 = np.percentile(np.asarray(x, dtype=float), [25, 75])
+    return float(q3 - q1)
 
-    Five assertions, one per statement the panel makes, in words or in marks:
-      * the file carries exactly one Q4 row for each of the two metrics;
-      * Q4 really is the highest-divergence quartile, per divergence_stratified.csv;
-      * the per-metric n agree between the two files;
-      * achieved_power is the power of the OBSERVED gap, reproduced here from mean, s.d. and n;
-      * MoA-nDCG clears the rule over ALL queries, which is what the x label's stratum line is
-        there to prevent a reader from denying.
+
+def _load(path, what):
+    """Read a per-query table, refusing to draw anything the file does not support."""
+    if not os.path.exists(path):
+        raise FileNotFoundError(
+            f"{path} does not exist. Run the Class-C analysis and export the per-query {what} "
+            f"table. This panel will not render placeholder correlations.")
+    d = pd.read_csv(path)
+    missing = [c for c, _l, _c, _f in ROWS if c not in d.columns]
+    if missing:
+        raise KeyError(f"{path} is missing {missing}; panel 3j needs all four ranking columns.")
+    if len(d) != N_QUERIES:
+        raise ValueError(f"{path} has {len(d)} queries; panel 3j and the caption both say "
+                         f"{N_QUERIES}. Fix one or the other, do not draw the mismatch.")
+    if d[[c for c, _l, _c, _f in ROWS]].isna().any().any():
+        raise ValueError(f"{path} carries missing correlations; medians would be over a subset "
+                         f"the caption does not describe.")
+    return d
+
+
+def _assert_claims(d, med):
+    """Assert, from the data, every relationship this panel and its caption state.
+
+    A drawn number can go stale silently; an assertion cannot. These are the statements the
+    panel makes with ink, plus the cross-cell-line consistency, the interval-kind caveat and the
+    mechanism reading that its docstring and caption claim. The panel now draws no sentence, so
+    these assertions are the only thing standing between a data change and a caption that has
+    quietly stopped being true.
     """
-    pw_all = pd.read_csv(POWER_CSV)
-    pw = pw_all[pw_all["stratum"] == STRATUM]
-    assert len(pw), (f"{POWER_CSV} carries no {STRATUM} row; strata present: "
-                     f"{sorted(set(pw_all['stratum']))}")
-    assert set(pw["metric"]) == {m for m, _ in METRICS}, (
-        f"{STRATUM} metrics are {sorted(set(pw['metric']))}, not the two this panel draws")
-    assert len(pw) == len(METRICS), f"expected one {STRATUM} row per metric, got {len(pw)}"
+    for col in KEEPS_RAW_SCALE:
+        assert med[col] < 0, (
+            f"3j says the rankings that keep the raw response scale sit below zero against "
+            f"absolute potency, but {col} has median {med[col]:+.3f}.")
 
-    st_all = pd.read_csv(STRAT_CSV)
-    st = st_all[st_all["stratum"] != "ALL"]
+    assert med[CTRL] > 0, (
+        f"3j says the control-subtracted mean cosine does NOT change sign against potency, "
+        f"but its median is {med[CTRL]:+.3f}. Do not redraw it as an inversion.")
+    others = [abs(med[c]) for c, _l, _c, _f in ROWS if c != CTRL]
+    assert abs(med[CTRL]) < min(others), (
+        f"3j draws the control-subtracted mean cosine as the row nearest zero; it is not "
+        f"({abs(med[CTRL]):.3f} against {min(others):.3f}).")
 
-    out = []
-    for metric, name in METRICS:
-        row = pw[pw["metric"] == metric].iloc[0]
-        n = int(row["n"])
-        power = float(row["achieved_power"])
+    retrieval = [med[c] for c, _l, _c, _f in ROWS if c != NO_RETRIEVAL]
+    assert med[NO_RETRIEVAL] > max(retrieval), (
+        f"3j draws the no-retrieval magnitude scalar as the highest row; it is not "
+        f"({med[NO_RETRIEVAL]:+.3f} against {max(retrieval):+.3f}).")
+    assert (d[NO_RETRIEVAL] > 0).all(), (
+        f"3j's caption says the magnitude scalar is positive in all {N_QUERIES} queries; "
+        f"{int((d[NO_RETRIEVAL] <= 0).sum())} are not.")
 
-        sub = st[st["metric"] == metric]
-        top = str(sub.loc[sub["divergence_median"].idxmax(), "stratum"])
-        assert top == STRATUM, (
-            f"{metric}: the highest-divergence stratum is {top}, not the {STRATUM} this panel "
-            f"names 'highest response-divergence quartile'")
-        n_strat = int(sub.loc[sub["stratum"] == STRATUM, "n"].iloc[0])
-        assert n_strat == n, f"{metric}: n disagrees between the two exp17 files, {n_strat} vs {n}"
+    # Judgement call 3: the caption says every row keeps its sign in all three cell lines. All
+    # four rows, not the two the panel leans hardest on.
+    for col, _lab, _c, _f in ROWS:
+        by_line = d.groupby("cell_line")[col].median()
+        assert (np.sign(by_line) == np.sign(med[col])).all(), (
+            f"3j's caption says every row's sign holds in all three cell lines; {col} has "
+            f"pooled median {med[col]:+.3f} against per-line {by_line.round(3).to_dict()}.")
 
-        recomputed = _achieved_power(float(row["observed_mean_gap"]), float(row["sd_gap"]), n)
-        assert abs(recomputed - power) < 1e-9, (
-            f"{metric}: achieved_power {power} is not the power of the observed gap "
-            f"({recomputed}); the axis label 'at the observed gap' would be false")
-        assert 0.0 <= power <= 1.0, f"{metric}: power {power} outside [0, 1]"
-        out.append((name, n, power))
+    # Judgement call 4: the fourth row's interval is between-cell-line, the other three are
+    # query-to-query. The caption has to say so, so the file has to keep it true.
+    for col, _lab, _c, _f in ROWS:
+        pooled = _iqr(d[col])
+        within = float(np.mean([_iqr(g[col]) for _k, g in d.groupby("cell_line")]))
+        if col == NO_RETRIEVAL:
+            assert within < 0.5 * pooled, (
+                f"3j's caption says the no-retrieval row's drawn width is mostly the difference "
+                f"between cell lines (within-line IQR {within:.3f}, pooled {pooled:.3f}); it is "
+                f"no longer, so stop describing it that way.")
+        else:
+            assert within > 0.5 * pooled, (
+                f"3j's caption contrasts the retrieval rows' intervals as genuine query-to-query "
+                f"spread; {col} now has within-line IQR {within:.3f} against pooled {pooled:.3f}, "
+                f"so its width has become a between-cell-line effect too.")
 
-    # The drawing, half one: the two dots straddle the drawn rule, coverage above and MoA-nDCG
-    # below. The panel no longer says so in words, but the marks do, and the caption does.
-    (_, _, p_cov), (_, _, p_moa) = out
-    assert p_cov >= POWER_RULE > p_moa, (
-        f"this panel draws the two {STRATUM} dots on opposite sides of the {POWER_RULE:.0%} rule; "
-        f"the file now says coverage {p_cov:.4f}, MoA-nDCG {p_moa:.4f}, so the marks would no "
-        f"longer carry that reading and the panel must be re-derived")
+    # The panel's defence, which the caption states: a negative rho here is a working retriever
+    # on a mismatched endpoint. If the retriever returns candidates like the query, then a potent
+    # query (LOW AUC) is the one whose rho comes out positive, so rho must fall as query AUC
+    # rises. It does, pooled and in each cell line.
+    assert QUERY_AUC in d.columns, (
+        f"{SRC} is missing {QUERY_AUC}; 3j's caption says a negative rho is the expected "
+        f"behaviour of a working retriever, and that claim is checked against the query's own "
+        f"potency, not asserted by hand.")
+    for col in KEEPS_RAW_SCALE:
+        pooled_r = float(d[[col, QUERY_AUC]].corr(method="spearman").iloc[0, 1])
+        assert pooled_r < -0.2, (
+            f"3j's caption reads the negative medians as a similarity retriever tracking the "
+            f"query's own potency, which requires {col} to fall as the query's AUC rises; the "
+            f"pooled Spearman rho is {pooled_r:+.3f}.")
+        by_line = {k: float(g[[col, QUERY_AUC]].corr(method="spearman").iloc[0, 1])
+                   for k, g in d.groupby("cell_line")}
+        assert all(v < 0 for v in by_line.values()), (
+            f"3j's caption says that reading holds in all three cell lines; {col} against "
+            f"{QUERY_AUC} gives {({k: round(v, 3) for k, v in by_line.items()})}.")
 
-    # The marks, half one and a half: draw_3j branches on whether each dot sits above or below
-    # the middle of the gauge, and puts that row's name in the other half. The straddle above
-    # pins the coverage dot to the upper half but leaves the MoA-nDCG dot anywhere below 0.80,
-    # and at 0.5 to 0.8 its value label would be written over its own name. Assert the branch
-    # the drawing takes rather than letting a future value silently stack two labels.
-    assert p_moa <= 0.5, (
-        f"draw_3j places the {STRATUM} MoA-nDCG name in the RIGHT half because its dot is in the "
-        f"left half; the file now says {p_moa:.4f}, so the name and the value would be set on "
-        f"the same ink and the row layout must be re-derived")
 
-    # The drawing, half two: the x label's "highest response-divergence quartile" line. That scope
-    # is load-bearing, not a courtesy, because the same MoA-nDCG evaluator DOES clear the rule over
-    # the whole query set, where its gap is negative. Without this check the line could be dropped
-    # in a later edit and the panel would become a false statement about the study rather than a
-    # true one about the stratum.
-    moa_key = METRICS[1][0]
-    whole = st_all[(st_all["metric"] == moa_key) & (st_all["stratum"] == "ALL")]
-    assert len(whole) == 1, f"{STRAT_CSV} carries {len(whole)} ALL rows for {moa_key}, expected 1"
-    whole = whole.iloc[0]
-    p_whole = _achieved_power(float(whole["mean_gap"]), float(whole["sd_gap"]), int(whole["n"]))
-    assert p_whole >= POWER_RULE, (
-        f"the x label scopes this panel to {STRATUM} because {moa_key} clears {POWER_RULE:.0%} "
-        f"over all {int(whole['n'])} queries and so the unscoped reading would be false; it now "
-        f"reaches only {p_whole:.4f}, so the scoping no longer carries that work and the panel "
-        f"must be re-derived rather than left standing")
-    return out
+def _assert_endpoints_differ(med):
+    """Assert the caption's opening phrase, a claim about two endpoints, from both files.
+
+    "Absolute potency is a different endpoint" is not readable from this panel's ink; the other
+    half of the comparison is panel h. That is why the phrase belongs to the caption. Checking it
+    here means a data change breaks the build rather than leaving a true-looking caption over
+    numbers that no longer support it.
+    """
+    f = _load(FUNCTIONAL, "functional-similarity")
+    fmed = {c: float(f[c].median()) for c, _l, _c, _f in ROWS}
+    for col in list(KEEPS_RAW_SCALE) + [NO_RETRIEVAL]:
+        assert fmed[col] * med[col] < 0, (
+            f"3j's caption says absolute potency is a different endpoint, on the strength of "
+            f"{col} changing sign between them; it now runs {fmed[col]:+.3f} to {med[col]:+.3f}.")
+    assert fmed[CTRL] > 0 and med[CTRL] > 0, (
+        f"3j's docstring and caption are exact that the control-subtracted mean cosine is the "
+        f"one row that does NOT change sign; it runs {fmed[CTRL]:+.3f} to {med[CTRL]:+.3f}.")
+    return fmed
 
 
 def draw_3j(ax):
-    """Achieved power at the observed gap, highest-divergence quartile: a two-dot gauge."""
-    rows = _load()
-    ys = [0.73, 0.17]                      # the two dot rows, top row first
-    dy = 0.075                             # labels sit ABOVE their lead, never across it
-    x_lo, x_hi = -0.025, 1.055             # room for a dot sitting at power 1.0
-    val_pad = 0.030                        # gap between a dot and its own value
-    name_pad = 0.090                       # gap between the rule and a name set against it
-    rule_head = 0.010                      # gap between the rule's top and the label above it
+    d = _load(SRC, "absolute-potency")
+    med = {c: float(d[c].median()) for c, _l, _c, _f in ROWS}
+    _assert_claims(d, med)
+    _assert_endpoints_differ(med)
 
-    # A hairline lead from zero to each dot: enough to say how much of [0, 1] the power fills,
-    # thin enough not to become the two bars this diagnostic does not deserve.
-    for y, (_, _, power) in zip(ys, rows):
-        ax.plot([0.0, power], [y, y], color=FAINT, lw=0.8, solid_capstyle="butt", zorder=1)
+    ys = np.arange(len(ROWS))[::-1]
+    for y, (col, _lab, colour, filled) in zip(ys, ROWS):
+        q1, q3 = (float(v) for v in np.percentile(d[col].values, [25, 75]))
+        assert XLIM_LO < q1 - LABEL_GAP and q3 + LABEL_GAP < XLIM_HI, (
+            f"{col} quartiles {q1:.3f},{q3:.3f} leave no room inside the view for the value "
+            f"label this panel puts {LABEL_GAP} outside them.")
+        ax.plot([q1, q3], [y, y], color=colour, lw=LW_IQR, solid_capstyle="butt", zorder=3)
+        ax.plot([med[col]], [y], marker="o", ms=MS_MEDIAN, mew=MEW_MEDIAN, zorder=4,
+                mfc=colour if filled else "white", mec=colour, ls="none")
+        # The median's value, on the side its effect points, clear of the interval it summarises.
+        if med[col] < 0:
+            ax.text(q1 - LABEL_GAP, y, _fmt(med[col]), ha="right", va="center",
+                    fontsize=PT_ANNOT, color=TEXT)
+        else:
+            ax.text(q3 + LABEL_GAP, y, _fmt(med[col]), ha="left", va="center",
+                    fontsize=PT_ANNOT, color=TEXT)
 
-    # The rule runs from the axis to just under the top row's label, so it passes both dots and
-    # reads as the one threshold they are judged against, without cutting through the row label
-    # that spans it. Its name sits in the band between the two rows, left of the rule, which is
-    # the only region no row's text reaches.
-    ax.vlines(POWER_RULE, 0.0, max(ys) + dy - rule_head, color=SHARED, lw=0.8,
-              ls=(0, (2.6, 2.0)), zorder=2)
-    ax.text(POWER_RULE - 0.024, 0.49, f"{POWER_RULE:.0%} power", ha="right", va="bottom",
-            fontsize=PT_SMALL, color=SHARED, zorder=3)
-
-    for y, (name, n, power) in zip(ys, rows):
-        ax.scatter([power], [y], s=MS_DOT, color=SHARED, lw=0, zorder=4, clip_on=False)
-        # The value goes on the side of the dot that has room, which differs by row: the
-        # coverage dot sits at the right end of the axis, the MoA-nDCG dot at the left end.
-        right_end = power > 0.5
-        ax.text(power - val_pad if right_end else power + val_pad, y + dy,
-                f"{power:.4f}", ha="right" if right_end else "left", va="bottom",
-                fontsize=PT_ANNOT, color=TEXT, zorder=5)
-        # The name goes in that row's empty half, so nothing crosses the reference rule. A
-        # right-end dot leaves the axis start as the row's only hard edge, so its name is set
-        # from there; a left-end dot leaves the RULE as the only hard edge, so its name is set
-        # against the rule rather than from a fixed left edge. Set from the left, that name
-        # cleared the rule only because "MoA-nDCG, n = 143" happens to be short enough, and
-        # nothing here could check it; set from the rule, it cannot cross the rule at any length.
-        ax.text(0.015 if right_end else POWER_RULE - name_pad, y + dy, f"{name}, n = {n}",
-                ha="left" if right_end else "right", va="bottom",
-                fontsize=PT_ANNOT, color=TEXT, zorder=5)
+    # Zero is the datum: to its left a ranking puts the least potent candidates first. It is NOT
+    # a population-versus-mean boundary, so the half-planes stay unwashed and unlabelled.
+    zero_rule(ax, 0.0, vertical=True, color=SUBTLE, lw=0.8, zorder=2)
 
     bare_axes(ax, keep=("bottom",))
-    ax.spines["bottom"].set_bounds(0.0, 1.0)
-    ax.set_xlim(x_lo, x_hi)
-    ax.set_ylim(0.0, 1.0)
-    ax.set_yticks([])
-    ax.set_xticks([0.0, 0.5, 1.0])
-    ax.set_xticklabels(["0", "0.5", "1"], fontsize=PT_TICK)
-    ax.tick_params(axis="x", length=1.8, pad=1.4)
-    # Two lines because both are load-bearing: the numbers are power AT THE OBSERVED GAP, and
-    # they are the top divergence quartile rather than the whole query set.
-    ax.set_xlabel("achieved power at the observed gap\nhighest response-divergence quartile",
-                  fontsize=PT_TICK, color=SUBTLE, labelpad=1.0, linespacing=1.18)
+    ax.set_xlim(XLIM_LO, XLIM_HI)
+    ax.set_ylim(-0.60, len(ROWS) - 0.40)
+    ax.set_xticks([-0.5, 0.0, 0.5])
+    ax.spines["bottom"].set_bounds(SPINE_LO, SPINE_HI)
+    ax.spines["bottom"].set_color(HAIRLINE)
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[1] for r in ROWS])
+    ax.tick_params(axis="y", length=0, labelsize=PT_ANNOT)
+    ax.tick_params(axis="x", labelsize=PT_TICK)
+    # "(low AUC)" is load-bearing: GDSC2 AUC runs OPPOSITE to potency, so "potency (GDSC2 AUC)"
+    # inverts every sign on this axis for a reader who knows the assay.
+    ax.set_xlabel(r"Spearman $\rho$ with GDSC2 potency (low AUC)", fontsize=PT_ANNOT,
+                  color=TEXT, labelpad=1.5)
     return ax
 
 
+def _endpoint_table():
+    """Both endpoints' medians, so this module's docstring can be checked against the files.
+
+    Not drawn: see judgement call 6. Standalone only, and it raises rather than skipping if the
+    functional table is absent, because a silent half-answer is worse than no answer.
+
+    The two tables share the 103 query keys but NOT every candidate pool, so this reports the
+    mismatch instead of asserting an equality that is false. See judgement call 6.
+    """
+    p, f = _load(SRC, "absolute-potency"), _load(FUNCTIONAL, "functional-similarity")
+    keys = ["cell_line", "query_drug"]
+    assert set(map(tuple, p[keys].values.tolist())) == set(map(tuple, f[keys].values.tolist())), \
+        "the two Class-C tables are not the same 103 queries; they cannot be compared per row."
+    lines = []
+    for col, lab, _c, _f in ROWS:
+        mf, mp = float(f[col].median()), float(p[col].median())
+        flips = "changes sign" if mf * mp < 0 else "same sign"
+        lines.append(f"  {lab:<26s} functional {mf:+.3f}  ->  potency {mp:+.3f}   {flips}")
+    if "n_cand" in p.columns and "n_cand" in f.columns:
+        m = p[keys + ["n_cand"]].merge(f[keys + ["n_cand"]], on=keys, suffixes=("_pot", "_fun"))
+        diff = m[m.n_cand_pot != m.n_cand_fun]
+        lines.append(f"  candidate pools differ for {len(diff)} of {len(m)} queries "
+                     f"(the endpoint medians are near-paired, not exactly paired)")
+        for _i, r in diff.iterrows():
+            lines.append(f"    {r.cell_line} {r.query_drug}: potency {int(r.n_cand_pot)} "
+                         f"candidates, functional {int(r.n_cand_fun)}")
+    return "\n".join(lines)
+
+
 if __name__ == "__main__":
-    # The house rcParams the composite sets, applied here too. Without them the standalone falls
-    # back to DejaVu Sans, which is about 18% wider than the deck's Arial/Liberation stack, and
-    # the labels overrun the 3.20 in box in this preview while fitting in the real figure. A
-    # preview that lies about fit is worse than no preview.
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     from figstyle import apply_style
     from fig3_style import PT_TITLE
-    apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
 
-    # The printed geometry of panel j after the sentence was cut: a 3.20 x 1.01 in box holding a
-    # 2.36 x 0.63 in axes, plus the assemble file's 0.17 in letter block, which now carries the
-    # panel letter and nothing else.
-    box_w, box_h, block = 3.20, 1.01, 0.17
-    fig = plt.figure(figsize=(box_w, box_h + block))
-    draw_3j(fig.add_axes([0.74 / box_w, 0.38 / (box_h + block),
-                          2.36 / box_w, 0.63 / (box_h + block)]))
+    apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
+    # apply_style sets savefig.bbox = "tight", which would crop the preview back to its ink and
+    # hand back a PNG at a different scale from the printed panel. This preview exists to be 1:1
+    # with the panel box, so keep the canvas.
+    plt.rcParams["savefig.bbox"] = None
+    # The rect this panel occupies in fig3_assemble after the 2026-08-31 trim: a 1.07 in row box,
+    # 1.20 in of left pad, 0.10 in right, 0.38 in bottom, and no title band above the axes.
+    fig = plt.figure(figsize=(3.60, 1.07))
+    ax = fig.add_axes([1.20 / 3.60, 0.38 / 1.07, 2.30 / 3.60, 0.69 / 1.07])
+    draw_3j(ax)
     out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "3j.png")
-    # Pin the export to the authored canvas. The house rcParams set savefig.bbox = "tight",
-    # which would crop this preview back to the ink and hide exactly what it exists to show:
-    # whether the panel's labels and axis label fit inside the printed 3.20 x 1.18 in box.
-    fig.savefig(out, dpi=300, bbox_inches=fig.bbox_inches)
+    fig.savefig(out, dpi=300)
     print(f"wrote {out}")
+    print(_endpoint_table())

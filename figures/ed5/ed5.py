@@ -1,7 +1,7 @@
 """Extended Data Fig. 5: the absolute-potency confounder audit.
 
 SUPERSEDED 2026-08-31. draw_a and draw_b were adopted as main-text Fig. 3l and 3m on 2026-08-30
-and re-authored on 2026-08-31 as figures/fig3/fig3l.py and fig3m.py, which read the same
+and re-authored on 2026-08-31 as figures/fig3/fig3j.py and fig3k.py, which read the same
 figures/source_data/fig3hi_class_c_potency.csv. They are no longer imported by any main figure.
 Two reasons, both recorded so this file is not mistakenly re-adopted: it sets 5.2 to 5.6 pt type,
 under Figure 3's 6.5 pt floor, and its x axis reads "absolute potency (GDSC AUC)", which equates

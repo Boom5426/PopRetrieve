@@ -1738,3 +1738,45 @@ five figures now embed Arial alone (regular, bold and italic), with no missing-g
 both build gates still pass: `build_all.py` reports 5 of 5 CLEAN with 0 typography violations and
 `check_overlaps.py` reports 0 collisions. Found by the agent auditing Fig. 3a, which measured the
 glyph widths rather than judging them by eye.
+
+---
+
+## R51. The power analysis moved from Figure 3 to Supplementary Note 2
+
+Not a correction: a scope decision, recorded because it moves evidence out of a main figure and a
+reader deserves to know where it went.
+
+Main-text Fig. 3 carried two panels showing that the mechanism-recovery null is not a power
+artefact, measured in the highest response-divergence quartile: achieved power 1.00 for
+minority-state coverage ($n=191$) against 0.06 for MoA-nDCG ($n=143$), and 45 queries needed for
+80% power against 20,844. On 2026-08-31 they were removed from the page and their numbers moved
+into Supplementary Note 2 in full, together with the reading they support. The Results sentence that
+cited "Fig. 3j,k and Supplementary Note 2" now cites the Note alone, and the surviving panels `l`
+and `m` were relabelled `j` and `k`.
+
+**Why.** The two panels are third-tier diagnostics on a page whose argument is its first four rows,
+and they cost a whole row of a thirteen-panel figure. Removing them shortened the canvas from 9.20
+to 7.96 in, a 13.5 per cent shorter page, and lifted panel a from 15.6 to 17.5 per cent of panel
+area without resizing any other panel.
+
+**The risk this takes, stated plainly.** A power analysis is the direct answer to the single most
+likely objection to a paper whose central result is a negative, and moving it to the Supplementary
+Information makes that answer one click further away. The mitigation is that the Note now carries
+more than the panels did: both effect sizes, both standard deviations, both sample sizes, both
+achieved powers, both required sample sizes, and the asymmetric reading the numbers actually
+support, which the panels could not state in the space they had. That reading is worth repeating
+here, because it is easy to overstate in the paper's favour:
+
+- The minority-state comparison is well powered and returns a small effect. That is evidence of a
+  small effect.
+- The mechanism-recovery comparison is **not** adequately powered at $n=143$. Its null is an
+  absence of evidence, not evidence of absence, and the main text's mechanism-recovery conclusion
+  therefore rests on the full 600-query set and on the shape of the whole distribution
+  (Fig. 3a,b), not on this stratum.
+
+The difference between the two is not effect size, which differs by less than a factor of two, but
+variance: the MoA-nDCG gap has twelve times the standard deviation.
+
+`figures/edfigs/ed_panels.draw_ed2a` and `draw_ed2b` remain in the repository. They are now the only
+code that reads `results/exp17_true_divergence_subset/power_analysis.csv`, so they are how that
+table is regenerated and checked, and they should not be deleted.

@@ -199,6 +199,30 @@ These results distinguish differential response from decision relevance. Stronge
 responses may create the information required for population-aware retrieval, but they do not
 guarantee that this information changes the ordering of candidate perturbations.
 
+\paragraph{The mechanism-recovery null is not a power artefact.}
+A null result invites the objection that the comparison could not have detected an effect, so we
+computed achieved power and the sample size required for 80\% power directly, in the highest
+response-divergence quartile: the stratum in which the pre-specified diagnostic itself predicts the
+largest population-level advantage, and therefore the only stratum in which the objection has
+force. Two task-proximal criteria were compared on the same queries. For minority-state coverage
+the observed mean gap was $+0.0056$ with a standard deviation of $0.0135$ across $n=191$ queries,
+giving an achieved power of $1.00$ and requiring only 45 queries for 80\% power. For
+mechanism-of-action nDCG the observed mean gap was $+0.0032$ with a standard deviation of $0.163$
+across $n=143$ queries, giving an achieved power of $0.06$ and requiring 20,844 queries for 80\%
+power.
+
+The two gaps differ by less than a factor of two; the two standard deviations differ by a factor of
+twelve. The mechanism-recovery comparison is therefore uninformative at the sample size available,
+and this is a property of that metric's variance rather than of the effect size. The correct reading
+is asymmetric and we state it as such: the minority-state comparison is well powered and returns a
+small effect, which is evidence of a small effect; the mechanism-recovery comparison is not
+adequately powered, so its null is an absence of evidence rather than evidence of absence. The main
+text's mechanism-recovery conclusion rests on the full 600-query set and on the shape of the whole
+distribution (Fig.~3a,b), not on this stratum.
+
+These figures were reported in the main text until 2026-08-31, when the two panels carrying them
+were moved here to keep the main figure to the evidence that carries its argument.
+
 \paragraph{Instability of thresholded dominance counts.}
 We also examined whether the real-data tasks could be summarized by counting queries whose
 population-level gain exceeded a fixed threshold. Such counts were unstable under resampling.

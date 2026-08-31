@@ -17,8 +17,7 @@ page exists to support or to qualify one of them:
                  gain, its own reliability axis runs opposite to true divergence, and its verdict
                  does not sort queries by divergence.
   Row 4  h | i   The external functional readout, in aggregate and per query.
-  Row 5  j | k   The Class-B null is not a power artifact.
-  Row 6  l | m   What the endpoint choice does, and the channel that explains it.
+  Row 5  j | k   What the endpoint choice does, and the channel that explains it.
 
 THE 2026-08-31 REBUILD
 ----------------------
@@ -48,9 +47,22 @@ Three things changed that are about the argument rather than the drawing.
     is a few large positives, not a broad advantage, and 102 of the 239 tasks select the same
     candidate under both methods. The panel now shows the tasks, not only their means.
 
-Panels j to m were drawn by the retired Extended Data modules (edfigs/ed_panels.draw_ed2a and
-draw_ed2b, ed5/ed5.draw_a and draw_b). They are re-authored here as fig3j to fig3m, reading the
-same files, because those modules set 5.2 to 5.6 pt type and this figure has a 6.5 pt floor.
+THE POWER PANELS LEFT THE PAGE, 2026-08-31. Two panels used to sit between rows 4 and 5, showing
+achieved power and the queries needed for 80 per cent power in the highest response-divergence
+quartile. They answered the one objection this paper's central negative result invites, and they
+answered it well, but they are third-tier diagnostics and they cost a whole row on a page whose
+argument is rows 1 to 4. Their numbers moved to Supplementary Note 2 in full, so nothing is lost:
+achieved power 1.00 for minority-state coverage against 0.06 for MoA-nDCG, and 45 queries needed
+against 20,844, a difference driven by a twelvefold gap in standard deviation rather than by effect
+size. The Results now cite that Note rather than the figure.
+
+Removing them took the canvas from 9.20 to 7.96 in, a 13.5 per cent shorter page, and lifted panel
+a from 15.6 to 17.5 per cent of panel area without changing any other panel's size. The surviving
+l and m were relabelled j and k.
+
+Panels j and k are re-authored from the retired Extended Data module ed5/ed5.py (draw_a and
+draw_b), reading the same file, because that module sets 5.2 to 5.6 pt type and this figure has a
+6.5 pt floor.
 
 GEOMETRY, IN INCHES ON THE PRINTED PAGE
 ---------------------------------------
@@ -94,8 +106,6 @@ from fig3h import draw_3h  # noqa: E402
 from fig3i import draw_3i  # noqa: E402
 from fig3j import draw_3j  # noqa: E402
 from fig3k import draw_3k  # noqa: E402
-from fig3l import draw_3l  # noqa: E402
-from fig3m import draw_3m  # noqa: E402
 
 # ------------------------------------------------------------------------------------------
 # The inch ledger
@@ -126,8 +136,7 @@ ROWS = [
     (1.20, [("c", 2.75), ("g", 4.15)]),
     (1.00, [("d", 2.10), ("e", 2.40), ("f", 2.40)]),
     (1.46, [("h", 4.10), ("i", 2.80)]),
-    (0.85, [("j", 3.20), ("k", 3.70)]),
-    (0.92, [("l", 3.60), ("m", 3.30)]),
+    (0.92, [("j", 3.60), ("k", 3.30)]),
 ]
 
 # (left, right, bottom) pad in inches inside the panel BOX. Top is always zero: the phrase is
@@ -139,8 +148,7 @@ PADS = {"a": (0.74, 0.10, 0.42), "b": (0.70, 0.10, 0.44),
         "c": (0.78, 0.10, 0.40), "g": (1.02, 0.10, 0.42),
         "d": (0.76, 0.10, 0.42), "e": (0.70, 0.10, 0.42), "f": (0.70, 0.10, 0.42),
         "h": (1.34, 0.10, 0.36), "i": (0.72, 0.10, 0.38),
-        "j": (0.74, 0.10, 0.38), "k": (0.80, 0.10, 0.38),
-        "l": (1.20, 0.10, 0.38), "m": (0.72, 0.10, 0.38)}
+        "j": (1.20, 0.10, 0.38), "k": (0.72, 0.10, 0.38)}
 
 
 def _boxes():
@@ -228,8 +236,7 @@ def _assert_no_titles(fig, cap=PT_ANNOT):
 
 
 DRAW = {"a": draw_3a, "b": draw_3b, "c": draw_3c, "d": draw_3d, "e": draw_3e, "f": draw_3f,
-        "g": draw_3g, "h": draw_3h, "i": draw_3i, "j": draw_3j, "k": draw_3k, "l": draw_3l,
-        "m": draw_3m}
+        "g": draw_3g, "h": draw_3h, "i": draw_3i, "j": draw_3j, "k": draw_3k}
 
 
 def build(apply_style, panel_letter):

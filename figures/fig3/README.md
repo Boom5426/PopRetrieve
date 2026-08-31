@@ -28,10 +28,8 @@ the manuscript is the authority and this file is the bug.
 | 3 | f | two divergence distributions, the declined one further right | same |
 | 4 | h | energy above its incumbent, and an arc dropping it to +0.097 | `source_data/fig3hi_class_c_functional.csv` |
 | 4 | i | a scatter split 62 / 41 by the diagonal | same |
-| 5 | j | one dot past 0.8, one nowhere near it | `results/exp17_true_divergence_subset/power_analysis.csv` |
-| 5 | k | two dumbbells of wildly different length on a log axis | same |
-| 6 | l | two negative, one near zero, one strongly positive | `source_data/fig3hi_class_c_potency.csv` |
-| 6 | m | a density piled up near +1 | same |
+| 5 | j | two negative, one near zero, one strongly positive | `source_data/fig3hi_class_c_potency.csv` |
+| 5 | k | a density piled up near +1 | same |
 
 ## Archetype and panel hierarchy
 
@@ -50,9 +48,9 @@ total is unchanged, so nothing outside those six numbers moved.
 
 | tier | panels | share of panel area, each |
 |---|---|---|
-| 1, discovery | a, g, h, i | 12.3% |
-| 2, why the gain is absent | b, c, e, f | 6.3% |
-| 3, diagnostics | d, j, k, l, m | 5.1% |
+| 1, discovery | a, g, h, i | 13.8% |
+| 2, why the gain is absent | b, c, e, f | 7.1% |
+| 3, diagnostics | d, j, k | 5.5% |
 
 ## Audit findings NOT acted on
 
@@ -61,9 +59,9 @@ Recorded so they are decisions rather than oversights.
 - **Panel letters are 9.5 pt against the 8 pt convention** for Nature-family panel labels. This
   deck sets its whole type ladder one step up (Figures 1, 2 and 3 all use 9.5), and changing one
   figure would break that consistency. Revisit deck-wide or not at all.
-- **The caption is 692 words against a 300-word guideline.** All five figures are over. The
+- **The caption is 631 words against a 300-word guideline.** All five figures are over. The
   guideline comes from a Nature Communications corpus; Nature main-text legends routinely run 400
-  to 700. At thirteen panels, 300 words is 23 words per panel including the figure title and every
+  to 700. At eleven panels, 300 words is 27 words per panel including the figure title and every
   statistic, and the QA contract separately requires n, centre, spread and test to be IN the
   legend. The two rules conflict at this panel count, and the statistics won. Cut from 943 on
   2026-08-31; the remaining candidates were all honesty qualifications rather than prose.
@@ -169,25 +167,29 @@ returned 0.42 in of height to the six rows, which is most of what had made rows 
   The retired `ed5.py` phrasing "every ranking's correlation with potency inverts" is also wrong:
   the control-subtracted mean cosine goes +0.083 to +0.105, a collapse toward zero, not a sign
   change. Only energy and the raw mean cosine change sign.
-- **j and k are a power analysis in a main figure**, which normally signals a thin headline. Here
-  the headline IS the null, so the power analysis is the evidence rather than an apology for it.
-  k prints 20,844 in full: rounding it to "about 20,000" costs the panel its force.
 
 ## Print geometry, authored 1:1
 
 The figure enters the manuscript as `\includegraphics[width=\textwidth]` into a 6.951 in text
-block. The canvas is **6.90 x 9.20 in** and exports 6.92 x 9.22, so LaTeX scales it by 1.004 and
-nominal point size is printed point size. The float budget is the 9.461 in text block less about
+block. The canvas is **6.90 x 7.96 in** and exports 6.92 x 7.98 (176 x 203 mm), so LaTeX scales it by
+1.004 and nominal point size is printed point size. The float budget is the 9.461 in text block less about
 16/72 in of overhead, i.e. 9.238 in, leaving 0.018 in of margin: **do not grow the canvas without
 re-checking `Float too large` in the build log.** The caption is on the following page and is
 itself near the limit; it overflowed at 991 words and fits at about 945.
 
-Layout is an explicit inch ledger in `fig3_assemble.py`: six rows, `a|b`, `c|g`, `d|e|f`, `h|i`,
-`j|k`, `l|m`, with unequal widths inside a row because the panels are unequal. It was five rows of
-up to four panels until 2026-08-31.
+Layout is an explicit inch ledger in `fig3_assemble.py`: five rows, `a|b`, `c|g`, `d|e|f`, `h|i`,
+`j|k`, with unequal widths inside a row because the panels are unequal.
 
-**Thirteen panels on one page is tight, and the ledger says so rather than pretending.** Rows 5 and
-6 give their panels 0.57 to 0.64 in of axes height. The response to that is to cut annotation into
+**The two power panels left the page on 2026-08-31.** They showed achieved power and the queries
+needed for 80 per cent power in the highest response-divergence quartile, and they answered the one
+objection this paper's central negative result invites. They are third-tier diagnostics and they
+cost a whole row on a page whose argument is rows 1 to 4, so their numbers moved to Supplementary
+Note 2 in full and the Results now cite that Note. Removing them shortened the canvas from 9.20 to
+7.96 in and lifted panel a from 15.6 to 17.5 per cent of panel area without resizing anything else;
+the surviving `l` and `m` were relabelled `j` and `k`. See CORRECTIONS.md R51.
+
+**Eleven panels on one page is still tight.** Row 5 gives its panels 0.54 in of axes height, and
+row 3 gives 0.58 in. The response to that is to cut annotation into
 the caption; `fig3_assemble._assert_floor` enforces a **6.5 pt** floor, above the deck's 5 pt
 production limit, and measures mathtext at its effective 0.7x size.
 
@@ -195,7 +197,7 @@ production limit, and measures mathtext at its effective 0.7x size.
 
 - `fig3_style.py` : the frozen vocabulary. The sign rule, the type ladder, `CELL_MARKER`,
   `sign_field`, and the seeded `boot_ci` that every interval in the figure comes from.
-- `fig3a.py` ... `fig3m.py` : per-panel draw functions, each `draw_3X(ax)`, each runnable
+- `fig3a.py` ... `fig3k.py` : per-panel draw functions, each `draw_3X(ax)`, each runnable
   standalone for a preview. Panels j to m were drawn by `edfigs/ed_panels.py` and `ed5/ed5.py`
   until 2026-08-31; they are re-authored here because those modules set type under this figure's
   floor, and are no longer imported by any main figure.
