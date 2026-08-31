@@ -4,14 +4,14 @@ Panel d answers exactly one question: if the mean score cannot tell two candidat
 does the population score change which one is preferred? It is the CONSEQUENCE of b (averaging
 can hide what a population is doing) and of c (which statistic enters the score), so it reuses
 c's vocabulary rather than inventing one: populations are drawn with fig1_style.cells, the
-collapse of a population onto one vector is stated where c states it, and the two routes keep the
+collapse of a population onto one vector is marked where c marks it, and the two routes keep the
 colours they were given there (MEAN orange for the collapsed signature, POP blue for the
 population, SHARED grey for what both routes see).
 
 fig1_style.centroid is deliberately NOT drawn on the shared mean, although panel d is one of the
 panels its docstring names. In this construction the shared mean falls inside candidate B, so the
 orange diamond would sit on top of, and be read as a marker of, the orange population; the dashed
-rule carries the shared mean instead. The diamond is kept for the verdict, where it is what the
+guide carries the shared mean instead. The diamond is kept for the verdict, where it is what the
 mean route compares, against the cell cluster the population route compares. Those two marks are
 c's two rows, which is what makes the verdict a consequence rather than a new assertion.
 
@@ -19,18 +19,52 @@ THE CONSTRUCTION
 ----------------
 Three populations, drawn once and shown twice: as the marginal along the axis they differ on, and
 as the cells themselves. All three are rigidly translated so that their sample means coincide
-EXACTLY, which is what lets one dashed rule stand for all three. Without that translation the
-rule would sit at a point none of the three clouds actually has, and the panel's whole claim is
-an equality of means.
+EXACTLY, which is what lets one guide stand for all three. Without that translation the guide
+would sit at a point none of the three clouds actually has, and the panel's whole claim is an
+equality of means.
 
-    target Q     SHARED   bimodal
+    target Q     SHARED   bimodal, drawn as a filled reference ribbon
     candidate A  POP      bimodal at the target's two modes: distribution-matched
     candidate B  MEAN     unimodal, peaking in the target's valley: mean-matched only
 
 The one number the mean route sees is the same for all three, so it returns a tie. The
 populations are not the same, so the population route does not. That verdict is set at the
-bottom, at PT_EQ, because a reader must not have to infer the outcome of the panel that exists
-to show the outcome.
+bottom, because a reader must not have to infer the outcome of the panel that exists to show the
+outcome.
+
+THE 3.15 x 1.60 IN RE-LAYOUT, AND THE FOUR THINGS IT MOVED
+-----------------------------------------------------------
+The panel was authored for a 1.65 x 3.00 in portrait box and now gets a landscape one, roughly
+twice as wide and half as tall. It shows the same three populations and returns the same verdict;
+the arrangement is not the same, because a landscape box changes what the drawing can afford:
+
+  * The title takes two lines at the top left and the three-population key sits beside it at the
+    top right, so the whole width above the construction is one band instead of two stacked ones.
+  * The construction keeps its stacking (marginal above cells), because the shared-mean guide can
+    only run through both halves if one is above the other. It is the guide that makes the two
+    halves one experiment rather than two illustrations, so it is now a SINGLE line from the top
+    of the densities to the floor of the scatter, named once at its foot.
+  * The clouds cannot grow with the width: their radius is capped by the height of the lower
+    band, so the mode separation grows instead (LOBE below). Cells are still drawn on an
+    isotropic scale, which is why the radius is converted through K in points rather than through
+    two independent axes fractions.
+  * The verdict rows carry their candidates' colours: the A and B of each relation are preceded
+    by the key's own stub in POP blue and MEAN orange, so "A = B" and "A > B" tie back to the two
+    curves above without a legend lookup. Colour travels through those marks, never through the
+    colour of the letters.
+
+TWO THINGS THAT CHANGED SIZE OR LEFT, AND WHY
+---------------------------------------------
+The relation is set at PT_ANNOT, where the portrait cut set it at PT_EQ. It carries no mathtext,
+so PT_EQ is not owed to it, and the whole verdict row is now one 7.2 pt line whose emphasis comes
+from the two colour marks rather than from a larger type size. That is also what the box allows:
+two 9.3 pt rows fit between the axis labels and the bottom edge with about a tenth of a point to
+spare, which is not a margin, it is a coincidence waiting to break on another font.
+
+The two italic band labels, "1D marginal view" and "2D cellular population", are gone. They cost
+about a fifth of the height this box has, and the caption already carries them word for word:
+"shown as 1D marginals above the 2D cells the marginals are computed from". What names the two
+halves now is the drawing, the curves above and the cells below, hung on one guide.
 
 Nothing here is measured. The populations are drawn from a seeded generator, no file in results/
 is read, and the caption says the panel is a constructed illustration.
@@ -47,60 +81,92 @@ import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig1_style import (FAINT, LW_HAIR, LW_LINE, MEAN, POP, PT_ANNOT,  # noqa: E402
-                        PT_EQ, SHARED, TEXT, blank, cells, centroid, title)
+                        SHARED, TEXT, blank, cells, centroid, title)
 
-# ------------------------------------------------------------------ the axis the halves share
-# The axes the composite gives panel d (fig1_assemble: FIGW * ROW1_SHARE["d"] less the letter
-# gutter and the right margin, by ROW1_H). It cannot be imported from there, because
-# fig1_assemble imports this module, so it is restated here and the preview block builds at
-# exactly it. Everything below is in axes fractions, and these two numbers are what turn a radius
-# or a mark width into the same number of inches horizontally as vertically.
-PANEL_W_IN, PANEL_H_IN = 1.652, 3.000
-ASPECT = PANEL_W_IN / PANEL_H_IN
+# ------------------------------------------------------------------ the box this is tuned for
+# The axes the composite gives panel d (fig1_assemble: half of FIGW less the letter gutter and the
+# right margin, by the row height). It cannot be imported from there, because fig1_assemble
+# imports this module, so it is restated here and the preview block builds at exactly it.
+PANEL_W_IN, PANEL_H_IN = 3.15, 1.60
+W_PT, H_PT = PANEL_W_IN * 72.0, PANEL_H_IN * 72.0
 
-X0, X1 = 0.015, 0.985      # the shared x axis runs the full panel width; panel d has no y axis
-D_LO, D_HI = -2.0, 2.0     # arbitrary units: this panel measures nothing
-SX = (X1 - X0) / (D_HI - D_LO)
-SY = SX * ASPECT
+# Everything below is laid out in POINTS, x from the left edge and y DOWN from the top edge, and
+# converted at the point of use. Axes fractions cannot express "this cloud is as tall as it is
+# wide" on a panel whose aspect is about 2:1, and every earlier round of this panel that reasoned
+# in fractions had to re-tune each constant when the box changed shape.
 
-# ------------------------------------------------------------------ vertical stack, axes fraction
-# Read top to bottom: what the panel claims, who the three populations are, the two views of them,
-# and what the two retrieval routes therefore return.
-Y_KEY = (0.893, 0.853, 0.813)
-Y_LAB_1D = 0.768
-Y_MEAN = 0.728            # the rule is named once, above the half the reader meets first
-Y_BAND_TOP, Y_BASE = 0.700, 0.512
-Y_LAB_2D = 0.486
-Y_SC_TOP, Y_FLOOR = 0.464, 0.268
-Y_XLABEL = 0.244
-Y_VERDICT = (0.135, 0.045)   # the verdict is set off by white space, not by a box or a rule
 
-X_SWATCH = (0.000, 0.045)  # flush left with the panel letter and the title, which title() sets at 0
-X_TAG, X_TEXT = 0.058, 0.115
-MARK_PT = 5.4              # width of a verdict row's mark, a little under the 7.2 pt beside it, so
-                           # the two routes are marked at the weight of a key and not of a figure
+def _fx(pt):
+    return pt / W_PT
+
+
+def _fy(pt):
+    return 1.0 - pt / H_PT
+
+
+# ------------------------------------------------------------------ vertical bands, pt from top
+# Read top to bottom: what the panel claims and who the three populations are, the two views of
+# them hung on one guide, and what the two retrieval routes therefore return.
+KEY_Y = (3.8, 12.3, 20.8)       # 8.5 pt leading: the tightest that keeps 7.2 pt rows apart, and
+                                # the first row clears the top edge by its own half height
+MARG_TOP, MARG_BASE = 27.0, 54.5
+SC_CY = 71.5                    # centre of the cell band; its radius follows from R_Q and K
+FLOOR_Y = 86.0
+UNDER_Y = 91.5                  # the guide's name and the axis name share one line under the floor
+VERDICT_Y = (102.0, 110.5)      # the verdict is set off by white space, not by a box or a rule
+
+# ------------------------------------------------------------------ horizontal, pt from left
+X0_PT, X1_PT = 3.4, 223.4       # the shared x axis runs the full panel width; panel d has no y axis
+KEY_X = 100.0                   # clears the longest title line (90 pt set) by a 10 pt gutter
+STUB_W = 9.0                    # key mark: one stroke of the curve the row names
+TAG_DX, GLOSS_DX = 12.0, 21.0
+MARK_CX, ROUTE_DX = 4.5, 12.0   # the verdict's route mark, and the route it names
+# The relation is laid out glyph by glyph, because its two rows must align column for column and
+# because the stub has to touch the letter it marks. Arial, Helvetica and Liberation Sans (the
+# deck's stack, figstyle.apply_style) are metric compatible, so these advances hold for all three.
+CAP_W = 5.04                    # a bold 7.2 pt capital
+OP_W = 4.32                     # a bold 7.2 pt "=" or ">"; equal widths keep the rows aligned
+REL_STUB_W = 8.0                # the key's stub, shortened to sit inside a relation
+REL_MARK_GAP = 2.0              # stub -> its letter: tight, so the pair reads as one token
+REL_OP_GAP = 4.0                # token -> operator: loose, so the relation reads as three parts
+# The verdict ends where the axis above it ends, so the panel has one right edge, not two.
+REL_X = X1_PT - (2 * (REL_STUB_W + REL_MARK_GAP + CAP_W) + 2 * REL_OP_GAP + OP_W)
+MARK_PT = 5.4                   # width of a verdict row's mark, a little under the 7.2 pt beside
+                                # it, so the two routes are marked at the weight of a key
 
 # ------------------------------------------------------------------ the three populations
-# In data units. The two candidates are separated by SHAPE, not by a fifth colour: A repeats the
-# target's two modes, B fills the valley between them. Both integrate to the same mean, which is
-# the only statistic the mean route keeps.
-LOBE, R_Q, R_A = 1.25, 0.44, 0.42
-R_B = (0.70, 0.45)         # wide enough to span the target's valley, narrow enough not to reach
-                           # into its modes: the clouds must not touch in the 2D view
-N_CELLS = 96               # equal population sizes, so a difference in the marginals is shape;
-                           # large enough that three clouds of it read as tissue, not as dots
-KDE_H = 0.19               # about half a mode radius: smooths the sampling, keeps the two modes
-Y_SC = (Y_FLOOR + Y_SC_TOP) / 2.0
-MX = X0 + (0.0 - D_LO) * SX
+# In data units, on one isotropic scale: K points per data unit, horizontally AND vertically.
+# The two candidates are separated by SHAPE, not by a fifth colour: A repeats the target's two
+# modes, B fills the valley between them. Both integrate to the same mean, which is the only
+# statistic the mean route keeps.
+D_LO, D_HI = -3.8, 3.8
+K = (X1_PT - X0_PT) / (D_HI - D_LO)      # points per data unit
+# R_Q is what sets the cloud radius, and a cloud has to stand inside the 31.5 pt between
+# MARG_BASE and FLOOR_Y; D_HI was chosen with R_Q so that 0.44 data units land at about 12.7 pt,
+# which is the radius the portrait cut used as well. The width bought separation, not size.
+LOBE, R_Q, R_A = 2.40, 0.44, 0.42
+R_B = (1.00, 0.44)              # wide enough to reach into the target's valley and to leave the
+                                # modes about 28 pt of clear space: the clouds must not touch in
+                                # 2D, and B must stay dense enough to read as tissue at equal N
+N_CELLS = 96                    # equal population sizes, so a difference in the marginals is
+                                # shape; large enough that three clouds of it read as tissue
+KDE_H = 0.26                    # about 0.6 of a mode radius: smooths the sampling, keeps the two
+                                # modes, and lets B's flanks cross the modes' inner flanks
 
 
 def _ax_x(v):
-    return X0 + (v - D_LO) * SX
+    """Data units to axes fraction, along the axis the three populations differ on."""
+    return _fx(X0_PT + (v - D_LO) * K)
+
+
+MX = _ax_x(0.0)                 # the shared mean, and the x of the guide both halves hang on
+Y_SC = _fy(SC_CY)
 
 
 def _blobs(spec):
-    """Data-unit (cx, cy, rx, ry) blobs into axes coordinates."""
-    return [(_ax_x(cx), Y_SC + cy * SY, rx * SX, ry * SY) for cx, cy, rx, ry in spec]
+    """Data-unit (cx, cy, rx, ry) blobs into axes coordinates, on one isotropic scale."""
+    return [(_ax_x(cx), _fy(SC_CY - cy * K), rx * K / W_PT, ry * K / H_PT)
+            for cx, cy, rx, ry in spec]
 
 
 def _population(ax, spec, colour, seed, s, alpha, zorder):
@@ -108,7 +174,7 @@ def _population(ax, spec, colour, seed, s, alpha, zorder):
 
     A finite sample of a mean-zero population does not have a mean of zero, and at this panel's
     scale that sampling error is a visible fraction of a mode radius. The whole population is
-    therefore translated onto the shared mean after sampling, so the rule the panel draws through
+    therefore translated onto the shared mean after sampling, so the guide the panel draws through
     all three is the mean all three actually have. cells() draws them, so the glyph is the one
     used everywhere else in the figure; only the offsets of what it drew are corrected.
     """
@@ -137,12 +203,13 @@ def _marginal(x, grid, h):
     return np.exp(-0.5 * z ** 2).sum(0) / (len(x) * h * np.sqrt(2 * np.pi))
 
 
-def _stub(ax, y, colour):
-    """The key mark: one stroke of the curve this row names. Colour is carried by the mark."""
-    ax.plot(X_SWATCH, [y, y], color=colour, lw=1.9, solid_capstyle="butt", zorder=5)
+def _stub(ax, x0_pt, y_pt, colour, w=STUB_W, lw=1.9, alpha=1.0, zorder=5):
+    """One stroke of the curve a row names. Colour is carried by the mark, never by the letters."""
+    ax.plot([_fx(x0_pt), _fx(x0_pt + w)], [_fy(y_pt)] * 2, color=colour, lw=lw, alpha=alpha,
+            solid_capstyle="butt", zorder=zorder)
 
 
-def _route_mark(ax, y, colour):
+def _route_mark(ax, x_pt, y_pt, colour):
     """What each retrieval route actually compares, at the size of a key mark.
 
     Not a colour stub. The verdict rows are the two rows of panel c, and drawing c's glyphs here,
@@ -150,75 +217,97 @@ def _route_mark(ax, y, colour):
     from the operator rather than from a new claim. It also keeps the verdict block from reading
     as a second copy of the population key above it.
     """
-    x = sum(X_SWATCH) / 2.0
+    x, y = _fx(x_pt), _fy(y_pt)
     if colour == MEAN:
         # scatter sizes are areas, so a mark MARK_PT across is MARK_PT squared
         centroid(ax, x, y, color=MEAN, size=MARK_PT ** 2)
     else:
         r_pt = MARK_PT / 2.0
-        cells(ax, x, y, 11, r_pt / (PANEL_W_IN * 72.0), r_pt / (PANEL_H_IN * 72.0),
-              color=POP, rng=np.random.default_rng(5), s=2.6, alpha=0.95, zorder=5)
+        cells(ax, x, y, 11, r_pt / W_PT, r_pt / H_PT, color=POP,
+              rng=np.random.default_rng(5), s=2.6, alpha=0.95, zorder=5)
 
 
 def draw_1d(ax):
     blank(ax)
     title(ax, "Means tie,\ndistributions separate", x=0.0, y=1.0, va="top", linespacing=1.15)
 
-    # ---- who the three populations are, before either view of them ----
+    # ---- who the three populations are, beside the title and above both views of them ----
+    # The target is the reference the candidates are read against, so its key mark carries the
+    # same pale block the density carries: the reader meets the filled curve already labelled.
     key = ((SHARED, "Q", "target population"),
            (POP, "A", "distribution-matched"),
            (MEAN, "B", "mean-matched only"))
-    for y, (colour, tag, gloss) in zip(Y_KEY, key):
-        _stub(ax, y, colour)
-        ax.text(X_TAG, y, tag, fontsize=PT_ANNOT, color=TEXT, fontweight="bold",
+    for y_pt, (colour, tag, gloss) in zip(KEY_Y, key):
+        if colour == SHARED:
+            _stub(ax, KEY_X, y_pt + 1.0, colour, lw=4.2, alpha=0.16, zorder=4)
+            _stub(ax, KEY_X, y_pt - 0.9, colour, lw=1.9, alpha=0.55)
+        else:
+            _stub(ax, KEY_X, y_pt, colour)
+        ax.text(_fx(KEY_X + TAG_DX), _fy(y_pt), tag, fontsize=PT_ANNOT, color=TEXT,
+                fontweight="bold", ha="left", va="center")
+        ax.text(_fx(KEY_X + GLOSS_DX), _fy(y_pt), gloss, fontsize=PT_ANNOT, color=TEXT,
                 ha="left", va="center")
-        ax.text(X_TEXT, y, gloss, fontsize=PT_ANNOT, color=TEXT, ha="left", va="center")
 
     # ---- the cells, drawn first because both views are views of them ----
     tgt = _population(ax, [(-LOBE, 0.0, R_Q, R_Q), (LOBE, 0.0, R_Q, R_Q)],
-                      SHARED, seed=11, s=3.6, alpha=0.55, zorder=3)
+                      SHARED, seed=11, s=3.4, alpha=0.5, zorder=3)
     cand_a = _population(ax, [(-LOBE, 0.0, R_A, R_A), (LOBE, 0.0, R_A, R_A)],
-                         POP, seed=23, s=3.4, alpha=0.85, zorder=4)
+                         POP, seed=23, s=3.2, alpha=0.85, zorder=4)
     cand_b = _population(ax, [(0.0, 0.0, R_B[0], R_B[1])],
-                         MEAN, seed=37, s=3.4, alpha=0.85, zorder=4)
+                         MEAN, seed=37, s=3.2, alpha=0.85, zorder=4)
 
     # ---- upper half: the marginal along the axis they differ on ----
-    ax.text(0.0, Y_LAB_1D, "1D marginal view", fontsize=PT_ANNOT, color=TEXT,
-            style="italic", ha="left", va="center")
-    grid = np.linspace(X0, X1, 400)
-    h = KDE_H * SX
+    grid = np.linspace(_fx(X0_PT), _fx(X1_PT), 500)
+    h = KDE_H * K / W_PT
     dens = [_marginal(x, grid, h) for x in (tgt, cand_a, cand_b)]
-    scale = (Y_BAND_TOP - Y_BASE) / max(d.max() for d in dens)
-    ax.plot([X0, X1], [Y_BASE, Y_BASE], color=FAINT, lw=LW_HAIR, zorder=1)
-    # the target is the reference, so it is the only filled one: the candidates are read against it
-    ax.fill_between(grid, Y_BASE, Y_BASE + dens[0] * scale, color=SHARED, alpha=0.16,
-                    lw=0, zorder=2)
-    for d, colour, z in ((dens[0], SHARED, 3), (dens[2], MEAN, 4), (dens[1], POP, 5)):
-        ax.plot(grid, Y_BASE + d * scale, color=colour, lw=LW_LINE, zorder=z,
+    base, scale = _fy(MARG_BASE), (MARG_BASE - MARG_TOP) / H_PT / max(d.max() for d in dens)
+    # No separate baseline rule under the densities. The three curves run out flat to both edges
+    # and already draw one; a FAINT rule under them was a second horizontal line the eye stopped
+    # on, and the panel only needs one, the floor the cells stand on.
+    # The target is the reference, so it is the only filled one, and its outline is drawn as a
+    # ribbon twice the width of a curve: A is then laid on that ribbon at ordinary curve width and
+    # is SEEN to cover it, which is the whole meaning of "distribution-matched".
+    ax.fill_between(grid, base, base + dens[0] * scale, color=SHARED, alpha=0.16, lw=0, zorder=2)
+    ax.plot(grid, base + dens[0] * scale, color=SHARED, lw=LW_LINE * 2.0, alpha=0.5, zorder=3,
+            solid_capstyle="round")
+    for d, colour, z in ((dens[2], MEAN, 4), (dens[1], POP, 5)):
+        ax.plot(grid, base + d * scale, color=colour, lw=LW_LINE, zorder=z,
                 solid_capstyle="round")
 
     # ---- lower half: the same cells, as cells ----
-    ax.text(0.0, Y_LAB_2D, "2D cellular population", fontsize=PT_ANNOT, color=TEXT,
-            style="italic", ha="left", va="center")
-    ax.plot([X0, X1], [Y_FLOOR, Y_FLOOR], color=FAINT, lw=LW_HAIR, zorder=1)
-    ax.text(0.5, Y_XLABEL, "latent dimension 1", fontsize=PT_ANNOT, color=TEXT,
-            ha="center", va="top")
+    ax.plot([_fx(X0_PT), _fx(X1_PT)], [_fy(FLOOR_Y)] * 2, color=FAINT, lw=LW_HAIR, zorder=1)
+    ax.text(_fx(X1_PT), _fy(UNDER_Y), "latent dimension 1", fontsize=PT_ANNOT, color=TEXT,
+            ha="right", va="center")
 
-    # ---- the one rule both halves are hung on ----
-    # Two segments rather than one: the label of the lower half crosses the rule's x, and a rule
-    # printed through a word costs more than the interruption does.
-    for lo, hi in ((Y_BASE, Y_MEAN - 0.016), (Y_FLOOR, Y_SC_TOP)):
-        ax.plot([MX, MX], [lo, hi], color=SHARED, lw=LW_HAIR, ls=(0, (2.6, 2.0)), zorder=2)
-    ax.text(MX, Y_MEAN, "Shared mean", fontsize=PT_ANNOT, color=TEXT,
+    # ---- the one guide both halves are hung on ----
+    # A SINGLE line, from the top of the densities to the floor of the scatter, drawn over the
+    # cells rather than under them: it has to be followed through candidate B's cloud, which sits
+    # on the shared mean, and a guide that disappeared there would leave two local rules again.
+    ax.plot([MX, MX], [_fy(MARG_TOP), _fy(FLOOR_Y)], color=SHARED, alpha=0.45, lw=LW_HAIR,
+            ls=(0, (2.6, 2.0)), zorder=6)
+    ax.text(MX, _fy(UNDER_Y), "shared mean", fontsize=PT_ANNOT, color=TEXT,
             ha="center", va="center")
 
     # ---- the verdict, which is why the panel is in the figure ----
-    for y, colour, route, relation in ((Y_VERDICT[0], MEAN, "Mean retrieval", "A = B"),
-                                       (Y_VERDICT[1], POP, "Population retrieval", "A > B")):
-        _route_mark(ax, y, colour)
-        ax.text(X_TAG, y, route, fontsize=PT_ANNOT, color=TEXT, ha="left", va="center")
-        ax.text(1.0, y, relation, fontsize=PT_EQ, color=TEXT, fontweight="bold",
-                ha="right", va="center")
+    # Each row: the mark of what the route compares, the route, then the relation with its two
+    # candidates marked in their own colours. Same grammar as the key, so no lookup is needed.
+    for y_pt, colour, route, op in ((VERDICT_Y[0], MEAN, "Mean retrieval", "="),
+                                    (VERDICT_Y[1], POP, "Population retrieval", ">")):
+        _route_mark(ax, MARK_CX, y_pt, colour)
+        ax.text(_fx(ROUTE_DX), _fy(y_pt), route, fontsize=PT_ANNOT, color=TEXT,
+                ha="left", va="center")
+        x = REL_X
+        for cand_colour, cand in ((POP, "A"), (MEAN, "B")):
+            _stub(ax, x, y_pt, cand_colour, w=REL_STUB_W)
+            x += REL_STUB_W + REL_MARK_GAP
+            ax.text(_fx(x), _fy(y_pt), cand, fontsize=PT_ANNOT, color=TEXT, fontweight="bold",
+                    ha="left", va="center")
+            x += CAP_W
+            if cand == "A":
+                x += REL_OP_GAP
+                ax.text(_fx(x), _fy(y_pt), op, fontsize=PT_ANNOT, color=TEXT, fontweight="bold",
+                        ha="left", va="center")
+                x += OP_W + REL_OP_GAP
 
 
 # --------------------------------------------------------------------------------- preview
@@ -287,7 +376,7 @@ if __name__ == "__main__":
 
     # Exactly the axes the composite gives panel d, so a position tuned here is the one that ships.
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
-    fig = plt.figure(figsize=(1.652, 3.000))
+    fig = plt.figure(figsize=(PANEL_W_IN, PANEL_H_IN))
     ax = fig.add_axes([0.0, 0.0, 1.0, 1.0])
     draw_1d(ax)
 

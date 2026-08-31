@@ -1,41 +1,58 @@
-"""PopRetrieve Figure 1 panel e: objective-utility mismatch.
+"""PopRetrieve Figure 1 panel e: the objective-utility mismatch, drawn as two judging scenarios.
 
-Schematic; no external data. The panel states the paper's central conceptual claim, that a
-retrieval method can be graded by the very quantity it was optimised to maximise, and that such a
-grade cannot tell us whether the retrieved candidate is a better candidate.
+Schematic. No measured value is plotted and no data file stands behind this panel; it states the
+paper's central conceptual claim, that a retrieval method can be graded by the very quantity it
+was optimised to maximise, and that a grade of that kind cannot say whether the retrieved
+candidate is the better candidate.
 
-WHY THE PANEL IS BUILT AS TWO STACKED LANES
--------------------------------------------
-The claim is a COMPARISON, so it is drawn as one. Both lanes run through the same three stage
-positions, carry the same stage glyph geometry and the same arrow style, and differ in exactly two
-places: the colour of the third stage, and what the lane does after it. Everything a reader has to
-compare therefore sits at the same x, one lane above the other, and the two differences are the
-only things that move.
+WHY TWO JUDGING SCENARIOS AND NOT A FLOWCHART
+---------------------------------------------
+The previous cut drew the claim as box -> box -> box with a curved arrow under it and then wrote
+the conclusion out in a sentence. The structure lived in the words; the drawing only carried
+them. The claim is about WHO HOLDS THE INSTRUMENT, so the drawing is now about that:
 
-The top lane closes: the third stage is POP, the same colour as the first, because a
-population-distance regret and a population-distance score are one statistical objective evaluated
-twice. The bracket over the two ends names that, and the concrete instance under the stages shows
-it literally, since "population distance" is spelled out at both ends of the chain. The bottom lane
-does not close: the third stage is EXT, an evaluator the retrieval score never saw, and the lane
-ends in a fork rather than a return arrow.
+  * The retriever and the coupled evaluator are the SAME MARK. One circle, one fill, one colour,
+    and inside each of them the same small instrument: two response populations with a gap
+    between them, which is what a population distance measures. The reader sees the same object
+    at both ends of the chain before reading a word, so "the scorer is judging itself" is seen
+    rather than asserted.
+  * The coupled lane CLOSES. A return path leaves the evaluator, runs back under the chain and
+    points up into the retriever, and the words "shared objective" sit inside the loop it makes.
+    A closed circuit is the one figure a reader cannot mistake for a pipeline.
+  * The independent lane does not close. Its third stage is a rectangle rather than a circle, in
+    EXT green rather than POP blue, and it holds pictures of things the retrieval score never
+    saw: a target, a protein with a ligand in its pocket, a dose-response curve. It opens to the
+    right onto two outcomes instead of returning.
 
-WHY THE STAGE LABELS SIT UNDER THE STAGE MARKS RATHER THAN INSIDE THEM
----------------------------------------------------------------------
-The axes is 1.652 in wide. Wrapped onto two lines each, "Retrieval score", "Ranked candidates" and
-"Evaluation" set at PT_ANNOT come to 0.85 of that width as bare text and 0.96 once each is boxed,
-which leaves about 3 pt for each connecting arrow; the flow would be implied by adjacency rather
-than drawn. Setting the type
-smaller is not available (this figure's floor is 6.5 pt and lowering a size to fit is the failure
-mode the ladder exists to prevent), so the stage MARK and the stage NAME were separated: a small
-coloured node carries the colour and the flow, and the name sits under it with the full panel width
-to wrap into. The arrows are then 0.23 in long and legible.
+Everything else is held identical on purpose. Both lanes use the same three stage centres, the
+same stage footprint, the same grey flow arrows and the same three numbered candidate cards, so
+the only differences a reader can find are the two the panel is about: one lane closes on itself,
+the other opens onto a different kind of judge.
 
-WHY THE MIDDLE STAGE IS DRAWN AS THREE BARS
--------------------------------------------
-It is the ranked candidate list, and it is the one object the two lanes literally share: the same
-ranking is handed to the independent evaluator unchanged. Drawing it as a list glyph rather than as
-another plain node lets the reader see the same object in both lanes, which is what "FIXED RANKING"
-asserts in words.
+WHAT WAS CUT, AND WHAT THE CAPTION MUST NOW CARRY
+-------------------------------------------------
+Three things were cut so the marks could be drawn large enough to be read as marks.
+
+  * The green judge's three icons are unlabelled. A bullseye, a bound protein and a sigmoid at
+    0.11 in do not name themselves, so the caption has to say what they are: mechanism of action,
+    target engagement, and viability from GDSC2 dose response.
+  * "Retriever" and "Evaluator" are written once, in the coupled lane only. The independent lane
+    inherits them from the column: same centre, same mark, therefore the same object.
+  * The word "ranking" under the coupled lane's middle stage is gone. Three numbered cards ARE a
+    ranking, and the independent lane still names it, because "fixed ranking" is the assertion
+    that the SAME list is handed on unchanged.
+
+The old verdict sentence "Apparent gain is built into the criterion" is gone as well. It read as
+a conclusion the reader had to accept; "objective-aligned gain" is a label on what the coupled
+lane produces, and the caption can argue from it.
+
+TYPE AND SPACE
+--------------
+The axes is 3.15 x 2.03 in, so the panel is landscape and the two scenarios stack as two lanes of
+roughly one inch each. Positions are held in inches and converted at draw time, rather than
+written as axes fractions, because every constraint in this panel is a collision between a point
+size and a length, and point sizes are inches. Nothing is set below PT_SMALL; where a phrase did
+not fit it was cut, not shrunk.
 
 Run standalone: python3 fig1e.py
 """
@@ -45,221 +62,330 @@ import os
 import sys
 
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.colors import to_rgba
-from matplotlib.patches import Rectangle
+from matplotlib.patches import Ellipse, Polygon, Rectangle
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from fig1_style import (EXT, FAINT, LW_HAIR, POP, PT_ANNOT,  # noqa: E402
-                        PT_SMALL, PT_TITLE, SHARED, TEXT, arrow, blank, title)
+from fig1_style import (EXT, LW_ARROW, LW_HAIR, POP, PT_ANNOT,  # noqa: E402
+                        PT_SMALL, PT_TITLE, SHARED, TEXT, arrow, blank, cells, title)
 
-# --------------------------------------------------------------------------- shared geometry
-# The three stage positions. Both lanes use them, which is what makes the lanes comparable.
-# X1 and X3 sit 0.17 of the width in from the edges because the widest name centred on either of
-# them ("Evaluation", "population", both 0.30 of the width) must not cross the axes boundary.
-X1, X2, X3 = 0.17, 0.50, 0.83
-CHIP_W, CHIP_H = 0.17, 0.036          # the stage node, identical in both lanes
-CHIP_GAP = 0.012                      # node edge -> arrow tail, so the head never touches the node
-
-# --------------------------------------------------------------------------- top lane, y
-# The ladder is solved, not chosen. Each lane's fixed heights (an 8.5 pt header, a 0.036 node, two
-# or three text lines per row, the arc's sag) were added up, the gaps were set to the smallest
-# value that still separates two rows at this size, and whatever was left over went to the pivot
-# band in the middle, because that band is the one thing the brief asks to be given room.
-Y_HEAD_T = 0.998
-Y_SPAN_LABEL = 0.953
-Y_SPAN = 0.920
-SPAN_TICK = 0.010
-Y_CHIP_T = 0.882                      # node centre
-Y_NAME_T = 0.852
-Y_INSTANCE = 0.778                    # 0.074 in below the names: any less and the 6.5 pt instance
-                                      # reads as a third line of the 7.2 pt name above it
-Y_RETURN = 0.689                      # the return arrow's two endpoints
-# Negative rad bows the arc DOWNWARD, away from the instance row it would otherwise cross. The
-# sag is |rad| x chord / 2 = 0.13 in here, deep enough to read as a return and not as a bracket.
-RETURN_RAD = -0.24
-Y_RETURN_LABEL = 0.642
-Y_VERDICT = 0.597
-X_VERDICT_BAR = 0.391                 # the verdict sets flush off this rule and runs to the
-                                      # right edge, so the lane closes where the panel does
-
-# --------------------------------------------------------------------------- pivot, y
-Y_RULE_T, Y_RULE_B = 0.535, 0.368
-Y_QUESTION = 0.4515
-
-# --------------------------------------------------------------------------- bottom lane, y
-Y_HEAD_B = 0.352
-Y_CHIP_B = 0.289
-Y_NAME_B = 0.259
-Y_EVAL_TOP, Y_EVAL_BOT = 0.162, 0.094
-Y_FORK = 0.088
-Y_OUTCOME = 0.036
-X_FORK, X_OK, X_FLIP = 0.54, 0.30, 0.78
-
-TINT = 0.14                           # a wash of the stage's own hue, never a fifth colour
-TINT_EMPH = 0.26
+# --------------------------------------------------------------------------------- the canvas
+# The rect fig1_assemble gives panel e: half of the 6.90 in page less the 0.24 in letter gutter
+# and the 0.06 in right margin, by the 2.03 in row height of the e/f row.
+AX_W, AX_H = 3.15, 2.03
 
 
-def _chip(ax, cx, cy, color, emphasis=False, ranked=False):
-    """One stage node. Square corners: a rounded corner in an axes whose x unit is 1.652 in and
-    whose y unit is 3.7 in comes out as an ellipse unless the mutation aspect is fought, and the
-    corner radius carries no meaning worth that."""
-    lw = 1.5 if emphasis else 0.8
-    ax.add_patch(Rectangle((cx - CHIP_W / 2, cy - CHIP_H / 2), CHIP_W, CHIP_H,
-                           fc=to_rgba(color, TINT_EMPH if emphasis else TINT),
-                           ec=color, lw=lw, zorder=3))
-    if not ranked:
-        return
-    # Three bars = the ranked list. Same three bars in both lanes, because it is the same list.
-    bh, pitch = 0.0055, 0.0115
-    for i in (-1, 0, 1):
-        ax.add_patch(Rectangle((cx - 0.055, cy + i * pitch - bh / 2), 0.110, bh,
-                               fc=color, ec="none", zorder=4))
+def _fx(x_in):
+    return x_in / AX_W
 
 
-def _stage_arrows(ax, y):
-    """The two connectors of one lane. SHARED, because the flow is what both routes have."""
-    x_edge = CHIP_W / 2 + CHIP_GAP
-    arrow(ax, (X1 + x_edge, y), (X2 - x_edge, y), color=SHARED, ms=5.5)
-    arrow(ax, (X2 + x_edge, y), (X3 - x_edge, y), color=SHARED, ms=5.5)
+def _fy(y_in):
+    return y_in / AX_H
 
 
-def _name(ax, x, y, text, weight="normal", boxed=False):
-    """A stage name, centred under its node.
+# ------------------------------------------------------------------------- stages, x in inches
+# The three stage centres. Both lanes use them, which is what makes the lanes comparable at a
+# glance. X1 is far enough in that the retriever's own two-line instance label clears the axes
+# edge; X3 is far enough left that the widest instance line ("population distance", 0.80 in)
+# still ends before the verdict column starts.
+X1, X2, X3 = 0.34, 0.97, 1.60
+D_STAGE = 0.36                  # circle diameter, and the height the card stack is built to match
+CARD_W, CARD_H, CARD_PITCH = 0.34, 0.095, 0.128     # 3 cards at this pitch stand 0.351 in tall
+CARD_BAR_H = 0.022              # the candidate's signature inside its card
+JUDGE_W, JUDGE_H = 0.46, 0.36   # the green judge: a stage's height, and a different shape
+X_FLOW_GAP = 0.035              # mark edge -> arrow tail, so no head ever touches a mark
 
-    ``boxed`` is spent once, on FIXED RANKING, and deliberately not mirrored in the lane above.
-    The two lanes are already parallel through the thing that has to be compared, the stage nodes,
-    which are identical in geometry at identical x. A rule drawn round the middle name in BOTH
-    lanes was tried and removed: it made every name in both lanes read as boxed, so the one place
-    the panel wants to shout, that the SAME ranking is handed on unchanged, no longer did.
+# The instrument drawn inside every POP circle: two populations and the gap between them. The
+# clouds sit 0.068 in apart edge to edge, which is the smallest gap that still reads as a gap
+# once the dots are 0.019 in across, and each cloud is tight enough to read as one population
+# rather than as scatter.
+ICON_R, ICON_DX, ICON_N = 0.036, 0.070, 13
+
+# ------------------------------------------------------------------------- verdicts, x in inches
+X_VERDICT_END = 1.975           # where a lane's verdict arrow stops
+X_VERDICT_MARK = 2.085          # the verdict mark's centre
+X_MARK_HALF = 0.070             # half a verdict mark. The swap needs two shafts long enough to
+                                # be shafts: below 0.10 in the pair renders as two bare heads.
+X_VERDICT_TEXT = 2.190          # the verdict's words, set flush left; 0.96 in of run remains,
+                                # which holds "objective-aligned" (0.78 in), the widest of them
+
+# ------------------------------------------------------------------------------- y, in inches
+# Solved rather than chosen: each row's fixed height (an 8.5 pt headline, two 7.2 pt lines, a
+# 6.5 pt two-line instance, a 0.36 in stage, the loop, the verdict fan) was added up and the
+# remainder was spent on the gap between the two lanes, because that gap is what makes them read
+# as two scenarios rather than one six-stage pipeline.
+Y_HEADLINE = 2.026              # va="top"
+Y_HEAD_A = 1.856                # lane name. 0.055 in under the headline's descenders: any less
+                                # and two bold lines read as one two-line title.
+Y_ROLE_A = 1.718                # Retriever / Evaluator
+Y_INST_A = 1.606                # their concrete instance, tight under the role it belongs to
+Y_STAGE_A = 1.202               # stage centres
+Y_LOOP_LABEL = 0.950            # inside the loop, between the card stack and the return run
+Y_RETURN = 0.875                # the return path's horizontal run
+Y_HEAD_B = 0.812
+Y_INST_B = 0.694
+Y_STAGE_B = 0.370
+DY_FAN = 0.180                  # the two outcomes, above and below the independent lane's axis
+
+TINT = 0.14                     # a wash of the mark's own hue, never a fifth colour
+TINT_JUDGE = 0.10               # the green card carries three icons, so its fill sits back
+
+
+# ------------------------------------------------------------------------------------- marks
+def _instrument(ax, cx, cy):
+    """Two response populations with a gap between them: what a population distance measures.
+
+    Drawn identically inside every POP circle, with the same two seeds every time, so the
+    retriever and the coupled evaluator are the same object down to the dot pattern. That
+    identity is the panel's first claim and it is made without a word.
     """
-    bbox = None
-    if boxed:
-        bbox = dict(boxstyle="round,pad=0.30", fc=to_rgba(SHARED, TINT), ec=SHARED, lw=1.1)
-    return ax.text(x, y, text, ha="center", va="top", fontsize=PT_ANNOT, color=TEXT,
-                   fontweight=weight, linespacing=1.15, bbox=bbox, zorder=5)
+    for dx, seed in ((-ICON_DX, 11), (ICON_DX, 12)):
+        cells(ax, _fx(cx + dx), _fy(cy), ICON_N, _fx(ICON_R), _fy(ICON_R), color=POP,
+              rng=np.random.default_rng(seed), s=1.8, alpha=0.9, zorder=5)
 
 
-def _top_lane(ax):
-    title(ax, "Coupled evaluation", x=0.0, y=Y_HEAD_T, va="top")
-
-    # The span names why the first and third stages share a colour. It is drawn in POP for the
-    # same reason they are: it is a statement about the objective, not about the flow.
-    ax.text(0.5, Y_SPAN_LABEL, "same statistical objective", ha="center", va="top",
-            fontsize=PT_ANNOT, color=TEXT)
-    ax.plot([X1, X3], [Y_SPAN, Y_SPAN], lw=LW_HAIR, color=POP, zorder=2)
-    for x in (X1, X3):
-        ax.plot([x, x], [Y_SPAN, Y_SPAN - SPAN_TICK], lw=LW_HAIR, color=POP, zorder=2)
-
-    _chip(ax, X1, Y_CHIP_T, POP)
-    _chip(ax, X2, Y_CHIP_T, SHARED, ranked=True)
-    _chip(ax, X3, Y_CHIP_T, POP)
-    _stage_arrows(ax, Y_CHIP_T)
-
-    _name(ax, X1, Y_NAME_T, "Retrieval\nscore")
-    _name(ax, X2, Y_NAME_T, "Ranked\ncandidates")
-    _name(ax, X3, Y_NAME_T, "Evaluation")
-
-    # The concrete instance. Column 1 and column 3 repeat the same two words on purpose: that
-    # repetition is the claim the span above states in the abstract.
-    for x, s in ((X1, "population\ndistance"), (X2, "ranking"),
-                 (X3, "population\ndistance\nregret")):
-        ax.text(x, Y_INSTANCE, s, ha="center", va="top", fontsize=PT_SMALL, color=TEXT,
-                linespacing=1.15)
-
-    arrow(ax, (X3, Y_RETURN), (X1, Y_RETURN), color=POP,
-          connectionstyle=f"arc3,rad={RETURN_RAD}")
-    ax.text(0.5, Y_RETURN_LABEL, "objective-aligned", ha="center", va="top",
-            fontsize=PT_ANNOT, color=TEXT)
-
-    ax.plot([X_VERDICT_BAR, X_VERDICT_BAR], [Y_VERDICT - 0.003, Y_VERDICT - 0.051],
-            lw=1.2, color=POP, solid_capstyle="butt", zorder=4)
-    ax.text(X_VERDICT_BAR + 0.016, Y_VERDICT, "Apparent gain is built\ninto the criterion",
-            ha="left", va="top", fontsize=PT_ANNOT, color=TEXT, linespacing=1.15)
+def _stage_circle(ax, cx, cy):
+    """The retriever, and the coupled evaluator. One shape, one fill, one instrument."""
+    ax.add_patch(Ellipse((_fx(cx), _fy(cy)), _fx(D_STAGE), _fy(D_STAGE),
+                         fc=to_rgba(POP, TINT), ec=POP, lw=1.0, zorder=3))
+    _instrument(ax, cx, cy)
 
 
-def _pivot(ax):
-    """The question the paper exists to answer, and the two hairlines that give it a band.
+def _cards(ax, cx, cy):
+    """The ranked candidate list: three numbered cards, identical in both lanes.
 
-    The rules are FAINT because they are structure: they hold the question apart from the two
-    lanes without being read as a boundary between two results.
+    It is the one object the two scenarios literally share, so it is drawn from the same code at
+    the same size at the same x in both, and the independent lane's "fixed ranking" says in words
+    only what the reader can already check by eye.
     """
-    for y in (Y_RULE_T, Y_RULE_B):
-        ax.plot([0, 1], [y, y], lw=LW_HAIR, color=FAINT, zorder=1)
-    title(ax, "Does better\nrepresentation lead to\nbetter candidate choice?",
-          x=0.5, y=Y_QUESTION, ha="center", va="center", linespacing=1.25)
+    for i, rank in enumerate(("1", "2", "3")):
+        y = cy + (1 - i) * CARD_PITCH
+        ax.add_patch(Rectangle((_fx(cx - CARD_W / 2), _fy(y - CARD_H / 2)),
+                               _fx(CARD_W), _fy(CARD_H),
+                               fc=to_rgba(SHARED, TINT), ec=SHARED, lw=0.7, zorder=3))
+        ax.text(_fx(cx - CARD_W / 2 + 0.050), _fy(y), rank, ha="center", va="center",
+                fontsize=PT_SMALL, color=TEXT, zorder=5)
+        ax.add_patch(Rectangle((_fx(cx - CARD_W / 2 + 0.090), _fy(y - CARD_BAR_H / 2)),
+                               _fx(CARD_W - 0.128), _fy(CARD_BAR_H),
+                               fc=to_rgba(SHARED, 0.55), ec="none", zorder=4))
 
 
-def _bottom_lane(ax):
-    title(ax, "Independent evaluation", x=0.0, y=Y_HEAD_B, va="top")
+def _target(ax, cx, cy):
+    """Mechanism of action: did the retrieved compound hit the target it was supposed to."""
+    for r in (0.055, 0.030):
+        ax.add_patch(Ellipse((_fx(cx), _fy(cy)), _fx(2 * r), _fy(2 * r),
+                             fc="none", ec=EXT, lw=0.7, zorder=5))
+    ax.add_patch(Ellipse((_fx(cx), _fy(cy)), _fx(0.020), _fy(0.020), fc=EXT, ec="none", zorder=5))
 
-    _chip(ax, X1, Y_CHIP_B, POP)
-    _chip(ax, X2, Y_CHIP_B, SHARED, emphasis=True, ranked=True)
-    _chip(ax, X3, Y_CHIP_B, EXT)
-    _stage_arrows(ax, Y_CHIP_B)
 
-    _name(ax, X1, Y_NAME_B, "same\nretrieval\nscore")
-    _name(ax, X2, Y_NAME_B, "FIXED\nRANKING", weight="bold", boxed=True)
-    _name(ax, X3, Y_NAME_B, "Outside\nevaluator")
+def _protein(ax, cx, cy):
+    """A protein with a ligand in its pocket: target engagement, measured on the protein itself.
 
-    # What the outside evaluator reads. It needs the panel width, so it sits centred under the
-    # whole lane and is tied back to the green stage by a green connector rather than by position.
-    ax.add_patch(Rectangle((0.185, Y_EVAL_BOT), 0.63, Y_EVAL_TOP - Y_EVAL_BOT,
-                           fc=to_rgba(EXT, TINT), ec=EXT, lw=0.8, zorder=3))
-    ax.text(0.5, (Y_EVAL_TOP + Y_EVAL_BOT) / 2, "MoA, protein, viability,\nfunctional response",
-            ha="center", va="center", fontsize=PT_SMALL, color=TEXT, linespacing=1.2, zorder=5)
-    arrow(ax, (0.80, Y_NAME_B - 0.058), (0.80, Y_EVAL_TOP + 0.002), color=EXT, ms=5.0)
+    The outline is a circle modulated by cos(3 theta), which puts three concavities on it; the
+    ligand sits in the one that faces down and right, so the two marks read as bound rather than
+    as a blob with a dot beside it.
+    """
+    th = np.linspace(0, 2 * np.pi, 180)
+    r = 0.048 * (1 + 0.24 * np.cos(3 * th + 0.6))
+    ax.add_patch(Polygon(np.column_stack([_fx(cx + r * np.cos(th)), _fy(cy + r * np.sin(th))]),
+                         closed=True, fc=to_rgba(EXT, 0.28), ec=EXT, lw=0.7, zorder=5))
+    th_pocket = (np.pi - 0.6) / 3 + 4 * np.pi / 3      # a minimum of r(theta), facing down-right
+    r_pocket = 0.048 * 0.76 + 0.011
+    ax.add_patch(Ellipse((_fx(cx + r_pocket * np.cos(th_pocket)),
+                          _fy(cy + r_pocket * np.sin(th_pocket))),
+                         _fx(0.026), _fy(0.026), fc=EXT, ec="white", lw=0.5, zorder=6))
 
-    # The fork. This is the whole difference from the lane above: the chain ends in two possible
-    # verdicts instead of returning to its own starting point.
-    arrow(ax, (X_FORK, Y_FORK), (X_OK, Y_OUTCOME + 0.026), color=EXT, ms=5.0)
-    arrow(ax, (X_FORK, Y_FORK), (X_FLIP, Y_OUTCOME + 0.026), color=EXT, ms=5.0)
 
-    # tick = the ranking survives an evaluator that never saw the score
-    ax.plot([0.135, 0.157, 0.190], [Y_OUTCOME, Y_OUTCOME - 0.010, Y_OUTCOME + 0.014],
-            lw=1.1, color=EXT, solid_capstyle="round", solid_joinstyle="miter", zorder=5)
-    ax.text(0.200, Y_OUTCOME, "confirmed", ha="left", va="center", fontsize=PT_ANNOT, color=TEXT)
+def _dose(ax, cx, cy):
+    """A dose-response curve: viability, the readout the retrieval score is furthest from."""
+    w, h = 0.180, 0.090
+    x0, y0 = cx - w / 2, cy - h / 2
+    ax.plot([_fx(x0), _fx(x0), _fx(x0 + w)], [_fy(y0 + h), _fy(y0), _fy(y0)],
+            lw=LW_HAIR, color=EXT, zorder=5, solid_capstyle="butt")
+    t = np.linspace(0, 1, 60)
+    xs = x0 + 0.016 + t * (w - 0.022)
+    ys = y0 + 0.012 + (h - 0.020) / (1 + np.exp(9 * (t - 0.5)))
+    ax.plot(_fx(xs), _fy(ys), lw=0.9, color=EXT, zorder=6, solid_capstyle="round")
 
-    # opposed pair = the order of two candidates swaps, which is what "reversed" means
-    arrow(ax, (0.600, Y_OUTCOME + 0.009), (0.700, Y_OUTCOME + 0.009), color=EXT, ms=4.5)
-    arrow(ax, (0.700, Y_OUTCOME - 0.009), (0.600, Y_OUTCOME - 0.009), color=EXT, ms=4.5)
-    ax.text(0.716, Y_OUTCOME, "reversed", ha="left", va="center", fontsize=PT_ANNOT, color=TEXT)
+
+def _judge(ax, cx, cy):
+    """The evaluator the method never saw: a rectangle of measured biology, not a score.
+
+    Deliberately not a circle and deliberately not blue. The reader has been taught by the lane
+    above that a POP circle is the retrieval objective; this stage has to be a different kind of
+    object at a glance, so it differs in shape, in colour and in what it contains.
+    """
+    ax.add_patch(Rectangle((_fx(cx - JUDGE_W / 2), _fy(cy - JUDGE_H / 2)),
+                           _fx(JUDGE_W), _fy(JUDGE_H),
+                           fc=to_rgba(EXT, TINT_JUDGE), ec=EXT, lw=1.0, zorder=3))
+    _target(ax, cx - 0.108, cy + 0.072)
+    _protein(ax, cx + 0.108, cy + 0.072)
+    _dose(ax, cx, cy - 0.082)
+
+
+# ------------------------------------------------------------------------------------- flow
+def _flow(ax, y, x3_half):
+    """The two connectors of one lane, in SHARED grey because the flow is what both lanes share.
+
+    ``x3_half`` is the half width of whatever occupies the third stage, so the arrow stops on the
+    mark's own edge in each lane and the two lanes still start their arrows at the same x.
+    """
+    arrow(ax, (_fx(X1 + D_STAGE / 2 + X_FLOW_GAP), _fy(y)),
+          (_fx(X2 - CARD_W / 2 - X_FLOW_GAP), _fy(y)), color=SHARED, ms=6.0)
+    arrow(ax, (_fx(X2 + CARD_W / 2 + X_FLOW_GAP), _fy(y)),
+          (_fx(X3 - x3_half - X_FLOW_GAP), _fy(y)), color=SHARED, ms=6.0)
+
+
+def _return_path(ax):
+    """The coupled lane closing on itself: down from the evaluator, back, and up into the scorer.
+
+    Rectilinear rather than a bowed arc. An arc deep enough to clear the label would have hung
+    0.20 in below the stages and crowded the lane beneath it; three straight segments close the
+    circuit in 0.15 in and leave a clean interior for the two words that name it.
+    """
+    y_bot = Y_STAGE_A - D_STAGE / 2
+    ax.plot([_fx(X3)] * 2, [_fy(y_bot), _fy(Y_RETURN)], lw=LW_ARROW, color=POP, zorder=2,
+            solid_capstyle="butt")
+    ax.plot([_fx(X3), _fx(X1)], [_fy(Y_RETURN)] * 2, lw=LW_ARROW, color=POP, zorder=2,
+            solid_capstyle="butt")
+    arrow(ax, (_fx(X1), _fy(Y_RETURN)), (_fx(X1), _fy(y_bot - 0.004)), color=POP, ms=6.0)
+
+
+# ---------------------------------------------------------------------------------- verdicts
+def _verdict_arrow(ax, x_from, y_from, y_to, color):
+    arrow(ax, (_fx(x_from), _fy(y_from)), (_fx(X_VERDICT_END), _fy(y_to)), color=color, ms=5.5)
+
+
+def _gain_mark(ax, y):
+    """The coupled lane's single outcome: a rise, in the colour of the objective that scored it."""
+    arrow(ax, (_fx(X_VERDICT_MARK), _fy(y - 0.072)), (_fx(X_VERDICT_MARK), _fy(y + 0.072)),
+          color=POP, ms=7.0, lw=1.1)
+
+
+def _tick_mark(ax, y):
+    """The ranking survives a judge that never saw the score."""
+    ax.plot(_fx(np.array([X_VERDICT_MARK - X_MARK_HALF, X_VERDICT_MARK - 0.020,
+                          X_VERDICT_MARK + X_MARK_HALF])),
+            _fy(np.array([y + 0.006, y - 0.030, y + 0.048])),
+            lw=1.3, color=EXT, solid_capstyle="round", solid_joinstyle="miter", zorder=5)
+
+
+def _swap_mark(ax, y):
+    """Two candidates changing places: what an independent judge is allowed to do to a ranking."""
+    arrow(ax, (_fx(X_VERDICT_MARK - X_MARK_HALF), _fy(y + 0.026)),
+          (_fx(X_VERDICT_MARK + X_MARK_HALF), _fy(y + 0.026)), color=EXT, ms=3.8)
+    arrow(ax, (_fx(X_VERDICT_MARK + X_MARK_HALF), _fy(y - 0.026)),
+          (_fx(X_VERDICT_MARK - X_MARK_HALF), _fy(y - 0.026)), color=EXT, ms=3.8)
+
+
+def _verdict_text(ax, y, text):
+    ax.text(_fx(X_VERDICT_TEXT), _fy(y), text, ha="left", va="center", fontsize=PT_ANNOT,
+            color=TEXT, linespacing=1.15, zorder=5)
+
+
+# ------------------------------------------------------------------------------------- lanes
+def _lane_name(ax, y, text):
+    ax.text(0.0, _fy(y), text, ha="left", va="top", fontsize=PT_ANNOT, fontweight="bold",
+            color=TEXT, zorder=5)
+
+
+def _coupled(ax):
+    _lane_name(ax, Y_HEAD_A, "Coupled evaluation")
+
+    for x, role in ((X1, "Retriever"), (X3, "Evaluator")):
+        ax.text(_fx(x), _fy(Y_ROLE_A), role, ha="center", va="top", fontsize=PT_ANNOT,
+                color=TEXT, zorder=5)
+    # The concrete instance, small, under the role it instantiates. The first and third columns
+    # repeat the same two words on purpose: that repetition is the whole claim of the lane.
+    for x, s in ((X1, "population\ndistance"), (X3, "population distance\nregret")):
+        ax.text(_fx(x), _fy(Y_INST_A), s, ha="center", va="top", fontsize=PT_SMALL, color=TEXT,
+                linespacing=1.15, zorder=5)
+
+    _stage_circle(ax, X1, Y_STAGE_A)
+    _cards(ax, X2, Y_STAGE_A)
+    _stage_circle(ax, X3, Y_STAGE_A)
+    _flow(ax, Y_STAGE_A, D_STAGE / 2)
+
+    _return_path(ax)
+    # Inside the loop, which is the only place these two words can sit and still mean the circuit
+    # around them rather than the stage above them.
+    ax.text(_fx(X2), _fy(Y_LOOP_LABEL), "shared objective", ha="center", va="center",
+            fontsize=PT_ANNOT, color=TEXT, zorder=5)
+
+    _verdict_arrow(ax, X3 + D_STAGE / 2 + X_FLOW_GAP, Y_STAGE_A, Y_STAGE_A, POP)
+    _gain_mark(ax, Y_STAGE_A)
+    _verdict_text(ax, Y_STAGE_A, "objective-aligned\ngain")
+
+
+def _independent(ax):
+    _lane_name(ax, Y_HEAD_B, "Independent evaluation")
+
+    # The one label the lane needs: the list is not re-ranked, it is handed over as it stands.
+    # Set at the weight of the coupled lane's role names, not at the lane name's: it sits in
+    # the same row as "Retriever" and "Evaluator" and is the same kind of label, and a second
+    # bold line under a bold lane name reads as a two-line heading.
+    ax.text(_fx(X2), _fy(Y_INST_B), "fixed ranking", ha="center", va="top", fontsize=PT_ANNOT,
+            color=TEXT, zorder=5)
+
+    _stage_circle(ax, X1, Y_STAGE_B)
+    _cards(ax, X2, Y_STAGE_B)
+    _judge(ax, X3, Y_STAGE_B)
+    _flow(ax, Y_STAGE_B, JUDGE_W / 2)
+
+    x_from = X3 + JUDGE_W / 2 + X_FLOW_GAP
+    _verdict_arrow(ax, x_from, Y_STAGE_B, Y_STAGE_B + DY_FAN, EXT)
+    _verdict_arrow(ax, x_from, Y_STAGE_B, Y_STAGE_B - DY_FAN, EXT)
+    _tick_mark(ax, Y_STAGE_B + DY_FAN)
+    _verdict_text(ax, Y_STAGE_B + DY_FAN, "ranking\nsupported")
+    _swap_mark(ax, Y_STAGE_B - DY_FAN)
+    _verdict_text(ax, Y_STAGE_B - DY_FAN, "ranking\noverturned")
 
 
 def draw_1e(ax):
     blank(ax)
-    _top_lane(ax)
-    _pivot(ax)
-    _bottom_lane(ax)
+    # The panel's own phrase. It is a question, not a finding: the finding is panels g and h.
+    # "Better representation, better decision?" and not the phrasing this panel was briefed
+    # with, "Better representation is not better decision?", which is missing an article and
+    # reads as a statement wearing a question mark. The comma form poses the question the
+    # paper exists to answer and is two words shorter, which the headline needs at 8.5 pt.
+    title(ax, "Better representation, better decision?", x=0.0, y=_fy(Y_HEADLINE),
+          va="top")
+    _coupled(ax)
+    _independent(ax)
     return ax
 
 
+# ------------------------------------------------------------------------------------ preview
 if __name__ == "__main__":
     import re
 
+    import matplotlib as mpl
     import matplotlib.axis as maxis
     import matplotlib.spines as mspines
     import matplotlib.text as mtext
 
-    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-    from figstyle import apply_style, pin_canvas
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from figstyle import apply_style
 
     from fig1_style import PT_FLOOR, PT_TICK
 
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
 
-    # The axes is exactly the rect fig1_assemble gives panel e (0.28 of a 6.90 in figure, less the
-    # 0.24 in letter gutter and the 0.04 in right margin, by 3.70 in). A panel tuned at any other
-    # size is tuned for a figure that does not ship.
-    AX_W, AX_H = 1.652, 3.700
-    fig = plt.figure(figsize=(AX_W, AX_H))
-    pin_canvas(fig)
-    ax = fig.add_axes([0, 0, 1, 1])
+    fig, ax = plt.subplots(figsize=(AX_W, AX_H))
+    fig.subplots_adjust(left=0, right=1, bottom=0, top=1)    # the axes IS the composite's rect
     draw_1e(ax)
     fig.canvas.draw()
     rend = fig.canvas.get_renderer()
 
-    # 1. type floor, at EFFECTIVE size: matplotlib renders a mathtext sub/superscript at 0.7x.
+    got = ax.get_window_extent(renderer=rend)
+    assert (round(got.width / fig.dpi, 3), round(got.height / fig.dpi, 3)) == (AX_W, AX_H), (
+        f"previewed at {got.width / fig.dpi:.3f} x {got.height / fig.dpi:.3f} in, but the "
+        f"composite gives panel e {AX_W} x {AX_H} in; a panel tuned at another size is wrong")
+    print(f"axes {AX_W} x {AX_H} in")
+
+    # 1. the type floor, at EFFECTIVE size: matplotlib renders a mathtext sub/superscript at 0.7x
     subsup = re.compile(r"\$[^$]*[\^_][^$]*\$")
     sizes = []
     for t in fig.findobj(mtext.Text):
@@ -267,19 +393,16 @@ if __name__ == "__main__":
         if not s.strip() or not t.get_visible():
             continue
         sizes.append((t.get_fontsize() * (0.7 if subsup.search(s) else 1.0),
-                      s.replace("\n", "/")[:34]))
+                      s.replace("\n", "/")[:36]))
     smallest = min(sizes)
     assert smallest[0] >= PT_FLOOR - 1e-6, f"below the {PT_FLOOR} pt floor: {sorted(sizes)[:5]}"
     print(f"smallest effective size: {smallest[0]:.2f} pt  ({smallest[1]!r})")
 
-    # 2. nothing may hang outside the axes: an overhang widens the composite.
-    box = ax.get_window_extent(renderer=rend)
+    # 2. nothing may hang outside the axes: an overhang widens the composite. blank() switched
+    # the spines and the two Axis objects off, and an invisible Axis still reports an extent.
     over = []
-    # blank() turns the axes furniture off but leaves the Spine and Axis artists parented to the
-    # axes, and their extents are not ink. Only drawn children can widen the composite.
-    furniture = (mspines.Spine, maxis.Axis)
     for art in ax.get_children():
-        if isinstance(art, furniture) or not art.get_visible():
+        if isinstance(art, (mspines.Spine, maxis.Axis)) or not art.get_visible():
             continue
         if isinstance(art, mtext.Text) and not str(art.get_text()).strip():
             continue
@@ -289,16 +412,18 @@ if __name__ == "__main__":
             bb = art.get_window_extent(renderer=rend)
         if bb is None or bb.width <= 0:
             continue
-        d = (box.x0 - bb.x0, bb.x1 - box.x1, box.y0 - bb.y0, bb.y1 - box.y1)
-        if max(d) > 0.5:                    # half a pixel of tolerance on the tight bbox
-            lab = str(art.get_text())[:28] if isinstance(art, mtext.Text) else type(art).__name__
-            over.append((lab.replace("\n", "/"),
-                         [round(v / fig.dpi, 4) for v in d]))     # inches, L R B T
+        d = (got.x0 - bb.x0, bb.x1 - got.x1, got.y0 - bb.y0, bb.y1 - got.y1)
+        if max(d) > 0.5:                    # half a display pixel, below the export's resolution
+            lab = str(art.get_text())[:30] if isinstance(art, mtext.Text) else type(art).__name__
+            over.append((lab.replace("\n", "/"), [round(v / fig.dpi, 4) for v in d]))
     for lab, d in over:
-        print(f"  hangs out  {lab!r:34s} L{d[0]:+.3f} R{d[1]:+.3f} B{d[2]:+.3f} T{d[3]:+.3f} in")
+        print(f"  hangs out  {lab!r:32s} L{d[0]:+.3f} R{d[1]:+.3f} B{d[2]:+.3f} T{d[3]:+.3f} in")
     assert not over, f"{len(over)} artist(s) outside the axes"
     print("all artists inside the axes")
 
     out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "1e.png")
-    fig.savefig(out, dpi=400)
+    # savefig.bbox is "tight" deck-wide; here it would crop the preview to its ink and the PNG
+    # would no longer be the 3.15 x 2.03 in rect the composite hands this panel.
+    with mpl.rc_context({"savefig.bbox": None, "savefig.pad_inches": 0.0}):
+        fig.savefig(out, dpi=400)
     print(f"wrote {out}  (axes {AX_W} x {AX_H} in)")

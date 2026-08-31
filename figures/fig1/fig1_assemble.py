@@ -2,13 +2,13 @@
 
 Figure 1 is the paper's visual thesis, and it is read in one order:
 
-    ROW 1   WHAT IS POPULATION RETRIEVAL?
+    WHAT IS POPULATION RETRIEVAL?
       a  Task                         one query, one candidate library, two representations
       b  Why averaging can fail       the same mean shift can hide opposite fates for a minority
       c  What mathematically changes  the same pair, scored at two resolutions
       d  How ranking can change       means tie, distributions separate, the preference flips
 
-    ROW 2   HOW SHOULD WE EVALUATE AND FORMALIZE IT?
+    HOW SHOULD WE EVALUATE AND FORMALIZE IT?
       e  Why evaluation can mislead   objective-aligned versus independent evaluation
       f  How this study evaluates it  the evidence ladder, and how far each body of work reports
       g  Mean retrieval is a limit    the population score\'s lambda -> 0 endpoint
@@ -71,75 +71,71 @@ from fig1h import draw_1h  # noqa: E402
 # ------------------------------------------------------------------------------------------
 # Geometry, in inches on the printed page
 # ------------------------------------------------------------------------------------------
+# FOUR ROWS OF TWO, since 2026-08-31. The previous cut put four panels across a 6.90 in canvas,
+# which left every panel 0.90 to 1.65 in wide and forced all eight into portrait. Their content is
+# not portrait: a is a left-to-right pipeline, b is three horizontal lanes, c is two mirrored rows,
+# e is two parallel lanes. Two per row makes every panel about 2 to 3.5 times wider and turns the
+# aspect from 0.5 to 1.97 wide-to-tall, which is the shape the drawings actually wanted.
+#
+# The pairs are the ones that explain each other, so a reader compares across the gutter rather
+# than down the page: a with b (the task and why it is hard), c with d (the definition and its
+# consequence), e with f (the evaluation problem and how this study answers it), g with h (the two
+# analytic continua). Row heights differ because the rows do: e and f are the conceptual centre and
+# get the deepest row, g and h carry a cartoon strip above a curve.
 FIGW = 6.90
 
 PAD_TOP, PAD_BOT = 0.05, 0.10
-LETTER_BLOCK = 0.26         # the band above each row that the bold letter sits in
-ROW1_H, ROW2_H = 3.00, 3.70
-ROW_GAP = 0.44
+LETTER_BLOCK = 0.24         # the band above each row that the bold letter sits in
+ROW_GAP = 0.30
 
 LETTER_GUTTER = 0.24        # box left edge -> axes left edge, for a panel with no y axis
-Y_FURNITURE = 0.44          # extra, for the two panels that have one
-RIGHT_MARGIN = 0.04
+Y_FURNITURE = 0.46          # extra, for the two panels that have one
+RIGHT_MARGIN = 0.06
 
-# Row shares. These are not equal because the panels are not equal: e states the question the
-# paper exists to answer and is the widest in its row. g and h take 24% rather than the 22% a
-# first pass gave them, with the 4% coming off e and f, because at 22% a box leaves 0.78 in of
-# axes once the letter and the y-axis furniture are paid for, and the three lambda cartoons g
-# needs above its curve are not legible at 0.26 in each.
-ROW1_SHARE = {"a": 0.26, "b": 0.24, "c": 0.22, "d": 0.28}
-ROW2_SHARE = {"e": 0.28, "f": 0.24, "g": 0.24, "h": 0.24}
+ROWS = [(("a", "b"), 1.60),
+        (("c", "d"), 1.60),
+        (("e", "f"), 2.03),
+        (("g", "h"), 1.96)]
+COL_X = (0.0, FIGW / 2.0)
 
 DATA_PANELS = ("g", "h")    # the only two with axes furniture
-# g and h are two axes each: a cartoon strip that gives the curve its intuition, and the curve.
-CARTOON_H = 1.00
-CARTOON_GAP = 0.20
-DATA_BELOW = 0.55           # x tick labels and the x label, under the curve
+CARTOON_H = 0.78            # the strip that gives each curve its intuition
+CARTOON_GAP = 0.10
+DATA_BELOW = 0.37           # x tick labels and the x label, under the curve
 
 
 def _boxes():
-    """Resolve the shares into per-panel rects, in inches, measured from the FIGURE TOP."""
-    row1_top = PAD_TOP + LETTER_BLOCK
-    row2_top = row1_top + ROW1_H + ROW_GAP + LETTER_BLOCK
-    figh = row2_top + ROW2_H + PAD_BOT
-
-    rects, letters, x = {}, {}, 0.0
-    for k, share in ROW1_SHARE.items():
-        w = FIGW * share
-        letters[k] = x
-        rects[k] = (x + LETTER_GUTTER, row1_top, w - LETTER_GUTTER - RIGHT_MARGIN, ROW1_H)
-        x += w
-    assert abs(x - FIGW) < 1e-9, x
-
-    x = 0.0
-    for k, share in ROW2_SHARE.items():
-        w = FIGW * share
-        letters[k] = x
-        if k in DATA_PANELS:
-            ax_x = x + LETTER_GUTTER + Y_FURNITURE
-            ax_w = w - LETTER_GUTTER - Y_FURNITURE - RIGHT_MARGIN - 0.04
-            rects[k + "_top"] = (ax_x, row2_top, ax_w, CARTOON_H)
-            rects[k] = (ax_x, row2_top + CARTOON_H + CARTOON_GAP, ax_w,
-                        ROW2_H - CARTOON_H - CARTOON_GAP - DATA_BELOW)
-        else:
-            rects[k] = (x + LETTER_GUTTER, row2_top, w - LETTER_GUTTER - RIGHT_MARGIN, ROW2_H)
-        x += w
-    assert abs(x - FIGW) < 1e-9, x
-    return figh, rects, letters
+    """Resolve the rows into per-panel rects, in inches, measured from the FIGURE TOP."""
+    rects, letters = {}, {}
+    y = PAD_TOP
+    for keys, row_h in ROWS:
+        y += LETTER_BLOCK
+        for k, x0 in zip(keys, COL_X):
+            letters[k] = (x0, y)
+            if k in DATA_PANELS:
+                ax_x = x0 + LETTER_GUTTER + Y_FURNITURE
+                ax_w = FIGW / 2.0 - LETTER_GUTTER - Y_FURNITURE - RIGHT_MARGIN - 0.02
+                rects[k + "_top"] = (ax_x, y, ax_w, CARTOON_H)
+                rects[k] = (ax_x, y + CARTOON_H + CARTOON_GAP, ax_w,
+                            row_h - CARTOON_H - CARTOON_GAP - DATA_BELOW)
+            else:
+                rects[k] = (x0 + LETTER_GUTTER, y,
+                            FIGW / 2.0 - LETTER_GUTTER - RIGHT_MARGIN, row_h)
+        y += row_h + ROW_GAP
+    return y - ROW_GAP + PAD_BOT, rects, letters
 
 
-FIGH, RECTS, LETTER_X = _boxes()
+FIGH, RECTS, LETTER_XY = _boxes()
 
 
 def _letter(fig, key):
-    """Panel letters on one baseline per row, in the gutter, at this figure\'s own 9.5 pt.
+    """Panel letters in the gutter, on one baseline per row, at this figure's own 9.5 pt.
 
     Placed in FIGURE coordinates rather than as an axes-fraction offset: a fixed dx would put the
-    letter twice as far out on a 1.65 in panel as on a 0.94 in one, and the row would never line
-    up. The baseline is the top of the row\'s axes, so a to d share one and e to h share one.
+    letter at a different distance on every panel width, and the two columns would never line up.
     """
-    row_top = RECTS["a"][1] if key in ROW1_SHARE else RECTS["e"][1]
-    fig.text(LETTER_X[key] / FIGW, 1.0 - (row_top - 0.06) / FIGH, key,
+    x0, row_top = LETTER_XY[key]
+    fig.text(x0 / FIGW, 1.0 - (row_top - 0.05) / FIGH, key,
              fontsize=PT_LETTER, fontweight="bold", va="bottom", ha="left", color=TEXT)
 
 
@@ -187,7 +183,7 @@ def build(apply_style, panel_letter):
     draw_1g(_ax("g"), _ax("g_top"))
     draw_1h(_ax("h"), _ax("h_top"))
 
-    for key in list(ROW1_SHARE) + list(ROW2_SHARE):
+    for key in "abcdefgh":
         _letter(fig, key)
 
     # Nature panels carry no rc titles; the phrases the panels state over themselves are drawn by

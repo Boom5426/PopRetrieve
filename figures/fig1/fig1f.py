@@ -6,38 +6,57 @@ The panel makes two statements, in this order.
    judge sits from the score being judged: response matching restates the retrieval objective,
    mechanism recovery moves to task-proximal biology on the same upstream data, and external
    function is measured by an evaluator the method never saw. That ordering is the only axis the
-   panel draws, and it is deliberately NOT an axis of claim strength: a Class A result is the
-   right test of objective fidelity, it is simply not a test of independent utility.
-2. Published families report at the bottom rung; this study reports at all three. The right-hand
+   panel draws, and it is deliberately NOT an axis of claim strength: a headline response-matching
+   result is the right test of objective fidelity, it is simply not a test of independent utility.
+2. Published families report at the bottom step; this study reports at all three. The right-hand
    pair of columns is drawn small on purpose. It is the panel's second sentence, not its subject.
 
-WHY IT IS A LADDER AND NOT A MATRIX
------------------------------------
-The previous version was a status matrix with the rungs as rows, and a matrix asks the reader to
-compare cells. The claim here is ordinal, so the drawing is ordinal: three treads at increasing
-height, each one a step the level's text stands on, with one arrow running the full height of the
-stack. The reader gets the ordering from geometry before reading a word, which is what lets the
-right-hand columns stay small enough to be secondary.
+WHY IT IS A STAIRCASE AND NOT A STACK OF LABELS
+-----------------------------------------------
+The previous version expressed the hierarchy through text POSITION: three rules with three blocks
+of type above them, ordered because they happened to be drawn at increasing height. A reader with
+the labels covered saw three rows, not three levels. This version draws the ordering as geometry:
+each level is a filled platform, each platform sits one full height above the one below it and one
+step to the right, so the silhouette is a staircase and the rise survives having every word masked.
+The step run (X_STEP) is what carries "independence increases upward"; the wording only names what
+the rise already shows.
 
-Colour follows the figure's four roles and adds nothing. The bottom tread is POP because response
-matching IS the population score's own ground truth; the middle tread is SHARED because mechanism
-recovery still runs on the data both routes share; the top tread is EXT, the figure's mark for a
-judge the method never saw, and panel f is one of the two panels allowed to use it. The status
+The 2026-08-31 layout change is what made this possible. The panel is now 3.15 x 2.03 in, roughly
+2:1 landscape, where the old box was 1.38 x 3.70 in portrait. A staircase needs run as well as
+rise; the portrait box had no run to give, which is why the old cut had to fall back on text.
+
+Colour follows the figure's four roles and adds nothing. The bottom platform is POP because
+response matching IS the population score's own ground truth; the middle is SHARED because
+mechanism recovery still runs on the data both routes share; the top is EXT, the figure's mark for
+a judge the method never saw, and panel f is one of the two panels allowed to use it. The status
 marks are ink in both columns, because filled-versus-open already carries "reports here" and
 tinting one of them would have given one of the four roles a second, unrelated meaning.
 
+WHAT AN OPEN MARK MEANS, AND WHAT IT MUST NOT BE READ AS
+--------------------------------------------------------
+The audit records each family's metrics as a class string whose FIRST letter is the class of its
+HEADLINE metric. All six published families are headline A, and four of them (single-cell
+signature retrieval, perturbation predictors, foundation models, PDGrapher-style graph methods)
+also carry a B through DEG overlap or target-family recovery. An open mark therefore means "not
+this family's headline metric", never "never reported", and the legend over the two columns says
+"filled = headline metric" for exactly that reason. Nothing in the panel may be strengthened into
+an absence claim.
+
 PROVENANCE
 ----------
-The survey size and the rung each published family reports at are read from the field audit table
+The survey size and the step each published family reports at are read from the field audit table
 (``manuscript/components/related_work_metric_audit_table.csv``), not typed in: the panel's whole
-point is that the audit found one class, so the audit file is what should be able to change it.
-This study reporting at all three rungs is the manuscript's own claim (Fig. 1 caption, and the
-Class C GDSC2 evaluation in Results), and the evaluator at the top rung is imported from GDSC2
-dose-response data rather than measured here, which the provenance line qualifies in one word.
+point is that the audit found one headline class, so the audit file is what should be able to
+change it. This study reporting at all three steps is the manuscript's own claim (Fig. 1 caption,
+and the Class C GDSC2 evaluation in Results), and the evaluator at the top step is imported from
+GDSC2 dose-response data rather than measured here, which the provenance line qualifies in a word.
+
+The arrow label says "of the retrieval objective" in full because the panel sits beside e, which
+is where that objective is defined; the caption carries the rest.
 
 Schematic. No measured value is plotted.
 
-Run standalone: python fig1f.py
+Run standalone: python3 fig1f.py
 """
 from __future__ import annotations
 
@@ -47,10 +66,12 @@ import re
 import sys
 
 import matplotlib.pyplot as plt
+from matplotlib.colors import to_rgba
+from matplotlib.patches import Rectangle
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fig1_style import (EXT, LW_ARROW, LW_LINE, MS_ARROW,  # noqa: E402
-                        POP, PT_ANNOT, PT_SMALL, PT_TICK, SHARED, SUBTLE, TEXT,
+from fig1_style import (EXT, LW_ARROW, LW_HAIR, MS_ARROW, POP,  # noqa: E402
+                        PT_ANNOT, PT_SMALL, PT_TICK, SHARED, SUBTLE, TEXT,
                         arrow, blank, title)
 
 # ---------------------------------------------------------------------------- the field audit
@@ -58,60 +79,78 @@ _REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 AUDIT_CSV = os.path.join(_REPO, "manuscript", "components", "related_work_metric_audit_table.csv")
 THIS_WORK = "PopRetrieve / distributional retrieval"   # the one row that is not a published family
 
-# The audit records each family's metrics as a class string whose FIRST letter is the class of the
-# headline metric ("A", "A (with some B via DEG overlap)", "A + B"). That first letter is what the
-# panel's filled markers mean: the class a body of work reports as its primary evidence.
-CLASS_RUNG = {"A": 0, "B": 1, "C": 2}
+# The first letter of metric_class is the class of the family's HEADLINE metric, and that is the
+# only thing the filled marks assert. A "B" later in the string ("A (with some B via DEG
+# overlap)") is a secondary metric and must NOT fill the middle step; see the module docstring.
+CLASS_STEP = {"A": 0, "B": 1, "C": 2}
 
 
 def _audit():
-    """(number of published families, set of rungs any of them reports at) from the audit table."""
+    """(number of published families, set of steps any of them reports at) from the audit table."""
     with open(AUDIT_CSV, newline="", encoding="utf-8") as fh:
         rows = [r for r in csv.DictReader(fh) if r["method_family"].strip() != THIS_WORK]
     if not rows:
         raise RuntimeError(f"no published method families in {AUDIT_CSV}; panel f has no survey "
                            f"to report and must not invent one")
-    rungs = {CLASS_RUNG[r["metric_class"].strip()[0]] for r in rows}
-    return len(rows), rungs
+    heads = [r["metric_class"].strip()[:1] for r in rows]
+    unknown = sorted(set(heads) - set(CLASS_STEP))
+    if unknown:
+        raise RuntimeError(f"{AUDIT_CSV} carries headline metric class(es) {unknown}, which the "
+                           f"ladder has no step for; the panel must not silently drop a family")
+    return len(rows), {CLASS_STEP[h] for h in heads}
 
 
-# ---------------------------------------------------------------------------- the three rungs
-# Bottom to top. `gloss` and `examples` are pre-wrapped rather than auto-wrapped: the column is
-# 0.96 in wide, every break here is at a word or at an existing hyphen, and a wrapper would break
-# "Evaluator-independent" somewhere else on a machine with a different metric font.
+# ---------------------------------------------------------------------------- the three levels
+# Bottom to top. Each level shows its two example metrics on their own lines rather than joined by
+# a comma: "GDSC2 dose response, protein response" is 1.71 in as one line and the platform is
+# 1.22 in wide, and one metric per line keeps the three platforms identical in shape.
 LEVELS = (
-    dict(name=("Response", "matching"), gloss=("Objective-aligned",),
-         examples=("energy regret", "connectivity"), tread=POP),
-    dict(name=("Mechanism", "recovery"), gloss=("Task-proximal biology",),
-         examples=("MoA-nDCG", "minority coverage"), tread=SHARED),
-    dict(name=("External", "function"), gloss=("Evaluator-independent", "measurement"),
-         examples=("GDSC2 dose response", "protein response"), tread=EXT),
+    dict(name="Response matching", gloss="objective-aligned",
+         metrics=("energy regret", "connectivity"), face=POP),
+    dict(name="Mechanism recovery", gloss="task-proximal biology",
+         metrics=("MoA-nDCG", "minority coverage"), face=SHARED),
+    dict(name="External function", gloss="external measurement",
+         metrics=("GDSC2 dose response", "protein response"), face=EXT),
 )
-OURS_RUNGS = (0, 1, 2)      # manuscript: "We report PopRetrieve under all three classes"
+OURS_STEPS = (0, 1, 2)      # manuscript: "We report PopRetrieve under all three classes"
 
 # ---------------------------------------------------------------------------- geometry, inches
-# The axes is 1.376 x 3.70 in in the composite. Positions are held in inches and converted, rather
-# than written as axes fractions, because every constraint in a panel this narrow is a collision
-# between a point size and a width, and points are inches.
-AX_W, AX_H = 1.376, 3.70
+# The axes is 3.15 x 2.03 in in the composite. Positions are held in inches and converted, rather
+# than written as axes fractions, because every constraint here is a collision between a point size
+# and a width, and points are inches. Every width below was measured in the deck font at the size
+# it is set in, not estimated.
+AX_W, AX_H = 3.15, 2.03
 
-X_RAIL = 0.145              # the independence arrow doubles as the ladder's rail: the treads
-                            # start on it, so three coloured rungs hang off one vertical
-X_ARROW_LABEL = 0.070       # its rotated label, one line high, clears the axes edge by 0.02 in
-X_TEXT = 0.185              # the text stands on the rung, inset from the rail
-X_TREAD_R = 1.135           # "GDSC2 dose response" is the widest line at 0.96 in; this is its end
-X_PUB, X_OURS = 1.196, 1.316    # 0.12 in pitch: one rotated 6.8 pt line is 0.09 in wide
+X_SLAB0 = 0.37              # left edge of the bottom platform
+X_STEP = 0.28               # the run of one step: what makes the silhouette a staircase
+W_SLAB = 1.22               # widest line inside a platform is the bold name at 1.03 in, plus pad
+PAD_TEXT = 0.075            # platform edge -> text, left
 
-Y_RUNG = (0.32, 1.49, 2.66)     # even pitch; the ladder is the one thing that must be regular
-Y_ARROW = (0.26, 2.78)          # over-runs the end rungs, so the head is not drawn on the top one
-Y_HEADER = 2.72                 # rotated column headers start just above the top rung
-Y_PROV = (0.150, 0.035)         # two provenance lines, below the bottom rung
+Y_LADDER_B, Y_LADDER_T = 0.30, 1.76
+GAP_SLAB = 0.02             # a hairline of white between platforms, so three colours do not bleed
+H_SLAB = (Y_LADDER_T - Y_LADDER_B - 2 * GAP_SLAB) / 3.0
 
-DY_EX = 0.100               # first example line, above its tread
-DY_LINE = (0.120, 0.115, 0.125)     # examples, gloss, name: leading within each group
-DY_GROUP = 0.050            # extra air between groups, so the three tiers are scannable
+# Baselines inside a platform, measured DOWN from its top edge. The four lines (name, gloss, two
+# metrics) plus the last descender come to 0.432 in, which leaves 0.04 in of padding at each edge.
+DY_NAME, DY_GLOSS, DY_M1, DY_M2 = 0.115, 0.220, 0.320, 0.412
 
-MS_STATUS = 16              # marker area in pt^2 -> 4.0 pt across, legible and still secondary
+X_ARROW = 0.22              # the independence axis, in the clear column left of the bottom step
+X_LABEL = 0.015             # its label sits UNDER it, where the full panel width is free: the two
+                            # lines are 0.85 and 1.10 in, and no column beside the ladder is that
+                            # wide at any height
+Y_FOOT = (0.155, 0.035)     # the footer band, shared by the arrow label and the provenance
+
+X_PUB, X_OURS = 2.32, 2.80  # 0.48 in pitch: the headers are 0.40 and 0.44 in wide, so their two
+                            # half-widths plus a 0.06 in gap are what set the columns apart
+X_PROV_R = 3.10             # provenance is right-aligned into the corner, away from the ladder
+Y_HEADER = 1.80             # column names, in the band between the ladder and the title
+Y_LEGEND = 1.93             # what a filled mark means, directly over the marks it explains
+X_LEGEND = (X_PUB + X_OURS) / 2.0       # centred on the pair, so it reads as their heading
+
+LW_TREAD = 2.0              # the platform's top edge. At LW_LINE the platform reads as a tinted
+                            # text box; at twice that the top edge reads as a surface it stands on.
+TINT = 0.16                 # a wash of the level's own hue, never a fifth colour
+MS_STATUS = 16              # marker area in pt^2 -> 4.5 pt across, legible and still secondary
 
 
 def _fx(x_in):
@@ -122,75 +161,91 @@ def _fy(y_in):
     return y_in / AX_H
 
 
+def _step(i):
+    """(left, bottom) of platform i, in inches: one height up and X_STEP right, each time."""
+    return X_SLAB0 + i * X_STEP, Y_LADDER_B + i * (H_SLAB + GAP_SLAB)
+
+
+def _mid(i):
+    """The y a level is read at: its platform centre, which is where its status marks sit."""
+    return _step(i)[1] + H_SLAB / 2.0
+
+
+def _platform(ax, i, level):
+    """One step: a tinted block with a solid top edge, carrying its own four lines of text."""
+    left, bottom = _step(i)
+    ax.add_patch(Rectangle((_fx(left), _fy(bottom)), _fx(W_SLAB), _fy(H_SLAB),
+                           fc=to_rgba(level["face"], TINT), ec=level["face"], lw=LW_HAIR,
+                           zorder=2))
+    ax.plot([_fx(left), _fx(left + W_SLAB)], [_fy(bottom + H_SLAB)] * 2, lw=LW_TREAD,
+            color=level["face"], solid_capstyle="butt", zorder=3)
+
+    x = _fx(left + PAD_TEXT)
+    top = bottom + H_SLAB
+    ax.text(x, _fy(top - DY_NAME), level["name"], ha="left", va="baseline", fontsize=PT_ANNOT,
+            fontweight="bold", color=TEXT, zorder=5)
+    ax.text(x, _fy(top - DY_GLOSS), level["gloss"], ha="left", va="baseline", fontsize=PT_SMALL,
+            style="italic", color=TEXT, zorder=5)
+    # The example metrics are the level's provenance, not its claim, so they are SUBTLE: at full
+    # ink the platform becomes four equal lines of type and the level name stops being the label.
+    for metric, dy in zip(level["metrics"], (DY_M1, DY_M2)):
+        ax.text(x, _fy(top - dy), metric, ha="left", va="baseline", fontsize=PT_SMALL,
+                color=SUBTLE, zorder=5)
+
+
 def _status(ax, x_in, y_in, filled):
     """Reports here / does not. Round, ink, sized in points so it stays round at any aspect."""
     ax.scatter([_fx(x_in)], [_fy(y_in)], s=MS_STATUS, marker="o", zorder=6, linewidths=0.7,
                facecolors=TEXT if filled else "white", edgecolors=TEXT)
 
 
-def _rung_text(ax, level, y_rung):
-    """One rung's three tiers: name, italic gloss, examples, stacked upward from its tread.
-
-    Built from the bottom up so the examples always sit the same distance above their tread. The
-    top rung's gloss needs a second line and therefore pushes its own name up by one line; that
-    happens above the reader's anchor rather than below it, and the rungs stay evenly spaced.
-    """
-    tiers = ((level["examples"], PT_SMALL, "normal", "normal", DY_LINE[0]),
-             (level["gloss"], PT_SMALL, "italic", "normal", DY_LINE[1]),
-             (level["name"], PT_ANNOT, "normal", "bold", DY_LINE[2]))
-    y = y_rung + DY_EX
-    for tier, (group, size, style, weight, lead) in enumerate(tiers):
-        y += DY_GROUP if tier else 0.0      # air between tiers, but not under the bottom one
-        for line in reversed(group):
-            ax.text(_fx(X_TEXT), _fy(y), line, ha="left", va="baseline", fontsize=size,
-                    style=style, fontweight=weight, color=TEXT, zorder=5)
-            y += lead
-
-
 def draw_1f(ax):
     blank(ax)
-    n_published, published_rungs = _audit()
+    n_published, published_steps = _audit()
 
     # Hung inside the top edge rather than on the helper's default baseline above it: everything
     # this panel draws has to stay within the rect, or it widens the row it is assembled into.
     title(ax, "Evidence ladder", y=0.998, va="top")
 
-    # ---- the axis the rungs are ordered on: independence, not strength ----
-    arrow(ax, (_fx(X_RAIL), _fy(Y_ARROW[0])), (_fx(X_RAIL), _fy(Y_ARROW[1])), color=TEXT,
+    # ---- the axis the steps are ordered on: independence, not strength ----
+    # It spans exactly the ladder, tail on the bottom platform and head on the top one, so the
+    # arrow and the rise are the same measurement drawn twice.
+    arrow(ax, (_fx(X_ARROW), _fy(Y_LADDER_B)), (_fx(X_ARROW), _fy(Y_LADDER_T)), color=TEXT,
           lw=LW_ARROW, ms=MS_ARROW, zorder=4)
-    ax.text(_fx(X_ARROW_LABEL), _fy(sum(Y_ARROW) / 2),
-            "Increasing independence from retrieval objective", rotation=90, ha="center",
-            va="center", fontsize=PT_ANNOT, color=TEXT, zorder=5)
+    for line, y_in in zip(("more independent", "of the retrieval objective"), Y_FOOT):
+        ax.text(_fx(X_LABEL), _fy(y_in), line, ha="left", va="baseline", fontsize=PT_ANNOT,
+                color=TEXT, zorder=5)
 
     # ---- the ladder ----
-    for i, (level, y_rung) in enumerate(zip(LEVELS, Y_RUNG)):
-        # The tread is the step the level stands on, and the only place colour appears. No leader
-        # runs from it out to the status marks: three rungs this far apart are already unambiguous
-        # rows, and a rule reaching the far column closed a rectangle around the whole panel.
-        # 2.0 pt, twice a plotted series: at 0.6 or 1.0 the rung reads as a rule dividing two
-        # blocks of text rather than as a surface the block stands on, and the ladder goes with it.
-        ax.plot([_fx(X_RAIL), _fx(X_TREAD_R)], [_fy(y_rung)] * 2, lw=2.0, color=level["tread"],
-                solid_capstyle="butt", zorder=2)
-        _rung_text(ax, level, y_rung)
-        _status(ax, X_PUB, y_rung, i in published_rungs)
-        _status(ax, X_OURS, y_rung, i in OURS_RUNGS)
+    for i, level in enumerate(LEVELS):
+        _platform(ax, i, level)
 
-    # One line through this study's three marks: the column is read as a single traverse of the
-    # ladder rather than as three unrelated ticks. That contrast is the panel's second sentence.
-    ax.plot([_fx(X_OURS)] * 2, [_fy(Y_RUNG[0]), _fy(Y_RUNG[-1])], lw=LW_LINE, color=TEXT,
+    # ---- who reports where, kept deliberately small ----
+    # One line through this study's three marks, drawn under them: the column is read as a single
+    # traverse of the ladder rather than as three unrelated ticks.
+    # LW_HAIR, not LW_LINE: the line is a guide that joins three marks, and the reader has to stop
+    # on the marks. At a plotted-series weight it became the boldest stroke in the panel and the
+    # comparison stopped being the panel's second sentence.
+    ax.plot([_fx(X_OURS)] * 2, [_fy(_mid(0)), _fy(_mid(len(LEVELS) - 1))], lw=LW_HAIR, color=TEXT,
             solid_capstyle="butt", zorder=5)
+    for i in range(len(LEVELS)):
+        _status(ax, X_PUB, _mid(i), i in published_steps)
+        _status(ax, X_OURS, _mid(i), i in OURS_STEPS)
+    for x_in, label in ((X_PUB, "Published"), (X_OURS, "This study")):
+        ax.text(_fx(x_in), _fy(Y_HEADER), label, ha="center", va="baseline", fontsize=PT_TICK,
+                color=TEXT, zorder=5)
+    # Open means "not the headline metric": four of the six families do report a Class B metric,
+    # just not as their headline. The legend is placed over the columns rather than in the corner
+    # because it is the one thing a reader needs before the marks mean anything.
+    ax.text(_fx(X_LEGEND), _fy(Y_LEGEND), "filled = headline metric", ha="center", va="baseline",
+            fontsize=PT_SMALL, color=SUBTLE, zorder=5)
 
-    # ---- who reports, kept deliberately small ----
-    for x_in, label in ((X_PUB, "Published families"), (X_OURS, "This study")):
-        ax.text(_fx(x_in), _fy(Y_HEADER), label, rotation=90, ha="center", va="bottom",
-                fontsize=PT_TICK, color=TEXT, zorder=5)
-
-    # ---- provenance ----
-    # The audit size comes from the table; "imported" is the one word the top rung needs, because
+    # ---- provenance, in the corner the ladder leaves empty ----
+    # The audit size comes from the table; "imported" is the one word the top step needs, because
     # its evaluator is read out of GDSC2 dose-response data rather than measured in this study.
     provenance = (f"{n_published} families surveyed", "GDSC2 evaluator imported")
-    for line, y_in in zip(provenance, Y_PROV):
-        ax.text(_fx(X_TEXT), _fy(y_in), line, ha="left", va="baseline", fontsize=PT_SMALL,
+    for line, y_in in zip(provenance, Y_FOOT):
+        ax.text(_fx(X_PROV_R), _fy(y_in), line, ha="right", va="baseline", fontsize=PT_SMALL,
                 color=SUBTLE, zorder=5)
 
 
@@ -254,7 +309,7 @@ if __name__ == "__main__":
     print(f"smallest effective size: {_check(fig, ax):.2f} pt")
     out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "1f.png")
     # savefig.bbox is "tight" deck-wide; here it would crop the panel to its ink and the preview
-    # would no longer be the 1.376 x 3.70 in rect the composite hands this panel.
+    # would no longer be the 3.15 x 2.03 in rect the composite hands this panel.
     with mpl.rc_context({"savefig.bbox": None, "savefig.pad_inches": 0.0}):
         fig.savefig(out, dpi=400)
     print(f"wrote {out}")

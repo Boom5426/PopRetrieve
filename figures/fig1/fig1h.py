@@ -1,58 +1,77 @@
 """PopRetrieve Figure 1 panel 1h: population scoring is itself a continuum.
 
-WHAT THE PANEL HAS TO SAY, AND WHY IT IS TWO AXES
--------------------------------------------------
-The measured object is a monotone curve of the interpolated distance against a temperature, and
-a reader who meets it cold reads "a parameter was swept". That is not the claim. The claim is
-about what the temperature DECIDES: whether the score averages the discrepancy over every
-response state, or reports the single worst-matched one. Those are two different questions about
-a drug, and they sit at the two ends of one score family rather than in two method classes.
+WHAT THE PANEL HAS TO MAKE VISIBLE
+----------------------------------
+The measurement is a monotone curve of an aggregate against a temperature, and a reader who meets
+it cold reads "a parameter was swept". That is not the claim. The claim is about what the
+temperature DECIDES: whether the score averages the discrepancy over every response state, or
+reports the single worst-matched one. Those are two different questions to ask about a drug, and
+they are the two ends of one score family rather than two method classes.
 
-So the intuition is drawn, not described. The cartoon strip holds four query subpopulations that
-one candidate matches (three well, one badly) and shows the weight each state receives in the two
-regimes; the curve underneath shows that the measured aggregate really does travel between those
-two regimes, and lands on the analytic endpoints at both ends.
+So the strip does not describe the weighting, it IS the weighting. Four tracks, one per response
+state, each a whole unit of weight; the bar inside a track is the share that state actually
+receives. Three frames read left to right at three temperatures, and the same four tracks change
+shape between them: four quarter-full tracks, then a graded tilt, then one full track and three
+empty. A reader who takes nothing else away has seen a weight budget slide onto one state, which
+is the panel. The tick and the cross say which state that is and why it wins the budget: the
+candidate matches three of the query's states and misses the fourth, and the bar that fills its
+track in the last frame is the one standing under the cross.
 
-One direction runs through both axes: mean aggregation is orange and sits low and left,
-worst-state emphasis is blue and sits high and right. That holds for the pair of bars inside
-every state's column, for the order of the key beneath them, and for the curve, which starts on
-the orange rule at low temperature and ends on the blue one at high temperature. The strip names
-the two regimes and the curve names the two temperatures that produce them, so the same two
-phrases carry the reader from the cartoon into the measurement.
+The curve underneath is those three frames made continuous, and the two axes are bound by colour
+rather than by a caption: the strip's leftmost frame is orange and so is the low dashed rule, its
+rightmost frame is blue and so is the high one, and the curve is measured travelling from the one
+to the other in the direction the strip is read. The two regime PHRASES stay upstairs, where the
+bars that earn them are; the curve repeats only the two temperature tokens, each hung under the
+rule it names, which is the whole bridge the reader needs.
 
-DATA
-----
-results/exp06_theory_limits/beta_interpolation.csv. Nothing here is typed in: the two dashed
-rules are the file's own ``mean`` and ``max`` columns, the y ticks are those same two numbers,
-and the axis window is solved from them so the rules land where the layout wants them.
+WHERE THE FOUR STATES COME FROM, AND WHY THEY ARE NOT INVENTED
+--------------------------------------------------------------
+STATES holds the four per-state distances of the Prop-3 construction in
+src/experiments/exp06_theory_limits.py, which is what produced beta_interpolation.csv. The CSV
+records only their aggregate, so the vector itself has to be named here; it is then CHECKED
+against the file rather than trusted. _states() asserts that its mean and max are the file's own
+mean and max columns and that its log-sum-exp aggregate reproduces every measured D_beta row, so
+the cartoon is the measured object and not a drawing of one. If the experiment ever changes that
+vector, this panel stops building instead of quietly illustrating a construction that no longer
+exists.
 
-The file's first and last rows carry beta = 1e-9 and 1e9, and their D_beta equals the mean and
-the max EXACTLY. They are the analytic limits written as rows, not measurements: plotting them
-would ask a log axis to span eighteen decades to show two points that are already on the page as
-the dashed rules. They are therefore identified by that exact equality (not by a hard-coded beta
-cut), asserted to be the first and last rows, and drawn as the rules.
+The states are drawn in ascending order. D_beta is a symmetric function of the four distances, so
+the order is free, and sorting is what lets "the worst-matched state" be a position the eye can
+hold across three frames instead of a value it has to look up.
 
-The K = 1 line at the foot is a second, separate identity, from degenerate_limit_real.csv. It is
-checked against the file before it is drawn, because the sentence asserts an exact equality and a
-panel must not assert one the data has stopped showing.
+Every bar height is softmax(beta * d), which is the exact weight state k receives: it is the
+gradient of D_beta with respect to d_k. The two labelled frames are the analytic limits, uniform
+and one-hot, which is why their bars are exactly a quarter and exactly full. The middle frame is
+a MEASURED row of the file, chosen as the one whose weight profile is furthest from both limits,
+so "intermediate" is a property of the data rather than a value picked to look good.
 
-A NOTE ON PT_EQ, RESOLVED 2026-08-31
------------------------------------------------------------
-This panel names its y axis in words rather than as "$D_\\beta$", and the reason survived being
-re-tested. Mathtext renders a sub/superscript at 0.7x, an axis label is set at PT_ANNOT (7.2), and
-7.2 x 0.7 = 5.04 pt, well under this figure's 6.5 pt floor. Correcting PT_EQ from 9.0 to 9.3 on
-2026-08-31 did not help: the rule is that any label carrying mathtext goes at PT_EQ, and a 9.3 pt
-y label would be the largest in the figure and half again the size of panel g's, which sits
-directly beside it. The caption carries the symbol instead. Everything else here has no
-sub/superscript: "$\\beta$" and the two limit arrows print at PT_EQ in full.
+The K = 1 property is the panel's third statement and its smallest. It is an analytic identity
+(Methods), checked here against degenerate_limit_real.csv before it is drawn: coverage_K1 and
+global_energy agree exactly in every row, and if they ever stop agreeing the panel raises instead
+of drawing the claim. It is set at the floor, in SUBTLE, in the corner the rising curve has left
+behind, which is what the identity is worth on the page: something a reader may pick up and never
+has to.
 
-Run standalone: python fig1h.py
+TYPE, AND THE ONE DECISION THAT WAS REVERSED
+--------------------------------------------
+The 0.90 in portrait cut of this panel set the y axis in words ("interpolated distance") and put
+the symbol in the caption, on the grounds that a PT_EQ label would be the largest in the figure.
+The four-rows-of-two layout settles it the other way. The curve axes is 0.71 in tall and the
+composite reserves 0.46 in of furniture beside it; a rotated two-line PT_ANNOT phrase plus
+four-character tick labels does not fit that band, and no shorter phrase names the quantity. The
+symbol does, in 0.13 in, and the caption already introduces it as $D_\\beta$. PT_EQ = 9.3 exists
+for exactly this: 9.3 x 0.7 = 6.51 pt, so the subscript clears the figure's 6.5 pt floor.
+
+Everything else avoids mathtext by using the unicode beta, as panel g uses the unicode lambda:
+it keeps the strip's beta and the axis label's beta the same letter in the same face, and it
+keeps three frame labels off a 9.3 pt line they have no room for.
+
+Run standalone: python3 fig1h.py
 """
 from __future__ import annotations
 
 import csv
 import os
-import re
 import sys
 
 import matplotlib as mpl
@@ -61,41 +80,57 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig1_style import (FAINT, LW_HAIR, LW_LINE, MEAN, POP, PT_ANNOT, PT_EQ,  # noqa: E402
-                        PT_SMALL, SHARED, TEXT, blank, cells)
+                        PT_SMALL, PT_TICK, SHARED, SUBTLE, TEXT, blank, title)
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-RESULTS = os.path.join(os.path.dirname(os.path.dirname(HERE)), "results", "exp06_theory_limits")
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+RESULTS = os.path.join(REPO, "results", "exp06_theory_limits")
 BETA_CSV = os.path.join(RESULTS, "beta_interpolation.csv")
 DEGEN_CSV = os.path.join(RESULTS, "degenerate_limit_real.csv")
 
-# ---------------------------------------------------------------------------------- cartoon
-# One column per query subpopulation, shared by the population glyph, its number and its two
-# weight bars, so "state 4" is a vertical reading rather than something the caption has to say.
-N_STATE = 4
-COL_PITCH = 0.240
-COL_X = np.array([0.5 + (i - (N_STATE - 1) / 2) * COL_PITCH for i in range(N_STATE)])
-CLOUD_RX, CLOUD_N = 0.072, 15
-CLOUD_AR = 0.896                 # x spans 0.896 in and y 1.00 in, so ry is scaled to stay round
-# The candidate is drawn as a BAND rather than a line. Three states falling inside it and one
-# sitting clear above it is a containment judgement, which needs no scale and no second glance;
-# the same states strung along a line read as four points at four heights.
-BAND_LO, BAND_HI = 0.666, 0.804
-CY_OK, CY_BAD = 0.735, 0.928
-Y_NUM = 0.650                    # state numbers, hung under the populations they name
-BAR_BASE, BAR_FULL = 0.395, 0.140   # a track is one unit of weight, so the four sum to one track
-TRACK_W, BAR_W, BAR_DX = 0.170, 0.075, 0.045
-# Two key rows, left aligned, one swatch each. Side by side they do not fit: "aggregation" and
-# "emphasis" together leave 0.007 in between them at 0.896 in and read as one run of letters.
-Y_KEY_MEAN, Y_KEY_WORST = 0.345, 0.205
-SWATCH, SWATCH_GAP = 0.040, 0.022
+# The axes the composite hands this panel, in inches. Needed in the module and not only in the
+# preview: the strip is 3.4 times wider than it is tall, so every glyph that must be square on the
+# PAGE is sized in inches here and divided by these.
+AX_W, AX_H = 2.67, 0.71
+TOP_W, TOP_H = 2.67, 0.78
 
-# ---------------------------------------------------------------------------------- curve
-# The two rules are pinned to these heights and the y window is solved backwards from them, so
-# the band under the mean rule is a reserved text band rather than whatever the data left over.
-F_MEAN, F_MAX = 0.315, 0.955
-X_PAD = 1.6                      # one factor, applied in log space to both ends
+# The per-state distances behind beta_interpolation.csv (exp06_theory_limits.prop3_interpolation).
+# Checked against the file in _states(); see the module docstring for why they live here at all.
+STATES = (0.20, 0.55, 1.30, 0.80)
+
+# ------------------------------------------------------------------ cartoon strip
+# Rows, in inches from the TOP of the strip, so the stack is read in the order it is written and
+# a change to one band cannot silently eat another. The bar zone is what is left over, and it is
+# the largest band, because it is the only one carrying the argument.
+Y_TITLE = 0.005
+Y_MARK = 0.190              # centre of the state row: index digit and match mark, side by side
+TRACK_TOP, TRACK_BOT = 0.235, 0.512
+Y_BETA = 0.537              # top of the temperature token
+Y_PHRASE = 0.660            # top of the regime phrase, on the two named frames only
+MARK_IN = 0.048             # tick / cross, drawn as paths: a mark at cell scale, not type
+MARK_GAP = 0.019            # digit to mark, within one state's slot
+# Three frames across 2.67 in. This is the number the first cut got wrong: at 0.80 in of bars the
+# 0.135 in between frames was barely twice the 0.07 in between bars inside one, and twelve tracks
+# read as a single row. At 0.72 in the gap is 0.255 in against 0.065 in, four times, and three
+# groups of four read as three.
+GROUP_W, BAR_W = 0.72, 0.115
+GROUP_X0 = (0.0, (TOP_W - GROUP_W) / 2.0, TOP_W - GROUP_W)
+
+# ------------------------------------------------------------------ curve axes
+# The y window is SOLVED from the file's two endpoint columns: the mean rule is pinned at F_MEAN
+# and the max rule at F_MAX, which reserves a band under the mean rule for its temperature token
+# and leaves the lower right, the corner the rising curve has left behind, for the K = 1 inset.
+# Written as fractions those bands survive the file changing; written as y limits they would
+# quietly stop being bands.
+F_MEAN, F_MAX = 0.200, 0.900
+X_PAD = 1.7                 # one factor, applied in log space to both ends of the measured grid
 DASH = (0, (2.6, 1.6))
-EQ_FRAC = 0.067                  # one PT_EQ line, as a fraction of the 1.95 in curve axes
+MS_POINT = 2.6              # the measured beta grid: present, not what is being read
+INSET_XY = (0.985, 0.520)   # top RIGHT corner of the K = 1 inset, in axes fractions
+
+
+def _u(y_in):
+    """Strip units for a distance measured in inches down from the strip's top edge."""
+    return 1.0 - y_in / TOP_H
 
 
 def _beta_interpolation():
@@ -111,11 +146,72 @@ def _beta_interpolation():
                          f"down the file; got {set(mean_col)} and {set(max_col)}.")
     lo, hi = float(mean_col[0]), float(max_col[0])
 
+    # The file's first and last rows carry beta = 1e-9 and 1e9 and their D_beta equals the mean and
+    # the max exactly. They are the analytic limits written as rows, not measurements: plotting
+    # them would ask a log axis to span eighteen decades to show two points that are already on the
+    # page as the dashed rules. They are identified by that exact equality rather than by a
+    # hard-coded beta cut, and asserted to be the two ends of the file.
     at_limit = (dist == lo) | (dist == hi)
     if not (at_limit[0] and at_limit[-1] and at_limit.sum() == 2):
         raise ValueError(f"{BETA_CSV}: expected exactly the first and last rows to sit on the "
                          f"analytic endpoints; rows on a limit: {np.flatnonzero(at_limit)}.")
     return beta[~at_limit], dist[~at_limit], lo, hi
+
+
+def _d_beta(states, beta):
+    """The coverage aggregate of ``states`` at ``beta``, as src/retrieval/metrics.py defines it."""
+    s = states.mean()
+    c = states - s
+    if beta * np.abs(c).max() < 1e-3:          # the small-beta expansion metrics.py uses
+        return s + 0.5 * beta * (c * c).mean()
+    return s + (np.log(np.exp(beta * c).sum()) - np.log(len(states))) / beta
+
+
+def _states(beta, dist, lo, hi):
+    """The four per-state distances, ascending, verified against every row of the measured file.
+
+    float32 is what wrote the CSV, so agreement is asserted at 1e-5 absolute rather than exactly;
+    the observed disagreement is 8e-8, which is that rounding and nothing else.
+    """
+    st = np.sort(np.asarray(STATES, dtype=float))
+    if not (np.isclose(st.mean(), lo, atol=1e-5) and np.isclose(st.max(), hi, atol=1e-5)):
+        raise ValueError(f"STATES has mean {st.mean():.6f} and max {st.max():.6f}, but "
+                         f"{BETA_CSV} reports {lo:.6f} and {hi:.6f}.")
+    got = np.array([_d_beta(st, b) for b in beta])
+    if not np.allclose(got, dist, atol=1e-5):
+        raise ValueError(f"STATES no longer reproduces {BETA_CSV}: worst row differs by "
+                         f"{np.max(np.abs(got - dist)):.2e}. The strip would be drawing a "
+                         f"construction the experiment has stopped running.")
+    return st
+
+
+def _weights(states, beta):
+    """The share of the aggregate each state receives: softmax(beta * d), the gradient of D_beta."""
+    w = np.exp(beta * (states - states.max()))
+    return w / w.sum()
+
+
+def _regimes(states, beta):
+    """The three frames: the two analytic limits, and the measured beta furthest from both.
+
+    "Intermediate" is decided by the data. Every finite beta in the file is scored by how far its
+    weight profile sits from BOTH limits, and the frame takes the argmax; picking a beta by eye
+    would be picking the shape the panel wants to show.
+    """
+    n = len(states)
+    w_mean, w_worst = np.full(n, 1.0 / n), np.eye(n)[-1]
+    scored = [min(np.linalg.norm(_weights(states, b) - w_mean),
+                  np.linalg.norm(_weights(states, b) - w_worst)) for b in beta]
+    b_mid = float(beta[int(np.argmax(scored))])
+    # Colour, and why the middle frame is not a fifth one. The two ends own the vocabulary's two
+    # meanings: beta -> 0 averages the per-state discrepancies, which is MEAN, and beta -> infinity
+    # keeps the one worst state instead of averaging it away, which is POP. Those two are the
+    # curve's two dashed rules below. The interior of the family belongs to neither and is drawn in
+    # SHARED, the neutral, so the strip reads orange -> grey -> blue in the direction the curve
+    # travels; what separates the three frames is their SHAPE and their position, not a new hue.
+    return ((w_mean, MEAN, "β → 0", "mean aggregation", "left", 0.0),
+            (_weights(states, b_mid), SHARED, f"β = {b_mid:g}", None, "center", 0.5),
+            (w_worst, POP, "β → ∞", "worst-state emphasis", "right", 1.0))
 
 
 def _k1_identity_holds():
@@ -127,200 +223,213 @@ def _k1_identity_holds():
     return all(float(r["global_energy"]) == float(r["coverage_K1"]) for r in rows)
 
 
-def _key_row(ax, y, colour, words):
-    """One legend row: a coloured mark, then the phrase in ink. Letters never carry the colour."""
-    ax.add_patch(mpl.patches.Rectangle((0.005, y - 0.055), SWATCH, SWATCH, facecolor=colour,
-                                       edgecolor="none", zorder=3))
-    # PT_SMALL, not PT_ANNOT: "worst-state emphasis" is 0.97 in at 7.2 pt against a 0.896 in
-    # panel, so PT_ANNOT would break it into three lines and spend the strip on a legend. The
-    # floor is what it may not go under, and it stops there.
-    ax.text(0.005 + SWATCH + SWATCH_GAP, y, words, ha="left", va="top", fontsize=PT_SMALL,
-            color=TEXT, linespacing=1.15)
+def _mark(ax, cx, cy, matched):
+    """A tick or a cross, drawn as paths so the two are told apart by SHAPE and not by colour.
+
+    Paths rather than a text glyph: this is a mark at the scale of the figure's cells, it must be
+    square on a strip that is 3.4 times wider than tall, and a font's check mark is not available
+    in every face the deck may fall back to.
+    """
+    hx, hy = MARK_IN / 2.0 / TOP_W, MARK_IN / 2.0 / TOP_H
+    kw = dict(color=SHARED, lw=0.75, solid_capstyle="round", solid_joinstyle="miter", zorder=4)
+    if matched:
+        ax.plot([cx - hx, cx - 0.25 * hx, cx + hx],
+                [cy + 0.10 * hy, cy - 0.85 * hy, cy + 0.95 * hy], **kw)
+    else:
+        for sign in (1, -1):
+            ax.plot([cx - 0.8 * hx, cx + 0.8 * hx], [cy - sign * 0.8 * hy, cy + sign * 0.8 * hy],
+                    **kw)
 
 
-def _cartoon(ax):
-    """Four subpopulations, one candidate, and the weight each state gets in the two regimes."""
+def _frame(ax, x0, weights, colour, states):
+    """One temperature: four tracks of one unit of weight each, filled by the share it receives."""
+    slot = GROUP_W / len(weights)
+    full = TRACK_BOT - TRACK_TOP
+    worst = int(np.argmax(states))
+    # One floor per frame, spanning only that frame's four tracks. It is what turns three groups
+    # of four into three objects: the eye takes a shared baseline as a shared scale.
+    ax.plot([x0 / TOP_W, (x0 + GROUP_W) / TOP_W], [_u(TRACK_BOT)] * 2, lw=LW_HAIR, color=SHARED,
+            solid_capstyle="butt", zorder=4)
+    for k, w in enumerate(weights):
+        cx = (x0 + (k + 0.5) * slot) / TOP_W
+        # The track is a WHOLE unit of weight, so a quarter-filled track and a full one are read
+        # off one scale. Without it the last frame is a lone bar and says nothing about the three
+        # states that were given nothing.
+        ax.add_patch(mpl.patches.Rectangle((cx - BAR_W / 2 / TOP_W, _u(TRACK_BOT)),
+                                           BAR_W / TOP_W, full / TOP_H, facecolor=FAINT,
+                                           edgecolor="none", alpha=0.55, zorder=2))
+        if w > 0:
+            ax.add_patch(mpl.patches.Rectangle((cx - BAR_W / 2 / TOP_W, _u(TRACK_BOT)),
+                                               BAR_W / TOP_W, w * full / TOP_H, facecolor=colour,
+                                               edgecolor="none", zorder=3))
+        # Index and match mark share one row: two rows would cost 0.09 in of a 0.78 in strip, and
+        # the bar zone is where that height does the panel more good.
+        dx = (MARK_GAP + MARK_IN) / 2.0 / TOP_W
+        ax.text(cx - dx, _u(Y_MARK), str(k + 1), ha="center", va="center", fontsize=PT_SMALL,
+                color=SUBTLE)
+        _mark(ax, cx + dx, _u(Y_MARK), k != worst)
+
+
+def _cartoon(ax, states, beta):
+    """The state weighting itself: three temperatures, one weight budget, four tracks."""
     blank(ax)
-    ry = CLOUD_RX * CLOUD_AR
+    title(ax, "Population scoring is a continuum", y=_u(Y_TITLE), va="top")
 
-    # ---- the query, and how well the candidate matches each of its states ----
-    # FAINT at part opacity, because at full strength a band this size is the heaviest ink in
-    # the strip and the populations inside it stop being the thing the eye lands on.
-    ax.add_patch(mpl.patches.Rectangle((0.02, BAND_LO), 0.96, BAND_HI - BAND_LO, facecolor=FAINT,
-                                       edgecolor="none", alpha=0.55, zorder=1))
-    ax.text(0.005, 1.0, "state mismatch", ha="left", va="top", fontsize=PT_ANNOT, color=TEXT)
-
-    for i, cx in enumerate(COL_X):
-        cy = CY_BAD if i == N_STATE - 1 else CY_OK
-        if cy - ry > BAND_HI:                       # only a state OUTSIDE the band has a gap
-            ax.plot([cx, cx], [BAND_HI, cy - ry], lw=LW_HAIR, color=SHARED, zorder=2)
-        # A separate stream per state, so four populations drawn by one helper do not read as
-        # four copies of one population.
-        cells(ax, cx, cy, CLOUD_N, CLOUD_RX, ry, color=SHARED,
-              rng=np.random.default_rng(11 + i), s=3.4, alpha=0.9)
-        ax.text(cx, Y_NUM, str(i + 1), ha="center", va="top", fontsize=PT_ANNOT, color=TEXT)
-
-    # ---- what the temperature does to the weights ----
-    # One track per state, and the track is one whole unit of weight, so "a quarter each" and
-    # "all of it on state 4" are read off the same scale instead of two.
-    w_mean = np.full(N_STATE, 1.0 / N_STATE)
-    w_worst = np.zeros(N_STATE)
-    w_worst[-1] = 1.0
-    ax.bar(COL_X, BAR_FULL, TRACK_W, bottom=BAR_BASE, color=FAINT, lw=0, zorder=2, alpha=0.55)
-    for dx, weights, colour in ((-BAR_DX, w_mean, MEAN), (BAR_DX, w_worst, POP)):
-        ax.bar(COL_X + dx, weights * BAR_FULL, BAR_W, bottom=BAR_BASE, color=colour, lw=0,
-               zorder=3)
-
-    _key_row(ax, Y_KEY_MEAN, MEAN, "mean aggregation")
-    _key_row(ax, Y_KEY_WORST, POP, "worst-state\nemphasis")
+    for x0, (weights, colour, token, phrase, ha, xa) in zip(GROUP_X0, _regimes(states, beta)):
+        _frame(ax, x0, weights, colour, states)
+        # The outer two frames are flush with the strip's edges and so are their labels, which is
+        # what lets "worst-state emphasis" be set at PT_ANNOT at all: centred under its own frame
+        # it would run 0.10 in past the axes and widen the composite.
+        ax.text(xa, _u(Y_BETA), token, ha=ha, va="top", fontsize=PT_ANNOT, color=TEXT)
+        if phrase:
+            ax.text(xa, _u(Y_PHRASE), phrase, ha=ha, va="top", fontsize=PT_ANNOT, color=TEXT)
 
 
 def _curve(ax, beta, dist, lo, hi):
-    """The measured interpolation, between the two endpoints it is asserted to reach."""
+    """The measured aggregate, travelling between the two endpoints the strip has just named."""
     span = (hi - lo) / (F_MAX - F_MEAN)
     y_lo = lo - F_MEAN * span
     ax.set_ylim(y_lo, y_lo + span)
     ax.set_xscale("log")
     ax.set_xlim(beta.min() / X_PAD, beta.max() * X_PAD)
 
-    ax.axhline(lo, color=MEAN, lw=LW_HAIR, ls=DASH, zorder=2)
-    ax.axhline(hi, color=POP, lw=LW_HAIR, ls=DASH, zorder=2)
-    ax.plot(beta, dist, color=POP, lw=LW_LINE, marker="o", ms=2.3, mfc=POP, mec="white",
-            mew=0.35, zorder=4)
+    # dash_capstyle butt: a projecting cap puts the rule's ink past the spine, which widens the
+    # composite by the linewidth on both sides for no visible gain. The two colours are the two
+    # outer frames of the strip directly above, so the endpoints are recognised, not read.
+    for y, colour in ((lo, MEAN), (hi, POP)):
+        ax.axhline(y, color=colour, lw=LW_HAIR, ls=DASH, zorder=2, dash_capstyle="butt")
+    ax.plot(beta, dist, "-o", color=POP, lw=LW_LINE, ms=MS_POINT, zorder=4)
 
-    # Each rule is named twice, by the temperature that produces it and by what that temperature
-    # does. The limits live here rather than in the strip above: at 0.896 in the strip cannot
-    # hold both the two phrases and the two limits, and here they cost the empty top-left corner.
-    for y_top, token, phrase in ((F_MAX - 0.012, r"$\beta \rightarrow \infty$", "worst case"),
-                                 (F_MEAN - 0.012, r"$\beta \rightarrow 0$", "mean aggregation")):
-        ax.text(0.0, y_top, token, transform=ax.transAxes, ha="left", va="top", fontsize=PT_EQ,
-                color=TEXT)
-        ax.text(0.0, y_top - EQ_FRAC, phrase, transform=ax.transAxes, ha="left", va="top",
+    # The only tokens on the curve. Each hangs under the rule it names, on the left, where the
+    # curve has not arrived: the strip's leftmost and rightmost frames are found again as the
+    # bottom and the top of this axes. The two regime phrases stay in the strip, because at 0.71 in
+    # tall there is room under a rule for one line and not for two.
+    for y_frac, token in ((F_MEAN, "β → 0"), (F_MAX, "β → ∞")):
+        ax.text(0.012, y_frac - 0.025, token, transform=ax.transAxes, ha="left", va="top",
                 fontsize=PT_ANNOT, color=TEXT)
 
     ax.set_yticks([lo, hi])
-    ax.set_yticklabels([f"{lo:.3f}", f"{hi:.3f}"])
+    ax.set_yticklabels([f"{lo:.2f}", f"{hi:.2f}"])
     ax.set_xticks([0.1, 1, 10, 100])
     # Written out rather than left to LogFormatter, which sets the decades as mathtext
     # superscripts: at PT_TICK those print at 4.76 pt, under this figure's floor.
     ax.set_xticklabels(["0.1", "1", "10", "100"])
     ax.xaxis.set_minor_locator(mpl.ticker.NullLocator())
-    ax.tick_params(axis="both", pad=1.8)
-    ax.set_xlabel(r"temperature $\beta$", fontsize=PT_EQ, labelpad=2.0)
-    # WORDS, NOT THE SYMBOL, AND THIS WAS RE-DERIVED THE HARD WAY. Putting "$D_\beta$" here
-    # was tried on 2026-08-31 after PT_EQ was corrected to 9.3, and the figure's own floor gate
-    # rejected it: an axis label is set at PT_ANNOT (7.2), the rule is that ANY label carrying
-    # mathtext goes at PT_EQ, and 7.2 x 0.7 = 5.04 pt. Setting the axis label at PT_EQ instead
-    # would make it the largest y label in the figure and half again the size of panel g's,
-    # which sits directly beside it. So the axis is named in words and the caption carries the
-    # symbol, which is the one place the translation costs the reader nothing.
-    ax.set_ylabel("interpolated distance", fontsize=PT_ANNOT, labelpad=2.0)
-    # The left spine spans the family, from the mean endpoint to the worst one, so the band that
-    # holds the K = 1 line reads as text under the plot rather than as unused axis.
+    ax.tick_params(labelsize=PT_TICK, pad=1.2)
+    ax.set_xlabel("temperature β", fontsize=PT_ANNOT, labelpad=0.5)
+    # The symbol, not a phrase: see the module docstring. PT_EQ is the vocabulary's size for any
+    # label carrying mathtext, and it is the only label here that does.
+    ax.set_ylabel(r"$D_\beta$", fontsize=PT_EQ, labelpad=1.5, rotation=0, ha="right", va="center")
+    # The left spine spans the family, from the mean endpoint to the worst one, so the band under
+    # the mean rule reads as a reserved margin rather than as unused axis.
     ax.spines["left"].set_bounds(lo, hi)
+    for side in ("top", "right"):
+        ax.spines[side].set_visible(False)
 
-    if _k1_identity_holds():
-        ax.text(0.0, 0.008, "K = 1: coverage\nreduces exactly to\nthe global distance",
-                transform=ax.transAxes, ha="left", va="bottom", fontsize=PT_SMALL, color=TEXT,
-                linespacing=1.15)
-    else:
+    if not _k1_identity_holds():
         raise ValueError(
             f"{DEGEN_CSV}: coverage_K1 no longer equals global_energy, so panel h may not state "
-            f"the identity. Drop the line from the panel rather than softening its wording.")
+            f"the identity. Drop the inset from the panel rather than softening its wording.")
+    # The K = 1 property, kept and demoted: an analytic identity (Methods), checked just above
+    # against the real-cell file, parked in the corner the rising curve has left behind. SUBTLE and
+    # at the floor, as panel g sets its own verified identity, so a reader who never reads it has
+    # still read the panel. That is the whole reason it is a corner inset and not a sentence.
+    ax.text(INSET_XY[0], INSET_XY[1], "Special case, K = 1:\ncoverage = global distance",
+            transform=ax.transAxes, ha="right", va="top", fontsize=PT_SMALL, color=SUBTLE,
+            linespacing=1.15)
 
 
 def draw_1h(ax, ax_top):
     """Panel h: the population score is a continuum, and beta says what it aggregates over."""
     beta, dist, lo, hi = _beta_interpolation()
-    _cartoon(ax_top)
+    _cartoon(ax_top, _states(beta, dist, lo, hi), beta)
     _curve(ax, beta, dist, lo, hi)
 
 
-# ------------------------------------------------------------------------------------------
-# Preview and self-check
-# ------------------------------------------------------------------------------------------
-# Mirrors the geometry fig1_assemble gives a DATA panel: the axes themselves are the sizes the
-# composite hands panel h, and the margins are the gutters it reserves around them (LETTER_GUTTER
-# + Y_FURNITURE on the left for the y axis, DATA_BELOW under the curve for the x axis). Written
-# out rather than imported, because importing fig1_assemble pulls in every other panel module.
-AX_W, CARTOON_H, CARTOON_GAP, CURVE_H = 0.896, 1.00, 0.20, 1.95
-PAD_L, PAD_R, PAD_T, PAD_B = 0.44, 0.08, 0.10, 0.55
-
-_SUBSUP = re.compile(r"\$[^$]*[\^_][^$]*\$")   # fig1_assemble's rule, applied before it is asked
-
-
-def _effective_sizes(fig):
-    """(effective pt, string) for every drawn Text, a mathtext sub/superscript at its real 0.7x."""
-    out = []
-    for t in fig.findobj(mpl.text.Text):
-        s = str(t.get_text())
-        if not s.strip() or not t.get_visible():
-            continue
-        out.append((t.get_fontsize() * (0.7 if _SUBSUP.search(s) else 1.0), s.replace("\n", "/")))
-    return out
-
-
-def _overhangs(ax, renderer, label):
-    """Print how far each artist leaves `ax`, in inches. Axis furniture is reported separately."""
-    box = ax.get_window_extent(renderer)
-    dpi = ax.figure.dpi
-    content, furniture = [], []
-    for art in ax.get_children():
-        if isinstance(art, mpl.spines.Spine) or art is ax.patch:
-            continue
-        if not art.get_visible() or (art in (ax.xaxis, ax.yaxis) and not ax.axison):
-            continue      # a blank() strip draws no axis, whatever its tick artists still claim
-        bb = art.get_tightbbox(renderer)
-        if bb is None or bb.width <= 0:
-            continue
-        out = max((box.x0 - bb.x0) / dpi, (bb.x1 - box.x1) / dpi,
-                  (box.y0 - bb.y0) / dpi, (bb.y1 - box.y1) / dpi)
-        row = (out, f"{label}: {type(art).__name__} "
-                    f"{getattr(art, 'get_text', lambda: '')()!r}".strip())
-        (furniture if art in (ax.xaxis, ax.yaxis) else content).append(row)
-    return content, furniture
-
-
 if __name__ == "__main__":
-    sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..")))
-    from figstyle import apply_style, pin_canvas, soften_axes  # noqa: E402
-    from fig1_style import PT_FLOOR, PT_TICK, PT_TITLE  # noqa: E402
+    import re
+
+    import matplotlib.text as mtext
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from figstyle import apply_style, pin_canvas, soften_axes
+    from fig1_style import PT_FLOOR, PT_TITLE
+
+    # The composite's own geometry for panel h (fig1_assemble.py, four rows of two): 0.46 in of y
+    # furniture beside the axes, 0.37 in under the curve for the x labels, 0.10 in between the two
+    # axes. A position tuned against these is the position the panel ships with.
+    Y_FURNITURE, DATA_BELOW, GAP, PAD = 0.46, 0.37, 0.10, 0.06
+    FW = Y_FURNITURE + AX_W + PAD
+    FH = PAD + TOP_H + GAP + AX_H + DATA_BELOW
 
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
-    figw = PAD_L + AX_W + PAD_R
-    figh = PAD_T + CARTOON_H + CARTOON_GAP + CURVE_H + PAD_B
-    fig = plt.figure(figsize=(figw, figh))
-    pin_canvas(fig)                       # the canvas is the page, so "tight" cannot rescale it
-    ax_top = fig.add_axes([PAD_L / figw, 1 - (PAD_T + CARTOON_H) / figh, AX_W / figw,
-                           CARTOON_H / figh])
-    ax = fig.add_axes([PAD_L / figw, PAD_B / figh, AX_W / figw, CURVE_H / figh])
+    fig = plt.figure(figsize=(FW, FH))
+    # apply_style pins savefig.bbox="tight", which would crop the preview to its ink and save a
+    # different canvas from the one the assertions below measure. pin_canvas makes tight == canvas.
+    pin_canvas(fig)
+    ax_top = fig.add_axes([Y_FURNITURE / FW, 1.0 - (PAD + TOP_H) / FH, TOP_W / FW, TOP_H / FH])
+    ax = fig.add_axes([Y_FURNITURE / FW, DATA_BELOW / FH, AX_W / FW, AX_H / FH])
     draw_1h(ax, ax_top)
     soften_axes(fig)
 
-    for a, want in ((ax, (AX_W, CURVE_H)), (ax_top, (AX_W, CARTOON_H))):
-        got = (a.get_position().width * figw, a.get_position().height * figh)
-        assert np.allclose(got, want, atol=1e-9), f"axes is {got}, composite gives it {want}"
-
-    fig.canvas.draw()                     # every tick label exists only once the figure is drawn
+    for a, want in ((ax, (AX_W, AX_H)), (ax_top, (TOP_W, TOP_H))):
+        got = (a.get_position().width * FW, a.get_position().height * FH)
+        assert np.allclose(got, want, atol=1e-9), f"axes is {got}, the composite gives it {want}"
+    fig.canvas.draw()                  # every tick label exists only once the figure is drawn
     rend = fig.canvas.get_renderer()
 
-    smallest = min(_effective_sizes(fig))
-    assert smallest[0] >= PT_FLOOR - 1e-6, f"below the {PT_FLOOR} pt floor: {smallest}"
-    print(f"smallest effective size {smallest[0]:.2f} pt  ({smallest[1]!r})")
+    # ---- 1. type floor, scored the way fig1_assemble scores it ------------------------------
+    subsup = re.compile(r"\$[^$]*[\^_][^$]*\$")
+    sizes = []
+    for t in fig.findobj(mtext.Text):
+        s = str(t.get_text())
+        if not s.strip() or not t.get_visible():
+            continue
+        sizes.append((t.get_fontsize() * (0.7 if subsup.search(s) else 1.0),
+                      s.replace("\n", " / ")[:34]))
+    worst = min(sizes)
+    assert worst[0] >= PT_FLOOR - 1e-6, f"under the {PT_FLOOR} pt floor: {sorted(sizes)[:4]}"
+    print(f"smallest effective size: {worst[0]:.2f} pt  ({worst[1]!r})")
 
-    content, furniture = [], []
-    for a, name in ((ax_top, "strip"), (ax, "curve")):
-        c, f = _overhangs(a, rend, name)
-        content += c
-        furniture += f
-    outside = [r for r in content if r[0] > 1e-4]
-    for out, who in sorted(furniture, reverse=True):
-        print(f"axis furniture leaves the axes by {out:+.3f} in  {who}  "
-              f"(composite reserves {PAD_L:.2f} in left, {PAD_B:.2f} in below)")
-    for out, who in sorted(outside, reverse=True):
-        print(f"HANGS OUT by {out:.4f} in  {who}")
-    assert not outside, "panel content must stay inside its axes; see the list above"
-    print("all panel content is inside its axes")
+    # ---- 2. containment ---------------------------------------------------------------------
+    # Tick labels and axis labels live in the furniture bands the composite reserves for them
+    # (0.46 in left, 0.37 in below), so they are measured against those budgets instead of against
+    # the axes rect. Everything else must sit inside the axes it was drawn into.
+    hangs, furniture = [], set()
+    for a, name in ((ax_top, "ax_top"), (ax, "ax")):
+        box = a.get_window_extent()
+        art = list(a.texts) + list(a.lines) + list(a.collections) + list(a.patches)
+        if a.axison:                       # blank() axes keep visible tick Texts they never draw
+            furn = (list(a.get_xticklabels()) + list(a.get_yticklabels())
+                    + [a.xaxis.label, a.yaxis.label])
+            furniture |= {id(o) for o in furn}
+            art += furn
+        for o in art:
+            if not o.get_visible() or (isinstance(o, mtext.Text) and not str(o.get_text()).strip()):
+                continue
+            bb = o.get_window_extent(renderer=rend) if isinstance(o, mtext.Text) \
+                else o.get_tightbbox(rend)
+            if bb is None:
+                continue
+            out = dict(left=(box.x0 - bb.x0), right=(bb.x1 - box.x1),
+                       below=(box.y0 - bb.y0), above=(bb.y1 - box.y1))
+            over = {k: v / fig.dpi for k, v in out.items() if v > 0.5}   # 0.5 px of ink
+            if over:
+                label = str(o.get_text())[:22] if isinstance(o, mtext.Text) else type(o).__name__
+                hangs.append((name, label, id(o) in furniture,
+                              {k: round(v, 3) for k, v in over.items()}))
 
-    fig.savefig(os.path.join(HERE, "1h.png"), dpi=400)
-    print("wrote 1h.png")
+    for name, label, is_furniture, over in hangs:
+        kind = "furniture" if is_furniture else "IN-PANEL"
+        print(f"  outside {name} [{kind}] {label!r}: "
+              + ", ".join(f"{k} {v:+.3f} in" for k, v in over.items()))
+    assert not [h for h in hangs if not h[2]], "in-panel artist leaves its axes; pull it back in"
+    for _, label, _, over in hangs:
+        assert over.get("left", 0) <= Y_FURNITURE, f"{label!r} overruns the y-furniture band"
+        assert over.get("below", 0) <= DATA_BELOW, f"{label!r} overruns the x-furniture band"
+        assert over.get("right", 0) <= PAD and over.get("above", 0) <= PAD, \
+            f"{label!r} would widen the composite: {over}"
+    print("containment: every in-panel artist inside its axes; furniture within its budget")
+
+    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "1h.png")
+    fig.savefig(out, dpi=400)
+    print(f"wrote {out}  (axes {AX_W} x {AX_H} in, strip {TOP_W} x {TOP_H} in)")
