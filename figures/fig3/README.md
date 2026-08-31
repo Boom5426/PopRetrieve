@@ -1,129 +1,144 @@
-# Figure 3: the apparent gains do not survive independent evaluation
+# Figure 3: the population advantage weakens, and can change direction, once the judge changes
 
-One-line message: the Class-A advantage (Fig. 2) does not survive a change to metrics that do not
-share the retrieval objective. The SAME queries flip sign from Class A to Class B, the
-information-condition gate correlates the WRONG way with true divergence, the real-data coverage
-advantage is statistically real but negligible and confined to constructed mixtures, and on the one
-independent (Class C) oracle where the distributional score does win, a scalar comparing no
-distributions reproduces most of the win.
+One-line message: the Class-A advantage established in Figure 2 does not survive a change to
+criteria that do not share the retrieval objective. Four numbers are this figure's skeleton, and
+every other panel supports or qualifies one of them:
+
+| | |
+|---|---|
+| **+0.129** | response matching: population retrieval wins decisively (a) |
+| **0.000** | mechanism recovery, the SAME rankings: the advantage is gone (a, b) |
+| **+0.276** | external functional similarity: a real population signal (h) |
+| **+0.097** | what survives once the response-magnitude channel is partialled out (h, m) |
 
 Panel letters and every number below match the Fig. 3 caption in
-`manuscript/latex/PopRetrieve_manuscript.tex`. If a number here and a number there ever disagree, the
-manuscript is the authority and this file is the bug.
+`manuscript/latex/PopRetrieve_manuscript.tex`. If a number here and a number there ever disagree,
+the manuscript is the authority and this file is the bug.
 
 ## Panels
 
-| Panel | Message | Source | Status |
-|-------|---------|--------|--------|
-| a | Same 480 paired queries: Class A regret reduction median +0.129 (73%>0) vs Class B MoA-nDCG mean -0.037 (35%>0) | figures/source_data/fig3a_classA_vs_classB.csv | done |
-| b | MoA-nDCG gain ECDF per cell line; median 0.000 in all three | figures/source_data/fig3a_classA_vs_classB.csv | done |
-| c | Minority-coverage gain by divergence quartile: significant, and negligible | results/exp16_gate_diagnosis/_merged_query_divergence.csv | done |
-| d | Recommended +0.119 (n=621) vs non-recommended +0.122 (n=133): the gate does not concentrate the gain | results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv | done |
-| e | Gate structure-reliability vs true divergence, Spearman rho = -0.21 (WRONG sign) | results/exp16_gate_diagnosis/_merged_query_divergence.csv | done |
-| f | Binary recommendation does not separate true divergence: Mann-Whitney p = 0.09 | results/exp16_gate_diagnosis/_merged_query_divergence.csv | done |
-| g | All 239 real-data tasks, one dot per task: overall mean +0.0018, positive tail only in the constructed cross-line mixtures | results/exp13_real_data_projection/projection.csv | done |
-| h | Class C functional oracle: energy +0.276 beats the mean incumbent +0.083, but a query-dependent magnitude scalar reaches +0.232 and the partial leaves +0.097 | figures/source_data/fig3hi_class_c_functional.csv | done |
-| i | Per query, energy vs that scalar: energy better on 62 of 103 queries (nominal Wilcoxon p = 0.073, anticonservative) | figures/source_data/fig3hi_class_c_functional.csv | done |
-| j | Achieved power in the highest divergence quartile: 1.00 for minority coverage, 0.06 for MoA-nDCG | results/exp17_true_divergence_subset/power_analysis.csv | done |
-| k | Queries needed for 80% power: 45 (observed n=191) for minority coverage, 20,844 (observed n=143) for MoA-nDCG | results/exp17_true_divergence_subset/power_analysis.csv | done |
-| l | The same four rankings scored against ABSOLUTE GDSC2 potency: energy -0.52 and raw mean cosine -0.53 change sign, control-subtracted mean cosine collapses to +0.10, response magnitude alone wins at +0.69 | figures/source_data/fig3hi_class_c_potency.csv | done |
-| m | Spearman rho between the query-candidate energy distance and the candidate response magnitude, median +0.791 | figures/source_data/fig3hi_class_c_potency.csv | done |
+| Row | Panel | Phrase the panel states over itself | Reads |
+|---|---|---|---|
+| 1 | a | "Only the evaluator changes; the advantage disappears" | `source_data/fig3a_classA_vs_classB.csv` |
+| 1 | b | "Median exactly zero in every cell line" | same |
+| 2 | c | "All four positive, no trend visible" | `results/exp16_gate_diagnosis/_merged_query_divergence.csv` |
+| 2 | g | "Largest mean, smallest share above zero" | `results/exp13_real_data_projection/projection.csv` |
+| 3 | d | "Gate does not enrich" | `results/exp12_partial_observed_retrieval/per_query_scores.csv` |
+| 3 | e | "Assumed to rise, it falls" | `results/exp16_gate_diagnosis/_merged_query_divergence.csv` |
+| 3 | f | "Inverted on 133, right on 11" | same |
+| 4 | h | Class-C ladder, energy against its controls | `source_data/fig3hi_class_c_functional.csv` |
+| 4 | i | "Energy better on 62 of 103 queries" | same |
+| 5 | j | "Top quartile: only coverage clears 80%" | `results/exp17_true_divergence_subset/power_analysis.csv` |
+| 5 | k | "Noise, not gap size, sets the cost" | same |
+| 6 | l | "Absolute potency is a different endpoint" | `source_data/fig3hi_class_c_potency.csv` |
+| 6 | m | "Energy ranks largely by magnitude" | same |
+
+Each phrase is drawn ink at 8.5 pt, not an rc title, and each is asserted against the data it
+describes, so a data change breaks the build rather than leaving a false sentence on the page.
 
 ## Verified numbers
-- 4a: leave_drug_out subset, n=480 paired; Class A regret reduction median +0.1292 (73.1%>0); Class B MoA-nDCG gain mean -0.0369, median 0.0000 (35.0%>0); Class A max +2.82 (the panel view stops at +1.42 and says so).
-- 4c: quartile MEANS +0.0042, +0.0050, +0.0062, +0.0056 (bars, with s.e.m.); quartile MEDIANS +0.0009, +0.0015, +0.0017, +0.0018 (dashes). The manuscript quotes the medians; the panel draws both, because the earlier "<0.002" caption was true of the medians only and was printed over the means.
-- 4d: recommendation_vs_outcome.csv, DART_coverage_worst: recommended median +0.11900 (n=621), mean_or_no_call +0.12194 (n=133).
-- 4e: structure_reliability vs true_divergence Spearman rho = -0.2110, p = 3.79e-09, n = 765 unique query keys (computed in the panel, not hard-coded).
-- 4f: recommended median divergence 1.66 (n=621) vs not recommended 1.68 (n=144), Mann-Whitney p = 0.090 (computed in the panel).
-- 4g: exp13 projection.csv, 239 tasks. Dataset means: SciPlex3 cross-line +0.00426 (n=90), SciPlex3 within-line +0.00038 (n=90), CD34+ +0.00027 (n=12), Frangieh +0.00042 (n=23), SciPlex3 predicted candidates +0.00003 (n=24); overall +0.0018. Two circled tasks (A549->MCF7 Abexinostat, Belinostat) are the only ones above the 0.01 threshold in 10 of 10 seed resamples.
-- 3j/3k: exp17 power_analysis.csv, Q4 stratum. minority_state_coverage n=191, observed mean gap +0.005608, s.d. 0.013496, achieved power 0.99992, n for 80% power 45.5. moa_ndcg n=143, observed mean gap +0.003166, s.d. 0.16317, achieved power 0.0562, n for 80% power 20,844.3 (data_sufficient False). The two s.d. are the whole story: the same size of gap is decisive on one metric and invisible on the other because the MoA-nDCG gap is twelve times noisier.
-- 3l/3m: fig3hi_class_c_potency.csv, the v2 analysis with the corrected energy sign. Medians against absolute GDSC2 AUC: energy -0.52, mean cosine raw -0.53, mean cosine control-subtracted +0.10, response magnitude alone +0.69. Energy distance vs candidate response magnitude, median rho +0.791.
-- 4h/4i: 103 leave-one-drug-out queries, SciPlex3 x GDSC2 at 10 uM. Medians: energy +0.276, mean cosine control-subtracted +0.083, mean cosine raw +0.241, response-magnitude match +0.232, potency match +0.399, energy partialled on magnitude match +0.097. Energy better on 62 of 103 queries.
+
+- **a** n = 480 paired queries (A549 157, K562 146, MCF7 177). Class A regret reduction median
+  +0.1292, mean +0.2881, 73.1% > 0, 19.2% < 0, 7.7% tied, range -1.021 to +2.823. Class B
+  MoA-nDCG gain median +0.0000, mean -0.0369, 35.0% > 0, 40.6% < 0, 24.4% tied, paired Wilcoxon
+  p = 1.13e-3.
+- **b** Class B medians exactly 0.000 in all three lines; ties 21.7% (A549), 25.3% (K562), 26.0%
+  (MCF7).
+- **c** quartile means +0.00415, +0.00495, +0.00619, +0.00561 with 95% bootstrap intervals
+  [+0.0009, +0.0072], [+0.0035, +0.0067], [+0.0045, +0.0080], [+0.0039, +0.0076]; each Wilcoxon
+  p < 1e-6. **Spearman(true_divergence, gain) = +0.0502, p = 0.165, n = 765: there is no trend.**
+- **d** recommended median +0.11900 (n=621) against not recommended +0.12194 (n=133); difference
+  -0.0029, 95% bootstrap CI -0.062 to +0.058, Mann-Whitney p = 0.967. Same measurement as
+  Fig. 2d, and the two panels use the same split and the same direction of subtraction.
+- **e** structure_reliability_score against true_divergence, Spearman rho = -0.2110,
+  p = 3.79e-09, n = 765.
+- **f** recommended n=621 median 1.660; mean_or_no_call n=133 median 1.689, Mann-Whitney
+  p = 0.0011, common-language effect size 0.410 (95% CI 0.362 to 0.458); mean_sufficient n=11
+  median 0.509, all eleven below the fifth percentile of both other groups. Pooled 621 against
+  144 gives p = 0.0902 with a Kolmogorov-Smirnov D = 0.154, p = 0.0069. See the honesty note.
+- **g** 239 tasks. Dataset means: cross-line +0.00426 (n=90, 18% > 0, median exactly 0.000),
+  within-line +0.00038 (n=90, 56% > 0), Frangieh +0.00042 (n=23, 57% > 0), CD34+ +0.00027
+  (n=12, 50% > 0), predicted candidates +0.00003 (n=24, 42% > 0). Overall mean +0.00181, median
+  0.000; 102 of 239 tasks select the same candidate under both approaches.
+- **h** 103 queries. Medians: energy +0.2761, mean cosine control-subtracted +0.0826, mean cosine
+  raw +0.2413, magnitude match +0.2318, potency match +0.3987, energy partialled on magnitude
+  match +0.0969. Per cell line the scalar-to-energy ratio is 0.95 (A549), 1.11 (K562), 0.49
+  (MCF7), so "nearly matches" is a pooled statement.
+- **i** energy better on 62 of 103; nominal paired Wilcoxon p = 0.0727, anticonservative.
+- **j/k** Q4 stratum: minority_state_coverage n=191, gap +0.005608, s.d. 0.013496, power 0.99992,
+  n for 80% power 45.5. moa_ndcg n=143, gap +0.003166, s.d. 0.163170, power 0.056191, n for 80%
+  power 20,844.3 with `data_sufficient` False. The gaps differ by 1.8x, the standard deviations
+  by 12x.
+- **l/m** medians against the GDSC2 potency ranking: energy -0.5202, raw mean cosine -0.5334,
+  control-subtracted mean cosine +0.1049, response magnitude alone +0.6918. Energy distance
+  against candidate response magnitude, median +0.7910, IQR [+0.515, +0.961].
 
 ## Honesty notes
-- This is the load-bearing negative. Every panel shows a DIFFERENT way the Class-A gain fails to
-  transfer to oracle-independent evaluation. No panel is padding.
-- 4a/4b: the flip is measured on the SAME queries, so it is not a population difference; it is the
-  metric changing the verdict.
-- 4c: the minority-coverage gain IS statistically significant (that is why it is not simply "zero"),
-  and it is a fraction of a metric whose own values run 0.89 to 0.99; the panel states both.
-- 4e: the negative correlation is the key. The gate axis moves opposite to the quantity it should
-  track, so it cannot be a valid trust signal.
-- 4g: the panel plots the distribution, never a count of "dominant" tasks. The conventional 0.01
-  threshold sits inside the noise band of this difference, and the exp13 seed is not a replicate.
-- 3j/3k: a power analysis in a MAIN figure normally reads as a sign that the headline result is
-  thin, which is why these two sat in Extended Data. Here the headline result IS the null, so the
-  power analysis is the evidence and not an apology for it. Panel k reports 20,844 rather than
-  rounding to "roughly 20,000": the number is what makes the point, and 143 queries is what exists.
-- 3l/3m: these two do not measure PopRetrieve. They measure the endpoint, and they are drawn beside
-  h and i so the one external win in the study is read next to the endpoint choice that produced
-  it. Row 5 is not evidence that retrieval fails under potency; a similarity retriever handed a
-  weak query SHOULD return weak candidates.
-- 3l: "every ranking inverts" is the phrasing ed5.py uses and it overstates panel l. Three of the
-  four medians move the way the magnitude story predicts, but the control-subtracted mean cosine
-  goes from +0.083 under functional similarity to +0.105 under potency, which is a collapse toward
-  zero, not a sign change. The caption and the ledger above say sign change only of energy and raw
-  mean cosine.
-- 4h/4i: the oracle is drug-drug FUNCTIONAL SIMILARITY (GDSC2 dose-response AUC profile
-  correlation, the three SciPlex3 lines held out), not measured potency. The absolute-potency
-  comparison is the confounder audit in row 5 (panels l and m), and it is a control on row 3, not
-  a competing result. Until 2026-07-26 the row-3 banner and the h/i titles still described that
-  withdrawn potency framing and contradicted the bars beneath them; they now state what is plotted.
 
-## Authored at print size (2026-07-26 re-cut, 2026-08-30 height re-cut)
+- **This is the load-bearing negative.** Every panel shows a different way the Class-A gain fails
+  to transfer to oracle-independent evaluation. No panel is padding.
+- **a and b measure the flip on the SAME queries**, so it is not a population difference; the
+  metric changes the verdict.
+- **Colour states a sign, not an object.** A distribution of population-minus-mean differences is
+  grey with the sign carried by the half-planes behind it. The previous version drew panel a's two
+  distributions blue and orange, which said the right-hand one was the mean method; both are the
+  advantage, and only the judge differs. Panel l is the one place blue and orange are object
+  colours, because it genuinely compares methods, and it draws no half-planes.
+- **c makes no effect-size ratio claim, deliberately.** The largest quartile mean, +0.0062, is
+  0.6% of the nominal [0, 1] metric range, 2.6% of the metric's observed range (0.756 to 0.996),
+  5.1% of its central 98%, and **53% of the metric's own interquartile range**; the paired
+  Cohen's d is 0.33. Those denominators disagree, so picking one would be the error this paper
+  exists to criticise. What the data support without a choice is the absence of a trend with
+  divergence, and that is what the panel claims. The earlier caption's "at most 0.0062 on a metric
+  whose values run from 0.89 to 0.99" also mis-stated the range: 0.89 to 0.99 is the central 98%.
+- **f's split is three-way because the gate's verdict is.** Pooling `mean_or_no_call` (n=133,
+  median 1.69) with `mean_sufficient` (n=11, median 0.51) manufactures a null out of two opposite
+  effects: the panel therefore draws both arms and states the pooled statistic in the caption.
+  This is stronger than the p = 0.090 the panel used to report, and CORRECTIONS.md R47 records it.
+- **g's largest mean is its least interesting number.** The constructed cross-line mixtures have
+  the largest dataset mean and the smallest share of tasks above zero, so that mean is a tail and
+  not a shift. The panel shows both, because a diamond alone says the opposite of what the tasks
+  say.
+- **h's oracle is drug-drug FUNCTIONAL SIMILARITY** (GDSC2 dose-response AUC profile correlation,
+  the three SciPlex3 lines held out), not measured potency. The absolute-potency comparison is the
+  endpoint control in l, not a competing result.
+- **l's axis is the potency ranking, not AUC.** GDSC2 AUC runs opposite to potency, so an axis
+  labelled "absolute potency (GDSC AUC)" makes a GDSC-literate reader take every sign backwards.
+  The retired `ed5.py` phrasing "every ranking's correlation with potency inverts" is also wrong:
+  the control-subtracted mean cosine goes +0.083 to +0.105, a collapse toward zero, not a sign
+  change. Only energy and the raw mean cosine change sign.
+- **j and k are a power analysis in a main figure**, which normally signals a thin headline. Here
+  the headline IS the null, so the power analysis is the evidence rather than an apology for it.
+  k prints 20,844 in full: rounding it to "about 20,000" costs the panel its force.
 
-The figure enters the manuscript as `\includegraphics[width=\textwidth]` into a 6.93 in text block.
-It used to be authored 11.7 in wide, so LaTeX scaled it by 0.59 on the page and its 5.6-8 pt source
-text printed at 3.3-4.7 pt, under the 5 pt floor Nature Portfolio enforces at FINAL printed size.
-`figures/build_all.py` measures NOMINAL point size, so it called the figure clean while the printed
-page failed. The canvas is now **6.90 x 8.59 in**, the width it is printed at: the scale factor is
-1.0 and nominal size is printed size. Panel geometry lives in `fig3_assemble.py` in INCHES, because
-at 1:1 the room a y-axis label or a panel letter needs is a fixed physical quantity.
+## Print geometry, authored 1:1
 
-Height grew from 4.83 to 8.59 in on 2026-08-30, when the caption moved to the page following the
-figure and freed the graphic from its roughly 5 in cap; the ceiling is 9.30 in. The width did not
-move and cannot: it is the only number that sets printed point size. `build()` now also calls
-`figstyle.pin_canvas`, so the exported media box is the authored canvas (6.92 in with
-`savefig.pad_inches`) instead of whatever the ink happened to span, which was 6.878 in.
+The figure enters the manuscript as `\includegraphics[width=\textwidth]` into a 6.951 in text
+block. The canvas is **6.90 x 9.20 in** and exports 6.92 x 9.22, so LaTeX scales it by 1.004 and
+nominal point size is printed point size. The float budget is the 9.461 in text block less about
+16/72 in of overhead, i.e. 9.238 in, leaving 0.018 in of margin: **do not grow the canvas without
+re-checking `Float too large` in the build log.** The caption is on the following page and is
+itself near the limit; it overflowed at 991 words and fits at about 945.
 
-No data value, statistic, panel or panel letter changed. What changed is geometry, plus on-panel
-prose that the Fig. 3 caption already carries:
+Layout is an explicit inch ledger in `fig3_assemble.py`: six rows, `a|b`, `c|g`, `d|e|f`, `h|i`,
+`j|k`, `l|m`, with unequal widths inside a row because the panels are unequal. It was five rows of
+up to four panels until 2026-08-31.
 
-| Panel | Cut or moved | Where it now lives |
-|-------|--------------|--------------------|
-| a | summary blocks moved from beside the violins to above them; view opened to $+1.8$, left spine still stops at the plotted $+1.42$ | on panel |
-| b | per-line n moved out of the key labels into the median note (key order); key to the upper left, note to the lower right | on panel |
-| c | four-line key rewrapped; head-room opened to 0.0135 | on panel |
-| e | note moved out of a bolted-on right-hand strip (`xlim` ran to 2.62 with data ending at 1.90) into the data-free band above the cloud; x axis cropped to the data | on panel, shortened |
-| f | view opened to 2.22 so the test statistic clears the two median labels | on panel |
-| g | second x-label line ("all 239 tasks; overall mean ...; circled, above 0.01 in 10 of 10 seeds") | Fig. 3 caption; diamond key kept on panel |
-| h | two-line gloss on the dotted remainder; x-label line 2 (GDSC2 provenance) | caption + row-3 banner; the number $+0.097$ stays on panel |
-| i | "the scalar is better here" (it lay across the cloud); win count moved from an in-axes label into the title, **computed** from the source table | caption; title carries 62 of 103 |
-
-QA at print size: zero text-text bbox collisions, nothing outside the canvas, smallest nominal (and
-therefore printed) size 5.2 pt, both instances inherited from the adopted panels: panel j's
-"80% power" note (`ed_panels.draw_ed2a`) and panel l's three-marker key (`ed5.draw_a`). The floor
-is 5 pt and `figstyle.save` refuses to write below it.
-Known residuals:
-
-- panel a: the stat blocks and the truncation note sit over the Class-A violin's hairline upper
-  tail, as they did before the re-cut.
-- panel k: "observed n=191" and "45" clear each other by 0.53 pt. Both y positions are computed
-  from the data inside `ed_panels.draw_ed2b`, so the only lever this file has is row height, and
-  the clearance scales with it: 1.6 pt at axh 1.55, 3.8 pt at 2.03, 4.4 pt at the 2.19 the
-  Extended Data version had. Recovering 4 pt costs the whole remaining height budget and makes two
-  two-bar panels the largest thing on the page, so the row stays at 1.32 in. The glyphs do not
-  touch even though the boxes nearly do.
+**Thirteen panels on one page is tight, and the ledger says so rather than pretending.** Rows 5 and
+6 give their panels 0.57 to 0.64 in of axes height. The response to that is to cut annotation into
+the caption; `fig3_assemble._assert_floor` enforces a **6.5 pt** floor, above the deck's 5 pt
+production limit, and measures mathtext at its effective 0.7x size.
 
 ## Files
-- fig3a.py ... fig3i.py : per-panel draw functions for a-i (each runs standalone). `fig3_assemble.TITLES` is
-  what the composite renders; where a panel file also sets a title it is the same claim, wrapped, and
-  h and i import their titles from the panel modules (`TITLE_4H`, `TITLE_4I`) so there is one copy.
-- fig3_assemble.py : the 13-panel, 5-row layout in inches; it owns `TITLES`, `ROW_LABELS` and the
-  module-level `STEM`. Panels j-m have no fig3\*.py of their own: they are imported from
-  `figures/edfigs/ed_panels.py` (j, k) and `figures/ed5/ed5.py` (l, m), which is where the retired
-  Extended Data deck drew them, so the panel here and the analysis it came from cannot drift.
-- fig3_collapse.{pdf,svg,png} : the composite, and the only stem this figure is written under.
-  `python figures/build_all.py --write` enforces the 5 pt floor, writes these, and copies the PDF to
-  manuscript/latex/figures/fig3.pdf, which is the file the manuscript compiles.
-- 3a.png ... 3i.png are standalone per-panel previews, not inputs to the composite.
+
+- `fig3_style.py` : the frozen vocabulary. The sign rule, the type ladder, `CELL_MARKER`,
+  `sign_field`, and the seeded `boot_ci` that every interval in the figure comes from.
+- `fig3a.py` ... `fig3m.py` : per-panel draw functions, each `draw_3X(ax)`, each runnable
+  standalone for a preview. Panels j to m were drawn by `edfigs/ed_panels.py` and `ed5/ed5.py`
+  until 2026-08-31; they are re-authored here because those modules set type under this figure's
+  floor, and are no longer imported by any main figure.
+- `fig3_assemble.py` : the inch ledger, 9.5 pt panel letters, and the 6.5 pt floor gate. Owns
+  `STEM`, which `build_all.py` checks against its own `STEMS` dict.
+- `fig3_collapse.{pdf,svg,png}` : the composite. `python figures/build_all.py --write` enforces
+  the floor, writes these, and copies the PDF to `manuscript/latex/figures/fig3.pdf`.
+- `3a.png` ... `3m.png` : standalone previews, not inputs to the composite, not guaranteed fresh.

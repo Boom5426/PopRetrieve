@@ -1597,3 +1597,77 @@ re-scores the 1,260 queries against their 43 candidates under the six scorers an
 not an edit to any text. Recorded here and in `figures/source_data/README.md` so it is not
 mistaken for a checked number. R29 corrected the *unit* of the 54,180 figure; this concerns its
 *provenance*.
+
+---
+
+## R47. Figure 3f's null was manufactured by pooling two opposite verdicts
+
+**Was:** panel 3f compared the 621 queries the information-condition gate recommended against the
+144 it did not, on measured response divergence, and reported medians 1.66 against 1.68 with
+Mann-Whitney p = 0.090. Drawn as two boxplots under the title "Recommendation cannot sort by
+divergence", it read as an absence of any relationship.
+
+**Is:** the gate issues THREE pre-specified verdicts, not two, and the two decline verdicts point
+in opposite directions. Splitting on the gate's own categories:
+
+| verdict | n | median true divergence |
+|---|---|---|
+| `DART_recommended` | 621 | 1.660 |
+| `mean_or_no_call` | 133 | 1.689 |
+| `mean_sufficient` | 11 | 0.509 |
+
+The 133 queries declined as `mean_or_no_call` are significantly MORE divergent than the 621
+recommended (Mann-Whitney p = 0.0011; a recommended query is the more divergent of a random pair
+only 41.0% of the time, 95% bootstrap CI 0.362 to 0.458, entirely below the 0.5 the gate's premise
+requires). The 11 declined as `mean_sufficient` sit below the fifth percentile of BOTH other
+groups, so on those eleven the gate is correct.
+
+Pooling the two decline verdicts into one group of 144 returns p = 0.090. That is not an absence:
+it is a 133-query effect above the recommended group and an 11-query effect far below it,
+cancelling. A Kolmogorov-Smirnov test on the same pooled comparison rejects equal distributions
+(D = 0.154, p = 0.0069), so the pooled null was never a statement that the two groups were alike.
+
+**Why this matters beyond one panel.** Manufacturing a null by pooling a mixture is the error this
+paper exists to criticise, and the paper had made it about its own diagnostic. The corrected
+reading is also STRONGER for the paper's argument: the gate does not merely fail to sort queries by
+divergence, it sorts them backwards on the arm where it is actually used.
+
+**What changed.** `figures/fig3/fig3f.py` draws both decline arms, the 133 as a distribution and
+the 11 as individual ticks, computes and asserts the pooled statistic so the caption cannot drift
+from it, and asserts that pooling still changes the answer. The Fig. 3 caption states both
+readings. `figures/fig3/README.md` is updated. No manuscript Results sentence quoted the pooled p,
+so no prose changed.
+
+**How it was found.** The agent redrawing the panel refused to draw the two decline verdicts as one
+group after reading their medians.
+
+## R48. Figure 3c's "negligible" depended on which denominator was chosen
+
+**Was:** panel 3c drew four quartile means as bars on an axis truncated at 0.012 under the title
+"Minority-coverage gain is negligible", and the Fig. 3 caption read "All four differences are
+statistically significant but at most 0.0062 on a metric whose values run from 0.89 to 0.99".
+
+**Is:** two problems, one of framing and one of fact.
+
+*Framing.* "Negligible" is a ratio, and the available denominators disagree by two orders of
+magnitude. The largest quartile mean, +0.00619, is 0.6% of the nominal [0, 1] metric range, 2.6%
+of the metric's observed range, 5.1% of its central 98%, 28.6% of its standard deviation across
+queries, and **53.5% of its own interquartile range**; the paired Cohen's d of the per-query gain
+is 0.331. Reporting the flattering denominator as though it were the natural one is precisely the
+move this paper argues against, so the panel now reports none of them and instead gives the metric's
+own median (0.985) and interquartile range (0.012) as the scale, and lets the reader size the gain.
+
+*Fact.* "A metric whose values run from 0.89 to 0.99" is the central 98% of the observed values,
+not their range, which is 0.756 to 0.996.
+
+**What the data support without a choice of denominator:** the gain is positive in every divergence
+stratum (each Wilcoxon p < 1e-6) and does not grow with divergence. Spearman(true_divergence, gain)
+= +0.0502, p = 0.165 over all 765 queries, Q4 sits below Q3, and all four quartile intervals
+overlap. The bar chart's apparent rise from Q1 to Q3 was noise on a truncated axis.
+
+**What changed.** The panel plots four point estimates with 95% bootstrap intervals rather than
+bars, states the Spearman result, and claims the absence of a trend rather than an effect size.
+That also moves it into the same family as panels d, e and f: it is the gate's premise failing.
+The Fig. 3 caption is rewritten accordingly. The manuscript's Results sentence, "Stratifying
+queries by their measured response divergence did not reveal a hidden regime of large benefit",
+was already the defensible claim and is unchanged.

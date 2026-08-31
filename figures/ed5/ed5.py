@@ -1,8 +1,12 @@
 """Extended Data Fig. 5: the absolute-potency confounder audit.
 
-SINCE 2026-08-30 draw_a and draw_b are main-text Fig. 3l and 3m, drawn by fig3/fig3_assemble.py,
-where they sit beside the functional-similarity evaluation in Fig. 3h,i that they are a control
-on. build() here still assembles the standalone preview.
+SUPERSEDED 2026-08-31. draw_a and draw_b were adopted as main-text Fig. 3l and 3m on 2026-08-30
+and re-authored on 2026-08-31 as figures/fig3/fig3l.py and fig3m.py, which read the same
+figures/source_data/fig3hi_class_c_potency.csv. They are no longer imported by any main figure.
+Two reasons, both recorded so this file is not mistakenly re-adopted: it sets 5.2 to 5.6 pt type,
+under Figure 3's 6.5 pt floor, and its x axis reads "absolute potency (GDSC AUC)", which equates
+potency with AUC. GDSC2 AUC runs OPPOSITE to potency, so a GDSC-literate reader takes every sign
+on that axis the wrong way round. build() here still assembles the standalone preview.
 
 This is the analysis that USED to be the paper's headline Class-C result, reported as "retrieval
 similarity is anti-aligned with therapeutic utility". That claim has been withdrawn, and this
