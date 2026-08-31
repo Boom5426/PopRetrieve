@@ -17,33 +17,45 @@ the manuscript is the authority and this file is the bug.
 
 ## Panels
 
-| Row | Panel | Phrase the panel states over itself | Reads |
+| Row | Panel | What the reader sees | Reads |
 |---|---|---|---|
-| 1 | a | "Only the evaluator changes; the advantage disappears" | `source_data/fig3a_classA_vs_classB.csv` |
-| 1 | b | "Median exactly zero in every cell line" | same |
-| 2 | c | "All four positive, no trend visible" | `results/exp16_gate_diagnosis/_merged_query_divergence.csv` |
-| 2 | g | "Largest mean, smallest share above zero" | `results/exp13_real_data_projection/projection.csv` |
-| 3 | d | "Gate does not enrich" | `results/exp12_partial_observed_retrieval/per_query_scores.csv` |
-| 3 | e | "Assumed to rise, it falls" | `results/exp16_gate_diagnosis/_merged_query_divergence.csv` |
-| 3 | f | "Inverted on 133, right on 11" | same |
-| 4 | h | Class-C ladder, energy against its controls | `source_data/fig3hi_class_c_functional.csv` |
-| 4 | i | "Energy better on 62 of 103 queries" | same |
-| 5 | j | "Top quartile: only coverage clears 80%" | `results/exp17_true_divergence_subset/power_analysis.csv` |
-| 5 | k | "Noise, not gap size, sets the cost" | same |
-| 6 | l | "Absolute potency is a different endpoint" | `source_data/fig3hi_class_c_potency.csv` |
-| 6 | m | "Energy ranks largely by magnitude" | same |
+| 1 | a | the advantage collapsing from +0.129 to 0 when only the judge changes | `results/exp12_partial_observed_retrieval/per_query_scores.csv` |
+| 1 | b | three ECDFs stepping through zero, all three medians 0.000 | same |
+| 2 | c | four quartile estimates, all positive, no trend | `results/exp16_gate_diagnosis/_merged_query_divergence.csv` |
+| 2 | g | 239 tasks hugging zero, the largest mean on the smallest share | `results/exp13_real_data_projection/projection.csv` |
+| 3 | d | two estimates with overlapping intervals | `results/exp12_partial_observed_retrieval/per_query_scores.csv` |
+| 3 | e | a binned trend falling where it should rise | `results/exp16_gate_diagnosis/_merged_query_divergence.csv` |
+| 3 | f | two divergence distributions, the declined one further right | same |
+| 4 | h | energy above its incumbent, and an arc dropping it to +0.097 | `source_data/fig3hi_class_c_functional.csv` |
+| 4 | i | a scatter split 62 / 41 by the diagonal | same |
+| 5 | j | one dot past 0.8, one nowhere near it | `results/exp17_true_divergence_subset/power_analysis.csv` |
+| 5 | k | two dumbbells of wildly different length on a log axis | same |
+| 6 | l | two negative, one near zero, one strongly positive | `source_data/fig3hi_class_c_potency.csv` |
+| 6 | m | a density piled up near +1 | same |
 
-Each phrase is drawn ink at 8.5 pt, not an rc title, and each is asserted against the data it
-describes, so a data change breaks the build rather than leaving a false sentence on the page.
+## No panel states a conclusion
+
+Every panel used to carry one bold sentence over itself, thirteen in all. They are gone, and
+`fig3_style.title()` is deleted rather than deprecated so none can come back. Only four kinds of
+text may appear on a panel: axis and group names, statistics (median, rho, P, n, and the values
+being compared), a two or three word direction hint, and nothing else. Every deleted phrase now
+opens its panel's entry in the Fig. 3 caption, where it costs no space and can be qualified.
+
+`fig3_assemble._assert_no_titles` enforces this mechanically: **no panel may draw text above
+7.2 pt**, and the build fails if one does. It is a size gate rather than a wording gate, because no
+code can tell a claim from a label, but a claim that has to fit at 7.2 pt beside the marks it
+describes has already lost the argument for being on the panel. Removing the thirteen sentences
+returned 0.42 in of height to the six rows, which is most of what had made rows 5 and 6 cramped.
 
 ## Verified numbers
 
-- **a** n = 480 paired queries (A549 157, K562 146, MCF7 177). Class A regret reduction median
-  +0.1292, mean +0.2881, 73.1% > 0, 19.2% < 0, 7.7% tied, range -1.021 to +2.823. Class B
-  MoA-nDCG gain median +0.0000, mean -0.0369, 35.0% > 0, 40.6% < 0, 24.4% tied, paired Wilcoxon
-  p = 1.13e-3.
-- **b** Class B medians exactly 0.000 in all three lines; ties 21.7% (A549), 25.3% (K562), 26.0%
-  (MCF7).
+- **a** n = **600** leave-one-drug-out queries, a balanced 200 per cell line. Class A regret
+  reduction median +0.1288, mean +0.2752, 73.0% > 0, 19.7% < 0, 7.3% tied, max +2.823. Class B
+  MoA-nDCG gain median +0.0000, mean -0.0371, 34.2% > 0, 41.3% < 0, 24.5% tied, paired Wilcoxon
+  p = 2.46e-4. These reproduce the manuscript's Results sentence exactly; the 480-query version
+  that used to be drawn did not. See CORRECTIONS.md R49.
+- **b** Class B medians exactly 0.000 in all three lines; ties 20.0% (A549), 28.5% (K562), 25.0%
+  (MCF7), n = 200 each.
 - **c** quartile means +0.00415, +0.00495, +0.00619, +0.00561 with 95% bootstrap intervals
   [+0.0009, +0.0072], [+0.0035, +0.0067], [+0.0045, +0.0080], [+0.0039, +0.0076]; each Wilcoxon
   p < 1e-6. **Spearman(true_divergence, gain) = +0.0502, p = 0.165, n = 765: there is no trend.**
@@ -79,6 +91,10 @@ describes, so a data change breaks the build rather than leaving a false sentenc
   to transfer to oracle-independent evaluation. No panel is padding.
 - **a and b measure the flip on the SAME queries**, so it is not a population difference; the
   metric changes the verdict.
+- **a and b are on all 600 leave-one-drug-out queries, never on the gate's subset.** They read
+  `results/` directly and assert n == 600, because until 2026-08-31 they plotted the 480 queries
+  the diagnostic itself recommended while the Results text reported 600. That is the second time
+  this deck drew a headline on a gate-selected subset; Fig. 2c was the first. CORRECTIONS.md R49.
 - **Colour states a sign, not an object.** A distribution of population-minus-mean differences is
   grey with the sign carried by the half-planes behind it. The previous version drew panel a's two
   distributions blue and orange, which said the right-hand one was the mean method; both are the

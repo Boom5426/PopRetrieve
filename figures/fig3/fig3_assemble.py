@@ -102,17 +102,21 @@ from fig3m import draw_3m  # noqa: E402
 FIGW = 6.90
 
 PAD_TOP, PAD_BOT = 0.05, 0.08
-LETTER_BLOCK = 0.24        # holds the bold panel letter and the panel's one phrase, one baseline
+# The panel letter alone. It was 0.24 in while every panel also stated a bold conclusion phrase;
+# removing those phrases (see fig3_style) returns 0.42 in to the six rows, which is most of what
+# made rows 5 and 6 cramped. The height a figure spends on sentences is height it does not spend
+# on evidence.
+LETTER_BLOCK = 0.17
 ROW_GAP = 0.22
 
 # (row height in inches, [(key, box width in inches), ...]). Box widths sum to FIGW per row.
 ROWS = [
-    (1.26, [("a", 4.00), ("b", 2.90)]),
-    (1.10, [("c", 2.75), ("g", 4.15)]),
-    (1.00, [("d", 2.10), ("e", 2.40), ("f", 2.40)]),
-    (1.20, [("h", 4.10), ("i", 2.80)]),
-    (0.95, [("j", 3.20), ("k", 3.70)]),
-    (1.02, [("l", 3.60), ("m", 3.30)]),
+    (1.34, [("a", 4.00), ("b", 2.90)]),
+    (1.18, [("c", 2.75), ("g", 4.15)]),
+    (1.07, [("d", 2.10), ("e", 2.40), ("f", 2.40)]),
+    (1.28, [("h", 4.10), ("i", 2.80)]),
+    (1.01, [("j", 3.20), ("k", 3.70)]),
+    (1.07, [("l", 3.60), ("m", 3.30)]),
 ]
 
 # (left, right, bottom) pad in inches inside the panel BOX. Top is always zero: the phrase is
@@ -186,6 +190,32 @@ def _assert_floor(fig, floor=PT_FLOOR):
     return fig
 
 
+def _assert_no_titles(fig, cap=PT_ANNOT):
+    """Refuse to return a figure in which any PANEL draws text above ``cap``.
+
+    This is the mechanical form of the rule in fig3_style: the panels carry evidence and the
+    caption carries the argument. A conclusion sentence set over a panel is always the largest
+    text on it, so capping panel text at the annotation size is what stops one coming back. The
+    panel letters are exempt because fig3_assemble draws them, not the panels, and they are the
+    figure's navigation rather than its claims.
+
+    It is deliberately a size gate and not a wording gate. Nothing here can tell a claim from a
+    label, but a claim that has to fit at 7.2 pt beside the marks it describes is a caption
+    sentence that has already lost the argument for being on the panel.
+    """
+    letters = {t for t in fig.texts}
+    bad = []
+    for t in fig.findobj(mtext.Text):
+        if t in letters or not str(t.get_text()).strip() or not t.get_visible():
+            continue
+        if t.get_fontsize() > cap + 1e-6:
+            bad.append((round(t.get_fontsize(), 2), str(t.get_text()).replace("\n", "/")[:44]))
+    assert not bad, (
+        f"Figure 3 caps panel text at {cap} pt and these are above it: {sorted(bad)[:8]}. "
+        f"A panel states no conclusion; move the sentence to the caption.")
+    return fig
+
+
 DRAW = {"a": draw_3a, "b": draw_3b, "c": draw_3c, "d": draw_3d, "e": draw_3e, "f": draw_3f,
         "g": draw_3g, "h": draw_3h, "i": draw_3i, "j": draw_3j, "k": draw_3k, "l": draw_3l,
         "m": draw_3m}
@@ -206,7 +236,7 @@ def build(apply_style, panel_letter):
     # strip_titles clears rc titles so a standalone preview can label itself without the composite
     # inheriting it. The one phrase each panel states over itself is drawn ink via fig3_style.title
     # and survives on purpose.
-    return _assert_floor(strip_titles(fig))
+    return _assert_no_titles(_assert_floor(strip_titles(fig)))
 
 
 if __name__ == "__main__":

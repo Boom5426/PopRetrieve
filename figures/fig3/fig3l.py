@@ -1,25 +1,49 @@
 """PopRetrieve Figure 3 panel 3l: the same four rankings scored against ABSOLUTE potency.
 
-WHAT THE PANEL CLAIMS
----------------------
-Absolute GDSC2 potency is a different endpoint from the drug-drug functional similarity that
-panels h and i are graded on, and it rewards a different thing. Graded against it, the two
-rankings that keep the candidate's raw response scale sit on the negative side of zero, the
-control-subtracted mean cosine sits just above zero, and the ranking that compares no
-distributions at all, sorting candidates by their own response magnitude, is far and away the
-highest, positive in every one of the 103 queries.
+WHAT THIS PANEL SHOWS, AND WHAT IT NO LONGER SAYS
+-------------------------------------------------
+Four rankings, each summarised by its median Spearman rho against absolute GDSC2 potency across
+103 leave-one-drug-out queries, with the interquartile range. Two rankings that keep the
+candidate's raw response scale sit on the negative side of zero, the control-subtracted mean
+cosine sits just above zero, and the ranking that compares no distributions at all, sorting
+candidates by their own response magnitude, is highest and positive in every one of the 103
+queries.
 
-This panel is a CONTROL ON THE ENDPOINT CHOICE in h and i. It is not evidence that retrieval
-fails, and it must not be read as a method comparison in the paper's sense. A similarity
-retriever is asked which candidate RESEMBLES the query; absolute potency asks which candidate
-kills hardest. Handed a weak query, a correctly working retriever SHOULD return other weak
-candidates, so a negative association here is the expected behaviour of a working instrument on
-a mismatched endpoint, not a failure of it. That is not left as an argument: across the 103
-queries the energy ranking's agreement with potency tracks the QUERY's own potency (Spearman
-rho = -0.55 against the query's GDSC2 AUC, the same sign in all three cell lines), which is what
-"returns candidates like the query" predicts and what a broken retriever would not produce. It is
-asserted below. Panel m carries the other half of the mechanism: the energy distance between
-query and candidate largely tracks the candidate's own magnitude (median rho +0.791).
+2026-08-31 REVISION: the drawn phrase "Absolute potency is a different endpoint" is DELETED, along
+with the fig3_style.title() call that set it. A panel states no conclusion; the figure carries
+visual evidence and the legend carries the argument, and thirteen conclusion sentences on one page
+were thirteen claims competing for attention. The phrase now opens this panel's caption entry,
+where it costs no page space and can be qualified. Removing it returned 0.42 in to the six rows,
+of which this panel's axes took 0.05 (0.64 to 0.69 in of height); the height went to the marks,
+not to replacement text. The interval rule went from 1.4 to 1.8 pt and the median dot from 4.6 to
+5.4 pt, with the open rings' edge from 1.0 to 1.1 pt so the two encodings still read as one pair.
+The medians and the side of zero each falls on are therefore the first thing read, which is what
+the phrase used to do in words. Nothing else about the drawing changed. Four kinds of text remain:
+the four row names, the four medians, the x ticks and the axis name.
+
+2026-08-31 AUDIT, two things the trim left behind. The two negative value labels were formatted
+with the ASCII hyphen while this panel's own x ticks print U+2212, so one axis carried two minus
+glyphs of different widths, side by side; the values now go through _fmt, the helper fig3d added
+for exactly this. And the standalone preview called savefig with the deck's rc savefig.bbox still
+set to "tight", so the PNG it wrote was cropped back to its ink at 3.40 x 0.99 in rather than
+being the 3.60 x 1.07 in printed rect the geometry comment claims; __main__ now pins the canvas
+the way fig3c and fig3d do, so the preview is 1:1 with the panel box again.
+
+WHAT THE PANEL IS AND IS NOT EVIDENCE FOR (this reading lives in the caption, not on the panel)
+----------------------------------------------------------------------------------------------
+Absolute GDSC2 potency is a different endpoint from the drug-drug functional similarity that
+panels h and i are graded on, and it rewards a different thing. This panel is a CONTROL ON THE
+ENDPOINT CHOICE in h and i. It is not evidence that retrieval fails, and it must not be read as a
+method comparison in the paper's sense. A similarity retriever is asked which candidate RESEMBLES
+the query; absolute potency asks which candidate kills hardest. Handed a weak query, a correctly
+working retriever SHOULD return other weak candidates, so a negative association here is the
+expected behaviour of a working instrument on a mismatched endpoint, not a failure of it. That is
+not left as an argument: across the 103 queries the energy ranking's agreement with potency tracks
+the QUERY's own potency (Spearman rho = -0.55 against the query's GDSC2 AUC, the same sign in all
+three cell lines), which is what "returns candidates like the query" predicts and what a broken
+retriever would not produce. It is asserted below. Panel m carries the other half of the
+mechanism: the energy distance between query and candidate largely tracks the candidate's own
+magnitude (median rho +0.791).
 
 WHICH WAY IS UP ON THIS AXIS
 ----------------------------
@@ -30,16 +54,19 @@ candidates first" and negative means "puts the least potent first". The axis lab
 "GDSC2 potency (low AUC)" and not "absolute potency (GDSC2 AUC)": the second wording equates
 potency with AUC, which is backwards, so a GDSC-literate reader would take every sign on this
 axis the wrong way round. The v2 source script exists because of a sign inversion and this figure
-will not reintroduce one in a label. "Absolute" is not lost: it is the first word of the phrase
-one line above, and the axis's shorter form is what leaves the label 0.25 in of margin inside its
-box instead of 0.05 in.
+will not reintroduce one in a label. This wording survived the 2026-08-31 trim unchanged; it is
+the one piece of text on the panel that must not be shortened further, because "(low AUC)" is
+what makes the axis readable in the right direction. "Absolute" is not lost: it is the first word
+of the caption sentence this panel used to draw over itself, and the axis's shorter form is what
+leaves the label 0.25 in of margin inside its box instead of 0.05 in.
 
 Source data: figures/source_data/fig3hi_class_c_potency.csv
   103 leave-one-drug-out queries, SciPlex3 x GDSC2 at 10 uM, three cell lines, the v2 analysis
   with the corrected energy sign. Every number drawn is a median or a quartile computed from that
   file at draw time; nothing here is typed in.
-Also read at draw time: figures/source_data/fig3hi_class_c_functional.csv, because the panel's
-  one phrase is a claim about TWO endpoints and is asserted against both.
+Also read at draw time: figures/source_data/fig3hi_class_c_functional.csv, because the CAPTION's
+  opening phrase is a claim about TWO endpoints and is asserted against both. The phrase left the
+  panel; the assertion that keeps it true did not.
 
 JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
 -------------------------------------------------------
@@ -58,11 +85,13 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    is the encoding panel h already uses. Colour separates the two meanings; the labels state both.
    Anyone who wanted one meaning per channel would need a hue this figure has already spent.
 3. MEDIAN AND INTERQUARTILE RANGE ACROSS THE 103 QUERIES, not the per-cell-line medians panel h
-   draws and not the full per-query cloud. At 0.64 in of axes height the four rows are 11 pt
-   apart, where 103 jittered points per row are unreadable. The quartiles carry the part of the
-   distribution the claim rests on: the control-subtracted interval straddles zero while the
-   magnitude interval is nowhere near it. The sign is consistent across all three cell lines for
-   all four rows, which is asserted below and stated in the caption rather than drawn.
+   draws and not the full per-query cloud. The 0.05 in this panel gained in the 2026-08-31 trim
+   does not change that: at 0.69 in of axes height the four rows are 11.8 pt apart, where 103
+   jittered points per row are still unreadable, so the height went into the weight of the marks
+   instead. The quartiles carry the part of the distribution the claim rests on: the
+   control-subtracted interval straddles zero while the magnitude interval is nowhere near it.
+   The sign is consistent across all three cell lines for all four rows, which is asserted below
+   and stated in the caption rather than drawn.
 4. THE FOURTH ROW'S INTERVAL IS NOT THE SAME KIND OF QUANTITY AS THE OTHER THREE, and the panel
    cannot show that. The magnitude ranking is QUERY-INDEPENDENT: it produces one ordering per
    cell line, so within a line its per-query rho is all but constant (mean within-line IQR 0.026)
@@ -71,10 +100,10 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    their pooled one (0.344 against 0.281, 0.356 against 0.286, 0.459 against 0.449), so their
    intervals really are query-to-query spread. Both relations are asserted below, at the loose
    threshold of half the pooled IQR, because what has to hold is the direction of the contrast
-   and not today's exact ratio. A reader comparing interval WIDTHS across the four rows would conclude the
-   magnitude ranking is the steadiest across queries; it is constant across queries by
-   construction, and the caption has to say so. The row is kept in the same grammar because the
-   panel's claim is about where the four medians sit, not about how wide they are.
+   and not today's exact ratio. A reader comparing interval WIDTHS across the four rows would
+   conclude the magnitude ranking is the steadiest across queries; it is constant across queries
+   by construction, and the caption has to say so. The row is kept in the same grammar because
+   the panel's claim is about where the four medians sit, not about how wide they are.
 5. ROW ORDER IS FIXED BY FAMILY AND STORY, not sorted by median. Energy (-0.520) and the raw mean
    cosine (-0.533) differ by 0.013, which is not an ordering, and sorting on it would invite a
    reader to rank them.
@@ -94,12 +123,19 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
 7. VALUE LABELS SIT ON THE OUTER SIDE OF THE INTERVAL, past the first quartile for a negative
    median and past the third for a positive one, so each number lies in empty space on the side
    its effect points. The number is the MEDIAN, not the interval end it sits beside.
+8. NO DIRECTION HINT IS DRAWN, although the trim's rules allow a two-word one. On this axis the
+   direction that matters is which candidates a ranking puts first, and naming it costs more than
+   two words ("most potent first" against "least potent first") because the endpoint is absolute
+   potency rather than a population-versus-mean advantage. "(low AUC)" in the axis name already
+   fixes the sign for the reader who needs it fixed, so a hint would be a second, shorter
+   statement of the same thing, in the panel's scarcest space.
 
-THE PANEL'S PHRASE IS A TWO-ENDPOINT CLAIM. "Absolute potency is a different endpoint" cannot be
-read off this panel's ink alone; its other half is in panel h. So it is not left to the reader:
+THE CAPTION'S PHRASE IS A TWO-ENDPOINT CLAIM, AND IT IS STILL GUARDED FROM HERE. "Absolute potency
+is a different endpoint" cannot be read off this panel's ink alone; its other half is in panel h.
+That is why it is now a caption sentence and not drawn ink. It is still not left unchecked:
 _assert_endpoints_differ reads the functional table at draw time and requires the three sign
 changes below to still be there. If the endpoints ever stop disagreeing, the build fails instead
-of leaving a phrase the numbers no longer support.
+of leaving a caption the numbers no longer support.
 
 BE EXACT ABOUT WHAT CHANGES SIGN. Between the functional endpoint and this one, energy (+0.276 to
 -0.520), the raw mean cosine (+0.241 to -0.533) and magnitude alone (-0.330 to +0.692) all change
@@ -118,7 +154,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from fig3_style import (EXT, HAIRLINE, MEAN, POP, PT_ANNOT, PT_TICK, REPO, SUBTLE, TEXT,
-                        bare_axes, title, zero_rule)
+                        bare_axes, zero_rule)
 
 SRC = os.path.join(REPO, "figures", "source_data", "fig3hi_class_c_potency.csv")
 FUNCTIONAL = os.path.join(REPO, "figures", "source_data", "fig3hi_class_c_functional.csv")
@@ -144,13 +180,29 @@ NO_RETRIEVAL = "magnitude_only_rho"
 # The query's own potency, on the axis the source table stores it on. Low AUC = potent.
 QUERY_AUC = "query_auc"
 
-TITLE_3L = "Absolute potency is a different endpoint"
-
 # Axis: the spine spans the drawn data, the view is wider so each median's value label has empty
 # space to sit in on the side its effect points.
 SPINE_LO, SPINE_HI = -0.75, 0.75
 XLIM_LO, XLIM_HI = -0.95, 1.00
 LABEL_GAP = 0.050
+
+# Mark weights. The 0.05 in of axes height returned by deleting the drawn phrase is spent here:
+# with no sentence to lead the eye, the medians and the side of zero they fall on have to be the
+# first thing seen. Row pitch is 11.8 pt, so a 5.4 pt dot on a 1.8 pt rule stays clear of its
+# neighbours.
+LW_IQR = 1.8
+MS_MEDIAN = 5.4
+MEW_MEDIAN = 1.1            # the open rings' edge, raised with the dot so filled and open match
+
+
+def _fmt(v):
+    """Signed value with a typographic minus, so the panel never mixes hyphens and minuses.
+
+    The x tick labels take U+2212 from the deck's rc, so a value label built by f"{v:+.2f}" puts a
+    second, visibly shorter minus glyph on the same axis, one row above the tick that uses the
+    other one. Same helper, and same reason, as fig3d._fmt.
+    """
+    return f"{v:+.2f}".replace("-", "−")
 
 
 def _iqr(x):
@@ -182,7 +234,9 @@ def _assert_claims(d, med):
 
     A drawn number can go stale silently; an assertion cannot. These are the statements the
     panel makes with ink, plus the cross-cell-line consistency, the interval-kind caveat and the
-    mechanism reading that its docstring and caption claim.
+    mechanism reading that its docstring and caption claim. The panel now draws no sentence, so
+    these assertions are the only thing standing between a data change and a caption that has
+    quietly stopped being true.
     """
     for col in KEEPS_RAW_SCALE:
         assert med[col] < 0, (
@@ -251,17 +305,18 @@ def _assert_claims(d, med):
 
 
 def _assert_endpoints_differ(med):
-    """Assert the panel's one phrase, which is a claim about two endpoints, from both files.
+    """Assert the caption's opening phrase, a claim about two endpoints, from both files.
 
     "Absolute potency is a different endpoint" is not readable from this panel's ink; the other
-    half of the comparison is panel h. Checking it here means a data change breaks the build
-    rather than leaving a true-looking phrase over numbers that no longer support it.
+    half of the comparison is panel h. That is why the phrase belongs to the caption. Checking it
+    here means a data change breaks the build rather than leaving a true-looking caption over
+    numbers that no longer support it.
     """
     f = _load(FUNCTIONAL, "functional-similarity")
     fmed = {c: float(f[c].median()) for c, _l, _c, _f in ROWS}
     for col in list(KEEPS_RAW_SCALE) + [NO_RETRIEVAL]:
         assert fmed[col] * med[col] < 0, (
-            f"3l's phrase says absolute potency is a different endpoint, on the strength of "
+            f"3l's caption says absolute potency is a different endpoint, on the strength of "
             f"{col} changing sign between them; it now runs {fmed[col]:+.3f} to {med[col]:+.3f}.")
     assert fmed[CTRL] > 0 and med[CTRL] > 0, (
         f"3l's docstring and caption are exact that the control-subtracted mean cosine is the "
@@ -281,15 +336,15 @@ def draw_3l(ax):
         assert XLIM_LO < q1 - LABEL_GAP and q3 + LABEL_GAP < XLIM_HI, (
             f"{col} quartiles {q1:.3f},{q3:.3f} leave no room inside the view for the value "
             f"label this panel puts {LABEL_GAP} outside them.")
-        ax.plot([q1, q3], [y, y], color=colour, lw=1.4, solid_capstyle="butt", zorder=3)
-        ax.plot([med[col]], [y], marker="o", ms=4.6, mew=1.0, zorder=4,
+        ax.plot([q1, q3], [y, y], color=colour, lw=LW_IQR, solid_capstyle="butt", zorder=3)
+        ax.plot([med[col]], [y], marker="o", ms=MS_MEDIAN, mew=MEW_MEDIAN, zorder=4,
                 mfc=colour if filled else "white", mec=colour, ls="none")
         # The median's value, on the side its effect points, clear of the interval it summarises.
         if med[col] < 0:
-            ax.text(q1 - LABEL_GAP, y, f"{med[col]:+.2f}", ha="right", va="center",
+            ax.text(q1 - LABEL_GAP, y, _fmt(med[col]), ha="right", va="center",
                     fontsize=PT_ANNOT, color=TEXT)
         else:
-            ax.text(q3 + LABEL_GAP, y, f"{med[col]:+.2f}", ha="left", va="center",
+            ax.text(q3 + LABEL_GAP, y, _fmt(med[col]), ha="left", va="center",
                     fontsize=PT_ANNOT, color=TEXT)
 
     # Zero is the datum: to its left a ranking puts the least potent candidates first. It is NOT
@@ -310,7 +365,6 @@ def draw_3l(ax):
     # inverts every sign on this axis for a reader who knows the assay.
     ax.set_xlabel(r"Spearman $\rho$ with GDSC2 potency (low AUC)", fontsize=PT_ANNOT,
                   color=TEXT, labelpad=1.5)
-    title(ax, TITLE_3L)
     return ax
 
 
@@ -348,10 +402,14 @@ if __name__ == "__main__":
     from fig3_style import PT_TITLE
 
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
-    fig = plt.figure(figsize=(3.60, 1.02))
-    # The rect this panel occupies in fig3_assemble: 1.20 in of left pad, 0.10 in right,
-    # 0.38 in bottom, and the title band above the axes.
-    ax = fig.add_axes([1.20 / 3.60, 0.38 / 1.02, 2.30 / 3.60, 0.64 / 1.02])
+    # apply_style sets savefig.bbox = "tight", which would crop the preview back to its ink and
+    # hand back a PNG at a different scale from the printed panel. This preview exists to be 1:1
+    # with the panel box, so keep the canvas.
+    plt.rcParams["savefig.bbox"] = None
+    # The rect this panel occupies in fig3_assemble after the 2026-08-31 trim: a 1.07 in row box,
+    # 1.20 in of left pad, 0.10 in right, 0.38 in bottom, and no title band above the axes.
+    fig = plt.figure(figsize=(3.60, 1.07))
+    ax = fig.add_axes([1.20 / 3.60, 0.38 / 1.07, 2.30 / 3.60, 0.69 / 1.07])
     draw_3l(ax)
     out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "3l.png")
     fig.savefig(out, dpi=300)

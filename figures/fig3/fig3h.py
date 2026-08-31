@@ -1,10 +1,10 @@
 """PopRetrieve Figure 3 panel 3h: the Class-C benchmark ladder, and what energy keeps once the
 response-magnitude channel is partialled out.
 
-WHAT THIS PANEL CLAIMS
-----------------------
+WHAT THIS PANEL SHOWS
+---------------------
 Five scores are ranked against ONE external oracle, drug-drug functional similarity, and the
-panel makes two statements about them:
+panel puts two things in front of the reader as positions on a common axis:
 
   1. Among the scores that compare a perturbation response representation, the distributional
      one leads: energy +0.276 against the pre-specified mean-signature incumbent +0.083. This is
@@ -12,13 +12,43 @@ panel makes two statements about them:
      wins, and the figure's third skeleton number.
   2. That lead is not a distributional achievement. A query-dependent SCALAR that compares no
      representation at all, preferring candidates whose response magnitude is close to the
-     query's, reaches +0.232, and the phrase over the panel says so. Partialling that channel out
-     of energy and out of the oracle leaves energy at +0.097, the figure's fourth skeleton number,
-     drawn as an arrow leaving the energy dot and landing on a row of its own directly beneath.
+     query's, reaches +0.232, so its dot prints about two marker widths from energy's while the
+     incumbent prints about eight away. Partialling that channel out of energy and out of the
+     oracle leaves energy at +0.097, the figure's fourth skeleton number, drawn as an arrow
+     leaving the energy dot and landing on a row of its own directly beneath.
 
 The transition is the panel's reason to exist. A reader who takes only the energy dot away from
 this panel has taken a stronger claim than the data carry, which is why the dot is not allowed to
 sit alone on its row.
+
+WHAT CHANGED IN THE 2026-08-31 RESTRAINT PASS, AND WHY
+------------------------------------------------------
+The panel used to state its conclusion over itself, "A scalar control nearly matches energy", set
+in ink above the marks. Thirteen such sentences on one page is thirteen competing claims, so
+fig3_style.title() was deleted and fig3_assemble._assert_no_titles now refuses to build a figure
+in which a panel draws text above PT_ANNOT. That sentence is now the opening of this panel's
+caption entry, where it can be qualified; nothing on the panel replaces it. Four consequences
+here, none of them touching the data, the statistic, the groups or the colours:
+
+  * The phrase is gone, and so is the constant that held it. The inequality it asserted is NOT
+    gone: SCALAR_NEAR_FRAC still bounds the scalar on both sides, because the same relationship
+    is now stated by POSITION rather than by words, and a position can be wrong just as a phrase
+    can.
+  * The derived row's label was "after magnitude adjustment", which reads as a clause about the
+    row above rather than as a name for the row. It is now "magnitude partialled out": three
+    words, still PT_SMALL and still SUBTLE grey, naming the row the way the other five rows are
+    named. It also names the operation correctly, which the old wording did not: "adjustment"
+    could be read as a rescaling, and this is a rank residualisation.
+  * The rows spread into the 0.08 in the panel gained when the sentence band was returned to the
+    six figure rows. The height went to the marks: TOP_Y and BOT_Y now reach further apart, so
+    the row pitch grows from 9.3 pt to about 10.7 pt printed, the six intervals sit further from
+    each other, and the transition arc has more room to fall through the gap between its two rows.
+  * Three assertions were added, one per fact the deleted sentence used to carry, and each is
+    measured in PRINTED POINTS on the resolved x scale rather than in units of rho: energy and
+    the incumbent must be at least one marker diameter apart; the scalar must be separable from
+    energy yet no further from it than HALF of that lead; and the drop to the partial must be at
+    least twice the energy-to-scalar gap. If a future file makes any of those three unreadable at
+    this panel's width, the panel now fails to build instead of quietly saying nothing.
 
 SOURCE
 ------
@@ -68,15 +98,16 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    panel i says of its Wilcoxon. It also UNDERSTATES between-line spread on four of the five rows:
    the per-cell-line medians of potency match run 0.195 to 0.679 against an interval of 0.232 to
    0.457, and energy, raw mean cosine and magnitude match each put one line's median outside their
-   own interval too. Only the control-subtracted mean cosine holds all three lines inside it. Those per-line medians are cut to the caption; at 2.66 x 0.84 in, fifteen extra marks
-   and an x axis stretched to 0.70 to hold them would cost the transition its legibility.
+   own interval too. Only the control-subtracted mean cosine holds all three lines inside it.
+   Those per-line medians are cut to the caption; at 2.66 x 0.92 in, fifteen extra marks and an
+   x axis stretched to 0.70 to hold them would cost the transition its legibility.
 4. THE PANEL DRAWS COLUMN MEDIANS, SO IT DOES NOT CLAIM A FRACTION REMOVED. Median energy falls
    from +0.276 to +0.097, but the median of the PER-QUERY drop is only +0.053 (95% bootstrap
    +0.007 to +0.122; Wilcoxon p = 1.3e-4, nominal for the same clustering reason), and the partial
    is the higher of the two on 38% of queries. "Most of energy's score is magnitude" would be a
    statement about the difference of two medians read as if it were the median difference, and
-   picking that denominator is the error this paper exists to criticise. Neither the title nor any
-   drawn label states a ratio.
+   picking that denominator is the error this paper exists to criticise. No drawn label states a
+   ratio, and with the panel's phrase deleted there is no longer any drawn text that could.
 5. THE PARTIAL LANDS DIRECTLY ABOVE THE INCUMBENT, AND THAT COMPARISON IS NOT LICENSED. +0.097
    is energy after residualisation; every other dot on the panel is unresidualised, and there is
    no partialled mean-cosine column to put beside it, so reading +0.097 against +0.083 sets two
@@ -89,12 +120,13 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    caption must state that the two numbers are not commensurable.
 6. THE PARTIAL GETS A ROW, WHICH RISKS READING AS A SIXTH COMPETITOR. It was first drawn on the
    energy row itself, where its interval, energy's interval and the connector became three
-   overlapping blue horizontals that no reader could separate, and where its label had nowhere
-   to go but a band under the title that read as a second title line. It therefore has a row,
-   and three things say it is not a method: a diamond rather than a circle, so its marker is not
-   one of the circles the filled/open contrast sorts into methods and controls; a label set small
-   and grey rather than in ink; and an arrow that starts on the energy dot, so the row is visibly
-   derived from the row above rather than measured beside it.
+   overlapping blue horizontals that no reader could separate, and where its label had nowhere to
+   go but the band above the marks, in which it read as a second line of the phrase that then
+   stood there. It therefore has a row, and three things say it is not a method: a diamond rather
+   than a circle, so its marker is not one of the circles the filled/open contrast sorts into
+   methods and controls; a label set small and grey rather than in ink; and an arrow that starts
+   on the energy dot, so the row is visibly derived from the row above rather than measured
+   beside it.
 7. THE CONNECTOR IS BOWED HARD RATHER THAN TAKING THE SHORT WAY ROUND. The partial's interval
    reaches well to the RIGHT of its own dot, across the ground a gentle arc would cross, and at
    the curvature this panel first used the connector ran along that interval within a third of a
@@ -104,11 +136,22 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    against every interval it passes over, so a change in the data cannot quietly lay the shaft
    back down on top of a bar.
 
+HONESTY NOTE ON "NEARLY MATCHES", WHICH IS NOW A CAPTION CLAIM AND A DRAWN POSITION
+-----------------------------------------------------------------------------------
+SCALAR_NEAR_FRAC is a POOLED statement, and so is the near-coincidence of the two dots. Per cell
+line the scalar-to-energy ratio of the medians is 0.95 in A549, 1.11 in K562 and 0.49 in MCF7: the
+scalar edges past energy in one line and reaches about half of it in another. Nothing on the panel
+shows that, because the three-line breakdown costs the marks their legibility at this width (see
+judgement call 3), so the caption carries it. Neither the assertion below nor the drawn geometry
+should be read as saying the two scores track each other within a cell line.
+
 WHAT WAS CUT INTO THE CAPTION
 -----------------------------
-The GDSC2 provenance, the per-cell-line medians, the bootstrap and its clustering caveat, the
-definition of each score, the fact that open means "not one of the two compared methods", and
-the warning that +0.097 and +0.083 are not commensurable because only the first is residualised.
+The panel's former phrase, "A scalar control nearly matches energy", which now opens the caption
+entry. The GDSC2 provenance, the per-cell-line medians and the per-line scalar-to-energy ratios,
+the bootstrap and its clustering caveat, the definition of each score, the fact that open means
+"not one of the two compared methods", and the warning that +0.097 and +0.083 are not
+commensurable because only the first is residualised.
 
 Run standalone: python fig3h.py
 """
@@ -123,8 +166,7 @@ import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig3_style import (EXT, LW_HAIR, MEAN, MS_DOT, POP,  # noqa: E402
-                        PT_ANNOT, PT_SMALL, REPO, SUBTLE, TEXT, bare_axes, boot_ci, title,
-                        zero_rule)
+                        PT_ANNOT, PT_SMALL, REPO, SUBTLE, TEXT, bare_axes, boot_ci, zero_rule)
 
 SRC = os.path.join(REPO, "figures", "source_data", "fig3hi_class_c_functional.csv")
 
@@ -145,14 +187,13 @@ MEAN_COL = "mean_cosine_ctrl_rho"
 SCALAR_COL = "magnitude_match_rho"
 POTENCY_COL = "potency_match_rho"
 PARTIAL_COL = "energy_rho_partial_magmatch"
-# The derived row's label. Set at PT_SMALL in SUBTLE grey, unlike every method label,
-# because it names an ADJUSTMENT of the row above rather than a sixth thing to rank.
-PARTIAL_LABEL = "after magnitude adjustment"
+# The derived row's name. Three words, PT_SMALL, SUBTLE grey, unlike every method label, because
+# it names an OPERATION on the row above rather than a sixth thing to rank.
+PARTIAL_LABEL = "magnitude partialled out"
 
-# The phrase over the panel. It states the comparison the transition does NOT state, and it is
-# asserted below: the no-representation scalar must reach at least three quarters of the
-# distributional score, and must sit above the mean-signature incumbent.
-TITLE_3H = "A scalar control nearly matches energy"
+# The scalar's position between the incumbent and energy, bounded on both sides. This used to
+# defend a phrase drawn over the panel; the phrase is now the caption's, and the bound defends
+# what the marks say instead. Pooled over the three cell lines; see the honesty note above.
 SCALAR_NEAR_FRAC = 0.75
 
 # ------------------------------------------------------------------------------ geometry, inches
@@ -162,18 +203,38 @@ LANE_W = 0.76          # the group-tag lane, right of every datum; holds "Retrie
 LANE_GAP = 0.10        # clear space between the last datum and the lane
 ZERO_IN = 0.16         # where rho = 0 sits, in from the axes left edge; far enough in to read
                        # as a datum rather than as a second spine
-TOP_Y = 0.845          # centre of the top row, in axes fraction
-BOT_Y = 0.075          # centre of the bottom row
+TOP_Y = 0.865          # centre of the top row, in axes fraction. TOP_Y and BOT_Y opened out when
+BOT_Y = 0.060          # the deleted phrase returned height to this panel: the six rows print
+                       # about 10.7 pt apart rather than 9.3, which is where the height went
 VAL_DY = 0.098         # a value label sits this far above its own marker, clear of that row's
                        # interval, of the transition arrow, and of the marker itself: at 0.075
                        # the diamond's top vertex touched the digits of its own label
-ARC_RAD = -0.50        # curvature of the energy -> partial connector. Large on purpose; see
+ARC_RAD = -0.54        # curvature of the energy -> partial connector. Large on purpose; see
                        # judgement call 7. The sign takes the arc DOWN into the gap between the
-                       # two rows instead of flattening it along the partial's own interval
+                       # two rows instead of flattening it along the partial's own interval.
+                       # Retuned from -0.50 in this pass: the taller rows lengthen the chord, so
+                       # the same radius dips proportionally less far below the partial's own
+                       # interval bar. -0.54 puts the tightest clearance back at the 2.1 pt it
+                       # held before the rows opened out, and still leaves 5.7 pt to the mean
+                       # cosine bar the arc passes over on its way down
 ARROW_CLEAR_PT = 1.5   # printed points of air demanded between that arc and any interval bar it
                        # passes over, asserted at draw time
 MARKER_SKIP_PT = 4.0   # the arc is trimmed by shrinkA/shrinkB at each end, so clearance is not
                        # measured within this radius of either endpoint
+
+# With no sentence over the panel, the three facts a reader must take from POSITION alone are
+# asserted as printed distances on the resolved x scale.
+READ_SEP_PT = 6.0      # two dots are separable at about one marker diameter of DRAWN INK. In
+                       # matplotlib, scatter's s is the SQUARED marker size in points rather than
+                       # an area in the geometric sense, so MS_DOT = 26 lays down a circular path
+                       # sqrt(26) = 5.10 pt across and the 0.9 pt edge stroke centred on it takes
+                       # the ink to 6.0 pt, which is what the 300 dpi render measures (25 px).
+                       # 6.0 pt of centre-to-centre is therefore exactly one marker, the floor for
+                       # "these are two marks", and any pair that must READ as apart needs it
+NEAR_RATIO = 0.5       # the scalar reads as near energy only if its gap to energy is at most this
+                       # share of energy's gap to the incumbent it is being contrasted with
+DROP_RATIO = 2.0       # the transition reads as a drop only if it is at least this many times the
+                       # energy-to-scalar gap, the smallest horizontal move the panel also draws
 
 
 def _arc_clearance_pt(a_in, b_in, rad, bar_y_in, bar_x0_in, bar_x1_in):
@@ -216,15 +277,16 @@ def draw_3h(ax):
     med = {c: float(d[c].median()) for c in cols}
     ci = {c: boot_ci(d[c].values) for c in cols}
 
-    # ---- the claims, asserted so no drawn label can outlive the data --------------------------
+    # ---- the claims, asserted so no drawn mark can outlive the data ---------------------------
     assert med[ENERGY_COL] > med[MEAN_COL], (
         "panel h draws energy above the mean-signature incumbent; the file no longer says that "
         f"({med[ENERGY_COL]:+.4f} vs {med[MEAN_COL]:+.4f}).")
     assert (SCALAR_NEAR_FRAC * med[ENERGY_COL] <= med[SCALAR_COL] <= med[ENERGY_COL]
             and med[SCALAR_COL] > med[MEAN_COL]), (
-        f"the phrase over this panel says a scalar control NEARLY MATCHES energy, which bounds "
-        f"the scalar on BOTH sides: at or above {SCALAR_NEAR_FRAC:.2f} of energy, and not past "
-        f"it. The scalar is {med[SCALAR_COL]:+.4f} against energy {med[ENERGY_COL]:+.4f} and "
+        f"this panel puts the no-representation scalar just short of energy and well above the "
+        f"incumbent, and the caption says a scalar control NEARLY MATCHES energy. Both bound the "
+        f"scalar on BOTH sides: at or above {SCALAR_NEAR_FRAC:.2f} of energy, and not past it. "
+        f"The scalar is {med[SCALAR_COL]:+.4f} against energy {med[ENERGY_COL]:+.4f} and "
         f"incumbent {med[MEAN_COL]:+.4f}.")
     assert med[PARTIAL_COL] < med[ENERGY_COL], (
         f"the transition is drawn leftward and downward; the partial is {med[PARTIAL_COL]:+.4f} "
@@ -274,6 +336,27 @@ def draw_3h(ax):
         """Data x of a point ``inches`` in from the axes' left edge."""
         return xlo + inches / scale
 
+    def sep_pt(col_a, col_b):
+        """Printed points between two rows' point estimates, on the scale just resolved."""
+        return 72.0 * scale * abs(med[col_a] - med[col_b])
+
+    # ---- the three facts the deleted sentence used to carry, now carried by position ----------
+    lead_pt = sep_pt(ENERGY_COL, MEAN_COL)
+    near_pt = sep_pt(ENERGY_COL, SCALAR_COL)
+    drop_pt = sep_pt(ENERGY_COL, PARTIAL_COL)
+    assert lead_pt >= READ_SEP_PT, (
+        f"energy leads the incumbent by only {lead_pt:.1f} printed pt at this width, under the "
+        f"{READ_SEP_PT:.1f} pt that keeps two dots apart. No text says energy is ahead, so the "
+        f"gap has to; widen the panel or shorten the tag lane.")
+    assert READ_SEP_PT <= near_pt <= NEAR_RATIO * lead_pt, (
+        f"the scalar has to read as NEAR energy and still as a separate mark: it is {near_pt:.1f} "
+        f"printed pt from energy, against a floor of {READ_SEP_PT:.1f} pt and a ceiling of "
+        f"{NEAR_RATIO:.2f} x the {lead_pt:.1f} pt lead over the incumbent.")
+    assert drop_pt >= DROP_RATIO * near_pt, (
+        f"the transition has to read as a sharp drop, not as another near-tie: it is "
+        f"{drop_pt:.1f} printed pt against the {near_pt:.1f} pt energy-to-scalar gap, short of "
+        f"the {DROP_RATIO:.1f}x this panel requires of it.")
+
     # ---- the connector must not lie down on any interval it crosses ---------------------------
     axh = ax.get_position().height * ax.figure.get_figheight()
     a_in = ((med[ENERGY_COL] - xlo) * scale, ys[0] * axh)
@@ -294,6 +377,9 @@ def draw_3h(ax):
         m, lo, hi = ci[col]
         ax.plot([lo, hi], [y, y], color=hue, lw=1.0, alpha=0.45 if derived else 0.55,
                 solid_capstyle="butt", zorder=3)
+        # The derived row's diamond is drawn a step under MS_DOT (5.4 pt of ink against the
+        # circles' 6.0) for the same reason its label is small and grey: it is subordinate to the
+        # row it comes from, and must not read as a sixth point estimate in the ranking.
         ax.scatter([m], [y], s=MS_DOT - 6 if derived else MS_DOT, marker="D" if derived else "o",
                    facecolor=hue if filled else "white", edgecolor=hue, linewidths=0.9,
                    zorder=6 if derived else 5)
@@ -326,8 +412,8 @@ def draw_3h(ax):
     ax.set_xticks([t for t in np.arange(0.0, 0.85, 0.1) if t <= axis_end + 1e-9])
     ax.set_xlabel(r"Spearman $\rho$ with drug-drug functional similarity", fontsize=PT_ANNOT,
                   labelpad=1.6)
-    title(ax, TITLE_3H)
-    return {"medians": med, "ci": ci, "paired_energy_minus_partial": paired}
+    return {"medians": med, "ci": ci, "paired_energy_minus_partial": paired,
+            "read_pt": {"lead": lead_pt, "near": near_pt, "drop": drop_pt}}
 
 
 if __name__ == "__main__":
@@ -335,14 +421,16 @@ if __name__ == "__main__":
     from fig3_style import PT_TICK, PT_TITLE
 
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
-    W, H = 4.10, 1.44                                   # the panel box h occupies in Figure 3
+    W, H = 4.10, 1.45                                   # the panel box h occupies in Figure 3
     fig = plt.figure(figsize=(W, H))
-    ax = fig.add_axes([1.34 / W, 0.36 / H, 2.66 / W, 0.84 / H])
+    ax = fig.add_axes([1.34 / W, 0.36 / H, 2.66 / W, 0.92 / H])
     out = draw_3h(ax)
     for k, v in out["medians"].items():
         print(f"{k:32s} {v:+.4f}   95% CI {out['ci'][k][1]:+.4f} to {out['ci'][k][2]:+.4f}")
     print(f"per-query energy minus partial: median {out['paired_energy_minus_partial'][0]:+.4f}, "
           f"95% CI {out['paired_energy_minus_partial'][1]:+.4f} to "
           f"{out['paired_energy_minus_partial'][2]:+.4f}")
+    print("printed separations, pt: " + ", ".join(f"{k} {v:.1f}"
+                                                  for k, v in out["read_pt"].items()))
     fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "3h.png"), dpi=300)
     print("wrote 3h.png")

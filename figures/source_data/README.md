@@ -32,7 +32,7 @@ python figures/sync_source_data.py --check    # exit 1 on drift, write nothing
 | `ed3_method_ari.csv`, `ed3_predictor_collapse.csv`, `ed3_silhouette.csv` | ED3 |
 | `ed4_enrichment_summary.csv`, `ed4_marker_enrichment.csv`, `ed4_minority_rescue.csv` | ED4 |
 | `fig2c_energy_collapse.csv`, `fig2d_operation_identity.csv`, `fig2e_beta_spectrum.csv` | 2c, 2d, 2e |
-| `fig3a_classA_vs_classB.csv` | 4a, 4b |
+| `fig3a_classA_vs_classB.csv` | **nothing, since 2026-08-31.** See CORRECTIONS.md R49: it holds 480 queries, which is leave_drug_out intersected with the gate's own recommended verdict, while panels 3a and 3b report all 600 leave_drug_out queries. Both now read `results/exp12_partial_observed_retrieval/per_query_scores.csv` and assert n = 600. Kept as released data; do not treat it as the analysis set |
 | `fig3hi_class_c_functional.csv` | 4h, 4i |
 | `fig3hi_class_c_potency.csv` | ED5 |
 

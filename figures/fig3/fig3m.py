@@ -1,14 +1,43 @@
-"""PopRetrieve Figure 3 panel 3m: the energy ranking is, for most queries, a magnitude ordering.
+"""PopRetrieve Figure 3 panel 3m: how strongly the energy ranking tracks candidate magnitude.
 
-WHAT THIS PANEL CLAIMS
-----------------------
+WHAT THIS PANEL SHOWS
+---------------------
 For each of the 103 leave-one-drug-out queries, the energy DISTANCE between the query population
 and a candidate population is Spearman-correlated, across that query's candidates, with the
 CANDIDATE'S OWN response magnitude. The panel draws the distribution of those 103 per-query
-correlations. Its claim is the median, +0.791, with 95 of 103 queries positive and 78 above +0.5.
-Ranking candidates nearest-first therefore reproduces, to a large degree, ranking them by how
-small their own response is. Nothing here measures retrieval quality, and nothing here is a
-comparison between retrieval families.
+correlations: median +0.791, with 95 of 103 queries positive and 78 above +0.5. Ranking candidates
+nearest-first therefore reproduces, to a large degree, ranking them by how small their own response
+is. Nothing here measures retrieval quality, and nothing here is a comparison between retrieval
+families.
+
+WHAT CHANGED IN THE 2026-08-31 PASS, AND WHY
+--------------------------------------------
+The panel used to set the phrase "Energy ranks largely by magnitude" over itself at PT_TITLE. It
+is deleted, along with the fig3_style.title() helper that drew it: thirteen conclusion sentences
+on one page is thirteen claims competing for attention, and in a Nature-family main figure the
+panels carry evidence while the legend carries the argument. The claim moved to this panel's
+caption entry, where it can be qualified properly, and fig3_assemble._assert_no_titles refuses to
+build a figure in which any panel draws text above PT_ANNOT, so it cannot come back at a smaller
+size.
+
+Be precise about where each number now lives, because the assertions below name the file a
+maintainer must edit when one fires. The CAPTION (manuscript/latex, Fig. 3 entry m) carries the
+median and the fact of the left tail, and nothing more: "the per-query Spearman correlation
+between the query-candidate energy distance and the candidate's own response magnitude, median
++0.791. The distribution has a left tail reaching below zero, so this describes the typical query
+and not every one." The three COUNTS, 95 positive, 78 above +0.5 and 8 at or below zero, are
+prose in this docstring and in figures/fig3/README.md; they have never been in the caption and
+they are not drawn. The assertions that policed the deleted phrase were not deleted with it, and
+each one now names its own reader.
+
+Removing the phrases returned 0.42 in to the six rows, and this axes grew from 0.64 to 0.69 in.
+All of it went into the marks, none into text. The label band that used to sit above the density,
+holding the title and the median value, is gone: the median value now sits INSIDE the panel, in
+the empty wedge to the left of the median rule, which is empty because the density there never
+exceeds 0.53 of its peak (asserted in _assert_label_clear). The density therefore stands 0.43 in
+rather than 0.36, and the rug 0.14 in rather than 0.09, so the eight left-tail queries are 48 per
+cent taller than they were. Four things are drawn and nothing else: the density, the rug, the
+median with its value, and the zero rule.
 
 WHERE IT SITS, AND THE INFERENCE IT MUST NOT LICENSE
 ----------------------------------------------------
@@ -32,12 +61,12 @@ can be checked rather than believed.
 
 THE LEFT TAIL IS REAL AND IS DRAWN
 ----------------------------------
-"Largely" is a statement about the MEDIAN, not about every query. Eight of the 103 queries sit at
-or below zero (minimum -0.242): for those, the energy distance carries no candidate-magnitude
-information at all. The rug beneath the density plots all 103 queries individually and the zero
-rule is drawn, so those eight are visible and countable rather than smoothed away by the density.
-_assert_claims checks the median, the sign counts and the size of the left tail, so the hedge
-cannot quietly stop being a hedge.
+The median describes the typical query, not every query. Eight of the 103 queries sit at or below
+zero (minimum -0.242): for those, the energy distance carries no candidate-magnitude information
+at all. The rug beneath the density plots all 103 queries individually and the zero rule is drawn,
+so those eight are visible and countable rather than smoothed away by the density. _assert_claims
+checks the median, the sign counts and the size of the left tail, so the caption's hedge cannot
+quietly stop being a hedge.
 
 Source data: figures/source_data/fig3hi_class_c_potency.csv, column energydist_vs_candmag_rho
 (the v2 analysis with the corrected energy sign; 103 rows = 35 held-out query drugs x 3 cell
@@ -60,21 +89,30 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    is bounded at 1 and 41 of the 103 queries sit above +0.9, so an unreflected KDE droops at the
    right edge and visually understates the pile-up that is the panel's whole point. The reflection
    is a boundary correction, not a smoothing choice, and it does not manufacture the mode: the
-   unreflected estimate already peaks at rho = +0.92 and the top histogram bin holds those 41
-   queries. No reflection is applied at the lower end, where the nearest datum is 1.2 rho units
-   from the -1 bound. Scott's bandwidth here is 0.134, wide enough to smooth the gap between the
+   unreflected estimate already peaks at rho = +0.92, where 41 of the 103 queries lie above
+   +0.9. No reflection is applied at the lower end, where the nearest datum sits 0.76 rho units
+   from the -1 bound, 5.7 bandwidths away, so the -1 boundary bites nothing. Scott's bandwidth here is 0.134, wide enough to smooth the gap between the
    left-tail queries and the main mass; the rug is the unsmoothed sample and shows that gap.
 3. NO CELL-LINE ENCODING. The three lines agree closely (median rho A549 +0.762, K562 +0.885,
    MCF7 +0.771) and no claim here is per line, so the rug is one undifferentiated grey series.
    Drawing 103 marks in three shapes on a 2.48 in axis would add ink a reader cannot resolve.
-4. THE VERTICAL AXIS IS A DENSITY AND SAYS SO. It is normalised to a peak of 1 and carries no
+4. LINE WEIGHT AS HIERARCHY. The three weights that carry the hierarchy are all fig3_style's:
+   LW_HAIR (0.6) for the baseline and the rho = +1 bound, which are guides; LW_STEM (0.9) for the
+   density outline, which is the panel's principal mark; LW_LINE (1.1) for the median rule, which
+   is the one thing carrying a number. With the title gone the density has to read as the subject
+   on its own, and a hairline outline over a 0.43 in curve did not. No new constant was invented
+   for this. Two further weights are drawn and are NOT fig3_style constants, so they are named
+   here rather than passed off as house values: the rug is 0.7, which is what fig3f sets its rug
+   to, and the zero rule is 0.8, which is fig3_style.zero_rule's own default and what panels a to
+   l pass. Both are figure-wide conventions carried by repetition, not by a constant.
+5. THE VERTICAL AXIS IS A DENSITY AND SAYS SO. It is normalised to a peak of 1 and carries no
    claim, so it gets no ticks. It is labelled "query density" rather than "queries" because the
    height is not a count of anything and an untick-ed axis labelled with the sample unit invites
    a reader to read it as one. Note that fig3_assemble.PADS reserves 0.72 in on this panel's left
    for "a rotated label plus numeric ticks"; roughly half of that is unused here.
-5. The queries within one cell line share a candidate pool, so the 103 values are not independent.
-   This panel therefore quotes no p value and no confidence interval, only the observed median and
-   counts. Panel i states the same pseudo-replication caveat for the paired test it does report.
+6. The queries within one cell line share a candidate pool, so the 103 values are not independent.
+   This panel therefore quotes no p value and no confidence interval, only the observed median.
+   Panel i states the same pseudo-replication caveat for the paired test it does report.
 
 Run standalone: python fig3m.py
 """
@@ -89,8 +127,8 @@ import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fig3_style import (FAINT, HAIRLINE, LW_HAIR, LW_LINE, MS_DOT, PT_ANNOT,  # noqa: E402
-                        REPO, SHARED, SUBTLE, TEXT, bare_axes, title, zero_rule)
+from fig3_style import (FAINT, HAIRLINE, LW_HAIR, LW_LINE, LW_STEM, MS_DOT,  # noqa: E402
+                        PT_ANNOT, REPO, SHARED, SUBTLE, TEXT, bare_axes, zero_rule)
 
 SRC = os.path.join(REPO, "figures", "source_data", "fig3hi_class_c_potency.csv")
 FUNCTIONAL = os.path.join(REPO, "figures", "source_data", "fig3hi_class_c_functional.csv")
@@ -100,15 +138,29 @@ N_QUERIES = 103             # panel l reads the same file and states the same n;
 
 RHO_BOUND = 1.0             # Spearman rho cannot exceed this; the density is reflected about it
 XLO, XHI = -0.38, 1.02      # the view; asserted below to contain every observation
-YTOP = 1.32                 # density peak is normalised to 1.0, so this is the free label band
-RUG_TOP, RUG_BOT = -0.16, -0.40
+YTOP = 1.10                 # density peak is normalised to 1.0; this is headroom, not a text band
+RUG_TOP, RUG_BOT = -0.13, -0.45
 
-# The one phrase this panel states over itself: what a median of +0.791 MEANS. The subject is
-# named because row 6's other panel draws four rankings, one of which IS the magnitude scalar,
-# and an unowned "a magnitude ranking" could be read as that row rather than as energy's.
-# "Largely" is load-bearing and is what _assert_claims checks: the median, the sign counts and
-# the left tail, not every query.
-TITLE_3M = "Energy ranks largely by magnitude"
+# Where the median's value is set, and the room it needs. The label hangs to the LEFT of the
+# median rule, inside the panel, in the wedge under the rising right shoulder of the density.
+# _assert_label_clear refuses to draw if the density has risen into that box, so the placement
+# cannot outlive the shape it was chosen for.
+#
+# The room is declared in PRINTED INCHES and converted through the axes rect at draw time, not
+# frozen in rho units. A label's width and height are properties of the string and of PT_ANNOT;
+# they become rho units and density units only by way of this panel's printed size and its view.
+# The earlier constants (0.46 rho wide, floor at 0.66) were measured on a 2.48 x 0.69 in axes
+# with a 1.40 rho view and silently assumed all three, so a change to fig3_assemble's ROWS or
+# PADS would have left the guard checking a box the label no longer occupied. Deriving them
+# instead means the guard follows the panel.
+MED_LABEL_Y = 0.80
+MED_LABEL_DX = 0.03         # rho units between the label's right edge and the median rule
+# Per-character advance as a fraction of the em, and half the em box as an ink half-height. Both
+# are deliberate over-estimates, so the guarded box is larger than the ink and the derived floor
+# sits below it: "median +0.791" measures 0.538 em per character in the deck's Arial at PT_ANNOT,
+# and its ink runs 0.72 em tall because the string is digits and lowercase with no descender.
+LABEL_EM_W = 0.62
+LABEL_EM_H = 0.50
 
 
 def _load():
@@ -129,39 +181,75 @@ def _load():
 
 
 def _assert_claims(v, med):
-    """Refuse to draw a title, or hand a caption a number, the data no longer support.
+    """Refuse to draw a number, or hand the caption one, the data no longer support.
 
-    Every number this panel draws is computed at draw time, so the only way the ink can lie is if
-    the drawn median stops meaning what the title says. The docstring and the caption go further
-    than the ink does, quoting the sign counts and the size of the left tail, so those are checked
-    here too: a data change must break the build rather than leave prose describing a panel that
-    no longer looks like that.
+    The panel itself now states only the median, computed at draw time, so its ink cannot lie.
+    The prose goes further, quoting the sign counts and the size of the left tail, and those are
+    checked here: a data change must break the build rather than leave prose describing a panel
+    that no longer looks like that. Each message names the text it guards, because they guard
+    two different texts: the caption carries the median and the fact of the tail, while the three
+    counts live only in this module's docstring and in figures/fig3/README.md.
     """
     n_pos = int((v > 0).sum())
     n_strong = int((v > 0.5).sum())
     n_le0 = int((v <= 0).sum())
 
     assert med >= 0.5, (
-        f"{TITLE_3M!r} claims a strong positive coupling, but the median rho is {med:+.3f}. "
-        "Retitle the panel from the data; do not keep the phrase.")
+        f"the caption claims a strong positive coupling, but the median rho is {med:+.3f}. "
+        "Restate the caption from the data.")
     assert n_pos > v.size / 2, (
-        f"{TITLE_3M!r} claims the typical query is magnitude-ordered, but only {n_pos} of "
+        f"the caption claims the typical query is magnitude-ordered, but only {n_pos} of "
         f"{v.size} queries have rho > 0.")
     # The docstring's three counts. They are recomputed, never typed into the prose from memory.
     assert (n_pos, n_strong, n_le0) == (95, 78, 8), (
-        f"the docstring and caption say 95 of 103 positive, 78 above +0.5 and 8 at or below "
-        f"zero; the file now gives {n_pos}, {n_strong} and {n_le0}. Update the prose.")
-    # "Largely" is a hedge and must stay one: a left tail that vanished would make the title
-    # weaker than the data, and one that swelled would make it stronger.
+        f"this module's docstring and figures/fig3/README.md say 95 of 103 positive, 78 above "
+        f"+0.5 and 8 at or below zero; the file now gives {n_pos}, {n_strong} and {n_le0}. "
+        "Update both. The caption quotes none of these three, so it needs no edit for this.")
+    # The caption's "largely" is a hedge and must stay one: a left tail that vanished would make
+    # the sentence weaker than the data, and one that swelled would make it stronger.
     assert 0 < n_le0 < 0.25 * v.size, (
-        f"{TITLE_3M!r} is hedged because {n_le0} of {v.size} queries carry no coupling. At this "
-        "count the hedge no longer describes the panel; restate the claim from the data.")
+        f"the caption hedges with \"a left tail reaching below zero\" because {n_le0} of "
+        f"{v.size} queries carry no coupling. At this count the hedge no longer describes the "
+        "panel; restate the claim from the data.")
     assert v.max() <= RHO_BOUND + 1e-9, (
         f"{COL} reaches {v.max():+.4f}; a Spearman rho cannot exceed {RHO_BOUND}, so the "
         "reflection boundary and the source file disagree.")
     assert XLO <= v.min() and v.max() <= XHI, (
         f"the view [{XLO}, {XHI}] clips the data [{v.min():+.3f}, {v.max():+.3f}]; widen the "
         "view rather than cropping queries out of the panel")
+
+
+def _label_box(ax, med, label):
+    """The rho window and the density floor the median's label occupies, in DATA units.
+
+    The width and the height enter in inches, from ``label`` and PT_ANNOT, and are converted
+    through this axes' printed size. ``YTOP - (RUG_BOT - 0.05)`` is the y range draw_3m sets
+    below, quoted here because the guard runs before set_ylim.
+    """
+    w_in = ax.figure.get_figwidth() * ax.get_position().width
+    h_in = ax.figure.get_figheight() * ax.get_position().height
+    span = len(label) * LABEL_EM_W * (PT_ANNOT / 72.0) / w_in * (XHI - XLO)
+    half = LABEL_EM_H * (PT_ANNOT / 72.0) / h_in * (YTOP - (RUG_BOT - 0.05))
+    hi = med - MED_LABEL_DX
+    return hi - span, hi, MED_LABEL_Y - half
+
+
+def _assert_label_clear(grid, dens, lo, hi, floor):
+    """Refuse to set the median's value on top of the curve it describes, or off the panel.
+
+    The label sits inside the panel rather than in a band above it, which is only legible because
+    the density is low everywhere to the left of the median. That is a property of this sample,
+    so it is checked against this sample at draw time.
+    """
+    assert lo >= XLO, (
+        f"the median label would start at rho {lo:+.3f}, left of the view edge {XLO}. It is set "
+        "inside the panel, so it has to fit inside the panel.")
+    win = (grid >= lo) & (grid <= hi)
+    peak = float(dens[win].max())
+    assert peak < floor, (
+        f"the median label occupies rho [{lo:+.3f}, {hi:+.3f}] down to a normalised density of "
+        f"{floor:.3f}, but the curve now reaches {peak:.3f} there and the text would sit on the "
+        "distribution. Move the label rather than letting it overlap.")
 
 
 def _density(v, grid):
@@ -181,11 +269,14 @@ def draw_3m(ax):
     grid = np.linspace(XLO, RHO_BOUND, 601)
     dens = _density(v, grid)
     dens = dens / dens.max()
+    med_label = f"median {med:+.3f}"
+    lo, hi, floor = _label_box(ax, med, med_label)
+    _assert_label_clear(grid, dens, lo, hi, floor)
     # Fill and outline are drawn separately so the polygon's closing verticals do not inherit
     # the curve's weight: the density is genuinely cut off at the rho = +1 bound, and a full-weight
     # stroke there reads as a drawn wall rather than as the edge of the statistic's range.
     ax.fill_between(grid, 0.0, dens, facecolor=FAINT, lw=0, zorder=3)
-    ax.plot(grid, dens, color=SHARED, lw=LW_HAIR, zorder=4)
+    ax.plot(grid, dens, color=SHARED, lw=LW_STEM, zorder=4)
     ax.plot([RHO_BOUND, RHO_BOUND], [0.0, dens[-1]], color=HAIRLINE, lw=LW_HAIR, zorder=4)
     ax.plot([XLO, RHO_BOUND], [0.0, 0.0], color=HAIRLINE, lw=LW_HAIR, zorder=4)
 
@@ -196,29 +287,28 @@ def draw_3m(ax):
     zero_rule(ax, at=0.0, vertical=True, color=SUBTLE, lw=0.8, zorder=4, ls=(0, (2.4, 1.8)))
 
     # --- one emphasised mark: the median, drawn through the whole panel and labelled ----------
-    ax.plot([med, med], [RUG_BOT, YTOP - 0.20], color=TEXT, lw=LW_LINE, zorder=6,
+    ax.plot([med, med], [RUG_BOT, YTOP - 0.05], color=TEXT, lw=LW_LINE, zorder=6,
             solid_capstyle="butt")
     ax.scatter([med], [0.0], s=MS_DOT, color=TEXT, zorder=7, linewidths=0)
-    ax.text(med - 0.03, YTOP - 0.155, f"median {med:+.3f}", ha="right", va="center",
-            fontsize=PT_ANNOT, color=TEXT)
+    ax.text(hi, MED_LABEL_Y, med_label, ha="right", va="center",
+            fontsize=PT_ANNOT, color=TEXT, zorder=7)
 
     # --- frame -------------------------------------------------------------------------------
     bare_axes(ax, keep=("bottom",))
     ax.set_xlim(XLO, XHI)
-    ax.set_ylim(RUG_BOT - 0.06, YTOP)
+    ax.set_ylim(RUG_BOT - 0.05, YTOP)
     ax.set_xticks([0.0, 0.25, 0.50, 0.75, 1.00])
     ax.set_xticklabels(["0", "0.25", "0.5", "0.75", "1"])
     ax.set_yticks([])
-    # Two lines because one is 2.6 in wide on a 2.48 in axis. "the candidate's own" is the part a
+    # Two lines because one is 3.28 in wide on a 2.48 in axis. "the candidate's own" is the part a
     # reader must not lose: the correlation is with the CANDIDATE's response magnitude, not the
     # query's, and that is what makes nearest-first a magnitude ranking.
     ax.set_xlabel("Spearman " r"$\rho$" ": energy distance vs\nthe candidate's own response "
                   "magnitude", fontsize=PT_ANNOT, color=TEXT, labelpad=1.6, linespacing=1.18)
-    # Two lines rather than one: "query density" set on a single line stands 0.62 in tall inside
-    # a 0.64 in axes and reads as crowding it.
+    # Two lines rather than one: "query density" set on a single line stands 0.62 in tall and
+    # would all but fill the 0.69 in axes, reading as a rule down the left edge.
     ax.set_ylabel("query\ndensity", fontsize=PT_ANNOT, color=TEXT, labelpad=2.0,
                   linespacing=1.10)
-    title(ax, TITLE_3M)
 
     return {"n": int(v.size), "median": med, "q1": q1, "q3": q3,
             "n_pos": int((v > 0).sum()), "n_at_or_below_zero": n_le0,
@@ -256,8 +346,10 @@ if __name__ == "__main__":
     from fig3_style import PT_TICK, PT_TITLE  # noqa: E402
 
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
-    fig = plt.figure(figsize=(3.30, 1.26))
-    ax = fig.add_axes([0.72 / 3.30, 0.38 / 1.26, 2.48 / 3.30, 0.64 / 1.26])
+    # The panel BOX on the printed page: 3.30 x 1.24 in (row 6 is 1.07 in plus fig3_assemble's
+    # 0.17 in letter block), with fig3_assemble.PADS["m"] holding the axes inside it.
+    fig = plt.figure(figsize=(3.30, 1.24))
+    ax = fig.add_axes([0.72 / 3.30, 0.38 / 1.24, 2.48 / 3.30, 0.69 / 1.24])
     st = draw_3m(ax)
     out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "3m.png")
     fig.savefig(out, dpi=300)

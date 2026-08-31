@@ -1671,3 +1671,70 @@ That also moves it into the same family as panels d, e and f: it is the gate's p
 The Fig. 3 caption is rewritten accordingly. The manuscript's Results sentence, "Stratifying
 queries by their measured response divergence did not reveal a hidden regime of large benefit",
 was already the defensible claim and is unchanged.
+
+---
+
+## R49. Figure 3a and 3b were drawn on the subset the diagnostic itself selected
+
+**Was:** panels 3a and 3b read `figures/source_data/fig3a_classA_vs_classB.csv`, a 480-row table,
+and the panel stated `n = 480 paired queries`. The Results text reports the same analysis on 600:
+"Among the 600 partial-observation queries for which both response-matching and mechanism
+annotations were available".
+
+**Is:** those 480 are `split_type == "leave_drug_out"` **intersected with the gate's
+`DART_recommended` verdict**. The full leave-one-drug-out set is 600 queries, of which the gate
+recommends 480, declines 109 as `mean_or_no_call`, and declines 11 as `mean_sufficient`. So the
+figure's opening panel, the one carrying the paper's central reversal, was drawn on a
+**gate-selected subset**, while the text reported the full set precisely so that the headline would
+not rest on one.
+
+The manuscript's numbers reproduce exactly on the 600 and not on the 480:
+
+| | manuscript | 600 (correct) | 480 (was drawn) |
+|---|---|---|---|
+| mechanism recovery decreased | 41.3% | **41.3%** | 40.6% |
+| increased | 34.2% | **34.2%** | 35.0% |
+| unchanged | 24.5% | **24.5%** | 24.4% |
+| paired Wilcoxon | 2.4e-4 | **2.46e-4** | 1.13e-3 |
+| Class A median | +0.129 | +0.1288 | +0.1292 |
+| Class B mean | -0.037 | -0.0371 | -0.0369 |
+
+**This is the second occurrence of one bug.** Fig. 2c had exactly the same defect and was fixed on
+2026-08-30: it plotted the 621-query gate-recommended subset while its caption and the Results text
+both reported all 765. The mechanism is the same in both cases, a hand-built file under
+`figures/source_data/` with no generator, silently holding a narrower query set than the panel's
+own caption claims. `figures/fig2/fig2c.py` records the first occurrence.
+
+**What changed.** Both panels now read
+`results/exp12_partial_observed_retrieval/per_query_scores.csv` directly, filter on `split_type`
+alone, never on `recommendation_mode`, and assert `n == 600`, so a subset cannot silently return.
+The corrected set is also a balanced design, 200 queries per cell line, where the gate-selected one
+was 157 / 146 / 177. The Fig. 3 caption is updated: 34% rather than 35% favour population, 24.5%
+rather than 24% are exact ties, the Wilcoxon p strengthens from $1.1\times10^{-3}$ to
+$2.5\times10^{-4}$, the Class A mean moves from +0.288 to +0.275, and the truncated tail is 4%
+rather than 5% of the row. No conclusion changes; every one of them is slightly better supported.
+
+`figures/source_data/fig3a_classA_vs_classB.csv` is no longer read by any panel. It is kept as
+released data and reclassified, with its 480-row scope stated, so nobody mistakes it for the
+analysis set again.
+
+**How it was found.** The author of the figure noticed that the panel said 480 while the Results
+said 600, and asked which was right before any redrawing began.
+
+## R50. Every mathtext glyph in the deck was set in a different typeface from the text around it
+
+`figstyle.apply_style` set `font.sans-serif` to Arial and left `mathtext.fontset` at matplotlib's
+`dejavusans` default, so all 55 mathtext strings across the five main figures, every Spearman
+$\rho$, every $\alpha$, every italic $P$ and every `$-$`, were rendered in DejaVu Sans beside Arial
+digits and labels. All five figure PDFs embedded both families.
+
+The minus sign was the worst of it. In the resolved Arial face a mathtext `$-$` measures 6.48 pt at
+7.2 pt nominal, against 4.32 pt for a real U+2212 and 7.20 pt for that face's em dash: the minus in
+a label like "population - mean advantage" was printing at 90 per cent of the width of an em dash,
+in a project whose house rule is that em dashes never appear.
+
+Fixed in `figstyle.apply_style` with `mathtext.fontset = "custom"` pointing at the sans family. All
+five figures now embed Arial alone (regular, bold and italic), with no missing-glyph warnings, and
+both build gates still pass: `build_all.py` reports 5 of 5 CLEAN with 0 typography violations and
+`check_overlaps.py` reports 0 collisions. Found by the agent auditing Fig. 3a, which measured the
+glyph widths rather than judging them by eye.

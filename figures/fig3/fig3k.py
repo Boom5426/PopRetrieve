@@ -1,31 +1,54 @@
 """PopRetrieve Figure 3 panel 3k: the queries the two Class-B evaluators would need.
 
-WHAT THIS PANEL CLAIMS
-----------------------
-In the highest quartile of true response divergence, the stratum the pre-specified gate says the
-population advantage should be largest in, the two Class-B evaluators disagree about whether the
-study is large enough, and the reason is variance, not effect size. Minority-state coverage would
-reach 80% power at 45 queries and 191 were analysed, so that null is a measurement and not an
-absence of data. MoA-nDCG would need 20,844 queries and 143 were analysed, so its null is
-uninformative. Inside that stratum the two observed gaps are the same sign and within a factor of
-1.8 of each other (+0.0056 and +0.0032); the MoA-nDCG gap is 12 times noisier, and squaring that
-noise ratio, not the gap ratio, is what produces the 458-fold difference in required n. Every
-number here is recomputed from the source files at draw time, and the claims the labels make are
-asserted before anything is drawn.
+WHAT THIS PANEL SHOWS
+---------------------
+Two evaluators, one row each, on a log query axis: the open marker is what was analysed, the
+filled marker is what 80% power would take, and the arrow runs from the first to the second.
+Minority-state coverage would reach 80% power at 45 queries and 191 were analysed, so its arrow
+points LEFT and its null is a measurement. MoA-nDCG would need 20,844 and 143 were analysed, so
+its arrow points RIGHT across two decades and its null is uninformative. The two studies start
+from nearly the same place, 191 and 143 queries, so the two open markers land 0.11 in apart and
+the only thing left to compare between the rows is the LENGTH of the two dumbbells. That length
+is the panel: one arrow spans 0.6 of a decade and the other 2.2, a factor of 3.5 in length, and
+_numbers asserts both.
+
+Every number here is recomputed from the source files at draw time, and every relationship the
+panel or its caption asserts is checked before anything is drawn.
+
+WHAT CHANGED IN THE 2026-08-31 PASS, AND WHY
+--------------------------------------------
+A panel states no conclusion. Two pieces of text were cut and not replaced:
+
+  * the phrase "Noise, not gap size, sets the cost", which was this panel's conclusion sentence
+    set in 8.5 pt over the marks. It now opens the caption entry, where it costs no page space
+    and can be qualified properly. fig3_style.title() is deleted and fig3_assemble refuses to
+    build a figure whose panels draw text above PT_ANNOT, so it cannot come back smaller either.
+  * the drawn line "vs coverage: gap 1.8x smaller, s.d. 12x larger", which was the caption's
+    sentence in the panel's ink. The geometry states it instead: the two dumbbells share a
+    starting neighbourhood and differ in length by 1.5 decades on a log axis, and a difference in
+    required n that survives near-equal starting points and near-equal gaps is a difference in
+    noise. The two ratios are still COMPUTED and still ASSERTED in _numbers, at the precision the
+    caption prints them to, so the caption cannot outlive the files either. An assertion is the
+    right place for a claim the reader is asked to take on the caption's word.
+
+Removing the sentences returned 0.42 in to the six rows, 0.06 in of it to this panel. It is spent
+on the marks: _bands now seats two number rows and two marker rows instead of three text rows and
+two marker rows, so every seam grew from about 1.0 pt to about 3.5 pt and each dumbbell reads as
+one object rather than as ink crowded against its label.
 
 WHY THE STRATUM IS NAMED ON THE PANEL, NOT ONLY IN THE CAPTION
 --------------------------------------------------------------
-Because the gap comparison does not survive leaving it. Q4 is the only stratum in which the
-MoA-nDCG gap is positive at all: divergence_stratified.csv gives its mean gap as -0.0822 (Q1),
--0.0411 (Q2), -0.0205 (Q3), +0.0032 (Q4) and -0.0371 over all 600 queries. Read without the
-stratum, "gap 1.8x smaller" would be taken for a statement about the study, where the truth is
-that the MoA-nDCG gap is NEGATIVE and about 7 times larger in magnitude than the coverage gap.
-The stratum is not a flattering subset picked after the fact, it is the one the gate pre-specified
-and the one panel j draws, but a panel that needs it must say it. The noise claim does not have
-this problem: the s.d. ratio is 12.4 over all queries and runs 9.3 to 18.1 across the four strata.
-The x label therefore carries the quartile, and _numbers asserts against divergence_stratified.csv
+Because all four drawn numbers are that stratum's. power_analysis.csv holds Q4 rows and no
+others, and the per-stratum n and gaps in divergence_stratified.csv differ enough that a reader
+who took 191 and 143 for the study totals (765 and 600 queries) would have the wrong panel in
+mind. The stratum also guards the caption's gap ratio, which is true inside Q4 and nowhere else:
+MoA-nDCG's mean gap is -0.0822 (Q1), -0.0411 (Q2), -0.0205 (Q3), +0.0032 (Q4) and -0.0371 over
+all 600 queries, so read without the stratum "gap 1.8x smaller" would invert a sign. Q4 is not a
+flattering subset picked after the fact: it is the stratum the pre-specified gate names and the
+one panel j draws. The noise claim does not have this problem, the s.d. ratio being 12.4 over all
+queries and 9.3 to 18.1 across the four strata. _numbers asserts against divergence_stratified.csv
 that Q4 really is the highest-divergence quartile and that its n match the power file, exactly as
-panel j does, so the words cannot outlive the files.
+panel j does, so the x label cannot outlive the files.
 
 SOURCE
 ------
@@ -54,19 +77,30 @@ JUDGEMENT CALLS A READER COULD DISAGREE WITH
    clear of the filled marker rather than inside it: at MS_DOT the marker is 2.9 pt in radius
    and a head tucked under it left only its base flare showing, which is the one cue the
    required-versus-observed reading rests on.
-4. The panel states the ratios (gap 1.8x smaller, s.d. 12x larger) rather than the raw s.d.
-   values, and the raw s.d. belong in the caption. The ratio is what explains the two marker
-   positions; the raw s.d. would need a second axis nobody would read.
-5. The title attributes the cost to noise. That is a decomposition, not a correlation:
-   n80 scales as (s.d. / gap)^2, the variance ratio is 146 and the squared gap ratio is 3.1,
-   so noise accounts for two orders of magnitude of the 458-fold difference and the gap for
-   half an order. _NUMBERS asserts that dominance holds before the title is drawn. A reader who
-   wants the strict statement should read the title as "noise, not gap size, is what makes these
-   two costs differ": a factor of 3 of the 458 is the gap, and the panel prints both ratios so
-   the arithmetic is available.
-6. The x axis is queries on a log scale, and 45 versus 20,844 is only legible on one. A log
+4. NOTHING WAS ADDED to tie the two open markers together, and this is the call most open to
+   disagreement. Comparing two lengths presumes a common origin, so two candidates were drawn and
+   rejected: a dotted hairline between the open markers, which crossed the 143 label and read as
+   a scratch, and a pale vertical band spanning 143 to 191, which was tidy but is a mark a reader
+   has to ask about, and this pass is about spending less ink on explanation rather than more.
+   The two open markers are already 0.11 in apart on a 2.80 in axis, which the eye reads without
+   help. What survives from the attempt is the assertion: _numbers now checks that the two n stay
+   within a factor of 1.5, so if the two studies ever diverged in size the panel would fail rather
+   than quietly invite a length comparison that no longer means what it means today.
+5. The panel no longer prints the gap and s.d. ratios, so the "why" behind the two lengths is
+   the caption's to carry. A reader who only looks at the marks learns that one study is
+   over-powered and the other is 146-fold short, which is this panel's evidence; the
+   decomposition into noise and effect size is an argument, and arguments belong in the legend.
+   The arithmetic behind it is real: n80 goes as (s.d. / gap)^2, the variance ratio is 146 and
+   the squared gap ratio is 3.1, so noise accounts for two orders of magnitude of the 458-fold
+   difference in cost and the gap for half an order. _numbers asserts that dominance.
+6. The x label says "needed for 80% power" rather than the bare "needed" the fill key would take.
+   The four extra characters are the definition of the filled marker: without the power target,
+   20,844 is a number with no operation behind it, and the rule that lets a panel keep its
+   necessary statistics is the rule that keeps this one. It is written from TARGET_POWER, so the
+   percentage cannot drift from the formula that produced the marker.
+7. The x axis is queries on a log scale, and 45 versus 20,844 is only legible on one. A log
    axis flatters nothing here: it makes a 458-fold difference look like the two decades it is.
-7. The two rows are not computed on the same queries: MoA-nDCG is undefined for 48 of the 191,
+8. The two rows are not computed on the same queries: MoA-nDCG is undefined for 48 of the 191,
    so it is a 143-query subset of them. Both n are on the panel for that reason. It is also why
    the s.d. comparison is between two nested samples rather than one paired one.
 
@@ -84,7 +118,7 @@ from scipy.stats import norm
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig3_style import (LW_LINE, MS_DOT, PT_ANNOT, PT_SMALL, PT_TICK, REPO,  # noqa: E402
-                        SHARED, SUBTLE, TEXT, bare_axes, title)
+                        SHARED, SUBTLE, TEXT, bare_axes)
 
 SRC = os.path.join(REPO, "results", "exp17_true_divergence_subset", "power_analysis.csv")
 STRAT_SRC = os.path.join(REPO, "results", "exp17_true_divergence_subset",
@@ -109,10 +143,12 @@ R_PT = (MS_DOT / np.pi) ** 0.5 + 0.45
 
 
 def _numbers():
-    """Read the Q4 power rows and verify every relationship the panel's labels assert.
+    """Read the Q4 power rows and verify every relationship the panel and its caption assert.
 
-    Returns one dict per metric, in METRICS order, plus the two ratios the panel prints.
-    Nothing is drawn until these hold, so a label cannot outlive the data it describes.
+    Returns one dict per metric, in METRICS order, plus the two ratios the CAPTION prints. The
+    ratios are no longer drawn, and they are checked here anyway: the panel's geometry is the
+    reader's evidence for them, so if the files stopped supporting them the geometry would be
+    making a claim the caption could no longer keep.
     """
     for path in (SRC, STRAT_SRC):
         if not os.path.exists(path):
@@ -135,9 +171,10 @@ def _numbers():
                      "power": float(r["achieved_power"]),
                      "sufficient": bool(r["data_sufficient"])})
 
-        # The x label calls these the highest response-divergence quartile, and the gap ratio the
-        # panel prints is true only inside it: MoA-nDCG's mean gap is negative in Q1, Q2, Q3 and
-        # over all queries. So the words are checked against the file that defines the strata.
+        # The x label calls these the highest response-divergence quartile, and all four drawn
+        # numbers are that stratum's: read as study totals they would be wrong, and the caption's
+        # gap ratio would be sign-reversed. So the words are checked against the file that
+        # defines the strata.
         sub_st = st[st["metric"] == key]
         top = str(sub_st.loc[sub_st["divergence_median"].idxmax(), "stratum"])
         assert top == STRATUM, (
@@ -150,12 +187,21 @@ def _numbers():
 
     # The stored n80 must be the paired-test sample size for THIS gap and THIS s.d. A stale
     # column would otherwise be drawn as if it were current.
-    z = norm.ppf(1.0 - ALPHA / 2.0) + norm.ppf(TARGET_POWER)
+    zc = norm.ppf(1.0 - ALPHA / 2.0)
+    z = zc + norm.ppf(TARGET_POWER)
     for r in rows:
         want = (z * r["sd"] / abs(r["gap"])) ** 2
         assert abs(want - r["n80"]) / r["n80"] < 5e-3, (
             f"{r['key']}: n_for_80pct_power = {r['n80']:.1f} in the file, but gap "
             f"{r['gap']:.6f} and s.d. {r['sd']:.6f} imply {want:.1f}. The column is stale.")
+        # achieved_power is not drawn, but data_sufficient is, in the shape of the arrow's
+        # direction and of the reading the docstring gives it, and this is the number behind
+        # that flag. Two-sided, both tails, the convention ALPHA is set under.
+        d = abs(r["gap"]) / (r["sd"] / np.sqrt(r["n"]))
+        want_p = float(norm.cdf(d - zc) + norm.cdf(-d - zc))
+        assert abs(want_p - r["power"]) < 1e-3, (
+            f"{r['key']}: achieved_power = {r['power']:.4f} in the file, but n {r['n']}, gap "
+            f"{r['gap']:.6f} and s.d. {r['sd']:.6f} imply {want_p:.4f}. The column is stale.")
 
     cov, moa = rows
     # The direction each arrow points, and the reading the docstring gives it.
@@ -167,17 +213,36 @@ def _numbers():
         "the panel says the coverage null is a measurement and the MoA-nDCG null is not; "
         "power_analysis.csv marks data_sufficient "
         f"{cov['sufficient']} / {moa['sufficient']}")
+    # The panel asks the reader to compare the LENGTH of two dumbbells, which is only a
+    # comparison of cost if the two start from about the same place. They do, 191 queries and
+    # the 143 of them MoA-nDCG is defined on, and the two open markers land 0.11 in apart on the
+    # drawn axis. If the two studies ever diverged in size, length would stop being the thing to
+    # read and the panel would need to say so.
+    start_ratio = max(cov["n"], moa["n"]) / min(cov["n"], moa["n"])
+    assert start_ratio < 1.5, (
+        f"the two dumbbells are drawn to be compared by length, but the studies now differ "
+        f"{start_ratio:.2f}-fold in size ({cov['n']} vs {moa['n']}), so the two lengths are no "
+        f"longer a comparison of required n alone")
+
+    # The two lengths the reader is asked to compare, in the units the docstring quotes them in:
+    # on a log axis a dumbbell is log10 of its own n ratio. Quoted geometry is checked like a
+    # drawn number, because it is the sentence the panel was allowed to stop printing.
+    dec = [abs(np.log10(r["n80"] / r["n"])) for r in rows]
+    assert 0.58 <= dec[0] <= 0.68 and 2.10 <= dec[1] <= 2.25, (
+        f"the docstring reads the two dumbbells as 0.6 and 2.2 decades long, a factor of 3.5; "
+        f"they are {dec[0]:.2f} and {dec[1]:.2f} decades, a factor of {dec[1] / dec[0]:.1f}")
 
     sd_ratio = moa["sd"] / cov["sd"]
     gap_ratio = cov["gap"] / moa["gap"]
-    # The two printed ratios, at the precision they are printed to.
-    assert 11.5 <= sd_ratio < 12.5, f"the panel prints 's.d. 12x larger'; it is {sd_ratio:.2f}x"
-    assert 1.75 <= gap_ratio < 1.85, f"the panel prints 'gap 1.8x smaller'; it is {gap_ratio:.2f}x"
-    # The title: noise, not gap size, is what sets the required n. n80 scales as (sd/gap)^2, so
+    # The two ratios the CAPTION prints, at the precision it prints them to. The panel draws
+    # neither; it draws the geometry that is the evidence for both.
+    assert 11.5 <= sd_ratio < 12.5, f"the caption says 's.d. 12x larger'; it is {sd_ratio:.2f}x"
+    assert 1.75 <= gap_ratio < 1.85, f"the caption says 'gap 1.8x smaller'; it is {gap_ratio:.2f}x"
+    # The caption: noise, not gap size, is what sets the required n. n80 scales as (sd/gap)^2, so
     # the two contributions are sd_ratio^2 and gap_ratio^2, and the first must dominate.
     assert sd_ratio ** 2 > 10.0 * gap_ratio ** 2, (
-        f"the title claims noise dominates the cost, but the variance ratio {sd_ratio ** 2:.0f} "
-        f"does not dominate the squared gap ratio {gap_ratio ** 2:.1f}")
+        f"the caption claims noise dominates the cost, but the variance ratio "
+        f"{sd_ratio ** 2:.0f} does not dominate the squared gap ratio {gap_ratio ** 2:.1f}")
     # The 458-fold the docstring quotes, so the prose cannot outlive the file either.
     cost_ratio = moa["n80"] / cov["n80"]
     assert 457.5 <= cost_ratio < 459.5, (
@@ -197,22 +262,24 @@ def _numbers():
 def _bands(ax):
     """Split the axes height into balanced bands, in points, and return the two row centres.
 
-    The panel holds three text lines (two number rows and the noise note) and two marker rows in
-    0.57 in. Placing them in data units left one seam at 0.5 pt and another at 4 pt, which looks
-    like a mistake rather than a layout. The height is therefore divided at draw time: the ink is
-    fixed, the six seams share what is left equally, and the panel stays balanced if the assemble
-    ledger ever changes the row height. Nothing here shrinks type; if the height ever falls far
-    enough for a seam to vanish, the assertion below says so instead of silently overlapping.
+    The panel holds two number rows and two marker rows in 0.63 in. Placing them in data units
+    left one seam at 0.5 pt and another at 4 pt, which looks like a mistake rather than a layout.
+    The height is therefore divided at draw time: the ink is fixed, the five seams share what is
+    left equally, and the panel stays balanced if the assemble ledger ever changes the row height.
+    This is where the 0.06 in the deleted conclusion phrase returned to the row is spent, together
+    with the line the third text row used to take: the seams went from about 1.0 pt to about
+    3.5 pt. Nothing here shrinks type; if the height ever falls far enough for a seam to vanish,
+    the assertion below says so instead of silently overlapping.
     """
     fig = ax.get_figure()
     h_pt = ax.get_position().height * fig.get_size_inches()[1] * 72.0
     r_pt = R_PT                                    # marker radius plus half its edge
-    ink = 3 * PT_ANNOT + 4 * r_pt                  # three text lines, two marker rows
-    gap = (h_pt - ink) / 6.0                       # top margin, four seams, bottom margin
+    ink = 2 * PT_ANNOT + 4 * r_pt                  # two number rows, two marker rows
+    gap = (h_pt - ink) / 5.0                       # top margin, three seams, bottom margin
     assert gap > 0.6, (
-        f"panel k has {h_pt:.1f} pt of axes height and needs {ink + 6 * 0.6:.1f} pt to seat two "
-        f"dumbbells, four number labels and the noise note. Cut the note into the caption; do "
-        f"not lower the size.")
+        f"panel k has {h_pt:.1f} pt of axes height and needs {ink + 5 * 0.6:.1f} pt to seat two "
+        f"dumbbells and their four number labels. Cut a label into the caption; do not lower "
+        f"the size.")
     top = h_pt - gap - PT_ANNOT - gap - r_pt       # centre of the upper marker row
     bottom = top - 2 * r_pt - 2 * gap - PT_ANNOT   # centre of the lower marker row
     return top / h_pt, bottom / h_pt, r_pt + gap
@@ -220,7 +287,7 @@ def _bands(ax):
 
 def draw_3k(ax):
     """Queries needed for 80% power against queries analysed, one dumbbell per evaluator."""
-    rows, sd_ratio, gap_ratio = _numbers()
+    rows, _sd_ratio, _gap_ratio = _numbers()
 
     ax.set_xscale("log")
     ax.set_xlim(*XLIM)
@@ -245,16 +312,6 @@ def draw_3k(ax):
             ax.annotate(text, xy=(value, y), xytext=(0, off), textcoords="offset points",
                         ha="center", va="bottom", fontsize=PT_ANNOT, color=TEXT)
 
-    # The whole story, once, on the row it belongs to. The comparator is named rather than left
-    # to the reader: with two rows and the note under the lower one it would probably be guessed
-    # right, but "smaller" and "larger" without a "than what" is the kind of half-claim this
-    # figure exists to stop. n80 goes as (s.d. / gap)^2, so the 12 is worth 146-fold and the
-    # 1.8 is worth 3.1, which is why the title names noise and not the gap.
-    moa = rows[1]
-    ax.annotate(f"vs coverage: gap {gap_ratio:.1f}x smaller, s.d. {sd_ratio:.0f}x larger",
-                xy=(moa["n"], y_bot), xytext=(0, -off), textcoords="offset points",
-                ha="left", va="top", fontsize=PT_ANNOT, color=SUBTLE)
-
     bare_axes(ax, keep=("bottom",))
     ax.set_xticks(list(XTICKS))
     # Plain integers, not 10^n: a mathtext exponent prints at 0.7x nominal and this figure's
@@ -269,23 +326,23 @@ def draw_3k(ax):
     # pad 1.6, not the house 3.5: the two-line x label needs the 2 pt to stay inside the panel
     # box that fig3_assemble gives this row.
     ax.tick_params(axis="x", labelsize=PT_TICK, pad=1.6)
-    # Line 1 names the stratum, in panel j's words. It is not decoration: the gap ratio on line
-    # 3 of the panel holds inside this quartile and nowhere else, so a reader who takes the
-    # numbers for the whole study is reading a sign-reversed claim. Line 2 is the fill key,
-    # written from TARGET_POWER so the percentage cannot drift from the formula behind it.
+    # Line 1 names the quantity and the stratum, in panel j's words. The stratum is not
+    # decoration: all four drawn numbers are Q4's, and taken for study totals they would be
+    # wrong. Line 2 is the fill key, written from TARGET_POWER so the percentage cannot drift
+    # from the formula that placed the filled markers.
     ax.set_xlabel(f"queries, highest response-divergence quartile (log scale)\n"
                   f"open, analysed; filled, needed for {TARGET_POWER:.0%} power",
                   fontsize=PT_SMALL, color=SUBTLE, linespacing=1.15, labelpad=1.5)
-    title(ax, "Noise, not gap size, sets the cost")
     return ax
 
 
 if __name__ == "__main__":
     # Reproduce the printed geometry exactly: the panel box fig3_assemble gives k is 3.70 in
-    # wide and 0.24 + 0.95 in tall (letter block plus row), with a 0.80 in left pad and a
-    # 0.38 in bottom pad, so the axes is 2.80 x 0.57 in and the preview is what the composite
-    # prints, this panel's one phrase included.
-    BOX_W, BOX_H, LEFT, BOTTOM, AX_W, AX_H = 3.70, 1.19, 0.80, 0.38, 2.80, 0.57
+    # wide and 0.17 + 1.01 in tall (letter block plus row), with a 0.80 in left pad and a
+    # 0.38 in bottom pad, so the axes is 2.80 x 0.63 in and the preview is what the composite
+    # prints. The row is 0.06 in taller than before this pass, and the letter block 0.07 in
+    # shorter, because no panel states a conclusion over itself any more.
+    BOX_W, BOX_H, LEFT, BOTTOM, AX_W, AX_H = 3.70, 1.18, 0.80, 0.38, 2.80, 0.63
     fig = plt.figure(figsize=(BOX_W, BOX_H))
     ax = fig.add_axes([LEFT / BOX_W, BOTTOM / BOX_H, AX_W / BOX_W, AX_H / BOX_H])
     draw_3k(ax)

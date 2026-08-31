@@ -151,6 +151,15 @@ def apply_style(sizes=(8, 7, 6)):
         "figure.facecolor": "white", "savefig.facecolor": "white",
         "savefig.bbox": "tight", "savefig.pad_inches": 0.01,
         "pdf.fonttype": 42, "ps.fonttype": 42, "svg.fonttype": "none",
+        # Mathtext in the TEXT face, not matplotlib's DejaVu default. Every rho, alpha,
+        # italic P and minus sign in this deck is mathtext, 55 strings in all, and they
+        # were being set in DejaVu Sans beside Arial digits. The minus was the worst of
+        # it: a mathtext "$-$" measures 6.48 pt at 7.2 pt nominal against 4.32 pt for a
+        # real U+2212, i.e. 90 per cent of this face's em dash, in a project whose house
+        # rule is that em dashes never appear.
+        "mathtext.fontset": "custom", "mathtext.rm": "sans",
+        "mathtext.it": "sans:italic", "mathtext.bf": "sans:bold",
+        "mathtext.default": "it",
     })
 
 

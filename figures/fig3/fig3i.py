@@ -1,16 +1,16 @@
 """PopRetrieve Figure 3 panel 3i: per query, the population-level score against the scalar it
 must beat, read as a side of the equality line.
 
-WHAT THIS PANEL CLAIMS
-----------------------
+WHAT THIS PANEL SHOWS
+---------------------
 Panel h reports the Class-C aggregate: energy retrieval reaches a median rho of +0.276 against
 the matched functional oracle, the query-dependent response-magnitude scalar reaches +0.232, and
 partialling that channel out leaves energy +0.097. This panel shows the same 103 queries one at a
-time, and its claim is a COUNT, drawn in the phrase over the panel and computed at draw time:
-energy scores higher than the scalar on 62 of 103 queries. That is a 60/40 split, not a sweep,
-and the split is the reason the paper does not read h as a clean win for distributional
-retrieval. A reader who takes "energy beats the scalar" away from h without this panel has taken
-a stronger claim than the data carry.
+time. What a reader takes from it is a SPLIT: the cloud straddles y = x, and the two half-plane
+counts, 62 against 41, are a 60/40 division rather than a sweep. That split is the reason the
+paper does not read h as a clean win for distributional retrieval. A reader who takes "energy
+beats the scalar" away from h without this panel has taken a stronger claim than the data carry.
+Saying so is the caption's job; the panel draws the split and the two counts, nothing more.
 
 Source data: figures/source_data/fig3hi_class_c_functional.csv, 103 leave-one-drug-out queries
 (SciPlex3 x GDSC2, 10 uM, 34-35 drugs per cell line).
@@ -21,6 +21,32 @@ The oracle both are scored against is drug-drug functional similarity from GDSC2
 profiles, named in full on panel h and in the row banner; these axis labels name only the score.
 Note the source table also carries magnitude_only_rho, a DIFFERENT and query-independent scalar,
 which is why the y label keeps the word "match".
+
+THE 2026-08-31 PASS: THE SENTENCE IS GONE, THE COUNT IS NOT
+-----------------------------------------------------------
+This panel used to set "Energy better on 62 of 103 queries" over itself through fig3_style.title,
+which has been deleted; thirteen such phrases on one page were thirteen claims competing for the
+reader. The count itself is the panel's evidence, not its conclusion, so it stays, rendered as a
+bare statistic under the half-plane label it belongs to: "energy better / 62/103" on the side
+where y < x, "scalar better / 41/103" on the side where y > x. Both numbers and the denominator
+are computed from the table at draw time and are asserted to partition the queries, so no label
+can outlive the data under it. Losing the sentence loses no information a reader was using: the
+sentence named one side's count and left the reader to subtract for the other, whereas the two
+counts sit in the two washes and read as a split without arithmetic.
+
+Removing the phrase band returned height to the row, so the axes grew from 1.98 x 0.82 in to
+1.98 x 0.90 in. The height went to the marks and not to new text: markers are 3.4 pt rather than
+3.0, which is what makes circle, square and triangle separable in print at 183 mm, and the
+equality line carries a little more weight than the rho = 0 guides than it did before.
+
+Two things the trim left unguarded, both fixed on audit. The counts and the direction hints were
+the only new text on the panel and nothing measured whether they fit: "energy" set at PT_ANNOT is
+0.320 in wide and the strip was 0.32 in, so the label ran edge to edge, and a longer word or a
+font change would have pushed it into the cloud or off the frame while still passing the
+assembler's floor gate. The strip is now 0.35 in and the fit is asserted from measured extents.
+And "41/103" sat within 0.02 in of the height of the "0.0" y tick label, close enough to read as
+an annotation on the y scale rather than as the left half-plane's score; the left label block now
+sits at 0.80 of the y range, on its own row between the 0.0 and 0.5 ticks.
 
 PROVENANCE, AND THE CORRECTION THAT MUST NOT BE LOST
 ----------------------------------------------------
@@ -42,32 +68,40 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    blue/orange half-plane idiom to the third family; the tint is DERIVED from the frozen EXT hex
    by the same white blend that produces the frozen POP_WASH from the frozen POP hex, and the
    blend is asserted against POP_WASH below so the two washes cannot drift apart.
-2. THE AXES ARE NOT EQUAL-ASPECT. The printed axes are 1.98 x 0.82 in, so an equal-aspect square
-   would waste more than half the width or go portrait, and the previous version's set_aspect
-   plus set_anchor left the panel floating inside its box. Anisotropic scaling distorts DISTANCE
-   from the equality line but preserves SIDE of it exactly, and the side is the whole claim, so
-   the distortion costs the panel nothing it uses. The line is still y = x in data coordinates;
-   it simply prints at about 32 degrees rather than 45.
+2. THE AXES ARE NOT EQUAL-ASPECT. The printed axes are 1.98 x 0.90 in, so an equal-aspect square
+   would waste more than half the width or go portrait, and an earlier version's set_aspect plus
+   set_anchor left the panel floating inside its box. Anisotropic scaling distorts DISTANCE from
+   the equality line but preserves SIDE of it exactly, and the side is the whole claim, so the
+   distortion costs the panel nothing it uses. The line is still y = x in data coordinates; it
+   simply prints at about 36 degrees rather than 45.
 3. THE TWO OUTER STRIPS HOLD NO DATA. Both half-planes need a label, and there is no data-free
-   region inside a 103-point cloud that spans both, so the x limits reserve 0.32 in on each side.
-   The equality line leaves the view through the top and the bottom of the frame before either
-   strip begins, so every visible point in the left strip satisfies y > x and every point in the
-   right strip y < x, and each label sits in the half-plane it names. Three assertions hold that
-   up: no query falls in a strip, the line clears both strips, and each label coordinate is on
-   the side its own text names. Because the strips push the x limits out to about +/- 1.09, past
-   the range a Spearman rho can take, the bottom spine is cut back to the data the way panels e,
-   h and l cut theirs back, so the strips read as margin and not as a scale.
-4. THE WILCOXON P AND THE CELL-LINE KEY ARE CUT INTO THE CAPTION. The paired Wilcoxon on
-   energy minus magnitude-match gives p = 0.073, and it is ANTICONSERVATIVE: queries within a
-   cell line share a candidate library, so they are not independent. It is computed here and
-   returned and printed, never drawn, because at 1.98 x 0.82 in it displaces the count, which is
-   the panel's actual claim. The caption must call it NOMINAL. The caption must also carry the
-   marker key (circle A549, square K562, triangle MCF7); shapes without an on-panel key still
-   show that the three lines interleave, and fig3_style forbids spending hue on them.
+   region inside a 103-point cloud that spans both, so the x limits reserve 0.35 in on each side
+   and leave the cloud 1.28 of the 1.98 in. The equality line leaves the view through the top and
+   the bottom of the frame before either strip begins, so every visible point in the left strip
+   satisfies y > x and every point in the right strip y < x, and each label sits in the half-plane
+   it names. Five assertions hold that up: no query falls in a strip, the line clears both strips,
+   each label coordinate is on the side its own text names, the count under each label is that
+   side's count, and every drawn label clears its own strip on all four edges by a MEASURED
+   margin. Because the strips push the x limits out to about +/- 1.14, past the range a Spearman
+   rho can take, the bottom spine is cut back to the data the way panels e, h and l cut theirs
+   back, so the strips read as margin and not as a scale; the drawn ticks are asserted to lie
+   inside that cut-back span.
+4. THE WILCOXON P IS CUT INTO THE CAPTION, and the cut is now a choice rather than a space
+   constraint. The paired Wilcoxon on energy minus magnitude-match gives p = 0.073, and it is
+   ANTICONSERVATIVE: queries within a cell line share a candidate library, so they are not
+   independent. It is computed here, returned and printed, never drawn. A p set beside the marks
+   is read as the panel's result, and this one cannot bear that weight, whereas a caption can
+   carry the word NOMINAL next to it in the same breath. The caption must do so. It must also
+   carry the marker key (circle A549, square K562, triangle MCF7); shapes without an on-panel key
+   still show that the three lines interleave, and fig3_style forbids spending hue on them.
 5. THE PANEL SHOWS NO PER-CELL-LINE COUNT, though the honest unit of replication is the three
    lines and they do not agree: energy leads on 22 of 34 A549, 15 of 34 K562 (a loss) and 25 of
-   35 MCF7 queries. Three more counts do not fit beside the two half-plane labels. They are
-   returned by draw_3i for the caption, and the shapes let a reader see that no line is separate.
+   35 MCF7 queries. Three more counts beside the two half-plane counts would turn the strips back
+   into a text column. They are returned by draw_3i for the caption, and the shapes let a reader
+   see that no line is separate.
+6. BOTH COUNTS CARRY THE DENOMINATOR. "62/103" and "41/103" repeat n, which one "n = 103"
+   elsewhere on the panel would not. The repetition buys each label the property of being true on
+   its own, in a panel whose whole point is that the two numbers are close.
 
 Run standalone: python3 fig3i.py
 """
@@ -78,25 +112,42 @@ import sys
 
 import numpy as np
 import pandas as pd
+from matplotlib.backends.backend_agg import RendererAgg
 from scipy import stats
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig3_style import (CELL_MARKER, EXT, FAINT, POP, POP_WASH, PT_ANNOT,  # noqa: E402
-                        PT_TICK, REPO, SHARED, SUBTLE, TEXT, bare_axes, title)
+                        PT_SMALL, PT_TICK, REPO, SHARED, SUBTLE, TEXT, bare_axes)
 
 SRC = os.path.join(REPO, "figures", "source_data", "fig3hi_class_c_functional.csv")
 
 XCOL, YCOL = "energy_rho", "magnitude_match_rho"
 
-# Inches of x reserved on each side for one half-plane label. 0.32 in holds "energy" set on one
-# line at PT_ANNOT with a hair of air; the label is two lines, so this is a width, not a height.
-STRIP_IN = 0.32
+# Inches of x reserved on each side for one half-plane label. The label is stacked, so this is a
+# width, not a height, and the widest thing it has to hold is "energy" set on one line at
+# PT_ANNOT, which measures 0.320 in; the count under it at PT_SMALL is 0.280 in. The strip was
+# 0.32 in, which held that label with 0.000 in to spare on either side: the word ran from the
+# padded edge of the data to the frame, and nothing checked it. 0.35 in buys 0.015 in of air on
+# each side, which is what makes the measured fit assertion below a gate rather than a coin flip.
+# It costs 0.06 in of the 1.98 in axes, taken from a cloud that is nowhere near density-limited.
+STRIP_IN = 0.35
+# Minimum clear space, in points, between a strip label and every edge of its own strip. Stated
+# in points because it is space around type; asserted from measured extents, not estimated.
+LABEL_AIR_PT = 0.8
 # Data-unit air between the outermost query and the strip it must not enter, and between the
 # outermost query and the top or bottom frame.
 PAD_X, PAD_Y = 0.035, 0.050
+# Where each half-plane label sits inside its strip, as a fraction of the y range, and how far
+# below it the count is set, in points. The offset is in points because it separates two pieces of
+# type; the label heights that set it are in points too. The high fraction was 0.72, which put
+# "41/103" within 0.02 in of the height of the "0.0" y tick label and 0.10 in to its right, so the
+# count read as an annotation on the y scale at rho = 0 rather than as the left half-plane's
+# score. 0.80 lifts it onto its own row, between the 0.0 and 0.5 tick rows.
+LY_FRAC_LOW, LY_FRAC_HIGH = 0.30, 0.80
+COUNT_DROP_PT = 13.0
 
-MS = 3.0          # marker diameter in points; 103 queries inside about 1.28 x 0.75 in
-LW_DIAG = 0.9     # the equality line, the datum this panel is read against
+MS = 3.4          # marker diameter in points; 103 queries inside about 1.28 x 0.90 in
+LW_DIAG = 1.0     # the equality line, the datum this panel is read against
 LW_ZERO = 0.6     # rho = 0 guides, deliberately fainter than the equality line
 
 
@@ -157,8 +208,8 @@ def draw_3i(ax):
     if energy_wins + scalar_wins != n:
         raise ValueError(
             f"{n - energy_wins - scalar_wins} of {n} queries score EXACTLY equal on {XCOL} and "
-            f"{YCOL}. The two half-plane labels no longer partition the queries and the count in "
-            f"the panel phrase would be a third of a three-way split.")
+            f"{YCOL}. The two half-plane labels no longer partition the queries, and the two "
+            f"counts drawn under them would not be a two-way split.")
     p_wilcoxon = float(stats.wilcoxon(x, y).pvalue)
 
     # ---- the view. Solve the x limits so each label strip is STRIP_IN wide on the page.
@@ -179,32 +230,46 @@ def draw_3i(ax):
 
     # The equality line must leave the frame through the top and the bottom, not through a label
     # strip, or the strip would hold both half-planes and its single label would be false over
-    # part of itself.
+    # part of itself. It is also what lets the count under a label be set anywhere in that strip:
+    # once the line clears the strip, every y in view is on the named side.
     assert inner_lo < YLO and YHI < inner_hi, (
         f"the equality line enters a label strip: y runs [{YLO:.3f}, {YHI:.3f}] against an inner "
         f"x of [{inner_lo:.3f}, {inner_hi:.3f}]. One half-plane label would then sit over a strip "
         f"containing both half-planes. Widen STRIP_IN or move the labels inside the data.")
 
-    # ---- the two half-planes and their labels, from ONE table, so the wash and the text over it
-    # cannot be swapped independently. side is the sign of y - x: negative is where energy scores
-    # higher, and it is the side the count in the phrase over the panel refers to. Each label sits
-    # in the strip on its own side, set high on the left and low on the right so the pair leans
-    # the way the line does. Ink, not colour: fig3_style allows a label on a wash, not coloured
-    # text on one. The wash is faint on purpose: the equality line and the two labels do the
-    # separating, and a wash is never the only thing that does.
+    # ---- the two half-planes, their direction hints and their counts, from ONE table, so the
+    # wash, the two words over it and the number under those words cannot be swapped
+    # independently. side is the sign of y - x: negative is where energy scores higher. Each label
+    # sits in the strip on its own side, high on the left and low on the right so neither lands on
+    # the line's visual path. Ink, not colour: fig3_style allows a label on a wash, not coloured
+    # text on one. The wash is faint on purpose: the equality line, the two hints and the two
+    # counts do the separating, and a wash is never the only thing that does.
     xs = np.linspace(XLO, XHI, 512)
     edge = np.clip(xs, YLO, YHI)
-    for side, wash, label, lx, ly_frac in (
-            (-1, POP_TINT, "energy\nbetter", 0.5 * (inner_hi + XHI), 0.26),
-            (+1, EXT_TINT, "scalar\nbetter", 0.5 * (XLO + inner_lo), 0.74)):
+    drawn = []
+    for side, wash, hint, wins, lx, ly_frac in (
+            (-1, POP_TINT, "energy\nbetter", energy_wins,
+             0.5 * (inner_hi + XHI), LY_FRAC_LOW),
+            (+1, EXT_TINT, "scalar\nbetter", scalar_wins,
+             0.5 * (XLO + inner_lo), LY_FRAC_HIGH)):
         lo_edge, hi_edge = (YLO, edge) if side < 0 else (edge, YHI)
         ax.fill_between(xs, lo_edge, hi_edge, color=wash, lw=0, zorder=0)
         ly = YLO + ly_frac * (YHI - YLO)
         assert np.sign(ly - lx) == side, (
-            f"the {label.replace(chr(10), ' ')!r} label sits at ({lx:.2f}, {ly:.2f}), which is on "
+            f"the {hint.replace(chr(10), ' ')!r} label sits at ({lx:.2f}, {ly:.2f}), which is on "
             f"the wrong side of y = x for the half-plane it names.")
-        ax.text(lx, ly, label, ha="center", va="center", fontsize=PT_ANNOT, color=TEXT,
-                linespacing=1.15, zorder=4)
+        assert wins == int((np.sign(y - x) == side).sum()), (
+            f"the count drawn under {hint.replace(chr(10), ' ')!r} is not the number of queries "
+            f"on that side of y = x; the label would contradict the cloud above it.")
+        t_hint = ax.text(lx, ly, hint, ha="center", va="center", fontsize=PT_ANNOT, color=TEXT,
+                         linespacing=1.15, zorder=4)
+        # The count is a bare statistic, not a sentence: the two words say which way, this says
+        # how many out of how many. Offset in points so the gap under the hint is type-set rather
+        # than data-set, and so it does not move when the y range does.
+        t_count = ax.annotate(f"{wins}/{n}", xy=(lx, ly), xycoords="data",
+                              xytext=(0.0, -COUNT_DROP_PT), textcoords="offset points",
+                              ha="center", va="center", fontsize=PT_SMALL, color=TEXT, zorder=4)
+        drawn.append((side, (t_hint, t_count)))
 
     # rho = 0 on either method. Drawn only across the data, so the strips stay legibly empty, and
     # fainter than the equality line because zero is context here and the equality line is the
@@ -213,7 +278,8 @@ def draw_3i(ax):
     ax.plot([inner_lo, inner_hi], [0.0, 0.0], color=FAINT, lw=LW_ZERO, zorder=1)
     ax.plot([0.0, 0.0], [YLO, YHI], color=FAINT, lw=LW_ZERO, zorder=1)
 
-    # ---- the equality line, spanning the full height of the frame.
+    # ---- the equality line, spanning the full height of the frame. It is the only thing on the
+    # panel a point is read against, so it outweighs the zero guides.
     ax.plot([YLO, YHI], [YLO, YHI], color=SUBTLE, lw=LW_DIAG, zorder=2, solid_capstyle="butt")
 
     # ---- the queries. Cell line is a SHAPE in SHARED grey: both axes are methods, so blue here
@@ -232,19 +298,50 @@ def draw_3i(ax):
     ax.spines["bottom"].set_bounds(inner_lo, inner_hi)
     ax.set_xticks([-0.5, 0.0, 0.5])
     ax.set_yticks([-0.5, 0.0, 0.5])
+    # The tick positions are the only literals on this panel, and the bottom spine they sit on is
+    # cut back to the data, so a narrower cloud would strand a tick past the end of its own scale.
+    assert all(inner_lo <= t <= inner_hi for t in ax.get_xticks()), (
+        f"an x tick falls outside the cut-back bottom spine [{inner_lo:.3f}, {inner_hi:.3f}]; it "
+        f"would print past the end of the scale it belongs to.")
+    assert all(YLO <= t <= YHI for t in ax.get_yticks()), (
+        f"a y tick falls outside the drawn y range [{YLO:.3f}, {YHI:.3f}].")
+
     ax.set_xlabel(r"energy retrieval, $\rho$", fontsize=PT_ANNOT)
     ax.set_ylabel("response-magnitude\nmatch (a scalar), " r"$\rho$", fontsize=PT_ANNOT,
                   linespacing=1.15)
 
-    # The count IS the panel. Computed here so the phrase cannot outlive the table under it.
-    title(ax, f"Energy better on {energy_wins} of {n} queries")
+    # ---- the four strip labels, MEASURED. Each strip is sized in inches because it holds type,
+    # so whether the type fits is a fact about the font rather than about the data, and nothing
+    # else would catch an overflow: a label that outgrows its strip runs into the cloud on one
+    # side or off the frame on the other, and both still pass the assembler's floor gate and the
+    # preview's text-overlap gate. The renderer is built here, as in fig3a and fig3d, rather than
+    # taken from fig.canvas, so the measurement neither forces a draw of a half-assembled figure
+    # nor assumes which backend fig3_assemble is building under. It runs after the limits are set
+    # because the extents are taken through transData.
+    fig = ax.get_figure()
+    rend = RendererAgg(int(fig.get_figwidth() * fig.dpi), int(fig.get_figheight() * fig.dpi),
+                       fig.dpi)
+    air_in = LABEL_AIR_PT / 72.0
+    for side, artists in drawn:
+        strip_lo, strip_hi = (XLO, inner_lo) if side > 0 else (inner_hi, XHI)
+        (px0, py0), (px1, py1) = ax.transData.transform(
+            [(strip_lo, YLO), (strip_hi, YHI)])
+        for art in artists:
+            e = art.get_window_extent(renderer=rend)
+            slack = min(e.x0 - px0, px1 - e.x1, e.y0 - py0, py1 - e.y1) / fig.dpi
+            assert slack >= air_in, (
+                f"the drawn label {str(art.get_text()).replace(chr(10), ' ')!r} clears its "
+                f"{STRIP_IN} in label strip by only {slack:.4f} in, under the {LABEL_AIR_PT} pt "
+                f"({air_in:.4f} in) this panel requires. It would print against the cloud or "
+                f"against the frame. Widen STRIP_IN, or move the label with LY_FRAC_LOW / "
+                f"LY_FRAC_HIGH, or shorten the wording; do not lower the size.")
 
     per_line = {ln: (int((s[XCOL] > s[YCOL]).sum()), int(len(s)))
                 for ln, s in d.groupby("cell_line")}
     assert (sum(w for w, _ in per_line.values()) == energy_wins
             and sum(k for _, k in per_line.values()) == n), (
-        f"the per-cell-line counts {per_line} do not add up to the {energy_wins} of {n} drawn in "
-        f"the phrase over the panel; the caption would contradict the figure.")
+        f"the per-cell-line counts {per_line} do not add up to the {energy_wins}/{n} drawn in the "
+        f"blue half-plane; the caption would contradict the figure.")
     return {"energy_wins": energy_wins, "scalar_wins": scalar_wins, "n_queries": n,
             "wilcoxon_p": p_wilcoxon, "per_cell_line": per_line}
 
@@ -259,11 +356,11 @@ if __name__ == "__main__":
     from fig3_style import PT_TITLE
 
     # The printed rect of panel i, copied from fig3_assemble's ledger (row 4, box 2.80 in wide,
-    # pads 0.72 / 0.10 / 0.38, row height 1.20). The preview duplicates it so this module never
-    # imports the assembler, which pulls in every other panel.
+    # pads 0.72 / 0.10 / 0.38, row height 1.28, letter block 0.17). The preview duplicates it so
+    # this module never imports the assembler, which pulls in every other panel.
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
-    fig = plt.figure(figsize=(2.80, 1.44))
-    ax = fig.add_axes([0.72 / 2.80, 0.38 / 1.44, 1.98 / 2.80, 0.82 / 1.44])
+    fig = plt.figure(figsize=(2.80, 1.45))
+    ax = fig.add_axes([0.72 / 2.80, 0.38 / 1.45, 1.98 / 2.80, 0.90 / 1.45])
     st = draw_3i(ax)
     out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "3i.png")
     fig.savefig(out, dpi=400)

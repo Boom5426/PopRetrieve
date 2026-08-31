@@ -86,7 +86,7 @@ MEAN_WASH = "#FBF0E4"
 
 # ---------------------------------------------------------------------------------- type
 PT_LETTER = 9.5
-PT_TITLE = 8.5              # the one phrase a panel states over itself
+PT_TITLE = 8.5              # RETIRED with title(); kept only so the gate can name it
 PT_ANNOT = 7.2
 PT_TICK = 6.8
 PT_EQ = 9.3                 # any label containing mathtext; 6.5 / 0.7 = 9.286
@@ -111,15 +111,26 @@ CLASS_NAME = {"A": "objective-aligned", "B": "task-proximal biological",
               "C": "external functional"}
 
 
-def title(ax, text, x=0.0, y=1.0, ha="left", va="bottom", color=TEXT, weight="bold", **kw):
-    """The single phrase a panel states over itself. Everything longer belongs in the caption.
-
-    Drawn ink, not an rc title: figstyle.strip_titles clears rc titles from every composite and
-    this phrase survives that on purpose. It must be literally true of what the panel draws, at
-    most about seven words, and never a restatement of an axis label.
-    """
-    return ax.text(x, y, text, transform=ax.transAxes, fontsize=PT_TITLE, ha=ha, va=va,
-                   color=color, fontweight=weight, **kw)
+# THERE IS NO title() HELPER, AND THAT IS THE POINT.
+#
+# The 2026-08-31 cut of this figure gave every panel one bold phrase stating its conclusion:
+# "Only the evaluator changes; the advantage disappears", "Gate does not enrich", "Noise, not gap
+# size, sets the cost", and ten more. Thirteen conclusion sentences on one page is thirteen claims
+# competing for the reader's attention, and it is not what a Nature-family main figure does: the
+# figure carries visual evidence and the legend carries the argument. Every one of those phrases
+# now opens its panel's caption entry, where it costs no space and can be qualified properly.
+#
+# So the helper is deleted rather than deprecated, and fig3_assemble._assert_no_titles enforces
+# what its absence intends: no panel may draw text above PT_ANNOT. Only four kinds of text are
+# allowed on a panel now.
+#
+#   1. the panel letter          drawn by fig3_assemble, not by the panel
+#   2. axis and group names      what the quantity is, and what the rows or groups are
+#   3. necessary statistics      median, rho, P, n, and the values being compared
+#   4. a very short direction    "mean better" / "population better", two or three words
+#
+# Anything else belongs in the caption. When a panel feels like it needs a sentence, that is the
+# signal that the drawing is not carrying its own weight yet.
 
 
 def sign_field(ax, vertical=True, at=0.0, pop_side="right", alpha=1.0, zorder=0):
