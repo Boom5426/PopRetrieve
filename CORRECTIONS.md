@@ -1780,3 +1780,71 @@ variance: the MoA-nDCG gap has twelve times the standard deviation.
 `figures/edfigs/ed_panels.draw_ed2a` and `draw_ed2b` remain in the repository. They are now the only
 code that reads `results/exp17_true_divergence_subset/power_analysis.csv`, so they are how that
 table is regenerated and checked, and they should not be deleted.
+
+---
+
+## R52. Figure 4 moved to the deck's 6.5 pt floor, and lost four panels to Supplementary Note 4
+
+Figure 4 was the last main figure still running on the deck defaults: a 5 pt production floor and a
+(8, 7, 6) type ladder, while Figures 1 to 3 had moved to 6.5 pt and (8.5, 7.2, 6.8). It carried
+**336 text artists below 6.5 pt, 21 of them at exactly 5.0 pt**, which is what Nature Portfolio
+rejects rather than what a reader can take in at 183 mm. A reader turning from Figure 3 to Figure 4
+watched the type shrink.
+
+Two structural problems went with it. The seven third-tier panels occupied **47.8 per cent** of the
+figure, and there was no hero: the largest panel, d at 13.7 per cent, is not the headline. Worse,
+**panel b was the 11th largest of thirteen at 6.2 per cent**, and panel b is the one place in this
+paper where circularity is measured rather than asserted.
+
+**What changed.** Panels j to m, the four marker-floor robustness sweeps, left the page.
+Supplementary Note 4 already carried every one of their numbers in prose (the 0.25 thresholds, the
+39.9 per cent unassigned fraction varying 29 to 58 per cent, the supervised ceiling 0.915 to 0.923,
+the best unsupervised 0.77 to 0.80, the paired gap 0.11 to 0.13, and the median cosine 0.54 to
+0.59), so nothing was lost and the Results citation now points at the Note alone. The freed row went
+back into the nine remaining panels rather than off the page: every axes grows from 1.46 or 1.56 in
+to 1.75 in, and the canvas goes from 8.09 to 7.97 in.
+
+`figures/fig4/fig4_style.py` now exists, and `fig4_assemble` gained `_assert_floor` at 6.5 pt and
+`_assert_no_titles` capping panel text at 7.2 pt. Three legends that sat inside their axes (c, d, h)
+became direct labels, which is both house style and where the space for larger type came from. What
+those legends said is now in the caption, which grew from 579 to 723 words while losing four panel
+entries.
+
+**One clearance is thin and nothing guards it.** Panel c's y-axis label clears panel b's colour-bar
+label by 1.78 pt and its own tick labels by 1.51 pt, measured on the rendered page. Any growth in
+panel b's colour-bar label collides, and no build gate watches horizontal clearance between
+neighbouring panels.
+
+## R53. Figure 4e draws a band from four hard-coded numbers, and one of them cannot be sourced
+
+`figures/fig7/fig7_natural.py:55` defines
+
+```python
+CONSTRUCTED = {"ceiling": 0.692, "unsup": 0.674, "cos_lo": 0.014, "cos_hi": 0.044}
+```
+
+as four literals, and main-text Fig. 4e imports it to draw the shaded band that its own label calls
+the constructed-mixture range. `fig7/` is a retired figure directory.
+
+`cos_lo = 0.014` reproduces: it is the mean induced-response cosine of the `real / real_blend` arm,
+0.014288, over 96 rows of
+`results/exp09_structure_diagnostics/gate1_response_divergence.csv`.
+
+**`cos_hi = 0.044` reproduces from nothing.** On that same 96-row sample the candidate summaries are
+median 0.011, q75 0.038, q90 0.079, q95 0.104, max 0.132, mean plus one standard error 0.019, and
+per-pair mean maximum 0.026. The two closest coincidences are the 78th percentile (0.0422) and the
+mean plus 0.64 standard deviations (0.0449), and neither is a statistic anyone chooses. A search of
+`results/` for a matching value returns only unrelated columns.
+
+So a band on a main-text figure is drawn from an unsourced literal, and the panel's own module
+docstring points at `fig7_natural` as the fix site rather than at a results file. This is the same
+class of defect as R46 (Fig. 2g's correlation matrix has no generator) and R49 (Fig. 3a plotted a
+hand-copied subset): a number reaching a main figure through a file with no derivation.
+
+**Reported, not fixed, because fixing it changes what the panel claims.** The honest repair is for
+`fig4_nat.draw_nat_gate1` to compute the band from
+`gate1_response_divergence.csv` at draw time and to draw a DEFINED interval, an interquartile range
+or a stated pair of quantiles, rather than an undocumented pair. That is a decision about what the
+panel asserts, and it needs the author. Until then the caption describes the band as the range
+spanned by the constructed mixtures, which is what the panel says, and that description is not
+verifiable against the released data.

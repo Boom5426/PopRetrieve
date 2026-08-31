@@ -1,6 +1,7 @@
 """Figure 4 panel d: Gate 2, on the SAME construct in constructed and natural data.
 
 Source: results/zhao_gbm/gate2_drug_response.json (analysis/natural/gate2_drug_response.py)
+        results/zhao_gbm/gate2_uncertainty.json   (patient-level cluster bootstrap)
 
 WHAT THIS PANEL REPLACES, AND WHY
 ---------------------------------
@@ -21,47 +22,97 @@ So (i) the old 0.692 ceiling was largely an artefact of POOLING several drugs in
 a tumour is an ALGORITHMIC bottleneck, not an informational one, which is the one constructive
 finding in this study and the opposite of what we concluded from our own benchmark twice.
 
-The class-pooled bar is kept, greyed, because deleting the number the paper previously reported
-would hide the correction rather than make it.
+TYPOGRAPHY, 2026-08-31: THE LAST PANEL OFF THE DECK'S OLD 5 pt FLOOR
+--------------------------------------------------------------------
+Everything drawn here was set between 5.6 and 6.2 pt, under the 6.5 pt floor fig4_style declares
+and fig4_assemble._assert_floor now enforces. All 18 offenders were RAISED, none was shrunk to fit,
+and the sizes come from the fig4_style ladder rather than from numbers typed in here:
+
+  value labels, gap labels and their intervals, the chance keyed label  5.8 -> PT_SMALL (6.5)
+  x tick labels 5.8 and y tick labels 6.0                              -> PT_TICK (6.8), by
+                                                                          deleting the per-call
+                                                                          sizes so the rcParams
+                                                                          ladder applies
+  the y axis label                                                     6.2 -> PT_ANNOT (7.2)
+  the two-entry key, at 5.6                                            deleted, see below
+
+WHAT WAS CUT, AND WHERE IT WENT
+-------------------------------
+  * THE KEY BOX ("best unsupervised" / "supervised ceiling", 5.6 pt, inside the axes) is gone. The
+    same two words are now set DIRECTLY on the two bars of the constructed group, rotated, at
+    PT_SMALL. The open/filled encoding is constant across both arms, so one labelled group names
+    both, and a direct label cannot detach from the mark it names the way a key can. This also
+    returns the upper-left band the key occupied to the bars.
+  * THE ROBUSTNESS BLOCK is in the caption, and the disabled copy of its drawing code that sat
+    here is deleted. It was four numbers of prose positioned by constants measured against a
+    2.55 x 1.18 in axes, i.e. against neither the box this panel had last week nor the one it has
+    now, so keeping it "for provenance" only preserved coordinates that were already wrong. The
+    numbers themselves live in results/zhao_gbm/gate2_uncertainty.json, which is cited above, and
+    caption entry d states both checks: every fixed probe-clusterer pair, and dropping the patient
+    that contributes 30 of 36 splits.
+  * The three-line tick-label glosses ("(as first reported)", "(like for like)", "(within
+    compartment)") were cut on 2026-07-26 and remain in the caption, including that the natural
+    comparison is within one compartment of one patient.
+
+THE NEW BOX, 2.28 x 1.75 in (was 2.55 x 1.56)
+---------------------------------------------
+0.27 in narrower and 0.19 in taller, so three constants measured against the old box were re-tuned:
+  * y limit 1.20 -> 1.12. The 1.20 headroom existed to hold the robustness block and the key,
+    and both are gone; the tallest ink above the bars is now the natural arm's two-line gap
+    interval, whose top measures at 1.069. Spending the freed height on the bars is what makes
+    the two direct labels fit inside the constructed bars at 6.5 pt: measured on the printed
+    rect they clear their own bar tops by 0.055 in (open) and 0.186 in (filled).
+  * x limits -0.62/1.62 -> -0.72/1.72, symmetric about the group centres. The keyed word "chance"
+    grew with the type and at the old right limit it OVERLAPPED the natural arm's filled bar by
+    0.046 in; in the wider band it clears that bar by 0.027 in and the axes edge by 0.028 in, and
+    the same band on the left keeps the first bar off the y axis.
+  * the gap label sits 0.065 above the taller bar rather than 0.050: at 6.5 pt the value label
+    below it had 0.040 in of clearance, under half the 0.089 in line height of the type it has to
+    clear, which closes on any font substitution. At 0.065 the clearance is 0.079 in, in both arms.
+The bars are drawn FROM the y floor (bottom=YMIN) rather than from zero. Nothing about them moves,
+because everything below 0.45 was clipped anyway; what changes is that their extents no longer
+report as 0.45 of an axis-height of ink hanging out of the bottom of the panel box.
+
+The class-pooled arm was dropped on 2026-08-28. It rested on a single split (n_splits = 1) and
+reported 0.687/0.700, a second estimate of the same constructed recoverability problem that
+main-text Fig. 5e reports as 0.674/0.692 under a different protocol. Two numbers for one quantity
+is a contradiction a reader cannot resolve, and the weaker of the two is the one to drop.
 """
 import json
 import os
+import sys
 
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
-# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
-# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
-import sys as _sys, os as _os
-_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
-from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
-# The natural-tumour arm used the house GREEN_SOFT. Across the deck GREEN_SOFT is reserved for readouts that
-# are handed information the retrieval method does not have: the "performs no retrieval" controls in
-# Fig. 3h and the "supervised, given the labels" ceiling in Fig. 5e,f. In this panel colour encodes
-# the experimental ARM, and both bars of every arm (unsupervised AND supervised ceiling) share it,
-# so a green arm here means the opposite of green next door. PURPLE_SOFT is already in the house palette
-# and carries no semantic load, so it separates the arms without colliding with anything.
-PURPLE_SOFT = "#8281B9"
-REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+# Palette and type ladder come from the house-style modules; do NOT re-declare a hex value or a
+# point size here. Every panel file used to carry its own copy of the palette, which made
+# figstyle's "one edit here recolours the whole deck" untrue: a recolour meant editing 43 files
+# and missing one was silent. PURPLE_SOFT is the house colour for "a second experimental arm
+# carrying no other semantics" and is imported for the same reason, not spelled out.
+_HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(_HERE))
+sys.path.insert(0, _HERE)
+from figstyle import PURPLE_SOFT  # noqa: E402
+from fig4_style import POP, PT_ANNOT, PT_SMALL, SHARED, TEXT  # noqa: E402
+
+# fig4_style freezes green for an external readout or a control that performs no retrieval (Fig. 3h
+# and Fig. 5e,f), and in this panel colour encodes the experimental ARM, with both bars of an arm
+# (unsupervised AND supervised ceiling) sharing it. A green arm here would therefore mean the
+# opposite of green next door, so the natural arm takes PURPLE_SOFT, which carries no semantic load.
+REPO = os.path.abspath(os.path.join(_HERE, "..", ".."))
 SRC = f"{REPO}/results/zhao_gbm/gate2_drug_response.json"
 UNC_SRC = f"{REPO}/results/zhao_gbm/gate2_uncertainty.json"
 # Patient-level cluster-bootstrap intervals. Absent -> the panel still renders, without them, and
 # says so; it does NOT invent an interval.
 UNC = json.load(open(UNC_SRC)) if os.path.exists(UNC_SRC) else None
 
-# 2026-07-26: the tick labels were three lines each, the third being a gloss ("(as first
-# reported)", "(like for like)", "(within compartment)"). At this figure's print size one bar group
-# is 1.15 in wide and those glosses were 0.7-0.8 in of text on a third line; the caption states all
-# three in full, including that the natural comparison is within one compartment of one patient.
-# The "classes pooled" arm was dropped on 2026-08-28. It rested on a single split
-# (n_splits = 1) and reported 0.687/0.700, a second estimate of the same constructed
-# recoverability problem that main-text Fig. 5e reports as 0.674/0.692 under a different
-# protocol. Two numbers for one quantity is a contradiction a reader cannot resolve, and
-# the weaker of the two is the one to drop. The panel keeps the drug-vs-drug constructed
-# arm as the granularity comparator and the natural tumour as the finding.
-ARMS = [("constructed_drug", "constructed\ndrug vs drug", FOCAL_SOFT),
+ARMS = [("constructed_drug", "constructed\ndrug vs drug", POP),
         ("natural", "natural tumour\ndrug vs drug", PURPLE_SOFT)]
+
+YMIN, YMAX = 0.45, 1.12      # the bars are drawn from YMIN; see the box note in the docstring
+XPAD = 0.72                  # data units of clear band each side of the two group centres
+BAR_W = 0.34
 
 
 def draw_gate2(ax):
@@ -71,36 +122,33 @@ def draw_gate2(ax):
     d = json.load(open(SRC))
 
     x = np.arange(len(ARMS))
-    w = 0.34
+    w = BAR_W
+    cols = [c for _, _, c in ARMS]
     unsup = [d[a]["best_unsup"] for a, _, _ in ARMS]
     ceil = [d[a]["ceiling_matched"] for a, _, _ in ARMS]
 
+    ax.set_ylim(YMIN, YMAX)
     # Open = what an unsupervised method reaches, filled = what a supervised probe reaches.
     # Open-versus-filled is the standard journal encoding for this contrast and is what Fig. 3h
     # uses for its controls; the "///" hatch it replaces was a third visual channel spent on a
     # binary that fill alone already carries.
-    ax.bar(x - w / 2, unsup, w, color="white", edgecolor=[c for _, _, c in ARMS],
+    ax.bar(x - w / 2, [u - YMIN for u in unsup], w, bottom=YMIN, color="white", edgecolor=cols,
            linewidth=0.9, zorder=3)
-    ax.bar(x + w / 2, ceil, w, color=[c for _, _, c in ARMS], edgecolor="none", zorder=3)
+    ax.bar(x + w / 2, [c - YMIN for c in ceil], w, bottom=YMIN, color=cols, edgecolor="none",
+           zorder=3)
 
-    # 2026-07-26: the hatched/solid encoding used to be named by two rotated labels written INSIDE
-    # the leftmost pair of bars. That worked while the axes were 2.4 in tall; at the figure's print
-    # size the pooled arm's bars are 0.25 in tall and a two-line rotated label is 0.47 in, so both
-    # labels stuck out of the bars they were labelling and across the neighbouring group. A
-    # two-entry single-row legend in the empty band above the short pooled bars costs the same
-    # space and cannot detach from what it names, because the encoding is constant across arms.
-    from matplotlib.patches import Patch
-    keys = [Patch(facecolor="white", edgecolor=INK, lw=0.8, label="best unsupervised"),
-            Patch(facecolor=INK, edgecolor="none", label="supervised ceiling")]
-    # one column, hard left: that is the only band of this panel that no bar, no value label and no
-    # gap interval reaches, now that the two wide intervals are set on two lines
-    ax.legend(handles=keys, loc="upper left", bbox_to_anchor=(0.0, 1.02), ncol=1, fontsize=5.6,
-              frameon=False, handlelength=1.1, handletextpad=0.45, labelspacing=0.35,
-              borderaxespad=0.0)
+    # DIRECT LABELS, replacing the 5.6 pt key box. Rotated inside the two bars of the CONSTRUCTED
+    # group, which is the taller pair and is the group a reader meets first; the encoding is
+    # constant across arms, so labelling one group names both. Ink on the open bar, white on the
+    # filled one. The 0.075 offset lifts both off the chance rule that passes behind the bars.
+    for dx, lab, col in ((-w / 2, "best unsupervised", TEXT),
+                         (w / 2, "supervised ceiling", "white")):
+        ax.text(x[0] + dx, YMIN + 0.075, lab, rotation=90, rotation_mode="anchor", ha="left",
+                va="center", fontsize=PT_SMALL, color=col, zorder=6)
 
-    for xi, ((u, c), (arm, _, _)) in enumerate(zip(zip(unsup, ceil), ARMS)):
-        ax.text(xi - w / 2, u + 0.008, f"{u:.3f}", ha="center", fontsize=5.8, color=INK)
-        ax.text(xi + w / 2, c + 0.008, f"{c:.3f}", ha="center", fontsize=5.8, color=INK)
+    for xi, (u, c, (arm, _, _)) in enumerate(zip(unsup, ceil, ARMS)):
+        ax.text(xi - w / 2, u + 0.008, f"{u:.3f}", ha="center", fontsize=PT_SMALL, color=TEXT)
+        ax.text(xi + w / 2, c + 0.008, f"{c:.3f}", ha="center", fontsize=PT_SMALL, color=TEXT)
         # The GAP is the finding, and it is the median of the PAIRED per-split differences, not
         # the difference of the two marginal medians drawn as bars. Those are not the same number
         # (a median is not linear), and quoting the larger of the two would overstate the result:
@@ -109,7 +157,13 @@ def draw_gate2(ax):
         gap = d[arm]["gap_matched"]
         # Drawn as a vertical double arrow at the group centre with thin leaders to the two bar
         # tops. The previous bar-top-to-bar-top diagonal ran straight through the printed values.
-        gcol = COMP_SOFT if gap > 0.05 else GREY
+        # The mark is INK when the gap clears 0.05 and SHARED grey when it does not, which pairs
+        # it with the weight and colour of the gap label directly above it. It used to be MEAN
+        # orange, which fig4_style freezes for the evaluator-derived, circular arm: orange on this
+        # panel's one honest, externally checked finding said the opposite of what the figure's
+        # colour key says. The arm's own colour is not available either, because the natural arm's
+        # double arrow stands at the seam between its two bars and would vanish into the filled one.
+        gcol = TEXT if gap > 0.05 else SHARED
         ax.plot([xi - w / 2, xi], [u, u], lw=0.5, ls=(0, (2, 1.6)), color=gcol, zorder=5)
         ax.plot([xi, xi + w / 2], [c, c], lw=0.5, ls=(0, (2, 1.6)), color=gcol, zorder=5)
         if gap > 0.05:
@@ -126,85 +180,51 @@ def draw_gate2(ax):
         lab = f"{gap:+.3f}"
         if UNC and arm in UNC and not np.isnan(UNC[arm]["ci95"][0]):
             lo, hi = UNC[arm]["ci95"]
-            # interval on its own line under the gap. Set on one line these two labels are 0.97 in
-            # wide and the two arms they belong to are 1.15 in apart at print size, so the
-            # constructed interval ran into the tumour one. Stacking is also the honest layout:
-            # every arm that HAS a cluster-bootstrap interval prints it, at the same size.
+            # interval on its own line under the gap. Set on one line these two labels are wider
+            # than the 1.0 in that separates the two arms at print size, so the constructed
+            # interval ran into the tumour one. Stacking is also the honest layout: every arm that
+            # HAS a cluster-bootstrap interval prints it, at the same size.
             lab += f"\n[{lo:+.3f}, {hi:+.3f}]"
-        # placed ABOVE the taller bar, not between the two bar tops: in the pooled arm the two
-        # bars differ by 0.013 and a label hung between them collided with both value labels.
-        # one size for all three arms (5.8 pt): the two constructed gaps used to be set 0.4 pt
-        # smaller to de-emphasise them, which at print size put the smallest type in the figure on
-        # a number the caption quotes. Emphasis is carried by WEIGHT, not by hue: the double
-        # arrow immediately below is the coloured mark for the one gap that clears 0.05, and the
-        # deck rule is that the marks carry the colour and the text does not.
-        ax.text(xi, max(u, c) + 0.050, lab, ha="center", va="bottom", fontsize=5.8,
+        # placed ABOVE the taller bar, not between the two bar tops: a label hung between them
+        # collides with both value labels wherever the two bars are close.
+        # One size for both arms: the constructed gap used to be set 0.4 pt smaller to de-emphasise
+        # it, which at print size put the smallest type in the figure on a number the caption
+        # quotes. Emphasis is carried by WEIGHT and by the coloured double arrow below.
+        ax.text(xi, max(u, c) + 0.065, lab, ha="center", va="bottom", fontsize=PT_SMALL,
                 linespacing=1.25, fontweight="bold" if gap > 0.05 else "normal",
-                color=INK if gap > 0.05 else GREY, zorder=7)
+                color=TEXT if gap > 0.05 else SHARED, zorder=7)
 
-    ax.axhline(0.5, ls="--", lw=0.8, color=GREY, zorder=1)
-    ax.set_xlim(-0.62, len(ARMS) - 0.38)
-    # keyed at the RIGHT end of the rule: at print size the left margin of this panel is 0.22 in
-    # and the word is 0.24 in, so on the left it lapped onto the first hatched bar
-    ax.text(len(ARMS) - 0.40, 0.506, "chance", ha="right", va="bottom", fontsize=5.8, color=GREY)
-
-    # The panel's claim used to live in an orange callout box pinned over the natural-tumour bars,
-    # where it collided with them. It is a claim, not data, so it belongs in the panel title; the
-    # space it occupied is given back to the bars. What replaces it here is the robustness block,
-    # because the Results text sends the reader to this panel for exactly these two numbers
-    # ("values in Fig. 4d"). Both are read from the cluster-bootstrap file, never typed in.
-    # THE ROBUSTNESS BLOCK IS NOW IN THE CAPTION, NOT ON THE PANEL, and must be kept in step
-    # with results/zhao_gbm/gate2_uncertainty.json by hand. It was three lines of prose and four
-    # numbers set inside a 2.55 x 1.18 in axes, where it overlapped the bar key, both gap labels
-    # and the constructed arm's value label; no amount of repositioning fits it, because the panel
-    # does not have the space. The Figure 4 caption entry d now states both checks (every fixed
-    # probe-clusterer pair; dropping the patient that contributes 30 of 36 splits) with the same
-    # numbers, which is where a robustness argument belongs. The block below is retained,
-    # disabled, so the numbers and their provenance stay next to the panel that reports them.
-    if False and UNC and "fixed_pair_contrast" in UNC and "natural_WITHOUT_PW030" in UNC:
-        fp = UNC["fixed_pair_contrast"]
-        wo = UNC["natural_WITHOUT_PW030"]
-        lo, hi = wo["ci95"]
-        n_wo = UNC["natural_only_PW030"]["n_splits"]
-        n_all = UNC["natural"]["n_splits"]
-        # 2026-07-26: same two facts, re-set to the panel's real width. The two lines used to be
-        # 58 and 55 characters of prefix before their numbers, which is 3.9 in of text in a 2.55 in
-        # panel now that the figure is authored at print size. The prefixes are cut to what
-        # identifies the check; the caption gives each in full. The numbers themselves are
-        # untouched and still read from the cluster-bootstrap file, never typed in.
-        ax.text(-0.60, 1.415, "the tumour gap survives every check", fontsize=5.8,
-                color=INK, ha="left", va="top")
-        ax.text(-0.60, 1.330,
-                f"every fixed probe-clusterer pair:   "
-                f"{fp['natural']:+.3f}  vs  {fp['constructed_drug']:+.3f} constructed\n"
-                f"drop the {n_wo}/{n_all}-split patient:   "
-                f"{wo['gap_matched']:+.3f}  [{lo:+.3f}, {hi:+.3f}]",
-                fontsize=5.8, color=INK, ha="left", va="top", linespacing=1.5)
+    ax.axhline(0.5, ls="--", lw=0.8, color=SHARED, zorder=1)
+    ax.set_xlim(-XPAD, len(ARMS) - 1 + XPAD)
+    # keyed at the RIGHT end of the rule, in the band the widened x limits open up: on the left the
+    # word laps onto the first open bar, and at the old right limit it lapped onto the filled bar
+    # of the natural arm.
+    ax.text(len(ARMS) - 1 + XPAD - 0.03, 0.506, "chance", ha="right", va="bottom",
+            fontsize=PT_SMALL, color=SHARED)
 
     ax.set_xticks(x)
-    ax.set_xticklabels([l for _, l, _ in ARMS], fontsize=5.8)
-    # two lines: rotated, the one-line label is 1.6 in of text against a 1.18 in axes
-    ax.set_ylabel("accuracy recovering\nthe true partition", fontsize=6.2)
-    ax.set_ylim(0.45, 1.20)
+    # no per-call sizes on either axis: the tick labels take PT_TICK from the rcParams ladder that
+    # fig4_assemble sets, which is what keeps this panel in step with the rest of the figure.
+    ax.set_xticklabels([l for _, l, _ in ARMS])
+    # two lines: rotated, the one-line label is wider than the axes is tall
+    ax.set_ylabel("accuracy recovering\nthe true partition", fontsize=PT_ANNOT)
     ax.set_yticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
-    ax.tick_params(axis="y", labelsize=6)
-    # the y range runs past 1.0 to hold the robustness block and the key, but accuracy only goes to
-    # 1.0; the spine is bounded so it does not advertise an axis that carries no data
-    ax.spines["left"].set_bounds(0.45, 1.0)
+    # the y range runs past 1.0 to hold the gap intervals, but accuracy only goes to 1.0; the spine
+    # is bounded so it does not advertise an axis that carries no data
+    ax.spines["left"].set_bounds(YMIN, 1.0)
     for s in ("right", "top"):
         ax.spines[s].set_visible(False)
 
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(figsize=(4.2, 3.0))
+    fig, ax = plt.subplots(figsize=(2.28, 1.75))
     draw_gate2(ax)
-    # Standalone label only. The composite title is fig4_assemble.TITLES["d"], "Gate 2 in a
-    # tumour: an algorithmic limit", which is the claim the manuscript makes and which overwrites
-    # this one; the two must never say opposite things. This wording describes the panel's design
-    # (the same question in a constructed setting and a natural one) rather than restating that
-    # claim, because standalone the panel is a diagnostic and the claim is scoped to one of its
-    # three arms.
-    ax.set_title("Recoverability, asked the same question twice", loc="left", fontsize=8)
-    fig.savefig(os.path.join(os.path.dirname(__file__), "4gate2.png"), dpi=200,
-                bbox_inches="tight")
-    print("wrote 6gate2.png")
+    # No ax.set_title, and no typed point size anywhere in this file. This panel's title lives in
+    # fig4_assemble.TITLES["d"], "Recoverability in a tumour: an algorithmic limit"; the standalone
+    # copy that used to sit here was set at 8 pt, above the PT_ANNOT cap that
+    # fig4_assemble._assert_no_titles enforces, and survived only because strip_titles() deletes it
+    # before that gate runs. A second wording of the claim that never prints is a place for the two
+    # to drift apart, so there is one wording and it is the composite's.
+    out = os.path.join(_HERE, "4gate2.png")
+    fig.savefig(out, dpi=200, bbox_inches="tight")
+    print(f"wrote {out}")

@@ -54,7 +54,7 @@ sizes, so a figure authored wider than the text block is scaled down by
 five main figures are authored at 6.90 in, i.e. the printed width, so their scale factor is 1.00
 and nominal equals printed.
 
-The five figures are 7.77 to 9.22 in tall on the page and their captions run 460 to 731 words, so
+The five figures are 7.77 to 9.22 in tall on the page and their captions run 631 to 731 words, so
 graphic and caption cannot share a page and are two floats each: a `[p]` float holding only the
 `\includegraphics`, then a `[p]` float holding only the `\caption` and `\label`. The figure
 counter advances on `\caption`, not on `\begin{figure}`, so the graphic float leaves the number

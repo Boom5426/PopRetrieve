@@ -1,5 +1,7 @@
 """PopRetrieve Figure 4: The benchmark decides the answer.
 
+ARCHETYPE: quantitative grid, three rows of three.
+
 WHY THESE TWO THINGS ARE NOW ONE FIGURE
 ---------------------------------------
 This used to be HIR-Bench alone (six panels), with the natural-heterogeneity test as a separate
@@ -93,9 +95,11 @@ ed6_panel_d defines draw_ed6c, ed6_panel_e defines draw_ed6d. The imports below 
 one per line so that mismatch is visible rather than something to rediscover.
 """
 import os
+import re
 import sys
 
 import matplotlib.pyplot as plt
+import matplotlib.text as mtext
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -114,6 +118,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..", "ed6")))
 STEM = "fig4_benchmarks"
 
 from figstyle import pin_canvas, soften_axes, strip_titles
+from fig4_style import PT_ANNOT, PT_FLOOR, PT_LETTER, PT_TICK, PT_TITLE, TEXT
 from fig4b import draw_4b                        # analytic flip boundary
 from fig4f import draw_4f                        # 2x2: observable vs oracle-derived x CV unit
 from fig4_shape import draw_shape                # the oracle's SHAPE picks the winner (real data)
@@ -122,7 +127,6 @@ from fig4_nat import draw_nat_gate1, draw_nat_premise   # natural-tissue arm, re
 from ed6_panel_c import draw_ed6b               # g: energy - mean Hit@1 phase grid  (old ED6c)
 from ed6_panel_d import draw_ed6c               # h: decision regret by information condition (ED6d)
 from ed6_panel_e import draw_ed6d               # i: the three benchmark sanity checks  (old ED6e)
-import ed4_zhao_robustness as _ed4              # j-m: compartment validation and the sweep (ED4a-d)
 
 TITLES = {
     # Every title is a claim that must survive being read against its own panel. The 2026-07-12
@@ -222,23 +226,31 @@ ROW_LABELS = [
 # The remaining 1.21 in of the 9.30 in ceiling is left unclaimed on purpose. A figure authored
 # flush against a hard page limit has to be re-laid-out the first time any label grows, and the
 # panels above do not get more legible from being stretched away from their own aspect ratios.
-W, H = 6.9, 8.09
-RECTS = {                     # x0,   y0,   w,    h     (inches)
-    "a": (0.45, 6.48, 1.46, 1.46),
-    "b": (2.46, 6.48, 1.36, 1.46),   # includes the colour bar, which is stolen from this box
-    "c": (4.78, 6.48, 2.07, 1.46),
-    "d": (0.50, 4.46, 2.55, 1.56),
-    "e": (3.38, 4.46, 1.64, 1.56),
-    "f": (5.45, 4.46, 1.27, 1.56),
-    "g": (0.52, 2.52, 1.50, 1.46),   # colour bar drawn OUTSIDE to the right, into the 0.92 gutter
-    "h": (2.94, 2.52, 1.56, 1.46),
-    "i": (5.35, 2.52, 1.48, 1.46),   # 0.85 in of left pad, all of it the two-line row labels
-    "j": (0.52, 0.46, 1.28, 1.56),
-    "k": (2.30, 0.46, 1.23, 1.56),
-    "l": (4.03, 0.46, 1.18, 1.56),
-    "m": (5.76, 0.46, 1.06, 1.56),
+# 7.97 in, not 8.09: nine panels instead of thirteen, each taller. See the RECTS note.
+W, H = 6.9, 7.97
+RECTS = {                     # x0,   y0,   w,    h     (inches, from the bottom left)
+    # NINE PANELS SINCE 2026-08-31, and every axes is taller. j to m, the four marker-floor
+    # robustness sweeps, left the page for Supplementary Note 4, which already carried all of
+    # their content in prose. That freed a whole row, and the height went back into the nine
+    # panels that remain rather than off the page: each axes grows from 1.46 or 1.56 in to
+    # 1.75 in, which is what pays for this figure's move to a 6.5 pt floor.
+    #
+    # The x geometry is close to what it was, because it has no slack: the gaps between panels
+    # are not margins, they are furniture. In row 1 the 0.60 in after a holds b's two-line row
+    # labels and the 0.80 in after b holds b's colour bar and c's y axis; in row 3 the 0.88 in
+    # after h holds i's category labels, which are its only y furniture. Those three numbers
+    # grew with the type, which is why b, c and i each moved right.
+    "a": (0.55, 5.97, 1.55, 1.75),
+    "b": (2.70, 5.97, 1.40, 1.75),   # includes the colour bar, which is stolen from this box
+    "c": (4.90, 5.97, 1.93, 1.75),
+    "d": (0.58, 3.30, 2.28, 1.75),
+    "e": (3.22, 3.30, 1.70, 1.75),
+    "f": (5.40, 3.30, 1.43, 1.75),
+    "g": (0.60, 0.63, 1.58, 1.75),   # colour bar drawn OUTSIDE to the right, into the gutter
+    "h": (3.05, 0.63, 1.62, 1.75),
+    "i": (5.55, 0.63, 1.28, 1.75),   # its category labels ARE its y furniture, 0.88 in of them
 }
-BANNER_Y = {0: 8.09, 1: 6.17, 2: 4.13, 3: 2.17}   # inches from the bottom, va="top"
+BANNER_Y = {0: 7.97, 1: 5.30, 2: 2.63}   # inches from the bottom, va="top"
 # the panel letter must clear its own panel's y-axis furniture, which differs a lot between a bare
 # strip (e) and a heat map with two-line row labels (b); given here in inches to the LEFT of the
 # axes box and converted to the axes-fraction dx that panel_letter() wants
@@ -251,31 +263,82 @@ BANNER_Y = {0: 8.09, 1: 6.17, 2: 4.13, 3: 2.17}   # inches from the bottom, va="
 # the figure positioned by a measured label rather than by the y-axis furniture, because i has no
 # y-axis furniture: its categories ARE the labels.
 LETTER_IN = {"a": 0.32, "b": 0.56, "c": 0.36, "d": 0.42, "e": 0.30, "f": 0.44,
-             "g": 0.40, "h": 0.34, "i": 0.75,
-             "j": 0.40, "k": 0.36, "l": 0.40, "m": 0.42}
+             "g": 0.40, "h": 0.34, "i": 0.75}
+
+
+_SUBSUP = re.compile(r"\$[^$]*[\^_][^$]*\$")
+
+
+def _assert_floor(fig, floor=PT_FLOOR):
+    """Refuse to return a figure carrying text below THIS figure's floor.
+
+    figstyle.save() enforces the deck's 5 pt production limit. This is stricter and runs earlier,
+    because 5 pt is what production rejects and 6.5 pt is what a reader can take in at 183 mm.
+    Mathtext is measured at its effective size, a sub/superscript printing at 0.7x nominal.
+
+    When this fires the fix is to CUT the annotation into the caption. It is not to lower the size:
+    that is how this figure came to hold 336 artists under the floor in the first place.
+    """
+    bad = []
+    for t in fig.findobj(mtext.Text):
+        s = str(t.get_text())
+        if not s.strip() or not t.get_visible():
+            continue
+        eff = t.get_fontsize() * (0.7 if _SUBSUP.search(s) else 1.0)
+        if eff < floor - 1e-6:
+            bad.append((round(eff, 2), s.replace("\n", "/")[:40]))
+    assert not bad, (
+        f"Figure 4 sets its own {floor} pt floor and {len(bad)} artists are under it: "
+        f"{sorted(bad)[:8]}. Cut the annotation into the caption; do not lower the size.")
+    return fig
+
+
+def _assert_no_titles(fig, cap=PT_ANNOT):
+    """Refuse to return a figure in which any PANEL draws text above ``cap``.
+
+    The panels carry evidence and the caption carries the argument. This figure's panels have
+    never stated their own conclusions, unlike Figures 1 to 3 before their 2026-08-31 pass, so
+    this gate is here to keep it that way rather than to enforce a change. Panel letters are
+    exempt: fig4_assemble draws them, and they are navigation rather than claims.
+    """
+    letters = {t for ax in fig.axes for t in ax.texts
+               if len(str(t.get_text())) == 1 and str(t.get_text()) in RECTS}
+    bad = []
+    for t in fig.findobj(mtext.Text):
+        if t in letters or not str(t.get_text()).strip() or not t.get_visible():
+            continue
+        if t.get_fontsize() > cap + 1e-6:
+            bad.append((round(t.get_fontsize(), 2), str(t.get_text()).replace("\n", "/")[:40]))
+    assert not bad, (
+        f"Figure 4 caps panel text at {cap} pt and these are above it: {sorted(bad)[:8]}. "
+        f"A panel states no conclusion; move the sentence to the caption.")
+    return fig
+
 
 
 def build(apply_style, panel_letter):
-    apply_style(sizes=(8, 7, 6))
+    # This figure's ladder, one step above the deck's (8, 7, 6), matching Figures 1 to 3.
+    # The tick size alone lifts 97 rc-driven labels from 6.0 to 6.8 pt for free.
+    apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
     fig = plt.figure(figsize=(W, H))
     # Pin the tight bbox to the authored canvas, so the exported page size is authored rather than
     # emergent (see the height note above the RECTS table).
     pin_canvas(fig)
     fns = {"a": draw_4b, "b": draw_4f, "c": draw_shape,
            "d": draw_gate2, "e": draw_nat_gate1, "f": draw_nat_premise,
-           "g": draw_ed6b, "h": draw_ed6c, "i": draw_ed6d,
-           "j": _ed4.draw_a, "k": _ed4.draw_b, "l": _ed4.draw_c, "m": _ed4.draw_d}
+           "g": draw_ed6b, "h": draw_ed6c, "i": draw_ed6d}
     assert set(fns) == set(RECTS), "every panel needs a rectangle and a draw function"
 
     for k, (x0, y0, w, h) in RECTS.items():
         ax = fig.add_axes([x0 / W, y0 / H, w / W, h / H])
         fns[k](ax)
-        panel_letter(ax, k, dx=-LETTER_IN[k] / w, dy=1.06, case="lower")
+        ax.text(-LETTER_IN[k] / w, 1.06, k, transform=ax.transAxes, fontsize=PT_LETTER,
+                fontweight="bold", va="top", ha="left", color=TEXT)
 
     # Nature panels carry no titles and Nature figures carry no row banners; both are in the
     # caption. TITLES and ROW_LABELS are kept as the statement of what each panel and each row
     # argues, because the caption has to be checkable against them.
-    return strip_titles(soften_axes(fig))
+    return _assert_no_titles(_assert_floor(strip_titles(soften_axes(fig))))
 
 
 if __name__ == "__main__":
