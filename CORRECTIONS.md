@@ -1534,3 +1534,66 @@ invented:
   Fig. 5 overflows its page and Supplementary Table 1 runs into the right margin. These are layout
   defects the author has deferred to a dedicated re-layout pass, and rebuilding at unchanged
   authored geometry cannot fix them.
+
+---
+
+## R45. Figure 2e's control axis was described as the wrong quantity, in the caption and in the Results
+
+**Was:** the manuscript said, in two places, that Fig. 2e sweeps the *similarity* of the two
+constructed subpopulations. The Results read "progressively merging the two constructed
+subpopulations did not produce a consistent monotonic loss of the energy-distance advantage", and
+the caption read "Increasing the similarity of the two constructed subpopulations does not
+consistently eliminate the energy-distance advantage". The panel itself labelled its x axis
+"subpopulation mixing $\alpha$ (higher = more merged)".
+
+**Is:** alpha is a mixing PROPORTION at fixed orthogonality, not a similarity knob.
+`ControlledMixtureTask.build` (`src/retrieval/tasks.py:108`) computes
+
+```python
+n_maj = int(round(alpha * self.n_total))   # cells drawn from the HDAC response pool
+n_min = self.n_total - n_maj               # cells drawn from the JAK response pool
+```
+
+so the query's 400 cells are drawn from two fixed real response pools and alpha sets their ratio:
+200:200 at alpha = 0.5 through 360:40 at alpha = 0.9. The two states are two orthogonal
+mechanism-of-action responses throughout, and nothing about them merges. What the sweep actually
+does is starve the minority state, from half the query population down to a tenth of it. Since the
+`covers-both` ground truth is built at the same alpha while `majority-only` is not, the
+discriminating evidence shrinks with the minority state, which is why the task gets harder.
+
+**Why the wrong description was plausible.** A merging sweep does exist in this repository, and it
+is in the same module: `build_divergence_query(task, lam, alpha, ...)`, documented as "lam=0 ->
+identical subpops, lam>=1 -> orthogonal". It is the control axis of exp02 (divergence gate) and
+exp11 (synthetic phase diagram). Figure 2e plots exp01, which does not use it. Two different
+control axes from two different experiments were described as one.
+
+**What survives.** The finding is unchanged and its wording is now tied to what was run: reducing
+the minority state from 50% to 10% of the query collapses the energy advantage in K562 (+1.00 to
++0.05) and does not in A549 (+0.40 to +0.65) or MCF7 (+0.35 to +0.45). The claim was always that
+the collapse is not universal, and it still is.
+
+**What changed.** The Results sentence, the Fig. 2 caption entry for **e**, and the panel, which
+now plots the advantage directly (energy Hit@1 minus mean-cosine Hit@1, one curve per line instead
+of six), labels its x axis "alpha, fraction of query cells in the HDAC state", and carries a strip
+showing the query composition at each alpha. `figures/fig2/fig2e.py` asserts the alpha grid and the
+cell-line set against the defaults `exp01_sciplex3_controlled.run` declares, so a re-run with a
+different sweep breaks the build instead of relabelling itself.
+
+**How it was found.** Two agents redrawing and then auditing the panel each rejected the brief's
+description of alpha independently, after reading `ControlledMixtureTask.build`. Neither drew the
+merged geometry the brief asked for, because the code does not produce it.
+
+## R46. Figure 2g's matrix cannot be regenerated from the released code (reported, not fixed)
+
+`figures/source_data/ed1_metric_correlation.csv` is the 6x6 Spearman matrix behind Fig. 2g and
+behind the manuscript's "identical scores at every query-candidate pair (Spearman $\rho=1.000$ over
+54,180 scores)". No file under `results/` holds those 54,180 query-candidate scores,
+`exp08_signature_baselines.py` exports none, and `sync_source_data.py` does not know the file;
+`figures/source_data/README.md` classifies it PRIMARY, i.e. nothing regenerates it.
+
+This was tolerable while the panel was Extended Data Fig. 1c. It is a main-text reproducibility gap
+now: a reader cannot check the panel or the sentence it supports. The fix is a generator that
+re-scores the 1,260 queries against their 43 candidates under the six scorers and writes the pairs,
+not an edit to any text. Recorded here and in `figures/source_data/README.md` so it is not
+mistaken for a checked number. R29 corrected the *unit* of the 54,180 figure; this concerns its
+*provenance*.

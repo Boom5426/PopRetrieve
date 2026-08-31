@@ -54,11 +54,15 @@ sizes, so a figure authored wider than the text block is scaled down by
 five main figures are authored at 6.90 in, i.e. the printed width, so their scale factor is 1.00
 and nominal equals printed.
 
-The five figures are 7.19 to 9.26 in tall on the page and their captions run 277 to 648 words, so
+The five figures are 8.11 to 9.22 in tall on the page and their captions run 460 to 731 words, so
 graphic and caption cannot share a page and are two floats each: a `[p]` float holding only the
 `\includegraphics`, then a `[p]` float holding only the `\caption` and `\label`. The figure
 counter advances on `\caption`, not on `\begin{figure}`, so the graphic float leaves the number
 alone and the caption float takes it.
+
+Three of the five now sit at 9.22 in against a float budget of 9.238 in (the 9.461 in text block
+less about 16/72 in of float overhead), i.e. 0.018 in of margin. Growing any authored canvas means
+re-checking `Float too large` in the build log, not assuming it still fits.
 
 Extended Data no longer exists. It had its own driver because copying it by hand did not work: on
 2026-07-27 all seven shipped Extended Data PDFs were stale renders, and three printed numbers this

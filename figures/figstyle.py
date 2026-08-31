@@ -193,10 +193,19 @@ def strip_titles(fig):
     text on the panel that repeats the caption is what production asks authors to delete.
 
     This deck was authored the other way, with a claim sentence set over each of its 40 panels.
-    Every one of those claims now lives in its figure's caption. Calling this at the end of a
-    composite's ``build()`` is what guarantees a panel script cannot put a title back into the
-    figure that ships: the panel scripts keep their own ``set_title`` calls, so a standalone
-    ``python figNx.py`` still labels its preview, and the composite strips them.
+    Calling this at the end of a composite's ``build()`` is what guarantees a panel script cannot
+    put an rc title back into the figure that ships: the panel scripts keep their own
+    ``set_title`` calls, so a standalone ``python figNx.py`` still labels its preview, and the
+    composite strips them.
+
+    FIGURES 1 AND 2 ARE A DELIBERATE EXCEPTION, and this function does not touch it. Each of
+    their panels states ONE short phrase over itself, drawn as ordinary ink at 8.5 pt through
+    ``figN_style.title`` rather than through ``set_title``, so it survives this call on purpose.
+    The two figures carry the paper's argument rather than its supporting measurements, and a
+    reader who skims them has to be able to take the argument off the page without holding the
+    caption open beside it. The rule those phrases obey instead is that each must be literally
+    true of what its panel draws, at most about seven words, and never a restatement of an axis
+    label. Figures 3 to 5 still carry no titles at all.
 
     Titles set with ``loc="left"`` live in a different artist from centred ones, which is why all
     three locations are cleared rather than just ``ax.set_title("")``.

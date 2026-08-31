@@ -5,7 +5,13 @@ twice over: the Extended Data deck they belonged to was consolidated on 2026-08-
 outright on 2026-08-30, when all 21 surviving panels moved into the five main figures. The draw
 functions here are imported by fig1_assemble, fig2_assemble, fig3_assemble and fig5_assemble.
 Where each one went:
-    draw_ed1c -> Fig. 2g     draw_ed1d -> Fig. 1g     draw_ed1e -> Fig. 1h
+    draw_ed1d -> Fig. 1g     draw_ed1e -> Fig. 1h
+    draw_ed1c    SUPERSEDED 2026-08-31 by figures/fig2/fig2g.py, which reads the same
+        figures/source_data/ed1_metric_correlation.csv and draws the same six scorers.
+        It is kept because this file is the Extended Data record, but it is no longer
+        imported by any main figure: it orders the six scorers so that the mean family is
+        split across the matrix, and it sets 5.2 pt ticks and 5.5 pt cell values, both
+        under Figure 2's 6.5 pt floor.
     draw_ed2a -> Fig. 3j     draw_ed2b -> Fig. 3k
     draw_ed3a -> Fig. 5h     draw_ed3b -> Fig. 5i     draw_ed3d -> Fig. 5j
     draw_ed1a, draw_ed1b, draw_ed2c, draw_ed3c   DELETED. Each was carried in full elsewhere:

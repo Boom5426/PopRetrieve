@@ -1,183 +1,240 @@
-"""PopRetrieve Figure 2: under objective-aligned metrics, distributional retrieval looks decisively stronger.
+"""PopRetrieve Figure 2: cell populations carry retrievable information beyond mean signatures.
 
-Seven panels in three rows. The top row carries the claim (a, the Hit@1 ladder), its counterexample
-(b, Frangieh) and its per-query distribution (c); the middle row holds the three supporting controls
-(d gate, e alpha sweep, f metric robustness); the bottom row carries the score-to-score correlation
-matrix (g) that the first two rows argue from without ever showing.
+Seven panels, read in one order:
 
-Panel g, moved here when the Extended Data deck was retired
------------------------------------------------------------
-g was ED1a of edfigs/ed_consolidated.py and is still drawn by edfigs/ed_panels.draw_ed1c: it is
-IMPORTED, not re-plotted, so the matrix printed here is the one the Extended Data deck printed,
-over the same 54,180 query-candidate scores (1,260 queries against 43 candidates each). It covers
-six of the eight scorers on a's ladder; the two PCA baselines are absent from the correlation
-export and the panel does not invent them.
+    HOW BIG IS IT?
+      a  The Hit@1 ladder          every population-level scorer above every mean-level one
 
-It earns main-deck space for two reasons, and both are about a and b rather than about g itself.
+    HOW GENERAL IS IT?
+      b  Per task                  large on both constructed tasks, reversed on Frangieh
+      c  Per query                 it survives partial observation on most of 765 queries
 
-First, a's headline is that energy reaches Hit@1 0.837 against 0.388 for mean cosine and for the
-numerically identical CMap-style cosine baseline, and b spends that identity again when it draws
-the pair as one marker. g is where the word "identical" is measured: Spearman rho = 1.000 at every
-one of the 54,180 pairs, not an agreement between the two macro-means a happens to plot. Until this
-row existed, the evidence for a load-bearing word in this figure's caption lived in another float.
+    CAN WE SAY WHERE IT WILL BE?
+      d  The pre-specified gate    does not enrich for the gain
+      e  Minority-state fraction   starving the minority state does not universally erase it
 
-Second, g shows energy and the two coverage scores agreeing with each other (rho 0.72 to 0.97) and
-not with mean cosine (|rho| <= 0.08), so the population-sensitive scores form a block that the
-mean-shaped ones are close to orthogonal to. That is what makes a-f a comparison between two
-FAMILIES of score rather than a ranking of eight scorers that happen to have been run: the family
-colouring in a is a claim about score algebra, and this is the panel that measures it.
+    IS IT A PROPERTY OF ONE SCORE, OR OF A FAMILY?
+      f  Five population scorers   all five gain, and the coverage pair gains most
+      g  Score-to-score agreement  the two families are internally coherent and near orthogonal
 
-Geometry note (why the numbers below are in inches, not gridspec units)
-----------------------------------------------------------------------
-The manuscript text block is 6.93 in wide and the figure enters with
-``\\includegraphics[width=\\textwidth]``. This composite used to be authored 11.0 in wide, so LaTeX
-shrank it by 0.63x and the 6 pt panel annotations printed at 3.8 pt, under the 5 pt Nature Portfolio
-floor. The build-time gate in ``figstyle.save`` only sees NOMINAL sizes, so it reported CLEAN while
-the printed page failed. The fix is to author at final print width: the canvas is 6.9 in, the scale
-factor is 1.0, and nominal point size == printed point size.
+Everything here is objective-aligned (Class A): the criteria reward correspondence between
+response populations, which is the information population-level retrieval uses. That is the
+figure's whole scope and the reason it stops where it does. What happens under criteria that do
+NOT share the retrieval objective is Figure 3.
 
-At 1:1 the horizontal budget is real, so the layout is specified as an explicit inch ledger rather
-than a uniform 12-column grid: panels a and f are horizontal bar charts whose category labels
-("coverage-worst") need ~0.62 in of clearance, which a uniform column gutter cannot give them
-without starving the other four panels. Rows 1 and 2 are each a 5-cell gridspec of
-``[panel, gutter, panel, gutter, panel]`` with ``wspace=0``, so every width below is literally
-inches on the printed page.
+THE 2026-08-31 REBUILD, AND WHAT IT WAS FIXING
+----------------------------------------------
+The science was already here. What was missing is that six of the seven panels were standard
+statistical charts that stated their result instead of showing it, and the layout was the reason.
+Three panels across a 6.90 in canvas leaves each one about 1.7 in wide, which is a size at which
+the only way to fit an annotation is to shrink it, so the figure had drifted down to 5.6 pt in six
+places. Two per row, and one full-width headline, buys the 6.5 pt floor this file now enforces.
 
-Row 3 is the same ledger with three cells, ``[margin, panel, margin]``, because it carries one
-panel. g is a 6x6 matrix drawn with ``aspect="equal"``, so matplotlib re-fits its axes box to a
-square at draw time whatever cell it is handed. Run to the full 6.14 in row the matrix is still
-1.905 in, the row height being what limits it there, and ``colorbar(ax=ax)`` then anchors the
-matrix EAST inside its own cell and parks the pair at x 4.41 to 6.65 with 3.7 in of blank to their
-left. A full-width cell therefore buys no ink at all and hands the placement to ``make_axes``; a
-2.080 in cell keeps it in the ledger, where this file keeps every other placement. The two margins
-are unequal because what is centred on the page is the ink and not the cell: g hangs 0.50 in of y
-tick labels past the left edge of its cell and 0.39 in of colorbar tick labels and "Spearman rho"
-past the right. Centring the cell instead would print the panel visibly off-centre; as written the
-blank canvas measures 1.963 in on the left and 1.964 in on the right.
+Four things changed that are about the argument rather than about the drawing:
 
-This file also pins the canvas now, which it did not before, for one old reason and one that
-arrives with row 3. Unpinned, ``bbox_inches="tight"`` cropped to the ink and exported 6.85 in
-rather than 6.90, so ``width=\\textwidth`` magnified the composite by 1.2 per cent and printed
-point size stopped being nominal point size, which is the drift the 1:1 authoring above exists to
-remove; worse, that width was an emergent property of whichever annotation sat furthest out, so any
-later edit could move it. And g is centred on the 6.9 in CANVAS, which is only centred on the
-printed page if the canvas IS the page: a tight crop keeps 1.952 in of blank left of g and 1.904 in
-right of it, two margins that differ by 0.05 in, and centring is the one thing this row's ledger
-was written to buy.
+  * a is grouped by REPRESENTATION FAMILY and no longer by performance alone. That is free,
+    because the two orderings coincide: 0.589 is the weakest population-level scorer and 0.518
+    the strongest mean-level one, so the ladder is sorted and grouped at the same time. It was
+    previously drawn in three colours with pca_dist coloured as "other", which put a latent
+    ENERGY DISTANCE outside the population family and weakened the claim the panel exists to
+    make. fig2a asserts the separation at draw time.
+  * d was two bars whose near-equality the reader had to notice. It now carries the measurement:
+    a bootstrap interval on each median, the difference, and a rank test. The gate's two groups
+    differ by -0.003 in median regret reduction, 95% CI [-0.065, +0.059], Mann-Whitney p = 0.97.
+  * e plotted six curves, three of them the mean baseline, and asserted only that energy Hit@1
+    falls with alpha. The quantity the manuscript's own caption discusses is the ADVANTAGE, so
+    the panel now plots it directly: three curves instead of six, and the claim ("not a universal
+    monotonic collapse") is a property of the drawn lines rather than of the caption.
 
-This gain is objective-aligned (Class A); it is NOT independent validation, which is Figure 3.
+    Rebuilding it also caught an error in the manuscript, which the panel's author and its
+    auditor found independently. Both the Results text and the old caption described alpha as a
+    SIMILARITY knob, "progressively merging the two constructed subpopulations". It is not.
+    ControlledMixtureTask.build draws n_maj = round(alpha * 400) cells from the HDAC response
+    pool and the remaining 400 - n_maj from the JAK pool, so the two states stay orthogonal and
+    what alpha moves is their PROPORTION: the minority state falls from 200 cells to 40. A real
+    merging sweep does exist in this repository, build_divergence_query's lam ("lam = 0 gives
+    identical subpops, lam >= 1 orthogonal"), but it belongs to exp02 and exp11 and is not what
+    this panel plots. The conclusion survived; the mechanism named did not. Both sentences are
+    corrected, and CORRECTIONS.md records it.
+  * e and f moved off hand-copied mirrors in figures/source_data/ onto the results/ files those
+    mirrors were copied from, which is what panel c was already fixed to do. The mirrors had no
+    generator, and both were verified to agree with their parent before the switch.
+
+    g did NOT move, because it cannot. It reads figures/source_data/ed1_metric_correlation.csv,
+    which source_data/README.md classifies PRIMARY, meaning nothing regenerates it. No file under
+    results/ holds the 54,180 query-candidate scores, and exp08_signature_baselines.py exports
+    none, so the matrix behind g and behind the manuscript's "rho = 1.000 over 54,180 scores"
+    cannot be recomputed from the released code. That was tolerable while the panel was Extended
+    Data; it is a main-text reproducibility gap now, and the fix is a generator, not an edit
+    here.
+
+GEOMETRY, IN INCHES ON THE PRINTED PAGE
+---------------------------------------
+The manuscript text block is 6.951 in and the figure enters with
+``\\includegraphics[width=\\textwidth]``. Authored at 6.90 in, so the scale factor is 1.00 and
+nominal point size IS printed point size; the 6.5 pt floor asserted below is 6.5 pt on paper.
+The float has to clear a 9.461 in text block less about 16/72 in of float overhead, so the
+canvas is 9.20 in and exports at 9.22 with savefig's 0.01 in pad.
+
+Row heights differ because the rows do. a is the headline and is the only full-width panel; d and
+e get the deepest row because d carries per-query distributions behind its two intervals and e
+carries a schematic strip above its curves.
+
+Rebuild: python fig2_assemble.py
 """
-import os, sys, matplotlib.pyplot as plt
+import os
+import re
+import sys
 
-# ONE canonical output stem per figure. This file used to write fig2_apparent_gains.* while
-# build_all.py wrote the same figure as fig2_temptation.*, so the composite existed on disk twice
-# under two names and nothing said which was current. build_all's STEMS entry is the one that is
-# copied to manuscript/latex/figures/fig2.pdf, so that is the name kept here; build_all checks
-# this constant against its own STEMS dict and fails the build if the two ever drift apart again.
-STEM = "fig2_temptation"
+import matplotlib.pyplot as plt
+import matplotlib.text as mtext
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-# The Extended Data panel library, for g. Same path idiom as the two lines above; edfigs is not a
-# package, and ed_consolidated.py reaches its own imports the same way.
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "edfigs")))
-from fig2a import draw_2a
-from fig2b import draw_2b
-from fig2c import draw_2c
-from fig2d import draw_2d
-from fig2e import draw_2e
-from fig2f import draw_2f
 
-import ed_panels                                    # noqa: E402  draw_edNx(ax, D)
-from figstyle import pin_canvas, strip_titles       # noqa: E402
+# ONE canonical output stem per figure; build_all.STEMS holds the same string and refuses to
+# build if the two drift apart. This is the name that syncs to manuscript/latex/figures/fig2.pdf.
+STEM = "fig2_temptation"
 
-DRAW = {"a": draw_2a, "b": draw_2b, "c": draw_2c,
-        "d": draw_2d, "e": draw_2e, "f": draw_2f}
+from figstyle import pin_canvas, strip_titles  # noqa: E402
+from fig2_style import PT_ANNOT, PT_FLOOR, PT_LETTER, PT_TICK, PT_TITLE, TEXT  # noqa: E402
 
-# ---- the inch ledger -----------------------------------------------------------------------
-FIG_W, FIG_H = 6.9, 8.055          # 6.9 in <= 6.93 in text block: printed 1:1
-M_LEFT = 0.70                      # holds panel a "coverage-worst" y tick labels
-M_RIGHT = 0.06
-M_TOP = 0.38                       # panel letters only; the titles are in the caption
-M_BOT = 0.52                       # g's x tick labels: its y labels stood upright cost 0.50 in
-                                   # (was 0.44, for row 2, which now hangs into ROW_GAP instead)
-ROW_GAP = 0.72                     # row-N x labels + row-(N+1) letters (was 0.95, with titles)
-N_ROWS = 3                         # a b c | d e f | g
-USABLE = FIG_W - M_LEFT - M_RIGHT  # 6.14 in of drawable width per row
+from fig2a import draw_2a  # noqa: E402
+from fig2b import draw_2b  # noqa: E402
+from fig2c import draw_2c  # noqa: E402
+from fig2d import draw_2d  # noqa: E402
+from fig2e import draw_2e  # noqa: E402
+from fig2f import draw_2f  # noqa: E402
+from fig2g import draw_2g  # noqa: E402
 
-# [panel, gutter, panel, gutter, panel]; gutters sized by what the RIGHT neighbour needs
-ROW1 = [1.757, 0.42, 1.757, 0.45, 1.756]      # a | b | c
-ROW2 = [1.450, 0.50, 1.830, 0.74, 1.620]      # d | e | f   (0.74 = f's long category labels)
-# [margin, panel, margin]. 2.080 is the widest cell that still leaves g square inside ROW_H, and
-# the two margins are what centres g's INK, not its cell, on the 6.9 in page (see above).
-ROW3 = [1.762, 2.080, 2.298]                  # (empty) | g | (empty; g's colorbar lands here)
-assert abs(sum(ROW1) - USABLE) < 1e-6, sum(ROW1)
-assert abs(sum(ROW2) - USABLE) < 1e-6, sum(ROW2)
-assert abs(sum(ROW3) - USABLE) < 1e-6, sum(ROW3)
+# ------------------------------------------------------------------------------------------
+# The inch ledger
+# ------------------------------------------------------------------------------------------
+FIGW = 6.90
 
-ROW_H = (FIG_H - M_TOP - M_BOT - ROW_GAP * (N_ROWS - 1)) / N_ROWS
-LETTER_OFFSET_IN = 0.22            # panel letters sit a constant 0.22 in left of their axes
-# g's letter is measured against the PRINTED square, not against its 2.080 in cell. Because
-# ``transAxes`` resolves to the box ``aspect="equal"`` leaves behind, dividing 0.22 in by the cell
-# would print the letter 0.20 in out and break the letter column. Derived rather than typed as
-# 1.901 so that re-tuning ROW3 cannot silently desynchronise the two.
-CBAR_TAKE = 0.046 + 0.04           # fraction + pad, exactly as ed_panels.draw_ed1c passes them
-G_AXES_W = ROW3[1] * (1.0 - CBAR_TAKE)        # 1.901 in against a 1.905 in row: width-limited
-assert G_AXES_W <= ROW_H + 1e-9, f"g would be height-limited: {G_AXES_W:.3f} > {ROW_H:.3f}"
+PAD_TOP, PAD_BOT = 0.05, 0.08
+LETTER_BLOCK = 0.26        # the band above each row holding the bold letter and the panel phrase
+ROW_GAP = 0.28
+
+# (panel keys in the row, row height in inches). A one-key row is full width.
+ROWS = [(("a",), 1.80),
+        (("b", "c"), 1.58),
+        (("d", "e"), 1.95),
+        (("f", "g"), 1.86)]
+
+# (left, right, bottom) pad in inches inside the panel BOX. Top is always zero: the panel phrase
+# is drawn at transAxes y = 1.0 and lives in the LETTER_BLOCK band above the axes. Left pads are
+# sized by what each panel's y furniture actually needs at 6.8 pt, which is why they differ:
+# "coverage-worst" as a y tick label is 0.62 in, a rotated y axis label plus numeric ticks is
+# 0.46 in, and every panel reserves 0.24 in of that for the letter.
+PADS = {"a": (0.94, 0.08, 0.46),
+        "b": (0.72, 0.10, 0.50),
+        "c": (0.72, 0.10, 0.50),
+        "d": (0.72, 0.10, 0.52),
+        "e": (0.72, 0.10, 0.50),
+        "f": (0.90, 0.10, 0.48),
+        "g": (0.86, 0.10, 0.50)}
+
+# e is a curve under a schematic strip that says what its x axis physically means, the same
+# construction figure 1 uses for its two continuum panels.
+E_STRIP_H, E_STRIP_GAP = 0.42, 0.08
 
 
-def _adapt(fn, arg):
-    """Wrap a draw function that wants a second argument so every panel is callable as fn(ax)."""
-    return lambda ax: fn(ax, arg)
+def _boxes():
+    """Resolve the rows into per-panel axes rects, in inches, measured from the FIGURE TOP."""
+    rects, letters = {}, {}
+    y = PAD_TOP
+    for keys, row_h in ROWS:
+        y += LETTER_BLOCK
+        box_w = FIGW / len(keys)
+        for i, k in enumerate(keys):
+            x0 = i * box_w
+            letters[k] = (x0, y)
+            left, right, bottom = PADS[k]
+            ax_x, ax_w = x0 + left, box_w - left - right
+            if k == "e":
+                rects["e_top"] = (ax_x, y, ax_w, E_STRIP_H)
+                rects["e"] = (ax_x, y + E_STRIP_H + E_STRIP_GAP, ax_w,
+                              row_h - E_STRIP_H - E_STRIP_GAP - bottom)
+            else:
+                rects[k] = (ax_x, y, ax_w, row_h - bottom)
+        y += row_h + ROW_GAP
+    return y - ROW_GAP + PAD_BOT, rects, letters
+
+
+FIGH, RECTS, LETTER_XY = _boxes()
+
+
+def _letter(fig, key):
+    """Panel letters in the gutter, on one baseline per row, at this figure's own 9.5 pt.
+
+    Placed in FIGURE coordinates rather than as an axes-fraction offset, so that the two columns
+    line up: a fixed transAxes dx puts the letter a different distance out on every panel width,
+    and this figure has five distinct axes widths.
+    """
+    x0, row_top = LETTER_XY[key]
+    fig.text(x0 / FIGW, 1.0 - (row_top - 0.04) / FIGH, key,
+             fontsize=PT_LETTER, fontweight="bold", va="bottom", ha="left", color=TEXT)
+
+
+_SUBSUP = re.compile(r"\$[^$]*[\^_][^$]*\$")
+
+
+def _assert_floor(fig, floor=PT_FLOOR):
+    """Refuse to return a figure carrying text below THIS figure's floor.
+
+    figstyle.save() already enforces the deck's 5 pt production limit. This is stricter and runs
+    earlier, because the point of the rebuild was legibility rather than compliance: 5 pt is what
+    production rejects, 6.5 pt is what a reader can take in at 183 mm. Mathtext is measured at its
+    effective size, since a sub/superscript prints at 0.7x nominal.
+
+    The fix when this fires is to CUT the annotation and move the sentence into the caption, which
+    is where dense explanation belongs and costs no space. It is not to lower the size.
+    """
+    bad = []
+    for t in fig.findobj(mtext.Text):
+        s = str(t.get_text())
+        if not s.strip() or not t.get_visible():
+            continue
+        eff = t.get_fontsize() * (0.7 if _SUBSUP.search(s) else 1.0)
+        if eff < floor - 1e-6:
+            bad.append((round(eff, 2), s.replace("\n", "/")[:40]))
+    assert not bad, (
+        f"Figure 2 sets its own {floor} pt floor and these are under it: {sorted(bad)[:8]}. "
+        f"Cut the annotation into the caption; do not lower the size.")
+    return fig
 
 
 def build(apply_style, panel_letter):
-    apply_style(sizes=(8, 7, 6))   # deck-wide type ladder; no titles are drawn
-    fig = plt.figure(figsize=(FIG_W, FIG_H))
+    # This figure's ladder sits one step above the deck's (8, 7, 6); see fig2_style. panel_letter
+    # is accepted to keep build_all's contract and deliberately not used: its size is fixed at
+    # 8 pt, below this figure's own title size.
+    apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
+    fig = plt.figure(figsize=(FIGW, FIGH))
+    pin_canvas(fig)
 
-    # ed_panels.load() opens every table the Extended Data library needs, so it is called ONCE
-    # here and bound to the one panel that uses it, the way ed_consolidated._build_specs does.
-    draw = dict(DRAW, g=_adapt(ed_panels.draw_ed1c, ed_panels.load()))
+    def _ax(key):
+        x, top, w, h = RECTS[key]
+        return fig.add_axes([x / FIGW, 1.0 - (top + h) / FIGH, w / FIGW, h / FIGH])
 
-    left, right = M_LEFT / FIG_W, 1.0 - M_RIGHT / FIG_W
-    r1_top = 1.0 - M_TOP / FIG_H
-    r1_bot = r1_top - ROW_H / FIG_H
-    r2_top = r1_bot - ROW_GAP / FIG_H
-    r2_bot = r2_top - ROW_H / FIG_H
-    r3_top = r2_bot - ROW_GAP / FIG_H
-    r3_bot = r3_top - ROW_H / FIG_H
+    for key, fn in (("a", draw_2a), ("b", draw_2b), ("c", draw_2c),
+                    ("d", draw_2d), ("f", draw_2f), ("g", draw_2g)):
+        fn(_ax(key))
+    draw_2e(_ax("e"), _ax("e_top"))
 
-    gs1 = fig.add_gridspec(1, 5, width_ratios=ROW1, wspace=0,
-                           left=left, right=right, top=r1_top, bottom=r1_bot)
-    gs2 = fig.add_gridspec(1, 5, width_ratios=ROW2, wspace=0,
-                           left=left, right=right, top=r2_top, bottom=r2_bot)
-    gs3 = fig.add_gridspec(1, 3, width_ratios=ROW3, wspace=0,
-                           left=left, right=right, top=r3_top, bottom=r3_bot)
+    for key in "abcdefg":
+        _letter(fig, key)
 
-    # panel -> (gridspec, cell index, axes width in inches)
-    PLACE = {"a": (gs1, 0, ROW1[0]), "b": (gs1, 2, ROW1[2]), "c": (gs1, 4, ROW1[4]),
-             "d": (gs2, 0, ROW2[0]), "e": (gs2, 2, ROW2[2]), "f": (gs2, 4, ROW2[4]),
-             "g": (gs3, 1, G_AXES_W)}
-
-    for k, (gs, col, w_in) in PLACE.items():
-        ax = fig.add_subplot(gs[0, col])
-        draw[k](ax)
-        panel_letter(ax, k, dx=-LETTER_OFFSET_IN / w_in, dy=1.19, case="lower")
-
-    # Nature panels carry no titles: the seven claims each panel used to state over itself are
-    # now the seven entries of this figure's caption. Panel scripts keep their set_title calls
-    # so a standalone preview still labels itself; the composite strips them.
-    return pin_canvas(strip_titles(fig))
+    # strip_titles clears rc titles so a panel's standalone preview can label itself without the
+    # composite inheriting it. The one phrase each panel states over itself here is drawn ink via
+    # fig2_style.title and survives on purpose.
+    return _assert_floor(strip_titles(fig))
 
 
 if __name__ == "__main__":
-    # build() must NOT export. It used to call fig.savefig() here, which meant two things:
-    # `python figures/build_all.py` without --write, documented as a report-only dry run,
-    # silently overwrote four tracked composites; and it wrote them BEFORE
-    # assert_min_fontsize ran, so a figure that then FAILED the gate had already been
-    # deployed to disk. Every export now goes through figstyle.save(), which applies the
-    # 5 pt floor first. (Audited 2026-07-27; fig1 and fig4 already worked this way.)
+    # build() must NOT export. Every export goes through figstyle.save(), which applies the
+    # deck-wide 5 pt floor first; a savefig here would ship a figure that never met the gate.
     from figstyle import apply_style, panel_letter, save
     save(build(apply_style, panel_letter),
          os.path.join(os.path.dirname(os.path.abspath(__file__)), STEM))
-    print("wrote fig2 composite")
+    print(f"wrote {STEM}.pdf / .svg / .png  ({FIGW} x {FIGH:.2f} in)")

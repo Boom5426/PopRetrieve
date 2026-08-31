@@ -1,84 +1,112 @@
-# Figure 2: Under objective-aligned metrics, distributional retrieval looks decisively stronger
+# Figure 2: cell populations carry retrievable information beyond mean signatures
 
-One-line message: under objective-aligned (Class-A) evaluation, distribution-aware retrieval shows
-large gains over mean-signature retrieval. This is genuine but Class A (the metric shares the
-retrieval objective); the figure must NOT be read as independent validation, which Fig 3 addresses.
+One-line message: retaining within-population structure gives retrieval access to information that
+a collapsed mean signature cannot reach. **Every criterion on this figure is objective-aligned
+(Class A):** all of them reward correspondence between response populations, which is the
+information population-level retrieval uses. The figure must NOT be read as independent
+validation. What happens under criteria that do not share the retrieval objective is Figure 3.
 
 ## Panels
 
-| Panel | Panel title (must stay true of the manuscript) | Source | Status |
-|-------|-----------------------------------------------|--------|--------|
-| a | "Distributional scorers top the Hit@1 ladder": energy 0.837 > ... > mean = CMap 0.388 | exp08 summary.csv | done |
-| b | "The advantage does not hold on Frangieh": mean/CMap 0.600 beats energy 0.578, and is the best of all eight scorers there | exp08 summary_by_task.csv | done |
-| c | "72% of all 765 queries improve, median +0.118" | exp12 per_query_scores.csv | done |
-| d | "The gate does not concentrate the gain": +0.119 (n=621) vs +0.122 (n=133) | exp12 recommendation_vs_outcome.csv | done |
-| e | "Energy retrieval degrades as subpopulations merge" | fig2e_alpha_crossover.csv | done |
-| f | "All five PopRetrieve metrics gain under the Class-A metric" | fig2f_classA_robustness.csv | done |
+Read in four movements: how big, how general, can we predict it, is it one score or a family.
+
+| Panel | What the reader should see in three seconds | Reads |
+|---|---|---|
+| a | "Every population scorer beats every mean scorer" | `results/exp08_signature_baselines/summary.csv` |
+| b | "Large on both mixtures, reversed on Frangieh" | `results/exp08_signature_baselines/summary_by_task.csv` |
+| c | "The gain survives partial observation" | `results/exp12_partial_observed_retrieval/per_query_scores.csv` |
+| d | "Recommendation does not enrich the gain" | same per-query file |
+| e | "K562 collapses; A549 and MCF7 do not" | `results/exp01_sciplex3_controlled/metrics_summary.csv` |
+| f | "All five intervals clear zero" | same per-query file |
+| g | "Score families agree within, not across" | `figures/source_data/ed1_metric_correlation.csv` |
+
+Each phrase is drawn ink at 8.5 pt, not an rc title, and each is asserted against the data it
+describes: if the data stopped supporting the sentence, the build breaks rather than the panel
+quietly printing a false one. Panels e and f build their phrases from the drawn values.
 
 ## Verified numbers
-- 3a: energy 0.8369, pca_dist 0.7782, coverage_mean 0.7734, coverage_worst 0.5893, pca_mean 0.5179,
-  cmap_wtcs 0.4635, cmap_cosine = mean_cosine 0.388492 (exp08 summary.csv, unweighted mean over the
-  7 task x setting cells). Query-weighted, the same two are 0.8865 and 0.4214, as the text says.
-- 3b: per task, energy vs mean/CMap: controlled 0.844 vs 0.289 (+0.56), crossline 0.916 vs 0.418
-  (+0.50), frangieh 0.578 vs 0.600 (-0.02). On Frangieh mean/CMap is the top of all eight scorers.
-- 3c: regret reduction DART_coverage_worst vs mean_cosine over ALL 765 partial-observed queries:
-  median +0.11826, mean +0.25790, frac>0 0.7203, frac<0 0.2078, Wilcoxon p = 1.568e-66. This is the
-  number the manuscript quotes; the 621-query gate-recommended subset gives +0.11900 and p = 4.3e-56.
-- 3d: recommendation_vs_outcome.csv medians, coverage_worst DART_recommended +0.11900 (n=621) vs
-  mean_or_no_call +0.12194 (n=133). The remaining 11 of the 765 queries are gate "mean_sufficient"
-  (median exactly 0.000); they are named on the panel and not plotted.
-- 3e: exp01 controlled mixing sweep. Energy Hit@1 is monotone non-increasing in alpha for all three
-  cell lines (K562 1.00 -> 0.35, A549 1.00 -> 0.85, MCF7 1.00 -> 0.75), which is what the panel
-  title claims and what the panel asserts at draw time.
-- 3f: all five PopRetrieve metrics positive on the 621 gate-recommended queries: energy +0.056, MMD +0.060,
-  sliced-W +0.059, coverage-mean +0.090, coverage-worst +0.119.
+
+- **a** macro-means over the 7 task x setting cells: energy 0.836905, PCA-dist 0.778175,
+  coverage-mean 0.773413, coverage-worst 0.589286, PCA-mean 0.517857, CMap WTCS 0.463492,
+  CMap cosine = mean cosine 0.388492. Difference energy minus mean cosine **+0.448413**, ratio
+  2.154x. Note this is not 0.837 minus 0.388: subtracting the rounded values gives 0.449, and the
+  panel prints the difference of the unrounded ones.
+- **The separation is the panel's design.** The weakest population-level scorer (0.589) is above
+  the strongest mean-level one (0.518), so sorting by value and grouping by representation give
+  the same ladder. `fig2a` asserts it; if it ever failed, the two-colour scheme would be a claim
+  the data no longer supports.
+- **b** per task, energy vs mean/CMap cosine: controlled 0.8444 vs 0.2889 (+0.56), cross-line
+  0.9157 vs 0.4176 (+0.50), Frangieh 0.5778 vs 0.6000 (-0.02). On Frangieh mean/CMap cosine is the
+  best of all eight scorers. n = 90, 1080, 90.
+- **c** regret reduction, coverage-worst against mean cosine, over ALL 765 partial-observed
+  queries: median +0.11826, mean +0.25790, 72.0% improved, 20.8% worse, 7.2% exactly tied,
+  Wilcoxon p = 1.568e-66.
+- **d** recommended +0.11900 (n=621, 95% CI +0.099 to +0.139) against not recommended +0.12194
+  (n=133, CI +0.061 to +0.177); difference -0.0029, CI -0.062 to +0.058, Mann-Whitney p = 0.967.
+  Pooling the 11 mean-sufficient queries into the non-recommended arm gives +0.0048, CI -0.055 to
+  +0.065, p = 0.807, so the null does not depend on which queries were set aside.
+- **e** population advantage, energy Hit@1 minus mean-cosine Hit@1, at alpha 0.5 to 0.9:
+  K562 +1.00 +0.90 +0.80 +0.50 +0.05 (the only monotone line, drop 0.95); A549 +0.40 +0.65 +0.70
+  +0.65 +0.65; MCF7 +0.35 +0.65 +0.70 +0.90 +0.45. n = 20 seeds per point.
+- **f** medians on the 621 gate-recommended queries, with seeded bootstrap 95% CIs: energy +0.0557
+  [+0.037, +0.072], MMD +0.0604 [+0.042, +0.079], sliced-W +0.0591 [+0.040, +0.082], coverage-mean
+  +0.0904 [+0.060, +0.109], coverage-worst +0.1190 [+0.099, +0.139]. All five exclude zero.
+- **g** within the mean family 1.0000 / 0.8501 / 0.8501, within the population family 0.8251 /
+  0.7217 / 0.9749, and all nine cross-family pairs at |rho| <= 0.0757.
 
 ## Honesty notes
-- The whole figure is Class A: gains are measured with metrics that share the retrieval objective.
-  The caption states this; the collapse under Class B/C metrics is Fig 3.
-- 3b is drawn as paired dots with a signed gap label rather than a heatmap, because a Blues heatmap
-  renders the 0.578 / 0.600 reversal invisible. The counterexample is deliberately reported.
-- 3c/3d: the Class-A positive is in decision REGRET, not MoA-nDCG (which is ~0 on the recommended
-  subset); the panels plot regret reduction, not a MoA-nDCG gain, to avoid overclaiming.
-- 3c plots all 765 queries, 3d and 3f the 621-query gate-recommended subset. Each panel states its
-  own n, because the three n's differ for a reason and a silent mismatch would look like an error.
-- 3e uses the controlled alpha axis (subpopulation mixing), the one setting with a clean
-  heterogeneity knob; per-query real-data divergence does NOT correlate with regret reduction
-  (rho=-0.03, p=0.40), so that (absent) relationship is deliberately not drawn.
 
-## Open items for the author
-- The manuscript caption for **e** says "the energy advantage narrows as subpopulations merge".
-  That holds for K562 (energy-minus-mean gap 1.00 -> 0.05) but NOT for A549 (0.40 -> 0.65) or MCF7
-  (0.35 -> 0.45). The panel title therefore claims only the part that is true of all three lines.
-  Either soften the caption or restrict it to K562.
-- The exact macro-mean for mean/CMap cosine is 0.388492, which rounds to 0.388. The panel, the
-  manuscript and README all print 0.388. (An earlier manuscript draft wrote 0.389; that is fixed.)
+- **The whole figure is Class A.** The caption says so in its first sentence, and panel g's own
+  note says its correlations describe scoring-rule similarity rather than retrieval performance.
+- **b reports its own counterexample.** A colour-scaled heatmap renders the 0.578 / 0.600 reversal
+  invisible; the paired markers and the signed gap cannot.
+- **The three n differ on purpose.** c is all 765 partial-observed queries, d splits the same 765,
+  f uses the 621 gate-recommended subset. Each panel states its own n, because a silent mismatch
+  would read as an error.
+- **d's test is anticonservative** (queries within a cell line share a candidate library), which
+  for a NULL strengthens the conclusion rather than weakening it. Stated in the caption.
+- **f's welfare proxy is worst-state energy**, and the two scorers furthest right are an energy
+  score and a worst-case score, so the criterion's functional form is closest to the two winners.
+  That alignment is the paper's subject, not a defect in the panel, and it is what Figure 3 tests.
+- **e's alpha is a mixing proportion, not a similarity knob.** See CORRECTIONS.md R45: the
+  manuscript described it as merging until 2026-08-31. It is not; the two response states are
+  orthogonal throughout and what shrinks is the minority state, from 200 cells to 40.
+- **The bootstrap bounds in d and f are seed-fixed, not seed-free.** `boot_median_ci` uses
+  `seed=0` and `n_boot=4000`, so the panel, this file and the caption agree exactly and the
+  figure reproduces. But with n = 133 the bootstrap median takes only about 38 distinct
+  values, so the 2.5th percentile lands on one of two adjacent atoms depending on the seed:
+  the non-recommended lower bound is +0.061 at seed 0 and +0.066 at seed 2. Quote these to
+  three decimals at most, and never treat the last digit as measured. The medians and the
+  rank-test p values are deterministic and carry no such caveat.
+- **g's matrix has no generator.** See CORRECTIONS.md R46. It covers six of a's eight scorers; the
+  two PCA baselines are absent from the export and the panel says so on its face rather than
+  inventing them.
 
-## Print geometry (authored 1:1)
-The manuscript text block is 6.93 in and the figure enters with `\includegraphics[width=\textwidth]`.
-This composite was previously authored 11.0 x 5.7 in, so LaTeX shrank it 0.63x and the 6 pt panel
-annotations printed at 3.8 pt, below the 5 pt Nature Portfolio floor. (`figstyle.save` only measures
-NOMINAL point size, so it reported CLEAN while the printed page failed.) The canvas is now
-6.9 x 5.8 in; the exported PDF is 6.836 x 5.596 in after the tight bounding box, so LaTeX scales it
-by 1.014 and the 6 pt floor prints at 6.1 pt. Layout is an explicit inch ledger in
-`fig2_assemble.py` (two rows of `[panel, gutter, panel, gutter, panel]`, `wspace=0`) because panels
-a and f need ~0.62 in for their category labels, which a uniform 12-column gutter cannot give.
+## Print geometry, authored 1:1
 
-On-panel text that was cut to fit 1:1 (all of it survives in the caption or the Results text):
-- 3a x label: "unweighted mean of 7 task x setting cells" -> "macro-mean of 7 cells".
-- 3b x ticks: dropped the "SciPlex3" / "natural" provenance line; only `n` remains.
-- 3c: dropped the trailing clause "pulled up by the right tail" from the Wilcoxon block.
-- All six titles are wrapped to two lines; no wording changed, and no font size was lowered.
+The manuscript text block is 6.951 in and the figure enters with
+`\includegraphics[width=\textwidth]`. The canvas is **6.90 x 9.20 in** and exports 6.92 x 9.22, so
+LaTeX scales it by 1.004 and nominal point size is printed point size. The float budget is the
+9.461 in text block less about 16/72 in of overhead, i.e. 9.238 in, so the height has 0.018 in of
+margin: **do not grow the canvas without re-checking `Float too large` in the build log.**
+
+Layout is an explicit inch ledger in `fig2_assemble.py`: four rows, `a` alone at full width, then
+`b|c`, `d|e`, `f|g`. It was three panels per row until 2026-08-31, which left each about 1.7 in
+wide and forced six annotations down to 5.6 pt. Two per row buys the **6.5 pt floor** that
+`fig2_assemble._assert_floor` now enforces, above the deck's 5 pt production limit, and mathtext
+is measured at its effective 0.7x size.
 
 ## Files
-- fig2a.py ... fig2f.py : per-panel draw functions (each runs standalone). Each sets its own title,
-  and `fig2_assemble.py` does NOT override them, so the string in the panel file is the string that
-  prints.
-- fig2_assemble.py : the two-row inch ledger described above; it owns the module-level `STEM`.
-- fig2_temptation.{pdf,svg,png} : the composite, and the only stem this figure is written under.
-  `python figures/build_all.py --write` enforces the 5 pt floor, writes these, and copies the PDF to
-  manuscript/latex/figures/fig2.pdf, which is the file the manuscript compiles. The assemble used to
-  write the same composite a second time as `fig2_apparent_gains.*`, so the figure sat on disk twice
-  under two names with nothing to say which one the manuscript used; that duplicate stem is gone and
-  build_all now fails if the two names drift apart again.
-- 2a.png ... 2f.png are standalone per-panel previews, not inputs to the composite.
+
+- `fig2_style.py` : the frozen vocabulary. Two family colours, one type ladder, the shared scorer
+  table, and `boot_median_ci` (seeded), which is where every interval in d and f comes from. Panels
+  import from here and never re-declare a colour.
+- `fig2a.py` ... `fig2g.py` : per-panel draw functions, each runnable standalone for a preview.
+  `draw_2e` takes two axes (the curve and the composition strip above it); the rest take one.
+- `fig2_assemble.py` : the inch ledger, the panel letters at 9.5 pt, and the 6.5 pt floor gate.
+  Owns the module-level `STEM`, which `build_all.py` checks against its own `STEMS` dict.
+- `fig2_temptation.{pdf,svg,png}` : the composite, and the only stem this figure is written under.
+  `python figures/build_all.py --write` enforces the floor, writes these, and copies the PDF to
+  `manuscript/latex/figures/fig2.pdf`, which is the file the manuscript compiles.
+- `2a.png` ... `2g.png` : standalone per-panel previews, not inputs to the composite, and not
+  guaranteed fresh.
