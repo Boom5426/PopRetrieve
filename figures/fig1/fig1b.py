@@ -1,162 +1,277 @@
-"""PopRetrieve Figure 1 panel 1b: the biological motivation, drawn rather than rendered.
+"""PopRetrieve Figure 1 panel b: why averaging can fail.
 
-The claim this panel has to carry, and the whole reason a distributional score could matter:
-two drugs can produce the SAME population mean shift and OPPOSITE consequences for a resistant
-minority. The mean is a sufficient statistic only if every cell responds the same way.
+WHAT THIS PANEL HAS TO SAY
+--------------------------
+Two drugs, one population of cells. Drug A moves every cell, Drug B moves only the responsive
+majority and leaves a resistant minority sitting at baseline. The population mean is the same
+under both, so a mean signature cannot tell them apart, while the cells plainly can.
 
-Schematic, not data. It states the hypothesis the paper then tests; it asserts no result.
+The panel is BIOLOGICAL, not statistical. It is about the fate of the same cells under two
+drugs, so the reader should see one population being carried across intact (Drug A) and the same
+population being torn in two (Drug B). That is why the three lanes are drawn from ONE glyph:
+lanes 1 and 2 are the same cells at two positions on the response axis, and lane 3 is those same
+cells with only the majority moved. Nothing here is measured; the arithmetic that makes the two
+means equal belongs in the caption, and deliberately does not appear on the panel.
 
-Design notes (presentation only, no data involved):
-  * Everything is laid out on ONE shared response axis, so "same mean shift" is a geometric fact
-    the reader can see: a single orange dashed line marks the treated population mean and both
-    drugs' mean markers sit on it.
-  * Points are drawn from a seeded generator, then each lane is rigidly translated so that its
-    POPULATION mean lands exactly on the intended value. Without that correction the two drugs'
-    sample means differ by ~0.01 and the panel would assert an identity it does not draw. The
-    translation is a whole-lane shift, so it changes no within-lane structure.
-  * Drug B's majority must overshoot (1.25 rather than 1.00) precisely because its minority does
-    not move: 0.8 x 1.25 + 0.2 x 0 = 1.0. That is the honest way to hold the mean fixed, and it
-    also makes the point sharper: the bulk response is not the same either, yet the mean is.
-  * Palette semantics: GREY = context (the responding bulk, which both scoring rules see),
-    FOCAL_SOFT blue = the distributional signal (the minority, visible only to a distributional score),
-    COMP_SOFT orange = the mean / the collapse (mean markers, the shared-mean rules, the delta arrow).
+WHY THE GEOMETRY IS A CONSTRUCTION AND NOT A MEASUREMENT
+-------------------------------------------------------
+"Identical mean response" is the panel's whole claim, so it has to be a fact about the picture
+rather than a caption the picture almost supports. Two things enforce it:
+
+  * R_MAJ_B is derived from the minority fraction, not typed in. If the minority does not move,
+    the majority has to overshoot by exactly 1 / (1 - f) to hold the population mean fixed.
+  * Each lane is translated RIGIDLY, as a whole, so that the mean of its drawn cells lands
+    exactly on the shared dashed rule. A seeded uniform draw of 60 cells misses its own centre by
+    a percent or two, which is invisible on one lane and, across two lanes, is the difference
+    between a rule that passes through both diamonds and one that misses both. The translation
+    moves every cell of a lane by the same amount, so it changes no within-lane structure.
+
+The single dashed rule is the only place the two treated lanes touch, and it is what makes the
+Drug B diamond damning: it sits in the empty gap between the two fragments, on a response value
+no cell in that lane has.
+
+Layout, for a 1.376 x 3.00 in axes: the key is at the top left, the panel's phrase sits directly
+above the rule it labels so the dashes hang from the words, and the three lanes read downward
+against one horizontal response axis at the foot.
 
 Run standalone: python fig1b.py
 """
+from __future__ import annotations
+
 import os
+import re
+import sys
 
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyArrowPatch, Ellipse
+from matplotlib.collections import PathCollection
 
-# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
-# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
-# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
-import sys as _sys, os as _os
-_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
-from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# The frozen vocabulary. Nothing here is redefined locally, and no colour is imported from
+# figstyle: fig1_style is the one place that maps a hue to a meaning for this figure.
+from fig1_style import (FAINT, LW_HAIR, MEAN, POP, PT_ANNOT, PT_TITLE, SHARED,  # noqa: E402
+                        SUBTLE, TEXT, arrow, blank, cells, centroid, title)
 
-# response-axis geometry: r (arbitrary response units) -> panel x
-R0, RS = 3.10, 3.50
-SD_R = 0.105
-N_MAJ, N_MIN = 184, 46          # 80 % / 20 %
+# ------------------------------------------------------------------ the population, as drawn
+N_CELLS = 60                # divides by the minority fraction exactly, so 48 / 12 cells
+MINOR_FRAC = 0.20
+S_CELL = 3.0                # marker area; at this panel's blob size 60 cells read as a cloud
+A_CELL = 0.70               # the majority is context, so it sits back from the blue minority
+RX, RY = 0.085, 0.025       # blob radii in axes fractions; 0.117 x 0.075 in, so it reads round
 
-LANES = [
-    # label,        centre y, majority r, minority r, population mean r
-    ("untreated",       8.70, 0.00, 0.00, 0.00),
-    ("+ drug A",        5.55, 1.00, 1.00, 1.00),
-    ("+ drug B",        2.50, 1.25, 0.00, 1.00),
-]
-DY = 0.92          # majority / minority sub-row offset within a lane
-SD_Y = 0.17        # within-sub-row vertical jitter (cosmetic only)
+# ------------------------------------------------------------------ the response axis
+R_BASE = 0.0                # untreated, and where a cell that does not respond stays
+R_TREATED = 1.0             # the response Drug A produces in every cell
+# What the majority must reach under Drug B for the population mean to be unchanged when the
+# minority does not move at all. Derived, not typed: this identity is the panel's claim, and a
+# literal 1.25 would let the fraction and the overshoot drift apart in a later edit.
+R_MAJ_B = R_TREATED / (1.0 - MINOR_FRAC)
+
+X_BASE, X_MAJ_B = 0.155, 0.865     # baseline and the far end of the Drug B majority, in axes x
+X_SCALE = (X_MAJ_B - X_BASE) / R_MAJ_B
+
+# ------------------------------------------------------------------ vertical score, axes fractions
+Y_KEY = (0.975, 0.928)      # the two state definitions
+# The phrase is set over the rule, not over the panel, and it wraps because at PT_TITLE in bold
+# it is 1.40 in wide on one line and the axes is 1.376 in. Wrapping is the only way to keep the
+# stated size; shrinking it to fit is what the type ladder exists to forbid.
+Y_TITLE, X_TITLE = 0.845, 0.985
+Y_RULE_TOP = 0.797          # just under the phrase, so the dashes hang from the words
+Y_AXIS, Y_AXIS_LABEL = 0.093, 0.038
+
+X_KEY_SWATCH, X_KEY_TEXT = 0.045, 0.088
+X_TRACK = (0.055, 0.985)    # each lane's stretch of the shared response axis
+DY_BLOB = 0.072             # lane name -> cells
+DY_MEAN = 0.046             # cells -> the mean diamond, which sits clear of the cells it summarises
+DY_PHRASE = 0.078           # cells -> the phrase under a treated lane
+
+# name, name y, majority response, minority response, phrase under the lane. The three names are
+# spaced to leave EQUAL WHITESPACE between blocks rather than equal distance between names: the
+# untreated lane carries no phrase and is a third shorter, so even centres put all of its missing
+# line into one gap and the panel came apart into "lane 1" and "lanes 2 and 3".
+LANES = (
+    ("Untreated", 0.784, R_BASE, R_BASE, None),
+    ("+ Drug A", 0.594, R_TREATED, R_TREATED, "uniform response"),
+    ("+ Drug B", 0.335, R_MAJ_B, R_BASE, "minority resistance"),
+)
 
 
-def _X(r):
-    return R0 + RS * r
+def _x(r: float) -> float:
+    """Response units to axes x. One mapping, so all three lanes share one response axis."""
+    return X_BASE + X_SCALE * r
 
 
-def _lane(ax, rng, cy, r_maj, r_min, r_mean):
-    """Draw one population lane and return the drawn population mean x."""
-    maj = np.column_stack([rng.normal(r_maj, SD_R, N_MAJ),
-                           rng.normal(cy + DY, SD_Y, N_MAJ)])
-    mnr = np.column_stack([rng.normal(r_min, SD_R, N_MIN),
-                           rng.normal(cy - DY, SD_Y, N_MIN)])
-    # rigid translation so the drawn population mean equals the intended one exactly
-    shift = r_mean - np.concatenate([maj[:, 0], mnr[:, 0]]).mean()
-    maj[:, 0] += shift
-    mnr[:, 0] += shift
-
-    ax.scatter(_X(maj[:, 0]), maj[:, 1], s=3.4, c=GREY, alpha=0.50, lw=0, zorder=2)
-    ax.scatter(_X(mnr[:, 0]), mnr[:, 1], s=4.6, c=FOCAL_SOFT, alpha=0.90, lw=0, zorder=3)
-    return _X(r_mean), _X(r_min)
+def _shift(coll: PathCollection, dx: float) -> None:
+    """Translate a drawn population rigidly along the response axis."""
+    off = np.asarray(coll.get_offsets(), dtype=float).copy()
+    off[:, 0] += dx
+    coll.set_offsets(off)
 
 
-def draw_1b(ax):
-    rng = np.random.default_rng(11)
-    # x limits are trimmed to the drawn content (lane labels start near r-units 1.1, the rightmost
-    # annotation ends near 9.1). The old 0-10.2 window left about 1.5 units of dead margin, which
-    # at the printed panel width is a fifth of an inch of empty canvas on each flank.
-    ax.set_xlim(0.80, 9.55)
-    # top headroom is set by the "identical mean shift" label, which sits at y = 10.66 with
-    # va="bottom": at the printed panel height one line of 6.4 pt is ~0.6 data units, so 11.20
-    # clipped it. The panel is authored at final print size, so this margin is now literal.
-    ax.set_ylim(-0.22, 11.52)
-    ax.axis("off")
+def _lane(ax: plt.Axes, rng: np.random.Generator, cy: float, r_maj: float,
+          r_min: float) -> float:
+    """Draw one lane's cells at their two response positions; return the drawn mean's x.
 
-    x_un, x_tr = _X(0.0), _X(1.0)
+    The lane starts as ONE population glyph at baseline and is then placed, rather than being
+    sampled separately per state, because the biological claim is that these are the same cells
+    in every lane. cells() puts the minority in the lower part of the blob, so the majority and
+    the minority come back as two collections that can be carried to different response values:
+    equal for Drug A, which keeps the blob intact, and split for Drug B, which tears it.
+    """
+    first = len(ax.collections)
+    cells(ax, _x(R_BASE), cy, N_CELLS, RX, RY, color=SHARED, minority=(MINOR_FRAC, POP),
+          rng=rng, s=S_CELL, alpha=A_CELL)
+    maj, mnr = ax.collections[first:]
+    for coll, r in ((maj, r_maj), (mnr, r_min)):
+        _shift(coll, _x(r) - _x(R_BASE))
 
-    # ---- the two mean rules: the geometry that makes "identical mean shift" visible ----
-    ax.plot([x_un, x_un], [1.10, 10.20], ls=(0, (3, 2)), lw=0.7, color=GREY, zorder=1)
-    ax.plot([x_tr, x_tr], [0.72, 10.20], ls=(0, (3, 2)), lw=0.8, color=COMP_SOFT, zorder=1)
+    # The rigid correction. The target is the population mean the construction implies; the drawn
+    # mean is what 60 seeded draws actually landed on, and the whole lane moves by the difference.
+    target = _x((1.0 - MINOR_FRAC) * r_maj + MINOR_FRAC * r_min)
+    drawn = np.concatenate([np.asarray(c.get_offsets())[:, 0] for c in (maj, mnr)])
+    for coll in (maj, mnr):
+        _shift(coll, target - drawn.mean())
+    return target
 
-    # Hairline weights and plain weight on the annotations. Bold is reserved for the structural
-    # row identifiers (the three lane names); a bolded conclusion is emphasis, not information,
-    # and this panel had four of them competing with the marks they describe.
-    ax.add_patch(FancyArrowPatch((x_un, 10.48), (x_tr, 10.48), arrowstyle="<|-|>",
-                                 mutation_scale=6, lw=0.8, color=COMP_SOFT, zorder=4))
-    ax.text((x_un + x_tr) / 2, 10.66, "identical mean shift", ha="center", va="bottom",
-            fontsize=6.4, color=INK)
 
-    # ---- the three populations ----
-    for label, cy, r_maj, r_min, r_mean in LANES:
-        xm, x_min_cloud = _lane(ax, rng, cy, r_maj, r_min, r_mean)
-        # grouping bracket: the two sub-rows are ONE population, not two samples
-        ax.plot([1.94, 1.94], [cy - DY - 0.44, cy + DY + 0.44], lw=0.8, color="#C7C7C7",
-                solid_capstyle="round", zorder=1)
-        ax.text(1.78, cy, label, ha="right", va="center", fontsize=6.6,
-                color=INK, fontweight="bold")
-        ax.scatter([xm], [cy], marker="D", s=26, c=COMP_SOFT, edgecolors="white",
-                   linewidths=0.6, zorder=6)
+def draw_1b(ax: plt.Axes) -> None:
+    """Draw panel b into ``ax``, which the composite sizes at 1.376 x 3.00 in.
 
-    # minority rings: dashed where the minority behaves like the bulk, solid where it does not
-    ax.add_patch(Ellipse((x_un, LANES[0][1] - DY), 2.25, 1.00, fill=False, ec=FOCAL_SOFT,
-                         lw=0.8, ls=(0, (2.5, 1.8)), zorder=4))
-    ax.add_patch(Ellipse((x_tr, LANES[1][1] - DY), 2.25, 1.00, fill=False, ec=FOCAL_SOFT,
-                         lw=0.8, ls=(0, (2.5, 1.8)), zorder=4))
-    ax.add_patch(Ellipse((x_un, LANES[2][1] - DY), 2.35, 1.10, fill=False, ec=FOCAL_SOFT,
-                         lw=1.1, zorder=4))
+    Everything is placed in axes fractions, so the panel is correct only at that size: RX and RY
+    are chosen to draw a round cell blob at that width-to-height ratio, and nothing is clipped or
+    drawn outside the axes, because in the composite an overhang widens the whole figure.
+    """
+    blank(ax)
 
-    # ---- direct labels, all placed in empty space, none crossing a mark ----
-    # One line each. The counts identify the two sub-rows and stay; they used to be set on a
-    # second line, which doubled the ink of the two largest text blocks in the panel for no
-    # information. The arithmetic they support (0.8 x 1.25 + 0.2 x 0 = 1.0) is in the caption.
-    # x = 4.35, and no comma: on one line "resistant minority, 20%" is 0.78 in, which at this
-    # panel's 3.17 in width is 2.15 data units, so from 4.55 it ran onto the orange mean rule at
-    # 6.60. The rule is the panel's whole geometric claim and nothing may cross it.
-    ax.text(4.35, LANES[0][1] + DY, "responding bulk 80%", ha="left", va="center",
-            fontsize=5.8, color=GREY)
-    ax.text(4.35, LANES[0][1] - DY, "resistant minority 20%", ha="left", va="center",
-            fontsize=5.8, color=INK)
-    ax.text(3.34, LANES[0][1], "population mean", ha="left", va="center",
-            fontsize=5.8, color=INK)
+    # ---------------- the two cellular states, defined once ----------------
+    # Drawn with the same helper and the same marker size as the lanes, so the key is a sample of
+    # the panel rather than a legend about it.
+    # The two swatches carry 12 and 3 cells, the same 4:1 the words state and the same 4:1 the
+    # lanes draw, so the key cannot read as two equal groups.
+    for y, colour, n, s, alpha, label in (
+            (Y_KEY[0], SHARED, 12, S_CELL, A_CELL, "Responsive majority, 80%"),
+            (Y_KEY[1], POP, 3, S_CELL * 1.25, 0.95, "Resistant minority, 20%")):
+        cells(ax, X_KEY_SWATCH, y, n, 0.028, 0.009, color=colour, rng=np.random.default_rng(3),
+              s=s, alpha=alpha)
+        ax.text(X_KEY_TEXT, y, label, ha="left", va="center", fontsize=PT_ANNOT, color=TEXT)
 
-    # Both minority labels are set on two lines. On one line "minority responds" is 0.68 in wide,
-    # which was 0.9 data units while this panel had a full-width row and is 1.9 units now that
-    # it shares row 1 with panel a: it ran past the right edge of the canvas, and its partner ran
-    # across the orange shared-mean rule. Wrapping halves the width and costs nothing, because the
-    # vertical space beside each ring was empty.
-    ax.plot([7.80, 8.02], [LANES[1][1] - DY, LANES[1][1] - DY], lw=0.6, color=FOCAL_SOFT, zorder=4)
-    ax.text(8.10, LANES[1][1] - DY, "minority\nresponds", ha="left", va="center",
-            fontsize=6.0, color=INK, linespacing=1.15)
-    # "minority survives" used to sit BELOW the solid ring. At the printed panel height the gap
-    # between the ring and the response axis is about 0.11 in and the label is 0.08 in tall, so it
-    # collided with the axis arrow. It is now a leader label on the ring's right flank, which is
-    # also how the drug-A ring is labelled, so the two minority annotations read in parallel.
-    ax.plot([4.38, 4.58], [LANES[2][1] - DY, LANES[2][1] - DY], lw=0.6, color=FOCAL_SOFT, zorder=4)
-    ax.text(4.66, LANES[2][1] - DY, "minority\nsurvives", ha="left", va="center",
-            fontsize=6.0, color=INK, linespacing=1.15)
+    # ---------------- the phrase, and the rule it labels ----------------
+    # Set at the top of the rule rather than at the top of the panel: the dashes then hang from
+    # the words, which is the only thing tying the claim to the geometry that makes it true.
+    # Flush right, so the block straddles the rule it names as closely as the panel width allows.
+    title(ax, "Identical mean\nresponse", x=X_TITLE, y=Y_TITLE, ha="right", va="center",
+          linespacing=1.1)
+    x_mean = _x(R_TREATED)
+    # Both ends are derived from the lane score rather than typed, so a lane that moves cannot
+    # leave the rule stopping short of the diamond it is supposed to carry.
+    y_foot = LANES[-1][1] - DY_BLOB - DY_MEAN - 0.024
+    ax.plot([x_mean, x_mean], [Y_RULE_TOP, y_foot], ls=(0, (2.6, 2.0)), lw=LW_HAIR, color=MEAN,
+            zorder=1)
+    # Baseline, running down from the untreated population that defines it. Unlabelled on
+    # purpose: it exists so that "the minority stayed put" is a geometric fact, not a phrase.
+    ax.plot([_x(R_BASE)] * 2, [LANES[0][1] - DY_BLOB, y_foot], lw=LW_HAIR, color=FAINT, zorder=1)
 
-    # ---- the response axis ----
-    ax.add_patch(FancyArrowPatch((1.95, 0.34), (8.95, 0.34), arrowstyle="-|>",
-                                 mutation_scale=7, lw=0.7, color=INK))
-    ax.text(5.45, -0.16, "phenotypic response coordinate (arbitrary units)",
-            ha="center", va="bottom", fontsize=5.8, color=GREY)
+    # ---------------- the three lanes ----------------
+    for name, y_name, r_maj, r_min, phrase in LANES:
+        ax.text(0.0, y_name, name, ha="left", va="center", fontsize=PT_ANNOT, color=TEXT,
+                fontweight="bold")
+        y_cells = y_name - DY_BLOB
+        # The lane's own stretch of the one response axis. It is what ties a name at the left
+        # edge to cells two thirds of the way across, and it makes "the same axis three times"
+        # something the eye gets for free rather than something the caption has to assert.
+        ax.plot(list(X_TRACK), [y_cells] * 2, lw=LW_HAIR, color=FAINT, zorder=0)
+        # One generator, re-seeded per lane, so every lane draws the same 60 cells and the
+        # reader is watching one population under three conditions.
+        x_mean_drawn = _lane(ax, np.random.default_rng(11), y_cells, r_maj, r_min)
+        if phrase is None:                     # untreated carries no claim and gets no marker
+            continue
+        # Below the cells rather than on them: at the default centroid size the diamond covers
+        # the middle of a blob this small, and under Drug A that is the middle of the very
+        # population it is standing for.
+        centroid(ax, x_mean_drawn, y_cells - DY_MEAN)
+        ax.text(0.0, y_cells - DY_PHRASE, phrase, ha="left", va="center", fontsize=PT_ANNOT,
+                color=TEXT)
+
+    # ---------------- the one response axis all three lanes are read against ----------------
+    arrow(ax, (0.055, Y_AXIS), (0.985, Y_AXIS), color=SHARED)
+    ax.text(0.5, Y_AXIS_LABEL, "single-cell response", ha="center", va="center",
+            fontsize=PT_ANNOT, color=SUBTLE)
+
+
+# ---------------------------------------------------------------------------- preview and gates
+_SUBSUP = re.compile(r"\$[^$]*[\^_][^$]*\$")
+
+
+def _check_type(fig, floor=6.5):
+    """Smallest EFFECTIVE point size on the panel. Mathtext sub/superscripts print at 0.7x."""
+    found = []
+    for t in fig.findobj(plt.Text):
+        s = str(t.get_text())
+        if not s.strip() or not t.get_visible():
+            continue
+        found.append((round(t.get_fontsize() * (0.7 if _SUBSUP.search(s) else 1.0), 3), s))
+    bad = [f for f in found if f[0] < floor - 1e-6]
+    assert not bad, f"below the {floor} pt floor: {sorted(bad)}"
+    return min(found)[0]
+
+
+def _check_bbox(fig, ax, tol_in=0.0005):
+    """Nothing may hang outside the axes: in the composite an overhang widens the whole figure."""
+    fig.canvas.draw()
+    rend = fig.canvas.get_renderer()
+    box = ax.get_window_extent(rend)
+    out = []
+    furniture = (ax.patch, ax.xaxis, ax.yaxis, *ax.spines.values())
+    for art in ax.get_children():
+        # The axis and spine artists still report a tight bbox under ax.axis("off"), and they
+        # draw nothing, so measuring them would report an overhang that cannot exist in print.
+        if art in furniture or not art.get_visible():
+            continue
+        bb = art.get_tightbbox(rend)
+        if bb is None or bb.width <= 0:
+            continue
+        over = max(box.x0 - bb.x0, bb.x1 - box.x1, box.y0 - bb.y0, bb.y1 - box.y1) / fig.dpi
+        if over > tol_in:
+            what = art.get_text() if hasattr(art, "get_text") else ""
+            out.append((round(over, 4), type(art).__name__, str(what)[:34]))
+    for row in sorted(out, reverse=True):
+        print(f"  OUTSIDE by {row[0]:.4f} in: {row[1]} {row[2]!r}")
+    assert not out, f"{len(out)} artist(s) hang outside the axes"
+    return True
 
 
 if __name__ == "__main__":
-    # Same axes geometry the composite gives this panel, so a position tuned here is correct there.
-    fig, ax = plt.subplots(figsize=(3.167, 1.538))
-    fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from figstyle import apply_style
+    from fig1_style import PT_TICK
+
+    # The AXES is the size the composite gives this panel, and the rc sizes are the ones
+    # fig1_assemble sets. A panel tuned at any other size is wrong in the figure that ships.
+    apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
+    fig = plt.figure(figsize=(1.376, 3.0))
+    ax = fig.add_axes([0, 0, 1, 1])
     draw_1b(ax)
-    fig.savefig(os.path.join(os.path.dirname(__file__), "1b.png"), dpi=300)
-    print("wrote 1b.png")
+
+    # The identity the panel asserts, measured off the cells that were actually drawn rather
+    # than off the constants they came from. This is the one claim panel b makes, so it is
+    # checked against the picture: if a lane ever stopped landing on the rule, the panel would
+    # be asserting in bold something its own marks do not do.
+    assert abs(round(N_CELLS * MINOR_FRAC) - N_CELLS * MINOR_FRAC) < 1e-12, N_CELLS
+    means = {}
+    for name, y_name, _, _, phrase in LANES:
+        y_lane = y_name - DY_BLOB
+        pts = [o for c in ax.collections for o in np.asarray(c.get_offsets())
+               if abs(o[1] - y_lane) <= RY + 1e-9 and len(c.get_offsets()) > 1]
+        assert len(pts) == N_CELLS, (name, len(pts))
+        means[name] = float(np.mean([q[0] for q in pts]))
+    treated = [v for (n, _, _, _, p), v in zip(LANES, means.values()) if p]
+    assert max(treated) - min(treated) < 1e-12, means
+    assert abs(treated[0] - _x(R_TREATED)) < 1e-12, (treated, _x(R_TREATED))
+    print(f"drawn population means (axes x): "
+          f"{ {k: round(v, 6) for k, v in means.items()} }")
+
+    print(f"smallest effective type: {_check_type(fig):.2f} pt")
+    print(f"all artists inside the axes: {_check_bbox(fig, ax)}")
+    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "1b.png")
+    fig.savefig(out, dpi=400)
+    print(f"wrote {out}  (axes 1.376 x 3.00 in)")

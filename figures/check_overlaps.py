@@ -7,6 +7,12 @@ Three sources of false positives are filtered, each for a stated reason:
     current view limits. Those are never drawn but still report an extent, parked at the axes
     edge, where they collide with whatever is really there.
   * a twinned axes exposes the shared axis's tick labels a second time, at the same coordinates.
+  * a COMPOSED EXPRESSION is several Text artists that are one piece of notation. Figure 1 sets
+    its subscripts as their own artists rather than as mathtext, because mathtext renders a
+    subscript at 0.7x nominal and that falls under that figure's 6.5 pt floor. The subscript is
+    then tucked against its base exactly where mathtext would have put it, and pairwise bbox
+    comparison reads the tuck as a 30% collision. Fragments of one expression share a gid, so
+    they are compared with everything except each other.
 """
 import sys, importlib
 sys.path.insert(0, "figures")
@@ -51,10 +57,13 @@ for n in [int(a) for a in sys.argv[1:]] or [1, 2, 3, 4, 5]:
             if key in seen:
                 continue
             seen.add(key)
-            items.append((t.get_text().replace("\n", "/")[:30], bb))
+            items.append((t.get_text().replace("\n", "/")[:30], bb, t.get_gid()))
     hits = 0
     for i in range(len(items)):
         for j in range(i + 1, len(items)):
+            gi, gj = items[i][2], items[j][2]
+            if gi is not None and gi == gj:      # two fragments of one composed expression
+                continue
             a, b = items[i][1], items[j][1]
             ox = min(a.x1, b.x1) - max(a.x0, b.x0)
             oy = min(a.y1, b.y1) - max(a.y0, b.y0)

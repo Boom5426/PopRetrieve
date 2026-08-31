@@ -1,158 +1,374 @@
-"""PopRetrieve Figure 1 panel 1a: from a single-cell response to a ranked candidate list.
+"""PopRetrieve Figure 1, panel a: the task, and the single fork the paper is about.
 
-The pipeline the whole paper operates on, and the one place where the two scoring rules differ.
-A query perturbation produces a population of single-cell responses. That population is turned
-into a comparable object in one of two ways: it is collapsed to one mean differential-expression
-vector, or it is kept as a population. Everything downstream is shared: the same candidate
-library, the same comparison step, one ranking. The paper's question is what the choice at that
-single fork is worth, which is why the fork is the only branching in the diagram.
+WHAT THIS PANEL HAS TO SAY
+--------------------------
+One query population, one candidate library, one ranking machine. The only thing that differs
+between the two routes is whether the query's single-cell responses are collapsed to one vector
+or kept as a population, and that one difference is allowed to change the ranked list. Panel a is
+also where the figure's colour vocabulary is declared: MEAN orange for the collapsed route, POP
+blue for the population route, SHARED grey for everything both routes have in common.
 
-Schematic, not data. No measured value appears here.
+WHY THE LAYOUT IS THIS SHAPE
+----------------------------
+The axes is 1.514 x 3.00 in, portrait. Two consequences drive every position below.
 
-Design notes (presentation only, no data involved):
-  * There is exactly ONE query cloud, and both branches leave it. Drawing a separate cloud per
-    branch would put the difference between the two rules in their INPUT, when the whole claim is
-    that they receive the same input and keep different amounts of it.
-  * The collapse is drawn on the branch rather than at its end: the upper branch is a fan of thin
-    leaders running from the query cells to a single orange dot, so the blue minority is visibly
-    consumed. The lower branch carries the population across unchanged. The asymmetry between the
-    two branches IS the panel's content.
-  * The candidate library and the ranked list are one object, a library column carrying rank
-    numbers, and both branches point into it. They were separate stages while this panel had the
-    full-width row; at the 3.17 in it gets sharing row 1 with panel b, five horizontal stages
-    leave about 0.6 in each, which is narrower than the stage labels. Merging them also states
-    something the two-stage version only implied: both rules rank the same library.
-  * The panel is authored as a wide box (3.167 x 1.538 in in the composite), so a cloud that is
-    circular in axes coordinates prints as a flat smear. Every cloud is drawn with its x-spread
-    divided by ASPECT, the panel's own width-to-height ratio, so blobs read round at print size.
-    ASPECT is a drawing constant, not a claim.
-  * Palette semantics: GREY context, FOCAL_SOFT blue the within-population structure only a
-    distributional score can use, COMP_SOFT orange the mean and the collapse onto it.
-  * Every mathtext label carrying a sub/superscript is set at 7.2 pt, not at the 5.6-6.4 pt of the
-    plain annotations. Matplotlib renders a subscript at 0.7x the nominal size and
-    figstyle.mathtext_offenders measures that product against the 5 pt production floor, so a
-    6.4 pt "$d_1$" would print its subscript at 4.5 pt. 7.2 x 0.7 = 5.04 pt clears the floor.
+  * The two routes are STACKED ROWS, not side-by-side columns. "$\\{x_1,\\ldots,x_n\\}\\to\\mu_Q$"
+    measures about 1.06 in once its subscripts are set at a legible size, so a half-panel column
+    (0.76 in) cannot hold it. Each route therefore gets a full-width row and the routes are
+    separated top-from-bottom, which is also how the caption reads them.
+  * The candidate library sits BESIDE the two rows rather than under them. Any arrow from the
+    upper row to a library placed below would have to cross the lower row; put the library in the
+    right margin and both routes reach it with a short horizontal arrow and nothing crosses.
+    The two ranked lists then take the full width underneath, as a two-column table, so that
+    rank 1 of one list sits directly beside rank 1 of the other and the swap is the thing the eye
+    lands on. (The brief asked for the lists "to the right" of the library; at 1.514 in of total
+    width the word "Population" alone is a fifth of the panel, so right became below.)
 
-Run standalone: python fig1a.py
+WHY SUBSCRIPTS ARE COMPOSED FROM TWO ARTISTS
+--------------------------------------------
+Matplotlib renders a mathtext sub/superscript at 0.7x nominal, so "$d_1$" set at PT_EQ (9.0) puts
+its subscript on the page at 6.3 pt: below this figure's 6.5 pt floor, and fig1_assemble._assert_floor
+measures exactly that product and refuses to build. Writing the base at PT_EQ and the subscript as
+its own artist at PT_SMALL prints the subscript at 6.5 pt, the floor itself, which is LARGER than
+the mathtext default rather than smaller. Nothing is shrunk to fit; the pair is measured and set
+snug by _run().
+
+Schematic, not data. No measured value appears anywhere in this panel.
+
+Run standalone: python3 fig1a.py
 """
+from __future__ import annotations
+
 import os
+import sys
 
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.patches import FancyArrowPatch
+from matplotlib.patches import Ellipse, Rectangle
 
-# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
-# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
-# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
-import sys as _sys, os as _os
-_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
-from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
-FAINT = "#CFCFCF"
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from fig1_style import (FAINT, LW_ARROW, LW_HAIR, MEAN, POP, PT_ANNOT, PT_EQ,  # noqa: E402
+                        PT_SMALL, SHARED, SUBTLE, TEXT, arrow, blank, cells, centroid,
+                        title)
 
-# panel width : panel height inside the composite; used only to keep round clouds round
-ASPECT = 2.059
-# nominal size for any label containing a mathtext sub/superscript (see the design note above)
-PT_MATH = 7.2
+# ------------------------------------------------------------------ layout, in axes units
+# x. The width budget is the tight one: a route's equation measures 1.02 in, the library column
+# needs 0.29 in for a population glyph plus its name, and the panel is 1.514 in wide. What is left
+# pays for the grey spine on the left and for the arrow that carries each route into the library.
+X_SPINE = 0.016             # the grey spine that carries the query down to both routes
+X_ROW = 0.045               # left edge of a route's own content
+X_ROWEND = 0.736            # right edge of a route's own content; its annotation right-aligns here
+# 0.736, not 0.700. PT_EQ was corrected 9.0 -> 9.3 on 2026-08-31 (9.0 x 0.7 = 6.30 pt is under
+# this figure's 6.5 pt floor, so the token could not carry real mathtext), and the 3.3% wider
+# set notation left the collapse route 0.025 axes units of arrow against the 0.042 its own
+# assertion demands. The width comes out of the run to the library, which was 0.106 units and
+# is now 0.070: still unambiguously an arrow, and the shortest thing in the panel that had
+# slack. Nothing was shrunk to fit.
+X_TOLIB = 0.806             # where a route's arrow reaches the library, whatever the row's width
+LIB_BOX = (0.812, 0.430, 0.188, 0.340)               # x, y, w, h
+LIB_CELLS_X, LIB_LABEL_X = 0.855, 0.900
+COL_RANK, COL_MEAN, COL_POP = 0.125, 0.470, 0.800    # the ranked-list table's three columns
+X_RULE = (0.045, 0.990)     # the table's rule, starting where the routes above it start
 
-X_Q = 0.120                       # the one query population
-X_REP = 0.395                     # where each branch has finished its representation
-X_RANK, X_LIB = 0.765, 0.900      # rank column, and the candidate clouds beside it
-Y_TOP, Y_BOT, Y_MID = 0.775, 0.205, 0.470
+# y, top to bottom
+Y_TITLE = 0.996
+Y_SUBTITLE = 0.950
+Q_CY = 0.854                # centre of the query population
+Y_LIBHEAD = 0.860           # library header, in the corner the query block leaves empty
+Y_SPINE = (0.788, 0.765)    # where the trunk leaves the query, and where the spine proper starts
+ROW_MEAN = (0.790, 0.700, 0.645)     # label (va top), equation baseline, annotation (va top)
+ROW_POP = (0.593, 0.503, 0.448)
+LIB_Y = (0.735, 0.645, 0.555, 0.465)
+Y_TABLE_HEAD, Y_TABLE_RULE = 0.310, 0.282
+TABLE_Y = (0.215, 0.140)
+Y_TABLE_DOTS = 0.072
 
-# the library, already ranked; both branches point into this one column
-RANKED = (("1", "$d_3$"), ("2", "$d_1$"), ("3", "$d_4$"), ("4", "$d_2$"))
-LIB_Y = (0.880, 0.640, 0.400, 0.160)
+# ------------------------------------------------------------------ drawing constants
+GAP = 0.010                 # horizontal breathing space between two parts of one expression
+ARROW_MIN = 0.042           # shortest a transformation arrow may get and still read as flow
+Y_MID = 0.012               # baseline to optical centre of a PT_EQ line, for marks set beside text
+FORK_DROP = 0.020           # how far below a row's label the spine hands that row over
+SUB_DROP_EM = 0.22          # subscript baseline drop, in ems of the base size, as mathtext sets it
+N_QUERY = (54, 30)          # the query's two response states; 84 cells in total
+CELL_S = 2.3                # marker area: small enough that 84 cells read as a population
+DIAMOND_W = 0.052           # printed width of centroid()'s diamond at its default size
+
+# The one candidate library, and the two rankings of it. Ranks 1 and 2 are swapped between the
+# routes: that swap is the whole reason the panel exists, so it is data of the figure, not decoration.
+CANDIDATES = ("1", "2", "3", "4")
+RANKED = {"mean": ("3", "1"), "pop": ("1", "3")}
 
 
-def _blob(rng, cx, cy, n, r):
-    """n points filling an ellipse of visual radius r, centred on (cx, cy).
+def _axes_in(ax):
+    """The axes box in inches. Read from the figure so the panel is correct at any size."""
+    w, h = ax.get_position().size * ax.figure.get_size_inches()
+    return float(w), float(h)
 
-    Bounded on purpose. A Gaussian cloud puts a few percent of its points beyond 2 sigma, and at
-    this panel's size those stragglers read as separate cells sitting outside the population and
-    push neighbouring clouds apart. Sampling uniformly inside a disk keeps every cell inside the
-    blob the reader is meant to see, which is all a schematic glyph has to do.
+
+def _rx(ax, ry):
+    """The x radius that prints as round given a y radius, since x and y both span one unit."""
+    w, h = _axes_in(ax)
+    return ry * h / w
+
+
+def _pt2y(ax, pt):
+    """Points to axes-y units."""
+    return pt / 72.0 / _axes_in(ax)[1]
+
+
+def _renderer(ax):
+    fig = ax.figure
+    fig.canvas.draw()
+    return fig.canvas.get_renderer()
+
+
+def _run(ax, x, y, parts, rend, ha="left", zorder=8):
+    """Set a run of fragments left to right on one baseline, spaced by MEASURED width.
+
+    ``parts`` is ((text, pt, is_subscript, colour), ...). Subscript fragments are dropped by
+    SUB_DROP_EM and carry their own size, which is how this panel gets a subscript that prints at
+    the figure's floor instead of at 0.7x PT_EQ. Measuring rather than hard-coding an advance is
+    what keeps the pair snug if the fallback font is not the one this was tuned on.
+
+    Returns the run's width in axes units, so the caller can put an arrow after it.
     """
-    t = rng.uniform(0, 2 * np.pi, n)
-    rad = r * np.sqrt(rng.uniform(0, 1, n))
-    return cx + rad * np.cos(t) / ASPECT, cy + rad * np.sin(t)
+    drop = _pt2y(ax, PT_EQ * SUB_DROP_EM)
+    inv = ax.transData.inverted()
+    arts, cur = [], 0.0
+    gid = "run-%d-%d" % (round(x * 1e4), round(y * 1e4))   # one expression, so QA can pair it up
+    for txt, pt, is_sub, colour in parts:
+        t = ax.text(cur, y - (drop if is_sub else 0.0), txt, ha="left", va="baseline",
+                    fontsize=pt, color=colour, zorder=zorder, gid=gid)
+        bb = t.get_window_extent(renderer=rend)
+        cur += inv.transform((bb.x1, 0.0))[0] - inv.transform((bb.x0, 0.0))[0]
+        arts.append(t)
+    shift = {"left": x, "center": x - cur / 2.0, "right": x - cur}[ha]
+    for t in arts:
+        t.set_x(t.get_position()[0] + shift)
+    return cur
 
 
-def _cloud(ax, rng, cx, cy, n_bulk, n_min, r, s=1.5):
-    """A population glyph: GREY bulk with the FOCAL_SOFT minority a distributional score can see."""
-    gx, gy = _blob(rng, cx, cy, n_bulk, r)
-    bx, by = _blob(rng, cx, cy, n_min, r * 0.46)
-    ax.scatter(gx, gy, s=s, c=GREY, alpha=0.55, lw=0, zorder=3)
-    ax.scatter(bx, by, s=s * 1.35, c=FOCAL_SOFT, alpha=0.95, lw=0, zorder=3)
-    return np.r_[gx, bx], np.r_[gy, by]
+def _set_parts():
+    """{x_1, ..., x_n}: the query's cells, written the same way on both routes."""
+    # The commas are braced so mathtext sets them as ordinary symbols. Its punctuation spacing
+    # costs 0.05 in here, and the row's total width has no 0.05 in to give.
+    return (("$\\{x$", PT_EQ, False, TEXT), ("$1$", PT_SMALL, True, TEXT),
+            ("${,}\\ldots{,}x$", PT_EQ, False, TEXT), ("$n$", PT_SMALL, True, TEXT),
+            ("$\\}$", PT_EQ, False, TEXT))
 
 
-# NO LOCAL text_run HERE. This module carried a private copy of figstyle.text_run, orphaned
-# when panel a's coloured footer moved into the caption: defined, never called, and a strictly
-# poorer version of the shared one (no per-fragment kwargs, no va). figstyle.text_run is the
-# single implementation; fig1f imports it.
+def _sym_parts(base, sub):
+    """One subscripted symbol, base at PT_EQ and subscript at the floor. See the module note."""
+    return (("$%s$" % base, PT_EQ, False, TEXT), ("$%s$" % sub, PT_SMALL, True, TEXT))
 
 
-def _arrow(ax, p0, p1, color=GREY, lw=0.8, z=4, ms=6):
-    ax.add_patch(FancyArrowPatch(p0, p1, arrowstyle="-|>", mutation_scale=ms, lw=lw,
-                                 color=color, zorder=z))
+def _query(ax, rend, rng):
+    """The query: a real population, two response states in it, both in SHARED grey.
+
+    The states are separated by position and fill, never by a fifth hue: the query belongs to both
+    routes, so colouring one of its states POP or MEAN would hand the query to one of them. The
+    faint ring names the second state without asking to be read.
+    """
+    title(ax, "Query response Q", y=Y_TITLE, va="top")
+    ax.text(0.0, Y_SUBTITLE, "single-cell population", transform=ax.transAxes,
+            fontsize=PT_ANNOT, ha="left", va="top", color=SUBTLE)
+
+    ry_a, ry_b = 0.038, 0.028
+    cx_a, cy_a = 0.085, Q_CY + 0.014
+    cx_b, cy_b = 0.118, Q_CY - 0.014
+    cells(ax, cx_a, cy_a, N_QUERY[0], _rx(ax, ry_a), ry_a, color=SHARED, rng=rng,
+          s=CELL_S, alpha=0.60)
+    cells(ax, cx_b, cy_b, N_QUERY[1], _rx(ax, ry_b), ry_b, color=SHARED, rng=rng,
+          s=CELL_S * 1.35, alpha=0.95)
+    ax.add_patch(Ellipse((cx_b, cy_b), 2 * _rx(ax, ry_b + 0.007), 2 * (ry_b + 0.007),
+                         fill=False, ec=FAINT, lw=LW_HAIR, ls=(0, (1.7, 1.4)), zorder=2))
+    return cx_a, cy_b - ry_b - 0.010
+
+
+def _spine(ax, x_from, y_from):
+    """One query, two treatments: SHARED grey down to the fork, route colour after it.
+
+    The spine runs in the left margin because the two routes are stacked rows; an arrow from the
+    query to the lower row drawn anywhere else would have to cross the upper row.
+    """
+    ax.plot([x_from, x_from, X_SPINE, X_SPINE],
+            [y_from, Y_SPINE[0], Y_SPINE[1], ROW_POP[0] - FORK_DROP],
+            color=SHARED, lw=LW_ARROW, solid_capstyle="round", solid_joinstyle="round", zorder=3)
+    for row, colour in ((ROW_MEAN, MEAN), (ROW_POP, POP)):
+        # Diagonal, not horizontal: the row starts 0.05 in from the spine, and an arrow that short
+        # is all head. Dropping it onto the equation line buys a shaft the eye can follow.
+        arrow(ax, (X_SPINE, row[0] - FORK_DROP), (X_ROW - 0.003, row[1] + Y_MID), color=colour)
+
+
+def _route(ax, rend, rng, rows, label, colour, annot, keep):
+    """One route: what it is called, what it does to the query, and what survives it.
+
+    Both routes are drawn from the same three lines, so the only difference the reader can see is
+    the one the paper is about: a diamond where the population was, or the population itself.
+    """
+    y_lab, y_eq, y_ann = rows
+    mid = y_eq + Y_MID
+    ax.text(X_ROW, y_lab, label, transform=ax.transAxes, fontsize=PT_ANNOT, ha="left",
+            va="top", color=TEXT, fontweight="bold")
+
+    # Both rows end at X_ROWEND, so the two arrows into the library are the same arrow drawn
+    # twice. The transformation arrow takes up the slack, which is why the result block is set
+    # from the right and the arrow is measured last rather than assumed first.
+    x_set = X_ROW + _run(ax, X_ROW, y_eq, _set_parts(), rend)
+    if keep:
+        ry = 0.032
+        x_res = X_ROWEND - 2 * _rx(ax, ry)
+        cells(ax, X_ROWEND - _rx(ax, ry), mid, 30, _rx(ax, ry), ry, color=colour, rng=rng,
+              s=CELL_S * 1.2)
+    else:
+        w_mu = _run(ax, X_ROWEND, y_eq, _sym_parts("\\mu", "Q"), rend, ha="right")
+        x_res = X_ROWEND - w_mu - GAP - DIAMOND_W
+        centroid(ax, x_res + DIAMOND_W / 2, mid, color=colour)
+    assert x_res - x_set - 2 * GAP >= ARROW_MIN, (
+        f"route {label!r} leaves {x_res - x_set - 2 * GAP:.3f} axes units for its arrow, less "
+        f"than the {ARROW_MIN} it takes to read as flow")
+    arrow(ax, (x_set + GAP, mid), (x_res - GAP, mid), color=colour)
+
+    ax.text(X_ROWEND, y_ann, annot, transform=ax.transAxes, fontsize=PT_ANNOT, ha="right",
+            va="top", color=TEXT)
+    arrow(ax, (X_ROWEND + GAP, mid), (X_TOLIB, mid), color=colour)
+
+
+def _library(ax, rend, rng):
+    """One library, shared. Both routes point into the same four candidate populations."""
+    ax.text(LIB_BOX[0] + LIB_BOX[2], Y_LIBHEAD, "candidate\nlibrary", transform=ax.transAxes,
+            fontsize=PT_ANNOT, ha="right", va="top", color=TEXT, linespacing=1.15)
+    ax.add_patch(Rectangle(LIB_BOX[:2], LIB_BOX[2], LIB_BOX[3], fill=False, ec=FAINT,
+                           lw=LW_HAIR, zorder=1))
+    ry = 0.018
+    for name, yy in zip(CANDIDATES, LIB_Y):
+        cells(ax, LIB_CELLS_X, yy, 13, _rx(ax, ry), ry, color=SHARED, rng=rng, s=CELL_S)
+        _run(ax, LIB_LABEL_X, yy - 0.013, _sym_parts("d", name), rend)
+
+
+def _rankings(ax, rend):
+    """The same four candidates, ranked twice. The lists disagree at the top; that is the panel."""
+    # Both arrows leave the SAME point on the library, because what differs downstream is the
+    # score, not the candidates: one library, ranked twice.
+    # Each arrow stops beside its column's heading rather than on it, so the heading stays a word
+    # rather than becoming a labelled target.
+    src = (LIB_CELLS_X + 0.020, LIB_BOX[1] - 0.008)
+    arrow(ax, src, (COL_MEAN + 0.055, Y_TABLE_HEAD + 0.028), color=MEAN)
+    arrow(ax, src, (COL_POP + 0.010, Y_TABLE_HEAD + 0.028), color=POP)
+
+    ax.text(COL_RANK, Y_TABLE_HEAD, "rank", transform=ax.transAxes, fontsize=PT_SMALL,
+            ha="center", va="top", color=SUBTLE)
+    for x, head in ((COL_MEAN, "Mean"), (COL_POP, "Population")):
+        ax.text(x, Y_TABLE_HEAD, head, transform=ax.transAxes, fontsize=PT_ANNOT, ha="center",
+                va="top", color=TEXT, fontweight="bold")
+    ax.plot(X_RULE, [Y_TABLE_RULE, Y_TABLE_RULE], color=FAINT, lw=LW_HAIR, zorder=2)
+
+    for i, yy in enumerate(TABLE_Y):
+        ax.text(COL_RANK, yy, str(i + 1), transform=ax.transAxes, fontsize=PT_ANNOT,
+                ha="center", va="center", color=SUBTLE)
+        for x, route in ((COL_MEAN, "mean"), (COL_POP, "pop")):
+            _run(ax, x, yy - 0.013, _sym_parts("d", RANKED[route][i]), rend, ha="center")
+    for x in (COL_RANK, COL_MEAN, COL_POP):
+        ax.text(x, Y_TABLE_DOTS, "$\\vdots$", transform=ax.transAxes, fontsize=PT_EQ,
+                ha="center", va="center", color=SUBTLE)
 
 
 def draw_1a(ax):
+    """Draw panel a into ``ax``. The axes is expected to be 1.514 x 3.00 in in the composite."""
+    blank(ax)
+    rend = _renderer(ax)
     rng = np.random.default_rng(7)
-    ax.set_xlim(0.0, 1.0)
-    ax.set_ylim(-0.12, 1.16)
-    ax.axis("off")
 
-    # ---------------- the one query population ----------------
-    ax.text(X_Q, 1.075, "query response", ha="center", va="center", fontsize=6.0, color=INK)
-    qx, qy = _cloud(ax, rng, X_Q, Y_MID, n_bulk=74, n_min=21, r=0.185)
-    ax.text(X_Q, 0.185, "$d_q$", ha="center", va="center", fontsize=PT_MATH, color=INK)
-
-    # ---------------- upper branch: the population is consumed into one vector ----------------
-    dot = (X_REP - 0.028, Y_TOP)
-    # Eight leaders, not eighty: the fan has to say "every cell ends up in this one dot" without
-    # becoming the heaviest ink in the panel or drawing a web across the query cloud itself.
-    for x0, y0 in zip(qx[::12], qy[::12]):
-        ax.plot([x0, dot[0]], [y0, dot[1]], lw=0.25, color=FAINT, zorder=2)
-    ax.scatter([dot[0]], [dot[1]], s=16, c=COMP_SOFT, edgecolors="white", lw=0.5, zorder=5)
-    ax.text(X_REP - 0.028, 1.075, "mean signature", ha="center", va="center", fontsize=6.4,
-            color=INK, fontweight="bold")
-
-    # ---------------- lower branch: the population is carried across ----------------
-    _arrow(ax, (X_Q + 0.075, 0.330), (X_REP - 0.130, 0.240), color=FOCAL_SOFT, lw=0.8, ms=5)
-    _cloud(ax, rng, X_REP - 0.020, Y_BOT, n_bulk=52, n_min=15, r=0.150)
-    ax.text(X_REP - 0.020, -0.070, "response population", ha="center", va="center", fontsize=6.4,
-            color=INK, fontweight="bold")
-
-    # ---------------- scoring: two rules, one library ----------------
-    _arrow(ax, (X_REP + 0.010, Y_TOP), (X_RANK - 0.100, Y_TOP), color=COMP_SOFT, lw=0.8)
-    _arrow(ax, (X_REP + 0.075, Y_BOT), (X_RANK - 0.100, Y_BOT), color=FOCAL_SOFT, lw=0.8)
-    ax.text((X_REP + X_RANK) / 2 - 0.045, Y_TOP + 0.135, "mean-signature\nsimilarity",
-            ha="center", va="center", fontsize=5.6, color=INK, linespacing=1.15)
-    ax.text((X_REP + X_RANK) / 2 - 0.045, Y_BOT - 0.135, "population\nsimilarity",
-            ha="center", va="center", fontsize=5.6, color=INK, linespacing=1.15)
-
-    # ---------------- the shared candidate library, ranked ----------------
-    ax.text(0.855, 1.075, "candidate library,\nranked", ha="center", va="center", fontsize=6.0,
-            color=INK, linespacing=1.15)
-    for (num, cand), yy in zip(RANKED, LIB_Y):
-        ax.text(X_RANK - 0.030, yy, num, ha="center", va="center", fontsize=PT_MATH, color=GREY)
-        ax.text(X_RANK + 0.045, yy, cand, ha="center", va="center", fontsize=PT_MATH, color=INK)
-        _cloud(ax, rng, X_LIB + 0.022, yy, n_bulk=24, n_min=7, r=0.078, s=1.2)
-
-    # THE CONTINUUM FOOTER IS IN THE CAPTION. It read "information retained: mean signature ->
-    # full population", which is the same sentence caption entry a ends on ("they differ only in
-    # how much within-population information is retained"), and Extended Data Fig. 1d,e is where
-    # the continuum is measured. Text on a panel that repeats its own caption is what production asks authors
-    # to delete, so it is deleted here rather than shrunk.
+    qx, qy = _query(ax, rend, rng)
+    _spine(ax, qx, qy)
+    _route(ax, rend, rng, ROW_MEAN, "collapse", MEAN, "1 vector", keep=False)
+    _route(ax, rend, rng, ROW_POP, "retain cells", POP, "n cellular responses", keep=True)
+    _library(ax, rend, rng)
+    _rankings(ax, rend)
+    return ax
 
 
 if __name__ == "__main__":
-    # The preview is drawn on the SAME axes geometry the composite gives this panel (3.167 x 1.538 in
-    # of axes, no subplot margins). An x tuned against a preview of a different width is wrong in
-    # the figure that ships, which is how an earlier draft of this panel overlapped its own footer.
-    fig, ax = plt.subplots(figsize=(3.167, 1.538))
+    import re
+
+    import matplotlib
+    matplotlib.use("agg")
+    import matplotlib.pyplot as plt
+    import matplotlib.text as mtext
+    from matplotlib.collections import Collection
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import Patch
+    from matplotlib.transforms import Bbox
+
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from figstyle import apply_style
+    from fig1_style import PT_FLOOR, PT_TICK, PT_TITLE
+
+    # EXACTLY the axes the composite gives this panel: 1.514 x 3.00 in with no subplot margins.
+    # A panel tuned at another size is wrong in the figure that ships.
+    AXW, AXH = 1.514, 3.000
+    apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
+    fig, ax = plt.subplots(figsize=(AXW, AXH))
     fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
     draw_1a(ax)
-    fig.savefig(os.path.join(os.path.dirname(__file__), "1a.png"), dpi=300)
-    print("wrote 1a.png")
+
+    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "1a.png")
+    fig.savefig(out, dpi=400, bbox_inches=Bbox([[0.0, 0.0], [AXW, AXH]]), pad_inches=0.0)
+
+    # ---- gate 1: nothing prints below this figure's 6.5 pt floor -------------------------
+    subsup = re.compile(r"\$[^$]*[\^_][^$]*\$")
+    sizes = []
+    for t in fig.findobj(mtext.Text):
+        s = str(t.get_text())
+        if not s.strip() or not t.get_visible():
+            continue
+        sizes.append((t.get_fontsize() * (0.7 if subsup.search(s) else 1.0), s[:30]))
+    worst = min(sizes)
+    assert worst[0] >= PT_FLOOR - 1e-6, f"below the {PT_FLOOR} pt floor: {worst}"
+
+    # ---- gate 2: nothing hangs outside the axes rect -------------------------------------
+    rend = fig.canvas.get_renderer()
+    axbb = ax.get_window_extent(renderer=rend)
+    skip = {ax.patch, *ax.spines.values()}
+    over = []
+    for art in ax.get_children():
+        if art in skip or not art.get_visible():
+            continue
+        if not isinstance(art, (mtext.Text, Line2D, Collection, Patch)):
+            continue
+        if isinstance(art, mtext.Text) and not str(art.get_text()).strip():
+            continue
+        bb = art.get_tightbbox(rend)
+        if bb is None:
+            continue
+        d = max(axbb.x0 - bb.x0, bb.x1 - axbb.x1, axbb.y0 - bb.y0, bb.y1 - axbb.y1)
+        if d > 0.5:                       # half a device pixel of tolerance on the rect itself
+            label = str(art.get_text())[:28] if isinstance(art, mtext.Text) else type(art).__name__
+            over.append((round(d / fig.dpi * 72, 2), label,
+                         [round(axbb.x0 - bb.x0, 1), round(bb.x1 - axbb.x1, 1),
+                          round(axbb.y0 - bb.y0, 1), round(bb.y1 - axbb.y1, 1)]))
+    for row in sorted(over, reverse=True):
+        print(f"  OUTSIDE by {row[0]} pt  {row[1]!r}  [L,R,B,T px] {row[2]}")
+    assert not over, f"{len(over)} artist(s) leave the axes; they would widen the composite"
+
+    # ---- gate 3: no two text artists overlap ---------------------------------------------
+    labels = [t for t in ax.get_children()
+              if isinstance(t, mtext.Text) and str(t.get_text()).strip()]
+    clashes = []
+    for i, a in enumerate(labels):
+        for b in labels[i + 1:]:
+            # Fragments of one expression are meant to touch: a subscript sits against its base.
+            if a.get_gid() is not None and a.get_gid() == b.get_gid():
+                continue
+            ba, bb2 = a.get_tightbbox(rend), b.get_tightbbox(rend)
+            if ba is None or bb2 is None:
+                continue
+            ov = min(ba.x1, bb2.x1) - max(ba.x0, bb2.x0), min(ba.y1, bb2.y1) - max(ba.y0, bb2.y0)
+            if min(ov) > 0.5:
+                clashes.append((round(min(ov), 1), str(a.get_text())[:18], str(b.get_text())[:18]))
+    for c in sorted(clashes, reverse=True):
+        print(f"  OVERLAP {c[0]} px: {c[1]!r} / {c[2]!r}")
+    assert not clashes, f"{len(clashes)} overlapping label pair(s)"
+
+    print(f"wrote {out}  ({AXW} x {AXH} in axes)")
+    print(f"smallest effective text size: {worst[0]:.2f} pt  ({worst[1]!r})")
+    print(f"text artists: {len(sizes)}   all inside the axes: True")
