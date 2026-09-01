@@ -95,7 +95,17 @@ def draw_a(ax):
     # round, so the same ceiling was orange in panel c and near-black here.
     # The constructed anchor keeps its emphasis through line weight rather than hue: it is this
     # panel's subject, and the point is how far left of everything else it sits.
-    for x, lab, col, lw in [(0.014, "constructed mixtures", MATERIAL, 1.3),
+    # The constructed-mixture anchor is COMPUTED from the same file main-text Fig. 4e draws its
+    # band from, not typed. It was the literal 0.014, which is that arm's mean and did reproduce,
+    # unlike the 0.044 beside it in fig7_natural (CORRECTIONS.md R53); it is the MEDIAN here so
+    # that the two figures describe the constructed mixtures by the same statistic. The change is
+    # 0.014288 to 0.011017, 0.3 per cent of this axis, and the caption's "fewer than 0.11% of
+    # conditions as divergent" is 3 of 3630 either way.
+    _cm = pd.read_csv(os.path.join(REPO, "results", "exp09_structure_diagnostics",
+                                   "gate1_response_divergence.csv"))
+    _cm = _cm[(_cm.synth == "real") & (_cm.predictor == "real_blend")].induced_response_cosine
+    _cm = float(_cm.dropna().median())
+    for x, lab, col, lw in [(_cm, "constructed mixtures", MATERIAL, 1.3),
                             (0.205, "real cells, state split", GREY, 0.8),
                             (0.566, "patient tissue", PURPLE_SOFT, 0.8),
                             (1.0, "additive ceiling", COMP_SOFT, 0.8)]:

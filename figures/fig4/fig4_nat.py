@@ -44,7 +44,7 @@ deleting them would mean editing fig7_natural, which still prints Fig. 7 at its 
 
 WHAT WAS CUT TO PAY FOR THE RAISE, AND WHERE IT GOES
     e   "(near-orthogonal)" leaves the band label, which now reads
-        "constructed / mixtures / 0.014-0.044". The noun "mixtures" was cut with it in an earlier
+        "constructed / mixtures / <lo> to <hi>". The noun "mixtures" was cut with it in an earlier
         pass and is RESTORED here on a third line: at PT_SMALL a first line reading
         "constructed mixtures" is 0.880 in wide and covers the points at (0.99, 0.081) and
         (0.944, 0.217), but the same two words stacked keep the block at 0.490 in and grow it
@@ -139,19 +139,20 @@ def draw_nat_gate1(ax):
     #   on one line with "constructed" it is 0.880 in wide and covers two points, on its own line
     #   the block is still 0.490 in and grows into empty plot area. Dropping it would leave the
     #   band named by an adjective with no noun.
-    span = f"{_CONSTRUCTED['cos_lo']:.3f}-{_CONSTRUCTED['cos_hi']:.3f}"
-    band = _one(ax, "constructed mixtures", "e")
-    if span.replace("-", " - ") not in band.get_text():
-        raise ValueError(
-            f"panel e: the band label reads {band.get_text()!r} but the axhspan is drawn from "
-            f"CONSTRUCTED at {span}. Fix fig7_natural rather than printing either number here.")
-    band.set_text("constructed\nmixtures\n" + span)
+    # The band label prints no number, so there is nothing here to rebuild and nothing to check.
+    # It used to read "constructed mixtures / 0.014 - 0.044", two hard-typed digits that this
+    # function had to guard against drifting from the axhspan they described; both were wrong
+    # (CORRECTIONS.md R53). The band's range, median and n are in the caption.
     #   n keeps the count fig7_natural computed from len(gate1_natural.csv) and drops only the
     #   unit; the caption states that the unit is a patient-drug pair over ten glioblastoma donors
     n_lab = _one(ax, "patient-drug pairs", "e")
     n_lab.set_text(n_lab.get_text().replace(" patient-drug pairs", ""))
     _retune(ax, {
-        "constructed\n": {"position": (0.60, 0.075), "fontsize": PT_SMALL},
+        # Centred in the band, on its empty right side. It was pinned at (0.60, 0.075), above the
+        # old 0.044 band; the band is the real range now and that position is inside it.
+        "constructed\n": {"position": (1.62, 0.5 * (_CONSTRUCTED["cos_lo"]
+                                                     + _CONSTRUCTED["cos_hi"])),
+                          "fontsize": PT_SMALL},
         # One line, not two. Right-aligned at 1.50 rather than at the spine, the two-line form
         # reached back across the point column AND its outer edge touched panel f's rotated y
         # label in the gutter between the two panels. "cos = 1" restates the y axis, which is

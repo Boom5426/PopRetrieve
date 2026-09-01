@@ -1841,13 +1841,41 @@ docstring points at `fig7_natural` as the fix site rather than at a results file
 class of defect as R46 (Fig. 2g's correlation matrix has no generator) and R49 (Fig. 3a plotted a
 hand-copied subset): a number reaching a main figure through a file with no derivation.
 
-**Reported, not fixed, because fixing it changes what the panel claims.** The honest repair is for
-`fig4_nat.draw_nat_gate1` to compute the band from
-`gate1_response_divergence.csv` at draw time and to draw a DEFINED interval, an interquartile range
-or a stated pair of quantiles, rather than an undocumented pair. That is a decision about what the
-panel asserts, and it needs the author. Until then the caption describes the band as the range
-spanned by the constructed mixtures, which is what the panel says, and that description is not
-verifiable against the released data.
+### FIXED 2026-09-01
+
+The band was worse than a provenance problem, and measuring it said so. The Figure 4 caption
+described it as "the range spanned by our own constructed mixtures". **The drawn band contained 24
+of the 96 values, 25 per cent.** Its lower edge was the MEAN, so it hid the entire lower half of a
+distribution that is centred near zero and runs negative: the real summaries are min $-0.0938$,
+q25 $-0.0156$, median $+0.0110$, q75 $+0.0380$, max $+0.1317$.
+
+It also concealed an overlap. The constructed values reach $+0.132$ and one of the 17 natural
+patient--drug pairs sits at $+0.081$, inside the constructed range. With the old band no natural
+point came near it, so the panel showed a clean separation that the data do not have.
+
+**What changed.** `fig7_natural.CONSTRUCTED` is no longer four literals; it is a `constructed()`
+function that reads every value from its own source. `ceiling` and `unsup` come from
+`results/upgrade/gate2_supervised_upper_bound.csv` at `separation_scale == 1.0` as medians over
+seeds, which is the same aggregation `fig5e` uses, so the two panels cannot disagree; they
+reproduce the old literals at 0.692 and 0.674. The divergence summaries come from the 96
+`real / real_blend` rows of `gate1_response_divergence.csv`.
+
+The band is now the observed range, min to max, with the median drawn inside it, so the caption's
+"range" is literally true and the overlap is visible. The caption states the range, the median, the
+n, and the overlapping pair.
+
+**The label prints no number at all.** It reads "constructed mixtures" and nothing else. The
+endpoints were previously typed twice, once in the dict and once in a hard-coded string
+`"constructed mixtures\n0.014 - 0.044 (near-orthogonal)"`, with a guard in `fig4_nat` comparing
+the two; both copies were wrong together, so the guard passed. A label that prints no number cannot
+drift from the band it names, and the guard is deleted rather than re-pointed.
+
+**One related literal, fixed at the same time.** `ed7_tahoe.draw_a`, which is main-text Fig. 5h,
+anchored its "constructed mixtures" reference line at a typed `0.014`. That number did reproduce,
+being the same arm's mean, but it is now computed from the same file, and as the MEDIAN so that the
+two figures describe the constructed mixtures by the same statistic. The anchor moves from 0.014288
+to 0.011017, 0.3 per cent of that axis, and the Figure 5 caption's "fewer than 0.11% of conditions
+as divergent as the constructed mixtures" is 3 of 3630 under either value.
 
 ---
 
