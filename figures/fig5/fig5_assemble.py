@@ -1,264 +1,254 @@
-"""PopRetrieve Figure 5: Structure preservation and identifiability constrain distribution-aware retrieval.
-14-panel two-gate mechanism figure. Assembles a-n into fig5_two_gate.{pdf,svg,png}.
+"""PopRetrieve Figure 5: three requirements connect heterogeneity to a change in candidate ranking.
 
-WHAT PANELS h-n ARE AND WHY THEY ARE HERE, 2026-08-30
-----------------------------------------------------
-The Extended Data deck is retired and its panels move into the main figures. Seven of them land
-here because Figure 5 is the figure that states the three requirements (differential response,
-recoverability, decision relevance), and these seven measure those same three requirements on
-material the figure did not previously cover.
+Eleven panels, a-k, assembled into fig5_two_gate.{pdf,svg,png}.
 
-  h  ed_panels.draw_ed3a   median ARI against the true two-source labels for nine unsupervised
-                           clustering configurations, best 0.106 against the 0.5 reliability line.
-  i  ed_panels.draw_ed3b   per-population silhouette under a raw k=2 partition, SciPlex3 (n=529)
-                           and Frangieh (n=231).
-  j  ed_panels.draw_ed3d   the seed-averaged ARI heatmap over separation scale by cells per source.
+WHAT CHANGED ON 2026-09-01, AND WHY THE PANEL COUNT AND THE TYPE FLOOR WERE ONE DECISION
+-----------------------------------------------------------------------------------------
+This figure carried fourteen panels and was the worst page in the deck: 239 of its 263 text
+artists sat below 6.5 pt, 33 of them at exactly 5.0 pt, and every one of the fourteen panels
+failed the floor the other four figures had already adopted.
 
-Panels e and f already measure recoverability on the constructed mixture, e as a supervised
-ceiling and f as the positive control that licenses reading e. h, i and j measure the same thing
-three further ways: across clusterers rather than one (h), in the raw geometry the clusterers see
-rather than through an accuracy score (i), and across the whole separation-by-budget grid rather
-than along f's single separation ladder (j). A reader who doubts e is answered by the row below
-it, not by a different document.
+The cause was geometric, not careless. Seven panels arrived here on 2026-08-30 when the Extended
+Data deck was retired, and they arrived as a three-across row and a four-across row at 1.06 to
+1.50 in wide. Measured at 6.5 pt against the slot each packing can afford (6.90 in less a 0.15 in
+left margin and a 0.10 in right margin, divided by the number across):
 
-  k  ed7_tahoe.draw_a      histogram of the induced response cosine between subpopulations over
-                           3,630 Tahoe-100M conditions, median 0.739.
-  l  ed7_tahoe.draw_b      Tahoe supervised ceiling against best unsupervised over 960 drug pairs
-                           and 48 cell lines, median gap 0.157.
-  m  ed7_tahoe.draw_c      disjoint state-ordering Spearman under two partitions, medians 0.841
-                           and 0.778.
-  n  ed7_tahoe.draw_d      per-cell-line differential response against state-ordering agreement.
+    packing        slot     a b d f      c          e          g        Tahoe panels
+    four-across    1.66 in  fit         +0.099     +0.130     +0.587    +0.31 / +0.16 on two
+    three-across   2.22 in  fit         +0.099     +0.006     +0.252    fit but for +0.020
+    two-across     3.33 in  fit         +0.099     fit        fit       fit
 
-k, l, m and n are the three requirements measured again on Tahoe-100M, 4,158,278 cells of
-heterogeneity nobody constructed: k is requirement one, l is requirement two, m is requirement
-three, and n checks that m is not requirement one restated. That is the paper's answer to the
-obvious objection, namely that a negative result on mixtures the authors built is a fact about the
-authors' mixtures. The answer has to sit in the same figure as the claim it defends, because a
-reader who accepts the objection stops reading before the Extended Data. Panel m carries a second
-job: panel a marks decision relevance as proposed rather than measured, and m at n=44 and n=45
-contexts is the closest the paper comes to measuring it, so the qualifier in a and the measurement
-in m are now on one page where a reader can hold them against each other.
+So the floor could not be raised while fourteen panels were on the page, and raising it was not a
+matter of editing font sizes. Panel c's overflow is the one that does not move with width: it is a
+second y axis, and it needs a right margin rather than a wider axes.
 
-GEOMETRY, 2026-07-26, RE-CUT 2026-08-30 WHEN THE CAPTION MOVED OFF THE PAGE
----------------------------------------------------------------------------
-The manuscript text block is 6.95 in (500.5 pt, letterpaper with 2 cm margins) and every figure
-enters with ``\\includegraphics[width=\\textwidth]``. This figure used to be authored 11.4 in wide,
-so LaTeX shrank it by 0.61x and its 5.4-6 pt source type printed at 3.3-3.7 pt. Nature Portfolio
-rejects text below 5 pt AT FINAL PRINTED SIZE, so the deck's build-time floor (which measures the
-NOMINAL size only) reported CLEAN while the printed page failed.
+WHAT LEFT, AND WHERE IT WENT
+----------------------------
+Panels h, i and j left: median ARI across nine clustering configurations, per-population
+silhouette under a raw k=2 partition, and the seed-averaged ARI grid over separation by cell
+budget. All three measure recoverability of the constructed two-state mixture, which is panel e's
+subject, and all three now sit in Supplementary Note 2 under "Unsupervised recovery of constructed
+two-state structure", written before they were removed because, unlike the panels cut from
+Figures 3 and 4, no Supplementary Note carried their numbers.
 
-The canvas is now 6.90 in wide, i.e. nominal size == printed size and the scale factor is 1.00.
-Two consequences drove every other change here:
+Removing them also repaired a citation. The Results sentence "This is an algebraic property of the
+model class rather than a consequence of insufficient training" cited Fig. 5h-j, but h, i and j
+were clustering diagnostics on the constructed mixture and showed nothing about predictor algebra;
+the caption said as much on its own face ("h-j, Recoverability measured three further ways on the
+constructed mixture of e"). Supplementary Note 3 carries that claim and now carries it alone.
 
-  1. Seven panels no longer fit in two rows. Four panels across 6.9 in leaves each about 1.2 in of
-     data area, which is narrower than panel c's four x-tick labels and panel e's seven. The grid
-     was three rows, 3 + 2 + 2, with the two width-hungry panels (e, seven methods; f and g) given
-     the wide slots and the schematic given the narrow one. It is now five rows, 3 + 2 + 2 + 3 + 4;
-     the four-across row is the one row whose panels were AUTHORED four-across, in ed7_tahoe.py at
-     this same 6.90 in width, so their labels are known to fit that slot.
-  2. Panel geometry is specified in INCHES via ``add_axes`` rather than as gridspec ratios. At this
-     size the binding constraints are absolute (a tick label is 0.5 in wide whatever the canvas is),
-     so the gutters are sized to the label that has to fit in them: 0.62 in between a and b for
-     panel b's wrapped predictor names, 0.50 in for a rotated y label plus its ticks, and a 0.52 in
-     right margin in row 0 alone for panel c's second y axis.
+The four Tahoe-100M panels stay, as h, i, j and k. Their numbers ARE duplicated in Supplementary
+Note 4, so they were the cheaper cut in content terms, and they were kept anyway: they are the
+paper's answer to the objection that a negative result about mixtures the authors built is a fact
+about the authors' mixtures, and a reader who accepts that objection stops reading before the
+Supplementary Information. The rebuttal has to sit in the figure that makes the claim.
 
-``figstyle.save`` writes with ``bbox_inches="tight"``, which would crop the canvas back to the ink
-and hand LaTeX a figure narrower than 6.9 in to scale UP again. A transparent full-canvas anchor
-patch pins the tight bbox to the authored width, so the exported media box is 6.92 x 9.22 in
-(6.90 x 9.20 plus the 0.01 in savefig pad) and the printed scale factor is 1.00 by construction.
-The patch is a floor, not a ceiling: it cannot pull ink back inside, so anything that hangs over
-an edge still widens the page. That is what sizes the right margins in rows 3 and 4 below.
+GEOMETRY, AUTHORED 1:1
+----------------------
+The manuscript text block is 6.951 in and the figure enters with \\includegraphics[width=\\textwidth],
+so the canvas is authored at 6.90 in: nominal point size IS printed point size and LaTeX applies
+no rescale. figstyle.pin_canvas pins the tight bbox to the authored width, since bbox_inches="tight"
+would otherwise crop to the ink and hand LaTeX a narrower figure to scale back up.
+
+Four rows rather than the old five. Deleting the three-across row returned 2.07 in, and the page
+went from 234 mm, which was the deck maximum and 0.02 in inside the float budget, to a height in
+the same class as Figures 3 and 4. The float budget is the 9.461 in text block less about 16/72 in
+of float overhead, i.e. 9.238 in.
+
+Row 3 is the one row that is four-across, and it is four-across on measurement rather than
+preference: at 1.09 in of axes the four Tahoe panels need 6.99 in of slot against the 6.90 in
+available, an excess of 0.09 in, which is about three characters of label at 6.5 pt. The
+alternative, splitting them two-by-two, costs a whole row and puts the page back at 226 mm.
 """
-import os, re, sys, matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
+import os
+import re
+import sys
 
-# The panel modules for h-n live in two sibling figure directories, so the search path is
-# extended the same way the two local imports below always extended it, just over a list.
+import matplotlib.pyplot as plt
+import matplotlib.text as mtext
+
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _FIGROOT = os.path.abspath(os.path.join(_HERE, ".."))
-for _p in (_HERE, _FIGROOT, os.path.join(_FIGROOT, "edfigs"), os.path.join(_FIGROOT, "ed7")):
+for _p in (_HERE, _FIGROOT, os.path.join(_FIGROOT, "ed7")):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-# The one canonical output stem for this figure; must equal build_all.STEMS[6], which build_all
-# asserts, because that is the name copied to manuscript/latex/figures/fig5.pdf.
+# The one canonical output stem for this figure; build_all asserts it equals STEMS[5], because
+# that is the name copied to manuscript/latex/figures/fig5.pdf.
 STEM = "fig5_two_gate"
 
-from fig5a import draw_5a
-from fig5b import draw_5b
-from fig5c import draw_5c
-from fig5d import draw_5d
-from fig5e import draw_5e
-from fig5f import draw_5f
-from fig5g import draw_5g
+from figstyle import pin_canvas, strip_titles          # noqa: E402
+from fig5_style import PT_ANNOT, PT_FLOOR, PT_LETTER, PT_TICK, PT_TITLE, TEXT  # noqa: E402
+from fig5a import draw_5a                              # noqa: E402
+from fig5b import draw_5b                              # noqa: E402
+from fig5c import draw_5c                              # noqa: E402
+from fig5d import draw_5d                              # noqa: E402
+from fig5e import draw_5e                              # noqa: E402
+from fig5f import draw_5f                              # noqa: E402
+from fig5g import draw_5g                              # noqa: E402
+import ed7_tahoe as _ed7                               # noqa: E402
 
-import ed_panels                    # noqa: E402  draw_ed3a/b/d(ax, D), D from ed_panels.load()
-import ed7_tahoe as _ed7            # noqa: E402  draw_a..draw_d(ax)
+_SUBSUP = re.compile(r"\$[^$]*[\^_][^$]*\$")
 
-# Panel b's title used to read "No predictor gives a positive gain". The deck's own source
-# data (source_data/fig5b_predictor_gaps.csv) falsifies it: the latent-linear predictor's
-# nDCG@10 gain is +0.027. The panel only looked consistent because a reindex key typo
-# dropped that predictor. The honest summary is that the gain is small and its SIGN is not
-# consistent across predictors, which is a weaker claim than the old title and a true one.
-# Panel titles are claims, and each must be true of the CURRENT manuscript.
-#   a  was "Retrieval limited by the predictor": panel a is the design schematic and shows no
-#      such result. It now states what the caption says it is.
-#   f  was "More cells cannot fix low separability": FALSE OF THE PANEL. The cell-budget axis
-#      was removed when the ARI phase diagram was replaced by the separation ladder, so the panel
-#      has no cell axis at all. Its x-axis is source separation and its job, per the caption, is
-#      the positive control that licenses reading panel e. The cell-budget axis is back in the
-#      figure as panel j, which is where that claim may now be read.
-#   e  was "No method recovers subpopulations". The manuscript now states that the low-ceiling
-#      reading is superseded (in patient tumour the same protocol gives ceiling 0.923 against
-#      0.777 unsupervised, so the limit there is algorithmic). The title is therefore scoped to
-#      the constructed mixture this panel actually measures.
-# The line breaks are geometry, not wording: at 6.9 in the narrow row-0 panels are 1.4-1.9 in
-# wide and an 8 pt single-line title of 36-39 characters runs 2.0-2.2 in, i.e. straight off the
-# panel and into its neighbour. Every title below is the same claim it was, wrapped.
-#   h-n keep the claims their source figures declared, with one scope repair: k's old title,
-#      "the mixtures are the outlier", named the constructed mixtures without saying against what,
-#      which reads as a claim about mixtures in general rather than about this distribution.
-TITLES={"a":"Predict-then-rank,\nand three conditions",
-        "b":"Gain is small and\nsign-inconsistent",
-        "c":"Structure survives;\ndivergence does not",
-        "d":"No predictor collapses structure",
-        "e":"In this mixture, even the ceiling is only 0.692",
-        "f":"The probe pulls away when structure is there",
-        "g":"Where theory predicts gain, there is none",
-        "h":"No clustering configuration\nreaches reliable ARI",
-        "i":"Raw k=2 barely separates\nthe two sources",
-        "j":"More cells do not rescue\nlow separation",
-        "k":"Against 3,630 Tahoe conditions,\nthe mixtures are the outlier",
-        "l":"Recoverable in principle,\nout of reach in practice",
-        "m":"State ordering mostly agrees,\nnot always",
-        "n":"Ordering agreement is not\ndifferential response restated"}
-#   g  was "No positive effect at any divergence". The highest-divergence quartile's mean is
-#      +0.003 (not significant, median exactly 0), so a reader can point at a positive bar and
-#      call the title false. The replacement is the caption's own sentence, "Where the theory
-#      predicts the largest gain there is none", which is exactly what the panel shows.
+FIGW = 6.90
+PAD_TOP, PAD_BOT = 0.05, 0.08
+# The panel letter alone. Figure 5 never drew a conclusion phrase over a panel on the composite,
+# which calls strip_titles, but it carried a TITLES dict of fourteen of them and three panel files
+# still set one for their standalone run. Both are gone; see fig5_style.
+LETTER_BLOCK = 0.17
+ROW_GAP = 0.22
 
-from figstyle import soften_axes, strip_titles  # noqa: E402
+# (row height in inches, [(key, box width in inches), ...]). Box widths sum to FIGW per row, and
+# row height INCLUDES the bottom pad that holds the x apparatus.
+#
+# Widths are the slot measurements above, not a taste decision. Row 0 gives c the widest box
+# because its second y axis needs a right margin no amount of axes width supplies. Row 1 gives e
+# 4.20 in because it scores seven methods in one unit. Row 2 gives g 3.90 in because at
+# three-across it overflowed by 0.252 in. Row 3 divides 6.90 in among four Tahoe panels in
+# proportion to the ink each was measured to need.
+# Row heights are a hierarchy decision, measured rather than chosen. On the first cut of this
+# ledger the largest panel was e at 17.8 per cent of panel area, and e is the panel whose general
+# reading this paper WITHDRAWS: its 0.692 ceiling is substantially an artefact of pooling several
+# drugs into each class, and posed as individual drug pairs the same cells give 0.879 (see the
+# honesty notes in README.md, and CORRECTIONS.md R18 and R21). Meanwhile a, the schematic that
+# defines the three requirements the whole figure is organised around, was 8.9 per cent, and c,
+# which carries the differential-response finding, was 9.3. Row 1 gives height back to rows 0 and
+# 2, which is the same correction Figure 2 needed for its panel d and Figure 3 for its row 5.
+#
+# e stays the single largest panel afterwards, at 16.1 per cent, and that is a content constraint
+# rather than a claim: it scores seven methods in one unit, and seven two-line categorical labels
+# need 3.39 in whatever the panel is worth. What the rebalance buys is that it is no longer
+# largest by a clear margin over g, which reports the decision-relevance null.
+ROWS = [
+    (1.80, [("a", 1.98), ("b", 2.16), ("c", 2.76)]),
+    (1.56, [("d", 2.70), ("e", 4.20)]),
+    (1.70, [("f", 3.00), ("g", 3.90)]),
+    (1.58, [("h", 1.86), ("i", 1.74), ("j", 1.62), ("k", 1.68)]),
+]
 
-FIG_W, FIG_H = 6.90, 9.20          # inches; the manuscript text block is 6.93 x 9.43 in
-# 9.20 in, not 5.14. Height was capped near 5 in only because the caption shared the page with the
-# graphic; captions now set on the following page, so the graphic's budget is the text block less
-# the float separation, which is 9.30 in. The seven new panels need two more rows, and two rows at
-# the heights below cost 4.06 in, so the canvas grows by exactly that and every pre-existing y0
-# moves up by 4.06 in unchanged. Nothing in rows 0-2 was re-plotted or re-proportioned.
-# 9.20 rather than the full 9.30: the 0.10 in that is left is the margin the anchor patch cannot
-# provide, since a panel letter sits 0.06 of an axes height ABOVE its axes and row 0's letters
-# already reach 9.125 in.
-# History of the number, kept because it explains the row heights that were NOT changed: at 6.85 in
-# LaTeX reported "Float too large for page by 83.7pt" when the caption still shared the page, and
-# rows and panels were tightened by ~15% rather than moving a panel out, since every panel letter
-# is cited in the caption. Those tightened heights are the ones rows 0-2 still carry.
-
-# Panel rectangles in INCHES, (x0, y0, width, height), origin bottom-left of the canvas.
-# Rows are stacked bottom-up with 0.36-0.48 in reserved under each row for two-line x tick labels
-# plus an x axis label, and 0.22-0.32 in above each row for its title and panel letter.
-#   row 0 (top)    y0 7.62  h 1.42   a | b | c      c's second y axis owns the 0.52 in right margin
-#   row 1          y0 6.00  h 1.32   d | e          e needs 7 tick label slots, so it takes 3.63 in
-#   row 2          y0 4.44  h 1.26   f | g
-#   row 3          y0 2.37  h 1.55   h | i | j      the constructed mixture, three more ways
-#   row 4 (bottom) y0 0.52  h 1.30   k | l | m | n  Tahoe-100M, all three requirements
-# Row 4 ends at 6.78 in, a 0.12 in right margin rather than rows 0-2's 0.52 in. That is not
-# carelessness: panel n has nothing in its right gutter (its y label and its rho/R2 block are both
-# on the left) and its rightmost x tick label is a three-character number, so 0.12 in is more than
-# the half-label that can overhang. The exported media box is the check, and it reads 6.92 in.
-# The two new rows are taller than rows 0-2 (1.55 and 1.30 against 1.26-1.42) for opposite
-# reasons. Row 3 is set by panel h, which stacks NINE categorical rows: at row 2's 1.26 in the
-# bars are 0.10 in apart and the 5 pt labels between them touch. Row 4 is set by nothing on the
-# canvas; 1.30 in is 0.10 in more than ed7_tahoe.py gave the same four panels, spent because the
-# row was going to be the bottom one and a squat bottom row reads as an afterthought.
-BOXES = {
-    # a is 0.07 in narrower than b so the a|b gutter is 0.62 in rather than 0.55: panel b's
-    # widest y tick label, "(scGen-fam.)", measures 0.56 in at 6 pt and at 0.55 in of gutter it
-    # came within 0.02 in of panel a's gate boxes.
-    "a": (0.62, 7.62, 1.33, 1.42),
-    "b": (2.57, 7.62, 1.43, 1.42),
-    "c": (4.50, 7.62, 1.88, 1.42),
-    "d": (0.62, 6.00, 1.85, 1.32),
-    "e": (2.99, 6.00, 3.63, 1.32),
-    "f": (0.62, 4.44, 2.74, 1.26),
-    "g": (3.89, 4.44, 2.73, 1.26),
-    # h takes a 1.25 in left pad, five times the deck's usual one, because its nine y tick labels
-    # are method names rather than numbers: the longest, "k-means k=2 (response)", is 22 characters
-    # at 5 pt and measures 0.76 in, and the panel letter still has to sit outside that.
-    "h": (1.25, 2.37, 1.50, 1.55),
-    "i": (3.28, 2.37, 1.22, 1.55),
-    # j stops at 6.26 in and leaves 0.64 in of canvas unclaimed. Its colorbar is drawn with
-    # fig.colorbar(..., ax=ax), which splits the colorbar out of the axes rectangle but puts the
-    # "ARI" label and the tick labels OUTSIDE it; measured on the Extended Data build, that
-    # overhang is 0.32 in. Anything less than that here and the overhang, not the anchor patch,
-    # would set the exported page width.
-    "j": (5.02, 2.37, 1.24, 1.55),
-    # Row 4 carries ed7_tahoe.py's own x0 and widths across UNCHANGED. They are not arbitrary:
-    # every one of these four panels hand-places annotations in data coordinates (l's three
-    # reference diamonds and its median label, m's two left-margin notes, k's four rotated
-    # anchors), and text is absolute while data coordinates are not, so narrowing a panel by
-    # 0.10 in drags those labels together. A first cut here took 0.06-0.10 in off each to buy a
-    # wider right margin and l's "Tahoe median gap 0.157" closed on "constructed, drug vs drug"
-    # until they read as one line. The margin was bought back from the row above instead.
-    "k": (0.52, 0.52, 1.30, 1.30),
-    "l": (2.28, 0.52, 1.24, 1.30),
-    "m": (4.02, 0.52, 1.18, 1.30),
-    "n": (5.72, 0.52, 1.06, 1.30),
-}
-# How far LEFT of its own axes each panel letter sits, in inches: far enough to clear whatever
-# that panel puts in its left gutter (nothing for the schematic, a rotated y label plus ticks
-# elsewhere), and never so far that the letter leaves the canvas. h and k are large because they
-# open their rows on the same 0.16 in left column as d, f and the rest, while their axes start
-# 1.25 in and 0.55 in in.
-LETTER_DX_IN = {"a": 0.16, "b": 0.52, "c": 0.46, "d": 0.44, "e": 0.46, "f": 0.46, "g": 0.46,
-                "h": 1.09, "i": 0.50, "j": 0.48,
-                "k": 0.36, "l": 0.42, "m": 0.46, "n": 0.48}
-# One baseline for every letter now that no panel carries a title to align with.
-LETTER_DY = {}
+# (left, right, bottom) pad in inches inside the panel BOX. Top is always zero: the panel letter
+# sits in the LETTER_BLOCK band above the row. Left pads hold the panel's y apparatus plus the
+# room the letter needs, and they differ because the apparatus does: a is a schematic and carries
+# none, b carries wrapped predictor names, and c is the only panel in the deck with a right pad
+# larger than 0.10 in, which is its second y axis.
+# Left pads are the MEASURED furniture of each panel plus 0.22 in for the letter, not a common
+# value: an over-wide pad is axes width thrown away, and at this panel count there is none to
+# spare. c is the only panel with a right pad above 0.10 in, and it is its second y axis.
+PADS = {"a": (0.30, 0.06, 0.44), "b": (0.72, 0.06, 0.46), "c": (0.58, 0.47, 0.46),
+        "d": (0.72, 0.10, 0.44), "e": (0.71, 0.10, 0.46),
+        "f": (0.66, 0.10, 0.44), "g": (0.81, 0.10, 0.48),
+        "h": (0.59, 0.06, 0.48), "i": (0.57, 0.06, 0.48),
+        "j": (0.69, 0.06, 0.48), "k": (0.69, 0.06, 0.48)}
 
 
+def _boxes():
+    """Resolve the rows into per-panel axes rects, in inches, measured from the FIGURE TOP."""
+    rects, letters = {}, {}
+    y = PAD_TOP
+    for row_h, panels in ROWS:
+        assert abs(sum(w for _, w in panels) - FIGW) < 1e-9, panels
+        y += LETTER_BLOCK
+        x0 = 0.0
+        for k, box_w in panels:
+            letters[k] = (x0, y)
+            left, right, bottom = PADS[k]
+            rects[k] = (x0 + left, y, box_w - left - right, row_h - bottom)
+            x0 += box_w
+        y += row_h + ROW_GAP
+    return y - ROW_GAP + PAD_BOT, rects, letters
 
 
-def _adapt(fn, arg):
-    """Wrap a two-argument draw function so every panel is callable as fn(ax).
+FIGH, RECTS, LETTER_XY = _boxes()
 
-    ed_panels' draw functions take (ax, D) because D is the whole Extended Data table set and
-    reading it per panel would read the same nine CSVs three times. ed_consolidated.py binds them
-    the same way.
+
+def _letter(fig, key):
+    """Panel letters in the gutter, one baseline per row, at this figure's own 9.5 pt.
+
+    Drawn as figure text rather than through figstyle.panel_letter so that the size is this
+    figure's and the letters are exempt from _assert_no_titles, which inspects axes text only.
     """
-    return lambda ax: fn(ax, arg)
+    x, top = LETTER_XY[key]
+    fig.text(max(x + 0.02, 0.02) / FIGW, 1.0 - (top - 0.02) / FIGH, key,
+             fontsize=PT_LETTER, fontweight="bold", color=TEXT, ha="left", va="top")
+
+
+def _assert_floor(fig, floor=PT_FLOOR):
+    """Refuse to return a figure carrying text below THIS figure's floor.
+
+    figstyle.save() enforces the deck's 5 pt production limit. This is stricter and runs earlier:
+    5 pt is what production rejects, 6.5 pt is what a reader can take in at 176 mm. Mathtext is
+    measured at its effective size, a sub/superscript printing at 0.7x nominal.
+
+    This gate is the reason the figure lost three panels. When it fires, the fix is to cut the
+    annotation into the caption or to give the panel more slot; it is never to lower the size.
+    """
+    bad = []
+    for t in fig.findobj(mtext.Text):
+        s = str(t.get_text())
+        if not s.strip() or not t.get_visible():
+            continue
+        eff = t.get_fontsize() * (0.7 if _SUBSUP.search(s) else 1.0)
+        if eff < floor - 1e-6:
+            bad.append((round(eff, 2), s.replace("\n", "/")[:40]))
+    assert not bad, (
+        f"Figure 5 sets its own {floor} pt floor and these are under it: {sorted(bad)[:8]}. "
+        f"Cut the annotation into the caption; do not lower the size.")
+    return fig
+
+
+def _assert_no_titles(fig, cap=PT_ANNOT):
+    """Refuse to return a figure in which any PANEL draws text above ``cap``.
+
+    The panels carry evidence and the caption carries the argument. A conclusion sentence set over
+    a panel is always the largest text on it, so capping panel text at the annotation size is what
+    stops one coming back. The panel letters are exempt because this module draws them, not the
+    panels, and they are the figure's navigation rather than its claims.
+
+    It is deliberately a size gate and not a wording gate. Nothing here can tell a claim from a
+    label, but a claim that has to fit at 7.2 pt beside the marks it describes is a caption
+    sentence that has already lost the argument for being on the panel.
+    """
+    letters = {t for t in fig.texts}
+    bad = []
+    for t in fig.findobj(mtext.Text):
+        if t in letters or not str(t.get_text()).strip() or not t.get_visible():
+            continue
+        if t.get_fontsize() > cap + 1e-6:
+            bad.append((round(t.get_fontsize(), 2), str(t.get_text()).replace("\n", "/")[:44]))
+    assert not bad, (
+        f"Figure 5 caps panel text at {cap} pt and these are above it: {sorted(bad)[:8]}. "
+        f"A panel states no conclusion; move the sentence to the caption.")
+    return fig
+
+
+# a-g are this figure's own panels; h-k are the four Tahoe-100M panels, whose draw functions live
+# in figures/ed7/ed7_tahoe.py because that module still assembles a standalone preview of them.
+# Figure 5 is their only gated consumer, so ed7_tahoe takes its type ladder from fig5_style.
+DRAW = {"a": draw_5a, "b": draw_5b, "c": draw_5c, "d": draw_5d, "e": draw_5e, "f": draw_5f,
+        "g": draw_5g,
+        "h": _ed7.draw_a, "i": _ed7.draw_b, "j": _ed7.draw_c, "k": _ed7.draw_d}
 
 
 def build(apply_style, panel_letter):
-    apply_style(sizes=(8,7,6))
-    fig=plt.figure(figsize=(FIG_W,FIG_H))
-    # Pin the tight bbox to the authored canvas (see module docstring). Transparent, zero-width,
-    # behind everything: it contributes extent and no ink.
-    fig.patches.append(mpatches.Rectangle((0,0),1,1,transform=fig.transFigure,
-                                          fill=False,ec="none",lw=0,zorder=-10))
-    # ONE read of the Extended Data tables, here, for h, i and j together.
-    D = ed_panels.load()
-    fns={"a":draw_5a,"b":draw_5b,"c":draw_5c,"d":draw_5d,"e":draw_5e,"f":draw_5f,"g":draw_5g,
-         "h":_adapt(ed_panels.draw_ed3a,D),
-         "i":_adapt(ed_panels.draw_ed3b,D),
-         "j":_adapt(ed_panels.draw_ed3d,D),
-         "k":_ed7.draw_a,"l":_ed7.draw_b,"m":_ed7.draw_c,"n":_ed7.draw_d}
-    for k,(x0,y0,w,h) in BOXES.items():
-        ax=fig.add_axes([x0/FIG_W, y0/FIG_H, w/FIG_W, h/FIG_H])
-        fns[k](ax)
-        panel_letter(ax,k,case="lower",dx=-LETTER_DX_IN[k]/w,dy=LETTER_DY.get(k,1.06))
-    # Nature panels carry no titles; the fourteen claims in TITLES are the caption's fourteen
-    # entries.
-    return strip_titles(soften_axes(fig))
+    # This figure's ladder sits one step above the deck's (8, 7, 6). panel_letter is accepted to
+    # keep build_all's contract and deliberately not used: its size is fixed at 8 pt.
+    apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
+    fig = plt.figure(figsize=(FIGW, FIGH))
+    pin_canvas(fig)
+
+    for key, fn in DRAW.items():
+        x, top, w, h = RECTS[key]
+        fn(fig.add_axes([x / FIGW, 1.0 - (top + h) / FIGH, w / FIGW, h / FIGH]))
+        _letter(fig, key)
+
+    # strip_titles clears rc titles so a standalone preview can label itself without the composite
+    # inheriting it. No panel states a conclusion on this figure; _assert_no_titles keeps it so.
+    return _assert_no_titles(_assert_floor(strip_titles(fig)))
 
 
 if __name__ == "__main__":
-    # build() must NOT export. It used to call fig.savefig() here, which meant two things:
-    # `python figures/build_all.py` without --write, documented as a report-only dry run,
-    # silently overwrote four tracked composites; and it wrote them BEFORE
-    # assert_min_fontsize ran, so a figure that then FAILED the gate had already been
-    # deployed to disk. Every export now goes through figstyle.save(), which applies the
-    # 5 pt floor first. (Audited 2026-07-27; fig1 and fig4 already worked this way.)
+    # build() must NOT export. Every export goes through figstyle.save(), which applies the
+    # deck-wide 5 pt floor first; a savefig here would ship a figure that never met the gate.
     from figstyle import apply_style, panel_letter, save
-    save(build(apply_style, panel_letter),
-         os.path.join(os.path.dirname(os.path.abspath(__file__)), STEM))
-    print("wrote fig5_two_gate.{png,pdf}")
+    save(build(apply_style, panel_letter), os.path.join(_HERE, STEM))
+    print(f"wrote {STEM}.{{png,pdf,svg}}")

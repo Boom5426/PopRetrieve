@@ -34,6 +34,7 @@ import matplotlib.pyplot as plt
 import sys as _sys, os as _os
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
+from fig5_style import PT_SMALL, PT_TICK  # noqa: E402
 GREEN_SOFT = "#55966B"
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SRC = f"{REPO}/results/upgrade/gate2_supervised_upper_bound.csv"
@@ -56,37 +57,37 @@ def draw_5f(ax):
     ax.plot(seps, ceil, "-o", color=GREEN_SOFT, ms=4, lw=1.5, zorder=3)
     ax.plot(seps, best, "-s", color=FOCAL_SOFT, ms=4, lw=1.5, zorder=3)
     ax.axhline(0.5, ls="--", lw=0.8, color=GREY, zorder=1)
-    ax.text(7.9, 0.508, "chance", ha="right", va="bottom", fontsize=5.5, color=GREY)
+    ax.text(7.9, 0.508, "chance", ha="right", va="bottom", fontsize=PT_SMALL, color=GREY)
 
     # Direct labels on the two curves, in their own colours, instead of a boxed legend: the
     # widest part of the wedge is the only place in this panel with room, and it is also the
     # place a reader is looking when the panel's point lands.
-    ax.text(2.0, 0.948, "supervised ceiling", ha="right", va="bottom", fontsize=5.8,
+    ax.text(2.0, 0.948, "supervised ceiling", ha="right", va="bottom", fontsize=PT_SMALL,
             color=INK)
-    ax.text(2.2, 0.700, "best unsupervised", ha="left", va="center", fontsize=5.8,
+    ax.text(2.2, 0.700, "best unsupervised", ha="left", va="center", fontsize=PT_SMALL,
             color=INK)
-    ax.text(2.02, 0.843, "gap", ha="center", va="center", fontsize=6.2,
+    ax.text(2.02, 0.843, "gap", ha="center", va="center", fontsize=PT_SMALL,
             color=INK)
     # THE SHADING KEY IS IN THE CAPTION. Defining an encoding is what a figure legend is for,
     # and the wedge is already bounded by the two curves it lies between and labelled "gap".
     _UNUSED_SHADING_KEY = (lambda *a, **k: None)(2.35, 0.615, "", ha="left", va="top",
-            fontsize=5.5, color=COMP_SOFT, linespacing=1.25)
+            fontsize=PT_SMALL, color=COMP_SOFT, linespacing=1.25)
 
     # the real-data regime: the gap is closed, and that is what panel e measures
     ax.axvline(1.0, ls=":", lw=1.0, color=INK, zorder=2)
     ax.annotate(f"real separation:\ngap {ceil[0] - best[0]:+.3f}",
                 xy=(1.0, (ceil[0] + best[0]) / 2), xytext=(1.30, 0.545),
-                fontsize=5.8, color=INK, linespacing=1.25,
+                fontsize=PT_SMALL, color=INK, linespacing=1.25,
                 arrowprops=dict(arrowstyle="->", lw=0.8, color=INK))
 
-    ax.set_xlabel(r"source separation ($\times$ real)", fontsize=6)
-    ax.set_ylabel("accuracy recovering the true partition", fontsize=6)
+    ax.set_xlabel(r"source separation ($\times$ real)", fontsize=PT_SMALL)
+    ax.set_ylabel("accuracy recovering\nthe true partition", fontsize=PT_SMALL, labelpad=2)
     ax.set_xscale("log")
     ax.set_xticks(seps)
-    ax.set_xticklabels([f"{s:g}" for s in seps], fontsize=5.6)
+    ax.set_xticklabels([f"{s:g}" for s in seps], fontsize=PT_TICK)
     ax.set_xlim(0.93, 8.7)
     ax.set_ylim(0.45, 1.06)
-    ax.tick_params(axis="y", labelsize=5.6)
+    ax.tick_params(axis="y", labelsize=PT_TICK)
     ax.minorticks_off()
     for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)
@@ -97,6 +98,5 @@ if __name__ == "__main__":
     draw_5f(ax)
     # Must stay identical to fig5_assemble.TITLES["f"], which overrides whatever this file sets
     # when the panel is composited.
-    ax.set_title("The probe pulls away when structure is there", loc="left", fontsize=8)
     fig.savefig(os.path.join(os.path.dirname(__file__), "5f.png"), dpi=200, bbox_inches="tight")
     print("wrote 5f.png")

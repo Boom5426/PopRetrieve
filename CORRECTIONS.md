@@ -1848,3 +1848,114 @@ or a stated pair of quantiles, rather than an undocumented pair. That is a decis
 panel asserts, and it needs the author. Until then the caption describes the band as the range
 spanned by the constructed mixtures, which is what the panel says, and that description is not
 verifiable against the released data.
+
+---
+
+## R54. Figure 5k reported the square of Spearman's rho as "R^2", beside a least-squares line whose R^2 is 0.61
+
+`ed7_tahoe.draw_d`, which is main-text Fig. 5k, computed
+
+```python
+r, _ = spearmanr(j.g1, j.spearman_rho)
+...  f"$\\rho$ = {r:+.2f}\n$R^2$ = {r ** 2:.2f}\nn = {len(j)} lines"
+```
+
+and the caption repeated it as `$R^2=0.38$`. Two things were wrong with it.
+
+It carried no information. `r ** 2` is the square of the rho printed on the line above, so the
+second line was the first line restated.
+
+More seriously, the panel also draws a least-squares line through the raw values, and **the
+R-squared of that line is Pearson's, 0.6057, not 0.3846**. A reader takes "R^2" beside a fitted
+line to be the variance that line explains, and the printed value understated it by 0.22. Over
+44 cell lines: Spearman rho +0.6202 (p = 7.1e-6), Pearson r +0.7783 (p = 5.0e-10).
+
+**Fixed.** The panel now prints rho and n only. Rho is the right statistic for the claim the panel
+makes, which is that differential response and state-ordering agreement are related but not
+equivalent; the dashed line stays as a visual trend guide, and the panel no longer implies it is
+the model rho describes. The caption drops `$R^2=0.38$`. The macro `\TAHOECOUPLINGRSQ`, defined as
+`0.385` in both the manuscript and the SI and never used by either, is deleted rather than left for
+someone to wire into prose.
+
+Removing it also resolved a type conflict: `$R^2$` is mathtext with a superscript, which matplotlib
+renders at 0.7x nominal, so meeting the 6.5 pt floor would have needed 9.3 pt nominal, above
+Figure 5's 7.2 pt cap on panel text, and would have set the base R half again as large as the text
+beside it.
+
+---
+
+## R55. Main text cited Fig. 5h-j, three clustering panels, for a claim about predictor algebra
+
+The Results sentence
+
+> This is an algebraic property of the model class rather than a consequence of insufficient
+> training (Fig.~\ref{fig:5}h--j and Supplementary Note~3).
+
+pointed at three panels that measured unsupervised recovery of the constructed two-state mixture:
+median ARI across nine clustering configurations, per-population silhouette under a raw k=2
+partition, and a seed-averaged ARI grid over separation by cell budget. None of them shows anything
+about whether an additive predictor can generate state-specific differential response. The caption
+said so on its own face: "**h-j**, Recoverability measured three further ways on the constructed
+mixture of **e**."
+
+**Fixed.** The three panels moved to Supplementary Note 2 (see R56) and the citation is now
+`(Supplementary Note~3)`, which derives the additive-predictor algebra and carries the claim
+alone.
+
+A second, smaller citation defect was fixed at the same time: **panels c, d and f were cited
+nowhere in the Results**, only described in the caption. Each is now cited where its evidence
+belongs, c and d in the differential-response paragraph and f in the recoverability paragraph.
+
+---
+
+## R56. Figure 5 could not meet the deck's 6.5 pt floor at fourteen panels, and three of them had no Supplementary home
+
+Figure 5 was the last figure to get the typography pass, and it was the worst page in the deck:
+**239 of its 263 text artists sat below 6.5 pt, 33 of them at exactly 5.0 pt**, and every one of
+its fourteen panels failed the floor.
+
+The cause was geometric rather than careless. Seven panels arrived on 2026-08-30 when the Extended
+Data deck was retired, as a three-across row and a four-across row at 1.06 to 1.50 in wide.
+Measured at 6.5 pt against the slot each packing affords:
+
+| packing | slot | a b d f | c | e | g | Tahoe |
+|---|---|---|---|---|---|---|
+| four-across | 1.66 in | fit | +0.099 | +0.130 | +0.587 | +0.31, +0.16 on two |
+| three-across | 2.22 in | fit | +0.099 | +0.006 | +0.252 | fit but for +0.020 |
+| two-across | 3.33 in | fit | +0.099 | fit | fit | fit |
+
+So the floor could not be raised while fourteen panels were on the page. Panel c's overflow is the
+one that does not move with width: it is a second y axis and needs a right margin.
+
+**Fixed, at eleven panels.** h, i and j left. Unlike the panels cut from Figures 3 and 4, **no
+Supplementary Note carried their numbers**: there was no ARI 0.106, no SciPlex3 or Frangieh
+silhouette, no separation-by-budget grid anywhere in the SI. Supplementary Note 2 therefore gained
+"Unsupervised recovery of constructed two-state structure" *before* the panels were removed,
+carrying all three measurements. The four Tahoe panels stayed, renumbered h to k.
+
+The page went from 234 mm, the deck maximum and 0.02 in inside the float budget, to 206 mm. The
+type ladder went from twelve sizes spanning 5.0 to 8.0 pt to four: 6.5, 6.8, 7.2 and the 9.5 pt
+panel letters.
+
+Two further defects were found and fixed while re-laying the panels.
+
+**Purple carried two meanings at once.** It was patient tissue in the Tahoe differential-response
+and recoverability panels, and the "cell state" partition in the state-ordering panel, where the
+same purple also drew the tissue reference line at 0.835. The cell-cycle median is 0.841, so that
+panel put a purple line through a *blue* series and labelled it in the other series' colour. The
+two partitions are separated by x position and by their own tick labels and never needed a colour
+contrast; they are now one colour, and purple means tissue.
+
+**Orange carried two meanings at once.** It was the mean signature and the additive limit in
+panels b, c and g, and "the constructed mixtures" as a reference mark in the two Tahoe panels. The
+two met on one axis: the Tahoe differential-response panel drew the constructed-mixture anchor in
+orange and the additive ceiling at cosine 1 in near-black, while panel c drew that same ceiling,
+the same quantity on the same axis, in orange. Orange is the deck's mean-signature colour and
+cannot move, so the constructed mixtures moved to slate and the additive ceiling is orange in both.
+
+**One hierarchy inversion was corrected.** On the first cut of the new ledger the largest panel was
+e at 17.8 per cent of panel area, and e is the panel whose general reading this paper withdraws
+(R18, R21), while a, the schematic the figure is organised around, was 8.9. Row heights were
+rebalanced; e is now 16.1 against g's 15.7. e remains the single largest because it scores seven
+methods in one unit and seven two-line categorical labels need 3.39 in, which is a content
+constraint rather than a claim.

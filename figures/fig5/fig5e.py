@@ -60,6 +60,7 @@ import matplotlib.pyplot as plt
 import sys as _sys, os as _os
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
+from fig5_style import PT_SMALL, PT_TICK  # noqa: E402
 GREEN_SOFT = "#55966B"
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SRC = f"{REPO}/results/upgrade/gate2_supervised_upper_bound.csv"
@@ -105,15 +106,15 @@ def draw_5e(ax):
         if v > ceiling - 0.021:
             # a value this close to the ceiling has no room above it: the ceiling rule would
             # be drawn straight through the digits
-            ax.text(x - 0.16, v, f"{v:.3f}", ha="right", va="center", fontsize=5.4, color=INK)
+            ax.text(x - 0.16, v, f"{v:.3f}", ha="right", va="center", fontsize=PT_SMALL, color=INK)
         else:
-            ax.text(x, v + 0.010, f"{v:.3f}", ha="center", va="bottom", fontsize=5.4,
+            ax.text(x, v + 0.010, f"{v:.3f}", ha="center", va="bottom", fontsize=PT_SMALL,
                     color=INK)
 
-    ax.text(-0.46, 0.504, "chance", ha="left", va="bottom", fontsize=5.4, color=GREY)
+    ax.text(-0.46, 0.504, "chance", ha="left", va="bottom", fontsize=PT_SMALL, color=GREY)
     ax.axhline(ceiling, ls="-", lw=1.0, color=INK, zorder=2)
     ax.text(-0.46, ceiling + 0.005, f"supervised ceiling {ceiling:.3f}", ha="left",
-            va="bottom", fontsize=5.4, color=INK)
+            va="bottom", fontsize=PT_SMALL, color=INK)
     # best unsupervised, carried across to the gap bracket
     ax.plot([2, len(UNSUP) - 0.5], [best_unsup] * 2, ls=":", lw=1.0, color=FOCAL_SOFT, zorder=2)
 
@@ -125,15 +126,15 @@ def draw_5e(ax):
                 arrowprops=dict(arrowstyle="<->", lw=1.0, color=COMP_SOFT,
                                 shrinkA=0, shrinkB=0), zorder=6)
     ax.text(gx, ceiling + 0.011, f"gap {ceiling - best_unsup:+.3f}", ha="center", va="bottom",
-            fontsize=5.4, color=INK, zorder=6)
+            fontsize=PT_SMALL, color=INK, zorder=6)
 
     ax.set_xticks(xs)
-    ax.set_xticklabels(labs, fontsize=5.5)
+    ax.set_xticklabels(labs, fontsize=PT_TICK)
     ax.set_xlim(-0.62, len(xs) - 0.38)
-    ax.set_ylabel("accuracy recovering the true partition", fontsize=6)
+    ax.set_ylabel("accuracy recovering\nthe true partition", fontsize=PT_SMALL, labelpad=2)
     ax.set_ylim(0.478, 0.762)
     ax.set_yticks([0.50, 0.55, 0.60, 0.65, 0.70, 0.75])
-    ax.tick_params(axis="y", labelsize=5.6)
+    ax.tick_params(axis="y", labelsize=PT_TICK)
     for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)
 
@@ -142,7 +143,7 @@ def draw_5e(ax):
                              (len(UNSUP), len(xs) - 1, "supervised (given the labels)", GREEN_SOFT)]:
         ax.plot([x0 - 0.3, x1 + 0.3], [0.7305] * 2, lw=0.8, color=col, zorder=5)
         # The bracket rule directly beneath is the coloured mark; the header is ink.
-        ax.text((x0 + x1) / 2, 0.734, txt, ha="center", va="bottom", fontsize=5.6, color=INK,
+        ax.text((x0 + x1) / 2, 0.734, txt, ha="center", va="bottom", fontsize=PT_SMALL, color=INK,
                 zorder=6)
     # The methods footnote that used to sit here (at 4.5 pt, illegible in print) has been moved
     # to the Fig. 5e caption. It is load-bearing (it is the leakage control), so it must NOT be
@@ -159,6 +160,5 @@ if __name__ == "__main__":
     # found", is the retracted reading: it asserts a general information limit that the natural
     # tumour arm contradicts, so a standalone run of this file printed a claim the manuscript no
     # longer makes.
-    ax.set_title("In this mixture, even the ceiling is only 0.692", loc="left", fontsize=8)
     fig.savefig(os.path.join(os.path.dirname(__file__), "5e.png"), dpi=200, bbox_inches="tight")
     print("wrote 5e.png")

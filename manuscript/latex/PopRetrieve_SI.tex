@@ -43,7 +43,6 @@
 \newcommand{\TAHOECONDS}{3630}
 \newcommand{\TAHOECOUPLING}{0.620}
 \newcommand{\TAHOECOUPLINGN}{44}
-\newcommand{\TAHOECOUPLINGRSQ}{0.385}
 \newcommand{\TAHOEGMM}{0.582}
 \newcommand{\TAHOEGONE}{0.739}
 \newcommand{\TAHOEGONEQ}{0.600 to 0.836}
@@ -184,6 +183,35 @@ attainable nDCG. Even in the highest-identifiability tertile, the median silhoue
 0.038, indicating weakly resolved two-state structure in these particular cell-line mixtures.
 These observations therefore do not establish identifiability as a reliable predictor of
 population-level retrieval gain.
+
+\paragraph{Unsupervised recovery of constructed two-state structure.}
+The main text reports recoverability in the constructed two-state mixture as a single supervised
+ceiling against the best unsupervised method (Fig.~5e). Three further measurements
+characterise the same limit and are reported here rather than in the figure.
+
+First, across nine unsupervised clustering configurations, the median adjusted Rand index against
+the known two-source labels ranged from 0.037 to 0.106. The configurations were $k$-means with
+$k=2$ in the raw, 10-dimensional PCA, 50-dimensional PCA and response spaces, two-component
+Gaussian mixtures in the raw and 50-dimensional PCA spaces, and $k$-means with $k$ selected from
+3, 4 and 5 by silhouette, reported separately by which $k$ was selected. The highest value,
+0.106, was obtained when silhouette selection chose $k=4$. No configuration approached the value
+of 0.5 conventionally treated as reliable recovery, so the low ceiling is not specific to the
+clustering method used in the main analysis.
+
+Second, the weak separation is visible in the raw geometry rather than only in an accuracy score.
+Silhouette scores computed independently for each perturbation-response population under a
+two-cluster partition had a median of 0.034 in SciPlex3 ($n=529$ populations) and 0.084 in
+Frangieh ($n=231$); in both datasets fewer than 0.5\% of populations exceeded 0.1. Visible
+multimodality is therefore not a prerequisite for, and should not be equated with, recoverable
+state-specific perturbation information.
+
+Third, recovery is limited by state separation rather than by cell number. Averaging the
+$k$-means $k=2$ adjusted Rand index over 20 seeds across a grid of source separation and cells per
+source, increasing the cell budget from 25 to 400 cells per source changed recovery by at most
+0.02 at fixed separation, whereas increasing separation from 1.0 to 8.0 times the observed value
+raised it from 0.07 to 1.00. The separation transform was defined from the full source
+populations before subsampling. Additional cells therefore do not compensate for states that are
+close together, which is the same conclusion the supervised ceiling reaches by a different route.
 
 \paragraph{Measured response divergence.}
 We next stratified the 600 mechanism-evaluable queries by the cosine between their state-specific

@@ -24,6 +24,7 @@ import matplotlib.pyplot as plt
 import sys as _sys, os as _os
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
+from fig5_style import PT_SMALL, PT_TICK  # noqa: E402
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 PREDS = [("average_effect", "avg-effect"),
@@ -87,20 +88,20 @@ def draw_5d(ax):
     ax.set_xscale("log")
     ax.set_xlim(0.60, 5.2)
     ax.set_xticks([0.7, 1, 2, 4])
-    ax.set_xticklabels(["0.7", "1", "2", "4"], fontsize=5.8)
+    ax.set_xticklabels(["0.7", "1", "2", "4"], fontsize=PT_TICK)
     ax.minorticks_off()
     # labelpad 1.5: at the default this label descended into panel f's title in the row below,
     # which the row-gap budget (0.46 in for a 0.36 in xlabel zone plus a 0.22-0.32 in title)
     # cannot absorb. Pulling the label up is cheaper than restacking the rows.
     ax.set_xlabel("predicted / real (log scale)", labelpad=1.5)
     ax.set_yticks([r[0] for r in rows])
-    ax.set_yticklabels(ylabs, fontsize=5.6)
+    ax.set_yticklabels(ylabs, fontsize=PT_TICK)
     # 0.40 of a row slot below the last marker and 0.60 above the first header. At the printed
     # panel height (1.62 in) the old y+0.10 / -0.15 pair left the bottom marker sitting on the
     # x axis spine, which read as a data point pinned to the axis rather than one row of nine.
     ax.set_ylim(y - 0.25, -0.50)
     for hy, mlab in headers:                            # metric names head their own group
-        ax.text(0.615, hy, mlab, ha="left", va="center", fontsize=6, color=INK,
+        ax.text(0.615, hy, mlab, ha="left", va="center", fontsize=PT_SMALL, color=INK,
                 fontweight="bold")
     for sp in ["right", "top", "left"]:
         ax.spines[sp].set_visible(False)

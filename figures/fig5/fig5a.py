@@ -44,6 +44,7 @@ import os, matplotlib as mpl, matplotlib.pyplot as plt
 import sys as _sys, os as _os
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
+from fig5_style import PT_SMALL  # noqa: E402
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 
@@ -52,7 +53,7 @@ def draw_5a(ax):
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
 
-    def box(x, y, w, h, txt, ec, fc, fs=6.0, tc=None, lw=0.7, ls="solid"):
+    def box(x, y, w, h, txt, ec, fc, fs=PT_SMALL, tc=None, lw=0.7, ls="solid"):
         # ``fc`` is accepted and ignored: every node is white with a hairline edge. The filled
         # pastel chips this panel used to draw are a slide idiom, and here they also made the
         # heaviest ink in the panel the boxes rather than the flow they contain. Colour survives
@@ -81,36 +82,36 @@ def draw_5a(ax):
     # than the gaps closed.
 
     # --- the query -------------------------------------------------------------------------
-    box(0.50, 0.9625, 0.46, 0.055, "held-out query", GREY, "white", fs=5.8)
+    box(0.50, 0.9625, 0.46, 0.055, "held-out query", GREY, "white", fs=PT_SMALL)
     # Label the predicted branch in the empty top-right corner. The query box is narrow enough
     # (x 0.27-0.73) that this clears it horizontally, which is why it is not beside its own box.
     ax.text(0.995, 0.930, "predictor", ha="right", va="center",
-            fontsize=5.5, color=INK, style="italic")
+            fontsize=PT_SMALL, color=INK, style="italic")
 
     # --- the two kinds of candidate population ---------------------------------------------
     arrow(0.50, 0.935, 0.28, 0.862)
     arrow(0.50, 0.935, 0.72, 0.862)
-    box(0.25, 0.794, 0.46, 0.122, "observed\npopulations", FOCAL_SOFT, "#eaf1f8", fs=5.8)
-    box(0.75, 0.794, 0.46, 0.122, "predicted\npopulations", COMP_SOFT, "#fbeee0", fs=5.8)
+    box(0.25, 0.794, 0.46, 0.122, "observed\npopulations", FOCAL_SOFT, "#eaf1f8", fs=PT_SMALL)
+    box(0.75, 0.794, 0.46, 0.122, "predicted\npopulations", COMP_SOFT, "#fbeee0", fs=PT_SMALL)
 
     # --- the two measured gates -------------------------------------------------------------
     arrow(0.25, 0.733, 0.40, 0.655, c=FOCAL_SOFT)
     arrow(0.75, 0.733, 0.60, 0.655, c=COMP_SOFT)
     box(0.50, 0.587, 0.96, 0.122,
-        "Differential response: do\nsubpopulations respond differently?", INK, "#f2f2f2", fs=5.8)
+        "Differential response: do\nsubpopulations respond differently?", INK, "#f2f2f2", fs=PT_SMALL)
     arrow(0.50, 0.526, 0.50, 0.450, c=INK)
     box(0.50, 0.385, 0.96, 0.122,
-        "Recoverability: can that\nstructure be identified?", INK, "#f2f2f2", fs=5.8)
+        "Recoverability: can that\nstructure be identified?", INK, "#f2f2f2", fs=PT_SMALL)
     arrow(0.50, 0.324, 0.50, 0.252, c=INK)
 
     # --- the decision, and the condition asked OF the decision -------------------------------
-    box(0.50, 0.2215, 0.80, 0.055, "rank: distributional vs mean", GREY, "white", fs=5.8)
+    box(0.50, 0.2215, 0.80, 0.055, "rank: distributional vs mean", GREY, "white", fs=PT_SMALL)
     # Dashed tie, not an arrow: Gate 3 is a question asked of this ranking, not a further filter
     # the candidate population passes through. Dashed edge and grey ink mark it as proposed here
     # rather than measured, as the two gates above are (see module docstring and the caption).
     ax.plot([0.50, 0.50], [0.194, 0.154], ls=(0, (1.6, 1.4)), lw=0.9, color=GREY, zorder=1)
     box(0.50, 0.083, 0.96, 0.122,
-        "Decision relevance (proposed):\ndoes it change the ranking?", GREY, "white", fs=5.8, ls="--")
+        "Decision relevance (proposed):\ndoes it change the ranking?", GREY, "white", fs=PT_SMALL, ls="--")
 
 
 if __name__ == "__main__":

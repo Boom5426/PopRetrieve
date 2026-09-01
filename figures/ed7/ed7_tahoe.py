@@ -50,7 +50,9 @@ from scipy.stats import spearmanr
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(REPO, "figures"))
-from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK, PURPLE_SOFT, apply_style, panel_letter, save, soften_axes, strip_titles, PT_MATH  # noqa: E402
+from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK, PURPLE_SOFT, apply_style, panel_letter, save, soften_axes, strip_titles  # noqa: E402
+sys.path.insert(0, os.path.join(REPO, "figures", "fig5"))
+from fig5_style import MATERIAL, PT_SMALL, PT_TICK  # noqa: E402
 
 P = os.path.join(REPO, "results", "tahoe_pilot")
 STEM = "ed7_tahoe"
@@ -64,11 +66,15 @@ FIG_W, FIG_H = 6.90, 2.45
 # FIG_H 2.05 with y0 0.52 and h 1.30, leaving 0.23 in above the axes for a two-line title plus a
 # letter, and both ran off the canvas. The panels are now 1.20 in tall with 0.52 in below for the
 # labels and 0.73 in above for title and letter.
+# These are the rects fig5_assemble gives these four panels, copied here so the preview shows what
+# the page prints rather than something narrower. Before 2026-09-01 the preview was 0.06 to 0.13 in
+# wider per panel than the figure, which hid the label collisions that the figure actually had; at
+# the 6.5 pt floor it was also 0.18 in short for panel d's rightmost x tick.
 BOXES = {
-    "a": (0.52, 0.52, 1.30, 1.20),
-    "b": (2.28, 0.52, 1.24, 1.20),
-    "c": (4.02, 0.52, 1.18, 1.20),
-    "d": (5.72, 0.52, 1.06, 1.20),
+    "a": (0.59, 0.52, 1.21, 1.10),
+    "b": (2.43, 0.52, 1.11, 1.10),
+    "c": (4.29, 0.52, 0.87, 1.10),
+    "d": (5.91, 0.52, 0.93, 1.10),
 }
 
 
@@ -83,19 +89,26 @@ def draw_a(ax):
     # Anchor labels go INSIDE the panel and rotated, at staggered heights. Placed above the axis
     # as horizontal text they collided with each other (0.03 and 0.205 are 0.17 apart on an axis
     # 1.17 wide, i.e. 0.19 in, and each label was 0.30 in) and with the two-line title.
-    for x, lab, col, yf in [(0.014, "constructed mixtures", COMP_SOFT, 0.97),
-                            (0.205, "real cells, state split", GREY, 0.97),
-                            (0.566, "patient tissue", PURPLE_SOFT, 0.97),
-                            (1.0, "additive ceiling", INK, 0.97)]:
-        ax.axvline(x, color=col, lw=0.8, ls=(0, (2.2, 1.6)))
+    # Colours follow fig5_style, which orange does not get to break: orange is the additive
+    # limit, so it is on the ceiling at cosine 1 and NOT on the constructed-mixture anchor, which
+    # is a material and takes MATERIAL slate. Before 2026-09-01 this panel had them the other way
+    # round, so the same ceiling was orange in panel c and near-black here.
+    # The constructed anchor keeps its emphasis through line weight rather than hue: it is this
+    # panel's subject, and the point is how far left of everything else it sits.
+    for x, lab, col, lw in [(0.014, "constructed mixtures", MATERIAL, 1.3),
+                            (0.205, "real cells, state split", GREY, 0.8),
+                            (0.566, "patient tissue", PURPLE_SOFT, 0.8),
+                            (1.0, "additive ceiling", COMP_SOFT, 0.8)]:
+        yf = 0.97
+        ax.axvline(x, color=col, lw=lw, ls=(0, (2.2, 1.6)))
         ax.text(x - 0.022, top * yf, lab, ha="right", va="top", rotation=90,
-                fontsize=5.0, color=INK)
+                fontsize=PT_SMALL, color=INK)
     ax.text(float(np.median(c)) + 0.025, top * 0.97, f"median {np.median(c):.2f}",
-            ha="left", va="top", rotation=90, fontsize=5.4, color=INK)
+            ha="left", va="top", rotation=90, fontsize=PT_SMALL, color=INK)
     ax.set_xlim(-0.12, 1.06)
-    ax.set_xlabel("induced response cosine\nbetween subpopulations", fontsize=6.2, labelpad=1.5)
-    ax.set_ylabel(f"conditions (n = {len(c):,})", fontsize=6.2)
-    ax.tick_params(labelsize=5.6)
+    ax.set_xlabel("induced response cosine\nbetween subpopulations", fontsize=PT_SMALL, labelpad=1.5)
+    ax.set_ylabel(f"conditions (n = {len(c):,})", fontsize=PT_SMALL)
+    ax.tick_params(labelsize=PT_TICK)
 
 
 def draw_b(ax):
@@ -104,33 +117,43 @@ def draw_b(ax):
     ax.scatter(g2.best_unsupervised, g2.supervised_ceiling, s=2.0, color=FOCAL_SOFT,
                alpha=0.28, lw=0, zorder=2)
     ax.plot([0.45, 1.0], [0.45, 1.0], ls=(0, (2.2, 1.6)), lw=0.8, color=GREY, zorder=1)
-    ax.text(0.985, 0.965, "no gap", fontsize=5.2, color=GREY, ha="right", va="top", rotation=41)
-    # Staggered by hand: the three reference points sit within 0.16 of each other in x and
-    # 0.23 in y, so a common label offset put "patient tissue" straight through
-    # "constructed, drug vs drug". Each is pushed to the side with room.
-    for x, y, lab, col, dx, dy, ha, va in [
-            (0.674, 0.692, "constructed,\npooled", COMP_SOFT, -0.020, 0.0, "right", "center"),
-            (0.837, 0.879, "constructed,\ndrug vs drug", COMP_SOFT, 0.018, -0.010, "left", "top"),
-            (0.777, 0.923, "patient tissue", PURPLE_SOFT, -0.018, 0.010, "right", "bottom")]:
-        ax.plot([x], [y], "D", ms=3.4, color=col, mec="white", mew=0.5, zorder=4)
-        ax.text(x + dx, y + dy, lab, fontsize=5.2, color=INK, ha=ha, va=va,
-                linespacing=1.15, zorder=4)
+    ax.text(0.985, 0.965, "no gap", fontsize=PT_SMALL, color=GREY, ha="right", va="top", rotation=41)
+    # A KEY IN THE EMPTY TRIANGLE, 2026-09-01, replacing four hand-staggered in-place labels.
+    # The old layout offset each label in DATA units, which is a fixed fraction of the axes, while
+    # the text is a fixed size in inches. At the Extended Data width that balance held; at this
+    # figure's 1.11 in it does not, and the labels collided exactly as the old comment predicted
+    # they would: "constructed, drug vs drug" ran 0.167 in off the right edge and through
+    # "Tahoe median gap 0.157", and "constructed, pooled" ran off the left.
+    #
+    # No point can fall below the diagonal, because the supervised ceiling upper-bounds the
+    # unsupervised method it is computed against, so the lower-right triangle is empty BY
+    # CONSTRUCTION rather than by luck. That is where the key goes. The labels are short because
+    # the caption defines the three settings; the panel only has to let a reader tell them apart.
     med = (g2.best_unsupervised.median(), g2.supervised_ceiling.median())
-    ax.plot([med[0]], [med[1]], "o", ms=4.6, color=FOCAL_SOFT, mec="white", mew=0.7, zorder=5)
-    # Below and to the RIGHT of the median marker. Right-aligned above it, the two-line label is
-    # 0.165 in data units wide against a left limit of 0.45, so its left edge fell outside the
-    # axes and landed on the y tick labels; and its top line ran into "patient tissue".
-    ax.text(med[0] + 0.016, med[1] - 0.012, f"Tahoe median\ngap {g2.gap_vs_best.median():.3f}",
-            fontsize=5.3, color=INK, ha="left", va="top", linespacing=1.2, zorder=5)
+    KEY = [(0.674, 0.692, "pooled", MATERIAL, "D", 3.4),
+           (0.837, 0.879, "drug pair", MATERIAL, "D", 3.4),
+           (0.777, 0.923, "tissue", PURPLE_SOFT, "D", 3.4),
+           (med[0], med[1], f"median gap {g2.gap_vs_best.median():.3f}", FOCAL_SOFT, "o", 4.6)]
+    for x, y, lab, col, mk, ms in KEY:
+        ax.plot([x], [y], mk, ms=ms, color=col, mec="white", mew=0.5 if mk == "D" else 0.7,
+                zorder=4 if mk == "D" else 5)
+    for row, (_, _, lab, col, mk, ms) in enumerate(reversed(KEY)):
+        yk = 0.055 + row * 0.088
+        ax.plot([0.965], [yk], mk, ms=ms, color=col, mec="white",
+                mew=0.5 if mk == "D" else 0.7, transform=ax.transAxes, zorder=6, clip_on=False)
+        ax.text(0.925, yk, lab, transform=ax.transAxes, fontsize=PT_SMALL, color=INK,
+                ha="right", va="center", zorder=6)
     ax.set_xlim(0.45, 1.0); ax.set_ylim(0.45, 1.02)
-    ax.set_xlabel("best unsupervised accuracy", fontsize=6.2, labelpad=1.5)
-    ax.set_ylabel("supervised ceiling", fontsize=6.2)
-    ax.tick_params(labelsize=5.6)
+    ax.set_xlabel("best unsupervised accuracy", fontsize=PT_SMALL, labelpad=1.5)
+    ax.set_ylabel("supervised ceiling", fontsize=PT_SMALL)
+    ax.tick_params(labelsize=PT_TICK)
     # Bottom-right, not bottom-left: no point can fall below the diagonal (the ceiling is never
     # beaten by an unsupervised method it upper-bounds), so that corner is empty by construction
     # while the bottom-left is dense.
-    ax.text(0.97, 0.03, f"n = {len(g2)} drug pairs\n{g2.cell_line.nunique()} cell lines",
-            transform=ax.transAxes, fontsize=5.3, color=GREY, va="bottom", ha="right",
+    # Top left, not bottom right: the key now owns the empty triangle. The cloud's top-left
+    # corner is the sparsest part of the occupied region, and n is grey so it recedes.
+    ax.text(0.02, 0.985, f"n = {len(g2)} pairs\n{g2.cell_line.nunique()} lines",
+            transform=ax.transAxes, fontsize=PT_SMALL, color=GREY, va="top", ha="left",
             linespacing=1.2)
 
 
@@ -139,32 +162,31 @@ def draw_c(ax):
     cc = pd.read_csv(os.path.join(P, "disjoint", "gate3_disjoint_cellcycle_G1_vs_G2M.csv"))
     st = pd.read_csv(os.path.join(P, "disjoint", "gate3_disjoint_controlstate_k2.csv"))
     rng = np.random.default_rng(0)
-    for i, (d, lab, col) in enumerate([(cc, "cell cycle", FOCAL_SOFT), (st, "cell state", PURPLE_SOFT)]):
+    for i, (d, lab, col) in enumerate([(cc, "cell cycle", FOCAL_SOFT), (st, "cell state", FOCAL_SOFT)]):
         y = d.spearman_rho.to_numpy()
         ax.scatter(np.full(len(y), i) + rng.uniform(-0.16, 0.16, len(y)), y,
                    s=5, color=col, alpha=0.55, lw=0, zorder=2)
         ax.plot([i - 0.30, i + 0.30], [np.median(y)] * 2, color=col, lw=1.4, zorder=3)
         ax.text(i, 1.035, f"{np.median(y):.3f}", ha="center", va="bottom",
-                fontsize=5.8, color=INK)
+                fontsize=PT_SMALL, color=INK)
+    # ANNOTATIONS MOVED RIGHT, 2026-09-01. All three used to sit in a left gutter bought by
+    # setting xlim to -0.85, which cost 30 per cent of the x range. That was affordable at the
+    # Extended Data width; at this figure's 0.87 in of axes the gutter is 0.26 in wide, and
+    # "tissue 0.835" ran straight through the cell-cycle points and its median bar, "0.5" sat on
+    # its own dotted line, and the count block landed on the 0.4 and 0.2 tick labels.
+    #
+    # The right side is genuinely empty: both columns jitter within 0.16 of their tick, so
+    # everything right of x = 1.2 is free at every height. The two reference lines are now
+    # labelled at their right ends, where a line label belongs anyway.
     ax.axhline(0.835, color=PURPLE_SOFT, lw=0.8, ls=(0, (2.2, 1.6)), zorder=1)
-    ax.text(-0.82, 0.848, "tissue 0.835", fontsize=5.2, color=INK, ha="left", va="bottom")
+    ax.text(1.54, 0.845, "tissue 0.835", fontsize=PT_SMALL, color=INK, ha="right", va="bottom")
     ax.axhline(0.5, color=GREY, lw=0.7, ls=":", zorder=1)
-    ax.text(-0.44, 0.5, "0.5", fontsize=5.2, color=GREY, ha="right", va="center")
-    n_open = int((st.spearman_rho < 0.5).sum())
-    # Annotation moved off the x axis region: at y 0.30 it sat on top of the "cell state" tick
-    # label. It now points at the two outliers from the left, where the panel is empty.
-    # No leader line: it has to reach two points at different heights, and either target left
-    # the line ending in empty space. The two low points are unambiguous on their own.
-    ax.text(-0.82, 0.27, f"{n_open} of {len(st)}\ncontexts\nbelow 0.5", fontsize=5.2, color=INK,
-            ha="left", va="center", linespacing=1.25)
-    ax.set_xticks([0, 1]); ax.set_xticklabels(["cell\ncycle", "cell\nstate"], fontsize=5.6)
-    # Left margin widened from -0.5 to -0.85 purely to make room for the two left-hand
-    # annotations. At -0.5 the tissue label ran from x -0.46 to about x 0.05 and crossed the
-    # cell-cycle points, whose jitter starts at -0.16; the tissue line sits at 0.835 and the
-    # cell-cycle median at 0.841, so there is no vertical room to separate them instead.
-    ax.set_xlim(-0.85, 1.5); ax.set_ylim(0.15, 1.06)
-    ax.set_ylabel("Spearman, majority response\nranks minority response", fontsize=6.2)
-    ax.tick_params(axis="y", labelsize=5.6)
+    ax.text(1.54, 0.512, "0.5", fontsize=PT_SMALL, color=GREY, ha="right", va="bottom")
+    ax.set_xticks([0, 1]); ax.set_xticklabels(["cell\ncycle", "cell\nstate"], fontsize=PT_TICK)
+    # -0.5 rather than -0.85: the left gutter held annotations that now sit on the right.
+    ax.set_xlim(-0.5, 1.55); ax.set_ylim(0.15, 1.13)
+    ax.set_ylabel("Spearman, majority\nranks minority", fontsize=PT_SMALL)
+    ax.tick_params(axis="y", labelsize=PT_TICK)
 
 
 def draw_d(ax):
@@ -178,11 +200,23 @@ def draw_d(ax):
     b = np.polyfit(j.g1, j.spearman_rho, 1)
     xs = np.linspace(j.g1.min(), j.g1.max(), 20)
     ax.plot(xs, np.polyval(b, xs), color=GREY, lw=0.9, ls=(0, (2.2, 1.6)))
-    ax.set_xlabel("differential response\ninduced cosine (per line)", fontsize=6.2, labelpad=1.5)
-    ax.set_ylabel("state-ordering\nSpearman (per line)", fontsize=6.2)
-    ax.tick_params(labelsize=5.6)
-    ax.text(0.04, 0.96, f"$\\rho$ = {r:+.2f}\n$R^2$ = {r ** 2:.2f}\nn = {len(j)} lines",
-            transform=ax.transAxes, fontsize=PT_MATH, color=INK, va="top",
+    ax.set_xlabel("differential response\ninduced cosine (per line)", fontsize=PT_SMALL, labelpad=1.5)
+    ax.set_ylabel("state-ordering\nSpearman (per line)", fontsize=PT_SMALL)
+    ax.tick_params(labelsize=PT_TICK)
+    # R^2 REMOVED 2026-09-01. The panel printed "$R^2$ = 0.38", which was r ** 2 where r is
+    # SPEARMAN's rho. Two things were wrong with it. It is rho squared by construction, so it
+    # carried no information the line above it did not. And it sat beside a least-squares line
+    # whose actual R^2 is Pearson's, 0.606, not 0.385: a reader reads R^2 as the variance the
+    # DRAWN line explains, and the printed value understated it by 0.22. Rho is the right
+    # statistic for a monotone-association claim and it stays; the dashed line is a visual trend
+    # guide, not the model rho describes.
+    #
+    # Removing it also resolves a type conflict. "$R^2$" is mathtext with a superscript, which
+    # matplotlib renders at 0.7x nominal, so meeting the 6.5 pt floor needs PT_EQ 9.3 nominal,
+    # which is above this figure's 7.2 pt cap on panel text and would have set the base R half
+    # again as large as the text beside it. "$\rho$" carries no superscript and needs neither.
+    ax.text(0.04, 0.96, f"$\\rho$ = {r:+.2f}\nn = {len(j)} lines",
+            transform=ax.transAxes, fontsize=PT_SMALL, color=INK, va="top",
             linespacing=1.3)
     # The interpretive sentence that used to sit here overlapped the leftmost point and the
     # caption states it anyway; the rho and R2 above carry the panel.
@@ -201,7 +235,9 @@ def build(apply_style_fn, panel_letter_fn):
     for k, (x0, y0, w, h) in BOXES.items():
         ax = fig.add_axes([x0 / FIG_W, y0 / FIG_H, w / FIG_W, h / FIG_H])
         fns[k](ax)
-        ax.set_title(TITLES[k], loc="left", fontsize=7)
+        # No set_title. build() ends in strip_titles, so a title set here was removed again
+        # before export and never reached the page; TITLES below stays as documentation of what
+        # the four caption entries say, which is where those claims belong.
         panel_letter_fn(ax, k, case="lower", dx=-0.40 / w, dy=1.20)
     # See ed6.py: the caption carries four per-panel entries, so the drawn titles go and TITLES
     # stays as the declaration each panel is checked against.

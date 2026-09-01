@@ -18,6 +18,7 @@ import os, numpy as np, pandas as pd, matplotlib as mpl, matplotlib.pyplot as pl
 import sys as _sys, os as _os
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
+from fig5_style import PT_SMALL, PT_TICK  # noqa: E402
 from matplotlib.patches import Rectangle  # noqa: E402
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
@@ -78,10 +79,12 @@ def draw_5b(ax):
         side = -1 if row["mean"] < 0 else 1
         # The dot this label belongs to is 0.13 of the span away and carries the sign colour.
         ax.text(row["mean"] + side * span * 0.13, y, f"{row['mean']:+.3f}".replace('-', '\u2212'),
-                ha="left" if side > 0 else "right", va="center", fontsize=6, color=INK)
+                ha="left" if side > 0 else "right", va="center", fontsize=PT_SMALL, color=INK)
     ax.set_yticks(ys)
-    ax.set_yticklabels([PREDICTORS[i] for i in g.index], fontsize=6)
-    ax.set_ylim(-0.62, len(g) - 0.18)
+    ax.set_yticklabels([PREDICTORS[i] for i in g.index], fontsize=PT_TICK)
+    # Top limit leaves room for the key block, whose text top sits at Y_KEY + 0.17; at len(g)
+    # - 0.18 the two direction hints ran 0.019 in above the panel box.
+    ax.set_ylim(-0.62, len(g) + 0.02)
     # Three ticks, not five. At 1.45 in a five-tick 0.05 grid puts 0.21 in labels 0.24 in apart.
     ax.set_xticks([-0.1, 0.0, 0.1])
     # SHORT FORM. The full label is 1.55 in at 6 pt against a 1.43 in panel, so it overflowed
@@ -106,7 +109,7 @@ def draw_5b(ax):
         ax.add_patch(Rectangle((x0, Y_KEY), sgn * span * 0.05, 0.17,
                                color=col, lw=0, clip_on=False, zorder=5))
         ax.text(sgn * span * 0.13, Y_KEY + 0.17, txt, ha=ha, va="top",
-                fontsize=5.5, color=INK, linespacing=1.15)
+                fontsize=PT_SMALL, color=INK, linespacing=1.15)
     for sp in ["right", "top"]:
         ax.spines[sp].set_visible(False)
 

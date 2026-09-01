@@ -20,6 +20,7 @@ import os, numpy as np, pandas as pd, matplotlib.pyplot as plt
 import sys as _sys, os as _os
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
+from fig5_style import PT_SMALL, PT_TICK  # noqa: E402
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 DIAG = f"{REPO}/results/exp09_structure_diagnostics"
@@ -78,12 +79,15 @@ def draw_5c(ax):
     # Short label only: this marks the algebraic ceiling so the line is not mistaken for data.
     # The full statement (additive predictor => identical subpopulation responses => cosine
     # exactly 1, divergence exactly zero) belongs in the caption, where it already is.
-    ax2.text(len(ORDER) - 0.58, 1.025, "additive limit, $\\cos = 1$",
-             ha="right", va="bottom", fontsize=5.5, color=INK, style="italic")
+    # BELOW the ceiling line, not above it. Above, the label overlapped the "predicted" group
+    # header by 15 per cent of its area (figures/check_overlaps.py). Below is empty down to about
+    # 0.7 on this axis, because the predicted cosines are 0.19 to 0.37 and the real one is 0.014.
+    ax2.text(len(ORDER) - 0.58, 0.975, "additive limit, $\\cos = 1$",
+             ha="right", va="top", fontsize=PT_SMALL, color=INK, style="italic")
     ax2.errorbar(xs + 0.09, cos, yerr=cerr, fmt="s", color=COMP_SOFT, ms=5, capsize=3, lw=1.3,
                  zorder=3, label=r"induced $\cos(d_{maj}, d_{min})$")
     ax2.axhline(cos[0], ls=":", lw=1.0, color=COMP_SOFT, alpha=0.7, zorder=1)
-    ax2.text(-0.44, cos[0] + 0.02, "real", ha="left", va="bottom", fontsize=5.5, color=INK)
+    ax2.text(-0.44, cos[0] + 0.02, "real", ha="left", va="bottom", fontsize=PT_SMALL, color=INK)
     ax2.set_ylabel(r"induced response cosine", color=COMP_SOFT)
     ax2.tick_params(axis="y", colors=COMP_SOFT)
     ax2.set_ylim(-0.05, 1.20)
@@ -91,7 +95,7 @@ def draw_5c(ax):
     ax2.spines["top"].set_visible(False)
 
     ax.set_xticks(xs)
-    ax.set_xticklabels([LABS[p] for p in ORDER], fontsize=6)
+    ax.set_xticklabels([LABS[p] for p in ORDER], fontsize=PT_TICK)
     ax.set_xlim(-0.5, len(ORDER) - 0.5)
     ax.set_ylim(0, max(var) * 1.42)
     for sp in ["right", "top"]:
@@ -99,14 +103,13 @@ def draw_5c(ax):
 
     # Group headers, inside the axes (above every marker) so they cannot hit the panel title.
     ax.text(0.125, 0.955, "observed", transform=ax.transAxes,
-            ha="center", va="center", fontsize=5.8, color=GREY)
+            ha="center", va="center", fontsize=PT_SMALL, color=GREY)
     ax.text(0.625, 0.955, "predicted", transform=ax.transAxes,
-            ha="center", va="center", fontsize=5.8, color=GREY)
+            ha="center", va="center", fontsize=PT_SMALL, color=GREY)
 
 
 if __name__ == "__main__":
     fig, ax = plt.subplots(figsize=(1.86, 1.80))   # the slot it occupies in fig5_assemble
     draw_5c(ax)
-    ax.set_title("Structure survives; divergence does not", loc="left")
     fig.savefig(os.path.join(os.path.dirname(__file__), "5c.png"), dpi=200, bbox_inches="tight")
     print("wrote 5c.png")

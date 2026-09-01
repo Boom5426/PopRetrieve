@@ -31,6 +31,7 @@ import matplotlib.pyplot as plt
 import sys as _sys, os as _os
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
+from fig5_style import PT_SMALL  # noqa: E402
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 STRAT = f"{REPO}/results/exp17_true_divergence_subset/divergence_stratified.csv"
 
@@ -62,14 +63,14 @@ def draw_5g(ax):
         star = "*" if q < 0.05 else "ns"
         if m < 0:
             ax.text(x, m - e - pad * 0.12, f"{m:+.3f} {star}".replace("-", "\u2212"), ha="center", va="top",
-                    fontsize=5.6, color=INK)
+                    fontsize=PT_SMALL, color=INK)
         else:
             ax.text(x, m + e + pad * 0.12, f"{m:+.3f} {star}".replace("-", "\u2212"), ha="center", va="bottom",
-                    fontsize=5.6, color=INK)
+                    fontsize=PT_SMALL, color=INK)
 
     ax.set_xticks(xs)
     ax.set_xticklabels([f"{s}\ndiv {dm:.2f}" for s, dm in
-                        zip(d["stratum"], d["divergence_median"])], fontsize=5.6)
+                        zip(d["stratum"], d["divergence_median"])], fontsize=PT_SMALL)
     # labelpad 1.5, not the default: row 2 reserves 0.38 in under its axes and the two-line
     # x tick labels ("Q1 / div 0.02") already spend most of it, so at the default pad this
     # label hung 0.03 in BELOW the canvas. bbox_inches="tight" would then have expanded the
@@ -79,11 +80,11 @@ def draw_5g(ax):
     # Direct label on the null line: what "zero" means here, and what the stars mean.
     ax.set_xlim(-0.62, len(xs) - 0.38)
     ax.text(-0.57, pad * 0.10, "no difference", ha="left", va="bottom",
-            fontsize=5.5, color=GREY)
+            fontsize=PT_SMALL, color=GREY)
     # THE SIGNIFICANCE KEY IS IN THE CAPTION, where a Nature legend has to define the test and
     # its correction anyway. The per-bar "*" and "ns" marks stay; only their definition moves.
     _UNUSED_SIG_KEY = (lambda *a, **k: None)(0.015, 0.02, "",
-            transform=ax.transAxes, ha="left", va="bottom", fontsize=5.4, color=GREY)
+            transform=ax.transAxes, ha="left", va="bottom", fontsize=PT_SMALL, color=GREY)
     for sp in ["right", "top"]:
         ax.spines[sp].set_visible(False)
 
