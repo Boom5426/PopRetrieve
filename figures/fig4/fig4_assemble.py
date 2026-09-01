@@ -227,7 +227,7 @@ ROW_LABELS = [
 # flush against a hard page limit has to be re-laid-out the first time any label grows, and the
 # panels above do not get more legible from being stretched away from their own aspect ratios.
 # 7.97 in, not 8.09: nine panels instead of thirteen, each taller. See the RECTS note.
-W, H = 6.9, 7.97
+W, H = 6.9, 7.09
 RECTS = {                     # x0,   y0,   w,    h     (inches, from the bottom left)
     # NINE PANELS SINCE 2026-08-31, and every axes is taller. j to m, the four marker-floor
     # robustness sweeps, left the page for Supplementary Note 4, which already carried all of
@@ -240,17 +240,39 @@ RECTS = {                     # x0,   y0,   w,    h     (inches, from the bottom
     # labels and the 0.80 in after b holds b's colour bar and c's y axis; in row 3 the 0.88 in
     # after h holds i's category labels, which are its only y furniture. Those three numbers
     # grew with the type, which is why b, c and i each moved right.
-    "a": (0.55, 5.97, 1.55, 1.75),
-    "b": (2.70, 5.97, 1.40, 1.75),   # includes the colour bar, which is stolen from this box
-    "c": (4.90, 5.97, 1.93, 1.75),
-    "d": (0.58, 3.30, 2.28, 1.75),
-    "e": (3.22, 3.30, 1.70, 1.75),
-    "f": (5.40, 3.30, 1.43, 1.75),
-    "g": (0.60, 0.63, 1.58, 1.75),   # colour bar drawn OUTSIDE to the right, into the gutter
-    "h": (3.05, 0.63, 1.62, 1.75),
-    "i": (5.55, 0.63, 1.28, 1.75),   # its category labels ARE its y furniture, 0.88 in of them
+    # THE THREE ROW ORIGINS DROPPED ON 2026-09-01 and the panels did not move relative to each
+    # other. Measured against ink rather than against this table, the corridor between two rows
+    # was 0.48 and 0.53 in, the second loosest in the deck; Figure 3 runs 0.21 to 0.32 and
+    # Figure 1 runs 0.04. Each row carries 0.29 to 0.33 in of x apparatus below its axes and
+    # 0.11 in of letter above, so the rows were placed 0.92 in apart to hold 0.40 in of
+    # furniture. They are now placed to leave a 0.22 in corridor, bottom-anchored at a 0.06 in
+    # page margin, which is what sets H:
+    #   0.06  below row 3     (was 0.30)
+    #   1.75  row 3  g h i    y0 = 0.39   (was 0.63)
+    #   0.22  corridor        (was 0.53)
+    #   1.75  row 2  d e f    y0 = 2.76   (was 3.30)
+    #   0.22  corridor        (was 0.48)
+    #   1.75  row 1  a b c    y0 = 5.17   (was 5.97)
+    #   0.06  above row 1     (was 0.14)
+    # NO AXES CHANGED HEIGHT. All nine are still 1.75 in, so nothing was re-tuned and the 6.5 pt
+    # floor this figure was raised to is untouched; 0.88 in of white left the page.
+    "a": (0.55, 5.17, 1.55, 1.75),
+    "b": (2.70, 5.17, 1.40, 1.75),   # includes the colour bar, which is stolen from this box
+    "c": (4.90, 5.17, 1.93, 1.75),
+    "d": (0.58, 2.76, 2.28, 1.75),
+    "e": (3.22, 2.76, 1.70, 1.75),
+    "f": (5.40, 2.76, 1.43, 1.75),
+    "g": (0.60, 0.39, 1.58, 1.75),   # colour bar drawn OUTSIDE to the right, into the gutter
+    # h starts 0.20 in further left and is 0.20 in wider. Row 3's two corridors were 0.51 and
+    # 0.11 in, the most uneven pair in the figure; this makes them 0.31 and 0.11 and the 0.20 in
+    # goes into h's axes, since the row already spans 0.18 to 6.88 and has no slack to reclaim.
+    "h": (2.85, 0.39, 1.82, 1.75),
+    "i": (5.55, 0.39, 1.28, 1.75),   # its category labels ARE its y furniture, 0.88 in of them
 }
-BANNER_Y = {0: 7.97, 1: 5.30, 2: 2.63}   # inches from the bottom, va="top"
+# BANNER_Y was here until 2026-09-01: three row-banner positions, referenced nowhere in this
+# file or any other, left behind when the row headings moved into the caption. It also still
+# held the pre-2026-08-31 canvas height, so a reader checking the geometry against it would
+# have been reading a number two revisions stale.
 # the panel letter must clear its own panel's y-axis furniture, which differs a lot between a bare
 # strip (e) and a heat map with two-line row labels (b); given here in inches to the LEFT of the
 # axes box and converted to the axes-fraction dx that panel_letter() wants

@@ -97,7 +97,12 @@ LETTER_BLOCK = 0.17
 ROW_GAP = 0.22
 
 LETTER_GUTTER = 0.24        # box left edge -> axes left edge, for a panel with no y axis
-Y_FURNITURE = 0.46          # extra, for the two panels that have one
+Y_FURNITURE = 0.32          # extra, for the two panels that have one
+# 0.32, not 0.46. 2026-09-01: this figure's row corridors measure 0.04 in, the tightest in the
+# deck, and five of its six panel boundaries measure 0.03. The sixth, g|h, measured 0.32,
+# because only g and h carry a y axis and this constant was 0.14 in wider than the tick labels
+# and y label actually occupy. ax_w is defined against it, so both axes GAIN that 0.14 in and
+# g's right edge does not move; only h's furniture slides left, to a 0.24 in corridor.
 RIGHT_MARGIN = 0.06
 
 ROWS = [(("a", "b"), 1.58),

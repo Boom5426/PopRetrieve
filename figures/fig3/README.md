@@ -171,7 +171,7 @@ returned 0.42 in of height to the six rows, which is most of what had made rows 
 ## Print geometry, authored 1:1
 
 The figure enters the manuscript as `\includegraphics[width=\textwidth]` into a 6.951 in text
-block. The canvas is **6.90 x 7.96 in** and exports 6.92 x 7.98 (176 x 203 mm), so LaTeX scales it by
+block. The canvas is **6.90 x 7.67 in** and exports 6.92 x 7.69 (176 x 195 mm), so LaTeX scales it by
 1.004 and nominal point size is printed point size. The float budget is the 9.461 in text block less about
 16/72 in of overhead, i.e. 9.238 in, leaving 0.018 in of margin: **do not grow the canvas without
 re-checking `Float too large` in the build log.** The caption is on the following page and is

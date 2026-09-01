@@ -123,7 +123,7 @@ panels rather than seven: the hero can only be a hero by so much when five panel
 ## Print geometry, authored 1:1
 
 The manuscript text block is 6.951 in and the figure enters with
-`\includegraphics[width=\textwidth]`. The canvas is **6.90 x 7.57 in** and exports 176 x 193 mm, so
+`\includegraphics[width=\textwidth]`. The canvas is **6.90 x 7.35 in** and exports 176 x 187 mm, so
 nominal point size is printed point size. The float budget is the 9.461 in text block less about
 16/72 in of overhead, i.e. 9.238 in, leaving 1.65 in of headroom.
 
@@ -165,7 +165,7 @@ column in the deck does. 0.6 mm is not worth being the one panel that reads diff
 Fixing a freed 1.01 in of page. Spending it on rows 1 and 2 rather than banking it fixed the same
 defect one panel over: **d's curve was 3.23 x 0.66 in, 4.9:1**, the very proportion a was rebuilt
 to escape. Its composition strip is a fixed 0.34 in, so every inch added to the row goes to the
-curve. The page is 193 mm rather than the 171 mm it would have been.
+curve. The page is 187 mm rather than the 171 mm it would have been.
 
 ### Three panels had furniture hung on axes fractions
 

@@ -117,8 +117,14 @@ PAD_TOP, PAD_BOT = 0.05, 0.08
 # removing those phrases (see fig3_style) returns 0.42 in to the six rows, which is most of what
 # made rows 5 and 6 cramped. The height a figure spends on sentences is height it does not spend
 # on evidence.
-LETTER_BLOCK = 0.17
-ROW_GAP = 0.22
+LETTER_BLOCK = 0.16
+# 0.16, not 0.22. 2026-09-01, measured against ink: this figure's bottom pads have NO slack left
+# (the smallest unused pad in a row runs -0.03 to 0.05 in, i.e. the x apparatus fills them), so
+# unlike Figures 4 and 5 the only white here to reclaim is the gap itself. Corridors go from
+# 0.21-0.32 in to 0.14-0.25. Cutting further would work on paper and not on the page: the
+# tightest boundary, row 1 to row 2, is set by c's x label, which already sits 0.01 in below its
+# own box.
+ROW_GAP = 0.16
 
 # (row height in inches, [(key, box width in inches), ...]). Box widths sum to FIGW per row.
 # TWO HERO ROWS, 2026-08-31. Row heights are not a taste decision: they were measured against
@@ -144,11 +150,16 @@ ROWS = [
 # apparatus plus 0.24 in reserved for the letter, and they differ because the apparatus does:
 # h and l carry a column of method names, b c e f i j k m carry a rotated label plus numeric
 # ticks, and a and d carry a rotated label only.
-PADS = {"a": (0.74, 0.10, 0.42), "b": (0.70, 0.10, 0.44),
+# LEFT PADS OF THE SECOND-COLUMN PANELS WERE CUT ON 2026-09-01 to a common rule: keep the
+# measured furniture plus 0.14 in for the letter, and give the rest back as axes width. Measured
+# unused left pad was b 0.24, e 0.25, i 0.19, k 0.49 in; k's alone made the j|k corridor 0.59 in,
+# the widest in the deck. First-column pads are NOT cut: their slack is the page margin, which is
+# already 0.01 in here, and cutting them would push ink off the left edge.
+PADS = {"a": (0.74, 0.10, 0.42), "b": (0.60, 0.10, 0.44),
         "c": (0.78, 0.10, 0.40), "g": (1.02, 0.10, 0.42),
-        "d": (0.76, 0.10, 0.42), "e": (0.70, 0.10, 0.42), "f": (0.70, 0.10, 0.42),
-        "h": (1.34, 0.10, 0.36), "i": (0.72, 0.10, 0.38),
-        "j": (1.20, 0.10, 0.38), "k": (0.72, 0.10, 0.38)}
+        "d": (0.76, 0.10, 0.42), "e": (0.59, 0.10, 0.42), "f": (0.70, 0.10, 0.42),
+        "h": (1.34, 0.10, 0.36), "i": (0.67, 0.10, 0.38),
+        "j": (1.20, 0.10, 0.38), "k": (0.37, 0.10, 0.38)}
 
 
 def _boxes():

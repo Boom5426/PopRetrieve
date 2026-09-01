@@ -146,7 +146,7 @@ is worth.
 ## Print geometry, authored 1:1
 
 The manuscript text block is 6.951 in and the figure enters with
-`\includegraphics[width=\textwidth]`. The canvas is **6.90 x 8.11 in** and exports 6.92 x 8.13 (176 x 207 mm),
+`\includegraphics[width=\textwidth]`. The canvas is **6.90 x 7.34 in** and exports 6.92 x 7.36 (176 x 187 mm),
 so LaTeX applies no meaningful rescale and nominal point size is printed point size. The float
 budget is the 9.461 in text block less about 16/72 in of overhead, i.e. 9.238 in, leaving 1.03 in
 of headroom; it was 0.02 in before this figure came down from 234 mm.

@@ -116,8 +116,11 @@ PAD_TOP, PAD_BOT = 0.05, 0.08
 # The panel letter alone. It was 0.26 in while every panel also stated a bold conclusion phrase;
 # removing those (see fig2_style) returns 0.36 in to the four rows, and the row gap tightens with
 # them. The height a figure spends on sentences is height it does not spend on evidence.
-LETTER_BLOCK = 0.17
-ROW_GAP = 0.22
+LETTER_BLOCK = 0.16
+# 0.16, not 0.22. Measured 2026-09-01: the corridors a reader saw between rows were 0.33 and
+# 0.31 in. Row 0 also carried 0.11 in of unused bottom pad, which comes off its row height below
+# so that no axes changes size; rows 1 and 2 had 0.04 and 0.02 in, i.e. none.
+ROW_GAP = 0.16
 
 # (panel keys in the row, row height in inches). Box widths sum to FIGW per row.
 #
@@ -142,7 +145,7 @@ ROW_GAP = 0.22
 # panel over: d's curve was 3.23 x 0.66 in, a 4.9:1 strip, which is the very proportion panel a
 # was rebuilt to escape. Its composition strip is a fixed 0.34 in, so every inch added to the row
 # goes to the curve. Aspects after: a 1.52:1, c 1.31:1, d 2.86:1, e 1.73:1, f 1.78:1.
-ROWS = [(("a", "b"), 2.54),
+ROWS = [(("a", "b"), 2.47),
         (("c", "d"), 2.05),
         (("e", "f"), 1.90)]
 
@@ -160,12 +163,16 @@ ROW_WIDTHS = {("a", "b"): (3.97, 2.93),
 # a's bottom pad is 0.60, not the 0.46 it had at full width: the x axis label and the dagger key
 # shared one baseline when there were 2.33 in to spread them over, and at 2.95 in they do not fit
 # side by side, so the key gets its own line.
-PADS = {"a": (0.94, 0.08, 0.60),
-        "b": (0.72, 0.10, 0.50),
+# b and f gave up 0.22 and 0.11 in of left pad on 2026-09-01, under the deck-wide rule: keep the
+# measured y furniture plus 0.14 in for the letter, hand the rest to axes width. Their corridors
+# were 0.44 and 0.33 in, the two widest here. a, c and e are first in their row, so their left
+# pad is the page margin and is left alone.
+PADS = {"a": (0.94, 0.08, 0.53),
+        "b": (0.50, 0.10, 0.43),
         "c": (0.72, 0.10, 0.50),
         "d": (0.72, 0.10, 0.50),
         "e": (0.90, 0.10, 0.48),
-        "f": (0.86, 0.10, 0.50)}
+        "f": (0.75, 0.10, 0.50)}
 
 # d (the old e) is a curve under a schematic strip that says what its x axis physically means, the
 # same construction figure 1 uses for its two continuum panels.

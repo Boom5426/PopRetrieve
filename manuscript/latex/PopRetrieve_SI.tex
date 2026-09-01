@@ -34,8 +34,16 @@
 \usepackage{lineno}
 \linenumbers
 %% Same value as the main manuscript (seed-resampling control range).
-%% Macros mirrored from the main manuscript for the relocated Supplementary Notes 5-8.
+%% Macros mirrored from the main manuscript for the Supplementary Notes below.
 %% Values must stay identical to PopRetrieve_manuscript.tex.
+%%
+%% MAIN-FIGURE REFERENCES ARE HARD-CODED HERE, AND HAVE TO BE. This is a separate document,
+%% so \ref{fig:N} does not resolve against the manuscript's labels. Every reference this
+%% file makes into the main figures therefore goes through one of the two macros below,
+%% which is the single place to edit if the main deck is ever renumbered or relettered.
+%% Checked against PopRetrieve_manuscript.tex on 2026-09-01.
+\newcommand{\MAINRECOVER}{Fig.~5e}   % recoverability ceiling vs best unsupervised
+\newcommand{\MAINCLASSAB}{Fig.~3a,b} % the 600-query response-matching / MoA pair
 \newcommand{\MAGONLYFUNC}{+0.330}
 \newcommand{\NCQUERIES}{103}
 \newcommand{\PREMISEDISJOINT}{+0.835}
@@ -186,7 +194,7 @@ population-level retrieval gain.
 
 \paragraph{Unsupervised recovery of constructed two-state structure.}
 The main text reports recoverability in the constructed two-state mixture as a single supervised
-ceiling against the best unsupervised method (Fig.~5e). Three further measurements
+ceiling against the best unsupervised method (\MAINRECOVER). Three further measurements
 characterise the same limit and are reported here rather than in the figure.
 
 First, across nine unsupervised clustering configurations, the median adjusted Rand index against
@@ -246,7 +254,7 @@ is asymmetric and we state it as such: the minority-state comparison is well pow
 small effect, which is evidence of a small effect; the mechanism-recovery comparison is not
 adequately powered, so its null is an absence of evidence rather than evidence of absence. The main
 text's mechanism-recovery conclusion rests on the full 600-query set and on the shape of the whole
-distribution (Fig.~3a,b), not on this stratum.
+distribution (\MAINCLASSAB), not on this stratum.
 
 These figures were reported in the main text until 2026-08-31, when the two panels carrying them
 were moved here to keep the main figure to the evidence that carries its argument.

@@ -2135,3 +2135,171 @@ reversal explicitly. But `fig2a.py`'s docstring called the separation "the whole
 recording that it is a mean-level property, and it now does. The practical consequence is recorded
 in the panel README: do not add per-cell dispersion to this panel, because the dots would visibly
 break the grouping in four of seven columns.
+
+---
+
+## R59. The Results quoted a Wilcoxon p that rounded the wrong way, and the figure caption quoted the right one
+
+Fig. 3a's mechanism-recovery arm carried **two hand-typed copies of one statistic that disagreed**:
+the Results said `p = 2.4e-4` and the Fig. 3a caption entry said `p = 2.5e-4`. Recomputed under the
+documented convention (two-sided Wilcoxon, zeros dropped, the scipy default) on the 600 paired
+queries `fig3a.class_a_b()` returns, **p = 2.46141e-4**, so the caption was right and the Results
+had truncated rather than rounded.
+
+A third copy existed and was worse. `\CLASSBP` was defined in the preamble, annotated with the
+correct convention, held the wrong value `2.4e-4`, and **was referenced nowhere in the document**.
+Both call sites now use `\CLASSBP` and it holds `2.5e-4`, so the statistic has one source.
+
+Nothing else in that paragraph moved: median +0.1288, mean -0.0371, and 41.3 / 34.2 / 24.5 per cent
+all reproduce exactly.
+
+## R60. Three Results citations pointed at panels that do not carry the claim, and two panels were never cited at all
+
+Found by cross-checking, for all 45 panels in the deck, what each assemble script actually draws
+against what the caption letters and what the `\ref{fig:N}` panel runs in the Results say. Caption
+coverage was already 45 of 45. Four defects were on the Results side.
+
+- **Fig. 3c was cited for a mechanism-of-action result it does not draw.** The sentence read "the
+  minority-state advantage remained small ... and mechanism-of-action recovery showed no significant
+  positive gain in that stratum (Fig. 3c)". `fig3c.py` draws minority-coverage gain by divergence
+  quartile; the MoA-by-quartile result (mean +0.003, q = 0.57) is **Fig. 5g**, which states it
+  verbatim. The sentence is now split and each half points at its own panel.
+- **Fig. 3c was also cited for panel g's numbers.** "239 real-data tasks, mean +0.0018, 102 tasks
+  selecting the same candidate" are all three panel g's; c is the n = 765 quartile panel and carries
+  none of them. The citation is now `g` alone.
+- **Fig. 3j,k were cited in support of a claim they qualify.** They sat after "This provides an
+  affirmative result: population-level transcriptional similarity contains functional information
+  that is not captured as strongly by the mean signature". Panel j is the absolute-potency endpoint
+  audit, whose own caption says "an endpoint diagnostic, not evidence that retrieval fails", and k
+  is the response-magnitude channel behind it, median rho = +0.791. Both are the evidence for the
+  **next** paragraph's caveat, and they are cited there now. Provenance: the citation read
+  `(Extended Data Fig. 5 ...)` before `e773b29`, and ED Fig. 5 is exactly what became 3j and 3k, so
+  the repoint was faithful and the misdirection predates it.
+- **Fig. 3e and Fig. 3f were the only two panels in the deck with no Results citation.** Both carry
+  substantive statistics, the caption groups them with d as "three independent ways the diagnostic
+  fails", and the Results discussed only d. Both are now cited where d is, with the statistics
+  recomputed from `_merged_query_divergence.csv`: e, rho = -0.2110, p = 3.79e-9, n = 765; f, medians
+  1.6888 against 1.6595, the 133 declined queries being more divergent than the 621 recommended.
+
+Re-running the audit after the edits: drawn = captioned = cited for all 45 panels, 0 misalignments.
+
+## R61. A Results paragraph attached four numbers to Fig. 5c, and none of them is on Fig. 5c
+
+The worst of the set, because a reader who follows the citation sees the opposite of what the
+sentence says. The paragraph reports the within-context differential-response experiment: real cells
+0.205 over 30 cell-line and drug combinations, the average-effect and linear-latent predictors
+"returned a cosine of 1.000 by construction", scGen 0.972, an optimal-transport map 0.900. It cited
+`Fig. 5c and Supplementary Note 3`.
+
+Those numbers are Supplementary Note 3's, from
+`results/exp14_nonadditive_predictors/gate1_within_context.{csv,json}`, n = 30 contexts. **Fig. 5c
+is a different experiment**: `fig5c.py` reads `exp09_structure_diagnostics/`, 96 constructed
+cross-line mixtures, and plots real 0.014 against average-effect 0.186, linear-latent 0.239 and
+nearest-neighbour 0.366. scGen and the OT map are not on the panel at all.
+
+So the sentence said two named predictors return 1.000 while the cited panel plots those same two
+predictors at 0.186 and 0.239, **next to a rule the panel labels "additive limit, cos = 1"**.
+
+The two are reconcilable and the reconciliation was only in the SI, in a subordinate clause: the
+additive limit is exact "when the perturbation response is referenced to the model-consistent
+baseline". `gate1_within_context.json` records this per predictor as `baseline_kind`, and the same
+file shows the size of the difference directly, e.g. scGen is 0.9724 against its reconstruction
+baseline and 0.4044 against the real control cells.
+
+Fixed as the author chose, minimally: the `Fig. 5c` pointer is removed from that sentence, which now
+cites Supplementary Note 3 alone. Fig. 5c would then have been uncited, i.e. the R60 defect again,
+so it is cited for the 96-mixture measurement it does draw, and its caption entry now states the
+panel's own numbers on both axes and says which baseline convention the Results values use.
+
+## R62. Two more reference anchors in Fig. 5h were unsourced literals, one line below the R53 fix
+
+R53 replaced Fig. 5h's constructed-mixture anchor with a value computed from its source file. The
+same `for` loop carried two more anchors as literals, `0.205` and `0.566`, and they were not looked
+at when R53 was fixed. Both now come from their own source of record:
+
+- real cells, state split: `exp14_nonadditive_predictors/gate1_within_context.csv`, `real_cells`
+  mean of `cos_within`, **0.20543**, the statistic Supplementary Note 3 quotes it by.
+- patient tissue: `zhao_gbm/gate1_natural.csv`, median `induced_response_cosine`, **0.56562**, the
+  statistic the Fig. 4e caption quotes it by.
+
+The two use different statistics deliberately: an anchor points at a result stated elsewhere, so it
+has to reproduce the number that result is quoted by. Both literals reproduced to three decimals, so
+nothing on the page moved; what was wrong was that neither could fail if its data changed.
+
+## R63. The Additional Information section said all 21 Extended Data panels were in the main figures, and nine had left
+
+`e773b29` folded 21 Extended Data panels into Figs. 1 to 5 and the section has said so since. Four
+later commits moved panels back out, and the sentence was not revisited. Against `e773b29`'s own
+allocation table:
+
+| | ED panels | now |
+|---|---|---|
+| Fig. 1 g,h; Fig. 2 g; Fig. 3 l,m; Fig. 4 g-i; Fig. 5 k-n | 12 | in Figs. 1-5 |
+| Fig. 3 j,k (`9e41f7c`); Fig. 4 j-m (`5c5ad32`); Fig. 5 h-j (`10f7311`) | 9 | Supplementary Notes 2 and 4 |
+
+The sentence now gives 12 and nine, and keeps the five that were removed as duplicates.
+
+## R64. Smaller items from the same pass
+
+- **Fig. 5b's caption listed its three values in an order matching neither the panel nor any naming**
+  (`-0.071, -0.016 and +0.027`, unnamed), while the panel plots avg-effect, linear-latent,
+  nearest-neighbour top to bottom. The caption now names each value and says "in the order plotted".
+- **A preamble comment still called the Tahoe panels `Fig. 5k-n`**; they have been h to k since
+  `10f7311`.
+- **The SI's two references into the main figures were hard-coded**, which it has to be, since
+  `\ref{fig:N}` cannot resolve across documents. They now go through `\MAINRECOVER` and
+  `\MAINCLASSAB`, so a renumber of the main deck has one place to edit rather than two to find. The
+  comment above them also said the file holds Supplementary Notes 5 to 8; it holds 1 to 4.
+
+## R65. NOT FIXED: the optimal-transport dispersion in Supplementary Note 3 has no source in the results
+
+Recorded rather than changed, because changing a reported statistic is the author's call.
+
+Supplementary Note 3 and the Results both give the optimal-transport predictor's induced-response
+cosine as **0.900 +- 0.107**. The 0.900 reproduces: it is `ot_map.cos_vs_model_baseline` in
+`gate1_within_context.json`. **The 0.107 does not appear in either file.** The only dispersion
+available for that predictor is in `gate1_within_context.csv`, where the ot_map rows give s.d.
+0.0968, but that CSV is from an earlier run (14 Jul) than the JSON (15 Jul) and disagrees with it on
+this predictor's whole convention: `baseline_kind` is `identity` there and `reconstruction` in the
+JSON, and the mean is 0.767 rather than 0.900. The real_cells and scGen values agree across the two
+files; only ot_map does not.
+
+Both texts hedge with "approximately", so nothing is overstated. But the number cannot currently be
+regenerated from the repository, which is the standard the rest of this file holds. Re-running
+`exp14_nonadditive_predictors` under the JSON's convention and writing the per-condition rows would
+settle it.
+
+---
+
+## R66. Three stale geometry records surfaced while measuring the deck's whitespace
+
+The author's report was that the panels sit too far apart. Measuring it, rather than adjusting the
+ledgers by eye, meant walking every panel's real ink against its own allocated box, which turned up
+three records that were simply wrong.
+
+- **`fig4_assemble.BANNER_Y` was dead and stale.** Three row-banner positions, referenced from
+  nowhere in the repository, left behind when the row headings moved into the caption. Its first
+  entry was the figure's canvas height, `7.97`, from two revisions earlier; anyone checking the
+  geometry against it would have been reading a stale number that no longer described anything.
+  Deleted, with a note saying what it was.
+- **The two-float comment in the manuscript preamble gave both of its ranges wrong.** It said the
+  five graphics "are now 7.19 to 9.26 in tall" and their captions "277 to 648 words". Measured, the
+  graphics were 7.57 to 8.60 in and the captions 548 to 769 words. The conclusion it draws is
+  unaffected and still holds after this pass (the shortest possible pairing is now 7.09 + about
+  5.4 in against a 9.46 in text block), but the numbers supporting it described an older deck.
+- **Three panel READMEs quoted canvas sizes that the whitespace pass then changed**, and are
+  updated with it: fig2 7.57 -> 7.35 in, fig3 7.96 -> 7.67, fig5 8.11 -> 7.34.
+
+The retune itself is in the commit, not here, since loose spacing is not an error. What the
+measurement found is worth recording: the corridor between two rows is ROW_GAP plus the upper row's
+UNUSED bottom pad plus LETTER_BLOCK less the letter's own height, so it has three independent terms
+and inspecting any one of them tells you nothing. Figure 5 ran 0.47 to 0.56 in and Figure 4 ran 0.48
+to 0.53 while Figure 3 ran 0.21 to 0.32 and Figure 1 ran 0.04, and every one of those ledgers said
+`ROW_GAP = 0.22`. Figure 5's left pads were the clearest case: all eleven panels had exactly 0.22 in
+between the box edge and the first ink, which is the letter reserve arriving completely unused,
+because `_letter()` draws at the box edge rather than inside the pad.
+
+**No axes changed size in any figure except to grow.** Every row height was cut by the same amount
+as its panels' bottom pads, and every left-pad cut went into axes width, so what left the page is
+white. Heights: fig1 219 mm (unchanged, it had no reclaimable white and its rows already measure
+0.04 in apart), fig2 193 -> 187, fig3 203 -> 195, fig4 203 -> 181, fig5 207 -> 187.

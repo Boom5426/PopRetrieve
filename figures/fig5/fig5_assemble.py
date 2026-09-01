@@ -95,8 +95,15 @@ PAD_TOP, PAD_BOT = 0.05, 0.08
 # The panel letter alone. Figure 5 never drew a conclusion phrase over a panel on the composite,
 # which calls strip_titles, but it carried a TITLES dict of fourteen of them and three panel files
 # still set one for their standalone run. Both are gone; see fig5_style.
-LETTER_BLOCK = 0.17
-ROW_GAP = 0.22
+LETTER_BLOCK = 0.15
+# 0.10, not the 0.22 this ledger was written with. 2026-09-01: measured against the ink rather
+# than against the ledger, the corridor a reader saw between two rows here was 0.47 to 0.56 in,
+# the loosest in the deck, against 0.21 to 0.32 in Figure 3 and 0.04 in Figure 1. The corridor is
+# ROW_GAP + the upper row's UNUSED bottom pad + LETTER_BLOCK less the letter's own height, so
+# three terms were generous at once and cutting only one would not have shown. All three are now
+# sized against measurement: the bottom pads below, this gap, and LETTER_BLOCK, which holds a
+# 9.5 pt letter whose cap height is 0.092 in.
+ROW_GAP = 0.10
 
 # (row height in inches, [(key, box width in inches), ...]). Box widths sum to FIGW per row, and
 # row height INCLUDES the bottom pad that holds the x apparatus.
@@ -119,11 +126,17 @@ ROW_GAP = 0.22
 # rather than a claim: it scores seven methods in one unit, and seven two-line categorical labels
 # need 3.39 in whatever the panel is worth. What the rebalance buys is that it is no longer
 # largest by a clear margin over g, which reports the decision-relevance null.
+#
+# ROW HEIGHTS DROPPED BY THE MEASURED BOTTOM-PAD SLACK ON 2026-09-01, and by nothing else. Each
+# row lost the smallest unused bottom pad among its own panels, less a 0.04 in guard, and every
+# panel in that row lost the same amount off its bottom pad. Axes heights are therefore UNCHANGED
+# to the hundredth: what left the page is white, not plotting area. Per row: 0.13, 0.12, 0.04,
+# 0.04 in.
 ROWS = [
-    (1.80, [("a", 1.98), ("b", 2.16), ("c", 2.76)]),
-    (1.56, [("d", 2.70), ("e", 4.20)]),
-    (1.70, [("f", 3.00), ("g", 3.90)]),
-    (1.58, [("h", 1.86), ("i", 1.74), ("j", 1.62), ("k", 1.68)]),
+    (1.67, [("a", 1.98), ("b", 2.16), ("c", 2.76)]),
+    (1.44, [("d", 2.70), ("e", 4.20)]),
+    (1.66, [("f", 3.00), ("g", 3.90)]),
+    (1.54, [("h", 1.86), ("i", 1.74), ("j", 1.62), ("k", 1.68)]),
 ]
 
 # (left, right, bottom) pad in inches inside the panel BOX. Top is always zero: the panel letter
@@ -134,11 +147,17 @@ ROWS = [
 # Left pads are the MEASURED furniture of each panel plus 0.22 in for the letter, not a common
 # value: an over-wide pad is axes width thrown away, and at this panel count there is none to
 # spare. c is the only panel with a right pad above 0.10 in, and it is its second y axis.
-PADS = {"a": (0.30, 0.06, 0.44), "b": (0.72, 0.06, 0.46), "c": (0.58, 0.47, 0.46),
-        "d": (0.72, 0.10, 0.44), "e": (0.71, 0.10, 0.46),
-        "f": (0.66, 0.10, 0.44), "g": (0.81, 0.10, 0.48),
-        "h": (0.59, 0.06, 0.48), "i": (0.57, 0.06, 0.48),
-        "j": (0.69, 0.06, 0.48), "k": (0.69, 0.06, 0.48)}
+# THE LETTER RESERVE IS 0.14 IN, NOT 0.22, SINCE 2026-09-01. Measured, every panel but a had
+# exactly 0.22 in between its box edge and its leftmost ink, which is the reserve arriving
+# untouched: the letter is drawn at the box edge by _letter() and a 9.5 pt bold letter is about
+# 0.08 in wide, so 0.14 in gives it its width and 0.06 in of air. The 0.08 in freed per panel goes
+# into axes WIDTH, since box widths still sum to FIGW. a keeps 0.30: it is the schematic, its ink
+# already runs 0.21 in left of its own axes, and 0.09 in is all the slack it has.
+PADS = {"a": (0.30, 0.06, 0.31), "b": (0.64, 0.06, 0.33), "c": (0.50, 0.47, 0.33),
+        "d": (0.64, 0.10, 0.32), "e": (0.63, 0.10, 0.34),
+        "f": (0.58, 0.10, 0.40), "g": (0.73, 0.10, 0.44),
+        "h": (0.51, 0.06, 0.44), "i": (0.49, 0.06, 0.44),
+        "j": (0.61, 0.06, 0.44), "k": (0.61, 0.06, 0.44)}
 
 
 def _boxes():

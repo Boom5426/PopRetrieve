@@ -105,9 +105,22 @@ def draw_a(ax):
                                    "gate1_response_divergence.csv"))
     _cm = _cm[(_cm.synth == "real") & (_cm.predictor == "real_blend")].induced_response_cosine
     _cm = float(_cm.dropna().median())
+    # 2026-09-01: the other two reference anchors were literals too, 0.205 and 0.566, which is the
+    # same defect as R53 one line up and was missed when that one was fixed. Both now come from
+    # the file that is each number's source of record, under the statistic that record uses, so
+    # neither can outlive its data:
+    #   real cells, state split -> Supplementary Note 3 defines it as a MEAN over 30 contexts
+    #   patient tissue          -> main-text Fig. 4e reports it as a MEDIAN over 17 pairs
+    # The two statistics differ on purpose. An anchor is a pointer to a result stated elsewhere,
+    # so it must reproduce the number that result is quoted by, not a locally tidier one.
+    _rc = pd.read_csv(os.path.join(REPO, "results", "exp14_nonadditive_predictors",
+                                   "gate1_within_context.csv"))
+    _rc = float(_rc[_rc.predictor == "real_cells"].cos_within.dropna().mean())
+    _pt = pd.read_csv(os.path.join(REPO, "results", "zhao_gbm", "gate1_natural.csv"))
+    _pt = float(_pt.induced_response_cosine.dropna().median())
     for x, lab, col, lw in [(_cm, "constructed mixtures", MATERIAL, 1.3),
-                            (0.205, "real cells, state split", GREY, 0.8),
-                            (0.566, "patient tissue", PURPLE_SOFT, 0.8),
+                            (_rc, "real cells, state split", GREY, 0.8),
+                            (_pt, "patient tissue", PURPLE_SOFT, 0.8),
                             (1.0, "additive ceiling", COMP_SOFT, 0.8)]:
         yf = 0.97
         ax.axvline(x, color=col, lw=lw, ls=(0, (2.2, 1.6)))
