@@ -12,15 +12,32 @@ exceptions: they are MEASURED, drawn by `figures/edfigs/ed_panels.py` off
 `results/exp06_theory_limits/`. No AI-generated raster is placed in this figure; see "Panel a
 provenance" below.
 
-**No panel carries a title.** A Nature-family panel carries axis labels, tick labels, direct
-labels on the marks and a key, and the explanation is the caption's job; `figstyle.strip_titles`
-is called at the end of `build()` and removes any title a panel script sets, so the claims in the
-table below reach the reader as the caption's entries, one per letter. The panel scripts keep their own
-`set_title` calls, which is what labels a standalone `python fig1x.py` preview.
+**No panel carries a title, and since 2026-09-01 no panel carries a phrase either.**
+`figstyle.strip_titles` removed any rc title a panel script set, and it always did. What it could
+not see was ink: seven panels drew a bold 8.5 pt phrase over themselves through a
+`fig1_style.title()` helper, and `fig1_assemble` said in a comment that those phrases "are the
+caption's own opening clauses". They were, three of them almost word for word, so the figure
+asserted its conclusions twice, once where they could be qualified and once where they could not.
+
+Six are gone: "same library, different ranking", "Means tie, distributions separate", "Better
+representation, better decision?", "Evidence ladder", "Mean retrieval = zero-variance limit",
+"Population scoring is a continuum". The helper is deleted rather than deprecated so no panel can
+call it. One survived, panel b's **same mean**, and it survived as a PT_ANNOT label rather than a
+PT_TITLE phrase because it NAMES the dashed rule it sits on, the way an axis label names an axis;
+without it the reader meets an unexplained orange line.
+
+`fig1_assemble._assert_no_titles` enforces this mechanically: **no panel may draw text above
+7.2 pt**, and the build fails if one does. It is a size gate rather than a wording gate, because
+no code can tell a claim from a label, but a claim that has to fit at 7.2 pt beside the marks it
+describes has already lost the argument for being on the panel. Text that is entirely mathtext is
+exempt: panel a composes its subscripted distances by hand, base at PT_EQ and subscript at
+PT_SMALL, which reproduces mathtext's own 1.43 ratio and prints a 9.3 pt base, and panel h sets its
+y axis to $D_\beta$ the same way. A symbol is not a claim, and a conclusion sentence is never
+wrapped in dollar signs.
 
 ## Panels
 
-| Panel | Claim (stated in the caption, NOT drawn on the panel) | Type |
+| Panel | Claim, which is the caption's to make | Type |
 |-------|------------------------------|------|
 | a | One population, two representations, one ranking | schematic, seeded points |
 | b | Same mean shift, opposite fate for a hidden minority | schematic, seeded points |
@@ -93,16 +110,45 @@ table below reach the reader as the caption's entries, one per letter. The panel
   exported page the union of canvas and ink, so that overhang would widen the PDF past the text
   block. Widening the left margin instead would narrow a, b, c, e and f by about 2 per cent each,
   which panel b cannot afford.
-- Palette semantics are the house ones: GREY context, FOCAL blue distributional/PopRetrieve signal,
-  COMP orange mean/collapse. No new hue family; GREEN and PURPLE are not used in this figure.
-  **Colour appears only in a-d**, where those meanings apply. Panels e and f are about
-  coupled-versus-independent evaluation and about evidence class, which are neither
-  "distributional" nor "mean", so painting them blue and orange gave both hues a second,
-  contradictory meaning inside one figure. They are ink and grey.
+- Palette semantics are the house ones, set in `fig1_style`: GREY context, FOCAL blue
+  distributional, COMP orange mean/collapse, GREEN an evaluator the method never saw. PURPLE is
+  not used. This paragraph used to claim that "colour appears only in a-d" and that e and f "are
+  ink and grey", and neither was true of the code: panel e fills its retriever and evaluator
+  circles in POP blue, its ranking cards in SHARED grey and its judge card in EXT green, and panel
+  f washed its three platforms in POP, SHARED and EXT.
+  **Panel e's fills are correct** and stay: a circle labelled "population distance" IS a
+  population-level object, the ranking cards ARE shared machinery, and the judge IS an external
+  evaluator, so all three uses are the vocabulary's own meanings.
+  **Panel f's were not**, and were fixed on 2026-09-01. An evidence class is neither
+  "population-level" nor "everything both routes have in common", so two of the three platforms
+  gave established colours a second, contradictory meaning in the last panel a reader reaches. The
+  ordinal axis is already carried by the staircase offset and by the labelled arrow, so hue was
+  carrying only the false signal; the three platforms are now one neutral. See `CORRECTIONS.md` R57.
 - **Bold is structural only.** Section labels, row identifiers and branch names are bold; every
   conclusion and every annotation is set plain. A bolded conclusion is emphasis, not information,
   and this figure previously had eight of them competing with the marks they described.
 - Per deck rule 5, Fig 1 sets tension only: no +0.119, no collapse statistics.
+
+## Print geometry, authored 1:1
+
+The manuscript text block is 6.951 in and the figure enters with
+`\includegraphics[width=\textwidth]`. The canvas is **6.90 x 8.60 in** and exports 176 x 219 mm,
+so nominal point size is printed point size. The float budget is the 9.461 in text block less about
+16/72 in of overhead, i.e. 9.238 in.
+
+It was 234 mm until 2026-09-01, which was the deck maximum and 0.02 in inside that budget. The
+compaction is entirely in the furniture, not the drawings: `LETTER_BLOCK` 0.24 to 0.17 and
+`ROW_GAP` 0.30 to 0.22, matching Figures 2, 3 and 5, which is 0.52 in over four rows and three
+gaps. Those numbers were set while every row also carried bold phrases inside its panels and needed
+the separation to keep two of them from reading as one block.
+
+The rows themselves gave back almost nothing, and that is a property of the panels rather than
+carelessness: these are schematics whose type is absolute while their layout is fractional, so
+shrinking a row compresses the drawing around text that does not shrink with it. Each row was cut
+by less than its TIGHTEST panel's measured slack: 0.024 in spare in b, 0.023 in d, 0.042 in f,
+0.014 in g, cut by 0.02, 0.02, 0.03 and 0.01. Measure scatter collections from their offsets when
+checking this; `PathCollection.get_window_extent` does not report the drawn points, and reading it
+made panel c look like it had 0.40 in of dead space at the top when it has 0.06.
 
 ## Panel a provenance
 
@@ -145,20 +191,23 @@ candidate populations on a shared sample mean, e = when an evaluator is independ
 evidence classes. If the two ever disagree, the manuscript is the authority and this file is the
 bug.
 
-**Open, and known:** the caption has six entries and the figure now has eight. g and h still need
-their entries written, and they carry measured numbers, so the caption must also state the source
-(`results/exp06_theory_limits/`) and the four endpoints (98.50 against 98.50 at lambda = 0; 0.7125
-and 1.300 for D_beta). Their claims are in `TITLES` in `fig1_assemble.py`, which is what the
-caption should be checked against.
+**No longer open.** This section used to record that the caption had six entries against the
+figure's eight, and that g and h still needed theirs written. The caption has carried all eight
+since the 2026-08-31 pass, including g's `98.50=98.50` at lambda = 0 and h's 0.7125 and 1.300
+endpoints, and it names `exp06_theory_limits` as their source. It also used to point at a `TITLES`
+dict in `fig1_assemble.py` as the thing to check the caption against; there is no such dict, and
+after the phrase removal above there is nothing for one to hold.
 
 ## Files
 
-- `fig1a.py` ... `fig1f.py`, `fig1_assemble.py` (which owns `TITLES`, the layout and the
-  module-level `STEM`). The filename letter always equals the panel letter; when a panel is
-  inserted or removed the modules are renamed with it. g and h break that rule on purpose: they
-  have no `fig1g.py` or `fig1h.py`, because `fig1_assemble.py` imports
-  `ed_panels.draw_ed1d` and `ed_panels.draw_ed1e` directly and a local copy would be a second
-  place for their numbers to drift.
+- `fig1_style.py` : the frozen vocabulary. Four colours with one meaning each and one type ladder.
+  There is no `title()` helper and there must not be one again; see the note at the foot of that
+  file.
+- `fig1a.py` ... `fig1h.py`, and `fig1_assemble.py`, which owns the inch ledger, the panel letters,
+  the 6.5 pt floor gate and the 7.2 pt no-titles gate, plus the module-level `STEM`. The filename
+  letter always equals the panel letter. An earlier version of this section said g and h had no
+  modules and were drawn by `ed_panels.draw_ed1d/e` directly; both files exist and
+  `fig1_assemble` imports `draw_1g` and `draw_1h` from them.
 - `fig1_problem.{pdf,svg,png}` : the composite, and the only stem this figure is written under.
   `python figures/build_all.py --write` enforces the 5 pt floor, writes these, and copies the PDF to
   `manuscript/latex/figures/fig1.pdf`, which is the file the manuscript compiles. That copy is part

@@ -85,17 +85,25 @@ from fig1h import draw_1h  # noqa: E402
 FIGW = 6.90
 
 PAD_TOP, PAD_BOT = 0.05, 0.10
-LETTER_BLOCK = 0.24         # the band above each row that the bold letter sits in
-ROW_GAP = 0.30
+# 0.17 and 0.22, matching Figures 2, 3 and 5, since 2026-09-01. They were 0.24 and 0.30 while
+# every row also carried a bold conclusion phrase inside its panels and needed the separation to
+# keep two phrases from reading as one block. With the phrases gone the band only has to hold a
+# 9.5 pt letter, which is 0.13 in. The saving is 0.52 in over four rows and three gaps, and it is
+# the whole of this figure's compaction: the panels themselves are schematics whose text is
+# absolute while their layout is fractional, so shrinking a row compresses the drawing around type
+# that does not shrink with it. Rows give back only the little each row's TIGHTEST panel has
+# spare, measured rather than guessed: 0.025 in for b, 0.024 for d, 0.044 for f, 0.022 for g.
+LETTER_BLOCK = 0.17
+ROW_GAP = 0.22
 
 LETTER_GUTTER = 0.24        # box left edge -> axes left edge, for a panel with no y axis
 Y_FURNITURE = 0.46          # extra, for the two panels that have one
 RIGHT_MARGIN = 0.06
 
-ROWS = [(("a", "b"), 1.60),
-        (("c", "d"), 1.60),
-        (("e", "f"), 2.03),
-        (("g", "h"), 1.96)]
+ROWS = [(("a", "b"), 1.58),
+        (("c", "d"), 1.58),
+        (("e", "f"), 2.00),
+        (("g", "h"), 1.95)]
 COL_X = (0.0, FIGW / 2.0)
 
 DATA_PANELS = ("g", "h")    # the only two with axes furniture
@@ -165,6 +173,43 @@ def _assert_floor(fig, floor=PT_FLOOR):
     return fig
 
 
+# A symbol is not a claim. Panel a composes its subscripted distances by hand, base at PT_EQ and
+# subscript at PT_SMALL, which reproduces mathtext's own 1.43 ratio exactly and prints d with a
+# 9.3 pt base; panel h sets its y axis to $D_\beta$ at the same size. Both are correct and both
+# are above the cap, so the gate exempts text that is entirely mathtext. A conclusion sentence is
+# never wrapped in dollar signs.
+_PURE_MATH = re.compile(r"^\s*\$[^$]*\$\s*$")
+
+
+def _assert_no_titles(fig, cap=PT_ANNOT):
+    """Refuse to return a figure in which any PANEL draws non-symbol text above ``cap``.
+
+    This is the mechanical form of the rule in fig1_style: the panels carry evidence and the
+    caption carries the argument. A conclusion sentence set over a panel is always the largest
+    text on it, so capping panel text at the annotation size is what stops one coming back. The
+    panel letters are exempt because this module draws them, not the panels, and they are the
+    figure's navigation rather than its claims.
+
+    It is deliberately a size gate and not a wording gate. Nothing here can tell a claim from a
+    label, but a claim that has to fit at 7.2 pt beside the marks it describes is a caption
+    sentence that has already lost the argument for being on the panel.
+    """
+    letters = {id(t) for t in fig.texts}
+    bad = []
+    for t in fig.findobj(mtext.Text):
+        s = str(t.get_text())
+        if id(t) in letters or not s.strip() or not t.get_visible():
+            continue
+        if _PURE_MATH.match(s):
+            continue
+        if t.get_fontsize() > cap + 1e-6:
+            bad.append((round(t.get_fontsize(), 2), s.replace("\n", "/")[:44]))
+    assert not bad, (
+        f"Figure 1 caps panel text at {cap} pt and these are above it: {sorted(bad)[:8]}. "
+        f"A panel states no conclusion; move the sentence to the caption.")
+    return fig
+
+
 def build(apply_style, panel_letter):
     # This figure\'s ladder sits one step above the deck\'s (8, 7, 6); see the module docstring.
     # panel_letter is accepted to keep build_all\'s contract and deliberately not used: its size
@@ -186,9 +231,10 @@ def build(apply_style, panel_letter):
     for key in "abcdefgh":
         _letter(fig, key)
 
-    # Nature panels carry no rc titles; the phrases the panels state over themselves are drawn by
-    # the panels at PT_TITLE, and are the caption\'s own opening clauses.
-    return _assert_floor(strip_titles(soften_axes(fig)))
+    # Nature panels carry no titles, and since 2026-09-01 no panel phrases either: the six
+    # conclusion sentences this figure drew over itself were the caption\'s own opening clauses,
+    # so the figure asserted them twice. _assert_no_titles keeps it that way.
+    return _assert_no_titles(_assert_floor(strip_titles(soften_axes(fig))))
 
 
 if __name__ == "__main__":

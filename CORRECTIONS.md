@@ -1959,3 +1959,78 @@ e at 17.8 per cent of panel area, and e is the panel whose general reading this 
 rebalanced; e is now 16.1 against g's 15.7. e remains the single largest because it scores seven
 methods in one unit and seven two-line categorical labels need 3.39 in, which is a content
 constraint rather than a claim.
+
+---
+
+## R57. Figure 1 stated six of its conclusions twice, and painted evidence classes in colours that already meant something else
+
+Figure 1 was the last figure to get the panel-phrase pass. It already met the 6.5 pt floor, so the
+problems here were not typographic.
+
+**Six conclusion sentences were drawn on the panels.** `fig1_style` ended in a `title()` helper,
+documented as "the single phrase a panel states over itself", and seven of the eight panels called
+it at 8.5 pt, the largest non-letter type in the figure:
+
+| panel | phrase | the caption already said |
+|---|---|---|
+| a | same library, different ranking | "the two ranked stacks ... disagree at rank 1" |
+| d | Means tie, distributions separate | "A mean score cannot separate them; a population score prefers A" |
+| e | Better representation, better decision? | "Why an evaluation can mislead" |
+| f | Evidence ladder | "**f**, The evidence ladder." |
+| g | Mean retrieval = zero-variance limit | "**g**, Mean retrieval is the zero-variance limit of population retrieval." |
+| h | Population scoring is a continuum | "**h**, Population scoring is itself a continuum." |
+
+`fig1_assemble` recorded the duplication in a comment of its own: the phrases "are the caption's
+own opening clauses". So the figure asserted its conclusions in two places, one of which cannot
+qualify, scope or attribute them.
+
+**Fixed.** All six removed, `fig1_style.title()` deleted rather than deprecated, and
+`fig1_assemble._assert_no_titles` added, capping panel text at 7.2 pt so no panel can reimplement
+the helper with a bare `ax.text`. Text that is entirely mathtext is exempt, because panel a
+composes its subscripted distances by hand (base at PT_EQ, subscript at PT_SMALL, reproducing
+mathtext's 1.43 ratio) and panel h sets its y axis to $D_\beta$ the same way; a symbol is not a
+claim, and a conclusion sentence is never wrapped in dollar signs.
+
+One phrase survived. Panel b's **same mean** names the dashed rule it sits on, the way an axis
+label names an axis, and without it the reader meets an unexplained orange line. It is now set at
+PT_ANNOT like every other direct label on the figure.
+
+**Panel f gave two established colours a second meaning.** Its three evidence-class platforms were
+washed and outlined in POP blue (Response matching), SHARED grey (Mechanism recovery) and EXT green
+(External function). `fig1_style` teaches four colours across panels a to e, where blue means
+"population-level / distributional" and grey means "everything both routes have in common". An
+evidence class is neither, so a reader who had learned the vocabulary reached the last panel of the
+figure and found two of its colours attached to something else. The module's own rule covers the
+case: "if a panel needs to separate two things and has run out, it separates them by shape, fill,
+or position, not by inventing a hue." This panel had not run out; it had three hues it did not
+need, because the ordinal axis is already carried twice, by the staircase offset and by the
+labelled arrow beside it.
+
+**Fixed.** All three platforms are one neutral and the ordering is position alone. Panel e's fills
+were checked at the same time and are correct, so they stay: its circles are labelled "population
+distance", its ranking cards are shared machinery, and its judge card is an external evaluator, all
+three the vocabulary's own meanings.
+
+**The README described a figure that was not being drawn.** Four of its claims were false of the
+code, and all four are corrected:
+
+- "Colour appears only in a-d ... Panels e and f ... are ink and grey." Both panels have used
+  fills and hue throughout.
+- "GREEN and PURPLE are not used in this figure." Green is used in e, and was used in f.
+- "the caption has six entries and the figure now has eight. g and h still need their entries
+  written." The caption has carried all eight since 2026-08-31, with g's and h's endpoint numbers
+  and their source.
+- "g and h ... have no `fig1g.py` or `fig1h.py`, because `fig1_assemble.py` imports
+  `ed_panels.draw_ed1d` and `ed_panels.draw_ed1e` directly." Both files exist and `fig1_assemble`
+  imports `draw_1g` and `draw_1h` from them. The README also pointed twice at a `TITLES` dict in
+  `fig1_assemble.py` as the authority for g's and h's claims; no such dict exists.
+
+The page came down from 234 mm, the deck maximum, to 219 mm. The saving is entirely furniture,
+`LETTER_BLOCK` 0.24 to 0.17 and `ROW_GAP` 0.30 to 0.22, both of which were sized to separate the
+bold phrases that are now gone. The rows themselves gave back less than 0.03 in each, because these
+are schematics whose type is absolute while their layout is fractional.
+
+A measurement note worth keeping, because it nearly caused a wrong edit:
+`PathCollection.get_window_extent` does not report the extent of the drawn points, so a first pass
+read panel c as having 0.40 in of dead space above its content and 0.02 in below. Measured from the
+collection offsets instead, the real figures are 0.06 and 0.02, and panel c needed no change at all.

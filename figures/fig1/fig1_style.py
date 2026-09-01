@@ -136,7 +136,23 @@ def blank(ax):
     return ax
 
 
-def title(ax, text, x=0.0, y=1.0, ha="left", va="bottom", color=TEXT, weight="bold", **kw):
-    """The single phrase a panel states over itself. Everything longer belongs in the caption."""
-    return ax.text(x, y, text, transform=ax.transAxes, fontsize=PT_TITLE, ha=ha, va=va,
-                   color=color, fontweight=weight, **kw)
+# THERE IS NO title() HELPER, AND THERE MUST NOT BE ONE AGAIN.
+#
+# Until 2026-09-01 this module ended in one, documented as "the single phrase a panel states over
+# itself", and seven of the eight panels used it: "same library, different ranking", "Means tie,
+# distributions separate", "Better representation, better decision?", "Evidence ladder", "Mean
+# retrieval = zero-variance limit", "Population scoring is a continuum".
+#
+# Every one of them was already in the caption, three of them almost word for word, and
+# fig1_assemble said so in a comment: the phrases "are the caption's own opening clauses". So the
+# figure asserted its conclusions twice, once where they could be qualified and once where they
+# could not. A panel carries evidence; the caption carries the argument, because the caption is
+# where a claim can be scoped, attributed and hedged.
+#
+# The helper is deleted rather than deprecated so that no panel can call it, and
+# fig1_assemble._assert_no_titles caps every panel text at PT_ANNOT so no panel can reimplement it
+# with a bare ax.text. One phrase survived, panel b's "same mean", and it survived as a PT_ANNOT
+# label because it names the dashed rule it sits on rather than stating a conclusion.
+#
+# PT_TITLE stays defined below because apply_style still takes it as the rc title size, which
+# strip_titles then clears. No panel may draw at it.

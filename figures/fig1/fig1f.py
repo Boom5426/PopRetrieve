@@ -25,12 +25,21 @@ The 2026-08-31 layout change is what made this possible. The panel is now 3.15 x
 2:1 landscape, where the old box was 1.38 x 3.70 in portrait. A staircase needs run as well as
 rise; the portrait box had no run to give, which is why the old cut had to fall back on text.
 
-Colour follows the figure's four roles and adds nothing. The bottom platform is POP because
-response matching IS the population score's own ground truth; the middle is SHARED because
-mechanism recovery still runs on the data both routes share; the top is EXT, the figure's mark for
-a judge the method never saw, and panel f is one of the two panels allowed to use it. The status
-marks are ink in both columns, because filled-versus-open already carries "reports here" and
-tinting one of them would have given one of the four roles a second, unrelated meaning.
+COLOUR: ONE NEUTRAL, since 2026-09-01. The three platforms used to take three of the figure's four
+role colours, and the argument for it was that each role happened to fit: POP because response
+matching is the population score's own ground truth, SHARED because mechanism recovery runs on data
+both routes share, EXT because the top level is a judge the method never saw.
+
+That argument does not survive being read from the reader's side. fig1_style teaches four colours
+over panels a to e, and blue there means "population-level / distributional" while grey means
+"everything both routes have in common". An evidence CLASS is neither. So a reader who had learned
+the vocabulary arrived at the last panel and found two of its colours attached to something else,
+and the reasoning above is the sound of a panel talking itself into that.
+
+The ordinal axis this panel exists to draw is already carried twice, by the staircase offset and by
+the labelled arrow beside it, so hue was carrying nothing except the false signal. All three
+platforms are now one neutral. The status marks stay ink in both columns, because filled-versus-open
+already carries "reports here" and tinting one of them would have given a role a second meaning.
 
 WHAT AN OPEN MARK MEANS, AND WHAT IT MUST NOT BE READ AS
 --------------------------------------------------------
@@ -70,9 +79,8 @@ from matplotlib.colors import to_rgba
 from matplotlib.patches import Rectangle
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fig1_style import (EXT, LW_ARROW, LW_HAIR, MS_ARROW, POP,  # noqa: E402
-                        PT_ANNOT, PT_SMALL, PT_TICK, SHARED, SUBTLE, TEXT,
-                        arrow, blank, title)
+from fig1_style import (LW_ARROW, LW_HAIR, MS_ARROW, PT_ANNOT,  # noqa: E402
+                        PT_SMALL, PT_TICK, SHARED, SUBTLE, TEXT, arrow, blank)
 
 # ---------------------------------------------------------------------------- the field audit
 _REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -106,11 +114,11 @@ def _audit():
 # 1.22 in wide, and one metric per line keeps the three platforms identical in shape.
 LEVELS = (
     dict(name="Response matching", gloss="objective-aligned",
-         metrics=("energy regret", "connectivity"), face=POP),
+         metrics=("energy regret", "connectivity")),
     dict(name="Mechanism recovery", gloss="task-proximal biology",
-         metrics=("MoA-nDCG", "minority coverage"), face=SHARED),
+         metrics=("MoA-nDCG", "minority coverage")),
     dict(name="External function", gloss="external measurement",
-         metrics=("GDSC2 dose response", "protein response"), face=EXT),
+         metrics=("GDSC2 dose response", "protein response")),
 )
 OURS_STEPS = (0, 1, 2)      # manuscript: "We report PopRetrieve under all three classes"
 
@@ -127,7 +135,7 @@ W_SLAB = 1.22               # widest line inside a platform is the bold name at 
 PAD_TEXT = 0.075            # platform edge -> text, left
 
 Y_LADDER_B, Y_LADDER_T = 0.30, 1.76
-GAP_SLAB = 0.02             # a hairline of white between platforms, so three colours do not bleed
+GAP_SLAB = 0.02             # a hairline of white between platforms, so the three do not merge
 H_SLAB = (Y_LADDER_T - Y_LADDER_B - 2 * GAP_SLAB) / 3.0
 
 # Baselines inside a platform, measured DOWN from its top edge. The four lines (name, gloss, two
@@ -149,7 +157,19 @@ X_LEGEND = (X_PUB + X_OURS) / 2.0       # centred on the pair, so it reads as th
 
 LW_TREAD = 2.0              # the platform's top edge. At LW_LINE the platform reads as a tinted
                             # text box; at twice that the top edge reads as a surface it stands on.
-TINT = 0.16                 # a wash of the level's own hue, never a fifth colour
+# ONE NEUTRAL, NOT THREE HUES, since 2026-09-01. Each platform used to be washed and outlined in
+# its own colour: POP blue for response matching, SHARED grey for mechanism recovery, EXT green for
+# external function. Only the last was right. fig1_style gives blue the meaning "population-level /
+# distributional" and grey the meaning "everything both routes have in common", and neither is what
+# an evidence class is, so a reader who had learned the figure's four colours by panel e arrived
+# here and found two of them attached to something else. The module's own rule covers this case:
+# "if a panel needs to separate two things and has run out, it separates them by shape, fill, or
+# position, not by inventing a hue". This panel had never run out; it had three hues it did not
+# need, because the ORDINAL axis is already carried twice, by the staircase offset and by the
+# labelled arrow beside it. The platforms are now one neutral container and the ordering is
+# position alone.
+TINT = 0.16                 # the wash inside a platform
+SLAB = SHARED               # the one neutral every platform is drawn in
 MS_STATUS = 16              # marker area in pt^2 -> 4.5 pt across, legible and still secondary
 
 
@@ -172,13 +192,13 @@ def _mid(i):
 
 
 def _platform(ax, i, level):
-    """One step: a tinted block with a solid top edge, carrying its own four lines of text."""
+    """One step: a neutral block with a solid top edge, carrying its own four lines of text."""
     left, bottom = _step(i)
     ax.add_patch(Rectangle((_fx(left), _fy(bottom)), _fx(W_SLAB), _fy(H_SLAB),
-                           fc=to_rgba(level["face"], TINT), ec=level["face"], lw=LW_HAIR,
+                           fc=to_rgba(SLAB, TINT), ec=SLAB, lw=LW_HAIR,
                            zorder=2))
     ax.plot([_fx(left), _fx(left + W_SLAB)], [_fy(bottom + H_SLAB)] * 2, lw=LW_TREAD,
-            color=level["face"], solid_capstyle="butt", zorder=3)
+            color=SLAB, solid_capstyle="butt", zorder=3)
 
     x = _fx(left + PAD_TEXT)
     top = bottom + H_SLAB
@@ -205,7 +225,8 @@ def draw_1f(ax):
 
     # Hung inside the top edge rather than on the helper's default baseline above it: everything
     # this panel draws has to stay within the rect, or it widens the row it is assembled into.
-    title(ax, "Evidence ladder", y=0.998, va="top")
+    # No panel title. "Evidence ladder" was set here at PT_TITLE and is the caption's own
+    # opening clause for this panel; the axis below already names what the staircase orders.
 
     # ---- the axis the steps are ordered on: independence, not strength ----
     # It spans exactly the ladder, tail on the bottom platform and head on the top one, so the

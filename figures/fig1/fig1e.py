@@ -69,7 +69,7 @@ from matplotlib.patches import Ellipse, Polygon, Rectangle
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from fig1_style import (EXT, LW_ARROW, LW_HAIR, POP, PT_ANNOT,  # noqa: E402
-                        PT_SMALL, PT_TITLE, SHARED, TEXT, arrow, blank, cells, title)
+                        PT_SMALL, PT_TITLE, SHARED, TEXT, arrow, blank, cells)
 
 # --------------------------------------------------------------------------------- the canvas
 # The rect fig1_assemble gives panel e: half of the 6.90 in page less the 0.24 in letter gutter
@@ -347,11 +347,10 @@ def draw_1e(ax):
     blank(ax)
     # The panel's own phrase. It is a question, not a finding: the finding is panels g and h.
     # "Better representation, better decision?" and not the phrasing this panel was briefed
-    # with, "Better representation is not better decision?", which is missing an article and
-    # reads as a statement wearing a question mark. The comma form poses the question the
-    # paper exists to answer and is two words shorter, which the headline needs at 8.5 pt.
-    title(ax, "Better representation, better decision?", x=0.0, y=_fy(Y_HEADLINE),
-          va="top")
+    # No headline. "Better representation, better decision?" was set here at PT_TITLE, and the
+    # wording had been argued over twice, which is itself the tell: a question that has to be
+    # phrased carefully is doing the caption's work. The caption asks it as "Why an evaluation
+    # can mislead", and the two lanes below answer it by their shape, one closed and one open.
     _coupled(ax)
     _independent(ax)
     return ax

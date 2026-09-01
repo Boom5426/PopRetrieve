@@ -70,7 +70,7 @@ import matplotlib.pyplot as plt
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig1_style import (FAINT, LW_HAIR, LW_LINE, MEAN, POP, PT_ANNOT,  # noqa: E402
                         PT_SMALL, PT_TICK, SHARED, SUBTLE, TEXT, blank, cells,
-                        centroid, title)
+                        centroid)
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CSV = os.path.join(REPO, "results", "exp06_theory_limits", "degenerate_limit_synthetic.csv")
@@ -170,7 +170,8 @@ def draw_1g(ax, ax_top):
 
     # ---------------------------------------------------------------- cartoon strip
     blank(ax_top)
-    title(ax_top, "Mean retrieval = zero-variance limit", y=0.99, va="top")
+    # No phrase: the caption says "Mean retrieval is the zero-variance limit of population
+    # retrieval", and the panel shows the wash closing to nothing at lambda = 0.
     # Provenance, in the panel's own top corner and at the floor: this is a construction, and a
     # reader must not carry it away as a measurement on cells. It never becomes a claim, so it is
     # SUBTLE and it is the smallest thing here.

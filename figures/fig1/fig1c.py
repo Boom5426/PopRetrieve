@@ -16,7 +16,7 @@ from one population to the other:
 
 One row detours through two points, the other goes straight across at the level of the cells. That
 contrast is the whole panel and it survives every formula being deleted, which is the test this
-panel is built to pass. The previous cut stated the same thing in a title, a collapse label, two
+panel is built to pass. The previous cut stated the same thing in a a collapse label, two
 link labels, two display equations and a four-name family line, and the drawing underneath was
 doing almost none of the work.
 

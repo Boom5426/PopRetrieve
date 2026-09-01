@@ -81,7 +81,7 @@ import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig1_style import (FAINT, LW_HAIR, LW_LINE, MEAN, POP, PT_ANNOT,  # noqa: E402
-                        SHARED, TEXT, blank, cells, centroid, title)
+                        SHARED, TEXT, blank, cells, centroid)
 
 # ------------------------------------------------------------------ the box this is tuned for
 # The axes the composite gives panel d (fig1_assemble: half of FIGW less the letter gutter and the
@@ -229,7 +229,8 @@ def _route_mark(ax, x_pt, y_pt, colour):
 
 def draw_1d(ax):
     blank(ax)
-    title(ax, "Means tie,\ndistributions separate", x=0.0, y=1.0, va="top", linespacing=1.15)
+    # No phrase. The caption states it: "A mean score cannot separate them; a population score
+    # prefers A." On the panel the shared-mean marker and the two marginal densities show it.
 
     # ---- who the three populations are, beside the title and above both views of them ----
     # The target is the reference the candidates are read against, so its key mark carries the

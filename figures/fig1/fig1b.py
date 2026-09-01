@@ -75,7 +75,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # The frozen vocabulary. Nothing here is redefined locally, and no colour is imported from
 # figstyle: fig1_style is the one place that maps a hue to a meaning for this figure.
 from fig1_style import (FAINT, LW_HAIR, MEAN, POP, PT_ANNOT, PT_TITLE, SHARED,  # noqa: E402
-                        SUBTLE, TEXT, arrow, blank, cells, centroid, title)
+                        SUBTLE, TEXT, arrow, blank, cells, centroid)
 
 # ------------------------------------------------------------------ the page, in inches
 # The rect fig1_assemble gives panel b in the four-rows-of-two layout. Everything else in this
@@ -257,8 +257,14 @@ def draw_1b(ax: plt.Axes) -> None:
     # ---------------- the rule the two treated means share, and its two words ----------------
     # Two words, at the top of the rule rather than the top of the panel, so the dashes hang from
     # them. Everything else this panel could say about the mean is the caption's job.
+    #
+    # This is the one phrase on Figure 1 that survived the 2026-09-01 pass, and it survived because
+    # it is not a claim: it NAMES the dashed rule it sits on, the way an axis label names an axis,
+    # and without it the reader meets an unexplained orange line. It is set at PT_ANNOT like every
+    # other direct label on this figure rather than at the old PT_TITLE, because it is a label.
     x_mean = _x(R_TREATED)
-    title(ax, "same mean", x=x_mean, y=_fy(Y_PHRASE_TOP), ha="center", va="top")
+    ax.text(x_mean, _fy(Y_PHRASE_TOP), "same mean", transform=ax.transAxes, fontsize=PT_ANNOT,
+            ha="center", va="top", color=TEXT, fontweight="bold")
     ax.plot([x_mean, x_mean], [_fy(Y_RULE_TOP), _fy(LANE_CY[-1] + DY_MEAN + 0.075)],
             ls=(0, (2.6, 2.0)), lw=LW_HAIR, color=MEAN, zorder=1)
 

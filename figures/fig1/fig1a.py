@@ -68,7 +68,7 @@ from matplotlib.patches import FancyBboxPatch
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig1_style import (FAINT, LW_HAIR, MEAN, POP, PT_ANNOT, PT_EQ,  # noqa: E402
-                        PT_SMALL, SHARED, TEXT, arrow, blank, cells, centroid, title)
+                        PT_SMALL, SHARED, TEXT, arrow, blank, cells, centroid)
 
 # ---------------------------------------------------------------- the one response coordinate
 # Every population in this panel is a Gaussian mixture of (weight, mean, sd) in one response
@@ -486,8 +486,10 @@ def draw_1a(ax):
             ha="center", va="top", color=TEXT, fontweight="bold")
     ax.text(LIB_CX, Y_LIB_HEAD, "candidate\nlibrary", transform=ax.transAxes, fontsize=PT_ANNOT,
             ha="center", va="top", color=TEXT, linespacing=1.15)
-    title(ax, "same library,\ndifferent ranking", x=RANK_RIGHT, y=Y_CLOSE, ha="right", va="top",
-          linespacing=1.15)
+    # "same library, different ranking" used to be set here at PT_TITLE. It was the figure's
+    # loudest claim and the caption already makes it, in the sentence "the two ranked stacks ...
+    # disagree at rank 1", which is checkable against the two drawn stacks in a way a phrase is
+    # not. The crossing leaders between the two columns carry it on the panel.
     return ax
 
 

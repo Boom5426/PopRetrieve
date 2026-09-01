@@ -80,7 +80,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig1_style import (FAINT, LW_HAIR, LW_LINE, MEAN, POP, PT_ANNOT, PT_EQ,  # noqa: E402
-                        PT_SMALL, PT_TICK, SHARED, SUBTLE, TEXT, blank, title)
+                        PT_SMALL, PT_TICK, SHARED, SUBTLE, TEXT, blank)
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 RESULTS = os.path.join(REPO, "results", "exp06_theory_limits")
@@ -273,7 +273,8 @@ def _frame(ax, x0, weights, colour, states):
 def _cartoon(ax, states, beta):
     """The state weighting itself: three temperatures, one weight budget, four tracks."""
     blank(ax)
-    title(ax, "Population scoring is a continuum", y=_u(Y_TITLE), va="top")
+    # No phrase: the caption says "Population scoring is itself a continuum", and the panel
+    # shows the three weightings and the curve between the two analytic endpoints.
 
     for x0, (weights, colour, token, phrase, ha, xa) in zip(GROUP_X0, _regimes(states, beta)):
         _frame(ax, x0, weights, colour, states)
