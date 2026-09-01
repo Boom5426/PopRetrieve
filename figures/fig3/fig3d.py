@@ -126,7 +126,7 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
     page, label theirs; this panel is 1.24 in wide, its axis name already states the direction of
     the subtraction, and the sign of the gain is not what it is about. A reader who reads the
     washes as decoration still reads this panel correctly.
- 9. QUERY_KEY IS DUPLICATED from fig2c and fig2d rather than imported, so that a concurrent edit
+ 9. QUERY_KEY IS DUPLICATED from fig2c rather than imported, so that a concurrent edit
     to a sibling panel cannot change what this panel pairs on. The pairing is guarded instead by
     asserting that it yields exactly 765 queries, that each method's rows are unique on the key,
     and that the gate's verdict is a property of the query rather than of the scorer.

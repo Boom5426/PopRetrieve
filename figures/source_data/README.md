@@ -28,7 +28,7 @@ python figures/sync_source_data.py --check    # exit 1 on drift, write nothing
 | file | panel |
 |---|---|
 | `ed1_dataset_scale.csv` | ED1a (Extended Data, retired) |
-| `ed1_metric_correlation.csv` | **Fig. 2g** (`figures/fig2/fig2g.py`), and the retired ED1c |
+| `ed1_metric_correlation.csv` | **Fig. 2f** (`figures/fig2/fig2f.py`), and the retired ED1c |
 | `ed3_method_ari.csv`, `ed3_predictor_collapse.csv`, `ed3_silhouette.csv` | ED3 |
 | `ed4_enrichment_summary.csv`, `ed4_marker_enrichment.csv`, `ed4_minority_rescue.csv` | ED4 |
 | `fig2c_energy_collapse.csv`, `fig2d_operation_identity.csv`, `fig2e_beta_spectrum.csv` | 2c, 2d, 2e |
@@ -40,14 +40,14 @@ Note that several of these are *fallbacks* inside their panel: the script prefer
 and reads the file here only if that path is absent. Read the panel's docstring before assuming a
 number here is what was plotted.
 
-### `ed1_metric_correlation.csv` has no generator, and Fig. 2g depends on it
+### `ed1_metric_correlation.csv` has no generator, and Fig. 2f depends on it
 
 Recorded here because "PRIMARY" understates it. Nothing under `results/` holds the 54,180
 query-candidate scores this matrix summarises, `exp08_signature_baselines.py` exports none, and
-`sync_source_data.py` does not know the file. So the matrix behind main-text Fig. 2g, and behind
+`sync_source_data.py` does not know the file. So the matrix behind main-text Fig. 2f, and behind
 the manuscript's "identical scores at every query-candidate pair (Spearman rho = 1.000 over 54,180
 scores)", cannot be recomputed from the released code. It was Extended Data until 2026-08-30; as a
-main-text panel it needs a generator. Until one exists, do not present Fig. 2g as reproducible.
+main-text panel it needs a generator. Until one exists, do not present Fig. 2f as reproducible. (It was Fig. 2g until 2026-09-01, when Figure 2 dropped its gate-diagnostic panel and the letters after it moved up one.)
 
 ### Two files stopped being inputs on 2026-08-31
 

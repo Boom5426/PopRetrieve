@@ -106,7 +106,6 @@ from fig2c import draw_2c  # noqa: E402
 from fig2d import draw_2d  # noqa: E402
 from fig2e import draw_2e  # noqa: E402
 from fig2f import draw_2f  # noqa: E402
-from fig2g import draw_2g  # noqa: E402
 
 # ------------------------------------------------------------------------------------------
 # The inch ledger
@@ -120,44 +119,56 @@ PAD_TOP, PAD_BOT = 0.05, 0.08
 LETTER_BLOCK = 0.17
 ROW_GAP = 0.22
 
-# (panel keys in the row, row height in inches). A one-key row is full width.
-# HIERARCHY, MEASURED 2026-08-31. Panel a is a proper hero at 30 per cent of panel area, but below
-# it the page was flat and in one place inverted: panel d, a diagnostic, was the SECOND LARGEST
-# panel in the figure at 14.1 per cent, larger than c, which is one of the figure's two main
-# results, and larger than every robustness panel. Row 3 was also the tallest row on the page and
-# it holds the two diagnostics. d is now the smallest panel at 8.7 per cent, which is what it
-# should be, and the tier averages run 18.6 / 11.3 / 10.8 instead of 20.2 / 12.0 / 11.8.
+# (panel keys in the row, row height in inches). Box widths sum to FIGW per row.
 #
-# The third tier is only just below the second, and that is honest rather than fixable: with seven
-# panels and a 30 per cent hero the remaining six share 70 per cent, so they land between 9 and 13
-# per cent whatever is done. Panel e sits at the top of that band because of its composition strip,
-# which exists because alpha was being described as the wrong quantity until CORRECTIONS.md R45,
-# and shrinking it away would undo that fix.
-ROWS = [(("a",), 1.66),
-        (("b", "c"), 1.58),
-        (("d", "e"), 1.50),
-        (("f", "g"), 1.54)]
+# SIX PANELS IN THREE ROWS OF TWO, 2026-09-01. The figure had seven panels with a alone on a
+# full-width row, and panel a was the reason this changed: at full width its axes was 5.88 x 1.20
+# in, a 4.9:1 strip, and 2.33 in of that (xlim ran to 1.656) was an annotation column sitting
+# entirely beyond the data. Folding that column back in does not fix it, because at full width the
+# only alternative to dead space is a longer track and thinner bars: the longest bar was already
+# 3.00 in of 6.9 pt ink, 44:1.
+#
+# So the hero had to stop being full width, and that forces the rest: a full-width panel at even
+# the shortest row height here is 5.76 in^2 of axes against the narrowed hero's 5.72, so once a is
+# not full width, NOTHING may be, and seven panels cannot tile two per row.
+#
+# The panel that left is the old d, the gate diagnostic. It was not chosen for its size. Figure 3
+# panel d is the same measurement and its caption says so in those words, "The same measurement as
+# Fig. 2d", so the null was already a main-text panel twice over, in the figure where the
+# diagnostic's failure is actually argued (Fig. 3d-f are "three independent ways the diagnostic
+# fails"). The old e, f and g moved up one letter into d, e and f.
+# Row heights, and why rows 1 and 2 grew on 2026-09-01. Fixing panel a's aspect freed 1.01 in of
+# page, and spending it on the two lower rows rather than banking it fixes the same defect one
+# panel over: d's curve was 3.23 x 0.66 in, a 4.9:1 strip, which is the very proportion panel a
+# was rebuilt to escape. Its composition strip is a fixed 0.34 in, so every inch added to the row
+# goes to the curve. Aspects after: a 1.52:1, c 1.31:1, d 2.86:1, e 1.73:1, f 1.78:1.
+ROWS = [(("a", "b"), 2.54),
+        (("c", "d"), 2.05),
+        (("e", "f"), 1.90)]
 
-# Box widths per row, in inches, summing to FIGW. A row of one is full width; a row of two is
-# split evenly unless named here. Row 3 is deliberately uneven: d is two point estimates and does
-# not need half the page, while e carries five alpha points under a composition strip.
-ROW_WIDTHS = {("d", "e"): (2.85, 4.05)}
+# Box widths per row, in inches, summing to FIGW. Row 0 gives a the width its ladder needs and no
+# more; row 1 gives d the width its five alpha points and composition strip need.
+ROW_WIDTHS = {("a", "b"): (3.97, 2.93),
+              ("c", "d"): (2.85, 4.05),
+              ("e", "f"): (3.45, 3.45)}
 
 # (left, right, bottom) pad in inches inside the panel BOX. Top is always zero: the panel phrase
 # is drawn at transAxes y = 1.0 and lives in the LETTER_BLOCK band above the axes. Left pads are
 # sized by what each panel's y furniture actually needs at 6.8 pt, which is why they differ:
 # "coverage-worst" as a y tick label is 0.62 in, a rotated y axis label plus numeric ticks is
 # 0.46 in, and every panel reserves 0.24 in of that for the letter.
-PADS = {"a": (0.94, 0.08, 0.46),
+# a's bottom pad is 0.60, not the 0.46 it had at full width: the x axis label and the dagger key
+# shared one baseline when there were 2.33 in to spread them over, and at 2.95 in they do not fit
+# side by side, so the key gets its own line.
+PADS = {"a": (0.94, 0.08, 0.60),
         "b": (0.72, 0.10, 0.50),
         "c": (0.72, 0.10, 0.50),
-        "d": (0.72, 0.10, 0.52),
-        "e": (0.72, 0.10, 0.50),
-        "f": (0.90, 0.10, 0.48),
-        "g": (0.86, 0.10, 0.50)}
+        "d": (0.72, 0.10, 0.50),
+        "e": (0.90, 0.10, 0.48),
+        "f": (0.86, 0.10, 0.50)}
 
-# e is a curve under a schematic strip that says what its x axis physically means, the same
-# construction figure 1 uses for its two continuum panels.
+# d (the old e) is a curve under a schematic strip that says what its x axis physically means, the
+# same construction figure 1 uses for its two continuum panels.
 E_STRIP_H, E_STRIP_GAP = 0.34, 0.08
 
 
@@ -175,9 +186,9 @@ def _boxes():
             letters[k] = (x0, y)
             left, right, bottom = PADS[k]
             ax_x, ax_w = x0 + left, box_w - left - right
-            if k == "e":
-                rects["e_top"] = (ax_x, y, ax_w, E_STRIP_H)
-                rects["e"] = (ax_x, y + E_STRIP_H + E_STRIP_GAP, ax_w,
+            if k == "d":
+                rects["d_top"] = (ax_x, y, ax_w, E_STRIP_H)
+                rects["d"] = (ax_x, y + E_STRIP_H + E_STRIP_GAP, ax_w,
                               row_h - E_STRIP_H - E_STRIP_GAP - bottom)
             else:
                 rects[k] = (ax_x, y, ax_w, row_h - bottom)
@@ -268,11 +279,11 @@ def build(apply_style, panel_letter):
         return fig.add_axes([x / FIGW, 1.0 - (top + h) / FIGH, w / FIGW, h / FIGH])
 
     for key, fn in (("a", draw_2a), ("b", draw_2b), ("c", draw_2c),
-                    ("d", draw_2d), ("f", draw_2f), ("g", draw_2g)):
+                    ("e", draw_2e), ("f", draw_2f)):
         fn(_ax(key))
-    draw_2e(_ax("e"), _ax("e_top"))
+    draw_2d(_ax("d"), _ax("d_top"))
 
-    for key in "abcdefg":
+    for key in "abcdef":
         _letter(fig, key)
 
     # strip_titles clears rc titles so a panel's standalone preview can label itself without the

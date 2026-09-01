@@ -1,474 +1,343 @@
-"""PopRetrieve Figure 2 panel 2e: the population advantage across the controlled mixing sweep.
+"""PopRetrieve Figure 2 panel 2f: the Class-A gain belongs to the population-level FAMILY.
 
-WHAT THIS PANEL SHOWS
----------------------
-Three advantage curves, one per cell line, over the five-point alpha sweep, drawn under a strip
-that shows what alpha does to the query. Exactly one of the three falls monotonically, by more
-than 0.5 Hit@1; the other two end at or above where they started. The panel does not SAY that,
-because a panel states no conclusion (see fig2_style, where title() used to be); it draws it, and
-it asserts it in code so the emphasis on the falling line cannot outlive the data. The panel says
-nothing about whether the advantage is biologically useful: this is Figure 2, and every criterion
-here is objective-aligned (Class A).
+WHAT THE PANEL SHOWS
+--------------------
+Five different population-level scores, paired query by query against mean cosine, all give a
+positive median regret reduction whose bootstrap 95% interval excludes zero. The claim is
+therefore about the family and not about one lucky distributional metric. It is deliberately no
+larger than that: this is a Class-A comparison, the criteria reward correspondence between
+response populations, which is the information population-level retrieval uses. Whether the
+retrieved neighbours are biologically better is Figure 3's question, not this panel's.
 
-WHAT IT READS
--------------
-results/exp01_sciplex3_controlled/metrics_summary.csv, the file the experiment writes.
-NOT figures/source_data/fig2e_alpha_crossover.csv, a hand-copied mirror with no generator. The
-two agreed exactly on their two shared columns when this panel was rebuilt (15 rows, both
-mean_cosine_hit@1 and global_energy_hit@1 identical), so nothing is lost by dropping the mirror;
-the mirror is simply one more copy that can drift and no longer has a reader.
+The second thing the panel shows, by arrangement rather than by a label, is that the two
+subpopulation-coverage scores sit further right than the three global-distance scores. That
+ordering is asserted at draw time so the layout cannot outlive it. It is an ordering of the five
+POINT ESTIMATES and nothing stronger: the coverage-mean interval still overlaps the sliced-W
+interval, so the panel is not claiming the two sub-families are separated.
 
-Constants that are properties of the experiment rather than of the drawing (n_seeds, the alpha
-grid, the cell lines, the query size n_total, and the two mechanism-of-action classes) are parsed
-out of the declaring source with ast, not typed here:
-    src/experiments/exp01_sciplex3_controlled.py :: run
-    src/retrieval/tasks.py :: ControlledMixtureTask.__init__
-If a default there changes, this panel's labels change with it or the parse fails loudly.
+WHAT CHANGED IN THE 2026-08-31 RESTRAINT AND RESIZE PASS
+--------------------------------------------------------
+The panel used to state its conclusion over itself, "All five intervals clear zero", set in ink
+above the marks. Seven such sentences on one page is seven competing claims, so fig2_style.title()
+was deleted and fig2_assemble._assert_no_titles now refuses to build a figure in which a panel
+draws text above PT_ANNOT. That sentence now opens this panel's caption entry. Nothing on the
+panel replaces it, and nothing about the data, the statistic, the row order or the colours moved:
 
-WHAT ALPHA ACTUALLY IS, AND A CORRECTION TO AN EARLIER VERSION
---------------------------------------------------------------
-ControlledMixtureTask.build takes n_maj = round(alpha * n_total) cells from the first
-mechanism-of-action pool and n_total - n_maj from the second. The two response states are fixed
-and orthogonal at every alpha; what alpha changes is the IMBALANCE between them, from a
-200 / 200 query at alpha = 0.5 to a 360 / 40 query at alpha = 0.9. The minority state becomes
-rare; it does not become similar to the majority state.
+  * The phrase is gone and so is COUNT_WORD, the lookup that spelled its "five" out loud. The
+    inequality the phrase asserted is NOT gone: every lower bound is still required to exceed
+    zero at draw time, which is a stronger guarantee than a sentence, because a sentence can only
+    be read while an assertion can fail the build.
+  * Because the fact is now carried by POSITION alone, it is also asserted as a printed distance.
+    ZERO_CLEAR_PT demands that the nearest lower bound stand at least 4 printed points clear of
+    the zero rule on this panel's resolved x scale; the tightest, energy at +0.037, stands 39.4 pt
+    clear, so the margin is large, and a future file that halved every gain would still print a
+    visible gap rather than five bars leaning on the datum.
+  * The box shrank from 2.45 x 1.38 in to 2.45 x 1.06 in. The y ladder was positioned by a
+    hardcoded ylim tuned against the old height; it is now RESOLVED at draw time from the axes'
+    real printed height, so the note band is reserved in inches, the five rows take what is left,
+    and the same file re-tunes itself if the ledger moves again. Printed row pitch is 10.8 pt
+    against 14.9 pt before, and the sub-family gap 16.2 pt against 22.4 pt.
+  * Two legibility floors were added, because 23 per cent less height is exactly where a ladder
+    stops being readable without anything looking wrong: the row pitch must clear the y label
+    type size with lead to spare, and the gap between the two sub-family blocks must exceed the
+    within-block pitch by enough to still read as a block break.
 
-An earlier version of this panel carried the x label "(higher = more merged)", and its docstring
-said "the two constructed subpopulations overlap more". That is not what the code does, and the
-composition strip above the curves is drawn to the code: two rows whose SEPARATION is constant
-across the sweep and whose COUNTS change. Nothing in the sweep merges. That correction is
-CORRECTIONS.md R45, and it is the reason the strip survives every squeeze on this panel: it is
-what makes alpha's meaning visible. The same wrong wording survives in fig2_assemble's own
-docstring ("merging the two states"); that file belongs to another author and is not edited here.
+WHICH FILE IT READS
+-------------------
+results/exp12_partial_observed_retrieval/per_query_scores.csv, restricted to the rows whose
+recommendation_mode is DART_recommended: 621 of the file's 765 queries, each scored by all nine
+methods, so 5,589 of its 6,885 rows. Paired on (split_type, cell_line, heldout_drug,
+observed_library_fraction, seed), which is the key panel d uses. Panel c adds heldout_MoA to the
+same list; each of the 144 held-out drugs in this file carries exactly one MoA, so that field
+partitions nothing and the two keys pair the same queries. Regret reduction is
+mean_cosine decision_regret minus the population scorer's decision_regret, so positive is better.
 
-THE RESTRAINT PASS AND THE RESIZE (2026-08-31)
-----------------------------------------------
-The page was compacted from 234 mm to 197 mm and the panel hierarchy was corrected, so this panel
-is now WIDER and much SHORTER: curve axes 3.23 x 0.58 in where it was 2.63 x 0.95, with the
-composition strip at 3.23 x 0.34 in where it was 2.63 x 0.42. Nothing was scaled by eye; every
-constant that was tuned against the old height was re-derived against the new one, and the two
-that govern legibility are now asserted against the measured axes rather than trusted.
+This panel previously read figures/source_data/fig2e_classA_robustness.csv, a hand-copied mirror
+with no generator. It now reads the authoritative results file, the same correction panel c
+received. The mirror is still checked against the recomputation by _crosscheck_mirror(), which
+runs in the standalone __main__ block; as of 2026-08-31 the two agree on all five medians and all
+five improved fractions exactly (largest median difference 2.8e-17, fractions identical), so
+nothing was lost by the move.
 
-Gone from the panel, and preserved nowhere on it:
+n = 621 IS NOT A TYPO FOR PANEL c's 765
+---------------------------------------
+Panel c reports the headline on ALL 765 partial-observed queries, precisely so the headline is not
+taken on a gate-selected subset. This panel reports the per-metric sweep on the 621 queries the
+pre-specified gate recommended, which is the subset the sweep was run on. The n is stated on the
+panel so the mismatch reads as a scope note rather than as an error.
 
-  * The conclusion phrase, "K562 collapses; A549 and MCF7 do not". Seven panels each stating a
-    conclusion is seven claims competing for one page; the figure carries evidence and the legend
-    carries the argument. fig2_style.title() is deleted and fig2_assemble._assert_no_titles caps
-    all panel text at PT_ANNOT, so it cannot return at a smaller size. The phrase opens this
-    panel's caption entry, where it costs no space and can be qualified properly.
-  * "one seed = 0.05", the resolution note that rode along with n. It is a reading instruction,
-    not a statistic, and it belongs beside the caption's own sentence about seed granularity. The
-    warning it carried still holds and is restated under judgement call 5 below: the smallest step
-    this panel can draw is one seed changing its mind, so do not read the small steps.
+JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
+-------------------------------------------------------
+1. Rows are ordered by CONCEPTUAL FAMILY, not by value: energy, MMD, sliced-Wasserstein (global
+   distances between two populations), then coverage-mean, coverage-worst (subpopulation
+   coverage). Sorting by value would have made a tidier ladder and would have hidden the fact
+   that the conceptual split and the performance split coincide.
+2. The two sub-families are separated by POSITION (a wider gap between the groups) and by SHAPE
+   (circle vs square), never by hue: all five are population-level scores and take one colour.
+   Neither sub-family is drawn as secondary, which is why both markers are filled rather than one
+   open: filled-versus-open would rank them, and this panel is not ranking them. A hairline group
+   rule was tried and cut: drawn across the panel it competed with the zero datum, and drawn only
+   in the left margin it read as a stray mark. The resize did not bring it back. The block break
+   is a RATIO of two spacings, so losing height costs it nothing as long as the ratio holds, and
+   GROUP_EXTRA_PT now asserts that it holds in printed points rather than in y units.
+3. The sub-families are NOT named on the panel. Their names do not fit beside a 2.45 in plot at
+   the 6.5 pt floor, and the y labels already read "coverage-" for the pair, so the naming is left
+   to the caption rather than shrunk below the floor.
+4. "sliced-W" abbreviates sliced-Wasserstein. Measured at PT_TICK the full word sets 0.79 in
+   wide, against 0.87 in between the panel box edge and the right end of the y labels, so on that
+   number alone it would fit. It does not fit the column it would have to live in: the assemble
+   ledger reserves the leftmost 0.24 in of every panel box for the letter, which leaves 0.63 in,
+   and "coverage-worst" at 0.64 in is already at that limit. The caption spells the word out.
+5. The per-metric improved fractions (0.601, 0.605, 0.618, 0.644, 0.720 as of 2026-08-31) are
+   computed here but not drawn. A second numeric column would fill the empty right half of the
+   three distance rows, which is the emptiness that makes the coverage pair's rightward offset
+   visible. That was true at 1.38 in and it is more true at 1.06 in.
+6. The interval is a seeded percentile bootstrap of the median (fig2_style.boot_median_ci,
+   4000 resamples, seed 0). Its endpoints move in the third decimal between seeds; the fact the
+   panel rests on, that every lower bound is above zero, holds with margin (the tightest is
+   energy at +0.037). What the interval IS stays named ON the panel rather than moving to the
+   caption with the deleted phrase: an interval whose definition is unstated cannot be read at
+   all, so the note is a statistic definition and not a conclusion. Panel d names its interval
+   on-panel for the same reason.
+7. The note keeps the headroom, and the marks pay for it. Two lines at the 6.5 pt floor set
+   0.23 in of type, and with the air above them and the gap below the reserved band is 0.32 in of
+   a 1.06 in box, just under a third of the panel. Moving the note under the x axis was
+   tried and abandoned: the bottom pad in the assemble ledger is spent on the tick labels and the
+   two-line axis name, so a note there would have overhung the panel box and enlarged the page.
+   Splitting the note into the pocket right of the three distance rows was also abandoned: that
+   pocket measures 1.08 in across and the shorter of the two lines measures 1.47 in.
+8. There is no direction hint such as "population better". The x axis name says the quantity is a
+   regret REDUCTION against mean cosine, which fixes the sign, and this panel is the fifth place
+   in the figure a reader meets that convention. A three-word hint would have cost another line
+   of the headroom the note is already competing for.
 
-What the resize forced, item by item:
-
-  * The y view tightened from [-0.05, 1.18] to [-0.04, 1.06]. The old top margin existed to hold
-    the n line inside the axes; with 39 per cent less height that margin costs more than the data
-    it frames, so the n moved below the x axis and the view closed to the data. The consequence is
-    measured, not hoped for: the collapsing line's fall now spans 86 per cent of the drawn view,
-    and LOSS_MIN_SPAN asserts it stays above half, so a later retune cannot shrink the panel's
-    one visible relationship into a wiggle.
-  * The three direct end labels no longer fit at their exact line ends. At alpha = 0.9 the two
-    non-collapsing lines are 0.20 Hit@1 apart, which was 11.1 pt of paper at the old height and
-    is 7.6 pt at the new one, under one 7.2 pt line of type. They are now placed by _spread(), which
-    pushes labels apart to a minimum gap DERIVED from the measured axes height and the type size
-    rather than from a constant, and never reorders them. On the current data it moves exactly one
-    label, A549, by 0.03 Hit@1; MAX_LABEL_NUDGE asserts no label is moved far enough to be read
-    against the wrong line.
-  * The y axis name broke to three short lines and lost the scorer pair (judgement call 8).
-  * The strip's two rows were re-tuned: JITTER_Y from 0.052 to 0.040 of the strip height, and the
-    row centres from 0.60 / 0.16 to 0.52 / 0.14, so that the clouds keep a clear lane between them
-    and clear the counts line above at 0.34 in. The question of whether two rows of dots still
-    read at that height is not left to the eye: the dots are generated before they are plotted
-    and the panel measures THEM, edge of dot to edge of dot, refusing to build if the rows would
-    merge. At the current numbers the lane between them is 3.3 pt and the guard needs 1.0 pt.
-
-JUDGEMENT CALLS A READER COULD DISAGREE WITH
---------------------------------------------
-1. The panel plots the DIFFERENCE, global_energy_hit@1 minus mean_cosine_hit@1, as three curves
-   rather than the two levels as six. The difference is the quantity the manuscript's caption
-   discusses. The cost is real: a reader can no longer see that, for instance, both scorers move
-   at alpha = 0.9 in one line. Those levels are in the source file and belong in the caption.
-2. All three curves are POP blue. The plotted quantity is signed towards the population family,
-   and there is no third family colour, so the three cell lines are separated by marker shape and
-   by a direct end label rather than by hue. The one line that falls additionally carries a
-   heavier stroke and filled markers; the two that do not carry open markers, which groups them
-   as one visual gesture. Emphasis therefore falls on the line that behaves as the naive
-   expectation predicts, which is a defensible choice only because the two open-marker lines are
-   the ones the claim rests on and read as a pair.
-3. The falling line's NAME is set bold, and the other two are not. That is weight, not colour, so
-   it does not touch the rule that marks carry colour and letters do not; it exists so the label
-   matches the stroke weight of the line it names. A reader could call it a residue of the deleted
-   phrase. The counter-argument is that the two open-marker lines would otherwise be labelled in
-   the same weight as the line they are being contrasted with.
-4. Straight segments between the five measured points, no smoothing and no fitted trend. The
-   claim is non-monotonicity; a smooth curve would argue against it.
-5. "Falls" and "does not fall" are the same threshold, COLLAPSE_DROP, applied in both directions.
-   An earlier version tested the falling line for a drop of at least 0.5 Hit@1 but tested the
-   other two only on their endpoints, so a line could give up 0.49 between two alphas and still
-   pass as one that does not fall. The binding case is real: MCF7 gives up 0.45 over the last step
-   and clears the guard by one seed. A reader who calls that step a collapse in progress is not
-   contradicted by the panel; what the drawing shows is that it is smaller than K562's fall and
-   that MCF7 ends above where it started.
-6. No error bars. exp01 writes a second file, per_query_scores.csv, which carries a seed column
-   and from which a per-seed distribution could be rebuilt, but that file is not in results/ in
-   this checkout: metrics_summary.csv is all there is, and it holds only the seed-averaged Hit@1.
-   An interval would therefore have to be invented, so none is drawn. The panel states n instead.
-   Each Hit@1 is a multiple of 1 / n_seeds, so their difference is too, and the smallest step the
-   panel can draw is one seed changing its mind. Do not read the small steps.
-7. The strip draws one dot per CELLS_PER_DOT cells, so the rows are subsampled 10:1. The exact
-   counts are printed at the two ends, so the subsampling cannot be mistaken for the population
-   size.
-8. The y axis name is "Population advantage (Delta Hit@1)" and no longer names the two scorers in
-   the rotated label: at 0.58 in no line of that label may exceed about 13 characters, and four
-   lines of rotated type would eat the whole left pad. The pair is not dropped, because WHICH
-   population scorer matters here (coverage-worst, one of the other three in the same file, goes
-   NEGATIVE for K562 at alpha = 0.9 where this pair is still +0.05). It is printed once, below the
-   x axis, on the same line as n. The names come from fig2_style.SCORERS, so this panel and panel
-   a's ladder cannot drift apart, and the families are checked: "advantage" is the right word only
-   for a population scorer minus a mean-level one, and swapping in a same-family pair fails here
-   rather than flipping the sign silently.
-9. The strip's row labels, the counts, the n line and "no advantage" are set at PT_SMALL, the
-   figure floor. They are provenance and datum labels rather than claims, and the 0.72 in left pad
-   does not hold "HDAC" at PT_ANNOT beside a three-line rotated axis name.
+Palette comes from fig2_style; do NOT re-declare hex values here. Every panel file used to carry
+its own copy, which made figstyle's "one edit here recolours the whole deck" untrue: a recolour
+meant editing 43 files and missing one was silent.
 
 Run standalone: python fig2e.py
 """
 from __future__ import annotations
 
-import ast
 import os
 import sys
 
 import numpy as np
 import pandas as pd
+import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fig2_style import (FAINT, LW_HAIR, POP, PT_ANNOT, PT_SMALL, PT_TICK,  # noqa: E402
-                        REPO, SCORERS, SHARED, SUBTLE, TEXT, bare_axes)
+from fig2_style import (LW_HAIR, MS_DOT, POP, PT_SMALL, PT_TICK, REPO,  # noqa: E402
+                        SUBTLE, TEXT, bare_axes, boot_median_ci, zero_rule)
 
-METRICS = f"{REPO}/results/exp01_sciplex3_controlled/metrics_summary.csv"
-EXP_SRC = f"{REPO}/src/experiments/exp01_sciplex3_controlled.py"
-TASK_SRC = f"{REPO}/src/retrieval/tasks.py"
+# The tether to zero is the same POP hue at half strength, derived from POP rather than declared
+# as a second hex, so a recolour of the family carries it. It has to be visible without competing
+# with the interval: at equal weight the stem plus the interval read as one bar, which is the
+# chart type this panel exists to avoid.
+STEM_TINT = tuple(0.45 * np.array(mcolors.to_rgb(POP)) + 0.55)
 
-# The two scorers whose difference IS the plotted quantity. See judgement call 8: they are named
-# on the panel, below the x axis, and the family of each is checked here.
-POP_SCORER, MEAN_SCORER = "global_energy", "mean_cosine"
-POP_COL, MEAN_COL = f"{POP_SCORER}_hit@1", f"{MEAN_SCORER}_hit@1"
-assert SCORERS[POP_SCORER]["family"] == "pop", f"{POP_SCORER} is not a population-level scorer"
-assert SCORERS[MEAN_SCORER]["family"] == "mean", f"{MEAN_SCORER} is not a mean-level scorer"
+SRC = f"{REPO}/results/exp12_partial_observed_retrieval/per_query_scores.csv"
+MIRROR = f"{REPO}/figures/source_data/fig2e_classA_robustness.csv"
 
-# What "falls" means, ONCE, for both halves of the contrast the marks draw: a loss of this many
-# Hit@1. The heavily stroked line has to fall by at least this much; the two open-marker lines
-# have to stay inside it between EVERY pair of alphas, not merely end where they began. On the
-# current data the binding case is MCF7, which gives up 0.45 over the last step: it clears the
-# guard by 0.05, which is one seed. If a rerun moves that step by two seeds the panel stops
-# building, which is the correct outcome, because the emphasis would stop being true.
-COLLAPSE_DROP = 0.5
+QUERY_KEY = ["split_type", "cell_line", "heldout_drug", "observed_library_fraction", "seed"]
+BASELINE = "mean_cosine"
+MODE = "DART_recommended"
+N_QUERIES = 621                      # the gate-recommended subset; see the module docstring
 
-# The fall has to be VISIBLE, not merely present. It is the one relationship this panel exists to
-# carry, so it must span at least this fraction of the drawn y view; the guard is what stops a
-# later y retune from compressing it into a wiggle. At the current view it spans 0.86.
-LOSS_MIN_SPAN = 0.5
+# (method column, y label, marker). Conceptual order, never value order: the three global
+# distances between two populations first, then the two subpopulation-coverage scores.
+DISTANCES = [("DART_energy", "energy"),
+             ("DART_mmd", "MMD"),
+             ("DART_sliced_wasserstein", "sliced-W")]
+COVERAGE = [("DART_coverage_mean", "coverage-mean"),
+            ("DART_coverage_worst", "coverage-worst")]
 
-# The drawing box, in data coordinates. Both axes share this x range so a reader can drop a
-# vertical line from a composition cloud to the point below it. The left margin holds the strip's
-# two row labels and the right margin holds the three end labels.
-XLO, XHI = 0.40, 0.985
-# Re-cut for the 0.58 in axes: closed onto the data (0.05 to 1.00) with just enough room below
-# zero for the datum spine to read as a line rather than as the frame.
-YLO, YHI = -0.04, 1.06
+# The caption entry that took over the deleted on-panel phrase counts the rows out loud: "five
+# population-level scores ... All five 95% bootstrap intervals exclude zero". COUNT_WORD used to
+# keep that count honest by spelling it from the drawn data. With the phrase gone the count is no
+# longer written anywhere on the panel, so it is pinned here instead: a sixth scorer added below
+# would otherwise leave the caption quietly wrong.
+N_ROWS = 5
 
-# Direct end labels. _spread pushes them apart to LABEL_LEAD line-heights of PT_ANNOT, measured
-# against the axes as drawn; MAX_LABEL_NUDGE is how far a label may travel from its own line
-# before it stops being that line's label.
-LABEL_LEAD = 1.20
-MAX_LABEL_NUDGE = 0.10
+# The y LADDER, in abstract units, top row first. The 1.5 gap between the last distance row and
+# the first coverage row against a pitch of 1.0 within a block is what makes the two sub-families
+# read as two blocks. These are ratios only: the inches they resolve to come from the axes.
+Y_POS = [4.5, 3.5, 2.5, 1.0, 0.0]
+X_MIN, X_MAX = -0.010, 0.155         # a stated scale, round above the largest upper bound
 
-# Composition strip. Two rows at a FIXED separation, because the two response states do not move.
-# Re-tuned for 0.34 in: at the old spread the two clouds would have shared a lane and the counts
-# line would have sat on the upper one. _assert_strip_reads checks both against the drawn size.
-Y_MAJ, Y_MIN = 0.52, 0.14
-JITTER_X, JITTER_Y = 0.011, 0.040     # cloud spread, in x data units and y axes fraction
-MS_STRIP = 1.5                        # one dot, in points
-CELLS_PER_DOT = 10
-DOT_SEED = 7                          # the cloud layout is jitter, so it is seeded and fixed
+# ------------------------------------------------------------------------------ geometry, inches
+# Resolved against the axes' real printed height at draw time, so the ledger in fig2_assemble.py
+# stays the single place the panel box is set. Nothing here is a fraction of the old 1.38 in box.
+NOTE_TOP_IN = 0.02     # air above the two-line note, inside the axes
+NOTE_LINESP = 1.25     # line spacing of the note, in multiples of its 6.5 pt type
+NOTE_GAP_IN = 0.075    # air between the note's last line and the top row's marker. The marker is
+                       # about 0.040 in of ink from its centre, so this leaves about 2.5 printed
+                       # points of white; below that the note reads as a label of the energy row
+BOTTOM_IN = 0.065      # air under the bottom row, so its marker does not sit on the x spine
+RULE_HEAD = 0.5        # how far the zero datum reaches above the top row, in ladder units. It is
+                       # trimmed rather than run to the axes top: at this height the reserved note
+                       # band is 30 per cent of the box, and a full-height rule spent that third
+                       # of its length as the strongest ink on the panel, next to no data at all,
+                       # where it read as a second spine. fig3c trims both ends of its zero rule
+                       # for the same reason; fig3d trims only the foot, because a wash reaches
+                       # its axes top and the rule has data beside it the whole way up
 
-# How far below the axes the provenance line sits, in points, and the lead that has to survive
-# under the x axis name. This was the one clearance on the panel that was chosen rather than
-# measured, and it was the tightest thing on it: at 25.0 pt the two lines cleared each other by
-# 2.4 pt, which is less lead than a paragraph gets, so the axis name and the provenance read as
-# one block. _n_line_lead() now derives the stack the line has to clear from the type ladder and
-# from where the zero spine sits in the view, and the panel refuses to build if the lead goes.
-N_LINE_PT = 26.5
-N_LINE_LEAD = 2.0
+# With no sentence over the panel, what the reader must take from POSITION alone is asserted as a
+# printed distance on the resolved scale, the way panel 3h asserts its three.
+ZERO_CLEAR_PT = 4.0    # printed points demanded between the zero rule and the nearest lower
+                       # bound. The rule is 1.0 pt wide and the interval ends in a round cap on a
+                       # 1.4 pt line, so ink meets ink at 0.5 + 0.7 = 1.2 pt of centre-to-centre.
+                       # The floor sits well above that on purpose: with no text saying the
+                       # intervals clear zero, the panel has to show a gap a reader SEES, not
+                       # merely a gap that measures greater than nothing
+LEAD_PT = 2.0          # printed points of lead demanded between two y labels, on top of their own
+                       # 6.8 pt type size
+GROUP_EXTRA_PT = 3.0   # printed points by which the sub-family gap must exceed the within-block
+                       # row pitch. Under this the block break reads as an uneven row rather than
+                       # as a break, and the arrangement stops carrying judgement call 2
 
-OPEN_MARKERS = ("s", "^")             # for the lines that do not fall; the one that does
-FALL_MARKER = "o"                     # gets a filled marker and a heavier stroke
 
+def paired_gains() -> "dict[str, np.ndarray]":
+    """Per-query regret reduction of each population scorer against mean cosine, on the subset.
 
-def _signature_defaults(path: str, qualname: str) -> dict:
-    """Keyword defaults of a function or method, read out of the declaring source with ast.
-
-    Used instead of importing, because importing exp01 pulls in the data loader. Raises if the
-    target is missing, so a rename upstream fails here rather than silently freezing a label.
+    Returns one array per method, all of length N_QUERIES and all indexed by the same queries.
     """
-    tree = ast.parse(open(path, encoding="utf-8").read())
-    parts = qualname.split(".")
-    node = tree
-    for i, name in enumerate(parts):
-        want = (ast.ClassDef,) if i < len(parts) - 1 else (ast.FunctionDef, ast.AsyncFunctionDef)
-        found = [c for c in ast.iter_child_nodes(node)
-                 if isinstance(c, want) and c.name == name]
-        if not found:
-            raise LookupError(f"{path}: no {'.'.join(parts[:i + 1])} to read defaults from")
-        node = found[0]
-    pos = node.args.args[len(node.args.args) - len(node.args.defaults):]
-    out = {a.arg: ast.literal_eval(d) for a, d in zip(pos, node.args.defaults)}
-    for a, d in zip(node.args.kwonlyargs, node.args.kw_defaults):
-        if d is not None:
-            out[a.arg] = ast.literal_eval(d)
+    d = pd.read_csv(SRC)
+    d = d[d["recommendation_mode"] == MODE]
+    base = d[d["method"] == BASELINE].set_index(QUERY_KEY)["decision_regret"]
+    assert base.index.is_unique, "mean_cosine is not one row per query on the recommended subset"
+
+    out = {}
+    for method, _ in DISTANCES + COVERAGE:
+        s = d[d["method"] == method].set_index(QUERY_KEY)["decision_regret"]
+        assert s.index.is_unique, f"{method} is not one row per query"
+        j = pd.concat([base.rename("base"), s.rename("pop")], axis=1).dropna()
+        assert len(j) == N_QUERIES, f"expected {N_QUERIES} paired queries for {method}, got {len(j)}"
+        out[method] = (j["base"] - j["pop"]).to_numpy()
     return out
 
 
-def _load():
-    """The advantage table, plus the experiment constants the labels quote."""
-    run = _signature_defaults(EXP_SRC, "run")
-    task = _signature_defaults(TASK_SRC, "ControlledMixtureTask.__init__")
-    alphas = tuple(float(a) for a in run["alphas"])
-    lines = tuple(run["lines"])
-    n_seeds, n_total = int(run["n_seeds"]), int(run["n_total"])
+def draw_2e(ax):
+    """Five population-level scores, median regret reduction vs mean cosine with bootstrap CIs."""
+    gains = paired_gains()
+    stats = {m: boot_median_ci(gains[m]) for m, _ in DISTANCES + COVERAGE}
 
-    m = pd.read_csv(METRICS)
-    assert sorted(m["cell_line"].unique()) == sorted(lines), \
-        f"{METRICS} holds {sorted(m['cell_line'].unique())}, run() declares {sorted(lines)}"
-    assert sorted(round(float(a), 6) for a in m["alpha"].unique()) == sorted(alphas), \
-        f"{METRICS} alpha grid does not match the sweep run() declares"
+    # The caption says every interval clears zero, so the panel refuses to draw itself if that
+    # stops being true of the file it just read. The sentence left the panel; this did not.
+    lows = {m: lo for m, (_, lo, _) in stats.items()}
+    assert all(lo > 0 for lo in lows.values()), f"an interval touches zero: {lows}"
+    # The arrangement claims the coverage pair sits further right than the distance trio. If that
+    # ever reverses, the conceptual ordering stops being legible and the panel needs redesigning.
+    assert (min(stats[m][0] for m, _ in COVERAGE)
+            > max(stats[m][0] for m, _ in DISTANCES)), "coverage no longer leads the distances"
+    hi_max = max(hi for _, _, hi in stats.values())
+    assert hi_max < X_MAX, f"an upper bound {hi_max:.4f} runs past the drawn scale {X_MAX}"
 
-    adv = {}
-    for cl in lines:
-        d = m[m["cell_line"] == cl].sort_values("alpha")
-        assert len(d) == len(alphas), f"{cl}: expected one row per alpha in {METRICS}"
-        adv[cl] = (d["alpha"].to_numpy(float), (d[POP_COL] - d[MEAN_COL]).to_numpy(float))
-    return adv, alphas, lines, n_seeds, n_total, str(task["class_a"]), str(task["class_b"])
+    rows = [(m, lab, "o") for m, lab in DISTANCES] + [(m, lab, "s") for m, lab in COVERAGE]
+    # zip() below would silently drop rows past the end of Y_POS, leaving the panel drawing fewer
+    # scorers than it read and fewer than the caption counts.
+    assert len(rows) == len(Y_POS), f"{len(rows)} scorers but {len(Y_POS)} y positions"
+    assert len(rows) == N_ROWS, (
+        f"the panel draws {len(rows)} scorers and the Fig. 2 caption entry for f says {N_ROWS}. "
+        f"Edit the caption in the same commit as this constant, or the figure and its legend "
+        f"disagree on how many scores the claim covers.")
+
+    # ---- resolve the ladder against the printed box ------------------------------------------
+    fig = ax.figure
+    axw = ax.get_position().width * fig.get_figwidth()
+    axh = ax.get_position().height * fig.get_figheight()
+    note_h = 2 * PT_SMALL * NOTE_LINESP / 72.0          # two lines of note, in inches
+    top_in = NOTE_TOP_IN + note_h + NOTE_GAP_IN         # axes top down to the top row's centre
+    rows_in = axh - top_in - BOTTOM_IN                  # what is left for the five rows
+    span = max(Y_POS) - min(Y_POS)
+    assert rows_in > 0.30, (
+        f"panel f is {axh:.2f} in tall and the note band plus the pads take {axh - rows_in:.2f} "
+        f"in of it, leaving {rows_in:.2f} in for five rows. Shorten the note or take the height "
+        f"back from the ledger; do not shrink the type.")
+    unit_in = rows_in / span                            # inches per unit of the Y_POS ladder
+
+    pitch_pt = 72.0 * unit_in * min(abs(a - b) for a, b in zip(Y_POS, Y_POS[1:]))
+    group_pt = 72.0 * unit_in * max(abs(a - b) for a, b in zip(Y_POS, Y_POS[1:]))
+    assert pitch_pt >= PT_TICK + LEAD_PT, (
+        f"the rows print {pitch_pt:.1f} pt apart and each y label is {PT_TICK} pt tall, which "
+        f"leaves under the {LEAD_PT:.1f} pt of lead five stacked labels need. The panel is too "
+        f"short for five rows at this type size.")
+    assert group_pt >= pitch_pt + GROUP_EXTRA_PT, (
+        f"the sub-family gap prints {group_pt:.1f} pt against a row pitch of {pitch_pt:.1f} pt, "
+        f"short of the {GROUP_EXTRA_PT:.1f} pt that keeps it reading as a block break rather "
+        f"than as an uneven row.")
+
+    scale_x = axw / (X_MAX - X_MIN)                     # inches per unit of regret reduction
+    clear_pt = 72.0 * scale_x * min(lows.values())
+    assert clear_pt >= ZERO_CLEAR_PT, (
+        f"the nearest lower bound stands {clear_pt:.1f} printed pt from the zero rule, under the "
+        f"{ZERO_CLEAR_PT:.1f} pt floor. No text on this panel says the intervals clear zero, so "
+        f"the gap has to be visible; widen the panel or narrow the drawn scale.")
+
+    # Zero first and darkest: it is the datum every point is read against, not a gridline. It
+    # runs from the x spine, where the "0" tick names it, to just over the top row, and no
+    # further: an axvline's y data is in AXES fraction, so the reach is resolved from the limits
+    # computed above rather than from the data.
+    y_lo = min(Y_POS) - BOTTOM_IN / unit_in
+    y_hi = max(Y_POS) + top_in / unit_in
+    zero_rule(ax, 0.0, color=TEXT, lw=1.0, zorder=2).set_ydata(
+        [0.0, (max(Y_POS) + RULE_HEAD - y_lo) / (y_hi - y_lo)])
+
+    for y, (method, _, marker) in zip(Y_POS, rows):
+        med, lo, hi = stats[method]
+        # thin stem from zero to the median, thicker interval on top of it
+        ax.plot([0.0, med], [y, y], color=STEM_TINT, lw=LW_HAIR, solid_capstyle="butt", zorder=3)
+        ax.plot([lo, hi], [y, y], color=POP, lw=1.4, solid_capstyle="round", zorder=4)
+        ax.scatter([med], [y], s=MS_DOT, marker=marker, color=POP, linewidths=0.6,
+                   edgecolors="white", zorder=5)
+
+    bare_axes(ax, keep=("bottom",))
+    ax.set_yticks(Y_POS)
+    ax.set_yticklabels([lab for _, lab, _ in rows], fontsize=PT_TICK, color=TEXT)
+    ax.tick_params(axis="y", length=0, pad=2.0)
+    ax.set_ylim(y_lo, y_hi)
+    ax.set_xlim(X_MIN, X_MAX)
+    ax.set_xticks([0.0, 0.05, 0.10, 0.15])
+    ax.set_xticklabels(["0", "0.05", "0.10", "0.15"])
+    ax.set_xlabel("median regret reduction\nvs mean cosine, paired by query", linespacing=1.2)
+
+    # Scope note in the band reserved for it above the top row, where it crosses no mark. It says
+    # n and it says WHICH n, because panel c's 765 is a different and deliberate scope, and it
+    # says what the interval is, because an unnamed interval cannot be read.
+    n_drawn = len(next(iter(gains.values())))
+    ax.text(1.0, 1.0 - NOTE_TOP_IN / axh,
+            f"n = {n_drawn} gate-recommended queries\ninterval: bootstrap 95% CI of the median",
+            transform=ax.transAxes, ha="right", va="top", fontsize=PT_SMALL, color=SUBTLE,
+            linespacing=NOTE_LINESP)
+    return {"stats": stats, "pitch_pt": pitch_pt, "group_pt": group_pt, "zero_clear_pt": clear_pt}
 
 
-def _axes_height_pt(ax) -> float:
-    """The drawn height of an axes in points, from the figure ledger rather than a renderer.
-
-    Every legibility constant below is derived from this rather than tuned against a remembered
-    canvas, which is what made the previous version of this panel wrong the moment the page was
-    compacted from 234 to 197 mm.
-    """
-    return float(ax.get_position().height * ax.figure.get_figheight() * 72.0)
-
-
-def _spread(ys, min_gap):
-    """Push labels apart to ``min_gap`` in data units, lowest first, without reordering them."""
-    out = list(map(float, ys))
-    rank = sorted(range(len(out)), key=lambda i: out[i])
-    for lo, hi in zip(rank[:-1], rank[1:]):
-        if out[hi] - out[lo] < min_gap:
-            out[hi] = out[lo] + min_gap
-    return out
-
-
-def _n_line_lead(ax) -> float:
-    """Points of white between the x axis name and the provenance line, from the type ladder.
-
-    Matplotlib hangs the x tick labels off the BOTTOM SPINE, and this panel moves that spine onto
-    the zero datum, so the whole stack under the axes rides on where zero sits in the view. Every
-    term below is an rcParam or a size from fig2_style; none of it is a remembered canvas. The
-    1.1 factor is the ascender-to-descender ink of one line of this face, which is what has to
-    clear, rather than the nominal size.
-    """
-    zero_pt = (0.0 - YLO) / (YHI - YLO) * _axes_height_pt(ax)   # zero, above the axes bottom
-    depth = plt.rcParams["xtick.major.size"] + plt.rcParams["xtick.major.pad"] - zero_pt
-    depth += PT_TICK + plt.rcParams["axes.labelpad"] + PT_ANNOT * 1.1
-    return N_LINE_PT - depth
-
-
-def _assert_strip_reads(ax_top, clouds):
-    """Refuse to draw a composition strip whose two response states no longer read as two rows.
-
-    The strip is the panel's answer to CORRECTIONS.md R45, so it survives the shrink; what it may
-    not do is survive it illegibly. The clouds are SEEDED jitter, so their extent is not a
-    property of chance and does not have to be approximated: they are generated before this runs
-    and this measures them, edge of dot to edge of dot, against the strip AS DRAWN. An earlier
-    version guarded a nominal 2 sigma instead, which over-states the lane by 0.6 pt at this size,
-    because 200 draws across five clouds reach well past 2 sigma.
-    """
-    h_pt = _axes_height_pt(ax_top)
-    r = MS_STRIP / 2.0
-    lower = [ys for y0, _, ys in clouds if y0 == Y_MIN]
-    upper = [ys for y0, _, ys in clouds if y0 == Y_MAJ]
-    assert lower and upper, "the strip must draw both response states"
-    top_of_min = max(float(ys.max()) for ys in lower) * h_pt + r
-    bot_of_maj = min(float(ys.min()) for ys in upper) * h_pt - r
-    lane = bot_of_maj - top_of_min
-    assert lane >= 1.0, (
-        f"at {h_pt / 72:.2f} in the two response-state rows leave {lane:.1f} pt between them; "
-        "two rows of dots that touch are one row, and a strip that cannot be read should be "
-        "reported rather than drawn")
-    assert min(float(ys.min()) for ys in lower) * h_pt - r >= 0.0, (
-        "the minority row is clipped by the bottom of the strip")
-    assert max(float(ys.max()) for ys in upper) * h_pt + r <= h_pt - PT_SMALL - 1.0, (
-        "the counts line would sit on the majority row")
-
-
-def draw_2e(ax, ax_top):
-    """Population advantage vs alpha, over a strip showing what alpha does to the query."""
-    adv, alphas, lines, n_seeds, n_total, class_a, class_b = _load()
-
-    # ---- what the marks assert, asserted before they are drawn ------------------------------
-    eps = 1e-9
-    falling = [cl for cl in lines
-               if all(adv[cl][1][i] >= adv[cl][1][i + 1] - eps
-                      for i in range(len(alphas) - 1))]
-    assert len(falling) == 1, (
-        "the panel gives ONE line the heavy stroke that marks it as the one that falls; the data "
-        f"now has {len(falling)} monotonically non-increasing: {falling}")
-    fall = falling[0]
-    drop = float(adv[fall][1][0] - adv[fall][1][-1])
-    assert drop >= COLLAPSE_DROP, (
-        f"{fall} falls by only {drop:.2f} Hit@1, which is a drift and not a collapse; "
-        "the emphasis this panel puts on that line no longer holds")
-    holds = [cl for cl in lines if cl != fall]
-    for cl in holds:
-        y = adv[cl][1]
-        assert y[-1] >= y[0] - eps, (
-            f"{cl} ends at {y[-1]:.2f} below its alpha = {alphas[0]} value {y[0]:.2f}; "
-            "the panel draws it as a line that does not fall")
-        worst = max(float(y[i] - y[j]) for i in range(len(y)) for j in range(i, len(y)))
-        assert worst < COLLAPSE_DROP, (
-            f"{cl} gives up {worst:.2f} Hit@1 between two alphas, which is the size of fall "
-            f"this same panel marks as a collapse in {fall}; the drawing would be using one "
-            "stroke weight to mean two different things")
-
-    # The view has to contain the data and the datum, and the fall has to be big enough on paper
-    # to be the thing a reader sees first. Both are properties of the RESIZE, not of the data.
-    flat = np.concatenate([adv[cl][1] for cl in lines])
-    assert YLO < flat.min() and flat.max() < YHI, (
-        f"the [{YLO}, {YHI}] view clips the data, which runs {flat.min():.2f} to {flat.max():.2f}")
-    assert YLO <= 0.0 <= YHI, "the zero datum the y axis is read against is outside the view"
-    assert drop / (YHI - YLO) >= LOSS_MIN_SPAN, (
-        f"{fall}'s fall spans only {drop / (YHI - YLO):.0%} of the drawn view; the panel's one "
-        "visible relationship has been compressed into a wiggle by the y range")
-
-    # ---- the composition strip: what alpha does to the query -------------------------------
-    # Two response states at a CONSTANT separation, with the minority state thinning out. The
-    # guides make the constancy legible: the rows do not move, only the clouds on them.
-    lab_x = alphas[0] - 2.6 * JITTER_X
-    for y0 in (Y_MAJ, Y_MIN):
-        ax_top.plot([lab_x + 0.008, XHI], [y0, y0], color=FAINT, lw=LW_HAIR, zorder=1,
-                    solid_capstyle="butt")
-    rng = np.random.default_rng(DOT_SEED)
-    minority, clouds = [], []
-    for a in alphas:
-        n_maj = int(round(a * n_total))
-        n_min = n_total - n_maj
-        assert n_maj + n_min == n_total, f"alpha = {a}: the strip must draw all {n_total} cells"
-        minority.append(n_min)
-        for y0, n in ((Y_MAJ, n_maj), (Y_MIN, n_min)):
-            k = int(round(n / CELLS_PER_DOT))
-            clouds.append((y0, a + rng.normal(0.0, JITTER_X, k),
-                           y0 + rng.normal(0.0, JITTER_Y, k)))
-        if a in (alphas[0], alphas[-1]):
-            ax_top.text(a, 1.0, f"{n_maj} : {n_min}" + (" cells" if a == alphas[0] else ""),
-                        ha="center", va="top", fontsize=PT_SMALL, color=SUBTLE)
-    assert all(b < c for b, c in zip(minority[1:], minority[:-1])), (
-        f"the strip draws the minority state thinning out; it now runs {minority}")
-    # Measured before a single dot is committed to the canvas, so an unreadable strip is reported
-    # rather than drawn. The draw order below is unchanged, so the picture is unchanged.
-    _assert_strip_reads(ax_top, clouds)
-    for y0, xs, ys in clouds:
-        ax_top.plot(xs, ys, ls="none", marker="o", ms=MS_STRIP, mfc=SHARED, mec="none",
-                    alpha=0.85, zorder=3)
-    for y0, name in ((Y_MAJ, class_a), (Y_MIN, class_b)):
-        ax_top.text(lab_x, y0, name, ha="right", va="center", fontsize=PT_SMALL, color=TEXT)
-    ax_top.set_xlim(XLO, XHI)
-    ax_top.set_ylim(0.0, 1.0)
-    ax_top.set_xticks([])
-    ax_top.set_yticks([])
-    for side in ("top", "right", "left", "bottom"):
-        ax_top.spines[side].set_visible(False)
-
-    # ---- the curves ------------------------------------------------------------------------
-    # One hue for all three: the plotted quantity belongs to the population family. The cell
-    # lines are told apart by marker shape and by a direct end label, never by hue alone.
-    order = [fall] + holds
-    for i, cl in enumerate(order):
-        x, y = adv[cl]
-        if cl == fall:
-            ax.plot(x, y, "-", marker=FALL_MARKER, color=POP, ms=3.0, lw=1.5, mfc=POP,
-                    mec=POP, zorder=6, clip_on=False)
-        else:
-            ax.plot(x, y, "-", marker=OPEN_MARKERS[i - 1], color=POP, ms=2.8, lw=0.9,
-                    mfc="white", mec=POP, mew=0.9, zorder=5, clip_on=False)
-
-    # Direct labels, placed against the axes AS DRAWN rather than at a remembered height. At
-    # 0.58 in the two non-falling lines end 7.6 pt apart, which is under one line of PT_ANNOT.
-    min_gap = LABEL_LEAD * PT_ANNOT / _axes_height_pt(ax) * (YHI - YLO)
-    ends = [float(adv[cl][1][-1]) for cl in order]
-    placed = _spread(ends, min_gap)
-    for cl, y_end, y_lab in zip(order, ends, placed):
-        assert abs(y_lab - y_end) <= MAX_LABEL_NUDGE, (
-            f"{cl}'s label had to move {abs(y_lab - y_end):.2f} Hit@1 to clear its neighbours, "
-            "which is far enough that a reader could read it against the wrong line")
-        assert YLO <= y_lab <= YHI, f"{cl}'s label was pushed outside the drawn view"
-        ax.text(adv[cl][0][-1] + 0.014, y_lab, cl, ha="left", va="center", fontsize=PT_ANNOT,
-                color=TEXT, fontweight="bold" if cl == fall else "normal")
-
-    # The zero datum is the bottom spine, moved to y = 0 below; fig2_style.zero_rule is
-    # deliberately NOT also called, because two lines on the same datum is one line too many.
-    ax.text(0.012, 0.02, "no advantage", transform=ax.get_yaxis_transform(), ha="left",
-            va="bottom", fontsize=PT_SMALL, color=SUBTLE)
-
-    ax.set_xlim(XLO, XHI)
-    ax.set_ylim(YLO, YHI)
-    ax.set_xticks(list(alphas))
-    ax.set_xticklabels([f"{a:g}" for a in alphas])
-    ax.set_yticks([0.0, 0.5, 1.0])
-    ax.set_yticklabels(["0", "0.5", "1.0"])
-    ax.set_xlabel(f"$\\alpha$, fraction of query cells in the {class_a} state")
-    # Three short lines because no line of a rotated label may exceed the 0.58 in axes; the
-    # scorer pair it used to carry is printed below the x axis instead. See judgement call 8.
-    ax.set_ylabel("Population\nadvantage\n($\\Delta$ Hit@1)", linespacing=1.15)
-    bare_axes(ax)
-    ax.spines["left"].set_bounds(0.0, 1.0)
-    # The bottom spine IS the zero datum, so it sits at y = 0 and takes the darker SUBTLE grey
-    # that fig2_style reserves for a value line rather than the hairline grey of a frame.
-    ax.spines["bottom"].set_position(("data", 0.0))
-    ax.spines["bottom"].set_color(SUBTLE)
-    ax.spines["bottom"].set_linewidth(0.8)
-
-    # What the difference is, and how many seeds each point averages, on one line under the axis
-    # names. The offset is in points below the axes, converted through the drawn height, so it
-    # does not have to be retuned again when the box changes; the lead it leaves under the x axis
-    # name is derived rather than trusted, because that was the tightest clearance on the panel.
-    lead = _n_line_lead(ax)
-    assert lead >= N_LINE_LEAD, (
-        f"the provenance line would clear the x axis name by {lead:.1f} pt, under the "
-        f"{N_LINE_LEAD} pt lead that keeps two lines saying different things from reading as one "
-        "block; raise N_LINE_PT, or move the line into the caption")
-    ax.text(1.0, -(N_LINE_PT / _axes_height_pt(ax)),
-            f"{SCORERS[POP_SCORER]['label']} $-$ {SCORERS[MEAN_SCORER]['label']}, "
-            f"n = {n_seeds} seeds per point",
-            transform=ax.transAxes, ha="right", va="top", fontsize=PT_SMALL, color=SUBTLE)
-
+def _crosscheck_mirror():
+    """Compare the recomputation against the hand-copied source_data mirror. Reports, not silent."""
+    gains = paired_gains()
+    mir = pd.read_csv(MIRROR).set_index("method")
+    worst_med, worst_frac = 0.0, 0.0
+    for method, _ in DISTANCES + COVERAGE:
+        g = gains[method]
+        worst_med = max(worst_med, abs(float(np.median(g)) - float(mir.loc[method, "median_regret_reduction"])))
+        worst_frac = max(worst_frac, abs(float((g > 0).mean()) - float(mir.loc[method, "frac_improved"])))
+        assert int(mir.loc[method, "n"]) == len(g), f"mirror n disagrees for {method}"
+    print(f"mirror crosscheck: max |median| diff {worst_med:.2e}, max |frac| diff {worst_frac:.2e}")
+    assert worst_med < 1e-9 and worst_frac < 1e-9, "the source_data mirror has drifted from results/"
 
 
 if __name__ == "__main__":
-    # Mirrors fig2_assemble's ledger for this panel: a 4.05 x 1.67 in box, 0.17 in of letter
-    # band, a 0.34 in strip, a 0.08 in gap, a 0.58 in curve axes and a 0.50 in bottom pad.
-    BW, BH, LEFT, RIGHT = 4.05, 1.67, 0.72, 0.10
-    BAND, STRIP, GAP, CURVE = 0.17, 0.34, 0.08, 0.58
-    fig = plt.figure(figsize=(BW, BH))
-    w = (BW - LEFT - RIGHT) / BW
-    a_top = fig.add_axes([LEFT / BW, 1.0 - (BAND + STRIP) / BH, w, STRIP / BH])
-    a_cur = fig.add_axes([LEFT / BW, 1.0 - (BAND + STRIP + GAP + CURVE) / BH, w, CURVE / BH])
-    draw_2e(a_cur, a_top)
-    fig.savefig(os.path.join(os.path.dirname(__file__), "2e.png"), dpi=300)
-    print("wrote 2e.png")
+    # The standalone canvas reproduces the assemble ledger's panel f box, 2.45 x 1.06 in of axes
+    # inside a 3.45 in half-row with a 0.90 in left pad and a 0.48 in bottom pad, so that what is
+    # previewed here is what prints. fig2_assemble.py remains the authority on those numbers.
+    _crosscheck_mirror()
+    FIGW_, FIGH_, LEFT_, BOTTOM_ = 3.45, 1.54, 0.90, 0.48
+    fig = plt.figure(figsize=(FIGW_, FIGH_))
+    ax = fig.add_axes([LEFT_ / FIGW_, BOTTOM_ / FIGH_,
+                       (FIGW_ - LEFT_ - 0.10) / FIGW_, (FIGH_ - BOTTOM_) / FIGH_])
+    info = draw_2e(ax)
+    print(f"row pitch {info['pitch_pt']:.1f} pt, sub-family gap {info['group_pt']:.1f} pt, "
+          f"nearest lower bound {info['zero_clear_pt']:.1f} pt clear of zero")
+    fig.savefig(os.path.join(os.path.dirname(__file__), "2f.png"), dpi=200)
+    print("wrote 2f.png")

@@ -62,8 +62,8 @@ DERIVED: dict[str, str] = {
     # of the parent is checked, the content is not rewritten) rather than becoming MIRRORs: a
     # mirror is a byte-for-byte copy, and neither of these is one. They are no longer read by any
     # figure; each panel asserts its agreement with the retired view at draw time.
-    "fig2e_alpha_crossover.csv":      "results/exp01_sciplex3_controlled/metrics_summary.csv",
-    "fig2f_classA_robustness.csv":    "results/exp12_partial_observed_retrieval/per_query_scores.csv",
+    "fig2d_alpha_crossover.csv":      "results/exp01_sciplex3_controlled/metrics_summary.csv",
+    "fig2e_classA_robustness.csv":    "results/exp12_partial_observed_retrieval/per_query_scores.csv",
     "fig3ef_gate_divergence.csv":     "results/exp16_gate_diagnosis/_merged_query_divergence.csv",
     "fig5b_predictor_gaps.csv":       "results/exp09_predict_then_rank/summary.csv",
     "fig5cd_structure_diagnostics.csv": "results/exp09_structure_diagnostics/exp09_structure_diagnostics_summary.csv",

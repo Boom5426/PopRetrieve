@@ -2034,3 +2034,76 @@ A measurement note worth keeping, because it nearly caused a wrong edit:
 `PathCollection.get_window_extent` does not report the extent of the drawn points, so a first pass
 read panel c as having 0.40 in of dead space above its content and 0.02 in below. Measured from the
 collection offsets instead, the real figures are 0.06 and 0.02, and panel c needed no change at all.
+
+---
+
+## R58. Figure 2 panel a spent 40 per cent of its axes on an annotation column, and two other panels had furniture hung on axes fractions
+
+The author's report was that panel a was too wide. It was, and the cause was measurable: its axes
+was 5.88 x 1.20 in, a **4.9:1 strip** whose longest bar was 3.00 in of 6.9 pt ink, **44:1**, and
+`xlim` ran to 1.656 so that **2.33 in of the axes, 40 per cent of it, sat beyond the data range**,
+holding the eight value labels, the `+0.448` headline block and the provenance key.
+
+That width was spent rather than wasted, which is why the obvious repair does not work: folding the
+annotation column back in only lengthens the track, and at full width the alternative to dead space
+is longer, thinner bars. The panel could not be fixed inside its own box.
+
+**That forces the layout.** A full-width panel at even the shortest row height in this figure is
+5.76 in^2 of axes against the narrowed hero's 5.72, so once panel a stops being full width, nothing
+else may be full width either, and seven panels cannot tile two per row. A panel had to go.
+
+**The panel that went is the old d, and it was a duplicate.** Figure 3 panel d is the same
+measurement, and Figure 3's caption said so in those words: "The same measurement as
+Fig.~\ref{fig:2}d". The gate null was a main-text panel twice over, and Figure 3 is where the
+diagnostic's failure is argued (its d--f are "three independent ways the diagnostic fails"). Its two
+load-bearing caveats moved into Figure 3's caption entry with it: that queries within a cell line
+share a candidate library, which makes the test anticonservative and therefore strengthens a null;
+and that pooling the 11 mean-sufficient queries gives the same verdict. The old e, f and g moved up
+one letter to d, e and f, and the two source-data mirrors named after them were renamed with them.
+
+Panel a is now 2.95 x 1.94 in, **1.52:1**, with a row pitch of 15.8 pt against the old 9.8 and bars
+0.101 in thick against 0.068. What it costs, stated plainly: the longest bar is 1.47 in rather than
+3.00, and the horizontal distance between the population floor (coverage-worst, 0.589) and the mean
+ceiling (PCA-mean, 0.518) is 0.124 in rather than 0.253. The ratio the panel argues from is
+unchanged; the absolute separation is 3.2 mm rather than 6.4 mm.
+
+The value column stays OUTSIDE the track. Folding it inside the wash's Hit@1 = 1 ceiling would buy a
+2.10 in track instead of 1.75, i.e. 0.6 mm more separation, but `figstyle`'s presentation layer
+states that value labels sit right-aligned past the end of the track and every other value column in
+the deck does. 0.6 mm is not worth being the one panel that reads differently.
+
+### Two more panels had the defect fig2a lost on 2026-08-31
+
+Freeing 1.01 in of page and spending it on the two lower rows exposed the same class of bug twice,
+and it is invisible until a box height moves:
+
+- **`fig2b`** dropped its group separator to `-0.40` and its n line to `-0.275` on the xaxis
+  transform, which is a fraction of the axes HEIGHT. When the panel went from a 1.08 in axes to
+  2.04 in, the separator fell 0.816 in against a 0.50 in pad and hung **0.316 in into the row
+  below**.
+- **`fig2c`** set its two x-label lines at `-0.19` and `-0.30`. At 1.55 in the second line fell
+  0.465 in and its descenders left the panel.
+
+Both now measure in inches and convert at draw time, preserving the printed drops they had at their
+old heights. **No gate could have caught either**: `_assert_floor` and `_assert_no_titles` read font
+sizes, not positions, and `check_overlaps.py` reads text against text, not text against its box.
+They were found by a per-panel harness that measures ink against the panel's own rect, which is the
+check this deck does not have as a build gate.
+
+Spending the freed inch also fixed the original complaint one panel over: **d's curve was
+3.23 x 0.66 in, 4.9:1**, the very proportion panel a was rebuilt to escape. It is now 2.86:1.
+
+The figure went from 176 x 197 mm with seven panels to 176 x 193 mm with six.
+
+### One thing found on the way that is not a layout matter
+
+Panel a groups eight scorers into two families and washes them, on the strength of the weakest
+population scorer (0.589) sitting above the strongest mean one (0.518). **That is a property of the
+macro-mean and holds in only 3 of the 7 individual task settings**; in the other four,
+coverage-worst is beaten by PCA-mean or CMap WTCS, and on Frangieh mean cosine is the best of all
+eight. Nothing on the page over-claims: the x axis label says "macro-average across 7 task
+settings", the caption quotes the two macro-means it is comparing, and panel b carries the Frangieh
+reversal explicitly. But `fig2a.py`'s docstring called the separation "the whole design" without
+recording that it is a mean-level property, and it now does. The practical consequence is recorded
+in the panel README: do not add per-cell dispersion to this panel, because the dots would visibly
+break the grouping in four of seven columns.

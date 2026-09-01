@@ -1,119 +1,135 @@
-"""PopRetrieve Figure 2 panel 2f: the Class-A gain belongs to the population-level FAMILY.
+"""PopRetrieve Figure 2 panel 2g: the eight scorers are two families, and the families do not talk.
 
 WHAT THE PANEL SHOWS
 --------------------
-Five different population-level scores, paired query by query against mean cosine, all give a
-positive median regret reduction whose bootstrap 95% interval excludes zero. The claim is
-therefore about the family and not about one lucky distributional metric. It is deliberately no
-larger than that: this is a Class-A comparison, the criteria reward correspondence between
-response populations, which is the information population-level retrieval uses. Whether the
-retrieved neighbours are biologically better is Figure 3's question, not this panel's.
+One thing, about SCORING RULES and nothing else: the six scorers this export covers split into two
+blocks whose members agree strongly inside a block and essentially not at all across blocks. Every
+within-family Spearman rho is at least 0.72; the largest cross-family |rho| is 0.076 over nine
+pairs. That is why Figure 2 draws two colour families instead of eight separate methods.
 
-The second thing the panel shows, by arrangement rather than by a label, is that the two
-subpopulation-coverage scores sit further right than the three global-distance scores. That
-ordering is asserted at draw time so the layout cannot outlive it. It is an ordering of the five
-POINT ESTIMATES and nothing stronger: the coverage-mean interval still overlaps the sliced-W
-interval, so the panel is not claiming the two sub-families are separated.
+Two cells carry the panel and are ringed:
+  * mean cosine / CMap cosine = 1.00. It is the largest off-diagonal value in the matrix and it
+    equals a diagonal cell to within 1e-10, so it is drawn exactly as dark as a self-correlation.
+    This is why panel a treats the two as ONE baseline rather than two.
+  * coverage-mean / coverage-worst = 0.97, the closest pair inside the population family.
+Both are asserted to be the largest off-diagonal value of their own block at draw time, so the
+rings cannot end up on the wrong cells if the export is regenerated.
+
+WHAT THE PANEL DOES NOT CLAIM, AND THIS MATTERS
+-----------------------------------------------
+This is a similarity between SCORING RULES. Two rules can agree perfectly and both be wrong. The
+panel is therefore NOT independent evidence that population-level retrieval works; that evidence
+is panels a to f, and whether the retrieved neighbours are biologically better is Figure 3. The
+first note under the matrix says "scoring rules", never "retrieval", for that reason. Nothing here
+reaches past response matching.
 
 WHAT CHANGED IN THE 2026-08-31 RESTRAINT AND RESIZE PASS
 --------------------------------------------------------
-The panel used to state its conclusion over itself, "All five intervals clear zero", set in ink
-above the marks. Seven such sentences on one page is seven competing claims, so fig2_style.title()
-was deleted and fig2_assemble._assert_no_titles now refuses to build a figure in which a panel
-draws text above PT_ANNOT. That sentence now opens this panel's caption entry. Nothing on the
-panel replaces it, and nothing about the data, the statistic, the row order or the colours moved:
+The panel used to state its conclusion over itself, "Score families agree within, not across", set
+in ink above the matrix. Seven such sentences on one page is seven competing claims, so
+fig2_style.title() was deleted and fig2_assemble._assert_no_titles now refuses to build a figure in
+which a panel draws text above PT_ANNOT. That phrase is now the opening of this panel's caption
+entry, where it can be qualified; nothing on the panel replaces it. The block structure is the only
+thing left to say it, which is the point: two saturated blocks on the diagonal, two blocks that are
+white because their values are near zero, and a white gutter between them.
 
-  * The phrase is gone and so is COUNT_WORD, the lookup that spelled its "five" out loud. The
-    inequality the phrase asserted is NOT gone: every lower bound is still required to exceed
-    zero at draw time, which is a stronger guarantee than a sentence, because a sentence can only
-    be read while an assertion can fail the build.
-  * Because the fact is now carried by POSITION alone, it is also asserted as a printed distance.
-    ZERO_CLEAR_PT demands that the nearest lower bound stand at least 4 printed points clear of
-    the zero rule on this panel's resolved x scale; the tightest, energy at +0.037, stands 39.4 pt
-    clear, so the margin is large, and a future file that halved every gain would still print a
-    visible gap rather than five bars leaning on the datum.
-  * The box shrank from 2.45 x 1.38 in to 2.45 x 1.06 in. The y ladder was positioned by a
-    hardcoded ylim tuned against the old height; it is now RESOLVED at draw time from the axes'
-    real printed height, so the note band is reserved in inches, the five rows take what is left,
-    and the same file re-tunes itself if the ledger moves again. Printed row pitch is 10.8 pt
-    against 14.9 pt before, and the sub-family gap 16.2 pt against 22.4 pt.
-  * Two legibility floors were added, because 23 per cent less height is exactly where a ladder
-    stops being readable without anything looking wrong: the row pitch must clear the y label
-    type size with lead to spare, and the gap between the two sub-family blocks must exceed the
-    within-block pitch by enough to still read as a block break.
+The box also changed. The page was compacted from 234 mm to 197 mm and the panel hierarchy was
+corrected, so the axes went from 2.49 x 1.36 in to 2.49 x 1.04 in: same width, 24 per cent shorter.
+Four consequences, none of them touching the file read, the statistic, any asserted relationship or
+the colour semantics:
+
+  * CELL HEIGHT IS NO LONGER SET BY A CONSTANT. It used to be whatever was left after a fixed
+    MATRIX_BOTTOM = 0.240 in reserve, a number tuned against the old height. It is now DERIVED:
+    the furniture under the matrix is costed in printed points (two lines of column label, three
+    note lines, the gaps between them, and BOX_SLACK of white above the box floor) and the matrix
+    takes every inch that is left, including the 0.50 in of bottom pad the panel box holds below
+    the axes floor. At this box that gives ch = 0.148 in against 0.178 in before, a 17 per cent
+    loss where the box lost 24 per cent, and it re-derives itself if the ledger moves again.
+  * THE FAMILY KEY MOVED ABOVE THE MATRIX, into the 0.17 in letter band, beside the panel letter.
+    It names the two column blocks, so it now sits where the reader meets them rather than three
+    text lines below. Moving it returned 0.14 in to the cells, which is where the height belongs
+    once the sentence is gone.
+  * TWO NEW GEOMETRY ASSERTIONS, both measured in inches on the resolved box. A printed value must
+    clear its cell edge by CELL_CLEAR above and below, and the family gutter must stay at least a
+    quarter of a cell high so it reads as a break rather than as a hairline. If a future ledger
+    makes either untrue the panel fails to build instead of quietly printing ink on its own edges.
+  * The coverage note lost one word, "of the 8" to "of 8", so that at 6.5 pt it measures 2.41 in
+    and fits inside the 2.49 in axes rather than leaning into the right pad. The count and the
+    names in it are still computed.
 
 WHICH FILE IT READS
 -------------------
-results/exp12_partial_observed_retrieval/per_query_scores.csv, restricted to the rows whose
-recommendation_mode is DART_recommended: 621 of the file's 765 queries, each scored by all nine
-methods, so 5,589 of its 6,885 rows. Paired on (split_type, cell_line, heldout_drug,
-observed_library_fraction, seed), which is the key panel d uses. Panel c adds heldout_MoA to the
-same list; each of the 144 held-out drugs in this file carries exactly one MoA, so that field
-partitions nothing and the two keys pair the same queries. Regret reduction is
-mean_cosine decision_regret minus the population scorer's decision_regret, so positive is better.
+figures/source_data/ed1_metric_correlation.csv, a 6 x 6 Spearman matrix. Per
+figures/source_data/README.md this file is PRIMARY: it is an input with no upstream parent in
+results/, so unlike panels c, d and f there is no authoritative file to move onto. Every number
+drawn is read out of it at draw time; none is typed.
 
-This panel previously read figures/source_data/fig2f_classA_robustness.csv, a hand-copied mirror
-with no generator. It now reads the authoritative results file, the same correction panel c
-received. The mirror is still checked against the recomputation by _crosscheck_mirror(), which
-runs in the standalone __main__ block; as of 2026-08-31 the two agree on all five medians and all
-five improved fractions exactly (largest median difference 2.8e-17, fractions identical), so
-nothing was lost by the move.
+COVERAGE, STATED BECAUSE IT IS INCOMPLETE
+-----------------------------------------
+The export holds six of the eight scorers panel a ranks. pca_dist and pca_mean, the two PCA-latent
+baselines, are NOT in it and are not invented here: the panel counts what is present, names the two
+that are missing on its own bottom line, and refuses to draw if the missing set stops being exactly
+those two. So the block structure shown is a statement about six rules, not about all eight. That
+line is the one note that may never be traded for space.
 
-n = 621 IS NOT A TYPO FOR PANEL c's 765
----------------------------------------
-Panel c reports the headline on ALL 765 partial-observed queries, precisely so the headline is not
-taken on a gate-selected subset. This panel reports the per-metric sweep on the 621 queries the
-pre-specified gate recommended, which is the subset the sweep was run on. The n is stated on the
-panel so the mismatch reads as a scope note rather than as an error.
+The correlation is over 54,180 query-candidate scored pairs (1,260 queries against 43 candidates
+each; the unit is the scored PAIR, not the query, which is the correction CORRECTIONS.md R29
+makes). That n is NOT printed on the panel, because this CSV is a bare 6 x 6 matrix and does not
+carry it: printing it here would mean typing a literal copied from the manuscript, which is exactly
+the laundering this deck forbids. The n lives in the caption and in Methods, where it is checkable.
 
 JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
 -------------------------------------------------------
-1. Rows are ordered by CONCEPTUAL FAMILY, not by value: energy, MMD, sliced-Wasserstein (global
-   distances between two populations), then coverage-mean, coverage-worst (subpopulation
-   coverage). Sorting by value would have made a tidier ladder and would have hidden the fact
-   that the conceptual split and the performance split coincide.
-2. The two sub-families are separated by POSITION (a wider gap between the groups) and by SHAPE
-   (circle vs square), never by hue: all five are population-level scores and take one colour.
-   Neither sub-family is drawn as secondary, which is why both markers are filled rather than one
-   open: filled-versus-open would rank them, and this panel is not ranking them. A hairline group
-   rule was tried and cut: drawn across the panel it competed with the zero datum, and drawn only
-   in the left margin it read as a stray mark. The resize did not bring it back. The block break
-   is a RATIO of two spacings, so losing height costs it nothing as long as the ratio holds, and
-   GROUP_EXTRA_PT now asserts that it holds in printed points rather than in y units.
-3. The sub-families are NOT named on the panel. Their names do not fit beside a 2.45 in plot at
-   the 6.5 pt floor, and the y labels already read "coverage-" for the pair, so the naming is left
-   to the caption rather than shrunk below the floor.
-4. "sliced-W" abbreviates sliced-Wasserstein. Measured at PT_TICK the full word sets 0.79 in
-   wide, against 0.87 in between the panel box edge and the right end of the y labels, so on that
-   number alone it would fit. It does not fit the column it would have to live in: the assemble
-   ledger reserves the leftmost 0.24 in of every panel box for the letter, which leaves 0.63 in,
-   and "coverage-worst" at 0.64 in is already at that limit. The caption spells the word out.
-5. The per-metric improved fractions (0.601, 0.605, 0.618, 0.644, 0.720 as of 2026-08-31) are
-   computed here but not drawn. A second numeric column would fill the empty right half of the
-   three distance rows, which is the emptiness that makes the coverage pair's rightward offset
-   visible. That was true at 1.38 in and it is more true at 1.06 in.
-6. The interval is a seeded percentile bootstrap of the median (fig2_style.boot_median_ci,
-   4000 resamples, seed 0). Its endpoints move in the third decimal between seeds; the fact the
-   panel rests on, that every lower bound is above zero, holds with margin (the tightest is
-   energy at +0.037). What the interval IS stays named ON the panel rather than moving to the
-   caption with the deleted phrase: an interval whose definition is unstated cannot be read at
-   all, so the note is a statistic definition and not a conclusion. Panel d names its interval
-   on-panel for the same reason.
-7. The note keeps the headroom, and the marks pay for it. Two lines at the 6.5 pt floor set
-   0.23 in of type, and with the air above them and the gap below the reserved band is 0.32 in of
-   a 1.06 in box, just under a third of the panel. Moving the note under the x axis was
-   tried and abandoned: the bottom pad in the assemble ledger is spent on the tick labels and the
-   two-line axis name, so a note there would have overhung the panel box and enlarged the page.
-   Splitting the note into the pocket right of the three distance rows was also abandoned: that
-   pocket measures 1.08 in across and the shorter of the two lines measures 1.47 in.
-8. There is no direction hint such as "population better". The x axis name says the quantity is a
-   regret REDUCTION against mean cosine, which fixes the sign, and this panel is the fifth place
-   in the figure a reader meets that convention. A three-word hint would have cost another line
-   of the headroom the note is already competing for.
+ 1. HUE IS FAMILY, SHADE IS |rho|. The Extended Data ancestor of this panel (ed_panels.draw_ed1c)
+    used the deck's diverging map, which runs orange to white to blue over rho = -1 to +1. Inside
+    Figure 2 that map is unusable: blue means population-level and orange means mean-level here, so
+    a diverging map would have painted the mean-cosine block BLUE and said the opposite of what the
+    panel measures. Each cell is instead filled with its own family's colour at alpha = 0.85|rho|.
+    The cost is that sign is no longer in the colour, which is paid for by note 2.
+ 2. SIGN IS CARRIED BY THE PRINTED NUMBER, NOT BY THE COLOUR. Legitimate only because every
+    off-diagonal value with |rho| >= 0.5 is positive, which is asserted: no dark cell hides a
+    negative. The six negative pairs in the matrix are all cross-family and all above -0.06, so
+    they are drawn as very nearly white either way.
+ 3. CROSS-FAMILY CELLS ARE GREY. Grey is this figure's SHARED colour and there is deliberately no
+    third family hue. A cross-family pair that did correlate would still go visibly dark, in grey,
+    so the encoding cannot hide a contradiction of what the panel shows.
+ 4. THE NINE CROSS-FAMILY NUMBERS ARE NOT PRINTED. One computed line, "9 cross-family pairs / max
+    |rho| = 0.076", stands over that block instead. Nine near-zero numbers would have been the
+    densest text on the panel while carrying the least information, and the bound is the stronger
+    statement. Both the count and the maximum are computed from the file. A reader who wants the
+    nine values has them in the source CSV, which is why that CSV is released.
+ 5. BOTH TRIANGLES ARE COLOURED, NUMBERS APPEAR IN THE LOWER ONE ONLY. The full square is what
+    makes the two dark blocks and the two white blocks read as a 2 x 2 arrangement in one glance;
+    printing the values twice would double the text for nothing. The upper triangle is a mirror by
+    construction, and symmetry is asserted to 1e-12.
+ 6. THE DIAGONAL IS DRAWN AT FULL STRENGTH even though rho = 1 there is trivial. It is what the
+    ringed 1.00 cell is read against: the point is that the mean-cosine / CMap-cosine cell is
+    indistinguishable from a self-correlation.
+ 7. ORDER WITHIN A FAMILY IS CHOSEN, NOT SORTED. mean cosine, CMap cosine, CMap WTCS and then
+    energy, coverage-mean, coverage-worst. That ordering puts each family's closest pair
+    immediately below the diagonal, so both rings sit on the sub-diagonal. Sorting by value
+    instead would have scattered them.
+ 8. "cov-mean" AND "cov-worst" ARE ABBREVIATED. Six columns share 2.49 in, so a column is 0.40 in
+    and the string "coverage-" alone measures 0.41 in at 6.8 pt: the full names do not fit and
+    shrinking them below the 6.5 pt floor is not an option. Panel f abbreviates sliced-Wasserstein
+    for the same reason. The caption spells both out. The abbreviation is a SUBSTITUTION on the
+    fig2_style label ("coverage-" to "cov-"), not a second spelling stored here, and the number of
+    labels it fires on is asserted; a rename in fig2_style therefore reaches panel g or breaks the
+    build, and cannot leave a and g naming one scorer two ways. Every other label is
+    fig2_style.SCORERS verbatim.
+ 9. NO aspect="equal". At 2.49 x 1.04 in a square matrix would be a small square in a wide box.
+    Cells are 0.40 x 0.148 in; a symmetric correlation matrix has no geometric content that square
+    cells would preserve, and the rectangle lets every printed value sit at 7.2 pt with about 2 pt
+    of white above and below it.
+10. NO COLORBAR. Every within-family value is printed and the cross block carries its bound, so a
+    ramp would only restate them. The one-line key "cell shade = |rho|" replaces it.
+11. THE FAMILY KEY SITS IN THE LETTER BAND. That band is 0.17 in of panel box above the axes, and
+    it held each panel's conclusion phrase until those were deleted. Using it for two group names
+    at 6.8 pt is a use of the box the ledger gives this panel, not a reintroduction of a title:
+    the strings name the two column blocks and state nothing. The alternative, keeping the key
+    below the column labels, cost the cells 0.14 in of the 1.04 in the panel has.
 
-Palette comes from fig2_style; do NOT re-declare hex values here. Every panel file used to carry
-its own copy, which made figstyle's "one edit here recolours the whole deck" untrue: a recolour
-meant editing 43 files and missing one was silent.
+Palette comes from fig2_style; do NOT re-declare hex values here.
 
 Run standalone: python fig2f.py
 """
@@ -122,222 +138,280 @@ from __future__ import annotations
 import os
 import sys
 
-import numpy as np
-import pandas as pd
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from matplotlib.patches import Rectangle
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fig2_style import (LW_HAIR, MS_DOT, POP, PT_SMALL, PT_TICK, REPO,  # noqa: E402
-                        SUBTLE, TEXT, bare_axes, boot_median_ci, zero_rule)
+from fig2_style import (FAMILY_COLOUR, FAMILY_NAME, PT_ANNOT,  # noqa: E402
+                        PT_SMALL, PT_TICK, REPO, SCORERS, SHARED, SUBTLE, TEXT)
 
-# The tether to zero is the same POP hue at half strength, derived from POP rather than declared
-# as a second hex, so a recolour of the family carries it. It has to be visible without competing
-# with the interval: at equal weight the stem plus the interval read as one bar, which is the
-# chart type this panel exists to avoid.
-STEM_TINT = tuple(0.45 * np.array(mcolors.to_rgb(POP)) + 0.55)
+SRC = f"{REPO}/figures/source_data/ed1_metric_correlation.csv"
 
-SRC = f"{REPO}/results/exp12_partial_observed_retrieval/per_query_scores.csv"
-MIRROR = f"{REPO}/figures/source_data/fig2f_classA_robustness.csv"
+# Row/column order: the two families, each with its closest pair adjacent to the diagonal. The
+# FAMILY of each key is not restated here; it is read from fig2_style.SCORERS and asserted, so a
+# regrouping of the vocabulary cannot leave this panel silently mislabelled.
+ORDER = ["mean_cosine", "cmap_cosine", "cmap_wtcs",
+         "global_energy", "coverage_mean", "coverage_worst"]
 
-QUERY_KEY = ["split_type", "cell_line", "heldout_drug", "observed_library_fraction", "seed"]
-BASELINE = "mean_cosine"
-MODE = "DART_recommended"
-N_QUERIES = 621                      # the gate-recommended subset; see the module docstring
+# The one shortening applied to a fig2_style label, written as a SUBSTITUTION rather than as a
+# second vocabulary: if panel a renames the coverage scorers, panel g renames them the same way or
+# the count assertion in draw_2f fires. See docstring note 8.
+LONG, SHORT = "coverage-", "cov-"
+N_ABBREV = 2         # coverage-mean and coverage-worst, the only labels too wide for a column
 
-# (method column, y label, marker). Conceptual order, never value order: the three global
-# distances between two populations first, then the two subpopulation-coverage scores.
-DISTANCES = [("DART_energy", "energy"),
-             ("DART_mmd", "MMD"),
-             ("DART_sliced_wasserstein", "sliced-W")]
-COVERAGE = [("DART_coverage_mean", "coverage-mean"),
-            ("DART_coverage_worst", "coverage-worst")]
+# ------------------------------------------------------------------------------ drawing constants
+ALPHA_MAX = 0.85     # fill alpha at |rho| = 1. Above this, 7.2 pt ink on POP blue loses contrast.
+SHADE_MID = 0.5      # the midpoint of the shading ramp; the block gap is asserted to straddle it
+GUT_X, GUT_Y = 0.090, 0.055        # white gutter between the two families, in inches
+CELL_EDGE = 0.5                    # white hairline articulating the cells inside a dark block
 
-# The caption entry that took over the deleted on-panel phrase counts the rows out loud: "five
-# population-level scores ... All five 95% bootstrap intervals exclude zero". COUNT_WORD used to
-# keep that count honest by spelling it from the drawn data. With the phrase gone the count is no
-# longer written anywhere on the panel, so it is pinned here instead: a sixth scorer added below
-# would otherwise leave the caption quietly wrong.
-N_ROWS = 5
+# The two halves of the panel BOX that lie outside the axes, from fig2_assemble's ledger for g:
+# PADS["g"] = (0.86 left, 0.10 right, 0.50 bottom) and LETTER_BLOCK = 0.17 above every row. They
+# are duplicated rather than imported because importing fig2_assemble would import every sibling
+# panel; the standalone preview at the foot of this file draws the same two numbers, and the
+# harness fails the panel if either is wrong, because ink would then leave the box.
+BOTTOM_PAD = 0.500                 # box below the axes floor: column labels and the note block
+TOP_BAND = 0.170                   # box above the axes top: the panel letter and the family key
+BOX_SLACK = 0.020                  # white kept between the lowest note and the box floor
 
-# The y LADDER, in abstract units, top row first. The 1.5 gap between the last distance row and
-# the first coverage row against a pitch of 1.0 within a block is what makes the two sub-families
-# read as two blocks. These are ratios only: the inches they resolve to come from the axes.
-Y_POS = [4.5, 3.5, 2.5, 1.0, 0.0]
-X_MIN, X_MAX = -0.010, 0.155         # a stated scale, round above the largest upper bound
+LAB_GAP = 0.050      # row label to matrix, in inches
+COL_GAP = 0.045      # matrix floor to the top of the column labels
+COL_LINESP = 1.05    # line spacing inside a two-line column label
+NOTE_GAP = 0.050     # column labels to the first note line
+NOTE_STEP = 0.096    # note line pitch; a 6.5 pt line sets a 0.090 in box, so this is 1.07 lines
+HEAD_GAP = 0.028     # matrix top to the foot of the family key, upward into the letter band
+SW_W, SW_H = 0.075, 0.055          # family swatch, in inches
+SW_GAP = 0.030
+SW_RISE = 0.017      # swatch foot above the key's text box, so the two centre on each other
 
-# ------------------------------------------------------------------------------ geometry, inches
-# Resolved against the axes' real printed height at draw time, so the ledger in fig2_assemble.py
-# stays the single place the panel box is set. Nothing here is a fraction of the old 1.38 in box.
-NOTE_TOP_IN = 0.02     # air above the two-line note, inside the axes
-NOTE_LINESP = 1.25     # line spacing of the note, in multiples of its 6.5 pt type
-NOTE_GAP_IN = 0.075    # air between the note's last line and the top row's marker. The marker is
-                       # about 0.040 in of ink from its centre, so this leaves about 2.5 printed
-                       # points of white; below that the note reads as a label of the energy row
-BOTTOM_IN = 0.065      # air under the bottom row, so its marker does not sit on the x spine
-RULE_HEAD = 0.5        # how far the zero datum reaches above the top row, in ladder units. It is
-                       # trimmed rather than run to the axes top: at this height the reserved note
-                       # band is 30 per cent of the box, and a full-height rule spent that third
-                       # of its length as the strongest ink on the panel, next to no data at all,
-                       # where it read as a second spine. fig3c trims both ends of its zero rule
-                       # for the same reason; fig3d trims only the foot, because a wash reaches
-                       # its axes top and the rule has data beside it the whole way up
-
-# With no sentence over the panel, what the reader must take from POSITION alone is asserted as a
-# printed distance on the resolved scale, the way panel 3h asserts its three.
-ZERO_CLEAR_PT = 4.0    # printed points demanded between the zero rule and the nearest lower
-                       # bound. The rule is 1.0 pt wide and the interval ends in a round cap on a
-                       # 1.4 pt line, so ink meets ink at 0.5 + 0.7 = 1.2 pt of centre-to-centre.
-                       # The floor sits well above that on purpose: with no text saying the
-                       # intervals clear zero, the panel has to show a gap a reader SEES, not
-                       # merely a gap that measures greater than nothing
-LEAD_PT = 2.0          # printed points of lead demanded between two y labels, on top of their own
-                       # 6.8 pt type size
-GROUP_EXTRA_PT = 3.0   # printed points by which the sub-family gap must exceed the within-block
-                       # row pitch. Under this the block break reads as an uneven row rather than
-                       # as a break, and the arrangement stops carrying judgement call 2
+# A "0.00" label at PT_ANNOT sets a 0.0938 in line box in the deck face (Arial; measured with the
+# Agg renderer, 2026-08-31), rounded UP here so the cell-clearance assertion below can never pass
+# on a box it has under-stated. CELL_CLEAR is the white demanded above and below that box inside
+# its cell: at 0.020 in it is about 1.4 pt, which is what stops the ink reading as touching the
+# cell edge.
+NUM_BOX = 0.094      # inches
+CELL_CLEAR = 0.020
+# The family gutter has to read as a break in the matrix rather than as a wide cell edge, so it is
+# held to at least this fraction of a cell height.
+GUT_MIN_FRAC = 0.25
 
 
-def paired_gains() -> "dict[str, np.ndarray]":
-    """Per-query regret reduction of each population scorer against mean cosine, on the subset.
+def _stack(label: str) -> str:
+    """Break a scorer label into at most two lines, at the space or after the hyphen.
 
-    Returns one array per method, all of length N_QUERIES and all indexed by the same queries.
+    A column is 0.40 in wide and the longest single token after the break ("coverage" is already
+    abbreviated away) is 0.28 in at 6.8 pt, so two lines always clear their column.
     """
-    d = pd.read_csv(SRC)
-    d = d[d["recommendation_mode"] == MODE]
-    base = d[d["method"] == BASELINE].set_index(QUERY_KEY)["decision_regret"]
-    assert base.index.is_unique, "mean_cosine is not one row per query on the recommended subset"
+    if " " in label:
+        head, tail = label.split(" ", 1)
+        return f"{head}\n{tail}"
+    if "-" in label:
+        head, tail = label.split("-", 1)
+        return f"{head}-\n{tail}"
+    return label
 
-    out = {}
-    for method, _ in DISTANCES + COVERAGE:
-        s = d[d["method"] == method].set_index(QUERY_KEY)["decision_regret"]
-        assert s.index.is_unique, f"{method} is not one row per query"
-        j = pd.concat([base.rename("base"), s.rename("pop")], axis=1).dropna()
-        assert len(j) == N_QUERIES, f"expected {N_QUERIES} paired queries for {method}, got {len(j)}"
-        out[method] = (j["base"] - j["pop"]).to_numpy()
-    return out
+
+def load_matrix() -> "tuple[pd.DataFrame, list[str]]":
+    """The 6 x 6 Spearman matrix in family order, plus the labels of the scorers it does not cover.
+
+    Everything the panel later states about shape is checked here: that the file is a symmetric
+    correlation matrix, that its six columns are exactly ORDER, and that ORDER is the two
+    fig2_style families in one block each.
+    """
+    raw = pd.read_csv(SRC, index_col=0)
+    assert list(raw.index) == list(raw.columns), f"{SRC} is not a square labelled matrix"
+    assert set(raw.columns) == set(ORDER), (
+        f"the correlation export no longer holds exactly {sorted(ORDER)}: {sorted(raw.columns)}")
+
+    m = raw.loc[ORDER, ORDER]
+    v = m.to_numpy(dtype=float)
+    assert np.allclose(v, v.T, rtol=0.0, atol=1e-12), "the correlation matrix is not symmetric"
+    assert np.allclose(np.diag(v), 1.0, rtol=0.0, atol=1e-12), "the diagonal is not 1"
+    assert np.all(np.abs(v) <= 1.0 + 1e-12), "a value outside [-1, 1]"
+
+    fams = [SCORERS[k]["family"] for k in ORDER]
+    assert fams == ["mean"] * 3 + ["pop"] * 3, (
+        f"ORDER is no longer two contiguous fig2_style families: {fams}")
+
+    missing = [SCORERS[k]["label"] for k in SCORERS if k not in raw.columns]
+    assert sorted(missing) == ["PCA-dist", "PCA-mean"], (
+        f"the panel's coverage note names PCA-dist and PCA-mean; the export is missing {missing}")
+    return m, missing
 
 
 def draw_2f(ax):
-    """Five population-level scores, median regret reduction vs mean cosine with bootstrap CIs."""
-    gains = paired_gains()
-    stats = {m: boot_median_ci(gains[m]) for m, _ in DISTANCES + COVERAGE}
+    """Spearman agreement among six retrieval scoring rules, blocked by representation family."""
+    m, missing = load_matrix()
+    v = m.to_numpy(dtype=float)
+    n = len(ORDER)
+    fams = [SCORERS[k]["family"] for k in ORDER]
+    labels = [SCORERS[k]["label"].replace(LONG, SHORT) for k in ORDER]
+    assert sum(SCORERS[k]["label"].startswith(LONG) for k in ORDER) == N_ABBREV, (
+        f"the {LONG!r} prefix no longer names exactly {N_ABBREV} of {ORDER}; panel g would stop "
+        "naming a scorer the way panel a names it")
 
-    # The caption says every interval clears zero, so the panel refuses to draw itself if that
-    # stops being true of the file it just read. The sentence left the panel; this did not.
-    lows = {m: lo for m, (_, lo, _) in stats.items()}
-    assert all(lo > 0 for lo in lows.values()), f"an interval touches zero: {lows}"
-    # The arrangement claims the coverage pair sits further right than the distance trio. If that
-    # ever reverses, the conceptual ordering stops being legible and the panel needs redesigning.
-    assert (min(stats[m][0] for m, _ in COVERAGE)
-            > max(stats[m][0] for m, _ in DISTANCES)), "coverage no longer leads the distances"
-    hi_max = max(hi for _, _, hi in stats.values())
-    assert hi_max < X_MAX, f"an upper bound {hi_max:.4f} runs past the drawn scale {X_MAX}"
+    lower = [(i, j) for i in range(n) for j in range(i)]
+    within = [(i, j) for i, j in lower if fams[i] == fams[j]]
+    cross = [(i, j) for i, j in lower if fams[i] != fams[j]]
+    assert len(within) == 6 and len(cross) == 9, "the 3 + 3 blocking changed shape"
 
-    rows = [(m, lab, "o") for m, lab in DISTANCES] + [(m, lab, "s") for m, lab in COVERAGE]
-    # zip() below would silently drop rows past the end of Y_POS, leaving the panel drawing fewer
-    # scorers than it read and fewer than the caption counts.
-    assert len(rows) == len(Y_POS), f"{len(rows)} scorers but {len(Y_POS)} y positions"
-    assert len(rows) == N_ROWS, (
-        f"the panel draws {len(rows)} scorers and the Fig. 2 caption entry for f says {N_ROWS}. "
-        f"Edit the caption in the same commit as this constant, or the figure and its legend "
-        f"disagree on how many scores the claim covers.")
+    # What the drawing has to carry on its own now that no phrase states it, refusing to draw
+    # itself if the file stops supporting it: every within-family pair sits above the middle of the
+    # shading ramp and every cross-family pair below it, so the two dark blocks and the two white
+    # blocks are a property of the data rather than of the palette.
+    w_min = min(v[i, j] for i, j in within)
+    c_max = max(abs(v[i, j]) for i, j in cross)
+    assert w_min > SHADE_MID > c_max, (
+        f"the blocks no longer separate across the shading midpoint: weakest within-family "
+        f"{w_min:.4f}, strongest cross-family |rho| {c_max:.4f}")
+    # Sign is carried by the printed number, not by the colour; that is only honest while nothing
+    # dark is negative. See docstring note 2.
+    assert all(v[i, j] > 0 for i, j in lower if abs(v[i, j]) >= SHADE_MID), \
+        "a strongly correlated pair is NEGATIVE, so |rho| shading would hide its sign"
 
-    # ---- resolve the ladder against the printed box ------------------------------------------
+    # The two ringed cells: each family's closest pair, which must be the one just under the
+    # diagonal for the ring to sit where the layout puts it.
+    ring_mean = max((p for p in within if fams[p[0]] == "mean"), key=lambda p: v[p])
+    ring_pop = max((p for p in within if fams[p[0]] == "pop"), key=lambda p: v[p])
+    assert ring_mean == (1, 0) and ring_pop == (5, 4), (
+        f"the closest pair moved off the sub-diagonal: {ring_mean}, {ring_pop}")
+    assert abs(v[ring_mean] - 1.0) < 1e-10, (
+        f"mean cosine and CMap cosine no longer agree at every pair (rho = {v[ring_mean]:.10f}); "
+        "the panel draws that cell as dark as a self-correlation and panel a merges the two")
+    assert v[ring_mean] == max(v[p] for p in lower), "1.00 is no longer the largest off-diagonal"
+
+    # -------------------------------------------------------------------- geometry, in inches
+    # Three grey lines, in the order a reader needs them: what the number is, how to read the
+    # drawing, what the drawing does not cover. The coverage line counts the scorers rather than
+    # stating a total, so it cannot outlive a change to the export. It is also the line that stays
+    # if the box ever shrinks again: a reader must not take this matrix for all eight scorers.
+    notes = ["Spearman $\\rho$ between scoring rules, not retrieval evidence",
+             "Cell shade = $|\\rho|$; ring = each family's closest pair",
+             f"{n} of {len(SCORERS)} scorers in panel a; {' and '.join(missing)} absent"]
+
     fig = ax.figure
-    axw = ax.get_position().width * fig.get_figwidth()
-    axh = ax.get_position().height * fig.get_figheight()
-    note_h = 2 * PT_SMALL * NOTE_LINESP / 72.0          # two lines of note, in inches
-    top_in = NOTE_TOP_IN + note_h + NOTE_GAP_IN         # axes top down to the top row's centre
-    rows_in = axh - top_in - BOTTOM_IN                  # what is left for the five rows
-    span = max(Y_POS) - min(Y_POS)
-    assert rows_in > 0.30, (
-        f"panel f is {axh:.2f} in tall and the note band plus the pads take {axh - rows_in:.2f} "
-        f"in of it, leaving {rows_in:.2f} in for five rows. Shorten the note or take the height "
-        f"back from the ledger; do not shrink the type.")
-    unit_in = rows_in / span                            # inches per unit of the Y_POS ladder
+    w_in = ax.get_position().width * fig.get_figwidth()
+    h_in = ax.get_position().height * fig.get_figheight()
+    ax.set_xlim(0.0, w_in)
+    ax.set_ylim(0.0, h_in)          # one data unit is one inch on both axes
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for side in ("left", "right", "top", "bottom"):
+        ax.spines[side].set_visible(False)
+    ax.set_facecolor("none")
 
-    pitch_pt = 72.0 * unit_in * min(abs(a - b) for a, b in zip(Y_POS, Y_POS[1:]))
-    group_pt = 72.0 * unit_in * max(abs(a - b) for a, b in zip(Y_POS, Y_POS[1:]))
-    assert pitch_pt >= PT_TICK + LEAD_PT, (
-        f"the rows print {pitch_pt:.1f} pt apart and each y label is {PT_TICK} pt tall, which "
-        f"leaves under the {LEAD_PT:.1f} pt of lead five stacked labels need. The panel is too "
-        f"short for five rows at this type size.")
-    assert group_pt >= pitch_pt + GROUP_EXTRA_PT, (
-        f"the sub-family gap prints {group_pt:.1f} pt against a row pitch of {pitch_pt:.1f} pt, "
-        f"short of the {GROUP_EXTRA_PT:.1f} pt that keeps it reading as a block break rather "
-        f"than as an uneven row.")
+    # The cell height is what is LEFT once the furniture below the matrix is costed in printed
+    # points, not a constant tuned against an earlier box. The matrix hangs from the axes top and
+    # is allowed to run past the axes floor into the panel box's bottom pad, which is where the
+    # column labels and the notes have always been drawn.
+    col_h = 2 * COL_LINESP * PT_TICK / 72.0
+    notes_h = (len(notes) - 1) * NOTE_STEP + PT_SMALL / 72.0
+    below = COL_GAP + col_h + NOTE_GAP + notes_h + BOX_SLACK
+    cw = (w_in - GUT_X) / n
+    ch = (h_in + BOTTOM_PAD - GUT_Y - below) / n
+    assert ch >= NUM_BOX + 2 * CELL_CLEAR, (
+        f"a cell is {ch:.4f} in high and a printed value needs "
+        f"{NUM_BOX + 2 * CELL_CLEAR:.4f} in to clear both edges; the values would touch")
+    assert GUT_Y >= GUT_MIN_FRAC * ch, (
+        f"the family gutter is {GUT_Y:.4f} in against a {ch:.4f} in cell, so the two blocks "
+        "are no longer separated by a readable band of white")
 
-    scale_x = axw / (X_MAX - X_MIN)                     # inches per unit of regret reduction
-    clear_pt = 72.0 * scale_x * min(lows.values())
-    assert clear_pt >= ZERO_CLEAR_PT, (
-        f"the nearest lower bound stands {clear_pt:.1f} printed pt from the zero rule, under the "
-        f"{ZERO_CLEAR_PT:.1f} pt floor. No text on this panel says the intervals clear zero, so "
-        f"the gap has to be visible; widen the panel or narrow the drawn scale.")
+    grp_x = [j * cw + (GUT_X if j >= 3 else 0.0) for j in range(n)]          # cell left edges
+    grp_y = [h_in - i * ch - (GUT_Y if i >= 3 else 0.0) for i in range(n)]   # cell top edges
 
-    # Zero first and darkest: it is the datum every point is read against, not a gridline. It
-    # runs from the x spine, where the "0" tick names it, to just over the top row, and no
-    # further: an axvline's y data is in AXES fraction, so the reach is resolved from the limits
-    # computed above rather than from the data.
-    y_lo = min(Y_POS) - BOTTOM_IN / unit_in
-    y_hi = max(Y_POS) + top_in / unit_in
-    zero_rule(ax, 0.0, color=TEXT, lw=1.0, zorder=2).set_ydata(
-        [0.0, (max(Y_POS) + RULE_HEAD - y_lo) / (y_hi - y_lo)])
+    def cell_xy(i, j):
+        """Bottom-left corner of cell (row i, column j), in axes inches."""
+        return grp_x[j], grp_y[i] - ch
 
-    for y, (method, _, marker) in zip(Y_POS, rows):
-        med, lo, hi = stats[method]
-        # thin stem from zero to the median, thicker interval on top of it
-        ax.plot([0.0, med], [y, y], color=STEM_TINT, lw=LW_HAIR, solid_capstyle="butt", zorder=3)
-        ax.plot([lo, hi], [y, y], color=POP, lw=1.4, solid_capstyle="round", zorder=4)
-        ax.scatter([med], [y], s=MS_DOT, marker=marker, color=POP, linewidths=0.6,
-                   edgecolors="white", zorder=5)
+    # -------------------------------------------------------------------- cells
+    for i in range(n):
+        for j in range(n):
+            base = FAMILY_COLOUR[fams[i]] if fams[i] == fams[j] else SHARED
+            fill = mcolors.to_rgba(base, ALPHA_MAX * abs(v[i, j]))
+            x0, y0 = cell_xy(i, j)
+            ax.add_patch(Rectangle((x0, y0), cw, ch, facecolor=fill, edgecolor="white",
+                                   linewidth=CELL_EDGE, zorder=2, clip_on=False))
 
-    bare_axes(ax, keep=("bottom",))
-    ax.set_yticks(Y_POS)
-    ax.set_yticklabels([lab for _, lab, _ in rows], fontsize=PT_TICK, color=TEXT)
-    ax.tick_params(axis="y", length=0, pad=2.0)
-    ax.set_ylim(y_lo, y_hi)
-    ax.set_xlim(X_MIN, X_MAX)
-    ax.set_xticks([0.0, 0.05, 0.10, 0.15])
-    ax.set_xticklabels(["0", "0.05", "0.10", "0.15"])
-    ax.set_xlabel("median regret reduction\nvs mean cosine, paired by query", linespacing=1.2)
+    # values, lower triangle only, within-family cells only
+    for i, j in within:
+        x0, y0 = cell_xy(i, j)
+        heavy = (i, j) in (ring_mean, ring_pop)
+        ax.text(x0 + cw / 2, y0 + ch / 2, f"{v[i, j]:.2f}", ha="center", va="center",
+                fontsize=PT_ANNOT, color=TEXT, fontweight="bold" if heavy else "normal",
+                zorder=4, clip_on=False)
 
-    # Scope note in the band reserved for it above the top row, where it crosses no mark. It says
-    # n and it says WHICH n, because panel c's 765 is a different and deliberate scope, and it
-    # says what the interval is, because an unnamed interval cannot be read.
-    n_drawn = len(next(iter(gains.values())))
-    ax.text(1.0, 1.0 - NOTE_TOP_IN / axh,
-            f"n = {n_drawn} gate-recommended queries\ninterval: bootstrap 95% CI of the median",
-            transform=ax.transAxes, ha="right", va="top", fontsize=PT_SMALL, color=SUBTLE,
-            linespacing=NOTE_LINESP)
-    return {"stats": stats, "pitch_pt": pitch_pt, "group_pt": group_pt, "zero_clear_pt": clear_pt}
+    # the nine cross-family pairs, as one computed bound instead of nine near-zero numbers
+    cx = (grp_x[0] + grp_x[2] + cw) / 2
+    cy = (grp_y[3] + grp_y[5] - ch) / 2
+    ax.text(cx, cy, f"{len(cross)} cross-family pairs\nmax $|\\rho|$ = {c_max:.3f}",
+            ha="center", va="center", fontsize=PT_ANNOT, color=TEXT, linespacing=1.25, zorder=4,
+            clip_on=False)
 
+    # the two rings: emphasis by keyline and weight, never by a third colour
+    for i, j in (ring_mean, ring_pop):
+        x0, y0 = cell_xy(i, j)
+        ax.add_patch(Rectangle((x0, y0), cw, ch, facecolor="none", edgecolor=TEXT,
+                               linewidth=0.9, zorder=5, clip_on=False))
 
-def _crosscheck_mirror():
-    """Compare the recomputation against the hand-copied source_data mirror. Reports, not silent."""
-    gains = paired_gains()
-    mir = pd.read_csv(MIRROR).set_index("method")
-    worst_med, worst_frac = 0.0, 0.0
-    for method, _ in DISTANCES + COVERAGE:
-        g = gains[method]
-        worst_med = max(worst_med, abs(float(np.median(g)) - float(mir.loc[method, "median_regret_reduction"])))
-        worst_frac = max(worst_frac, abs(float((g > 0).mean()) - float(mir.loc[method, "frac_improved"])))
-        assert int(mir.loc[method, "n"]) == len(g), f"mirror n disagrees for {method}"
-    print(f"mirror crosscheck: max |median| diff {worst_med:.2e}, max |frac| diff {worst_frac:.2e}")
-    assert worst_med < 1e-9 and worst_frac < 1e-9, "the source_data mirror has drifted from results/"
+    # -------------------------------------------------------------------- labels
+    for i, lab in enumerate(labels):
+        ax.text(-LAB_GAP, grp_y[i] - ch / 2, lab, ha="right", va="center",
+                fontsize=PT_TICK, color=TEXT, clip_on=False)
+
+    mat_floor = grp_y[n - 1] - ch
+    col_top = mat_floor - COL_GAP
+    for j, lab in enumerate(labels):
+        ax.text(grp_x[j] + cw / 2, col_top, _stack(lab), ha="center", va="top",
+                fontsize=PT_TICK, color=TEXT, linespacing=COL_LINESP, clip_on=False)
+
+    # Family key, above the matrix and beside the panel letter: a swatch at the left edge of each
+    # block of columns, at the same strength the block itself is drawn at. This is the one place
+    # colour may sit beside letters, because the label names a whole family and has no mark of its
+    # own. See docstring note 11 for why it is up here rather than under the column labels.
+    for start, fam in ((0, "mean"), (3, "pop")):
+        ax.add_patch(Rectangle((grp_x[start], h_in + HEAD_GAP + SW_RISE), SW_W, SW_H,
+                               facecolor=mcolors.to_rgba(FAMILY_COLOUR[fam], ALPHA_MAX),
+                               edgecolor="none", clip_on=False, zorder=3))
+        ax.text(grp_x[start] + SW_W + SW_GAP, h_in + HEAD_GAP, FAMILY_NAME[fam],
+                ha="left", va="bottom", fontsize=PT_TICK, color=TEXT, clip_on=False)
+
+    y = col_top - col_h - NOTE_GAP
+    for line in notes:
+        ax.text(0.0, y, line, ha="left", va="top", fontsize=PT_SMALL, color=SUBTLE,
+                clip_on=False)
+        y -= NOTE_STEP
+
+    # The stack is built downward from the axes top, so both ends have to be checked against the
+    # panel box the ledger gives g. Ink outside it enlarges the exported page and collides with f.
+    note_floor = y + NOTE_STEP - PT_SMALL / 72.0
+    assert note_floor >= -BOTTOM_PAD, (
+        f"the note block ends {-note_floor:.4f} in below the axes floor and the box holds only "
+        f"{BOTTOM_PAD:.3f} in")
+    key_top = h_in + HEAD_GAP + max(SW_RISE + SW_H, PT_TICK / 72.0)
+    assert key_top <= h_in + TOP_BAND, (
+        f"the family key reaches {key_top - h_in:.4f} in above the axes and the letter band is "
+        f"{TOP_BAND:.3f} in")
 
 
 if __name__ == "__main__":
-    # The standalone canvas reproduces the assemble ledger's panel f box, 2.45 x 1.06 in of axes
-    # inside a 3.45 in half-row with a 0.90 in left pad and a 0.48 in bottom pad, so that what is
-    # previewed here is what prints. fig2_assemble.py remains the authority on those numbers.
-    _crosscheck_mirror()
-    FIGW_, FIGH_, LEFT_, BOTTOM_ = 3.45, 1.54, 0.90, 0.48
-    fig = plt.figure(figsize=(FIGW_, FIGH_))
-    ax = fig.add_axes([LEFT_ / FIGW_, BOTTOM_ / FIGH_,
-                       (FIGW_ - LEFT_ - 0.10) / FIGW_, (FIGH_ - BOTTOM_) / FIGH_])
-    info = draw_2f(ax)
-    print(f"row pitch {info['pitch_pt']:.1f} pt, sub-family gap {info['group_pt']:.1f} pt, "
-          f"nearest lower bound {info['zero_clear_pt']:.1f} pt clear of zero")
-    fig.savefig(os.path.join(os.path.dirname(__file__), "2f.png"), dpi=200)
-    print("wrote 2f.png")
+    # The standalone preview is drawn at panel g's real box and real pads, so the inch geometry
+    # above is the geometry on the page. These numbers mirror fig2_assemble's ledger for g (half of
+    # a 6.90 in canvas; PADS["g"] = 0.86 left, 0.10 right, 0.50 bottom; the 1.54 in row plus its
+    # 0.17 in letter block) and are duplicated rather than imported because importing fig2_assemble
+    # would import every sibling panel.
+    sys.path.insert(0, os.path.join(REPO, "figures"))
+    from figstyle import apply_style
+    from fig2_style import PT_TITLE
+
+    # Without this the preview sets in matplotlib's default face, which is wider than the deck's
+    # and would have every width on the page read 6 per cent long.
+    apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
+    BOX_W, BOX_H = 3.45, 1.71
+    fig = plt.figure(figsize=(BOX_W, BOX_H))
+    ax = fig.add_axes([0.86 / BOX_W, BOTTOM_PAD / BOX_H, 2.49 / BOX_W, 1.04 / BOX_H])
+    draw_2f(ax)
+    fig.savefig(os.path.join(os.path.dirname(__file__), "2g.png"), dpi=300)
+    print("wrote 2g.png")

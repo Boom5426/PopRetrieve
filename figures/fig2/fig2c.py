@@ -300,10 +300,20 @@ def draw_2c(ax):
     # The plain-language reading leads; the definition follows a size down, so two method names
     # never have to share the axis title. Neither line carries a sub/superscript, so neither is
     # printed at 0.7x and both stand at their nominal size.
-    ax.text(0.5, -0.19, "Regret reduction vs mean retrieval", transform=ax.transAxes,
+    #
+    # Both drops are INCHES, converted here, not axes fractions. They were -0.19 and -0.30 of the
+    # axes height, which printed as 0.205 and 0.324 in at the 1.08 in axes this panel had until
+    # 2026-09-01; those printed values are what is preserved. As fractions they moved with the box:
+    # when the row grew to give this panel 1.55 in, the second line dropped 0.465 in against a
+    # 0.50 in pad and its descenders left the panel. fig2a lost this defect on 2026-08-31 and
+    # fig2b on 2026-09-01; this is the last of the three.
+    ax_h_in = ax.get_position().height * ax.figure.get_figheight()
+    def _below(inches):
+        return -inches / ax_h_in
+    ax.text(0.5, _below(0.205), "Regret reduction vs mean retrieval", transform=ax.transAxes,
             fontsize=PT_ANNOT, color=TEXT, ha="center", va="top")
-    ax.text(0.5, -0.30, "mean-cosine regret $-$ coverage-worst regret", transform=ax.transAxes,
-            fontsize=PT_SMALL, color=SUBTLE, ha="center", va="top")
+    ax.text(0.5, _below(0.324), "mean-cosine regret $-$ coverage-worst regret",
+            transform=ax.transAxes, fontsize=PT_SMALL, color=SUBTLE, ha="center", va="top")
 
     # ---- what the deleted sentence used to assert, now asserted of the MARKS that replaced it
     # (module docstring, restraint pass). Both are measured on the printed scale: this panel is

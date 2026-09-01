@@ -150,6 +150,10 @@ SMALL_REVERSAL = 0.05
 # 2.66 is the smallest end that keeps it inside the axes with air to spare (0.027 in). At 2.62 it
 # hung 0.002 units past the axis.
 XLIM = (-0.58, 2.66)
+# Drops below the axis, in INCHES. They were 0.40 and 0.275 of the axes height, which printed as
+# 0.432 and 0.297 in at the 1.08 in axes this panel had until 2026-09-01; those printed values are
+# what is preserved here. Both must stay inside fig2_assemble's 0.50 in bottom pad for b.
+SEP_DROP_IN, N_LINE_IN = 0.43, 0.30
 
 # Hard y range, so the axis does not breathe with the data. Every value drawn is asserted to lie
 # inside it: a scorer that fell below the floor would otherwise be clipped in silence and the
@@ -171,6 +175,18 @@ MS_CONTEXT = 7              # the background column: a quarter of MS_DOT's area,
 
 def draw_2b(ax):
     """Per-task Hit@1: energy against mean cosine, over a background of the other six scorers."""
+    # EVERYTHING BELOW THE AXIS IS MEASURED IN INCHES, since 2026-09-01. The separator rule and
+    # the n line were positioned in AXES FRACTION on the xaxis transform, so their descent below
+    # the axis was 0.40 and 0.275 of the axes HEIGHT. That was invisible while the height never
+    # moved. When this panel went from a 1.08 in axes to 2.04 in, the separator dropped 0.816 in
+    # against a 0.50 in pad and hung 0.316 in into the row below, and no gate could see it:
+    # _assert_floor and _assert_no_titles read font sizes, not positions. fig2a had the same
+    # defect and lost it on 2026-08-31; this is the same fix, one panel later.
+    fig_w, fig_h = ax.figure.get_size_inches()
+    ax_h = ax.get_position().height * fig_h
+    def _below(inches: float) -> float:
+        """Inches below the axis -> the negative axes fraction the xaxis transform wants."""
+        return -inches / ax_h
     sbt = pd.read_csv(os.path.join(REPO, SRC))
     hit = sbt.pivot_table(index="method", columns="task", values="hit@1")
     nq = sbt.pivot_table(index="method", columns="task", values="n_queries")
@@ -241,8 +257,8 @@ def draw_2b(ax):
     # vocabulary, because this split is context for the reversal and not the reading itself. It
     # runs from under the n line up to just below the cross-line difference label and stops there:
     # a full-height rule crossed that label, and the number has to read as the cross-line pair's.
-    ax.plot([1.5, 1.5], [-0.40, 0.52], transform=ax.get_xaxis_transform(), color=HAIRLINE,
-            lw=LW_HAIR, zorder=1, clip_on=False, solid_capstyle="butt")
+    ax.plot([1.5, 1.5], [_below(SEP_DROP_IN), 0.52], transform=ax.get_xaxis_transform(),
+            color=HAIRLINE, lw=LW_HAIR, zorder=1, clip_on=False, solid_capstyle="butt")
 
     # Direct labels on the anchor pair instead of a legend: the controlled task is the only one
     # with clear space beside both of its markers, and a legend key placed inside the plot would
@@ -266,11 +282,10 @@ def draw_2b(ax):
                        linespacing=1.15)
     for i, (task, _, constructed) in enumerate(TASKS):
         n = int(nq.loc[POP_METHOD, task])
-        # y is in axes fraction along the xaxis transform, so it must be NEGATIVE to sit below
-        # the tick labels; at +0.128 it once sat 13% up the axes, on top of the controlled data.
-        # "natural" is carried on Frangieh's n line rather than on a fourth row of furniture; see
-        # judgement call 5 in the module docstring.
-        ax.text(i, -0.275, f"n = {n}" if constructed else f"natural, n = {n}",
+        # Below the tick labels, by a measured inch drop rather than by a fraction of a height
+        # that has now moved once. "natural" is carried on Frangieh's n line rather than on a
+        # fourth row of furniture; see judgement call 5 in the module docstring.
+        ax.text(i, _below(N_LINE_IN), f"n = {n}" if constructed else f"natural, n = {n}",
                 transform=ax.get_xaxis_transform(), ha="center", va="top",
                 fontsize=PT_SMALL, color=SUBTLE)
 

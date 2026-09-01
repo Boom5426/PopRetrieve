@@ -10,6 +10,14 @@ is sorted by value and grouped by family at the same time and the grouping costs
 That separation is ASSERTED at draw time (`_load`), because it is the whole design: if new data
 broke it, the grouping and the two family washes would start lying quietly.
 
+IT IS A PROPERTY OF THE MACRO-MEAN, AND THE PANEL SAYS SO ON ITS X AXIS. Per individual task
+setting the separation holds in only 3 of the 7: in the other four coverage-worst is beaten by
+PCA-mean or CMap WTCS, and on Frangieh mean cosine is the best of all eight scorers. Nothing here
+over-claims, because the axis label, the caption and panel b all scope it, but the consequence is
+worth writing down: do NOT add per-cell dispersion to this panel. Dots over the bars would break
+the grouping in four of seven columns, and the grouping is what the panel is for. Panel b is where
+the per-task picture, including the reversal, belongs.
+
 Everything here is objective-aligned (Class A). Hit@1 rewards correspondence between response
 populations, which is the information population-level retrieval uses. Whether that information is
 biologically valuable is Figure 3's question and is deliberately absent from this panel.
@@ -127,13 +135,33 @@ REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SRC = os.path.join(REPO, "results", "exp08_signature_baselines", "summary.csv")
 
 # ------------------------------------------------------------------------------ geometry
-# Authored against the composite's own box for panel a: 5.88 x 1.20 in, which is fig2_assemble's
-# row height 1.66 less its 0.46 in bottom pad. The tracks deliberately do NOT run the full width.
+# Authored against the composite's own box for panel a: 2.95 x 1.94 in, which is fig2_assemble's
+# row height 2.54 less its 0.60 in bottom pad. The tracks deliberately do NOT run the full width.
 # x = 1 (the attainable Hit@1 maximum) sits at TRACK_IN inches, and everything right of it is the
-# headline block, so the panel reads as bars on the left and the comparison on the right.
-TRACK_IN = 3.55             # inches spanned by Hit@1 = 0 .. 1
-AXES_IN = 5.88              # the panel's axes width, from fig2_assemble's ledger
-AXES_H_IN = 1.20            # the panel's axes height, same ledger. 1.34 before the compaction.
+# value column and the headline block, so the panel reads as bars on the left and the comparison
+# on the right.
+#
+# THE PANEL STOPPED BEING FULL WIDTH ON 2026-09-01, and these four numbers are the whole of it.
+# It was 5.88 x 1.20 in: a 4.9:1 strip whose longest bar was 3.00 in of 6.9 pt ink, 44:1, and
+# whose xlim ran to 1.656 so that 2.33 in of the axes, 40 per cent, sat beyond the data holding
+# the value column, the headline and the provenance key. That width was spent, not wasted, which
+# is why folding the column back in does not fix the panel: at full width the only alternative to
+# dead space is a longer track and thinner bars.
+#
+# What the new numbers cost, stated plainly: the longest bar is 1.47 in rather than 3.00, and the
+# horizontal distance between the population floor (coverage-worst, 0.589) and the mean ceiling
+# (PCA-mean, 0.518) is 0.124 in rather than 0.253. The RATIO the panel argues from is unchanged;
+# the absolute separation is 3.2 mm rather than 6.4, still an order of magnitude above visual
+# acuity. What is bought back is the aspect, 4.90:1 to 1.52:1, and a row pitch of 15.8 pt against
+# the old 9.8, so the bars are 0.101 in thick rather than 0.068.
+#
+# The value column stays OUTSIDE the track. Folding it inside the wash's Hit@1 = 1 ceiling would
+# buy TRACK_IN 2.10 instead of 1.75, i.e. 0.6 mm more separation, but figstyle's presentation
+# layer states that value labels sit right-aligned past the end of the track, and every other
+# value column in the deck does. 0.6 mm is not worth being the one panel that reads differently.
+TRACK_IN = 1.75             # inches spanned by Hit@1 = 0 .. 1
+AXES_IN = 2.95              # the panel's axes width, from fig2_assemble's ledger
+AXES_H_IN = 1.94            # the panel's axes height, same ledger
 XMAX = AXES_IN / TRACK_IN   # right edge of the axes, in Hit@1 units
 
 def _u(inches: float) -> float:
@@ -142,14 +170,14 @@ def _u(inches: float) -> float:
 
 FAM_GAP = 0.70              # blank rows between the two family blocks
 Y_PAD = 0.56                # air above the top wash and below the bottom one, in row units
-BAR_H, BAR_H_HEAD = 0.50, 0.70
+BAR_H, BAR_H_HEAD = 0.46, 0.58   # row units; 0.101 and 0.128 in at the 0.220 in pitch
 assert BAR_H_HEAD < 1.0, "a bar taller than the row pitch would touch its neighbour"
 
 # The y axis is measured in ROW UNITS, one per scorer, so the printed pitch is whatever the box
 # height divides into. It is derived here rather than left implicit, because the box lost 0.14 in
 # and the pitch is what has to clear the scorer names.
 Y_SPAN = (len(SCORERS) - 1) + FAM_GAP + 2 * Y_PAD
-ROW_IN = AXES_H_IN / Y_SPAN          # printed inches per row unit: 0.1361 at 1.20 in
+ROW_IN = AXES_H_IN / Y_SPAN          # printed inches per row unit: 0.2200 at 1.94 in
 assert ROW_IN * 72.0 >= PT_TICK * 1.30, (
     f"the ladder's row pitch is {ROW_IN * 72.0:.2f} pt and the scorer names set at {PT_TICK} pt; "
     "adjacent rows would crowd. Drop a row, widen the box, or take the names into the caption.")
@@ -162,12 +190,18 @@ X_LABEL_R = -_u(0.062)      # right edge of the scorer-name column
 X_DAGGER = -_u(0.030)       # the published-baseline glyph, on its own fixed column
 X_FAMILY = -_u(0.845)       # the rotated family label
 X_SWATCH = -_u(0.740)       # the family swatch, a rule the length of the group
-X_VALUE_R = 1.0 + _u(0.300)  # right edge of the value column
-X_BRACKET = 1.0 + _u(0.500)  # the headline bracket's spine
-X_ARM = 1.0 + _u(0.375)     # where the bracket's arms stop, clear of the value column
-X_HEAD = 1.0 + _u(0.620)    # left edge of the headline text
+# The block right of the track is 1.20 in wide (AXES_IN - TRACK_IN) and holds three things in
+# order: the value column, the bracket, the headline. Every offset below is inches past the track.
+X_VALUE_R = 1.0 + _u(0.280)  # right edge of the value column; "0.837" sets 0.23 in
+X_ARM = 1.0 + _u(0.330)      # where the bracket's arms stop, clear of the value column
+X_BRACKET = 1.0 + _u(0.420)  # the headline bracket's spine
+X_HEAD = 1.0 + _u(0.470)     # left edge of the headline text
 LW_HEAD = 0.9               # headline bracket: above LW_HAIR, and inked, so the brackets rank
-FOOT_IN = 0.245             # drop of the x label and the provenance key below the axes, in inches
+FOOT_IN = 0.245             # drop of the x axis label below the axes, in inches
+# The provenance key gets its own baseline. At full width it shared FOOT_IN with the x label,
+# which was possible only because there were 2.33 in to spread them across; at 2.95 in the x
+# label alone sets 2.06 in and the key 0.84 in, so they cannot share a line.
+KEY_IN = 0.42
 
 
 def _load():
@@ -298,7 +332,7 @@ def draw_2a(ax):
     for y in (y_hi, y_lo):
         ax.plot([x_t - _u(0.045), x_t], [y, y], color=SHARED, lw=LW_HAIR, zorder=3, clip_on=False)
     ax.text(x_t + _u(0.045), 0.5 * (y_hi + y_lo),
-            f"identical, {n_cells}/{n_cells} settings (panel g)", fontsize=PT_SMALL, color=TEXT,
+            f"identical, {n_cells}/{n_cells} (f)", fontsize=PT_SMALL, color=TEXT,
             ha="left", va="center")
 
     # ---------------------------------------------------------------- the headline comparison
@@ -316,8 +350,9 @@ def draw_2a(ax):
     # on the panel is the bold weight, the empty block around it, and the bracket, not the size.
     ax.text(X_HEAD, y_mid - _v(0.075), f"+{d:.3f} Hit@1", fontsize=PT_ANNOT, fontweight="bold",
             color=TEXT, ha="left", va="center", clip_on=False)
-    ax.text(X_HEAD, y_mid + _v(0.075),
-            f"{SCORERS[best]['label']} above {SCORERS[worst]['label']}, {ratio:.2f}x",
+    # Second line: the ratio alone. "energy above mean cosine" sets 1.35 in and the whole block
+    # right of the track is 1.20 in, so the naming moved to the caption, which already carries it.
+    ax.text(X_HEAD, y_mid + _v(0.075), f"{ratio:.2f}x",
             fontsize=PT_SMALL, color=SUBTLE, ha="left", va="center", clip_on=False)
 
     # ---------------------------------------------------------------- axes furniture
@@ -338,7 +373,7 @@ def draw_2a(ax):
     ax.spines["bottom"].set_linewidth(LW_HAIR)
     ax.spines["bottom"].set_bounds(0.0, 1.0)       # the scale exists only under the tracks
     # Key for the provenance glyph, kept off the ladder and out of a legend box.
-    ax.text(1.0, -FOOT_IN / AXES_H_IN, "† published baseline", transform=ax.transAxes,
+    ax.text(1.0, -KEY_IN / AXES_H_IN, "† published baseline", transform=ax.transAxes,
             fontsize=PT_SMALL, color=SUBTLE, ha="right", va="center")
 
 
@@ -346,8 +381,8 @@ if __name__ == "__main__":
     sys.path.insert(0, os.path.join(REPO, "figures"))
     from figstyle import apply_style
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
-    fig = plt.figure(figsize=(6.90, 1.66))
-    ax = fig.add_axes([0.94 / 6.90, 0.46 / 1.66, 5.88 / 6.90, AXES_H_IN / 1.66])
+    fig = plt.figure(figsize=(3.97, 2.54))   # the box fig2_assemble gives this panel
+    ax = fig.add_axes([0.94 / 3.97, 0.60 / 2.54, AXES_IN / 3.97, AXES_H_IN / 2.54])
     draw_2a(ax)
     out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "2a.png")
     fig.savefig(out, dpi=300)
