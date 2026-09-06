@@ -75,14 +75,16 @@ Metric-class legend:
 
 | field | value |
 |---|---|
-| unit | per query; n = 621 (DART_recommended), 133 (mean_or_no_call), 11 (mean_sufficient) |
-| energy-proxy effect | DART_coverage_worst regret reduction: mean +0.264, **median +0.113**, 72% improved |
-| test | **paired Wilcoxon** signed-rank vs mean_cosine; p = 4.26e-56 |
+| unit | per query; n = 627 (DART_recommended), 127 (mean_or_no_call), 11 (mean_sufficient) |
+| estimator arm | **U** (unbiased). Reissued 2026-09-03; the V-arm split was 621 / 133 / 11 and every value in this block moved. See docs/phase2/POST_REPAIR_MASTER_RESULTS.md |
+| energy-proxy effect | DART_coverage_worst regret reduction over all 765: mean +0.132, **median +0.031** (95% bootstrap CI +0.017 to +0.049), 56% improved |
+| test | **paired Wilcoxon** signed-rank vs mean_cosine; p = 1.60e-12 |
 | multiple testing | 5 PopRetrieve methods × 3 modes compared; report best-per-mode, note the family |
 | metric class (regret) | **circular-risk** — energy-based welfare proxy aligned with PopRetrieve's objective |
-| non-circular effects | −0.013 must not be paired with +0.119 as if the two were the same scorer on the same queries (**R4**); the "0 of 37" companion count is **RETRACTED** (**R13**). |
+| magnitude control | the regret reduction is measured against a DIRECTION-ONLY reference. Against a magnitude-aware `mean_l2` reference the three distributional distances gain exactly 0.000 and both coverage scorers lose (−0.030, −0.038). Any sentence built on the +0.031 must name which reference it is against |
+| non-circular effects | the negative non-circular effect must not be paired with the positive regret reduction as if the two were the same scorer on the same queries (**R4**); the "0 of 37" companion count is **RETRACTED** (**R13**) |
 | metric class (nDCG/coverage) | **independent** — near-null, reported alongside the positive |
-| gate discrimination | recommended +0.119 vs non-recommended +0.122 median (does not separate) |
+| gate discrimination | recommended +0.032 vs not-recommended +0.040 median; difference −0.008, 95% CI −0.032 to +0.056, Mann-Whitney p = 0.64. Does not separate, and the interval is now WIDER than either median, so this is a failure to detect enrichment rather than a bounded null |
 
 ## exp13 — real-data projection
 
@@ -111,7 +113,7 @@ Metric-class legend:
 ## Global reporting rules
 
 1. State the **unit of analysis** for every p-value (per query, per cell, per task).
-2. For exp12, **never report +0.119 without its Class-B counterpart** in the same sentence or caption, and never present +0.119 and −0.013 as the same method on the same queries: they are different scorers on different query sets (**R4**).
+2. For exp12, **never report the Class-A regret reduction without its Class-B counterpart** in the same sentence or caption, and never present the two as the same method on the same queries: they are different scorers on different query sets (**R4**). The number itself was reissued on 2026-09-03 from +0.119 to **+0.031**; any draft still carrying +0.119, 72% or p = 4.3e-56 is pre-repair.
 3. Label every headline metric with its class (circular-risk / proxy / independent).
 4. exp15 p-values get **BH correction** and the "exploratory" qualifier.
 5. Report the energy-welfare regret as **median** with Wilcoxon (skewed distribution), not

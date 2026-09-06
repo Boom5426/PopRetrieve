@@ -4,7 +4,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{mathpazo}
-\usepackage[margin=2cm]{geometry}
+%% Matches the manuscript. Every table here is placed with [H], so a table box that does not
+%% fit the space left on a page pushes a break and leaves the rest of that page blank; the
+%% extra page height lets two of the shorter boxes share a page instead.
+\usepackage[left=2cm,right=2cm,top=1.3cm,bottom=1.3cm]{geometry}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{caption}
@@ -14,18 +17,38 @@
 %% both printed "Extended Data Fig. 7: Extended Data Fig. 7." on every figure. Numbering is now
 %% the counter's, so a caption can no longer disagree with its own \label.
 \captionsetup{singlelinecheck=false, font={small}, skip=4pt, labelfont=bf, labelsep=period}
+%% Compaction, matching the manuscript's figure floats. The blank tails on the table pages come
+%% from the [H] boxes, not from the tables themselves, so the space is recovered from the glue
+%% around them and from the row stretch rather than by shortening any table.
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+\setlength{\belowcaptionskip}{0pt}
+\renewcommand{\arraystretch}{1.15}
 %% Supplementary-table blocks. Heading, tabular and note are set INSIDE one non-floating [H]
 %% table so the three move as a single box. Set as running text they did not: an [H] table that
 %% does not fit the remaining page is carried over whole while the heading above it stays
-%% behind, which is how the headings of Supplementary Tables 2, 3 and 4 came to print a full
+%% behind, which is how the headings of Supplementary Tables 1, 3 and~4 came to print a full
 %% page above the tables they name. \parbox keeps the surrounding \centering from
 %% ragged-centring the prose.
 \newcommand{\stabhead}[1]{{\noindent\large\bfseries #1\par}\medskip}
 \newcommand{\stabsub}[1]{{\noindent\bfseries #1\par}\smallskip}
-\newcommand{\stabbody}[1]{\noindent\parbox{\textwidth}{#1}\par\medskip}
-\newcommand{\stabnote}[1]{\par\medskip\noindent\parbox{\textwidth}{\footnotesize #1}}
+\newcommand{\stabbody}[1]{\noindent #1\par\medskip}
+\newcommand{\stabnote}[1]{\par\medskip\noindent{\footnotesize #1\par}}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
+%% Supplementary tables are longtables. Each used to be a non-floating [H] box 380 to 430 pt tall,
+%% so a table that did not fit the space left on a page was carried over whole and left the rest
+%% of that page blank; six of the eight table pages were ending 26 to 46%% short. A longtable
+%% splits at a row boundary instead. The heading travels inside \endfirsthead and a continuation
+%% line inside \endhead, which is what keeps a heading from printing a page above the table it
+%% names. Each heading element is its own \caption* row: \caption* is not \long, so one caption
+%% cannot hold the \par that a title and a sub-title together would need.
+\usepackage{longtable}
+\setlength{\LTcapwidth}{\textwidth}
+\setlength{\LTpre}{0pt}
+\setlength{\LTpost}{\medskipamount}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[most]{tcolorbox}
 \usepackage{hyperref}
@@ -42,9 +65,14 @@
 %% file makes into the main figures therefore goes through one of the two macros below,
 %% which is the single place to edit if the main deck is ever renumbered or relettered.
 %% Checked against PopRetrieve_manuscript.tex on 2026-09-01.
-\newcommand{\MAINRECOVER}{Fig.~5e}   % recoverability ceiling vs best unsupervised
+%% THIS ONE WENT STALE AND IS THE REASON THE BLOCK ABOVE EXISTS. It read "Fig.~5e" until
+%% 2026-09-04. Figure 5e is now the headroom-correlation null, Figure 5f is the recoverability of
+%% the Tahoe state that carries the drug-by-state interaction, and the CONSTRUCTED two-state
+%% mixture this note is about has no figure panel at all: it is reported in the main Results as
+%% prose. A figure number is therefore the wrong kind of pointer for it, so the macro names the
+%% result by its two values instead, which cannot be renumbered.
+\newcommand{\MAINRECOVER}{ceiling 0.692 against best unsupervised 0.674}
 \newcommand{\MAINCLASSAB}{Fig.~3a,b} % the 600-query response-matching / MoA pair
-\newcommand{\MAGONLYFUNC}{+0.330}
 \newcommand{\NCQUERIES}{103}
 \newcommand{\PREMISEDISJOINT}{+0.835}
 \newcommand{\TAHOEBELOWMIX}{0.11}
@@ -84,8 +112,12 @@
 \hypersetup{colorlinks=true,linkcolor=MidnightBlue,citecolor=MidnightBlue,urlcolor=MidnightBlue}
 \setlength{\emergencystretch}{3em}
 
+%% ONE TITLE, TWO DOCUMENTS. This must be the main manuscript's title verbatim. It was not:
+%% it carried "Single-cell population structure adds limited decision value beyond response
+%% magnitude in drug retrieval", which the main text stopped using when the title became a
+%% question. Checked against PopRetrieve_manuscript.tex on 2026-09-04.
 \title{Supplementary Information for\\
-\textit{From signatures to populations: when does single-cell information improve drug retrieval?}}
+\textit{When do single-cell response distributions improve drug retrieval?}}
 
 \author{}
 \date{}
@@ -97,9 +129,8 @@
 
 \noindent
 This Supplementary Information provides additional methodological detail, robustness analyses and
-supporting experiments for the main text. It contains four Supplementary Notes and four
-Supplementary Tables. It carries no Extended Data figures: all 21 panels of the former Extended
-Data deck are now in the main figures. The supplementary analyses follow the same
+supporting experiments for the main text. It contains Supplementary Methods, four Supplementary
+Notes and four Supplementary Tables, and no Extended Data figures. The supplementary analyses follow the same
 conceptual structure as the main text: they examine the information retained by population-level
 retrieval, the dependence of apparent retrieval gains on the evaluation criterion, and the
 conditions under which state-specific single-cell responses can become consequential for candidate
@@ -121,53 +152,34 @@ ranking.
 %% =====================================================================
 \clearpage
 
-\noindent{\large\textbf{Supplementary Note 1. Verification and transfer limits of HIR-Bench}}
+\noindent{\large\textbf{Supplementary Methods}}
 \bigskip
 
 \noindent
-HIR-Bench was introduced as a controlled construction in which the conditions under which
-within-population structure can alter candidate preference are known analytically. It is therefore
-used to verify the logic of a preference-changing regime rather than to infer a biological phase
-boundary from data.
+\textbf{Implementation of population retrieval scores.}
+Energy distance was the primary population score. RBF-kernel maximum mean discrepancy used the
+median squared pairwise distance of the pooled query and candidate sample as its bandwidth
+reference and evaluated scales of 0.25, 1 and 4 times that value. Sliced Wasserstein-1 distance
+averaged quantile-matched projections over 128 fixed random directions. Candidate populations were
+subsampled with a fixed seed to at most 500 cells in the observed-population analyses and 300 cells
+in the partial-observation analyses. A population containing fewer than two cells after filtering
+was assigned a fixed large penalty distance rather than removed from the candidate library.
 
-The generator satisfies its internal consistency checks on the full parameter grid. When the two
-subpopulations have no conflict in candidate preference, the retrieval-flip rate is 0, as required
-by construction. Across the remaining parameter settings, preference changes occur near the
-analytical boundary
-
-$$
-\alpha^{*}
-=
-\frac{B}{A+B},
-$$
-
-and the median distance from the observed flip location to this boundary is 0.27. These checks
-confirm that the benchmark behaves according to its specified latent-welfare model.
-
-We next asked whether the synthetic regime could be recognized from quantities observable at
-retrieval time. Observable features included the subpopulation-variance ratio, isotropy index and
-response diversity of the query and candidate populations. Their performance is reported in the
-main text. Features derived directly from the latent utility construction were analysed only as a
-controlled comparison and are not available to a retrieval system.
-
-The analytical boundary was also projected to the real-data retrieval tasks as a transfer test.
-This projection did not generalize. The resulting real-data labels were strongly imbalanced
-(228 versus 11), for which a constant majority-class predictor achieves 95.4\% accuracy. The
-synthetic-regime projection reached 61.1\%, substantially below this baseline. The projection was
-necessarily fitted on the reduced method-performance grid available for this analysis
-(144 instances, corresponding to 72 parameter cells), rather than on the full HIR-Bench grid.
-
-We therefore do not use the HIR-Bench boundary to classify biological datasets by whether
-population structure changes candidate preference. Its role is narrower: it establishes constructively that
-within-population structure can become consequential for candidate choice, while the failed
-real-data transfer shows that the corresponding regime cannot be inferred reliably from this
-synthetic boundary alone.
-
-
-
+\noindent
+\textbf{Implementation of subpopulation coverage.}
+Query cells were partitioned by $k$-means with $k=2$, three initializations and a fixed seed.
+Candidate cells were assigned to the query component whose centroid had the highest cosine
+similarity. A candidate with no cell assigned to a query component received the penalty distance
+for that component. At small $\beta$, the coverage distance was evaluated using
+$D_\beta=\operatorname{mean}(d)+\tfrac{\beta}{2}\operatorname{var}(d)+O(\beta^2)$ to avoid
+numerical cancellation in the log-sum-exp form. Coverage-mean and coverage-worst use the
+$\beta\rightarrow0$ and $\beta\rightarrow\infty$ limits, respectively. The base distance was
+energy distance unless otherwise specified; the complete score registry is given in
+Supplementary Table~1.
 
 \bigskip
-\noindent{\large\textbf{Supplementary Note 2. Additional diagnostics of when population information changes ranking}}
+
+\noindent{\large\textbf{Supplementary Note 1. Additional diagnostics of when population information changes ranking}}
 \bigskip
 
 \noindent
@@ -177,34 +189,30 @@ performed several additional analyses to ask whether simple observables could id
 for which population-level retrieval is more useful.
 
 \paragraph{Query identifiability.}
-In the SciPlex3 partial-observation tasks, query identifiability was quantified from the
-two-state response population independently of the retrieval outcome. Across 543 evaluable
-query--seed combinations, identifiability was positively associated with absolute
-mechanism-of-action nDCG (Spearman $\rho=0.17$, $p=6.3\times10^{-5}$). The relationship was not
-monotonic, however: mean nDCG across identifiability tertiles was 0.285, 0.240 and 0.444 from
-lowest to highest identifiability.
-
-This comparison is additionally confounded by candidate-library composition. Queries in the
-highest-identifiability tertile contained a median of six same-mechanism candidates, compared with
-two in each of the lower tertiles, and a larger relevant candidate pool mechanically increases the
-attainable nDCG. Even in the highest-identifiability tertile, the median silhouette score was only
-0.038, indicating weakly resolved two-state structure in these particular cell-line mixtures.
-These observations therefore do not establish identifiability as a reliable predictor of
-population-level retrieval gain.
+In A549 leave-drug-out retrieval, query identifiability was quantified as a two-cluster
+silhouette on the query cells, independently of the retrieval outcome. Across 543 evaluable
+query--seed combinations it was weakly and non-monotonically associated with the absolute
+mechanism-of-action nDCG of a single energy-distance run (Spearman $\rho=0.17$,
+$p=6.3\times10^{-5}$), and the association is confounded with candidate-library composition: the
+highest-identifiability tertile holds a median of six same-mechanism candidates against two in each
+lower tertile, and a larger relevant pool mechanically raises the attainable nDCG. The median
+silhouette score even in that tertile is 0.038, so the two-state structure these queries carry is
+weakly resolved. This analysis scores one retriever and therefore bears on absolute recovery rather
+than on the population-minus-mean gain.
 
 \paragraph{Unsupervised recovery of constructed two-state structure.}
-The main text reports recoverability in the constructed two-state mixture as a single supervised
-ceiling against the best unsupervised method (\MAINRECOVER). Three further measurements
-characterise the same limit and are reported here rather than in the figure.
+Response-identity recoverability in the constructed two-state mixture is a supervised ceiling
+against the best unsupervised method (\MAINRECOVER), and separately a ceiling of 0.879 when the
+same cells are posed at the level of individual drug pairs rather than pooled drug classes. Three further
+measurements characterise the same limit.
 
 First, across nine unsupervised clustering configurations, the median adjusted Rand index against
 the known two-source labels ranged from 0.037 to 0.106. The configurations were $k$-means with
 $k=2$ in the raw, 10-dimensional PCA, 50-dimensional PCA and response spaces, two-component
 Gaussian mixtures in the raw and 50-dimensional PCA spaces, and $k$-means with $k$ selected from
 3, 4 and 5 by silhouette, reported separately by which $k$ was selected. The highest value,
-0.106, was obtained when silhouette selection chose $k=4$. No configuration approached the value
-of 0.5 conventionally treated as reliable recovery, so the low ceiling is not specific to the
-clustering method used in the main analysis.
+0.106, was obtained when silhouette selection chose $k=4$. Recovery is weak under all nine, so the
+low ceiling is not specific to the clustering method used in the main analysis.
 
 Second, the weak separation is visible in the raw geometry rather than only in an accuracy score.
 Silhouette scores computed independently for each perturbation-response population under a
@@ -221,180 +229,180 @@ raised it from 0.07 to 1.00. The separation transform was defined from the full 
 populations before subsampling. Additional cells therefore do not compensate for states that are
 close together, which is the same conclusion the supervised ceiling reaches by a different route.
 
+%% REISSUED 2026-09-04 under the U arm, from
+%% results/exp16_gate_diagnosis/_merged_query_divergence.csv, which was itself rebuilt on
+%% 2026-09-03 (see docs/phase2/POST_REPAIR_MASTER_RESULTS.md A5c). The V-arm values were
+%% rho = 0.14, permutation p = 2e-4, a top-stratum mean of about +0.02, and a reversal in one of
+%% three cell lines. The reversal is now in TWO of three, which is a change of claim and not only
+%% of digits, so the cell-line means are printed rather than summarised.
 \paragraph{Measured response divergence.}
-We next stratified the 600 mechanism-evaluable queries by the cosine between their state-specific
-perturbation responses. Greater divergence was associated weakly with a larger
-population-minus-mean mechanism-recovery difference (Spearman $\rho=0.14$, permutation
-$p=2\times10^{-4}$), but the conditional advantage did not become convincingly positive. The most
-divergent stratum reached a mean nDCG difference of approximately $+0.02$, with a bootstrap
-interval spanning zero, and the direction reversed in one of the three SciPlex3 cell lines.
-Stratifying by query identifiability instead yielded essentially no association with retrieval
-advantage.
+We next stratified the 600 mechanism-evaluable queries by measured response divergence, one minus
+the mean cosine between their state-specific perturbation responses. Greater divergence was
+associated weakly with a larger population-minus-mean mechanism-recovery difference
+(Spearman $\rho=0.15$, $p=1.4\times10^{-4}$), but the conditional
+advantage did not become convincingly positive. The most divergent quartile reached a mean nDCG
+difference of $+0.014$ with a bootstrap interval of $-0.012$ to $+0.041$, and the direction
+reversed in two of the three SciPlex3 cell lines (A549 $-0.107$, $n=9$; K562 $-0.021$, $n=38$;
+MCF7 $+0.040$, $n=96$). That quartile is not balanced across cell lines, and its positive mean is
+carried by the one line that contributes two thirds of it.
 
 These results distinguish differential response from decision relevance. Stronger state-specific
 responses may create the information required for population-aware retrieval, but they do not
 guarantee that this information changes the ordering of candidate perturbations.
 
-\paragraph{The mechanism-recovery null is not a power artefact.}
-A null result invites the objection that the comparison could not have detected an effect, so we
-computed achieved power and the sample size required for 80\% power directly, in the highest
-response-divergence quartile: the stratum in which the pre-specified diagnostic itself predicts the
-largest population-level advantage, and therefore the only stratum in which the objection has
-force. Two task-proximal criteria were compared on the same queries. For minority-state coverage
-the observed mean gap was $+0.0056$ with a standard deviation of $0.0135$ across $n=191$ queries,
-giving an achieved power of $1.00$ and requiring only 45 queries for 80\% power. For
-mechanism-of-action nDCG the observed mean gap was $+0.0032$ with a standard deviation of $0.163$
-across $n=143$ queries, giving an achieved power of $0.06$ and requiring 20,844 queries for 80\%
-power.
-
-The two gaps differ by less than a factor of two; the two standard deviations differ by a factor of
-twelve. The mechanism-recovery comparison is therefore uninformative at the sample size available,
-and this is a property of that metric's variance rather than of the effect size. The correct reading
-is asymmetric and we state it as such: the minority-state comparison is well powered and returns a
-small effect, which is evidence of a small effect; the mechanism-recovery comparison is not
-adequately powered, so its null is an absence of evidence rather than evidence of absence. The main
-text's mechanism-recovery conclusion rests on the full 600-query set and on the shape of the whole
-distribution (\MAINCLASSAB), not on this stratum.
-
-These figures were reported in the main text until 2026-08-31, when the two panels carrying them
-were moved here to keep the main figure to the evidence that carries its argument.
+\paragraph{Precision of the two task-proximal comparisons in the highest-divergence stratum.}
+In the most divergent quartile the two criteria differ in precision rather than in effect size.
+The mechanism-recovery gap is nearly three times the minority-coverage gap but its per-query
+standard deviation is twelve times larger ($0.169$ against $0.0136$), so the two readings are
+asymmetric: the minority-state comparison is well determined and returns a small effect, which is
+evidence of a small effect, whereas the mechanism-recovery comparison in this stratum supports
+uncertainty rather than evidence of no effect. Achieved power and the sample size required for
+80\% power are given in the code release. The main text's mechanism-recovery conclusion rests on
+the full 600-query set and on the shape of the whole distribution (\MAINCLASSAB), not on this
+stratum.
 
 \paragraph{Instability of thresholded dominance counts.}
-We also examined whether the real-data tasks could be summarized by counting queries whose
-population-level gain exceeded a fixed threshold. Such counts were unstable under resampling.
-Using a gain threshold of $+0.01$, only 2 of the 10 initially threshold-crossing cross-line tasks
-remained above threshold in at least 8 of 10 seed resamples. Conversely, control drugs that did
-not cross the threshold in the recorded run crossed it in between 1 and 4 of 10 resamples.
-
-The two most stable examples were A549$\rightarrow$MCF7 Abexinostat
-($+0.090\pm0.013$ across resamples) and Belinostat ($+0.081\pm0.027$), both HDAC inhibitors and
-both above threshold in all 10 resamples. With only two perturbations from a single drug class and
-one cell-line pair, these examples are treated as hypotheses rather than evidence for a general
-regime in which population structure changes candidate preference.
-
-For this reason, the main text reports continuous retrieval differences and stratified analyses
-rather than thresholded winner counts.
+Counting tasks whose population-level gain exceeds a fixed threshold is unstable under resampling:
+at a gain threshold of $+0.01$, only 2 of the 10 initially threshold-crossing cross-line tasks stay
+above it in at least 8 of 10 seed resamples, while control drugs that cross it in no recorded seed
+cross it in \CONTROLRANGE\ of 10 resamples. No count of dominant tasks is therefore reported from
+this work, and the main text reports continuous retrieval differences and stratified analyses
+instead.
 
 
 \bigskip
-\noindent{\large\textbf{Supplementary Note 3. Perturbation-predictor diagnostics}}
+%% REISSUED 2026-09-04 UNDER THE UNBIASED U-STATISTIC ENERGY DISTANCE. Every number in this
+%% paragraph was computed under the V-statistic and none of them survived the repair: the counts
+%% were 621 / 133 / 11 and are now 627 / 127 / 11, because the gate's verdict is computed from
+%% quantities that pass through the energy kernel and six queries crossed its threshold. The
+%% main manuscript reissued its copies on 2026-09-03 (see \NREC, \NNONREC there) and this
+%% paragraph did not, which is what left the two documents quoting different denominators for
+%% the same 765 queries. Recomputed here from
+%% results/exp12_partial_observed_retrieval/per_query_scores.csv with the estimator, seed and
+%% n_boot of figures/fig3/fig3e.py, so the SI, the main text and the panel share one bootstrap.
+\paragraph{Two checks on the diagnostic's decline verdicts.}
+The pre-specified diagnostic declines 127 queries as ``mean or no call'' and a further 11 as
+``mean sufficient''. Pooling the 11 into the non-recommended group leaves the verdict unchanged,
+and every interval involved is wider than either group median, so the comparison is a failure to
+detect enrichment rather than a demonstration that there is none. The two decline verdicts behave
+oppositely: the 127 ``mean or no call'' queries are \emph{more} divergent than the queries the
+diagnostic recommends (medians 1.68 against 1.66), which is the direction its design does not
+predict, while the 11 ``mean sufficient'' queries lie below the fifth percentile of both groups,
+where the diagnostic is correct.
+
+\bigskip
+\noindent{\large\textbf{Supplementary Note 2. Verification and transfer limits of HIR-Bench}}
 \bigskip
 
 \noindent
-The predictor analyses in this study address a specific question rather than comparing
-perturbation-prediction models generally: whether a predicted response population contains
-state-specific perturbation effects that could be exploited by a downstream population-aware
+HIR-Bench was introduced as a controlled construction in which the conditions under which
+within-population structure can alter candidate preference are known analytically. It is therefore
+used to verify the logic of a preference-changing regime rather than to infer a biological phase
+boundary from data.
+
+The generator satisfies its internal consistency checks on the full parameter grid. All three
+pre-specified checks pass: when the two subpopulations have no conflict in candidate preference the
+retrieval-flip rate is 0 against a threshold of 0.05, as required by construction; the median
+distance between the grid's own mixing fraction and the analytical boundary
+\[
+\alpha^{*}
+=
+\frac{B}{A+B},
+\]
+is 0.292, a range guard rather than a discriminating test since the statistic cannot exceed its
+threshold of 1.0; and under a predicted-mean information condition the
+population-level and mean-level Hit@1 differ by 0.051 against a threshold of 0.10, which is the
+degeneracy the construction requires when no within-population structure is available to the
 retriever.
 
-\paragraph{Additive response models.}
-For a predictor that applies the same perturbation effect $\delta_d$ to every cell in a context,
+The measured counterpart of the analytical boundary behaves as the construction predicts. Over the
+36 cells of the conflict-by-majority-fraction grid, the energy distance exceeds mean-signature
+retrieval in Hit@1 in 30 of them, and the advantage runs from $-0.25$ to $+1.00$, largest where
+conflict is high and the majority fraction is above $\alpha^{*}$ and vanishing below it.
 
-$$
-\widehat{x}_{i,d}
-=
-x_i+\delta_d,
-$$
+We next asked whether the synthetic regime could be recognized from quantities observable at
+retrieval time. Observable features included the subpopulation-variance ratio, isotropy index and
+response diversity of the query and candidate populations. Under a cross-validation unit that
+respects the 28 label-determining parameter cells, those features reach a pooled out-of-fold AUC
+of 0.788 against a majority-class rate of 0.643. Splitting instead on the 672 grid configurations,
+which leaves about twelve near-duplicates of each held-out instance in training, raises it to
+0.836, so leakage alone is worth $+0.048$ and the honest observable result is modest. Because the
+label is deterministic within a parameter cell, every held-out fold is single-class and the pooled
+out-of-fold AUC is the only statistic the design admits. Removing within-population information
+also raised the best decision regret over the method set, which a predicted-structure condition
+recovered, so the construction penalizes that loss in the direction it was built to.
 
-the response of any two cellular states is identical after subtraction of their corresponding
-controls,
+The analytical boundary was also projected to the biological retrieval tasks as a transfer test.
+This projection did not generalize. The resulting labels were strongly imbalanced
+(229 versus 10), for which a constant majority-class predictor achieves 95.8\% accuracy. The
+synthetic-regime projection reached 39.7\%, far below this baseline and below it on four of the
+five datasets separately (0.29, 0.40, 0.33 and 0.22); the fifth is the predicted-mean subset, where
+the projection returns the same verdict for every task by construction. The boundary was transferred by percentile rather than by value: the
+crossover percentile was fitted on 4{,}480 grid cells of the HIR-Bench method-performance layer
+and applied to the real tasks at the corresponding quantile of their own preference-conflict
+distribution.
 
-$$
-r_{d,0}
-=
-r_{d,1}
-=
-\delta_d.
-$$
+HIR-Bench establishes constructively that within-population structure can become consequential
+for candidate choice. The failed transfer sets its limit: the corresponding regime in biological
+data cannot be inferred from this synthetic boundary.
 
-Consequently,
 
-$$
-\cos(r_{d,0},r_{d,1})=1.
-$$
-
-This result is independent of the heterogeneity of the starting control population. An additive
-predictor can therefore generate a visually heterogeneous predicted population while containing
-no state-specific variation in the perturbation effect itself.
-
-The average-effect and linear-latent predictors used in the main analysis satisfy this additive
-limit by construction when the perturbation response is referenced to the model-consistent
-baseline. Their role is to establish this limiting case, not to represent the performance of
-modern perturbation-prediction models as a class.
-
-\paragraph{scGen.}
-A deployed scGen model was evaluated using the same within-context cellular-state partition and
-state-specific induced-response definition as the other predictors. Across the same 30
-cell-line and drug combinations, its mean induced-response cosine was 0.972, close to the additive
-limit of 1.000 and substantially more aligned than the corresponding responses observed in real
-treated cells (0.205). Thus, in this experiment scGen
-preserved substantially less state dependence in the perturbation effect than was present in the
-observed response populations.
-
-The model is the published \texttt{scgen.SCGEN} implementation on \texttt{scvi-tools}, trained on
-the SciPlex3 tensor with the perturbation label as batch key and the cell line as label key, 30
-latent dimensions, batch size 512, at most 40 epochs with early stopping after 15 epochs without
-improvement, and a fixed seed. Predictions use scGen's own latent arithmetic: one latent delta per
-perturbation, taken as the mean latent of treated cells minus the mean latent of control cells,
-added to the encoded control mean and decoded (Methods).
-
-\paragraph{Non-parametric optimal-transport mapping.}
-We additionally evaluated a non-parametric optimal-transport map as a predictor that is not
-constrained to apply a shared additive shift to all cells. Under the within-context
-differential-response analysis, the optimal-transport predictions reached an induced-response
-cosine of approximately $0.900\pm0.107$, moving away from the additive limit but remaining much
-more aligned than the observed responses.
-
-A latent-space implementation passed the corresponding perturbation-learning diagnostic
-(mean-delta agreement 0.352), whereas the same construction applied directly in gene space showed
-substantially weaker perturbation learning (0.057). The latent-space implementation was therefore
-used for the differential-response comparison.
-
-The map is an entropic (Sinkhorn) coupling between control and treated cells with uniform
-marginals, regularization $0.05$, at most 500 iterations and a cost matrix rescaled by its maximum,
-solved in a 30-component PCA latent fitted unsupervised on at most 20,000 cells. Each fitting
-context is centred on its own control mean, and the query context is excluded from the fit. A
-barycentric projection gives a per-source-cell displacement, extended to the query's real control
-cells by nearest-source matching in the same centred space and decoded through the PCA inverse
-transform (Methods).
-
-Opening this state-specific response channel was not sufficient to provide a clean retrieval test.
-When the same optimal-transport map was used to generate candidates in the cross-context
-predict-then-rank setting, Hit@1 was approximately 0.05 under each retrieval rule, compared with
-0.88 for the additive average-effect candidate source. The optimal-transport predictions were
-therefore too inaccurate in that transfer setting to test whether greater state dependence itself
-improves retrieval.
-
-Taken together, these analyses leave a specific unresolved experiment. A decisive test requires a
-predictor that both generalizes accurately to the target cellular context and reproduces the
-state-specific perturbation responses present in real cells. No predictor evaluated here satisfied
-both requirements simultaneously.
 
 
 \bigskip
-\noindent{\large\textbf{Supplementary Note 4. Robustness of the natural-heterogeneity and large-scale analyses}}
+\noindent{\large\textbf{Supplementary Note 3. Robustness of the natural-heterogeneity and large-scale analyses}}
 \bigskip
 
 \noindent
 The main text uses patient-derived glioblastoma and Tahoe-100M to ask whether the information
 requirements identified in the controlled experiments are also present when cellular heterogeneity
-is not created by combining experimentally distinct source populations. These datasets are not
-additional retrieval benchmarks. They measure differential response, recoverability and the
-extent to which state-specific response ordering leaves headroom for population structure to alter
-candidate preference.
+is not created by combining experimentally distinct source populations. These datasets measure differential response,
+recoverability and the extent to which state-specific response ordering leaves headroom for
+population structure to alter candidate preference; no retrieval is benchmarked on them.
+
+\paragraph{Response alignment between compartments.}
+For 17 patient--drug pairs in which both compartments carried enough treated and control cells, the
+cosine between the malignant and myeloid perturbation-response directions has a median of 0.566,
+against a range of 0.02 to 0.39 for the constructed mixtures used elsewhere in this study. Read
+directly, that contrast says the two compartments of a real tumour respond far more alike than two
+experimentally combined cell lines do.
+
+The cosine is descriptive. It is confounded with effect size and with signal-to-noise: a
+compartment with a weak or noisily estimated response yields a lower cosine for reasons that have
+nothing to do with its pharmacology, and the compartments here differ substantially in cell
+number. The two natural-tissue results the main text relies on, the recoverability gap and the
+conservation of candidate ordering across disjoint compartments, are measured without reference
+to it.
 
 \paragraph{Robustness of glioblastoma compartment assignment.}
 The ZhaoSims2021 dataset does not provide resolved cell-type labels for the analysed cells, so
-malignant, tumour-associated myeloid and oligodendrocyte compartments were assigned from canonical
-marker scores. The primary analysis required both an absolute marker-expression threshold of 0.25
-and a $z$-score margin of 0.25 over the second-highest compartment score. Cells failing these
-criteria were excluded rather than forced into a compartment, resulting in 39.9\% of cells being
-labelled unassigned.
+malignant, tumour-associated myeloid and oligodendrocyte compartments were assigned from marker
+scores. Cells with fewer than 200 detected genes were removed, counts were library-size normalized
+to $10^4$ and $\log(1+x)$ transformed, and gene symbols were upper-cased; compartment scoring runs
+on that full matrix, before the 2,000-gene selection used downstream, so the labels do not depend
+on a gene set chosen for downstream variance. Three marker sets were used: malignant \emph{SOX2},
+\emph{EGFR}, \emph{PDGFRA}, \emph{OLIG1}, \emph{OLIG2}, \emph{GFAP} and \emph{AQP4}; myeloid
+\emph{PTPRC}, \emph{CD14}, \emph{AIF1}, \emph{CSF1R}, \emph{ITGAM}, \emph{C1QA} and
+\emph{C1QB}; oligodendrocyte \emph{MBP}, \emph{PLP1}, \emph{MOG} and \emph{MAG}. A marker
+absent from the matrix is skipped. Each gene was $z$-scored across all cells of the cohort and the
+compartment score is the mean of its set's $z$-scores, so the scores are cohort-dependent by
+construction. A cell was called for the highest-scoring compartment only if the mean
+log-normalized expression of that compartment's key markers (malignant \emph{SOX2},
+\emph{OLIG2}, \emph{EGFR}; myeloid \emph{CD14}, \emph{CSF1R}, \emph{C1QB}, \emph{AIF1};
+oligodendrocyte \emph{MBP}, \emph{PLP1}) reached 0.25 and its $z$-score margin over the
+second-highest compartment reached 0.25. Cells failing either criterion were left unassigned
+rather than swept into a leftover class, which leaves 39.9\% of cells unassigned. The build
+refuses to proceed unless every called compartment expresses its own key markers most strongly,
+and writes the check to \texttt{results/zhao\_gbm/compartment\_validation.csv}.
 
 The results were stable when both thresholds were varied jointly over
-
-$$
+\[
 \{0.10,\;0.25,\;0.40,\;0.50\}.
-$$
+\]
+The unsupervised arm is the best of four partitions of the same cells: $k$-means with $k=2$,
+a two-component Gaussian mixture, Leiden\cite{Leiden} and HDBSCAN\cite{HDBSCAN}. Leiden is the
+maximum on 152 of the 180 natural splits, so the reported best-unsupervised value is close to
+Leiden's alone.
 
 Across this range, the excluded fraction varied from 29\% to 58\%, while the supervised
 drug-response ceiling remained between 0.915 and 0.923, the best unsupervised recovery between
@@ -411,15 +419,13 @@ resampling was used to quantify uncertainty, and the analysis was repeated after
 dominant patient.
 
 The reported recoverability gap is computed within each split before aggregation,
-
-$$
+\[
 G_j
 =
 A^{(j)}_{\mathrm{sup}}
 -
 A^{(j)}_{\mathrm{unsup}},
-$$
-
+\]
 rather than as the difference between the two marginal medians. The primary paired median is
 $+0.117$; subtracting the marginal medians would instead give $+0.147$. Across 5,000
 patient-cluster bootstrap resamples, the natural-minus-constructed difference in recoverability
@@ -427,9 +433,20 @@ gap was $+0.109$ with an interval of $[+0.052,+0.129]$, and no bootstrap draw wa
 zero. Because only four patient clusters contribute to this calculation, the interval is
 interpreted as supportive rather than as a precise population-level uncertainty estimate.
 
+Two aggregation controls give the same gap. Fixing every probe--clusterer pair, so that the same pair is scored in both arms,
+gives $+0.122$ in tissue against $-0.002$ in the constructed arm. Removing the patient that
+contributes 30 of the 36 splits gives $+0.123$, with a $[+0.098,+0.138]$ interval.
+
 \paragraph{Large-scale measurement in Tahoe-100M.}
 Tahoe-100M plate 3 provides a substantially larger setting in which heterogeneity occurs within
-cell lines rather than through constructed mixtures. Across 3,630 evaluable drug--cell-line
+cell lines rather than through constructed mixtures. Two cellular-state definitions are used
+below, and both are fixed before any treated cell is examined. The first is the released
+cell-cycle phase call, G1 against G2M, with S-phase cells dropped as intermediate and each
+state's response referred to its own phase-matched control. The second is $k$-means with $k=2$
+fitted on each cell line's DMSO\_TF control cells in the 2,304 highly variable genes in log1p
+space, with ten initializations and a fixed seed; treated cells are assigned to the nearest
+control centroid, the larger control cluster is taken as the first state, and a cell line enters
+only when it holds at least 100 control cells. Across 3,630 evaluable drug--cell-line
 conditions, the median cosine between the two state-specific response directions was 0.739
 (interquartile range 0.600--0.836). Fewer than 0.11\% of conditions were as divergent as the
 constructed mixtures used in the controlled experiments.
@@ -443,7 +460,8 @@ analysis to well-covered compounds changed the median from 0.739 to 0.740.
 Recoverability remained measurable at scale. Across 960 sampled drug pairs and 48 cell lines, the
 supervised ceiling was 0.853 and the best unsupervised procedure reached 0.611, giving a median
 paired gap of 0.157. The gap was positive in all 48 evaluable cell lines. Individual unsupervised
-methods gave similar results: $k$-means 0.592, Gaussian mixtures 0.582 and Leiden 0.563.
+methods gave similar results: $k$-means 0.592, Gaussian mixtures 0.582 and
+Leiden\cite{Leiden} 0.563.
 
 \paragraph{State-specific ordering and decision-relevance headroom.}
 We finally compared relative drug-response ordering between non-overlapping cellular states. Under
@@ -455,137 +473,185 @@ These high correlations indicate that relative drug ordering is often substantia
 between cellular states even when the states respond differently. The pattern is not universal:
 under the control-derived partition, 2 of 45 contexts had a correlation below 0.5, with a minimum
 of 0.236. Such contexts leave greater headroom for state-specific response information to alter
-candidate ordering, but this statistic alone does not establish that a population-level retrieval
-method would improve the selected candidate.
+candidate ordering. Headroom of that kind is what a population-level method would need in order to
+change the selected candidate, and it is measured here on the ordering alone.
 
 The two state definitions agree only moderately in their ranking of contexts
 (Spearman $\rho=0.466$), reinforcing that apparent decision-relevance headroom depends on how
 cellular states are defined. Both partitions were specified independently of downstream retrieval
-performance, and neither was selected after observing which produced the larger effect.
+performance.
 
 Tahoe-100M therefore supports the same separation of concepts observed elsewhere in the study:
 state-specific responses can exist, and response identity can remain recoverable, while much of
-the relative candidate ordering is still preserved across cellular states. No retrieval algorithm
-was run on Tahoe-100M, so these analyses constrain the conditions under which population-level
-retrieval could add value rather than measuring such an advantage directly.
+the relative candidate ordering is still preserved across cellular states. These are intrinsic-state
+diagnostics: they constrain the conditions under which population-level retrieval could add value.
+The advantage itself is measured on the same plate by the source-to-target intervention benchmark
+of the main text (Figs.~5 and~6).
 
 
 
 
 
+\noindent{\large\textbf{Supplementary Note 4. Perturbation-predictor diagnostics}}
+\bigskip
+
+\noindent
+The predictor analyses ask one question: whether a predicted response population contains
+state-specific perturbation effects that a downstream population-aware retriever could exploit.
+
+\paragraph{Additive response models.}
+For a predictor that applies the same perturbation effect $\delta_d$ to every cell in a context,
+\[
+\widehat{x}_{i,d}
+=
+x_i+\delta_d,
+\]
+the response of any two cellular states is identical after subtraction of their corresponding
+controls,
+\[
+r_{d,0}
+=
+r_{d,1}
+=
+\delta_d.
+\]
+Consequently,
+\[
+\cos(r_{d,0},r_{d,1})=1.
+\]
+This result is independent of the heterogeneity of the starting control population. An additive
+predictor can therefore generate a visually heterogeneous predicted population while containing
+no state-specific variation in the perturbation effect itself.
+
+The average-effect and linear-latent predictors used in the main analysis satisfy this additive
+limit by construction when the perturbation response is referenced to the model-consistent
+baseline. They are included to establish this limiting case.
+
+%% MOVED HERE FROM THE MAIN METHODS, 2026-09-04. It specified an experiment that appears only in
+%% this note and in Supplementary Table 4, and while it sat in the main Methods it claimed to
+%% specify Fig. 6c, which is the Tahoe-100M prediction arm and a different experiment entirely.
+\paragraph{The predict-then-rank construction.}
+The predictor-generated retrieval used in this note factorizes the pipeline the field actually uses
+into a forward predictor and a retrieval rule, so that the retrieval layer can be varied with the
+predictor held fixed. It is run on SciPlex3 and is not the Tahoe-100M prediction arm of the main
+text. Queries are cross-line: for each of the three SciPlex3
+cell-line pairs (K562--A549, A549--MCF7, K562--MCF7) and each of ten drugs selected by a
+cross-context divergence probe, the query is that drug's response blended across the two lines at
+mixing fraction $\alpha\in\{0.5,0.7,0.9\}$ over 200 cells, with eight seeds, giving 720 queries.
+The candidate library is the query's own drug together with up to 30 further drugs shared by both
+lines; the query's drug is the single relevant candidate. Each predictor is asked to imagine every
+candidate's response in the query's real blended control cells, mixed at the same $\alpha$, so no
+predictor sees the within-query line structure. The imagined populations are then ranked by four
+retrieval rules: mean cosine, $R^2$ of the predicted against the observed mean delta, energy
+distance and coverage. Performance is nDCG@10 with binary relevance, and the reported quantity is
+the distributional minus the mean-cosine value for the same predictor, so each predictor is its own
+control. The predictors are fitted on the full SciPlex3 matrix, including the lines that compose
+each query, so these values are an in-sample ceiling on candidate generation rather than a transfer
+result.
+
+\paragraph{Two reference baselines.}
+A predicted population's induced response can be referred to two different controls, and the two
+answer different questions. Referring it to the model's own zero-effect baseline, which is its
+reconstruction of the control population whenever the model decodes and the control cells
+themselves when it does not, cancels the reconstruction bias and leaves the divergence the model
+itself generates. The additivity result above pins this quantity to exactly 1 for any predictor
+of the form $\widehat{x}_{i,d}=g(x_i)+\delta_d$ with a fixed $g$, covering both the gene-space
+case $g=\mathrm{id}$ and the latent case in which $g$ is the model's own reconstruction, so the
+value is analytic and not estimated. Referring it to the real
+control cells is instead what a retrieval scorer does, and the resulting cosine contains the
+model's reconstruction bias, which differs between cellular states and is not a perturbation
+response. Across the same 30 cell-line and drug combinations, the average-effect, linear-latent,
+scGen and optimal-transport predictors give 1.000, 1.000, 0.972 and 0.900 against the model
+baseline, and 1.000, 0.190, 0.404 and 0.380 against the real control; real treated cells give
+0.205, and have no model baseline.
+
+The two columns are informative together. Lower cosine means more state-specific divergence. The
+average-effect predictor adds its effect directly in gene space and has no reconstruction step,
+so its two references coincide at 1.000, which is the correct answer for such a model. The other three pass their output through a decoder whose
+reconstruction error differs between cellular states, and that error enters the real-control
+cosine as if it were a perturbation effect. The linear-latent model is the clearest case: it
+generates exactly zero state-specific divergence, yet measured the way a scorer measures it it
+reads 0.190, marginally more divergent than the 0.205 of the real cells it replaces. A
+distributional score run on such a predicted population is therefore partly scoring the decoder.
+This is a second reason, independent of transfer accuracy, why predicted candidates do not
+provide a clean test of whether population structure improves retrieval.
+
+\paragraph{scGen.}
+A deployed scGen model was evaluated using the same within-context cellular-state partition and
+state-specific induced-response definition as the other predictors. Across the same 30
+cell-line and drug combinations, its mean induced-response cosine against its own
+reconstruction baseline was 0.972, close to the additive limit of 1.000, and 0.404 against the
+real control. Thus, in this experiment scGen preserved substantially less state dependence in
+the perturbation effect than the 0.205 observed in real treated cells, under either reference.
+
+The model is the published \texttt{scgen.SCGEN} implementation on \texttt{scvi-tools}\cite{scviTools},
+trained on
+the SciPlex3 tensor with the perturbation label as batch key and the cell line as label key, 30
+latent dimensions, batch size 512, at most 40 epochs with early stopping after 15 epochs without
+improvement, and a fixed seed. Predictions use scGen's own latent arithmetic: one latent delta per
+perturbation, taken as the mean latent of treated cells minus the mean latent of control cells,
+added to the encoded control mean and decoded.
+
+\paragraph{Entropic optimal-transport mapping.}
+We additionally evaluated an entropic optimal-transport map as a predictor that is not
+constrained to apply a shared additive shift to all cells. It is a different map from the
+Gaussian (Bures) predictor of the Tahoe-100M arm (Methods). Under the within-context
+differential-response analysis, the optimal-transport predictions reached an induced-response
+cosine of approximately $0.900\pm0.107$ against their own reconstruction baseline, moving away
+from the additive limit but remaining much more aligned than the observed responses.
+
+A latent-space implementation passed the corresponding perturbation-learning diagnostic
+(mean-delta agreement 0.352), whereas the same construction applied directly in gene space showed
+substantially weaker perturbation learning (0.057). The latent-space implementation was therefore
+used for the differential-response comparison.
+
+The map is an entropic (Sinkhorn) coupling\cite{Sinkhorn} between control and treated cells,
+solved with POT\cite{POT}, with uniform
+marginals, regularization $0.05$, at most 500 iterations and a cost matrix rescaled by its maximum,
+solved in a 30-component PCA latent fitted unsupervised on at most 20,000 cells. Each fitting
+context is centred on its own control mean, and the query context is excluded from the fit. A
+barycentric projection gives a per-source-cell displacement, extended to the query's real control
+cells by nearest-source matching in the same centred space and decoded through the PCA inverse
+transform.
+
+Opening this state-specific response channel was not sufficient to provide a clean retrieval test.
+When the same entropic map was used to generate candidates in the cross-context
+predict-then-rank setting, Hit@1 was 0.053 under mean cosine and 0.007 and 0.008 under the two
+distributional rules, against 0.879 to 0.899 for the additive average-effect candidate source. The optimal-transport predictions were
+therefore too inaccurate in that transfer setting to test whether greater state dependence itself
+improves retrieval.
+
+Taken together, these analyses leave a specific unresolved experiment. A decisive test requires a
+predictor that both generalizes accurately to the target cellular context and reproduces the
+state-specific perturbation responses present in real cells. No predictor evaluated here satisfied
+both requirements simultaneously.
+
+
+\bigskip
 % SUPPLEMENTARY TABLE 1
+%% No \clearpage here. Supplementary Table 1(a) is a 400 pt [H] box and the Supplementary Methods
+%% end near the top of their last page, so the break was throwing away most of a page that the
+%% first table fits on.
 \renewcommand{\thetable}{S\arabic{table}}
 \setcounter{table}{0}
 
-\clearpage
-\begin{table}[H]
-\stabhead{Supplementary Table 1. Data resources, preprocessing and analytical roles.}
-\centering
+\begingroup
 \footnotesize
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{@{}p{2.7cm}p{2.5cm}p{3.0cm}p{3.4cm}p{4.0cm}@{}}
-\toprule
-Resource & Scale & Perturbation/context structure & Representation and controls & Role in this study \\
-\midrule
-
-SciPlex3
-&
-276{,}325 cells; 2{,}000 genes
-&
-188 compounds shared across A549, K562 and MCF7
-&
-Log-transformed 2{,}000-gene representation; perturbation responses referenced to matched controls
-&
-Primary observed-population drug-retrieval setting; controlled within- and cross-context constructions; source of the GDSC2-linked transcriptomic rankings
-\\
-
-Frangieh Perturb-CITE-seq
-&
-218{,}023 RNA-profiled cells; 2{,}000 genes; 20 retained surface proteins
-&
-239 CRISPR knockouts across Control, IFN$\gamma$ and Co-culture conditions
-&
-RNA and protein modalities joined by cell barcode; responses referenced to condition-matched controls
-&
-Independent genetic-perturbation retrieval setting and matched RNA--protein evaluator-shape experiment; not treated as a drug-retrieval benchmark
-\\
-
-CD34$+$ HSPC
-&
-33{,}984 cells; 2{,}000 genes
-&
-36 compounds
-&
-Log-transformed expression; DMSO-referenced perturbation responses
-&
-Negative-control retrieval setting for testing whether population-level information consistently improves ranking
-\\
-
-ZhaoSims2021 glioblastoma
-&
-10 patients; 6 compounds
-&
-Acute-slice culture and surgical biopsy with co-existing malignant, myeloid and oligodendrocyte compartments
-&
-Counts normalized to $10^4$ per cell, log1p-transformed and reduced to 2{,}000 highly variable genes; state-specific responses referenced within patient and compartment
-&
-Natural-tissue analysis of differential response, recoverability and state-specific response ordering; no retrieval benchmark is constructed
-\\
-
-Tahoe-100M plate 3
-&
-4{,}158{,}278 cells; 2{,}304 genes
-&
-50 cell lines $\times$ 93 compounds at one concentration, with DMSO\_TF controls
-&
-Released 2{,}304-gene log1p representation used without refitting; state-specific responses referenced to matched state controls
-&
-Large-scale measurement of differential response, recoverability and state-ordering agreement under intrinsic within-cell-line heterogeneity; no retrieval is run
-\\
-
-GDSC2
-&
-286 compounds across 969 cell lines in the retained release
-&
-35 compounds matched to the SciPlex3 panel; A549, K562 and MCF7 excluded from external profiles
-&
-Fitted dose--response AUC; primary functional similarity uses cell-line-centred cross-line response profiles
-&
-External functional evaluation of fixed SciPlex3 RNA-derived rankings
-\\
-
-HIR-Bench
-&
-13{,}440 synthetic instances
-&
-672 parameter configurations $\times$ 20 seeds in a two-subpopulation latent-welfare model
-&
-Synthetic observed, predicted-mean and predicted-structure information conditions
-&
-Controlled demonstration that population structure can alter candidate preference; not interpreted as a biological generative model
-\\
-
-\bottomrule
-\end{tabular}
-\stabnote{The resources above answer distinct questions and are not pooled as independent
-replicates of a single benchmark. Dataset-specific cell-number thresholds, subsampling rules and
-statistical units are given in the corresponding Methods sections.}
-\end{table}
-
-
-
-
-% SUPPLEMENTARY TABLE 2
-\begin{table}[H]
-\stabhead{Supplementary Table 2. Retrieval scores, task constructions and evaluation criteria.}
-\stabsub{(a) Retrieval scores.}
-\centering
-\footnotesize
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{@{}p{3.2cm}p{4.0cm}p{4.3cm}p{4.0cm}@{}}
+\begin{longtable}{@{}p{3.2cm}p{4.0cm}p{4.3cm}p{4.0cm}@{}}
+\caption*{{\large\bfseries Supplementary Table 1. Retrieval scores, task constructions and evaluation criteria.}}\\
+\caption*{{\bfseries (a) Retrieval scores.}}\\
 \toprule
 Score & Input representation & Ranking rule & Role \\
 \midrule
+\endfirsthead
+\caption*{\textit{Supplementary Table 1(a) continued.}}\\
+\toprule
+Score & Input representation & Ranking rule & Role \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
 
 Mean cosine
 &
@@ -649,36 +715,38 @@ Component-level distances aggregated with temperature $\beta$; increasing $\beta
 &
 Population-sensitive score used for the partial-observation response-matching analyses
 \\
-
-\bottomrule
-\end{tabular}
-\stabnote{The five configured population-level scoring variants are, verbatim from the experiment
-registry, \texttt{energy}, \texttt{mmd}, \texttt{sliced\_wasserstein}, \texttt{coverage\_mean} and
-\texttt{coverage\_worst}. The four score families become five configurations because
+\end{longtable}
+\stabnote{The four score families become five population-level configurations because
 subpopulation-coverage contributes two: coverage-mean is the $\beta\rightarrow0$ limit of the
 aggregate and coverage-worst the $\beta\rightarrow\infty$ limit, both with energy distance as the
-per-component base metric. They are compared against \texttt{mean\_cosine}, \texttt{mean\_l2},
-\texttt{cmap\_match} and \texttt{cmap\_reverse}; \texttt{cmap\_match} is numerically identical to
-\texttt{mean\_cosine} on control-referenced mean vectors, and \texttt{cmap\_reverse} is its
-negation.}
-\end{table}
+per-component base metric. The CMap-style cosine is numerically identical to mean cosine on
+control-referenced mean vectors; its sign-flipped variant is scored in the partial-observation
+experiments as an anti-correlation floor and is not reported here.}
+\endgroup
 
 
-\begin{table}[H]
-\stabsub{Supplementary Table 2 continued. (b) Retrieval task constructions.}
-\centering
+\begingroup
 \footnotesize
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{@{}p{3.4cm}p{4.5cm}p{4.2cm}p{3.5cm}@{}}
+\begin{longtable}{@{}p{3.4cm}p{4.5cm}p{4.2cm}p{3.5cm}@{}}
+\caption*{{\bfseries Supplementary Table 1 continued. (b) Retrieval task constructions.}}\\
 \toprule
 Task & Query and candidate construction & Candidate evaluation & Statistical unit \\
 \midrule
+\endfirsthead
+\caption*{\textit{Supplementary Table 1(b) continued.}}\\
+\toprule
+Task & Query and candidate construction & Candidate evaluation & Statistical unit \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
 
-Observed-population source identification
+
+Observed-population retrieval over heterogeneous queries
 &
-A measured perturbation-response population is used as query and ranked against a library containing the perturbation that generated it and task-specific distractors
+A heterogeneous query population combines two response modes at weight $\alpha$; the library holds a held-out re-mixture at the same weight, the two single-mode populations, and 40 distractors, giving a 43-candidate library
 &
-Hit@1; the true generating perturbation is relevant
+Hit@1; only the both-mode candidate is relevant, so a single-mode population counts as a miss even when it carries one of the query's two response modes
 &
 Retrieval query; headline values macro-averaged over seven task--setting combinations
 \\
@@ -727,27 +795,32 @@ Spearman agreement between RNA-derived ranking and external GDSC2 functional-sim
 &
 Per-query correlation summarized within SciPlex3 cell line
 \\
-
-\bottomrule
-\end{tabular}
-\end{table}
+\end{longtable}
+\endgroup
 
 
-\begin{table}[H]
-\stabsub{Supplementary Table 2 continued. (c) Evaluation criteria applied to fixed rankings.}
-\centering
+\begingroup
 \footnotesize
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{@{}p{3.5cm}p{6.2cm}p{5.5cm}@{}}
+\begin{longtable}{@{}p{3.5cm}p{6.2cm}p{5.5cm}@{}}
+\caption*{{\bfseries Supplementary Table 1 continued. (c) Evaluation criteria applied to fixed rankings.}}\\
 \toprule
 Criterion & Definition & Interpretation \\
 \midrule
+\endfirsthead
+\caption*{\textit{Supplementary Table 1(c) continued.}}\\
+\toprule
+Criterion & Definition & Interpretation \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
 
 Hit@1
 &
-Indicator that the perturbation generating the query is ranked first
+Indicator that the both-mode candidate, the held-out re-mixture at the query's own weight, is ranked first
 &
-Source-identification performance
+Recovery of the query's response composition, not of its perturbation identity alone
 \\
 
 Response-matching regret
@@ -798,9 +871,7 @@ $-\left|\|\bar d_q\|-\|\bar d_c\|\right|$
 &
 Query-dependent scalar control that uses no within-population information
 \\
-
-\bottomrule
-\end{tabular}
+\end{longtable}
 \stabnote{Query states $s$ are obtained by $k$-means with $k=2$ on the query cells, the minority state
 being the smaller cluster. A candidate $d$ with response population $P_d$ receives the welfare
 $U(d)=\operatorname{agg}_s\big(-\mathcal{E}(P_d,Q_s)\big)$, where $\mathcal{E}$ is the energy
@@ -812,22 +883,236 @@ optimum. Minority-state coverage is
 $\tfrac{1}{2}\big(1+\cos(\bar P_d,\bar Q_{\mathrm{min}})\big)$, the cosine between the candidate's
 mean response and the mean response of the query's minority state rescaled to $[0,1]$. The same
 definitions are given in the main Methods.}
-\end{table}
+\endgroup
+
+
+
+
+% SUPPLEMENTARY TABLE 2
+\begingroup
+\footnotesize
+\begin{longtable}{@{}p{2.7cm}p{2.5cm}p{3.0cm}p{3.4cm}p{4.0cm}@{}}
+\caption*{{\large\bfseries Supplementary Table 2. Data resources, preprocessing and analytical roles.}}\\
+\toprule
+Resource & Scale & Perturbation/context structure & Representation and controls & Role in this study \\
+\midrule
+\endfirsthead
+\caption*{\textit{Supplementary Table 2 continued.}}\\
+\toprule
+Resource & Scale & Perturbation/context structure & Representation and controls & Role in this study \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
+
+SciPlex3
+&
+276{,}325 cells; 2{,}000 genes
+&
+188 compounds shared across A549, K562 and MCF7
+&
+Log-transformed 2{,}000-gene representation; perturbation responses referenced to matched controls
+&
+Primary observed-population drug-retrieval setting; controlled within- and cross-context constructions; source of the GDSC2-linked transcriptomic rankings
+\\
+
+Frangieh Perturb-CITE-seq
+&
+218{,}023 RNA-profiled cells for retrieval and 218{,}331 barcode-matched cells for the RNA--protein evaluation; 2{,}000 genes; 20 retained surface proteins
+&
+239 CRISPR knockouts across Control, IFN$\gamma$ and Co-culture conditions
+&
+RNA and protein modalities joined by cell barcode; responses referenced to condition-matched controls
+&
+Independent genetic-perturbation retrieval setting and matched RNA--protein evaluator-shape experiment; not treated as a drug-retrieval benchmark
+\\
+
+CD34$+$ HSPC
+&
+33{,}984 cells; 2{,}000 genes
+&
+36 compounds
+&
+Log-transformed expression; DMSO-referenced perturbation responses
+&
+Negative-control retrieval setting for testing whether population-level information consistently improves ranking
+\\
+
+ZhaoSims2021 glioblastoma
+&
+10 patients; 6 compounds
+&
+Acute-slice culture and surgical biopsy with co-existing malignant, myeloid and oligodendrocyte compartments
+&
+Counts normalized to $10^4$ per cell, log1p-transformed and reduced to 2{,}000 highly variable genes; state-specific responses referenced within patient and compartment
+&
+Natural-tissue analysis of differential response, recoverability and state-specific response ordering; no retrieval benchmark is constructed
+\\
+
+Tahoe-100M plate 3
+&
+4{,}158{,}278 cells; 2{,}304 genes
+&
+50 cell lines $\times$ 93 compounds at one concentration, with DMSO\_TF controls
+&
+Released 2{,}304-gene log1p representation used without refitting; state-specific responses referenced to matched state controls
+&
+Two roles: large-scale measurement of differential response, recoverability and state-ordering agreement under intrinsic within-cell-line heterogeneity, and the substrate for the source-to-target intervention retrieval benchmark (Figs.~5 and~6)
+\\
+
+GDSC2
+&
+286 compounds across 969 cell lines in the retained release
+&
+35 compounds matched to the SciPlex3 panel; A549, K562 and MCF7 excluded from external profiles
+&
+Fitted dose--response AUC; primary functional similarity uses cell-line-centred cross-line response profiles
+&
+External functional evaluation of fixed SciPlex3 RNA-derived rankings
+\\
+
+HIR-Bench
+&
+13{,}440 synthetic instances
+&
+672 parameter configurations $\times$ 20 seeds in a two-subpopulation latent-welfare model
+&
+Synthetic observed, predicted-mean and predicted-structure information conditions
+&
+Controlled demonstration that population structure can alter candidate preference; not interpreted as a biological generative model
+\\
+\end{longtable}
+\stabnote{The resources above answer distinct questions and are not pooled as independent
+replicates of a single benchmark. Dataset-specific cell-number thresholds, subsampling rules and
+statistical units are given in the corresponding Methods sections.}
+\endgroup
 
 
 
 
 % SUPPLEMENTARY TABLE 3
-\begin{table}[H]
-\stabhead{Supplementary Table 3. Perturbation-predictor implementations and their role in the
-differential-response analysis.}
-\centering
+\begingroup
+\small
+\begin{longtable}{@{}lcc@{}}
+\caption*{{\large\bfseries Supplementary Table 3. Sensitivity of the GDSC2 functional-similarity evaluation to response-profile construction.}}\\
+\caption*{The primary external functional criterion compares drug--drug response profiles after removing the shared cell-line sensitivity effect. For cell line $l$ and drug $d$, \[ \widetilde{\mathrm{AUC}}_{d,l} = \mathrm{AUC}_{d,l} - \frac{1}{|\mathcal D_l|} \sum_{d'\in\mathcal D_l} \mathrm{AUC}_{d',l}, \] where $\mathcal D_l$ contains all GDSC2 compounds measured in that cell line. Drug--drug functional similarity is then the Spearman correlation between centred cross-cell-line response profiles. The table compares this primary construction with the corresponding uncentred AUC-profile similarity.}\\
+\toprule
+RNA-derived ranking rule
+&
+\shortstack{Cell-line-centred\\functional similarity}
+&
+\shortstack{Uncentred\\functional similarity}
+\\
+\midrule
+\endfirsthead
+\caption*{\textit{Supplementary Table 3 continued.}}\\
+\toprule
+RNA-derived ranking rule
+&
+\shortstack{Cell-line-centred\\functional similarity}
+&
+\shortstack{Uncentred\\functional similarity}
+\\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
+
+%% REISSUED 2026-09-04 with the main manuscript's \ENERGYFUNC and \ENERGYUNCEN. These were
+%% +0.276 and +0.0967, the V-statistic values; Fig. 3h had already been rebuilt and drew +0.265.
+%% Only the energy row moves: every other row of this table ranks by a mean vector or a scalar
+%% and never touches the energy kernel.
+Energy distance
+&
+\textbf{+0.265}
+&
++0.0902
+\\
+
+Mean cosine, control referenced
+&
++0.083
+&
+\textbf{+0.138}
+\\
+
+Mean cosine, treated mean only
+&
++0.241
+&
++0.092
+\\
+
+Response-magnitude matching
+&
++0.232
+&
++0.217
+\\
+
+Candidate magnitude only
+&
+$-$0.330
+&
++0.135
+\\
+
+Potency matching diagnostic
+&
++0.399
+&
++0.290
+\\
+
+\midrule
+
+Energy, magnitude-adjusted partial rank correlation
+&
++0.105
+&
+n/a
+\\
+\end{longtable}
+\stabnote{Values are median per-query Spearman correlations over 103 leave-one-drug-out queries across the
+three SciPlex3 cell lines. The primary centred functional criterion is constructed from GDSC2 AUC
+profiles after subtracting each cell line's mean response across all 286 compounds in the retained
+release. Drug pairs sharing fewer than 100 cell lines are excluded; 591 usable drug pairs remain,
+with a median of 909 shared cell lines per pair.
+
+\smallskip\noindent
+The change between centred and uncentred constructions shows that external evaluation is itself
+sensitive to how the functional measurement is summarized. Under the centred criterion, energy
+retrieval exceeds the control-referenced mean-signature baseline, but much of this association is
+also reproduced by response-magnitude matching. Under the uncentred criterion, the ordering between
+energy and the mean-signature baseline reverses. Neither construction is interpreted as a direct
+measure of therapeutic utility.}
+\endgroup
+
+
+
+
+
+
+
+% SUPPLEMENTARY TABLE 4
+\begingroup
 \footnotesize
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{@{}p{2.5cm}p{3.3cm}p{3.2cm}p{3.6cm}p{3.1cm}@{}}
+\begin{longtable}{@{}p{2.5cm}p{3.3cm}p{3.2cm}p{3.6cm}p{3.1cm}@{}}
+\caption*{{\large\bfseries Supplementary Table 4. Perturbation-predictor implementations and their role in the differential-response analysis.}}\\
 \toprule
 Predictor & Model form & Predicted-population construction & Use in this study & Interpretation / limitation \\
 \midrule
+\endfirsthead
+\caption*{\textit{Supplementary Table 4 continued.}}\\
+\toprule
+Predictor & Model form & Predicted-population construction & Use in this study & Interpretation / limitation \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
 
 Average-effect
 &
@@ -873,45 +1158,77 @@ Additional differential-response diagnostic reported in the main text
 Mean induced-response cosine 0.972 over 30 cell-line and drug combinations
 \\
 
-Optimal-transport map
+Entropic optimal-transport map
 &
-Non-parametric mapping that permits cell-dependent displacements
+Non-parametric Sinkhorn mapping that permits cell-dependent displacements
 &
 Control cells mapped individually to predicted treated states
 &
 Additional non-additive differential-response diagnostic; also tested as a candidate-response source
 &
-Within-context induced-response cosine approximately $0.900\pm0.107$; cross-context candidate predictions were too inaccurate for a clean retrieval test
+Within-context induced-response cosine approximately $0.900\pm0.107$ against the map's own reconstruction baseline and $0.380$ against the real control; cross-context candidate predictions were too inaccurate for a clean retrieval test
 \\
-
-\bottomrule
-\end{tabular}
-\end{table}
+\end{longtable}
+\endgroup
 
 
-\begin{table}[H]
-\stabsub{Supplementary Table 3 continued. Implementation details required for reproducibility.}
-\centering
+%% THE FIRST THREE ROWS WERE A CHECKLIST, NOT A SPECIFICATION, until 2026-09-04. They named the
+%% fields a reproducible entry has to carry ("drug-effect estimation set, context handling, cell
+%% cap, and exact construction") without filling any of them in, while the scGen and
+%% optimal-transport rows below were already written out. They are now filled from the code that
+%% produced the reported runs: src/baselines/average_effect_predictor.py,
+%% src/baselines/nearest_neighbor_predictor.py, the _CPALinearLatent class in
+%% src/baselines/scgen_predictor.py (recorded in the run provenance as backend cpa_linear), and
+%% the runner src/experiments/exp09_predict_then_rank.py.
+\begingroup
 \footnotesize
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{@{}p{3.0cm}p{11.8cm}@{}}
+\begin{longtable}{@{}p{3.0cm}p{11.8cm}@{}}
+\caption*{{\bfseries Supplementary Table 4 continued. Implementation of each predictor.}}\\
 \toprule
-Predictor & Required final specification \\
+Predictor & Implementation \\
 \midrule
+\endfirsthead
+\caption*{\textit{Supplementary Table 4 continued.}}\\
+\toprule
+Predictor & Implementation \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+
 
 Average-effect
 &
-Drug-effect estimation set, context handling, cell cap, and exact construction used in the reported predict-then-rank run
+Per drug $d$, $\widehat{\delta}_d=\operatorname{mean}_{c}\big(\operatorname{mean}(\text{treated}_{c,d})-\operatorname{mean}(\text{control}_{c})\big)$
+over the SciPlex3 cell lines $c$, a line contributing only where it has at least two treated cells
+for $d$; one signature per drug, independent of the query context. The predicted population is that
+single signature added to each of the query context's real control cells, so every cell is shifted
+identically. No reconstruction step, so the model's own zero-effect baseline is the control cells
+themselves. A drug absent from the fit is scored at $-10^{6}$ under every rule rather than imputed
 \\
 
 Nearest-neighbour
 &
-Control-state similarity metric, training contexts available to each query, tie handling and transferred-response construction
+$c^{*}=\arg\min_{c}\big(1-\cos(\bar{x}_{\text{control}}^{\text{query}},\bar{x}_{\text{control}}^{c})\big)$
+over the training lines, then $\widehat{\delta}_d=\operatorname{mean}(\text{treated}_{c^{*},d})-\operatorname{mean}(\text{control}_{c^{*}})$.
+Distances are compared strictly, so an exact tie is resolved by context iteration order; where
+$d$ was not measured in $c^{*}$ the signature falls back to the mean of $d$'s signatures over the
+remaining admissible lines. Population synthesis as for average-effect. The two query-composing cell lines remained eligible donor
+contexts, so this experiment is interpreted as an in-sample ceiling rather than as a transfer
+evaluation
 \\
 
 Linear-latent
 &
-Encoder dimensionality, fitting set, perturbation-delta estimation, decoder definition and population-synthesis procedure
+PCA with 30 components fitted, unsupervised and once, on up to 20{,}000 cells drawn from the full
+SciPlex3 matrix at seed 0. Each line's control latent mean is stored; each drug's latent delta is
+the mean over lines of (mean latent of treated $-$ that line's control latent mean), again
+requiring at least two treated cells. Prediction encodes each real control cell of the query
+context, adds the drug's latent delta to that cell's own latent code, and decodes each cell by the
+PCA inverse transform. The decoder is linear, so the composite map is
+$\mathrm{dec}(\mathrm{enc}(x)+\mathrm{d}z)=\mathrm{P}x+\mathrm{P}\,\mathrm{d}z$ and the predictor is
+additive in gene space and deterministic. Because it reconstructs, its own zero-effect baseline is
+the PCA reconstruction of the control cells rather than those cells
 \\
 
 scGen
@@ -929,123 +1246,33 @@ marginals; regularization $0.05$; at most 500 iterations; fitted per non-query c
 that context's own control mean, with the query context excluded; barycentric projection extended to
 the query's control cells by nearest-source matching and decoded by the PCA inverse transform
 \\
-
-\bottomrule
-\end{tabular}
+\end{longtable}
 \stabnote{Predictors are used as candidate-response sources or information diagnostics rather than as a
 benchmark of perturbation-prediction architectures. The reported predict-then-rank experiment uses
 predictors fitted on the full SciPlex3 matrix and is therefore interpreted as an in-sample ceiling,
-not as a cross-context generalization benchmark.}
-\end{table}
-
-
-
-
-% SUPPLEMENTARY TABLE 4
-\begin{table}[H]
-\stabhead{Supplementary Table 4. Sensitivity of the GDSC2 functional-similarity evaluation to
-response-profile construction.}
-\stabbody{The primary external functional criterion compares drug--drug response profiles after removing the
-shared cell-line sensitivity effect. For cell line $l$ and drug $d$,
-
-\[
-\widetilde{\mathrm{AUC}}_{d,l}
-=
-\mathrm{AUC}_{d,l}
--
-\frac{1}{|\mathcal D_l|}
-\sum_{d'\in\mathcal D_l}
-\mathrm{AUC}_{d',l},
-\]
-
-where $\mathcal D_l$ contains all GDSC2 compounds measured in that cell line. Drug--drug
-functional similarity is then the Spearman correlation between centred cross-cell-line response
-profiles. The table compares this primary construction with the corresponding uncentred AUC-profile
-similarity.}
-\centering
-\small
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}lcc@{}}
-\toprule
-RNA-derived ranking rule
-&
-\shortstack{Cell-line-centred\\functional similarity}
-&
-\shortstack{Uncentred\\functional similarity}
-\\
-\midrule
-
-Energy distance
-&
-\textbf{+0.276}
-&
-+0.0967
-\\
-
-Mean cosine, control referenced
-&
-+0.083
-&
-\textbf{+0.138}
-\\
-
-Mean cosine, treated mean only
-&
-+0.241
-&
-+0.092
-\\
-
-Response-magnitude matching
-&
-+0.232
-&
-+0.217
-\\
-
-Candidate magnitude only
-&
-$-$0.330
-&
-+0.135
-\\
-
-Potency matching diagnostic
-&
-+0.399
-&
-+0.290
-\\
-
-\midrule
-
-Energy, magnitude-adjusted partial rank correlation
-&
-+0.097
-&
-n/a
-\\
-
-\bottomrule
-\end{tabular}
-\stabnote{Values are median per-query Spearman correlations over 103 leave-one-drug-out queries across the
-three SciPlex3 cell lines. The primary centred functional criterion is constructed from GDSC2 AUC
-profiles after subtracting each cell line's mean response across all 286 compounds in the retained
-release. Drug pairs sharing fewer than 100 cell lines are excluded; 591 usable drug pairs remain,
-with a median of 909 shared cell lines per pair.
+not as a cross-context generalization benchmark.
 
 \smallskip\noindent
-The change between centred and uncentred constructions shows that external evaluation is itself
-sensitive to how the functional measurement is summarized. Under the centred criterion, energy
-retrieval exceeds the control-referenced mean-signature baseline, but much of this association is
-also reproduced by response-magnitude matching. Under the uncentred criterion, the ordering between
-energy and the mean-signature baseline reverses. Neither construction is interpreted as a direct
-measure of therapeutic utility.}
-\end{table}
+Constants shared by every row of the predict-then-rank run: 720 cross-line queries, formed from the
+three cell-line pairs (K562--A549, A549--MCF7, K562--MCF7) at mixing weights $\alpha\in\{0.5,0.7,0.9\}$
+over 10 divergent drugs and 8 seeds; 200 query cells per query; a 31-drug candidate library holding
+the true drug and 30 other shared drugs; 200 predicted cells synthesized per candidate; query
+construction seeded at $1000+s$ and distractor selection at $7000+s$ for $s=0,\dots,7$. The
+within-context differential-response measurements in Supplementary Note~4 are a separate run over
+30 cell-line and drug combinations with 400 control cells per context split into two states, a
+state requiring 60 cells and a treated arm 40, at seed 0. Nearest-neighbour appears only in the
+predict-then-rank run and scGen only in the differential-response run; the entropic
+optimal-transport map appears in both.}
+\endgroup
 
-
-
-
-
+%% SUPPLEMENTARY REFERENCES, added 2026-09-06. The SI loaded natbib from the start but had no
+%% \bibliography, so the methods named only here, Leiden, HDBSCAN, the entropic map and its POT
+%% implementation, and scvi-tools, could not be credited anywhere. This list numbers from 1 and is
+%% independent of the main reference list, which is the normal arrangement for a separate SI file:
+%% a work cited in both documents carries a different number in each.
+\clearpage
+\renewcommand{\refname}{Supplementary References}
+\bibliographystyle{unsrtnat}
+\bibliography{references}
 
 \end{document}

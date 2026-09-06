@@ -131,16 +131,12 @@
 
 %% ---- Graph-based and target-centric inverse design ----
 
-@article{ref11,
-  author = {Guney, Emre and Menche, J{\"o}rg and Vidal, Marc and Barab{\'a}si, Albert-L{\'a}szl{\'o}},
-  title = {Network-based in silico drug efficacy screening},
-  journal = {Nature Communications},
-  volume = {7},
-  number = {1},
-  pages = {10331},
-  year = {2016},
-  doi = {10.1038/ncomms10331}}
-
+%% ref11 (Guney et al., Network-based in silico drug efficacy screening, Nature Communications
+%% 7:10331, 2016, doi:10.1038/ncomms10331) was REMOVED on 2026-09-06. It had been attached to
+%% "retrieval asks which perturbation best matches a cellular response of interest", but it ranks
+%% drugs by network proximity between drug targets and disease genes, so neither side of its
+%% comparison is a cellular response. ref12 carries that clause. Recorded here rather than deleted
+%% silently, in case a later draft wants it on a clause about network-proximity candidate ranking.
 %% Journal version. An earlier bibliography entry placed this in Nature Machine
 %% Intelligence (2025); the peer-reviewed article appeared in Nature Biomedical
 %% Engineering, and the venue was corrected against the PubMed and Crossref records.
@@ -259,13 +255,19 @@
   year = {2023},
   doi = {10.1038/s41592-023-01969-x}}
 
+%% JOURNAL VERSION, substituted 2026-09-06. This was cited as arXiv:2511.13124; the peer-reviewed
+%% article appeared in the AAAI 2026 proceedings under the same title with the same seven authors,
+%% verified against the Crossref record for 10.1609/aaai.v40i25.39190.
 @article{Departures,
   author = {Chi, Changxi and Huang, Yufei and Xia, Jun and Zheng, Jiangbin and Liu, Yunfan and Zang, Zelin and Li, Stan Z.},
   title = {Departures: distributional transport for single-cell perturbation prediction with neural {S}chr{\"o}dinger bridges},
-  journal = {arXiv},
-  year = {2025},
-  doi = {10.48550/arXiv.2511.13124},
-  note = {preprint {arXiv}:2511.13124}}
+  journal = {Proceedings of the {AAAI} Conference on Artificial Intelligence},
+  volume = {40},
+  number = {25},
+  pages = {20544--20552},
+  year = {2026},
+  doi = {10.1609/aaai.v40i25.39190},
+  note = {also available as {arXiv}:2511.13124}}
 
 @article{CellFlow,
   author = {Klein, Dominik and others},
@@ -340,9 +342,9 @@
   title = {{S}inkhorn distances: lightspeed computation of optimal transport},
   booktitle = {Advances in Neural Information Processing Systems},
   volume = {26},
+  pages = {2292--2300},
   year = {2013},
-  doi = {10.48550/arXiv.1306.0895},
-  note = {preprint {arXiv}:1306.0895}}
+  note = {{NIPS} 2013 proceedings register no {DOI}; preprint {arXiv}:1306.0895}}
 
 @article{POT,
   author = {Flamary, R{\'e}mi and others},
@@ -473,15 +475,21 @@
   year = {2022},
   doi = {10.1016/j.patter.2022.100476}}
 
+%% AUTHOR LIST CORRECTED 2026-09-06. The spelled-out list printed a person who exists in no
+%% source: "Winters, Ian" was a splice of two real authors, Lai, Ian and Winters, Aidan, after
+%% which every later name was shifted by one. bioRxiv publishes only initials for this preprint
+%% and six given names had been expanded by guess, each to a same-initial substitute that
+%% Crossref and Europe PMC both contradict: Sapre Aakash (Ajay), Nguyen Huy (Hoai), Kaplan
+%% Olivier (Olivia), Hariadi Bertrand (Bryan), Marrujo Susana (Simone), Salvino Carlos C. A.
+%% (Crina Curca Alec), Gallareta Olivares Gabriel (Guillermo). The entry also broke this file's
+%% own rule for lists longer than seven, which is what let 31 unverified names reach the page.
+%% Crossref and Europe PMC agree on 32 authors including Lai, Ian, confirmed by the authors on
+%% 2026-09-06; bioRxiv's own per-version API returns 31 for v3 and omits Lai. The verified order
+%% is Zhang, Ubas, de Borja, Svensson, Thomas, Thakar, Lai, Winters, Khan, Jones, Thompson, Tran,
+%% Pangallo, Papalexi, Sapre, Nguyen, Sanderson, Nigos, Kaplan, Schroeder, Hariadi, Marrujo,
+%% Salvino, Gallareta Olivares, Koehler, Geiss, Rosenberg, Roco, Merico, Alidoust, Goodarzi, Yu.
 @article{Tahoe100M,
-  author  = {Zhang, Jesse and Ubas, Airol A. and de Borja, Richard and Svensson, Valentine and
-             Thomas, Nicole and Thakar, Neha and Winters, Ian and Khan, Umair and Jones, Matthew G.
-             and Thompson, John D. and Tran, Vuong and Pangallo, Joseph and Papalexi, Efthymia and
-             Sapre, Aakash and Nguyen, Huy and Sanderson, Oliver and Nigos, Maria and Kaplan, Olivier
-             and Schroeder, Sarah and Hariadi, Bertrand and Marrujo, Susana and
-             Salvino, Carlos C. A. and Gallareta Olivares, Gabriel and Koehler, Ryan and
-             Geiss, Gary and Rosenberg, Alexander and Roco, Charles and Merico, Daniele and
-             Alidoust, Nima and Goodarzi, Hani and Yu, Johnny},
+  author  = {Zhang, Jesse and others},
   title   = {{Tahoe-100M}: a giga-scale single-cell perturbation atlas for context-dependent gene
              function and cellular modeling},
   journal = {bioRxiv},
@@ -489,3 +497,38 @@
   doi     = {10.1101/2025.02.20.639398},
   note    = {Preprint, version 3 (2025-05-10)}
 }
+
+%% ---- Software and protocol conventions credited in Methods ----
+%% Added 2026-09-06. Every field below was checked against the Crossref record for the DOI, or,
+%% for scikit-learn, against DBLP, since JMLR registers no DOI (as for POT and MMD above).
+
+@article{CITEseq,
+  author = {Stoeckius, Marlon and Hafemeister, Christoph and Stephenson, William and
+            Houck-Loomis, Brian and Chattopadhyay, Pratip K. and Swerdlow, Harold and
+            Satija, Rahul and Smibert, Peter},
+  title = {Simultaneous epitope and transcriptome measurement in single cells},
+  journal = {Nature Methods},
+  volume = {14},
+  number = {9},
+  pages = {865--868},
+  year = {2017},
+  doi = {10.1038/nmeth.4380}}
+
+@article{Scanpy,
+  author = {Wolf, F. Alexander and Angerer, Philipp and Theis, Fabian J.},
+  title = {{SCANPY}: large-scale single-cell gene expression data analysis},
+  journal = {Genome Biology},
+  volume = {19},
+  number = {1},
+  pages = {15},
+  year = {2018},
+  doi = {10.1186/s13059-017-1382-0}}
+
+@article{ScikitLearn,
+  author = {Pedregosa, Fabian and others},
+  title = {Scikit-learn: machine learning in {P}ython},
+  journal = {Journal of Machine Learning Research},
+  volume = {12},
+  pages = {2825--2830},
+  year = {2011},
+  note = {{JMLR} registers no {DOI}}}

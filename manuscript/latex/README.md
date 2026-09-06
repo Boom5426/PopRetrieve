@@ -46,13 +46,15 @@ python figures/build_all.py --write    # rebuild, then sync to manuscript/latex/
 ```
 
 `build_all.py` owns one canonical stem per figure (`fig1_problem`, `fig2_temptation`,
-`fig3_collapse`, `fig4_benchmarks`, `fig5_two_gate`) and refuses to build if a
+`fig3_collapse`, `fig4_benchmarks`, `fig5_intervention_oracle`,
+`fig6_prediction_bottleneck`) and refuses to build if a
 `figN_assemble.py` declares a different one. It also fails the build if any text is **authored**
 below 5 pt. It does **not** know this document's text width: the check reads nominal point
 sizes, so a figure authored wider than the text block is scaled down by
 `\includegraphics[width=\textwidth]` and can print below 5 pt while the gate reports CLEAN. The
-five main figures are authored at 6.90 in, i.e. the printed width, so their scale factor is 1.00
-and nominal equals printed.
+six main figures are authored at 6.90 in, i.e. the printed width, so their scale factor is 1.00
+and nominal equals printed. There have been six since 2026-09-03, when the Phase-II page split
+into an oracle figure and a prediction figure.
 
 The five figures are 7.77 to 9.22 in tall on the page and their captions run 631 to 731 words, so
 graphic and caption cannot share a page and are two floats each: a `[p]` float holding only the

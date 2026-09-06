@@ -183,7 +183,9 @@ a degenerate ground truth.
 **That shipped run was a QUICK sanity run**, and the label is not constant on the full task
 set. See R13, which supersedes the reading of this experiment. On the FULL set the test is no
 longer degenerate, it is simply **failed**: the majority-class baseline is 95.4% and the
-projection scores 61.1%.
+projection scores 61.1%. **Both numbers were reissued on 2026-09-03** under the unbiased
+estimator and a boundary re-fitted on the full 4,480-cell grid: the baseline is 95.8% and the
+projection scores 39.7%. The correction's finding is unchanged and larger.
 
 The related "predicted_mean → `no_DART`: 100%" is a **tautology**: `predict_regime` returns
 `no_DART` unconditionally for that information condition. It is now labelled as such and no
@@ -2303,3 +2305,193 @@ because `_letter()` draws at the box edge rather than inside the pad.
 as its panels' bottom pads, and every left-pad cut went into axes width, so what left the page is
 white. Heights: fig1 219 mm (unchanged, it had no reclaimable white and its rows already measure
 0.04 in apart), fig2 193 -> 187, fig3 203 -> 195, fig4 203 -> 181, fig5 207 -> 187.
+
+## R67. Figure 4f drew the overlapping premise statistic under a caption that described the disjoint one
+
+`figures/fig7/fig7_natural.draw_c`, imported unchanged into Figure 4 as panel f, plotted
+`cos_mean_signature` against `cos_malignant_response` and printed `Spearman rho = +0.878`, with an
+x axis reading `cos(mean signature A, B)`. The Figure 4 caption and the Results sentence that cites
+the panel both describe the DISJOINT comparison, myeloid-response similarity against
+malignant-response similarity at `rho = +0.835`. A reader comparing panel to caption saw two
+different statistics, two different x quantities and two different numbers.
+
+**Was:** panel = mean-signature form (`+0.878`); caption and Results = disjoint form (`+0.835`).
+**Is:** all three are the disjoint form. `\PREMISEOVERLAP` was defined in the preamble and used
+nowhere; the overlapping value is now quoted in the Results, where it belongs as the quantity the
+disjoint repeat was run against, together with the share that makes the repeat necessary.
+
+The fix required no new computation on the tumour data. The per-pair table
+`results/zhao_gbm/premise_mean_vs_compartment.csv` has carried `cos_myeloid_response` since it was
+written, and the panel computes its own rho from the column it plots, so changing the column
+changed the printed value to `+0.835` without a digit being retyped. The existing axis limits
+`(-0.2, 0.95)` already contain the myeloid range (`-0.106` to `0.810`), so the diagonal, the equal
+aspect and the limits are untouched. `figures/fig7` is no longer built as a figure of its own
+(`build_all.STEMS` covers 1 to 5), so the edit reaches only Figure 4f.
+
+Both the panel docstring and the geometry wrapper now name the constraint, because the failure mode
+is a one-word edit away in either file.
+
+## R68. The Source Data file shipped for Figure 5c,d contained a run the panel itself retracts
+
+`figures/source_data/fig5cd_structure_diagnostics.csv` held `real 0.046` against predictors near
+`0.009`, which is the "predictors collapse subpopulation variance, 5.1x collapse" claim that
+`figures/fig5/fig5c.py`'s own docstring retracts, plus a predictor named `scgen_cpa_linear` that
+appears in no file under `results/`. The panels had moved to the faithful `cells` synthesizer
+(`0.138 / 0.142 / 0.462`); the shipped table had not. Nature sends Source Data to reviewers, so a
+reviewer downloading this table would have received numbers reproducing neither panel nor text.
+
+**Root cause, and what changed.** The file sat in `sync_source_data.DERIVED`, a category whose
+check is `if not (REPO / rel).exists()`: it verifies the parent is on disk and never looks at the
+view's contents, so content drift in a derived view could not fail the gate. A third category,
+`GENERATED`, now holds views that have a builder; they are rebuilt from their parents on every sync
+and drift-checked like a MIRROR. `fig5cd_structure_diagnostics.csv` moved there with a builder that
+selects the rows the two panels plot and joins the induced-response cosine, so the table now
+reproduces both panels and both of the Results sentences that quote them. Run against the old file,
+the new gate fails with `DRIFTED`, which is the behaviour that was missing.
+
+`DERIVED` still exists for hand-built views with no generator; the rule is now to prefer
+`GENERATED` whenever a builder can be written.
+
+## R69. The Discussion attached a by-construction claim to a model that was never run
+
+Discussion: "a model that applies the same perturbation effect\cite{ref4,ref5} to every cell can
+preserve heterogeneity in the starting population yet, by construction, cannot generate
+state-specific differential responses." `ref5` is CPA, and
+`results/exp14_nonadditive_predictors/gate1_within_context.json` records `"cpa_real": {"status":
+"did not run"}`; CPA is not measured, described or limited anywhere in the submission. `ref4` is
+scGen, of which Methods states the opposite: "Because the decoder is nonlinear ... the
+induced-response cosine is not pinned to 1 by construction as it is for the linear-latent control",
+and Results measures it at 0.972 rather than 1.000.
+
+**Is:** the citations are dropped from the by-construction sentence, which now applies to the
+strictly additive predictors actually measured, followed by a sentence naming what was measured for
+the deployed latent-arithmetic model. `ref5` remains cited in the Introduction, where it is a
+forward-prediction reference and accurate.
+
+## R70. Two attributions that contradicted their own source
+
+- **honest and leaky cross-validation units were swapped.** Methods, "Reading the HIR-Bench
+  verification panels": "Under the leaky cross-validation unit, the latent-utility feature set
+  reaches a pooled out-of-fold AUC of 0.400."
+  `results/exp11_hir_benchmark/phase_grid_predictability_2x2.csv` assigns `0.400` to
+  `label_determining_cells` (28, the honest unit) and `0.640` to `instance_grid_id_LEAKY` (672).
+  The sentence then explains the number by "the benchmark has 28 label-determining parameter
+  cells", i.e. it explains the honest unit while naming the leaky one, and `figures/fig4/fig4f.py`
+  draws the matrix the right way round. Now reads "Under the honest, 28-cell cross-validation
+  unit ... 0.400 (0.640 under the leaky, 672-instance unit)".
+- **Tahoe recoverability is scored on drug identity, not on state labels.** Methods says so
+  plainly: "Tahoe recoverability was evaluated using drug identity rather than the state labels
+  used above." The Figure 5 caption nevertheless opened panels h to k with "All three requirements
+  measured on Tahoe-100M", and panel i's entry with a bare "Recoverability", while the requirement
+  is defined on state structure and Fig. 5e measures it that way. Both the caption and the Results
+  sentence now name the construct. This paper's argument is that an evaluator must not be
+  mismatched to what it evaluates; using one word for two different recoverabilities on the figure
+  carrying that argument is the version of the error a reviewer would quote back.
+
+## R71. A Supplementary heading asserted the opposite of its own paragraph
+
+Supplementary Note 2 carried `\paragraph{The mechanism-recovery null is not a power artefact.}`
+over a body that concludes "the mechanism-recovery comparison is not adequately powered, so its
+null is an absence of evidence rather than evidence of absence", with an achieved power of 0.06
+against 1.00 for the minority-state comparison in the same stratum. The heading described the
+minority-state half and denied the mechanism-recovery half. A reader skimming headings would take
+away the reverse of what the paragraph establishes. Retitled to name what the paragraph does,
+"Power of the two task-proximal comparisons in the highest-divergence stratum". No number, no
+verdict and no hedge changed; the asymmetric reading the paragraph already states is the correct
+one and stands.
+
+## R72. Figure 2 marked a cosine baseline built in this study as a published one
+
+`fig2_style.SCORERS["cmap_cosine"]` carried `label="CMap cosine", published=True`, and panel a
+prints `dagger published baseline` under the glyph that flag draws. The canonical L1000
+connectivity score is WTCS, which is the row above and is genuinely published; this row is a cosine
+applied to the same mean signatures, and the main text has always been careful about it ("the
+implemented CMap-style cosine", three times). The figure was less careful than the text it
+illustrates, and the equivalence result the figure supports is exactly the claim a reviewer would
+check the provenance of.
+
+**Is:** `label="CMap-style cos.", published=False`, so the dagger marks only WTCS, and the caption
+key now says which score is the published one and what the other is. Typography and overlap gates
+pass unchanged.
+
+## R73. A retracted decision-level table was sitting unmarked beside the live results
+
+`results/upgrade/class_c_viability.csv` carries the schema a decision-level external-utility
+analysis would have (`dart_top1_drug`, `dart_top1_auc`, `mean_top1_drug`, `mean_top1_auc`,
+`most_potent_drug`), which is exactly why it is dangerous: it looks finished. It is the output of
+`analysis/class_c/class_c_experiment.py`, retracted by R14a, which ranks `score_energy` ascending
+although that function returns a similarity, so the population scorer's rank-1 candidate in the
+file is the population farthest from the query. The signature is visible in the data:
+`dart_top1_drug` is effectively query-independent, naming Panobinostat in 142 of 152 rows against
+27 to 32 distinct picks for `mean_top1_drug`.
+
+The retraction lived only on the producing script and in this ledger. Nothing named the CSV, and
+nothing next to the CSV warned a reader who opened it directly. Moved to
+`results/upgrade/_retracted/` with a README stating the sign error, the dose and platform pooling,
+and what to use instead; the producing script now writes there too, so a re-run cannot replant it
+among the current tables.
+
+## R74. NOT FIXED, carried forward from this pass
+
+- **The macro layer is mostly dead.** The preamble declares that every number is a macro with a
+  provenance comment, and 88 of the main text's 104 macros are never used while the same values are
+  hand-typed in prose: `\HITENERGY` (0.837), `\REGRETALLP` (1.6e-66), `\CLASSBMED`, the whole
+  `TAHOE*` block. The hand-typed values are currently correct, so this is a drift risk rather than
+  an error, but it is the seam R67 came through: a number that lives in two places will eventually
+  disagree, and the mechanism built to prevent that is not connected.
+- **The Fig. 2 headline task is described as plain source identification.** Methods,
+  "Observed-population retrieval", says the library contains "the perturbation that generated the
+  query response together with competing perturbations". In all three exp08 tasks the query is a
+  constructed two-mode alpha-mixture and the ground truth is `covers-both`, a held-out re-mixture at
+  the same alpha; `majority-only` and `minority-only` are also candidates and are scored as misses.
+  For the controlled task those two are single-class HDAC and JAK populations, and for the
+  crossline and Frangieh tasks they are the same perturbation observed in one context. No sentence
+  in either .tex discloses the construction. This needs a Methods rewrite, not a one-line edit, and
+  it runs in the direction that flatters the headline gap, so it is recorded here rather than
+  patched quietly.
+- **No cluster-level resampling on the n=765 and n=600 paired tests.** A patient-level cluster
+  bootstrap exists (`analysis/natural/gate2_uncertainty.cluster_bootstrap`), as do leave-one-cell-
+  line-out CV in exp16, `(alpha, conflict)`-grouped CV for HIR-Bench and exp13 seed stability, but
+  none is computed on these two statistics, whose p-values are formed as if queries were
+  independent. The estimator is reusable with the cluster key changed to `heldout_drug` (144 and
+  130 clusters).
+
+---
+
+## R75. R42's own overlap figure was wrong, and understated the overlap it was conceding
+
+**Was:** R42 above, and with it `\PREMISESHARE` in the manuscript preamble, the Results sentence it
+fed, `analysis/natural/zhao_premise_disjoint.py`, `figures/fig7/fig7_natural.py`,
+`docs/phase2/FINAL_FIGURE_NUMBER_LEDGER.md` and `analysis/tahoe_pilot/README.md`: "the mean
+signature contains 43% of the malignant cells it is being asked to rank", sourced as 41,314 of
+96,225 called cells.
+
+**Is:** the malignant compartment contributes exactly **half** of that mean signature, by
+construction. `analysis/natural/zhao_two_gates.py:127-128` builds it as
+`mean_a = 0.5 * (a[malignant] + a[myeloid])`, an equal-weight average of two compartment deltas.
+It is not a cell-weighted mean over called cells at all.
+
+**Why 43% was wrong twice over.** The denominator 96,225 pools **three** compartments and includes
+23,233 oligodendrocytes, which never enter this signature. And no cell-count reading gives 43%
+either: malignant/(malignant+myeloid) is 56.6% of all called cells, 55.0% of the drug-treated cells
+across all ten patients, and 60.2% of the drug-treated cells of the four patients
+(PW030/PW032/PW034/PW036) this analysis actually uses.
+
+**Direction of the error.** R42 existed to concede how much of the +0.878 was arithmetic. Every
+correct reading of the overlap (50% by construction, 55-60% by cell count) is **larger** than 43%,
+so the concession was understated. The load-bearing number is unaffected: the manuscript's argument
+rests on the disjoint +0.835, which shares no cells and is what Fig. 4f draws.
+
+**Also wrong:** `zhao_premise_disjoint.py` attributed the 43% to Supplementary Table 3. That table
+is the GDSC2 functional-similarity sensitivity analysis and carries no compartment counts; the
+count source is `results/zhao_gbm/compartment_validation.csv`.
+
+**What changed.** `\PREMISESHARE` is retired from the manuscript preamble with a note forbidding
+its reinstatement at 43%; `\PREMISEOVERLAP` (+0.878) moved from Results into the Methods paragraph
+that already explains why the disjoint comparison is the reported one, now with the correct
+half-weight reason; the Results paragraph goes straight to the disjoint statistic. The two Python
+files and the Tahoe README carry the corrected wording. R42's text above is left as written, since
+this file is a record of what was believed when.
+
+**Not revisited here:** the Tahoe comparison quoted inside R42 (26% overlap, +0.064 of rho) was not
+re-derived in this pass and may carry the same class of error.

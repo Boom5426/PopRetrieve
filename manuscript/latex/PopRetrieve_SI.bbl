@@ -1,0 +1,44 @@
+\begin{thebibliography}{5}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Traag et~al.(2019)Traag, Waltman, and van Eck]{Leiden}
+V.~A. Traag, L.~Waltman, and N.~J. van Eck.
+\newblock From {L}ouvain to {L}eiden: guaranteeing well-connected communities.
+\newblock \emph{Scientific Reports}, 9\penalty0 (1):\penalty0 5233, 2019.
+\newblock \doi{10.1038/s41598-019-41695-z}.
+
+\bibitem[Campello et~al.(2013)Campello, Moulavi, and Sander]{HDBSCAN}
+Ricardo J. G.~B. Campello, Davoud Moulavi, and Joerg Sander.
+\newblock Density-based clustering based on hierarchical density estimates.
+\newblock In \emph{Advances in Knowledge Discovery and Data Mining ({PAKDD}
+  2013)}, pages 160--172, 2013.
+\newblock \doi{10.1007/978-3-642-37456-2_14}.
+
+\bibitem[Gayoso et~al.(2022)]{scviTools}
+Adam Gayoso et~al.
+\newblock A {P}ython library for probabilistic analysis of single-cell omics
+  data.
+\newblock \emph{Nature Biotechnology}, 40\penalty0 (2):\penalty0 163--166,
+  2022.
+\newblock \doi{10.1038/s41587-021-01206-w}.
+
+\bibitem[Cuturi(2013)]{Sinkhorn}
+Marco Cuturi.
+\newblock {S}inkhorn distances: lightspeed computation of optimal transport.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~26, pages 2292--2300, 2013.
+\newblock {NIPS} 2013 proceedings register no {DOI}; preprint
+  {arXiv}:1306.0895.
+
+\bibitem[Flamary et~al.(2021)]{POT}
+R{\'e}mi Flamary et~al.
+\newblock {POT}: {P}ython {O}ptimal {T}ransport.
+\newblock \emph{Journal of Machine Learning Research}, 22\penalty0
+  (78):\penalty0 1--8, 2021.
+\newblock open-source library.
+
+\end{thebibliography}
