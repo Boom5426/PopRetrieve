@@ -3,13 +3,19 @@
 WHY
 ---
 The manuscript reports that in a patient's tumour the similarity of two drugs' MEAN signatures
-ranks the similarity of their MALIGNANT-compartment responses at Spearman +0.878 (Fig. 5f), and
+ranks the similarity of their MALIGNANT-compartment responses at Spearman +0.878, and
 reads that as the mean already ranking most of what the subpopulation does.
 
-That statistic has a mechanical component. The mean signature is taken over ALL called cells, and
-malignant glioma is 41,314 of the 96,225 called cells, i.e. 43% of them (Supplementary Table 3).
-The two quantities being correlated therefore share nearly half their cells, so part of the
-correlation is arithmetic rather than biology. The same structure was found and corrected in the
+That statistic has a mechanical component. The mean signature is NOT a cell-weighted mean over
+all called cells: zhao_two_gates.py:127-128 builds it as 0.5*(delta_malignant + delta_myeloid), an
+equal-weight average of the two compartment deltas, so the malignant compartment contributes
+exactly HALF of it by construction and part of the correlation is arithmetic rather than biology.
+CORRECTED 2026-09-06. This block previously read "41,314 of the 96,225 called cells, i.e. 43% of
+them (Supplementary Table 3)". Both halves were wrong. 43% is the malignant share of all called
+cells across THREE compartments, and its denominator holds 23,233 oligodendrocytes that never
+enter this signature; by cell count the malignant share of the drug-treated cells of the four
+patients used here is 60.2%. And Supplementary Table 3 is the GDSC2 sensitivity table, which
+carries no compartment counts; the count source is results/zhao_gbm/compartment_validation.csv. The same structure was found and corrected in the
 Tahoe pilot, where the mean signature contained 26% of the compartment being predicted and the
 overlap was worth +0.064 of rho.
 
@@ -57,7 +63,7 @@ def main() -> int:
 
     rows = []
     for name, x, y in [
-        ("published  (mean signature -> malignant, SHARES 43% of its cells)",
+        ("published  (mean signature -> malignant, malignant is HALF of it)",
          "cos_mean_signature", "cos_malignant_response"),
         ("disjoint   (myeloid -> malignant, shares no cells)",
          "cos_myeloid_response", "cos_malignant_response"),

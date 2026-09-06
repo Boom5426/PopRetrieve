@@ -71,7 +71,7 @@ the correlation is arithmetic. `tahoe_gate3_disjoint.py` is the fix, and it cost
 (0.905 -> 0.841).
 
 **The same flaw was then found in the manuscript's own premise correlation**, where the overlap is
-larger (43%): `CORRECTIONS.md` R42, and `analysis/natural/zhao_premise_disjoint.py`. The published
+larger (the malignant compartment is half of the tissue mean signature by construction): `CORRECTIONS.md` R42, and `analysis/natural/zhao_premise_disjoint.py`. The published
 +0.878 becomes **+0.835** on disjoint compartments. Nothing is retracted; the number moves.
 
 **The first Gate 2 pass was not like-for-like either.** It scored the unsupervised arm with

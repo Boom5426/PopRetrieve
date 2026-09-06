@@ -2,672 +2,1680 @@ pair,drug,seed,predictor,synth,induced_response_cosine
 K562+A549,(+)-JQ1,0,real_blend,real,0.03374053076538062
 K562+A549,(+)-JQ1,0,average_effect,cells,0.5811024298070205
 K562+A549,(+)-JQ1,0,nearest_neighbor,cells,0.7959710940984853
-K562+A549,(+)-JQ1,0,scgen,cells,0.7844573892465109
+K562+A549,(+)-JQ1,0,scgen,cells,0.7844578314987726
 K562+A549,(+)-JQ1,0,average_effect,gaussian,
 K562+A549,(+)-JQ1,0,nearest_neighbor,gaussian,
 K562+A549,(+)-JQ1,0,scgen,gaussian,
 K562+A549,(+)-JQ1,1,real_blend,real,0.03778816215742893
 K562+A549,(+)-JQ1,1,average_effect,cells,0.5488728286199116
 K562+A549,(+)-JQ1,1,nearest_neighbor,cells,0.8047148551765005
-K562+A549,(+)-JQ1,1,scgen,cells,0.782836491077951
+K562+A549,(+)-JQ1,1,scgen,cells,0.7828369258814663
 K562+A549,(+)-JQ1,1,average_effect,gaussian,
 K562+A549,(+)-JQ1,1,nearest_neighbor,gaussian,
 K562+A549,(+)-JQ1,1,scgen,gaussian,
 K562+A549,(+)-JQ1,2,real_blend,real,0.0044224436178818384
 K562+A549,(+)-JQ1,2,average_effect,cells,0.6159299263513037
 K562+A549,(+)-JQ1,2,nearest_neighbor,cells,0.8149227448254882
-K562+A549,(+)-JQ1,2,scgen,cells,0.8493678541499976
+K562+A549,(+)-JQ1,2,scgen,cells,0.8493684724770284
 K562+A549,(+)-JQ1,2,average_effect,gaussian,
 K562+A549,(+)-JQ1,2,nearest_neighbor,gaussian,
 K562+A549,(+)-JQ1,2,scgen,gaussian,
 K562+A549,(+)-JQ1,3,real_blend,real,0.04672979616383696
 K562+A549,(+)-JQ1,3,average_effect,cells,0.5457310261331731
 K562+A549,(+)-JQ1,3,nearest_neighbor,cells,0.785508226321196
-K562+A549,(+)-JQ1,3,scgen,cells,0.8454335474876161
+K562+A549,(+)-JQ1,3,scgen,cells,0.8454336166218274
 K562+A549,(+)-JQ1,3,average_effect,gaussian,
 K562+A549,(+)-JQ1,3,nearest_neighbor,gaussian,
 K562+A549,(+)-JQ1,3,scgen,gaussian,
+K562+A549,(+)-JQ1,4,real_blend,real,0.07279516215837688
+K562+A549,(+)-JQ1,4,average_effect,cells,0.6170123214860594
+K562+A549,(+)-JQ1,4,nearest_neighbor,cells,0.8031402401224763
+K562+A549,(+)-JQ1,4,scgen,cells,0.8069234416508417
+K562+A549,(+)-JQ1,4,average_effect,gaussian,
+K562+A549,(+)-JQ1,4,nearest_neighbor,gaussian,
+K562+A549,(+)-JQ1,4,scgen,gaussian,
+K562+A549,(+)-JQ1,5,real_blend,real,0.0526369521464748
+K562+A549,(+)-JQ1,5,average_effect,cells,0.5572805420383568
+K562+A549,(+)-JQ1,5,nearest_neighbor,cells,0.8011834219970091
+K562+A549,(+)-JQ1,5,scgen,cells,0.7324031679258741
+K562+A549,(+)-JQ1,5,average_effect,gaussian,
+K562+A549,(+)-JQ1,5,nearest_neighbor,gaussian,
+K562+A549,(+)-JQ1,5,scgen,gaussian,
+K562+A549,(+)-JQ1,6,real_blend,real,0.04922958081954864
+K562+A549,(+)-JQ1,6,average_effect,cells,0.6091779483827756
+K562+A549,(+)-JQ1,6,nearest_neighbor,cells,0.791498039177341
+K562+A549,(+)-JQ1,6,scgen,cells,0.787895302202664
+K562+A549,(+)-JQ1,6,average_effect,gaussian,
+K562+A549,(+)-JQ1,6,nearest_neighbor,gaussian,
+K562+A549,(+)-JQ1,6,scgen,gaussian,
+K562+A549,(+)-JQ1,7,real_blend,real,-0.004791351930033919
+K562+A549,(+)-JQ1,7,average_effect,cells,0.6044472313506845
+K562+A549,(+)-JQ1,7,nearest_neighbor,cells,0.803616057034588
+K562+A549,(+)-JQ1,7,scgen,cells,0.8136932617696577
+K562+A549,(+)-JQ1,7,average_effect,gaussian,
+K562+A549,(+)-JQ1,7,nearest_neighbor,gaussian,
+K562+A549,(+)-JQ1,7,scgen,gaussian,
 K562+A549,2-Methoxyestradiol (2-MeOE2),0,real_blend,real,-0.030859220268222014
 K562+A549,2-Methoxyestradiol (2-MeOE2),0,average_effect,cells,0.11625754234113286
 K562+A549,2-Methoxyestradiol (2-MeOE2),0,nearest_neighbor,cells,0.2287756273846182
-K562+A549,2-Methoxyestradiol (2-MeOE2),0,scgen,cells,0.18642859386568694
+K562+A549,2-Methoxyestradiol (2-MeOE2),0,scgen,cells,0.18642986913113252
 K562+A549,2-Methoxyestradiol (2-MeOE2),0,average_effect,gaussian,
 K562+A549,2-Methoxyestradiol (2-MeOE2),0,nearest_neighbor,gaussian,
 K562+A549,2-Methoxyestradiol (2-MeOE2),0,scgen,gaussian,
 K562+A549,2-Methoxyestradiol (2-MeOE2),1,real_blend,real,-0.01912267289437895
 K562+A549,2-Methoxyestradiol (2-MeOE2),1,average_effect,cells,0.06180400913284483
 K562+A549,2-Methoxyestradiol (2-MeOE2),1,nearest_neighbor,cells,0.2150419722013495
-K562+A549,2-Methoxyestradiol (2-MeOE2),1,scgen,cells,0.024975594917391986
+K562+A549,2-Methoxyestradiol (2-MeOE2),1,scgen,cells,0.024976821969877105
 K562+A549,2-Methoxyestradiol (2-MeOE2),1,average_effect,gaussian,
 K562+A549,2-Methoxyestradiol (2-MeOE2),1,nearest_neighbor,gaussian,
 K562+A549,2-Methoxyestradiol (2-MeOE2),1,scgen,gaussian,
 K562+A549,2-Methoxyestradiol (2-MeOE2),2,real_blend,real,-0.04222026157283197
 K562+A549,2-Methoxyestradiol (2-MeOE2),2,average_effect,cells,0.16606541704635164
 K562+A549,2-Methoxyestradiol (2-MeOE2),2,nearest_neighbor,cells,0.279029040956333
-K562+A549,2-Methoxyestradiol (2-MeOE2),2,scgen,cells,0.31875931158322457
+K562+A549,2-Methoxyestradiol (2-MeOE2),2,scgen,cells,0.3187614443614225
 K562+A549,2-Methoxyestradiol (2-MeOE2),2,average_effect,gaussian,
 K562+A549,2-Methoxyestradiol (2-MeOE2),2,nearest_neighbor,gaussian,
 K562+A549,2-Methoxyestradiol (2-MeOE2),2,scgen,gaussian,
 K562+A549,2-Methoxyestradiol (2-MeOE2),3,real_blend,real,-0.006115136718519492
 K562+A549,2-Methoxyestradiol (2-MeOE2),3,average_effect,cells,0.09451747627224653
 K562+A549,2-Methoxyestradiol (2-MeOE2),3,nearest_neighbor,cells,0.18738047655009463
-K562+A549,2-Methoxyestradiol (2-MeOE2),3,scgen,cells,0.2834886250771527
+K562+A549,2-Methoxyestradiol (2-MeOE2),3,scgen,cells,0.2834886646887644
 K562+A549,2-Methoxyestradiol (2-MeOE2),3,average_effect,gaussian,
 K562+A549,2-Methoxyestradiol (2-MeOE2),3,nearest_neighbor,gaussian,
 K562+A549,2-Methoxyestradiol (2-MeOE2),3,scgen,gaussian,
+K562+A549,2-Methoxyestradiol (2-MeOE2),4,real_blend,real,-0.02884173579955509
+K562+A549,2-Methoxyestradiol (2-MeOE2),4,average_effect,cells,0.1888143848185298
+K562+A549,2-Methoxyestradiol (2-MeOE2),4,nearest_neighbor,cells,0.2655356254183712
+K562+A549,2-Methoxyestradiol (2-MeOE2),4,scgen,cells,0.2593475770106905
+K562+A549,2-Methoxyestradiol (2-MeOE2),4,average_effect,gaussian,
+K562+A549,2-Methoxyestradiol (2-MeOE2),4,nearest_neighbor,gaussian,
+K562+A549,2-Methoxyestradiol (2-MeOE2),4,scgen,gaussian,
+K562+A549,2-Methoxyestradiol (2-MeOE2),5,real_blend,real,0.02265000735130493
+K562+A549,2-Methoxyestradiol (2-MeOE2),5,average_effect,cells,0.0891376133668009
+K562+A549,2-Methoxyestradiol (2-MeOE2),5,nearest_neighbor,cells,0.21036245270196108
+K562+A549,2-Methoxyestradiol (2-MeOE2),5,scgen,cells,0.048432372658530495
+K562+A549,2-Methoxyestradiol (2-MeOE2),5,average_effect,gaussian,
+K562+A549,2-Methoxyestradiol (2-MeOE2),5,nearest_neighbor,gaussian,
+K562+A549,2-Methoxyestradiol (2-MeOE2),5,scgen,gaussian,
+K562+A549,2-Methoxyestradiol (2-MeOE2),6,real_blend,real,0.01027606518400319
+K562+A549,2-Methoxyestradiol (2-MeOE2),6,average_effect,cells,0.08813554952497239
+K562+A549,2-Methoxyestradiol (2-MeOE2),6,nearest_neighbor,cells,0.19702950512023837
+K562+A549,2-Methoxyestradiol (2-MeOE2),6,scgen,cells,0.1814792887230662
+K562+A549,2-Methoxyestradiol (2-MeOE2),6,average_effect,gaussian,
+K562+A549,2-Methoxyestradiol (2-MeOE2),6,nearest_neighbor,gaussian,
+K562+A549,2-Methoxyestradiol (2-MeOE2),6,scgen,gaussian,
+K562+A549,2-Methoxyestradiol (2-MeOE2),7,real_blend,real,-0.02248604202702172
+K562+A549,2-Methoxyestradiol (2-MeOE2),7,average_effect,cells,0.16178298112443185
+K562+A549,2-Methoxyestradiol (2-MeOE2),7,nearest_neighbor,cells,0.2513944777064998
+K562+A549,2-Methoxyestradiol (2-MeOE2),7,scgen,cells,0.3184104216841139
+K562+A549,2-Methoxyestradiol (2-MeOE2),7,average_effect,gaussian,
+K562+A549,2-Methoxyestradiol (2-MeOE2),7,nearest_neighbor,gaussian,
+K562+A549,2-Methoxyestradiol (2-MeOE2),7,scgen,gaussian,
 K562+A549,A-366,0,real_blend,real,0.01361878846913904
 K562+A549,A-366,0,average_effect,cells,0.03144554487578794
 K562+A549,A-366,0,nearest_neighbor,cells,0.10655725620017302
-K562+A549,A-366,0,scgen,cells,-0.02758221366984656
+K562+A549,A-366,0,scgen,cells,-0.02758187400296727
 K562+A549,A-366,0,average_effect,gaussian,
 K562+A549,A-366,0,nearest_neighbor,gaussian,
 K562+A549,A-366,0,scgen,gaussian,
 K562+A549,A-366,1,real_blend,real,0.02877069667722869
 K562+A549,A-366,1,average_effect,cells,0.06974367064589233
 K562+A549,A-366,1,nearest_neighbor,cells,0.15122270820431666
-K562+A549,A-366,1,scgen,cells,0.1245524407791745
+K562+A549,A-366,1,scgen,cells,0.1245502196836537
 K562+A549,A-366,1,average_effect,gaussian,
 K562+A549,A-366,1,nearest_neighbor,gaussian,
 K562+A549,A-366,1,scgen,gaussian,
 K562+A549,A-366,2,real_blend,real,-0.01941757772609118
 K562+A549,A-366,2,average_effect,cells,0.09283263011602413
 K562+A549,A-366,2,nearest_neighbor,cells,0.14039244181933408
-K562+A549,A-366,2,scgen,cells,-0.022241836888029456
+K562+A549,A-366,2,scgen,cells,-0.022239119903311653
 K562+A549,A-366,2,average_effect,gaussian,
 K562+A549,A-366,2,nearest_neighbor,gaussian,
 K562+A549,A-366,2,scgen,gaussian,
 K562+A549,A-366,3,real_blend,real,0.010437736791923627
 K562+A549,A-366,3,average_effect,cells,0.07404445366102624
 K562+A549,A-366,3,nearest_neighbor,cells,0.11353198428365596
-K562+A549,A-366,3,scgen,cells,0.14873837394854517
+K562+A549,A-366,3,scgen,cells,0.1487370158720941
 K562+A549,A-366,3,average_effect,gaussian,
 K562+A549,A-366,3,nearest_neighbor,gaussian,
 K562+A549,A-366,3,scgen,gaussian,
+K562+A549,A-366,4,real_blend,real,0.030576737932721577
+K562+A549,A-366,4,average_effect,cells,0.12806584261150533
+K562+A549,A-366,4,nearest_neighbor,cells,0.13193563096858546
+K562+A549,A-366,4,scgen,cells,-0.04130943908561788
+K562+A549,A-366,4,average_effect,gaussian,
+K562+A549,A-366,4,nearest_neighbor,gaussian,
+K562+A549,A-366,4,scgen,gaussian,
+K562+A549,A-366,5,real_blend,real,0.007396758948608939
+K562+A549,A-366,5,average_effect,cells,0.018378801926273804
+K562+A549,A-366,5,nearest_neighbor,cells,0.08842601226027176
+K562+A549,A-366,5,scgen,cells,-0.20837155137716865
+K562+A549,A-366,5,average_effect,gaussian,
+K562+A549,A-366,5,nearest_neighbor,gaussian,
+K562+A549,A-366,5,scgen,gaussian,
+K562+A549,A-366,6,real_blend,real,0.03191874585976981
+K562+A549,A-366,6,average_effect,cells,0.0992637687364909
+K562+A549,A-366,6,nearest_neighbor,cells,0.14439706548830175
+K562+A549,A-366,6,scgen,cells,0.16137013753133436
+K562+A549,A-366,6,average_effect,gaussian,
+K562+A549,A-366,6,nearest_neighbor,gaussian,
+K562+A549,A-366,6,scgen,gaussian,
+K562+A549,A-366,7,real_blend,real,0.010089701098991254
+K562+A549,A-366,7,average_effect,cells,0.10385743845522016
+K562+A549,A-366,7,nearest_neighbor,cells,0.16452345273650093
+K562+A549,A-366,7,scgen,cells,0.17975112712801342
+K562+A549,A-366,7,average_effect,gaussian,
+K562+A549,A-366,7,nearest_neighbor,gaussian,
+K562+A549,A-366,7,scgen,gaussian,
 K562+A549,ABT-737,0,real_blend,real,0.015545957369554093
 K562+A549,ABT-737,0,average_effect,cells,0.07239258999864084
 K562+A549,ABT-737,0,nearest_neighbor,cells,0.16458112654635826
-K562+A549,ABT-737,0,scgen,cells,0.09305811792293947
+K562+A549,ABT-737,0,scgen,cells,0.09305819800837922
 K562+A549,ABT-737,0,average_effect,gaussian,
 K562+A549,ABT-737,0,nearest_neighbor,gaussian,
 K562+A549,ABT-737,0,scgen,gaussian,
 K562+A549,ABT-737,1,real_blend,real,-0.016172143835350816
 K562+A549,ABT-737,1,average_effect,cells,0.11491324377333777
 K562+A549,ABT-737,1,nearest_neighbor,cells,0.20937725654691902
-K562+A549,ABT-737,1,scgen,cells,0.32919047527208933
+K562+A549,ABT-737,1,scgen,cells,0.3291878612676986
 K562+A549,ABT-737,1,average_effect,gaussian,
 K562+A549,ABT-737,1,nearest_neighbor,gaussian,
 K562+A549,ABT-737,1,scgen,gaussian,
 K562+A549,ABT-737,2,real_blend,real,-0.009976534758316905
 K562+A549,ABT-737,2,average_effect,cells,0.10652025399534312
 K562+A549,ABT-737,2,nearest_neighbor,cells,0.1793786741385602
-K562+A549,ABT-737,2,scgen,cells,0.06692289405511194
+K562+A549,ABT-737,2,scgen,cells,0.06692405471390234
 K562+A549,ABT-737,2,average_effect,gaussian,
 K562+A549,ABT-737,2,nearest_neighbor,gaussian,
 K562+A549,ABT-737,2,scgen,gaussian,
 K562+A549,ABT-737,3,real_blend,real,0.06277183063180394
 K562+A549,ABT-737,3,average_effect,cells,0.07324834864092492
 K562+A549,ABT-737,3,nearest_neighbor,cells,0.14014432693219736
-K562+A549,ABT-737,3,scgen,cells,0.250776266139336
+K562+A549,ABT-737,3,scgen,cells,0.2507741653215092
 K562+A549,ABT-737,3,average_effect,gaussian,
 K562+A549,ABT-737,3,nearest_neighbor,gaussian,
 K562+A549,ABT-737,3,scgen,gaussian,
+K562+A549,ABT-737,4,real_blend,real,-0.07390948431671021
+K562+A549,ABT-737,4,average_effect,cells,0.06718485524621182
+K562+A549,ABT-737,4,nearest_neighbor,cells,0.17626901306725762
+K562+A549,ABT-737,4,scgen,cells,-0.07937820645817222
+K562+A549,ABT-737,4,average_effect,gaussian,
+K562+A549,ABT-737,4,nearest_neighbor,gaussian,
+K562+A549,ABT-737,4,scgen,gaussian,
+K562+A549,ABT-737,5,real_blend,real,-0.021359909274637646
+K562+A549,ABT-737,5,average_effect,cells,0.03750291004341673
+K562+A549,ABT-737,5,nearest_neighbor,cells,0.14397579652446685
+K562+A549,ABT-737,5,scgen,cells,-0.06296854841978233
+K562+A549,ABT-737,5,average_effect,gaussian,
+K562+A549,ABT-737,5,nearest_neighbor,gaussian,
+K562+A549,ABT-737,5,scgen,gaussian,
+K562+A549,ABT-737,6,real_blend,real,0.08949899342510774
+K562+A549,ABT-737,6,average_effect,cells,0.0476574969852537
+K562+A549,ABT-737,6,nearest_neighbor,cells,0.1112499158628969
+K562+A549,ABT-737,6,scgen,cells,0.12562564277397417
+K562+A549,ABT-737,6,average_effect,gaussian,
+K562+A549,ABT-737,6,nearest_neighbor,gaussian,
+K562+A549,ABT-737,6,scgen,gaussian,
+K562+A549,ABT-737,7,real_blend,real,0.049882600936554444
+K562+A549,ABT-737,7,average_effect,cells,0.09037999257706227
+K562+A549,ABT-737,7,nearest_neighbor,cells,0.1407238928723345
+K562+A549,ABT-737,7,scgen,cells,0.057289436384615325
+K562+A549,ABT-737,7,average_effect,gaussian,
+K562+A549,ABT-737,7,nearest_neighbor,gaussian,
+K562+A549,ABT-737,7,scgen,gaussian,
 K562+A549,AC480 (BMS-599626),0,real_blend,real,0.04172421597055105
 K562+A549,AC480 (BMS-599626),0,average_effect,cells,0.0598130406207001
 K562+A549,AC480 (BMS-599626),0,nearest_neighbor,cells,0.20274146370010077
-K562+A549,AC480 (BMS-599626),0,scgen,cells,0.0300946179359905
+K562+A549,AC480 (BMS-599626),0,scgen,cells,0.030094219157294284
 K562+A549,AC480 (BMS-599626),0,average_effect,gaussian,
 K562+A549,AC480 (BMS-599626),0,nearest_neighbor,gaussian,
 K562+A549,AC480 (BMS-599626),0,scgen,gaussian,
 K562+A549,AC480 (BMS-599626),1,real_blend,real,-0.03134088939612921
 K562+A549,AC480 (BMS-599626),1,average_effect,cells,0.05537675488905482
 K562+A549,AC480 (BMS-599626),1,nearest_neighbor,cells,0.2164701554153195
-K562+A549,AC480 (BMS-599626),1,scgen,cells,0.21956538578896323
+K562+A549,AC480 (BMS-599626),1,scgen,cells,0.2195622860377171
 K562+A549,AC480 (BMS-599626),1,average_effect,gaussian,
 K562+A549,AC480 (BMS-599626),1,nearest_neighbor,gaussian,
 K562+A549,AC480 (BMS-599626),1,scgen,gaussian,
 K562+A549,AC480 (BMS-599626),2,real_blend,real,0.05798267580438482
 K562+A549,AC480 (BMS-599626),2,average_effect,cells,0.1094792224569884
 K562+A549,AC480 (BMS-599626),2,nearest_neighbor,cells,0.21535702127063203
-K562+A549,AC480 (BMS-599626),2,scgen,cells,-0.008091183922307678
+K562+A549,AC480 (BMS-599626),2,scgen,cells,-0.008091407424929819
 K562+A549,AC480 (BMS-599626),2,average_effect,gaussian,
 K562+A549,AC480 (BMS-599626),2,nearest_neighbor,gaussian,
 K562+A549,AC480 (BMS-599626),2,scgen,gaussian,
 K562+A549,AC480 (BMS-599626),3,real_blend,real,-0.01368828231292069
 K562+A549,AC480 (BMS-599626),3,average_effect,cells,0.0974624394707553
 K562+A549,AC480 (BMS-599626),3,nearest_neighbor,cells,0.1758571048111919
-K562+A549,AC480 (BMS-599626),3,scgen,cells,0.2659185377337967
+K562+A549,AC480 (BMS-599626),3,scgen,cells,0.2659165552444684
 K562+A549,AC480 (BMS-599626),3,average_effect,gaussian,
 K562+A549,AC480 (BMS-599626),3,nearest_neighbor,gaussian,
 K562+A549,AC480 (BMS-599626),3,scgen,gaussian,
+K562+A549,AC480 (BMS-599626),4,real_blend,real,-0.0179322081227001
+K562+A549,AC480 (BMS-599626),4,average_effect,cells,0.06980037480888902
+K562+A549,AC480 (BMS-599626),4,nearest_neighbor,cells,0.18572143511250597
+K562+A549,AC480 (BMS-599626),4,scgen,cells,-0.0750869379341816
+K562+A549,AC480 (BMS-599626),4,average_effect,gaussian,
+K562+A549,AC480 (BMS-599626),4,nearest_neighbor,gaussian,
+K562+A549,AC480 (BMS-599626),4,scgen,gaussian,
+K562+A549,AC480 (BMS-599626),5,real_blend,real,0.02498315821113196
+K562+A549,AC480 (BMS-599626),5,average_effect,cells,0.055393641576539865
+K562+A549,AC480 (BMS-599626),5,nearest_neighbor,cells,0.1731768873423552
+K562+A549,AC480 (BMS-599626),5,scgen,cells,-0.027246855041647207
+K562+A549,AC480 (BMS-599626),5,average_effect,gaussian,
+K562+A549,AC480 (BMS-599626),5,nearest_neighbor,gaussian,
+K562+A549,AC480 (BMS-599626),5,scgen,gaussian,
+K562+A549,AC480 (BMS-599626),6,real_blend,real,0.02920293636830445
+K562+A549,AC480 (BMS-599626),6,average_effect,cells,0.08253407437797018
+K562+A549,AC480 (BMS-599626),6,nearest_neighbor,cells,0.19394529777781683
+K562+A549,AC480 (BMS-599626),6,scgen,cells,0.17458931698879646
+K562+A549,AC480 (BMS-599626),6,average_effect,gaussian,
+K562+A549,AC480 (BMS-599626),6,nearest_neighbor,gaussian,
+K562+A549,AC480 (BMS-599626),6,scgen,gaussian,
+K562+A549,AC480 (BMS-599626),7,real_blend,real,-0.008266698382950083
+K562+A549,AC480 (BMS-599626),7,average_effect,cells,0.1266673865956567
+K562+A549,AC480 (BMS-599626),7,nearest_neighbor,cells,0.2502894184409324
+K562+A549,AC480 (BMS-599626),7,scgen,cells,0.2155691397097273
+K562+A549,AC480 (BMS-599626),7,average_effect,gaussian,
+K562+A549,AC480 (BMS-599626),7,nearest_neighbor,gaussian,
+K562+A549,AC480 (BMS-599626),7,scgen,gaussian,
 K562+A549,AG-14361,0,real_blend,real,-0.02123786786396553
 K562+A549,AG-14361,0,average_effect,cells,0.023770097562679487
 K562+A549,AG-14361,0,nearest_neighbor,cells,0.06567620633546022
-K562+A549,AG-14361,0,scgen,cells,0.0027527046141896856
+K562+A549,AG-14361,0,scgen,cells,0.002752739672491539
 K562+A549,AG-14361,0,average_effect,gaussian,
 K562+A549,AG-14361,0,nearest_neighbor,gaussian,
 K562+A549,AG-14361,0,scgen,gaussian,
 K562+A549,AG-14361,1,real_blend,real,-0.006178868400202266
 K562+A549,AG-14361,1,average_effect,cells,0.1003725903518456
 K562+A549,AG-14361,1,nearest_neighbor,cells,0.12445706056271709
-K562+A549,AG-14361,1,scgen,cells,0.14515457041358373
+K562+A549,AG-14361,1,scgen,cells,0.14515221872272763
 K562+A549,AG-14361,1,average_effect,gaussian,
 K562+A549,AG-14361,1,nearest_neighbor,gaussian,
 K562+A549,AG-14361,1,scgen,gaussian,
 K562+A549,AG-14361,2,real_blend,real,0.02528808679606851
 K562+A549,AG-14361,2,average_effect,cells,0.06947712975108351
 K562+A549,AG-14361,2,nearest_neighbor,cells,0.09005723710981484
-K562+A549,AG-14361,2,scgen,cells,0.06573871088481426
+K562+A549,AG-14361,2,scgen,cells,0.06574005778715687
 K562+A549,AG-14361,2,average_effect,gaussian,
 K562+A549,AG-14361,2,nearest_neighbor,gaussian,
 K562+A549,AG-14361,2,scgen,gaussian,
 K562+A549,AG-14361,3,real_blend,real,0.00021559791907454665
 K562+A549,AG-14361,3,average_effect,cells,0.04581399137680136
 K562+A549,AG-14361,3,nearest_neighbor,cells,0.09598151034185186
-K562+A549,AG-14361,3,scgen,cells,-0.006853635282477065
+K562+A549,AG-14361,3,scgen,cells,-0.0068549931542344214
 K562+A549,AG-14361,3,average_effect,gaussian,
 K562+A549,AG-14361,3,nearest_neighbor,gaussian,
 K562+A549,AG-14361,3,scgen,gaussian,
+K562+A549,AG-14361,4,real_blend,real,-0.03191511348471548
+K562+A549,AG-14361,4,average_effect,cells,0.09773310212545445
+K562+A549,AG-14361,4,nearest_neighbor,cells,0.09902851205204008
+K562+A549,AG-14361,4,scgen,cells,0.08179482241594953
+K562+A549,AG-14361,4,average_effect,gaussian,
+K562+A549,AG-14361,4,nearest_neighbor,gaussian,
+K562+A549,AG-14361,4,scgen,gaussian,
+K562+A549,AG-14361,5,real_blend,real,-0.01914910815620012
+K562+A549,AG-14361,5,average_effect,cells,0.04922405633077273
+K562+A549,AG-14361,5,nearest_neighbor,cells,0.07882660916735224
+K562+A549,AG-14361,5,scgen,cells,-0.1034801132774736
+K562+A549,AG-14361,5,average_effect,gaussian,
+K562+A549,AG-14361,5,nearest_neighbor,gaussian,
+K562+A549,AG-14361,5,scgen,gaussian,
+K562+A549,AG-14361,6,real_blend,real,-0.014456248128255245
+K562+A549,AG-14361,6,average_effect,cells,0.014160972781833687
+K562+A549,AG-14361,6,nearest_neighbor,cells,0.03559884621938524
+K562+A549,AG-14361,6,scgen,cells,-0.03731738406201106
+K562+A549,AG-14361,6,average_effect,gaussian,
+K562+A549,AG-14361,6,nearest_neighbor,gaussian,
+K562+A549,AG-14361,6,scgen,gaussian,
+K562+A549,AG-14361,7,real_blend,real,0.09152982940741815
+K562+A549,AG-14361,7,average_effect,cells,0.07904685061956598
+K562+A549,AG-14361,7,nearest_neighbor,cells,0.12483386507502048
+K562+A549,AG-14361,7,scgen,cells,0.12100487937470807
+K562+A549,AG-14361,7,average_effect,gaussian,
+K562+A549,AG-14361,7,nearest_neighbor,gaussian,
+K562+A549,AG-14361,7,scgen,gaussian,
 K562+A549,AG-490 (Tyrphostin B42),0,real_blend,real,0.028112728265524797
 K562+A549,AG-490 (Tyrphostin B42),0,average_effect,cells,0.04806306170107173
 K562+A549,AG-490 (Tyrphostin B42),0,nearest_neighbor,cells,0.05885413460327738
-K562+A549,AG-490 (Tyrphostin B42),0,scgen,cells,0.1179034493663134
+K562+A549,AG-490 (Tyrphostin B42),0,scgen,cells,0.11790511284963026
 K562+A549,AG-490 (Tyrphostin B42),0,average_effect,gaussian,
 K562+A549,AG-490 (Tyrphostin B42),0,nearest_neighbor,gaussian,
 K562+A549,AG-490 (Tyrphostin B42),0,scgen,gaussian,
 K562+A549,AG-490 (Tyrphostin B42),1,real_blend,real,0.02734927974782091
 K562+A549,AG-490 (Tyrphostin B42),1,average_effect,cells,0.0319602192347105
 K562+A549,AG-490 (Tyrphostin B42),1,nearest_neighbor,cells,0.08407811410975008
-K562+A549,AG-490 (Tyrphostin B42),1,scgen,cells,0.08621706163376643
+K562+A549,AG-490 (Tyrphostin B42),1,scgen,cells,0.08621651817342375
 K562+A549,AG-490 (Tyrphostin B42),1,average_effect,gaussian,
 K562+A549,AG-490 (Tyrphostin B42),1,nearest_neighbor,gaussian,
 K562+A549,AG-490 (Tyrphostin B42),1,scgen,gaussian,
 K562+A549,AG-490 (Tyrphostin B42),2,real_blend,real,0.03166398398313797
 K562+A549,AG-490 (Tyrphostin B42),2,average_effect,cells,0.1150442276262211
 K562+A549,AG-490 (Tyrphostin B42),2,nearest_neighbor,cells,0.0971824540469116
-K562+A549,AG-490 (Tyrphostin B42),2,scgen,cells,0.2436073612062147
+K562+A549,AG-490 (Tyrphostin B42),2,scgen,cells,0.2436099244007112
 K562+A549,AG-490 (Tyrphostin B42),2,average_effect,gaussian,
 K562+A549,AG-490 (Tyrphostin B42),2,nearest_neighbor,gaussian,
 K562+A549,AG-490 (Tyrphostin B42),2,scgen,gaussian,
 K562+A549,AG-490 (Tyrphostin B42),3,real_blend,real,-0.015554557985687783
 K562+A549,AG-490 (Tyrphostin B42),3,average_effect,cells,0.04681062841462095
 K562+A549,AG-490 (Tyrphostin B42),3,nearest_neighbor,cells,0.0703751840701699
-K562+A549,AG-490 (Tyrphostin B42),3,scgen,cells,0.14286755705565723
+K562+A549,AG-490 (Tyrphostin B42),3,scgen,cells,0.14286784014532478
 K562+A549,AG-490 (Tyrphostin B42),3,average_effect,gaussian,
 K562+A549,AG-490 (Tyrphostin B42),3,nearest_neighbor,gaussian,
 K562+A549,AG-490 (Tyrphostin B42),3,scgen,gaussian,
+K562+A549,AG-490 (Tyrphostin B42),4,real_blend,real,0.06821583957167142
+K562+A549,AG-490 (Tyrphostin B42),4,average_effect,cells,0.13454060982251567
+K562+A549,AG-490 (Tyrphostin B42),4,nearest_neighbor,cells,0.10193184521607698
+K562+A549,AG-490 (Tyrphostin B42),4,scgen,cells,0.19553538833951867
+K562+A549,AG-490 (Tyrphostin B42),4,average_effect,gaussian,
+K562+A549,AG-490 (Tyrphostin B42),4,nearest_neighbor,gaussian,
+K562+A549,AG-490 (Tyrphostin B42),4,scgen,gaussian,
+K562+A549,AG-490 (Tyrphostin B42),5,real_blend,real,-0.050563795963661874
+K562+A549,AG-490 (Tyrphostin B42),5,average_effect,cells,0.028732149020538885
+K562+A549,AG-490 (Tyrphostin B42),5,nearest_neighbor,cells,0.015494968442488825
+K562+A549,AG-490 (Tyrphostin B42),5,scgen,cells,-0.013816542005203781
+K562+A549,AG-490 (Tyrphostin B42),5,average_effect,gaussian,
+K562+A549,AG-490 (Tyrphostin B42),5,nearest_neighbor,gaussian,
+K562+A549,AG-490 (Tyrphostin B42),5,scgen,gaussian,
+K562+A549,AG-490 (Tyrphostin B42),6,real_blend,real,-0.08997827026083886
+K562+A549,AG-490 (Tyrphostin B42),6,average_effect,cells,0.07552631305818377
+K562+A549,AG-490 (Tyrphostin B42),6,nearest_neighbor,cells,0.0676811243532935
+K562+A549,AG-490 (Tyrphostin B42),6,scgen,cells,0.1834249323977804
+K562+A549,AG-490 (Tyrphostin B42),6,average_effect,gaussian,
+K562+A549,AG-490 (Tyrphostin B42),6,nearest_neighbor,gaussian,
+K562+A549,AG-490 (Tyrphostin B42),6,scgen,gaussian,
+K562+A549,AG-490 (Tyrphostin B42),7,real_blend,real,-0.02027993166389649
+K562+A549,AG-490 (Tyrphostin B42),7,average_effect,cells,0.13526431030769
+K562+A549,AG-490 (Tyrphostin B42),7,nearest_neighbor,cells,0.12578520546040295
+K562+A549,AG-490 (Tyrphostin B42),7,scgen,cells,0.2558795781812664
+K562+A549,AG-490 (Tyrphostin B42),7,average_effect,gaussian,
+K562+A549,AG-490 (Tyrphostin B42),7,nearest_neighbor,gaussian,
+K562+A549,AG-490 (Tyrphostin B42),7,scgen,gaussian,
 K562+A549,AICAR (Acadesine),0,real_blend,real,-0.012634073974923502
 K562+A549,AICAR (Acadesine),0,average_effect,cells,0.02564417212459202
 K562+A549,AICAR (Acadesine),0,nearest_neighbor,cells,0.03400431665218035
-K562+A549,AICAR (Acadesine),0,scgen,cells,-0.02831345864735789
+K562+A549,AICAR (Acadesine),0,scgen,cells,-0.028314082113531615
 K562+A549,AICAR (Acadesine),0,average_effect,gaussian,
 K562+A549,AICAR (Acadesine),0,nearest_neighbor,gaussian,
 K562+A549,AICAR (Acadesine),0,scgen,gaussian,
 K562+A549,AICAR (Acadesine),1,real_blend,real,-0.0023560479476492156
 K562+A549,AICAR (Acadesine),1,average_effect,cells,0.04844483578516012
 K562+A549,AICAR (Acadesine),1,nearest_neighbor,cells,0.08212124927522167
-K562+A549,AICAR (Acadesine),1,scgen,cells,0.11656684269771539
+K562+A549,AICAR (Acadesine),1,scgen,cells,0.11656315036736398
 K562+A549,AICAR (Acadesine),1,average_effect,gaussian,
 K562+A549,AICAR (Acadesine),1,nearest_neighbor,gaussian,
 K562+A549,AICAR (Acadesine),1,scgen,gaussian,
 K562+A549,AICAR (Acadesine),2,real_blend,real,0.04861339723147576
 K562+A549,AICAR (Acadesine),2,average_effect,cells,0.07447971676868821
 K562+A549,AICAR (Acadesine),2,nearest_neighbor,cells,0.1135694424295694
-K562+A549,AICAR (Acadesine),2,scgen,cells,-0.0027305187602726664
+K562+A549,AICAR (Acadesine),2,scgen,cells,-0.002729237154827852
 K562+A549,AICAR (Acadesine),2,average_effect,gaussian,
 K562+A549,AICAR (Acadesine),2,nearest_neighbor,gaussian,
 K562+A549,AICAR (Acadesine),2,scgen,gaussian,
 K562+A549,AICAR (Acadesine),3,real_blend,real,-0.06281956537727838
 K562+A549,AICAR (Acadesine),3,average_effect,cells,0.032754176343828816
 K562+A549,AICAR (Acadesine),3,nearest_neighbor,cells,0.031780814127035796
-K562+A549,AICAR (Acadesine),3,scgen,cells,0.030755084059428103
+K562+A549,AICAR (Acadesine),3,scgen,cells,0.03075264179273598
 K562+A549,AICAR (Acadesine),3,average_effect,gaussian,
 K562+A549,AICAR (Acadesine),3,nearest_neighbor,gaussian,
 K562+A549,AICAR (Acadesine),3,scgen,gaussian,
+K562+A549,AICAR (Acadesine),4,real_blend,real,-0.0667596770391862
+K562+A549,AICAR (Acadesine),4,average_effect,cells,0.06974062501169455
+K562+A549,AICAR (Acadesine),4,nearest_neighbor,cells,0.05949869619296034
+K562+A549,AICAR (Acadesine),4,scgen,cells,0.024938211219175395
+K562+A549,AICAR (Acadesine),4,average_effect,gaussian,
+K562+A549,AICAR (Acadesine),4,nearest_neighbor,gaussian,
+K562+A549,AICAR (Acadesine),4,scgen,gaussian,
+K562+A549,AICAR (Acadesine),5,real_blend,real,-0.01599419842792162
+K562+A549,AICAR (Acadesine),5,average_effect,cells,0.038263062103983114
+K562+A549,AICAR (Acadesine),5,nearest_neighbor,cells,0.05625374733617512
+K562+A549,AICAR (Acadesine),5,scgen,cells,-0.10611586456535904
+K562+A549,AICAR (Acadesine),5,average_effect,gaussian,
+K562+A549,AICAR (Acadesine),5,nearest_neighbor,gaussian,
+K562+A549,AICAR (Acadesine),5,scgen,gaussian,
+K562+A549,AICAR (Acadesine),6,real_blend,real,-0.026949193063336617
+K562+A549,AICAR (Acadesine),6,average_effect,cells,0.029078077402201745
+K562+A549,AICAR (Acadesine),6,nearest_neighbor,cells,0.04519052886723768
+K562+A549,AICAR (Acadesine),6,scgen,cells,-0.03584756575375515
+K562+A549,AICAR (Acadesine),6,average_effect,gaussian,
+K562+A549,AICAR (Acadesine),6,nearest_neighbor,gaussian,
+K562+A549,AICAR (Acadesine),6,scgen,gaussian,
+K562+A549,AICAR (Acadesine),7,real_blend,real,0.06164122593711081
+K562+A549,AICAR (Acadesine),7,average_effect,cells,0.08477894791898456
+K562+A549,AICAR (Acadesine),7,nearest_neighbor,cells,0.11011285270404444
+K562+A549,AICAR (Acadesine),7,scgen,cells,0.10030121726929396
+K562+A549,AICAR (Acadesine),7,average_effect,gaussian,
+K562+A549,AICAR (Acadesine),7,nearest_neighbor,gaussian,
+K562+A549,AICAR (Acadesine),7,scgen,gaussian,
+K562+A549,AMG-900,0,real_blend,real,0.16629101951663855
+K562+A549,AMG-900,0,average_effect,cells,0.45894841611866416
+K562+A549,AMG-900,0,nearest_neighbor,cells,0.24936860442673897
+K562+A549,AMG-900,0,scgen,cells,0.7354186670388866
+K562+A549,AMG-900,0,average_effect,gaussian,
+K562+A549,AMG-900,0,nearest_neighbor,gaussian,
+K562+A549,AMG-900,0,scgen,gaussian,
+K562+A549,AMG-900,1,real_blend,real,0.17850658238704345
+K562+A549,AMG-900,1,average_effect,cells,0.5016423843474023
+K562+A549,AMG-900,1,nearest_neighbor,cells,0.3342082426481033
+K562+A549,AMG-900,1,scgen,cells,0.8020941053193199
+K562+A549,AMG-900,1,average_effect,gaussian,
+K562+A549,AMG-900,1,nearest_neighbor,gaussian,
+K562+A549,AMG-900,1,scgen,gaussian,
+K562+A549,AMG-900,2,real_blend,real,0.09368070118488298
+K562+A549,AMG-900,2,average_effect,cells,0.42750826576476697
+K562+A549,AMG-900,2,nearest_neighbor,cells,0.28226376877913134
+K562+A549,AMG-900,2,scgen,cells,0.7149637324670859
+K562+A549,AMG-900,2,average_effect,gaussian,
+K562+A549,AMG-900,2,nearest_neighbor,gaussian,
+K562+A549,AMG-900,2,scgen,gaussian,
+K562+A549,AMG-900,3,real_blend,real,0.17625686910228874
+K562+A549,AMG-900,3,average_effect,cells,0.4042843639630202
+K562+A549,AMG-900,3,nearest_neighbor,cells,0.21654322221224864
+K562+A549,AMG-900,3,scgen,cells,0.785016118678939
+K562+A549,AMG-900,3,average_effect,gaussian,
+K562+A549,AMG-900,3,nearest_neighbor,gaussian,
+K562+A549,AMG-900,3,scgen,gaussian,
+K562+A549,AMG-900,4,real_blend,real,0.14657087025788834
+K562+A549,AMG-900,4,average_effect,cells,0.3691972619145847
+K562+A549,AMG-900,4,nearest_neighbor,cells,0.2766576894651642
+K562+A549,AMG-900,4,scgen,cells,0.5897969129671946
+K562+A549,AMG-900,4,average_effect,gaussian,
+K562+A549,AMG-900,4,nearest_neighbor,gaussian,
+K562+A549,AMG-900,4,scgen,gaussian,
+K562+A549,AMG-900,5,real_blend,real,0.1363693428963609
+K562+A549,AMG-900,5,average_effect,cells,0.47820606998509607
+K562+A549,AMG-900,5,nearest_neighbor,cells,0.2853810953410683
+K562+A549,AMG-900,5,scgen,cells,0.7256316187948354
+K562+A549,AMG-900,5,average_effect,gaussian,
+K562+A549,AMG-900,5,nearest_neighbor,gaussian,
+K562+A549,AMG-900,5,scgen,gaussian,
+K562+A549,AMG-900,6,real_blend,real,0.1342131613931736
+K562+A549,AMG-900,6,average_effect,cells,0.32883302916820417
+K562+A549,AMG-900,6,nearest_neighbor,cells,0.21986020659080818
+K562+A549,AMG-900,6,scgen,cells,0.572584006431956
+K562+A549,AMG-900,6,average_effect,gaussian,
+K562+A549,AMG-900,6,nearest_neighbor,gaussian,
+K562+A549,AMG-900,6,scgen,gaussian,
+K562+A549,AMG-900,7,real_blend,real,0.1508976375499158
+K562+A549,AMG-900,7,average_effect,cells,0.3257915871656062
+K562+A549,AMG-900,7,nearest_neighbor,cells,0.25025190798908875
+K562+A549,AMG-900,7,scgen,cells,0.5938410896262803
+K562+A549,AMG-900,7,average_effect,gaussian,
+K562+A549,AMG-900,7,nearest_neighbor,gaussian,
+K562+A549,AMG-900,7,scgen,gaussian,
+K562+A549,AR-42,0,real_blend,real,0.1524187736204547
+K562+A549,AR-42,0,average_effect,cells,0.7516521744474504
+K562+A549,AR-42,0,nearest_neighbor,cells,0.8395567133050452
+K562+A549,AR-42,0,scgen,cells,0.9136719855263389
+K562+A549,AR-42,0,average_effect,gaussian,
+K562+A549,AR-42,0,nearest_neighbor,gaussian,
+K562+A549,AR-42,0,scgen,gaussian,
+K562+A549,AR-42,1,real_blend,real,0.12488282226579728
+K562+A549,AR-42,1,average_effect,cells,0.746385988016023
+K562+A549,AR-42,1,nearest_neighbor,cells,0.8369596788214771
+K562+A549,AR-42,1,scgen,cells,0.9323973668442792
+K562+A549,AR-42,1,average_effect,gaussian,
+K562+A549,AR-42,1,nearest_neighbor,gaussian,
+K562+A549,AR-42,1,scgen,gaussian,
+K562+A549,AR-42,2,real_blend,real,0.10525581287479327
+K562+A549,AR-42,2,average_effect,cells,0.7656721853878188
+K562+A549,AR-42,2,nearest_neighbor,cells,0.8417464756826116
+K562+A549,AR-42,2,scgen,cells,0.9319038922759896
+K562+A549,AR-42,2,average_effect,gaussian,
+K562+A549,AR-42,2,nearest_neighbor,gaussian,
+K562+A549,AR-42,2,scgen,gaussian,
+K562+A549,AR-42,3,real_blend,real,0.15994307957998416
+K562+A549,AR-42,3,average_effect,cells,0.7332911510793036
+K562+A549,AR-42,3,nearest_neighbor,cells,0.8176081948936785
+K562+A549,AR-42,3,scgen,cells,0.9402732949130589
+K562+A549,AR-42,3,average_effect,gaussian,
+K562+A549,AR-42,3,nearest_neighbor,gaussian,
+K562+A549,AR-42,3,scgen,gaussian,
+K562+A549,AR-42,4,real_blend,real,0.12126042570376289
+K562+A549,AR-42,4,average_effect,cells,0.7578611416060155
+K562+A549,AR-42,4,nearest_neighbor,cells,0.8284133952588192
+K562+A549,AR-42,4,scgen,cells,0.9083791420226337
+K562+A549,AR-42,4,average_effect,gaussian,
+K562+A549,AR-42,4,nearest_neighbor,gaussian,
+K562+A549,AR-42,4,scgen,gaussian,
+K562+A549,AR-42,5,real_blend,real,0.13061002688173043
+K562+A549,AR-42,5,average_effect,cells,0.7392189063210355
+K562+A549,AR-42,5,nearest_neighbor,cells,0.8323227824115288
+K562+A549,AR-42,5,scgen,cells,0.8981599359028203
+K562+A549,AR-42,5,average_effect,gaussian,
+K562+A549,AR-42,5,nearest_neighbor,gaussian,
+K562+A549,AR-42,5,scgen,gaussian,
+K562+A549,AR-42,6,real_blend,real,0.05241175831945572
+K562+A549,AR-42,6,average_effect,cells,0.7521383619597569
+K562+A549,AR-42,6,nearest_neighbor,cells,0.8192815972066784
+K562+A549,AR-42,6,scgen,cells,0.9012486510920278
+K562+A549,AR-42,6,average_effect,gaussian,
+K562+A549,AR-42,6,nearest_neighbor,gaussian,
+K562+A549,AR-42,6,scgen,gaussian,
+K562+A549,AR-42,7,real_blend,real,0.1556677441841993
+K562+A549,AR-42,7,average_effect,cells,0.7664158069221187
+K562+A549,AR-42,7,nearest_neighbor,cells,0.8338450831446103
+K562+A549,AR-42,7,scgen,cells,0.921691431929035
+K562+A549,AR-42,7,average_effect,gaussian,
+K562+A549,AR-42,7,nearest_neighbor,gaussian,
+K562+A549,AR-42,7,scgen,gaussian,
 A549+MCF7,(+)-JQ1,0,real_blend,real,0.12241316905762496
 A549+MCF7,(+)-JQ1,0,average_effect,cells,0.7208546203309233
 A549+MCF7,(+)-JQ1,0,nearest_neighbor,cells,0.8906445459608047
-A549+MCF7,(+)-JQ1,0,scgen,cells,0.8689514910694093
+A549+MCF7,(+)-JQ1,0,scgen,cells,0.8689519818670005
 A549+MCF7,(+)-JQ1,0,average_effect,gaussian,
 A549+MCF7,(+)-JQ1,0,nearest_neighbor,gaussian,
 A549+MCF7,(+)-JQ1,0,scgen,gaussian,
 A549+MCF7,(+)-JQ1,1,real_blend,real,0.10546850996252821
 A549+MCF7,(+)-JQ1,1,average_effect,cells,0.7797029235669278
 A549+MCF7,(+)-JQ1,1,nearest_neighbor,cells,0.9109203141701704
-A549+MCF7,(+)-JQ1,1,scgen,cells,0.926529087764073
+A549+MCF7,(+)-JQ1,1,scgen,cells,0.9265291071720643
 A549+MCF7,(+)-JQ1,1,average_effect,gaussian,
 A549+MCF7,(+)-JQ1,1,nearest_neighbor,gaussian,
 A549+MCF7,(+)-JQ1,1,scgen,gaussian,
 A549+MCF7,(+)-JQ1,2,real_blend,real,0.13171077341085172
 A549+MCF7,(+)-JQ1,2,average_effect,cells,0.6500524202661123
 A549+MCF7,(+)-JQ1,2,nearest_neighbor,cells,0.8668251823813931
-A549+MCF7,(+)-JQ1,2,scgen,cells,0.8508026247120823
+A549+MCF7,(+)-JQ1,2,scgen,cells,0.8508030070943539
 A549+MCF7,(+)-JQ1,2,average_effect,gaussian,
 A549+MCF7,(+)-JQ1,2,nearest_neighbor,gaussian,
 A549+MCF7,(+)-JQ1,2,scgen,gaussian,
 A549+MCF7,(+)-JQ1,3,real_blend,real,0.1140686153396059
 A549+MCF7,(+)-JQ1,3,average_effect,cells,0.7373865868687431
 A549+MCF7,(+)-JQ1,3,nearest_neighbor,cells,0.8925676063368769
-A549+MCF7,(+)-JQ1,3,scgen,cells,0.8705394729219186
+A549+MCF7,(+)-JQ1,3,scgen,cells,0.8705399262004443
 A549+MCF7,(+)-JQ1,3,average_effect,gaussian,
 A549+MCF7,(+)-JQ1,3,nearest_neighbor,gaussian,
 A549+MCF7,(+)-JQ1,3,scgen,gaussian,
+A549+MCF7,(+)-JQ1,4,real_blend,real,0.0985978653983173
+A549+MCF7,(+)-JQ1,4,average_effect,cells,0.7174171647252077
+A549+MCF7,(+)-JQ1,4,nearest_neighbor,cells,0.8819746440722864
+A549+MCF7,(+)-JQ1,4,scgen,cells,0.8553408034299727
+A549+MCF7,(+)-JQ1,4,average_effect,gaussian,
+A549+MCF7,(+)-JQ1,4,nearest_neighbor,gaussian,
+A549+MCF7,(+)-JQ1,4,scgen,gaussian,
+A549+MCF7,(+)-JQ1,5,real_blend,real,0.10707639242202664
+A549+MCF7,(+)-JQ1,5,average_effect,cells,0.7063148157404179
+A549+MCF7,(+)-JQ1,5,nearest_neighbor,cells,0.8942367320356753
+A549+MCF7,(+)-JQ1,5,scgen,cells,0.8630067279782715
+A549+MCF7,(+)-JQ1,5,average_effect,gaussian,
+A549+MCF7,(+)-JQ1,5,nearest_neighbor,gaussian,
+A549+MCF7,(+)-JQ1,5,scgen,gaussian,
+A549+MCF7,(+)-JQ1,6,real_blend,real,0.07776441668472611
+A549+MCF7,(+)-JQ1,6,average_effect,cells,0.7506301343484653
+A549+MCF7,(+)-JQ1,6,nearest_neighbor,cells,0.8850954603932291
+A549+MCF7,(+)-JQ1,6,scgen,cells,0.855813412615159
+A549+MCF7,(+)-JQ1,6,average_effect,gaussian,
+A549+MCF7,(+)-JQ1,6,nearest_neighbor,gaussian,
+A549+MCF7,(+)-JQ1,6,scgen,gaussian,
+A549+MCF7,(+)-JQ1,7,real_blend,real,0.10995509387691776
+A549+MCF7,(+)-JQ1,7,average_effect,cells,0.7436941453537492
+A549+MCF7,(+)-JQ1,7,nearest_neighbor,cells,0.8905315613333755
+A549+MCF7,(+)-JQ1,7,scgen,cells,0.8870198794146148
+A549+MCF7,(+)-JQ1,7,average_effect,gaussian,
+A549+MCF7,(+)-JQ1,7,nearest_neighbor,gaussian,
+A549+MCF7,(+)-JQ1,7,scgen,gaussian,
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),0,real_blend,real,-0.007721595375970369
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),0,average_effect,cells,0.19217602563210612
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),0,nearest_neighbor,cells,0.5038710430838089
-A549+MCF7,2-Methoxyestradiol (2-MeOE2),0,scgen,cells,0.3272006906169381
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),0,scgen,cells,0.32720384432554656
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),0,average_effect,gaussian,
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),0,nearest_neighbor,gaussian,
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),0,scgen,gaussian,
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),1,real_blend,real,0.017032953138580477
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),1,average_effect,cells,0.2844778729368868
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),1,nearest_neighbor,cells,0.5825809638620881
-A549+MCF7,2-Methoxyestradiol (2-MeOE2),1,scgen,cells,0.515527757279278
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),1,scgen,cells,0.5155284148891248
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),1,average_effect,gaussian,
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),1,nearest_neighbor,gaussian,
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),1,scgen,gaussian,
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),2,real_blend,real,0.016068935999959205
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),2,average_effect,cells,0.10227977379276001
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),2,nearest_neighbor,cells,0.46725313988245293
-A549+MCF7,2-Methoxyestradiol (2-MeOE2),2,scgen,cells,0.07164403914653979
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),2,scgen,cells,0.07164342903138919
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),2,average_effect,gaussian,
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),2,nearest_neighbor,gaussian,
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),2,scgen,gaussian,
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),3,real_blend,real,-0.044584501078075454
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),3,average_effect,cells,0.2451200575789996
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),3,nearest_neighbor,cells,0.5288519715495394
-A549+MCF7,2-Methoxyestradiol (2-MeOE2),3,scgen,cells,0.2353486387749082
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),3,scgen,cells,0.23535279730796888
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),3,average_effect,gaussian,
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),3,nearest_neighbor,gaussian,
 A549+MCF7,2-Methoxyestradiol (2-MeOE2),3,scgen,gaussian,
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),4,real_blend,real,-0.09372919272368901
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),4,average_effect,cells,0.217914518845997
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),4,nearest_neighbor,cells,0.47788415808167417
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),4,scgen,cells,0.36192682905415324
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),4,average_effect,gaussian,
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),4,nearest_neighbor,gaussian,
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),4,scgen,gaussian,
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),5,real_blend,real,-0.05022824139040939
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),5,average_effect,cells,0.14144349755469487
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),5,nearest_neighbor,cells,0.5380140341226396
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),5,scgen,cells,0.17408061824235496
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),5,average_effect,gaussian,
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),5,nearest_neighbor,gaussian,
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),5,scgen,gaussian,
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),6,real_blend,real,0.0022294441944478035
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),6,average_effect,cells,0.2886974058487432
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),6,nearest_neighbor,cells,0.5082916548404902
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),6,scgen,cells,0.4656381724130247
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),6,average_effect,gaussian,
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),6,nearest_neighbor,gaussian,
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),6,scgen,gaussian,
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),7,real_blend,real,-0.036630610563985075
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),7,average_effect,cells,0.2197545860758872
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),7,nearest_neighbor,cells,0.47606822144781086
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),7,scgen,cells,0.37256561229451257
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),7,average_effect,gaussian,
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),7,nearest_neighbor,gaussian,
+A549+MCF7,2-Methoxyestradiol (2-MeOE2),7,scgen,gaussian,
 A549+MCF7,A-366,0,real_blend,real,-0.030719435888154553
 A549+MCF7,A-366,0,average_effect,cells,0.13194932626143158
 A549+MCF7,A-366,0,nearest_neighbor,cells,0.356865375306832
-A549+MCF7,A-366,0,scgen,cells,0.004373362804814378
+A549+MCF7,A-366,0,scgen,cells,0.004375830829747839
 A549+MCF7,A-366,0,average_effect,gaussian,
 A549+MCF7,A-366,0,nearest_neighbor,gaussian,
 A549+MCF7,A-366,0,scgen,gaussian,
 A549+MCF7,A-366,1,real_blend,real,0.005848072681094929
 A549+MCF7,A-366,1,average_effect,cells,0.2706031627750696
 A549+MCF7,A-366,1,nearest_neighbor,cells,0.43257643046765765
-A549+MCF7,A-366,1,scgen,cells,0.41495373980130273
+A549+MCF7,A-366,1,scgen,cells,0.414954105216201
 A549+MCF7,A-366,1,average_effect,gaussian,
 A549+MCF7,A-366,1,nearest_neighbor,gaussian,
 A549+MCF7,A-366,1,scgen,gaussian,
 A549+MCF7,A-366,2,real_blend,real,-0.015690675103331397
 A549+MCF7,A-366,2,average_effect,cells,0.05557347754670124
 A549+MCF7,A-366,2,nearest_neighbor,cells,0.3314754049285414
-A549+MCF7,A-366,2,scgen,cells,-0.0019550508908537777
+A549+MCF7,A-366,2,scgen,cells,-0.001958523197622914
 A549+MCF7,A-366,2,average_effect,gaussian,
 A549+MCF7,A-366,2,nearest_neighbor,gaussian,
 A549+MCF7,A-366,2,scgen,gaussian,
 A549+MCF7,A-366,3,real_blend,real,0.0783121476058236
 A549+MCF7,A-366,3,average_effect,cells,0.15645126464908127
 A549+MCF7,A-366,3,nearest_neighbor,cells,0.35393387979820945
-A549+MCF7,A-366,3,scgen,cells,0.04614091979589712
+A549+MCF7,A-366,3,scgen,cells,0.046143565364074705
 A549+MCF7,A-366,3,average_effect,gaussian,
 A549+MCF7,A-366,3,nearest_neighbor,gaussian,
 A549+MCF7,A-366,3,scgen,gaussian,
+A549+MCF7,A-366,4,real_blend,real,0.0149754541450269
+A549+MCF7,A-366,4,average_effect,cells,0.1493761046888736
+A549+MCF7,A-366,4,nearest_neighbor,cells,0.33547439591356065
+A549+MCF7,A-366,4,scgen,cells,0.17999821101731986
+A549+MCF7,A-366,4,average_effect,gaussian,
+A549+MCF7,A-366,4,nearest_neighbor,gaussian,
+A549+MCF7,A-366,4,scgen,gaussian,
+A549+MCF7,A-366,5,real_blend,real,0.03320374587380629
+A549+MCF7,A-366,5,average_effect,cells,0.09422523336088327
+A549+MCF7,A-366,5,nearest_neighbor,cells,0.3373431439471414
+A549+MCF7,A-366,5,scgen,cells,0.07685634821731502
+A549+MCF7,A-366,5,average_effect,gaussian,
+A549+MCF7,A-366,5,nearest_neighbor,gaussian,
+A549+MCF7,A-366,5,scgen,gaussian,
+A549+MCF7,A-366,6,real_blend,real,-0.020307841086060055
+A549+MCF7,A-366,6,average_effect,cells,0.20280313709327571
+A549+MCF7,A-366,6,nearest_neighbor,cells,0.36444923763123765
+A549+MCF7,A-366,6,scgen,cells,0.3223267153624167
+A549+MCF7,A-366,6,average_effect,gaussian,
+A549+MCF7,A-366,6,nearest_neighbor,gaussian,
+A549+MCF7,A-366,6,scgen,gaussian,
+A549+MCF7,A-366,7,real_blend,real,-0.04640544931570104
+A549+MCF7,A-366,7,average_effect,cells,0.15073361684966824
+A549+MCF7,A-366,7,nearest_neighbor,cells,0.33527443026529363
+A549+MCF7,A-366,7,scgen,cells,0.056652720061144475
+A549+MCF7,A-366,7,average_effect,gaussian,
+A549+MCF7,A-366,7,nearest_neighbor,gaussian,
+A549+MCF7,A-366,7,scgen,gaussian,
 A549+MCF7,ABT-737,0,real_blend,real,0.0502652859040566
 A549+MCF7,ABT-737,0,average_effect,cells,0.1393359222910339
 A549+MCF7,ABT-737,0,nearest_neighbor,cells,0.39061298079858087
-A549+MCF7,ABT-737,0,scgen,cells,0.20006575610821634
+A549+MCF7,ABT-737,0,scgen,cells,0.20006697005762492
 A549+MCF7,ABT-737,0,average_effect,gaussian,
 A549+MCF7,ABT-737,0,nearest_neighbor,gaussian,
 A549+MCF7,ABT-737,0,scgen,gaussian,
 A549+MCF7,ABT-737,1,real_blend,real,0.018574952552582163
 A549+MCF7,ABT-737,1,average_effect,cells,0.1796437857121747
 A549+MCF7,ABT-737,1,nearest_neighbor,cells,0.42990745550851533
-A549+MCF7,ABT-737,1,scgen,cells,0.2785042825683331
+A549+MCF7,ABT-737,1,scgen,cells,0.2785021875034459
 A549+MCF7,ABT-737,1,average_effect,gaussian,
 A549+MCF7,ABT-737,1,nearest_neighbor,gaussian,
 A549+MCF7,ABT-737,1,scgen,gaussian,
 A549+MCF7,ABT-737,2,real_blend,real,0.0766675678101554
 A549+MCF7,ABT-737,2,average_effect,cells,0.08854688046462149
 A549+MCF7,ABT-737,2,nearest_neighbor,cells,0.31707369432968857
-A549+MCF7,ABT-737,2,scgen,cells,0.23295809078527208
+A549+MCF7,ABT-737,2,scgen,cells,0.23295506660823354
 A549+MCF7,ABT-737,2,average_effect,gaussian,
 A549+MCF7,ABT-737,2,nearest_neighbor,gaussian,
 A549+MCF7,ABT-737,2,scgen,gaussian,
 A549+MCF7,ABT-737,3,real_blend,real,0.008958694829519916
 A549+MCF7,ABT-737,3,average_effect,cells,0.14329528353752594
 A549+MCF7,ABT-737,3,nearest_neighbor,cells,0.4063262397370671
-A549+MCF7,ABT-737,3,scgen,cells,0.05568426627462136
+A549+MCF7,ABT-737,3,scgen,cells,0.05568463057019225
 A549+MCF7,ABT-737,3,average_effect,gaussian,
 A549+MCF7,ABT-737,3,nearest_neighbor,gaussian,
 A549+MCF7,ABT-737,3,scgen,gaussian,
+A549+MCF7,ABT-737,4,real_blend,real,0.013569730784284981
+A549+MCF7,ABT-737,4,average_effect,cells,0.11960717197787714
+A549+MCF7,ABT-737,4,nearest_neighbor,cells,0.34537582520681054
+A549+MCF7,ABT-737,4,scgen,cells,0.20697667075309628
+A549+MCF7,ABT-737,4,average_effect,gaussian,
+A549+MCF7,ABT-737,4,nearest_neighbor,gaussian,
+A549+MCF7,ABT-737,4,scgen,gaussian,
+A549+MCF7,ABT-737,5,real_blend,real,0.06466773035810743
+A549+MCF7,ABT-737,5,average_effect,cells,0.10361708311610371
+A549+MCF7,ABT-737,5,nearest_neighbor,cells,0.3954643506107777
+A549+MCF7,ABT-737,5,scgen,cells,0.09600772151257171
+A549+MCF7,ABT-737,5,average_effect,gaussian,
+A549+MCF7,ABT-737,5,nearest_neighbor,gaussian,
+A549+MCF7,ABT-737,5,scgen,gaussian,
+A549+MCF7,ABT-737,6,real_blend,real,-0.007133956441565116
+A549+MCF7,ABT-737,6,average_effect,cells,0.15849483790518873
+A549+MCF7,ABT-737,6,nearest_neighbor,cells,0.3632503562503766
+A549+MCF7,ABT-737,6,scgen,cells,0.24621567636240238
+A549+MCF7,ABT-737,6,average_effect,gaussian,
+A549+MCF7,ABT-737,6,nearest_neighbor,gaussian,
+A549+MCF7,ABT-737,6,scgen,gaussian,
+A549+MCF7,ABT-737,7,real_blend,real,-0.03257957217903038
+A549+MCF7,ABT-737,7,average_effect,cells,0.13634700065638344
+A549+MCF7,ABT-737,7,nearest_neighbor,cells,0.39175768809351813
+A549+MCF7,ABT-737,7,scgen,cells,0.06267060442814149
+A549+MCF7,ABT-737,7,average_effect,gaussian,
+A549+MCF7,ABT-737,7,nearest_neighbor,gaussian,
+A549+MCF7,ABT-737,7,scgen,gaussian,
 A549+MCF7,AC480 (BMS-599626),0,real_blend,real,0.027365810008689394
 A549+MCF7,AC480 (BMS-599626),0,average_effect,cells,0.101668131828819
 A549+MCF7,AC480 (BMS-599626),0,nearest_neighbor,cells,0.3673817395268678
-A549+MCF7,AC480 (BMS-599626),0,scgen,cells,-0.033850552805013215
+A549+MCF7,AC480 (BMS-599626),0,scgen,cells,-0.033850645071090715
 A549+MCF7,AC480 (BMS-599626),0,average_effect,gaussian,
 A549+MCF7,AC480 (BMS-599626),0,nearest_neighbor,gaussian,
 A549+MCF7,AC480 (BMS-599626),0,scgen,gaussian,
 A549+MCF7,AC480 (BMS-599626),1,real_blend,real,-0.07425981653087356
 A549+MCF7,AC480 (BMS-599626),1,average_effect,cells,0.25878747102718297
 A549+MCF7,AC480 (BMS-599626),1,nearest_neighbor,cells,0.4770705252059755
-A549+MCF7,AC480 (BMS-599626),1,scgen,cells,0.5266311085129777
+A549+MCF7,AC480 (BMS-599626),1,scgen,cells,0.5266296905919241
 A549+MCF7,AC480 (BMS-599626),1,average_effect,gaussian,
 A549+MCF7,AC480 (BMS-599626),1,nearest_neighbor,gaussian,
 A549+MCF7,AC480 (BMS-599626),1,scgen,gaussian,
 A549+MCF7,AC480 (BMS-599626),2,real_blend,real,0.12628778673881152
 A549+MCF7,AC480 (BMS-599626),2,average_effect,cells,0.19150406686444946
 A549+MCF7,AC480 (BMS-599626),2,nearest_neighbor,cells,0.34419058678145065
-A549+MCF7,AC480 (BMS-599626),2,scgen,cells,0.39990275404342146
+A549+MCF7,AC480 (BMS-599626),2,scgen,cells,0.3999003394908743
 A549+MCF7,AC480 (BMS-599626),2,average_effect,gaussian,
 A549+MCF7,AC480 (BMS-599626),2,nearest_neighbor,gaussian,
 A549+MCF7,AC480 (BMS-599626),2,scgen,gaussian,
 A549+MCF7,AC480 (BMS-599626),3,real_blend,real,0.0030219339081310357
 A549+MCF7,AC480 (BMS-599626),3,average_effect,cells,0.20243500665977376
 A549+MCF7,AC480 (BMS-599626),3,nearest_neighbor,cells,0.44236676155565713
-A549+MCF7,AC480 (BMS-599626),3,scgen,cells,0.19078761293087695
+A549+MCF7,AC480 (BMS-599626),3,scgen,cells,0.19078775960769404
 A549+MCF7,AC480 (BMS-599626),3,average_effect,gaussian,
 A549+MCF7,AC480 (BMS-599626),3,nearest_neighbor,gaussian,
 A549+MCF7,AC480 (BMS-599626),3,scgen,gaussian,
+A549+MCF7,AC480 (BMS-599626),4,real_blend,real,-0.026608839145887277
+A549+MCF7,AC480 (BMS-599626),4,average_effect,cells,0.08056037218251244
+A549+MCF7,AC480 (BMS-599626),4,nearest_neighbor,cells,0.3360144046780556
+A549+MCF7,AC480 (BMS-599626),4,scgen,cells,0.07881923478735779
+A549+MCF7,AC480 (BMS-599626),4,average_effect,gaussian,
+A549+MCF7,AC480 (BMS-599626),4,nearest_neighbor,gaussian,
+A549+MCF7,AC480 (BMS-599626),4,scgen,gaussian,
+A549+MCF7,AC480 (BMS-599626),5,real_blend,real,-0.015273822913739582
+A549+MCF7,AC480 (BMS-599626),5,average_effect,cells,0.1859197794603662
+A549+MCF7,AC480 (BMS-599626),5,nearest_neighbor,cells,0.39962064554785964
+A549+MCF7,AC480 (BMS-599626),5,scgen,cells,0.2979750235281096
+A549+MCF7,AC480 (BMS-599626),5,average_effect,gaussian,
+A549+MCF7,AC480 (BMS-599626),5,nearest_neighbor,gaussian,
+A549+MCF7,AC480 (BMS-599626),5,scgen,gaussian,
+A549+MCF7,AC480 (BMS-599626),6,real_blend,real,0.04591846861863398
+A549+MCF7,AC480 (BMS-599626),6,average_effect,cells,0.19060878330107017
+A549+MCF7,AC480 (BMS-599626),6,nearest_neighbor,cells,0.3814986473446124
+A549+MCF7,AC480 (BMS-599626),6,scgen,cells,0.2979222720538657
+A549+MCF7,AC480 (BMS-599626),6,average_effect,gaussian,
+A549+MCF7,AC480 (BMS-599626),6,nearest_neighbor,gaussian,
+A549+MCF7,AC480 (BMS-599626),6,scgen,gaussian,
+A549+MCF7,AC480 (BMS-599626),7,real_blend,real,0.01804332623551026
+A549+MCF7,AC480 (BMS-599626),7,average_effect,cells,0.14536712534501633
+A549+MCF7,AC480 (BMS-599626),7,nearest_neighbor,cells,0.36214455793869194
+A549+MCF7,AC480 (BMS-599626),7,scgen,cells,0.13277042828252297
+A549+MCF7,AC480 (BMS-599626),7,average_effect,gaussian,
+A549+MCF7,AC480 (BMS-599626),7,nearest_neighbor,gaussian,
+A549+MCF7,AC480 (BMS-599626),7,scgen,gaussian,
 A549+MCF7,AG-14361,0,real_blend,real,-0.05664425531469364
 A549+MCF7,AG-14361,0,average_effect,cells,0.04883303947549121
 A549+MCF7,AG-14361,0,nearest_neighbor,cells,0.35348241157168325
-A549+MCF7,AG-14361,0,scgen,cells,-0.04944743507832308
+A549+MCF7,AG-14361,0,scgen,cells,-0.04944371340688279
 A549+MCF7,AG-14361,0,average_effect,gaussian,
 A549+MCF7,AG-14361,0,nearest_neighbor,gaussian,
 A549+MCF7,AG-14361,0,scgen,gaussian,
 A549+MCF7,AG-14361,1,real_blend,real,0.03647480707823221
 A549+MCF7,AG-14361,1,average_effect,cells,0.18531894960410128
 A549+MCF7,AG-14361,1,nearest_neighbor,cells,0.4304259739234007
-A549+MCF7,AG-14361,1,scgen,cells,0.30064726366214156
+A549+MCF7,AG-14361,1,scgen,cells,0.3006470359859928
 A549+MCF7,AG-14361,1,average_effect,gaussian,
 A549+MCF7,AG-14361,1,nearest_neighbor,gaussian,
 A549+MCF7,AG-14361,1,scgen,gaussian,
 A549+MCF7,AG-14361,2,real_blend,real,0.007700410157053474
 A549+MCF7,AG-14361,2,average_effect,cells,0.07918146666737885
 A549+MCF7,AG-14361,2,nearest_neighbor,cells,0.317057938068268
-A549+MCF7,AG-14361,2,scgen,cells,0.09510534770520088
+A549+MCF7,AG-14361,2,scgen,cells,0.09510226659992606
 A549+MCF7,AG-14361,2,average_effect,gaussian,
 A549+MCF7,AG-14361,2,nearest_neighbor,gaussian,
 A549+MCF7,AG-14361,2,scgen,gaussian,
 A549+MCF7,AG-14361,3,real_blend,real,0.06980645941407579
 A549+MCF7,AG-14361,3,average_effect,cells,0.14505128136807388
 A549+MCF7,AG-14361,3,nearest_neighbor,cells,0.3781391456101183
-A549+MCF7,AG-14361,3,scgen,cells,-0.042124319686808014
+A549+MCF7,AG-14361,3,scgen,cells,-0.04212194274721158
 A549+MCF7,AG-14361,3,average_effect,gaussian,
 A549+MCF7,AG-14361,3,nearest_neighbor,gaussian,
 A549+MCF7,AG-14361,3,scgen,gaussian,
+A549+MCF7,AG-14361,4,real_blend,real,-0.002762160494254122
+A549+MCF7,AG-14361,4,average_effect,cells,0.0420422330978271
+A549+MCF7,AG-14361,4,nearest_neighbor,cells,0.3089927490543226
+A549+MCF7,AG-14361,4,scgen,cells,-0.006289990434400749
+A549+MCF7,AG-14361,4,average_effect,gaussian,
+A549+MCF7,AG-14361,4,nearest_neighbor,gaussian,
+A549+MCF7,AG-14361,4,scgen,gaussian,
+A549+MCF7,AG-14361,5,real_blend,real,0.003809723436566921
+A549+MCF7,AG-14361,5,average_effect,cells,0.12331640402173066
+A549+MCF7,AG-14361,5,nearest_neighbor,cells,0.3843163200250814
+A549+MCF7,AG-14361,5,scgen,cells,0.11306602098575998
+A549+MCF7,AG-14361,5,average_effect,gaussian,
+A549+MCF7,AG-14361,5,nearest_neighbor,gaussian,
+A549+MCF7,AG-14361,5,scgen,gaussian,
+A549+MCF7,AG-14361,6,real_blend,real,0.036892074043372386
+A549+MCF7,AG-14361,6,average_effect,cells,0.17007539741121183
+A549+MCF7,AG-14361,6,nearest_neighbor,cells,0.38285151035332005
+A549+MCF7,AG-14361,6,scgen,cells,0.21233687416710886
+A549+MCF7,AG-14361,6,average_effect,gaussian,
+A549+MCF7,AG-14361,6,nearest_neighbor,gaussian,
+A549+MCF7,AG-14361,6,scgen,gaussian,
+A549+MCF7,AG-14361,7,real_blend,real,0.011625248006157957
+A549+MCF7,AG-14361,7,average_effect,cells,0.14035629475331368
+A549+MCF7,AG-14361,7,nearest_neighbor,cells,0.3578264749870244
+A549+MCF7,AG-14361,7,scgen,cells,0.08442782243878784
+A549+MCF7,AG-14361,7,average_effect,gaussian,
+A549+MCF7,AG-14361,7,nearest_neighbor,gaussian,
+A549+MCF7,AG-14361,7,scgen,gaussian,
 A549+MCF7,AG-490 (Tyrphostin B42),0,real_blend,real,0.013730079416551185
 A549+MCF7,AG-490 (Tyrphostin B42),0,average_effect,cells,0.09690065353447513
 A549+MCF7,AG-490 (Tyrphostin B42),0,nearest_neighbor,cells,0.45312210486242016
-A549+MCF7,AG-490 (Tyrphostin B42),0,scgen,cells,0.13405088890132238
+A549+MCF7,AG-490 (Tyrphostin B42),0,scgen,cells,0.1340551788595032
 A549+MCF7,AG-490 (Tyrphostin B42),0,average_effect,gaussian,
 A549+MCF7,AG-490 (Tyrphostin B42),0,nearest_neighbor,gaussian,
 A549+MCF7,AG-490 (Tyrphostin B42),0,scgen,gaussian,
 A549+MCF7,AG-490 (Tyrphostin B42),1,real_blend,real,0.038560650713840836
 A549+MCF7,AG-490 (Tyrphostin B42),1,average_effect,cells,0.22659719880959758
 A549+MCF7,AG-490 (Tyrphostin B42),1,nearest_neighbor,cells,0.5317341999729399
-A549+MCF7,AG-490 (Tyrphostin B42),1,scgen,cells,0.44126359489663736
+A549+MCF7,AG-490 (Tyrphostin B42),1,scgen,cells,0.4412637860844755
 A549+MCF7,AG-490 (Tyrphostin B42),1,average_effect,gaussian,
 A549+MCF7,AG-490 (Tyrphostin B42),1,nearest_neighbor,gaussian,
 A549+MCF7,AG-490 (Tyrphostin B42),1,scgen,gaussian,
 A549+MCF7,AG-490 (Tyrphostin B42),2,real_blend,real,-0.03340149000719849
 A549+MCF7,AG-490 (Tyrphostin B42),2,average_effect,cells,0.05180661260600633
 A549+MCF7,AG-490 (Tyrphostin B42),2,nearest_neighbor,cells,0.3957063177750809
-A549+MCF7,AG-490 (Tyrphostin B42),2,scgen,cells,0.028711027799918395
+A549+MCF7,AG-490 (Tyrphostin B42),2,scgen,cells,0.02870906581642216
 A549+MCF7,AG-490 (Tyrphostin B42),2,average_effect,gaussian,
 A549+MCF7,AG-490 (Tyrphostin B42),2,nearest_neighbor,gaussian,
 A549+MCF7,AG-490 (Tyrphostin B42),2,scgen,gaussian,
 A549+MCF7,AG-490 (Tyrphostin B42),3,real_blend,real,0.024316882387495936
 A549+MCF7,AG-490 (Tyrphostin B42),3,average_effect,cells,0.14123851146505134
 A549+MCF7,AG-490 (Tyrphostin B42),3,nearest_neighbor,cells,0.4736028050348428
-A549+MCF7,AG-490 (Tyrphostin B42),3,scgen,cells,0.06825363679880189
+A549+MCF7,AG-490 (Tyrphostin B42),3,scgen,cells,0.06825768444406989
 A549+MCF7,AG-490 (Tyrphostin B42),3,average_effect,gaussian,
 A549+MCF7,AG-490 (Tyrphostin B42),3,nearest_neighbor,gaussian,
 A549+MCF7,AG-490 (Tyrphostin B42),3,scgen,gaussian,
+A549+MCF7,AG-490 (Tyrphostin B42),4,real_blend,real,-0.044305494415542185
+A549+MCF7,AG-490 (Tyrphostin B42),4,average_effect,cells,0.1091300609226653
+A549+MCF7,AG-490 (Tyrphostin B42),4,nearest_neighbor,cells,0.42703540369318116
+A549+MCF7,AG-490 (Tyrphostin B42),4,scgen,cells,0.210277049582701
+A549+MCF7,AG-490 (Tyrphostin B42),4,average_effect,gaussian,
+A549+MCF7,AG-490 (Tyrphostin B42),4,nearest_neighbor,gaussian,
+A549+MCF7,AG-490 (Tyrphostin B42),4,scgen,gaussian,
+A549+MCF7,AG-490 (Tyrphostin B42),5,real_blend,real,0.013990890216298039
+A549+MCF7,AG-490 (Tyrphostin B42),5,average_effect,cells,0.07860061115851211
+A549+MCF7,AG-490 (Tyrphostin B42),5,nearest_neighbor,cells,0.4641848974095944
+A549+MCF7,AG-490 (Tyrphostin B42),5,scgen,cells,0.09392478155009827
+A549+MCF7,AG-490 (Tyrphostin B42),5,average_effect,gaussian,
+A549+MCF7,AG-490 (Tyrphostin B42),5,nearest_neighbor,gaussian,
+A549+MCF7,AG-490 (Tyrphostin B42),5,scgen,gaussian,
+A549+MCF7,AG-490 (Tyrphostin B42),6,real_blend,real,0.01175514432957797
+A549+MCF7,AG-490 (Tyrphostin B42),6,average_effect,cells,0.21638247431078642
+A549+MCF7,AG-490 (Tyrphostin B42),6,nearest_neighbor,cells,0.4654774852938442
+A549+MCF7,AG-490 (Tyrphostin B42),6,scgen,cells,0.4034676476651008
+A549+MCF7,AG-490 (Tyrphostin B42),6,average_effect,gaussian,
+A549+MCF7,AG-490 (Tyrphostin B42),6,nearest_neighbor,gaussian,
+A549+MCF7,AG-490 (Tyrphostin B42),6,scgen,gaussian,
+A549+MCF7,AG-490 (Tyrphostin B42),7,real_blend,real,0.01632716202982552
+A549+MCF7,AG-490 (Tyrphostin B42),7,average_effect,cells,0.1595563373571045
+A549+MCF7,AG-490 (Tyrphostin B42),7,nearest_neighbor,cells,0.4763609457337675
+A549+MCF7,AG-490 (Tyrphostin B42),7,scgen,cells,0.2655491911679195
+A549+MCF7,AG-490 (Tyrphostin B42),7,average_effect,gaussian,
+A549+MCF7,AG-490 (Tyrphostin B42),7,nearest_neighbor,gaussian,
+A549+MCF7,AG-490 (Tyrphostin B42),7,scgen,gaussian,
 A549+MCF7,AICAR (Acadesine),0,real_blend,real,-0.0017297587961598877
 A549+MCF7,AICAR (Acadesine),0,average_effect,cells,0.060010253530238054
 A549+MCF7,AICAR (Acadesine),0,nearest_neighbor,cells,0.3263032734284616
-A549+MCF7,AICAR (Acadesine),0,scgen,cells,-0.04210865543682969
+A549+MCF7,AICAR (Acadesine),0,scgen,cells,-0.04210756773725788
 A549+MCF7,AICAR (Acadesine),0,average_effect,gaussian,
 A549+MCF7,AICAR (Acadesine),0,nearest_neighbor,gaussian,
 A549+MCF7,AICAR (Acadesine),0,scgen,gaussian,
 A549+MCF7,AICAR (Acadesine),1,real_blend,real,0.0036414942057717797
 A549+MCF7,AICAR (Acadesine),1,average_effect,cells,0.1735999638799243
 A549+MCF7,AICAR (Acadesine),1,nearest_neighbor,cells,0.3993021733128379
-A549+MCF7,AICAR (Acadesine),1,scgen,cells,0.21808827684345877
+A549+MCF7,AICAR (Acadesine),1,scgen,cells,0.2180860018075246
 A549+MCF7,AICAR (Acadesine),1,average_effect,gaussian,
 A549+MCF7,AICAR (Acadesine),1,nearest_neighbor,gaussian,
 A549+MCF7,AICAR (Acadesine),1,scgen,gaussian,
 A549+MCF7,AICAR (Acadesine),2,real_blend,real,0.01980766129495438
 A549+MCF7,AICAR (Acadesine),2,average_effect,cells,0.11279833982502907
 A549+MCF7,AICAR (Acadesine),2,nearest_neighbor,cells,0.32237609580325305
-A549+MCF7,AICAR (Acadesine),2,scgen,cells,0.2310846408169609
+A549+MCF7,AICAR (Acadesine),2,scgen,cells,0.2310812662375841
 A549+MCF7,AICAR (Acadesine),2,average_effect,gaussian,
 A549+MCF7,AICAR (Acadesine),2,nearest_neighbor,gaussian,
 A549+MCF7,AICAR (Acadesine),2,scgen,gaussian,
 A549+MCF7,AICAR (Acadesine),3,real_blend,real,-0.024002987104232078
 A549+MCF7,AICAR (Acadesine),3,average_effect,cells,0.10263748216715829
 A549+MCF7,AICAR (Acadesine),3,nearest_neighbor,cells,0.36292343601016713
-A549+MCF7,AICAR (Acadesine),3,scgen,cells,-0.06393155400397843
+A549+MCF7,AICAR (Acadesine),3,scgen,cells,-0.06393135821392497
 A549+MCF7,AICAR (Acadesine),3,average_effect,gaussian,
 A549+MCF7,AICAR (Acadesine),3,nearest_neighbor,gaussian,
 A549+MCF7,AICAR (Acadesine),3,scgen,gaussian,
+A549+MCF7,AICAR (Acadesine),4,real_blend,real,-0.12011206564562998
+A549+MCF7,AICAR (Acadesine),4,average_effect,cells,0.02158797827228008
+A549+MCF7,AICAR (Acadesine),4,nearest_neighbor,cells,0.29265737337718856
+A549+MCF7,AICAR (Acadesine),4,scgen,cells,-0.029997050644517412
+A549+MCF7,AICAR (Acadesine),4,average_effect,gaussian,
+A549+MCF7,AICAR (Acadesine),4,nearest_neighbor,gaussian,
+A549+MCF7,AICAR (Acadesine),4,scgen,gaussian,
+A549+MCF7,AICAR (Acadesine),5,real_blend,real,0.01987894227633997
+A549+MCF7,AICAR (Acadesine),5,average_effect,cells,0.09041385209570005
+A549+MCF7,AICAR (Acadesine),5,nearest_neighbor,cells,0.34093892032043926
+A549+MCF7,AICAR (Acadesine),5,scgen,cells,0.13296335683418248
+A549+MCF7,AICAR (Acadesine),5,average_effect,gaussian,
+A549+MCF7,AICAR (Acadesine),5,nearest_neighbor,gaussian,
+A549+MCF7,AICAR (Acadesine),5,scgen,gaussian,
+A549+MCF7,AICAR (Acadesine),6,real_blend,real,-0.007642805611731645
+A549+MCF7,AICAR (Acadesine),6,average_effect,cells,0.1045290531436844
+A549+MCF7,AICAR (Acadesine),6,nearest_neighbor,cells,0.31523435876721423
+A549+MCF7,AICAR (Acadesine),6,scgen,cells,0.11870985329117772
+A549+MCF7,AICAR (Acadesine),6,average_effect,gaussian,
+A549+MCF7,AICAR (Acadesine),6,nearest_neighbor,gaussian,
+A549+MCF7,AICAR (Acadesine),6,scgen,gaussian,
+A549+MCF7,AICAR (Acadesine),7,real_blend,real,-0.141018829186654
+A549+MCF7,AICAR (Acadesine),7,average_effect,cells,0.0718722846335362
+A549+MCF7,AICAR (Acadesine),7,nearest_neighbor,cells,0.32861207819813504
+A549+MCF7,AICAR (Acadesine),7,scgen,cells,-0.08680137322984609
+A549+MCF7,AICAR (Acadesine),7,average_effect,gaussian,
+A549+MCF7,AICAR (Acadesine),7,nearest_neighbor,gaussian,
+A549+MCF7,AICAR (Acadesine),7,scgen,gaussian,
+A549+MCF7,AMG-900,0,real_blend,real,0.20877154647704163
+A549+MCF7,AMG-900,0,average_effect,cells,0.564352480323027
+A549+MCF7,AMG-900,0,nearest_neighbor,cells,0.738725880244964
+A549+MCF7,AMG-900,0,scgen,cells,0.8008479228406237
+A549+MCF7,AMG-900,0,average_effect,gaussian,
+A549+MCF7,AMG-900,0,nearest_neighbor,gaussian,
+A549+MCF7,AMG-900,0,scgen,gaussian,
+A549+MCF7,AMG-900,1,real_blend,real,0.24266450500584905
+A549+MCF7,AMG-900,1,average_effect,cells,0.5970469872442983
+A549+MCF7,AMG-900,1,nearest_neighbor,cells,0.7548012291151421
+A549+MCF7,AMG-900,1,scgen,cells,0.841801753881119
+A549+MCF7,AMG-900,1,average_effect,gaussian,
+A549+MCF7,AMG-900,1,nearest_neighbor,gaussian,-0.5629038976497752
+A549+MCF7,AMG-900,1,scgen,gaussian,
+A549+MCF7,AMG-900,2,real_blend,real,0.23021436743730228
+A549+MCF7,AMG-900,2,average_effect,cells,0.5888967541766773
+A549+MCF7,AMG-900,2,nearest_neighbor,cells,0.7363165020173824
+A549+MCF7,AMG-900,2,scgen,cells,0.8422120944186507
+A549+MCF7,AMG-900,2,average_effect,gaussian,
+A549+MCF7,AMG-900,2,nearest_neighbor,gaussian,-0.39869072216623347
+A549+MCF7,AMG-900,2,scgen,gaussian,
+A549+MCF7,AMG-900,3,real_blend,real,0.2691612615124351
+A549+MCF7,AMG-900,3,average_effect,cells,0.620088110242498
+A549+MCF7,AMG-900,3,nearest_neighbor,cells,0.7723171832307575
+A549+MCF7,AMG-900,3,scgen,cells,0.8280863155375096
+A549+MCF7,AMG-900,3,average_effect,gaussian,
+A549+MCF7,AMG-900,3,nearest_neighbor,gaussian,-0.46297502753665826
+A549+MCF7,AMG-900,3,scgen,gaussian,
+A549+MCF7,AMG-900,4,real_blend,real,0.19695837336182576
+A549+MCF7,AMG-900,4,average_effect,cells,0.4657962538116786
+A549+MCF7,AMG-900,4,nearest_neighbor,cells,0.7042507375739053
+A549+MCF7,AMG-900,4,scgen,cells,0.6996958377128183
+A549+MCF7,AMG-900,4,average_effect,gaussian,
+A549+MCF7,AMG-900,4,nearest_neighbor,gaussian,-0.5120413833047021
+A549+MCF7,AMG-900,4,scgen,gaussian,
+A549+MCF7,AMG-900,5,real_blend,real,0.18262217411625079
+A549+MCF7,AMG-900,5,average_effect,cells,0.624567885162365
+A549+MCF7,AMG-900,5,nearest_neighbor,cells,0.7498501017839575
+A549+MCF7,AMG-900,5,scgen,cells,0.8427571680852897
+A549+MCF7,AMG-900,5,average_effect,gaussian,
+A549+MCF7,AMG-900,5,nearest_neighbor,gaussian,-0.35688864725088243
+A549+MCF7,AMG-900,5,scgen,gaussian,
+A549+MCF7,AMG-900,6,real_blend,real,0.11660504999603524
+A549+MCF7,AMG-900,6,average_effect,cells,0.43599343619697306
+A549+MCF7,AMG-900,6,nearest_neighbor,cells,0.6732022400245138
+A549+MCF7,AMG-900,6,scgen,cells,0.6027055554493552
+A549+MCF7,AMG-900,6,average_effect,gaussian,
+A549+MCF7,AMG-900,6,nearest_neighbor,gaussian,
+A549+MCF7,AMG-900,6,scgen,gaussian,
+A549+MCF7,AMG-900,7,real_blend,real,0.3035968031464423
+A549+MCF7,AMG-900,7,average_effect,cells,0.5703951815880282
+A549+MCF7,AMG-900,7,nearest_neighbor,cells,0.7338052473544651
+A549+MCF7,AMG-900,7,scgen,cells,0.7860296524379227
+A549+MCF7,AMG-900,7,average_effect,gaussian,
+A549+MCF7,AMG-900,7,nearest_neighbor,gaussian,
+A549+MCF7,AMG-900,7,scgen,gaussian,
+A549+MCF7,AR-42,0,real_blend,real,0.2731861232154616
+A549+MCF7,AR-42,0,average_effect,cells,0.8394908464180769
+A549+MCF7,AR-42,0,nearest_neighbor,cells,0.9021388888383249
+A549+MCF7,AR-42,0,scgen,cells,0.950219890260393
+A549+MCF7,AR-42,0,average_effect,gaussian,
+A549+MCF7,AR-42,0,nearest_neighbor,gaussian,
+A549+MCF7,AR-42,0,scgen,gaussian,
+A549+MCF7,AR-42,1,real_blend,real,0.3777430295655411
+A549+MCF7,AR-42,1,average_effect,cells,0.8790861060146277
+A549+MCF7,AR-42,1,nearest_neighbor,cells,0.9206757162589934
+A549+MCF7,AR-42,1,scgen,cells,0.9730712085678206
+A549+MCF7,AR-42,1,average_effect,gaussian,
+A549+MCF7,AR-42,1,nearest_neighbor,gaussian,
+A549+MCF7,AR-42,1,scgen,gaussian,
+A549+MCF7,AR-42,2,real_blend,real,0.31397314291889133
+A549+MCF7,AR-42,2,average_effect,cells,0.8174091040709397
+A549+MCF7,AR-42,2,nearest_neighbor,cells,0.8819729205286175
+A549+MCF7,AR-42,2,scgen,cells,0.9496317571546933
+A549+MCF7,AR-42,2,average_effect,gaussian,
+A549+MCF7,AR-42,2,nearest_neighbor,gaussian,
+A549+MCF7,AR-42,2,scgen,gaussian,
+A549+MCF7,AR-42,3,real_blend,real,0.31681484423494344
+A549+MCF7,AR-42,3,average_effect,cells,0.8504549198613075
+A549+MCF7,AR-42,3,nearest_neighbor,cells,0.9033970097271959
+A549+MCF7,AR-42,3,scgen,cells,0.950784505900389
+A549+MCF7,AR-42,3,average_effect,gaussian,
+A549+MCF7,AR-42,3,nearest_neighbor,gaussian,
+A549+MCF7,AR-42,3,scgen,gaussian,
+A549+MCF7,AR-42,4,real_blend,real,0.3305394001890037
+A549+MCF7,AR-42,4,average_effect,cells,0.8351714124340541
+A549+MCF7,AR-42,4,nearest_neighbor,cells,0.8904221576795252
+A549+MCF7,AR-42,4,scgen,cells,0.9375809808697024
+A549+MCF7,AR-42,4,average_effect,gaussian,
+A549+MCF7,AR-42,4,nearest_neighbor,gaussian,
+A549+MCF7,AR-42,4,scgen,gaussian,
+A549+MCF7,AR-42,5,real_blend,real,0.307310632506896
+A549+MCF7,AR-42,5,average_effect,cells,0.8490628575374052
+A549+MCF7,AR-42,5,nearest_neighbor,cells,0.9067079692062853
+A549+MCF7,AR-42,5,scgen,cells,0.9529225820127085
+A549+MCF7,AR-42,5,average_effect,gaussian,
+A549+MCF7,AR-42,5,nearest_neighbor,gaussian,
+A549+MCF7,AR-42,5,scgen,gaussian,
+A549+MCF7,AR-42,6,real_blend,real,0.3615742036369766
+A549+MCF7,AR-42,6,average_effect,cells,0.8451678881306783
+A549+MCF7,AR-42,6,nearest_neighbor,cells,0.8959079339692056
+A549+MCF7,AR-42,6,scgen,cells,0.9303714404515986
+A549+MCF7,AR-42,6,average_effect,gaussian,
+A549+MCF7,AR-42,6,nearest_neighbor,gaussian,
+A549+MCF7,AR-42,6,scgen,gaussian,
+A549+MCF7,AR-42,7,real_blend,real,0.38521999780069466
+A549+MCF7,AR-42,7,average_effect,cells,0.8462786102310739
+A549+MCF7,AR-42,7,nearest_neighbor,cells,0.9019559455192097
+A549+MCF7,AR-42,7,scgen,cells,0.952213921163471
+A549+MCF7,AR-42,7,average_effect,gaussian,
+A549+MCF7,AR-42,7,nearest_neighbor,gaussian,
+A549+MCF7,AR-42,7,scgen,gaussian,
 K562+MCF7,(+)-JQ1,0,real_blend,real,0.08672175163282511
 K562+MCF7,(+)-JQ1,0,average_effect,cells,0.7235218236842758
 K562+MCF7,(+)-JQ1,0,nearest_neighbor,cells,0.8719708131711332
-K562+MCF7,(+)-JQ1,0,scgen,cells,0.8711092551202831
+K562+MCF7,(+)-JQ1,0,scgen,cells,0.8711095654329526
 K562+MCF7,(+)-JQ1,0,average_effect,gaussian,
 K562+MCF7,(+)-JQ1,0,nearest_neighbor,gaussian,-0.43442548610350723
 K562+MCF7,(+)-JQ1,0,scgen,gaussian,
 K562+MCF7,(+)-JQ1,1,real_blend,real,0.0803008158554376
 K562+MCF7,(+)-JQ1,1,average_effect,cells,0.6497378436424021
 K562+MCF7,(+)-JQ1,1,nearest_neighbor,cells,0.8205021943023293
-K562+MCF7,(+)-JQ1,1,scgen,cells,0.8501280667653551
+K562+MCF7,(+)-JQ1,1,scgen,cells,0.8501287638125066
 K562+MCF7,(+)-JQ1,1,average_effect,gaussian,
 K562+MCF7,(+)-JQ1,1,nearest_neighbor,gaussian,-0.348745668137429
 K562+MCF7,(+)-JQ1,1,scgen,gaussian,
 K562+MCF7,(+)-JQ1,2,real_blend,real,0.10337607960364806
 K562+MCF7,(+)-JQ1,2,average_effect,cells,0.6429537033968391
 K562+MCF7,(+)-JQ1,2,nearest_neighbor,cells,0.8408665297839643
-K562+MCF7,(+)-JQ1,2,scgen,cells,0.8444590326236266
+K562+MCF7,(+)-JQ1,2,scgen,cells,0.8444596993909366
 K562+MCF7,(+)-JQ1,2,average_effect,gaussian,
 K562+MCF7,(+)-JQ1,2,nearest_neighbor,gaussian,-0.4005668097208788
 K562+MCF7,(+)-JQ1,2,scgen,gaussian,
 K562+MCF7,(+)-JQ1,3,real_blend,real,0.0928731785335752
 K562+MCF7,(+)-JQ1,3,average_effect,cells,0.6512957003820957
 K562+MCF7,(+)-JQ1,3,nearest_neighbor,cells,0.8141197089183119
-K562+MCF7,(+)-JQ1,3,scgen,cells,0.8817614995484919
+K562+MCF7,(+)-JQ1,3,scgen,cells,0.8817617329918913
 K562+MCF7,(+)-JQ1,3,average_effect,gaussian,
 K562+MCF7,(+)-JQ1,3,nearest_neighbor,gaussian,-0.40811478350619207
 K562+MCF7,(+)-JQ1,3,scgen,gaussian,
+K562+MCF7,(+)-JQ1,4,real_blend,real,0.09931990177872754
+K562+MCF7,(+)-JQ1,4,average_effect,cells,0.6815266808097533
+K562+MCF7,(+)-JQ1,4,nearest_neighbor,cells,0.8556741683412227
+K562+MCF7,(+)-JQ1,4,scgen,cells,0.8135061663401157
+K562+MCF7,(+)-JQ1,4,average_effect,gaussian,
+K562+MCF7,(+)-JQ1,4,nearest_neighbor,gaussian,-0.42645678115625196
+K562+MCF7,(+)-JQ1,4,scgen,gaussian,
+K562+MCF7,(+)-JQ1,5,real_blend,real,0.11360718807777549
+K562+MCF7,(+)-JQ1,5,average_effect,cells,0.6790026890546786
+K562+MCF7,(+)-JQ1,5,nearest_neighbor,cells,0.863744180530377
+K562+MCF7,(+)-JQ1,5,scgen,cells,0.8529399839814485
+K562+MCF7,(+)-JQ1,5,average_effect,gaussian,
+K562+MCF7,(+)-JQ1,5,nearest_neighbor,gaussian,-0.4362686534098762
+K562+MCF7,(+)-JQ1,5,scgen,gaussian,
+K562+MCF7,(+)-JQ1,6,real_blend,real,0.07646887068112
+K562+MCF7,(+)-JQ1,6,average_effect,cells,0.6864761506756071
+K562+MCF7,(+)-JQ1,6,nearest_neighbor,cells,0.8140152372321577
+K562+MCF7,(+)-JQ1,6,scgen,cells,0.81989875843253
+K562+MCF7,(+)-JQ1,6,average_effect,gaussian,
+K562+MCF7,(+)-JQ1,6,nearest_neighbor,gaussian,-0.4351538849480869
+K562+MCF7,(+)-JQ1,6,scgen,gaussian,
+K562+MCF7,(+)-JQ1,7,real_blend,real,0.08531299722363044
+K562+MCF7,(+)-JQ1,7,average_effect,cells,0.6894414804110507
+K562+MCF7,(+)-JQ1,7,nearest_neighbor,cells,0.8486447177752939
+K562+MCF7,(+)-JQ1,7,scgen,cells,0.8565117677005418
+K562+MCF7,(+)-JQ1,7,average_effect,gaussian,
+K562+MCF7,(+)-JQ1,7,nearest_neighbor,gaussian,
+K562+MCF7,(+)-JQ1,7,scgen,gaussian,
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),0,real_blend,real,-0.038642048637218256
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),0,average_effect,cells,0.25419872553891887
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),0,nearest_neighbor,cells,0.4902890315906116
-K562+MCF7,2-Methoxyestradiol (2-MeOE2),0,scgen,cells,0.34127251701010575
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),0,scgen,cells,0.3412761336987675
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),0,average_effect,gaussian,
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),0,nearest_neighbor,gaussian,
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),0,scgen,gaussian,
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),1,real_blend,real,0.0318286789077576
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),1,average_effect,cells,0.1583562045041525
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),1,nearest_neighbor,cells,0.3967612520477076
-K562+MCF7,2-Methoxyestradiol (2-MeOE2),1,scgen,cells,0.24899938468332583
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),1,scgen,cells,0.24900271873067667
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),1,average_effect,gaussian,
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),1,nearest_neighbor,gaussian,
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),1,scgen,gaussian,
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),2,real_blend,real,-0.07353676021434093
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),2,average_effect,cells,0.10725361537297308
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),2,nearest_neighbor,cells,0.4197250312256491
-K562+MCF7,2-Methoxyestradiol (2-MeOE2),2,scgen,cells,0.006589791560101131
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),2,scgen,cells,0.0065934024097304735
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),2,average_effect,gaussian,
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),2,nearest_neighbor,gaussian,
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),2,scgen,gaussian,
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),3,real_blend,real,0.007750262910199364
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),3,average_effect,cells,0.16784121789556122
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),3,nearest_neighbor,cells,0.4476666519823827
-K562+MCF7,2-Methoxyestradiol (2-MeOE2),3,scgen,cells,0.3408304765404034
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),3,scgen,cells,0.3408321994310117
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),3,average_effect,gaussian,
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),3,nearest_neighbor,gaussian,
 K562+MCF7,2-Methoxyestradiol (2-MeOE2),3,scgen,gaussian,
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),4,real_blend,real,0.003960583149979667
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),4,average_effect,cells,0.21731719821485598
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),4,nearest_neighbor,cells,0.4467668759980325
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),4,scgen,cells,0.279826955279006
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),4,average_effect,gaussian,
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),4,nearest_neighbor,gaussian,-0.4420431368699166
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),4,scgen,gaussian,
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),5,real_blend,real,-0.011085916535022701
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),5,average_effect,cells,0.1706612343827361
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),5,nearest_neighbor,cells,0.4458060641724932
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),5,scgen,cells,0.15507533722019554
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),5,average_effect,gaussian,
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),5,nearest_neighbor,gaussian,
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),5,scgen,gaussian,
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),6,real_blend,real,0.01220984802354143
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),6,average_effect,cells,0.23845879363955055
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),6,nearest_neighbor,cells,0.36657364679202303
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),6,scgen,cells,0.36968312949214915
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),6,average_effect,gaussian,
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),6,nearest_neighbor,gaussian,-0.4762032016119768
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),6,scgen,gaussian,
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),7,real_blend,real,-0.025552885832027975
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),7,average_effect,cells,0.27812497091764615
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),7,nearest_neighbor,cells,0.4916211290765152
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),7,scgen,cells,0.48355024488811416
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),7,average_effect,gaussian,
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),7,nearest_neighbor,gaussian,
+K562+MCF7,2-Methoxyestradiol (2-MeOE2),7,scgen,gaussian,
 K562+MCF7,A-366,0,real_blend,real,-0.012154021462134606
 K562+MCF7,A-366,0,average_effect,cells,0.23543034116409825
 K562+MCF7,A-366,0,nearest_neighbor,cells,0.3754058668815492
-K562+MCF7,A-366,0,scgen,cells,0.20706273203017012
+K562+MCF7,A-366,0,scgen,cells,0.20706619761996414
 K562+MCF7,A-366,0,average_effect,gaussian,
 K562+MCF7,A-366,0,nearest_neighbor,gaussian,
 K562+MCF7,A-366,0,scgen,gaussian,
 K562+MCF7,A-366,1,real_blend,real,0.03499745980703223
 K562+MCF7,A-366,1,average_effect,cells,0.15651996509024463
 K562+MCF7,A-366,1,nearest_neighbor,cells,0.3097262977735593
-K562+MCF7,A-366,1,scgen,cells,0.27271940405309236
+K562+MCF7,A-366,1,scgen,cells,0.27272099328192934
 K562+MCF7,A-366,1,average_effect,gaussian,
 K562+MCF7,A-366,1,nearest_neighbor,gaussian,
 K562+MCF7,A-366,1,scgen,gaussian,
 K562+MCF7,A-366,2,real_blend,real,-0.009777327066506329
 K562+MCF7,A-366,2,average_effect,cells,0.05763798515365726
 K562+MCF7,A-366,2,nearest_neighbor,cells,0.2804356721411116
-K562+MCF7,A-366,2,scgen,cells,-0.27689060892310474
+K562+MCF7,A-366,2,scgen,cells,-0.2768876509749121
 K562+MCF7,A-366,2,average_effect,gaussian,
 K562+MCF7,A-366,2,nearest_neighbor,gaussian,
 K562+MCF7,A-366,2,scgen,gaussian,
 K562+MCF7,A-366,3,real_blend,real,0.02373100689369942
 K562+MCF7,A-366,3,average_effect,cells,0.1000948601802465
 K562+MCF7,A-366,3,nearest_neighbor,cells,0.28987422141847496
-K562+MCF7,A-366,3,scgen,cells,0.18351867837958244
+K562+MCF7,A-366,3,scgen,cells,0.18352052491601717
 K562+MCF7,A-366,3,average_effect,gaussian,
 K562+MCF7,A-366,3,nearest_neighbor,gaussian,
 K562+MCF7,A-366,3,scgen,gaussian,
+K562+MCF7,A-366,4,real_blend,real,0.026011798324882065
+K562+MCF7,A-366,4,average_effect,cells,0.1397634164119634
+K562+MCF7,A-366,4,nearest_neighbor,cells,0.31540755889857885
+K562+MCF7,A-366,4,scgen,cells,0.03201846281218325
+K562+MCF7,A-366,4,average_effect,gaussian,
+K562+MCF7,A-366,4,nearest_neighbor,gaussian,
+K562+MCF7,A-366,4,scgen,gaussian,
+K562+MCF7,A-366,5,real_blend,real,-0.0016528285824711022
+K562+MCF7,A-366,5,average_effect,cells,0.14317117318225359
+K562+MCF7,A-366,5,nearest_neighbor,cells,0.3036223817952482
+K562+MCF7,A-366,5,scgen,cells,0.08926993056611898
+K562+MCF7,A-366,5,average_effect,gaussian,
+K562+MCF7,A-366,5,nearest_neighbor,gaussian,
+K562+MCF7,A-366,5,scgen,gaussian,
+K562+MCF7,A-366,6,real_blend,real,0.1175299077264042
+K562+MCF7,A-366,6,average_effect,cells,0.13474812699374789
+K562+MCF7,A-366,6,nearest_neighbor,cells,0.2787606880369464
+K562+MCF7,A-366,6,scgen,cells,0.18729008794451316
+K562+MCF7,A-366,6,average_effect,gaussian,
+K562+MCF7,A-366,6,nearest_neighbor,gaussian,
+K562+MCF7,A-366,6,scgen,gaussian,
+K562+MCF7,A-366,7,real_blend,real,0.056766930529065125
+K562+MCF7,A-366,7,average_effect,cells,0.2028320899637971
+K562+MCF7,A-366,7,nearest_neighbor,cells,0.32367338433832116
+K562+MCF7,A-366,7,scgen,cells,0.3133957477517362
+K562+MCF7,A-366,7,average_effect,gaussian,
+K562+MCF7,A-366,7,nearest_neighbor,gaussian,
+K562+MCF7,A-366,7,scgen,gaussian,
 K562+MCF7,ABT-737,0,real_blend,real,0.01613033308578094
 K562+MCF7,ABT-737,0,average_effect,cells,0.20524657190067172
 K562+MCF7,ABT-737,0,nearest_neighbor,cells,0.3709645808986743
-K562+MCF7,ABT-737,0,scgen,cells,0.30784120304391044
+K562+MCF7,ABT-737,0,scgen,cells,0.30784297594183313
 K562+MCF7,ABT-737,0,average_effect,gaussian,
 K562+MCF7,ABT-737,0,nearest_neighbor,gaussian,
 K562+MCF7,ABT-737,0,scgen,gaussian,
 K562+MCF7,ABT-737,1,real_blend,real,0.06154764605413286
 K562+MCF7,ABT-737,1,average_effect,cells,0.14040070442945324
 K562+MCF7,ABT-737,1,nearest_neighbor,cells,0.35638589421472794
-K562+MCF7,ABT-737,1,scgen,cells,0.3521748927491178
+K562+MCF7,ABT-737,1,scgen,cells,0.35217510897855
 K562+MCF7,ABT-737,1,average_effect,gaussian,
 K562+MCF7,ABT-737,1,nearest_neighbor,gaussian,
 K562+MCF7,ABT-737,1,scgen,gaussian,
 K562+MCF7,ABT-737,2,real_blend,real,0.02926379110528419
 K562+MCF7,ABT-737,2,average_effect,cells,0.07127481837173195
 K562+MCF7,ABT-737,2,nearest_neighbor,cells,0.26545342846768794
-K562+MCF7,ABT-737,2,scgen,cells,0.03922155521044238
+K562+MCF7,ABT-737,2,scgen,cells,0.039222251514735726
 K562+MCF7,ABT-737,2,average_effect,gaussian,
 K562+MCF7,ABT-737,2,nearest_neighbor,gaussian,
 K562+MCF7,ABT-737,2,scgen,gaussian,
 K562+MCF7,ABT-737,3,real_blend,real,0.016602913536410035
 K562+MCF7,ABT-737,3,average_effect,cells,0.13548605375020295
 K562+MCF7,ABT-737,3,nearest_neighbor,cells,0.33178264026970594
-K562+MCF7,ABT-737,3,scgen,cells,0.41568815458150515
+K562+MCF7,ABT-737,3,scgen,cells,0.415688713155174
 K562+MCF7,ABT-737,3,average_effect,gaussian,
 K562+MCF7,ABT-737,3,nearest_neighbor,gaussian,
 K562+MCF7,ABT-737,3,scgen,gaussian,
+K562+MCF7,ABT-737,4,real_blend,real,-0.009882887576242283
+K562+MCF7,ABT-737,4,average_effect,cells,0.10332181096051231
+K562+MCF7,ABT-737,4,nearest_neighbor,cells,0.29246247702761147
+K562+MCF7,ABT-737,4,scgen,cells,-0.0288047255725677
+K562+MCF7,ABT-737,4,average_effect,gaussian,-0.5239946244281284
+K562+MCF7,ABT-737,4,nearest_neighbor,gaussian,
+K562+MCF7,ABT-737,4,scgen,gaussian,
+K562+MCF7,ABT-737,5,real_blend,real,0.11123643260306085
+K562+MCF7,ABT-737,5,average_effect,cells,0.18487446051654083
+K562+MCF7,ABT-737,5,nearest_neighbor,cells,0.3872078289540444
+K562+MCF7,ABT-737,5,scgen,cells,0.26171587026708754
+K562+MCF7,ABT-737,5,average_effect,gaussian,
+K562+MCF7,ABT-737,5,nearest_neighbor,gaussian,
+K562+MCF7,ABT-737,5,scgen,gaussian,
+K562+MCF7,ABT-737,6,real_blend,real,-0.011594267688257602
+K562+MCF7,ABT-737,6,average_effect,cells,0.0728441380602733
+K562+MCF7,ABT-737,6,nearest_neighbor,cells,0.2589869047236814
+K562+MCF7,ABT-737,6,scgen,cells,0.11714788259407351
+K562+MCF7,ABT-737,6,average_effect,gaussian,
+K562+MCF7,ABT-737,6,nearest_neighbor,gaussian,
+K562+MCF7,ABT-737,6,scgen,gaussian,
+K562+MCF7,ABT-737,7,real_blend,real,-0.03281685890778269
+K562+MCF7,ABT-737,7,average_effect,cells,0.14490541049253772
+K562+MCF7,ABT-737,7,nearest_neighbor,cells,0.3388335431249169
+K562+MCF7,ABT-737,7,scgen,cells,0.11579759472816555
+K562+MCF7,ABT-737,7,average_effect,gaussian,
+K562+MCF7,ABT-737,7,nearest_neighbor,gaussian,
+K562+MCF7,ABT-737,7,scgen,gaussian,
 K562+MCF7,AC480 (BMS-599626),0,real_blend,real,0.0623615191085907
 K562+MCF7,AC480 (BMS-599626),0,average_effect,cells,0.21062235692505085
 K562+MCF7,AC480 (BMS-599626),0,nearest_neighbor,cells,0.38064907761373873
-K562+MCF7,AC480 (BMS-599626),0,scgen,cells,0.1771590668482874
+K562+MCF7,AC480 (BMS-599626),0,scgen,cells,0.17716040372094405
 K562+MCF7,AC480 (BMS-599626),0,average_effect,gaussian,
 K562+MCF7,AC480 (BMS-599626),0,nearest_neighbor,gaussian,
 K562+MCF7,AC480 (BMS-599626),0,scgen,gaussian,
 K562+MCF7,AC480 (BMS-599626),1,real_blend,real,0.004940070876269687
 K562+MCF7,AC480 (BMS-599626),1,average_effect,cells,0.13370726014266474
 K562+MCF7,AC480 (BMS-599626),1,nearest_neighbor,cells,0.30721306919767366
-K562+MCF7,AC480 (BMS-599626),1,scgen,cells,0.3280996560671395
+K562+MCF7,AC480 (BMS-599626),1,scgen,cells,0.3280998541148444
 K562+MCF7,AC480 (BMS-599626),1,average_effect,gaussian,
 K562+MCF7,AC480 (BMS-599626),1,nearest_neighbor,gaussian,
 K562+MCF7,AC480 (BMS-599626),1,scgen,gaussian,
 K562+MCF7,AC480 (BMS-599626),2,real_blend,real,0.07820399893626426
 K562+MCF7,AC480 (BMS-599626),2,average_effect,cells,0.12915800063546373
 K562+MCF7,AC480 (BMS-599626),2,nearest_neighbor,cells,0.29054353951242307
-K562+MCF7,AC480 (BMS-599626),2,scgen,cells,0.07572858067276414
+K562+MCF7,AC480 (BMS-599626),2,scgen,cells,0.07572966192829207
 K562+MCF7,AC480 (BMS-599626),2,average_effect,gaussian,
 K562+MCF7,AC480 (BMS-599626),2,nearest_neighbor,gaussian,
 K562+MCF7,AC480 (BMS-599626),2,scgen,gaussian,
 K562+MCF7,AC480 (BMS-599626),3,real_blend,real,0.09841534420270115
 K562+MCF7,AC480 (BMS-599626),3,average_effect,cells,0.14570453860066865
 K562+MCF7,AC480 (BMS-599626),3,nearest_neighbor,cells,0.33135678512318284
-K562+MCF7,AC480 (BMS-599626),3,scgen,cells,0.3520711079656261
+K562+MCF7,AC480 (BMS-599626),3,scgen,cells,0.3520708232619624
 K562+MCF7,AC480 (BMS-599626),3,average_effect,gaussian,
 K562+MCF7,AC480 (BMS-599626),3,nearest_neighbor,gaussian,
 K562+MCF7,AC480 (BMS-599626),3,scgen,gaussian,
+K562+MCF7,AC480 (BMS-599626),4,real_blend,real,0.008728073929455033
+K562+MCF7,AC480 (BMS-599626),4,average_effect,cells,0.06074796219851666
+K562+MCF7,AC480 (BMS-599626),4,nearest_neighbor,cells,0.26323619558947176
+K562+MCF7,AC480 (BMS-599626),4,scgen,cells,-0.07636031768502823
+K562+MCF7,AC480 (BMS-599626),4,average_effect,gaussian,
+K562+MCF7,AC480 (BMS-599626),4,nearest_neighbor,gaussian,
+K562+MCF7,AC480 (BMS-599626),4,scgen,gaussian,
+K562+MCF7,AC480 (BMS-599626),5,real_blend,real,0.015092378815610331
+K562+MCF7,AC480 (BMS-599626),5,average_effect,cells,0.20327693818446854
+K562+MCF7,AC480 (BMS-599626),5,nearest_neighbor,cells,0.3752320704566377
+K562+MCF7,AC480 (BMS-599626),5,scgen,cells,0.21476353346000437
+K562+MCF7,AC480 (BMS-599626),5,average_effect,gaussian,
+K562+MCF7,AC480 (BMS-599626),5,nearest_neighbor,gaussian,
+K562+MCF7,AC480 (BMS-599626),5,scgen,gaussian,
+K562+MCF7,AC480 (BMS-599626),6,real_blend,real,0.07594382534303637
+K562+MCF7,AC480 (BMS-599626),6,average_effect,cells,0.10405709701656778
+K562+MCF7,AC480 (BMS-599626),6,nearest_neighbor,cells,0.27492860224944016
+K562+MCF7,AC480 (BMS-599626),6,scgen,cells,0.14239271218299976
+K562+MCF7,AC480 (BMS-599626),6,average_effect,gaussian,
+K562+MCF7,AC480 (BMS-599626),6,nearest_neighbor,gaussian,
+K562+MCF7,AC480 (BMS-599626),6,scgen,gaussian,
+K562+MCF7,AC480 (BMS-599626),7,real_blend,real,-0.005220631101017494
+K562+MCF7,AC480 (BMS-599626),7,average_effect,cells,0.2114143149993865
+K562+MCF7,AC480 (BMS-599626),7,nearest_neighbor,cells,0.3675305584183529
+K562+MCF7,AC480 (BMS-599626),7,scgen,cells,0.33045276725374934
+K562+MCF7,AC480 (BMS-599626),7,average_effect,gaussian,
+K562+MCF7,AC480 (BMS-599626),7,nearest_neighbor,gaussian,
+K562+MCF7,AC480 (BMS-599626),7,scgen,gaussian,
 K562+MCF7,AG-14361,0,real_blend,real,-0.0937762555180781
 K562+MCF7,AG-14361,0,average_effect,cells,0.15681278853236358
 K562+MCF7,AG-14361,0,nearest_neighbor,cells,0.36537838050830534
-K562+MCF7,AG-14361,0,scgen,cells,0.11877450347810924
+K562+MCF7,AG-14361,0,scgen,cells,0.11877746748726592
 K562+MCF7,AG-14361,0,average_effect,gaussian,
 K562+MCF7,AG-14361,0,nearest_neighbor,gaussian,
 K562+MCF7,AG-14361,0,scgen,gaussian,
 K562+MCF7,AG-14361,1,real_blend,real,-0.013950896949873698
 K562+MCF7,AG-14361,1,average_effect,cells,0.13909939685677103
 K562+MCF7,AG-14361,1,nearest_neighbor,cells,0.33595065866649965
-K562+MCF7,AG-14361,1,scgen,cells,0.18214759296280297
+K562+MCF7,AG-14361,1,scgen,cells,0.18214881152150098
 K562+MCF7,AG-14361,1,average_effect,gaussian,
 K562+MCF7,AG-14361,1,nearest_neighbor,gaussian,
 K562+MCF7,AG-14361,1,scgen,gaussian,
 K562+MCF7,AG-14361,2,real_blend,real,0.03883491409309832
 K562+MCF7,AG-14361,2,average_effect,cells,0.0607534019818824
 K562+MCF7,AG-14361,2,nearest_neighbor,cells,0.2915854808319609
-K562+MCF7,AG-14361,2,scgen,cells,-0.1042534548506006
+K562+MCF7,AG-14361,2,scgen,cells,-0.10425197790345987
 K562+MCF7,AG-14361,2,average_effect,gaussian,
 K562+MCF7,AG-14361,2,nearest_neighbor,gaussian,
 K562+MCF7,AG-14361,2,scgen,gaussian,
 K562+MCF7,AG-14361,3,real_blend,real,-0.07326639227614955
 K562+MCF7,AG-14361,3,average_effect,cells,0.09734087226105217
 K562+MCF7,AG-14361,3,nearest_neighbor,cells,0.29918829412069
-K562+MCF7,AG-14361,3,scgen,cells,0.056346685324514534
+K562+MCF7,AG-14361,3,scgen,cells,0.0563474993844624
 K562+MCF7,AG-14361,3,average_effect,gaussian,
 K562+MCF7,AG-14361,3,nearest_neighbor,gaussian,
 K562+MCF7,AG-14361,3,scgen,gaussian,
+K562+MCF7,AG-14361,4,real_blend,real,0.051216802014055984
+K562+MCF7,AG-14361,4,average_effect,cells,0.08011702578265929
+K562+MCF7,AG-14361,4,nearest_neighbor,cells,0.3157384812135641
+K562+MCF7,AG-14361,4,scgen,cells,-0.03937134839941604
+K562+MCF7,AG-14361,4,average_effect,gaussian,
+K562+MCF7,AG-14361,4,nearest_neighbor,gaussian,
+K562+MCF7,AG-14361,4,scgen,gaussian,
+K562+MCF7,AG-14361,5,real_blend,real,-0.015050592219188034
+K562+MCF7,AG-14361,5,average_effect,cells,0.15399630017574312
+K562+MCF7,AG-14361,5,nearest_neighbor,cells,0.3440597869239986
+K562+MCF7,AG-14361,5,scgen,cells,0.044751224682164206
+K562+MCF7,AG-14361,5,average_effect,gaussian,
+K562+MCF7,AG-14361,5,nearest_neighbor,gaussian,
+K562+MCF7,AG-14361,5,scgen,gaussian,
+K562+MCF7,AG-14361,6,real_blend,real,-0.06312417566931314
+K562+MCF7,AG-14361,6,average_effect,cells,0.10814016763791098
+K562+MCF7,AG-14361,6,nearest_neighbor,cells,0.30648713014668605
+K562+MCF7,AG-14361,6,scgen,cells,0.11216349132342177
+K562+MCF7,AG-14361,6,average_effect,gaussian,
+K562+MCF7,AG-14361,6,nearest_neighbor,gaussian,
+K562+MCF7,AG-14361,6,scgen,gaussian,
+K562+MCF7,AG-14361,7,real_blend,real,0.0367163811825473
+K562+MCF7,AG-14361,7,average_effect,cells,0.19066953819617288
+K562+MCF7,AG-14361,7,nearest_neighbor,cells,0.3621396722729343
+K562+MCF7,AG-14361,7,scgen,cells,0.2710081958543514
+K562+MCF7,AG-14361,7,average_effect,gaussian,
+K562+MCF7,AG-14361,7,nearest_neighbor,gaussian,
+K562+MCF7,AG-14361,7,scgen,gaussian,
 K562+MCF7,AG-490 (Tyrphostin B42),0,real_blend,real,-0.00761943038793396
 K562+MCF7,AG-490 (Tyrphostin B42),0,average_effect,cells,0.20692997833221427
 K562+MCF7,AG-490 (Tyrphostin B42),0,nearest_neighbor,cells,0.4609074965330989
-K562+MCF7,AG-490 (Tyrphostin B42),0,scgen,cells,0.3021895434871208
+K562+MCF7,AG-490 (Tyrphostin B42),0,scgen,cells,0.30219291803086695
 K562+MCF7,AG-490 (Tyrphostin B42),0,average_effect,gaussian,
 K562+MCF7,AG-490 (Tyrphostin B42),0,nearest_neighbor,gaussian,
 K562+MCF7,AG-490 (Tyrphostin B42),0,scgen,gaussian,
 K562+MCF7,AG-490 (Tyrphostin B42),1,real_blend,real,-0.06561522800822434
 K562+MCF7,AG-490 (Tyrphostin B42),1,average_effect,cells,0.09548456159282029
 K562+MCF7,AG-490 (Tyrphostin B42),1,nearest_neighbor,cells,0.34929239854880634
-K562+MCF7,AG-490 (Tyrphostin B42),1,scgen,cells,0.22676419529086722
+K562+MCF7,AG-490 (Tyrphostin B42),1,scgen,cells,0.2267666897190528
 K562+MCF7,AG-490 (Tyrphostin B42),1,average_effect,gaussian,
 K562+MCF7,AG-490 (Tyrphostin B42),1,nearest_neighbor,gaussian,
 K562+MCF7,AG-490 (Tyrphostin B42),1,scgen,gaussian,
 K562+MCF7,AG-490 (Tyrphostin B42),2,real_blend,real,-0.04303835464006705
 K562+MCF7,AG-490 (Tyrphostin B42),2,average_effect,cells,0.07316757305129455
 K562+MCF7,AG-490 (Tyrphostin B42),2,nearest_neighbor,cells,0.34987238187913183
-K562+MCF7,AG-490 (Tyrphostin B42),2,scgen,cells,0.01754962536309082
+K562+MCF7,AG-490 (Tyrphostin B42),2,scgen,cells,0.017553185675877766
 K562+MCF7,AG-490 (Tyrphostin B42),2,average_effect,gaussian,
 K562+MCF7,AG-490 (Tyrphostin B42),2,nearest_neighbor,gaussian,
 K562+MCF7,AG-490 (Tyrphostin B42),2,scgen,gaussian,
 K562+MCF7,AG-490 (Tyrphostin B42),3,real_blend,real,0.011595756975086136
 K562+MCF7,AG-490 (Tyrphostin B42),3,average_effect,cells,0.10621572370328532
 K562+MCF7,AG-490 (Tyrphostin B42),3,nearest_neighbor,cells,0.3786434911896783
-K562+MCF7,AG-490 (Tyrphostin B42),3,scgen,cells,0.2354364871553893
+K562+MCF7,AG-490 (Tyrphostin B42),3,scgen,cells,0.2354385796394704
 K562+MCF7,AG-490 (Tyrphostin B42),3,average_effect,gaussian,
 K562+MCF7,AG-490 (Tyrphostin B42),3,nearest_neighbor,gaussian,
 K562+MCF7,AG-490 (Tyrphostin B42),3,scgen,gaussian,
+K562+MCF7,AG-490 (Tyrphostin B42),4,real_blend,real,0.012032788075683662
+K562+MCF7,AG-490 (Tyrphostin B42),4,average_effect,cells,0.14384878543950963
+K562+MCF7,AG-490 (Tyrphostin B42),4,nearest_neighbor,cells,0.4048490627110539
+K562+MCF7,AG-490 (Tyrphostin B42),4,scgen,cells,0.14433575600029147
+K562+MCF7,AG-490 (Tyrphostin B42),4,average_effect,gaussian,
+K562+MCF7,AG-490 (Tyrphostin B42),4,nearest_neighbor,gaussian,
+K562+MCF7,AG-490 (Tyrphostin B42),4,scgen,gaussian,
+K562+MCF7,AG-490 (Tyrphostin B42),5,real_blend,real,-0.017999331893479534
+K562+MCF7,AG-490 (Tyrphostin B42),5,average_effect,cells,0.13687667040756646
+K562+MCF7,AG-490 (Tyrphostin B42),5,nearest_neighbor,cells,0.42757252709292964
+K562+MCF7,AG-490 (Tyrphostin B42),5,scgen,cells,0.14524096200192493
+K562+MCF7,AG-490 (Tyrphostin B42),5,average_effect,gaussian,
+K562+MCF7,AG-490 (Tyrphostin B42),5,nearest_neighbor,gaussian,
+K562+MCF7,AG-490 (Tyrphostin B42),5,scgen,gaussian,
+K562+MCF7,AG-490 (Tyrphostin B42),6,real_blend,real,0.010185519618783062
+K562+MCF7,AG-490 (Tyrphostin B42),6,average_effect,cells,0.15246622872480484
+K562+MCF7,AG-490 (Tyrphostin B42),6,nearest_neighbor,cells,0.3862885682044488
+K562+MCF7,AG-490 (Tyrphostin B42),6,scgen,cells,0.26558594517581147
+K562+MCF7,AG-490 (Tyrphostin B42),6,average_effect,gaussian,
+K562+MCF7,AG-490 (Tyrphostin B42),6,nearest_neighbor,gaussian,
+K562+MCF7,AG-490 (Tyrphostin B42),6,scgen,gaussian,
+K562+MCF7,AG-490 (Tyrphostin B42),7,real_blend,real,-0.07972259254156988
+K562+MCF7,AG-490 (Tyrphostin B42),7,average_effect,cells,0.22482521798093424
+K562+MCF7,AG-490 (Tyrphostin B42),7,nearest_neighbor,cells,0.4727988547715856
+K562+MCF7,AG-490 (Tyrphostin B42),7,scgen,cells,0.39646427338573736
+K562+MCF7,AG-490 (Tyrphostin B42),7,average_effect,gaussian,
+K562+MCF7,AG-490 (Tyrphostin B42),7,nearest_neighbor,gaussian,
+K562+MCF7,AG-490 (Tyrphostin B42),7,scgen,gaussian,
 K562+MCF7,AICAR (Acadesine),0,real_blend,real,-0.04092083111369748
 K562+MCF7,AICAR (Acadesine),0,average_effect,cells,0.17080097751723658
 K562+MCF7,AICAR (Acadesine),0,nearest_neighbor,cells,0.37161539472295146
-K562+MCF7,AICAR (Acadesine),0,scgen,cells,0.12099007589565096
+K562+MCF7,AICAR (Acadesine),0,scgen,cells,0.12099286434119375
 K562+MCF7,AICAR (Acadesine),0,average_effect,gaussian,
 K562+MCF7,AICAR (Acadesine),0,nearest_neighbor,gaussian,
 K562+MCF7,AICAR (Acadesine),0,scgen,gaussian,
 K562+MCF7,AICAR (Acadesine),1,real_blend,real,-0.04606918553255637
 K562+MCF7,AICAR (Acadesine),1,average_effect,cells,0.10363941459579452
 K562+MCF7,AICAR (Acadesine),1,nearest_neighbor,cells,0.29522209415346057
-K562+MCF7,AICAR (Acadesine),1,scgen,cells,0.15952559165530514
+K562+MCF7,AICAR (Acadesine),1,scgen,cells,0.1595258680799053
 K562+MCF7,AICAR (Acadesine),1,average_effect,gaussian,
 K562+MCF7,AICAR (Acadesine),1,nearest_neighbor,gaussian,
 K562+MCF7,AICAR (Acadesine),1,scgen,gaussian,
 K562+MCF7,AICAR (Acadesine),2,real_blend,real,-0.020854633217474244
 K562+MCF7,AICAR (Acadesine),2,average_effect,cells,0.04320725562829588
 K562+MCF7,AICAR (Acadesine),2,nearest_neighbor,cells,0.2564820028780272
-K562+MCF7,AICAR (Acadesine),2,scgen,cells,-0.15370223145807196
+K562+MCF7,AICAR (Acadesine),2,scgen,cells,-0.15370159945624265
 K562+MCF7,AICAR (Acadesine),2,average_effect,gaussian,
 K562+MCF7,AICAR (Acadesine),2,nearest_neighbor,gaussian,
 K562+MCF7,AICAR (Acadesine),2,scgen,gaussian,
 K562+MCF7,AICAR (Acadesine),3,real_blend,real,-0.000998515799083281
 K562+MCF7,AICAR (Acadesine),3,average_effect,cells,0.07603390348515993
 K562+MCF7,AICAR (Acadesine),3,nearest_neighbor,cells,0.2851111104063032
-K562+MCF7,AICAR (Acadesine),3,scgen,cells,0.1723405597408585
+K562+MCF7,AICAR (Acadesine),3,scgen,cells,0.17234044253453418
 K562+MCF7,AICAR (Acadesine),3,average_effect,gaussian,
 K562+MCF7,AICAR (Acadesine),3,nearest_neighbor,gaussian,
 K562+MCF7,AICAR (Acadesine),3,scgen,gaussian,
+K562+MCF7,AICAR (Acadesine),4,real_blend,real,0.018894520868824195
+K562+MCF7,AICAR (Acadesine),4,average_effect,cells,0.062167847760299016
+K562+MCF7,AICAR (Acadesine),4,nearest_neighbor,cells,0.2685086700905939
+K562+MCF7,AICAR (Acadesine),4,scgen,cells,-0.036184680847528135
+K562+MCF7,AICAR (Acadesine),4,average_effect,gaussian,
+K562+MCF7,AICAR (Acadesine),4,nearest_neighbor,gaussian,
+K562+MCF7,AICAR (Acadesine),4,scgen,gaussian,
+K562+MCF7,AICAR (Acadesine),5,real_blend,real,-0.04126583799476121
+K562+MCF7,AICAR (Acadesine),5,average_effect,cells,0.13808575879728877
+K562+MCF7,AICAR (Acadesine),5,nearest_neighbor,cells,0.33351466804155344
+K562+MCF7,AICAR (Acadesine),5,scgen,cells,0.05408635636361037
+K562+MCF7,AICAR (Acadesine),5,average_effect,gaussian,
+K562+MCF7,AICAR (Acadesine),5,nearest_neighbor,gaussian,
+K562+MCF7,AICAR (Acadesine),5,scgen,gaussian,
+K562+MCF7,AICAR (Acadesine),6,real_blend,real,0.0553162734543668
+K562+MCF7,AICAR (Acadesine),6,average_effect,cells,0.06736209752417253
+K562+MCF7,AICAR (Acadesine),6,nearest_neighbor,cells,0.2640252004710831
+K562+MCF7,AICAR (Acadesine),6,scgen,cells,0.05734525987707037
+K562+MCF7,AICAR (Acadesine),6,average_effect,gaussian,
+K562+MCF7,AICAR (Acadesine),6,nearest_neighbor,gaussian,
+K562+MCF7,AICAR (Acadesine),6,scgen,gaussian,
+K562+MCF7,AICAR (Acadesine),7,real_blend,real,0.09917265922128374
+K562+MCF7,AICAR (Acadesine),7,average_effect,cells,0.1548966123506688
+K562+MCF7,AICAR (Acadesine),7,nearest_neighbor,cells,0.3230838366721489
+K562+MCF7,AICAR (Acadesine),7,scgen,cells,0.21962986707980298
+K562+MCF7,AICAR (Acadesine),7,average_effect,gaussian,
+K562+MCF7,AICAR (Acadesine),7,nearest_neighbor,gaussian,
+K562+MCF7,AICAR (Acadesine),7,scgen,gaussian,
+K562+MCF7,AMG-900,0,real_blend,real,0.09531877146032451
+K562+MCF7,AMG-900,0,average_effect,cells,0.5374637542861495
+K562+MCF7,AMG-900,0,nearest_neighbor,cells,0.6880191787465337
+K562+MCF7,AMG-900,0,scgen,cells,0.7451514132671853
+K562+MCF7,AMG-900,0,average_effect,gaussian,
+K562+MCF7,AMG-900,0,nearest_neighbor,gaussian,
+K562+MCF7,AMG-900,0,scgen,gaussian,
+K562+MCF7,AMG-900,1,real_blend,real,0.03899506819580408
+K562+MCF7,AMG-900,1,average_effect,cells,0.5570920657223037
+K562+MCF7,AMG-900,1,nearest_neighbor,cells,0.7373889457560252
+K562+MCF7,AMG-900,1,scgen,cells,0.8454854613574729
+K562+MCF7,AMG-900,1,average_effect,gaussian,
+K562+MCF7,AMG-900,1,nearest_neighbor,gaussian,
+K562+MCF7,AMG-900,1,scgen,gaussian,
+K562+MCF7,AMG-900,2,real_blend,real,0.07781215013235959
+K562+MCF7,AMG-900,2,average_effect,cells,0.5181486568934816
+K562+MCF7,AMG-900,2,nearest_neighbor,cells,0.6849150963206506
+K562+MCF7,AMG-900,2,scgen,cells,0.8054825402655006
+K562+MCF7,AMG-900,2,average_effect,gaussian,
+K562+MCF7,AMG-900,2,nearest_neighbor,gaussian,
+K562+MCF7,AMG-900,2,scgen,gaussian,
+K562+MCF7,AMG-900,3,real_blend,real,0.1116485789817338
+K562+MCF7,AMG-900,3,average_effect,cells,0.5310689102034443
+K562+MCF7,AMG-900,3,nearest_neighbor,cells,0.7046188668454643
+K562+MCF7,AMG-900,3,scgen,cells,0.8391161184670249
+K562+MCF7,AMG-900,3,average_effect,gaussian,-0.44404364495541376
+K562+MCF7,AMG-900,3,nearest_neighbor,gaussian,
+K562+MCF7,AMG-900,3,scgen,gaussian,
+K562+MCF7,AMG-900,4,real_blend,real,0.1592866069980216
+K562+MCF7,AMG-900,4,average_effect,cells,0.41775843611872016
+K562+MCF7,AMG-900,4,nearest_neighbor,cells,0.6118572929782268
+K562+MCF7,AMG-900,4,scgen,cells,0.5823181320305755
+K562+MCF7,AMG-900,4,average_effect,gaussian,
+K562+MCF7,AMG-900,4,nearest_neighbor,gaussian,
+K562+MCF7,AMG-900,4,scgen,gaussian,
+K562+MCF7,AMG-900,5,real_blend,real,0.07637465581289248
+K562+MCF7,AMG-900,5,average_effect,cells,0.5881455848013754
+K562+MCF7,AMG-900,5,nearest_neighbor,cells,0.7514981349763895
+K562+MCF7,AMG-900,5,scgen,cells,0.8244834309371781
+K562+MCF7,AMG-900,5,average_effect,gaussian,
+K562+MCF7,AMG-900,5,nearest_neighbor,gaussian,
+K562+MCF7,AMG-900,5,scgen,gaussian,
+K562+MCF7,AMG-900,6,real_blend,real,0.03484069850674044
+K562+MCF7,AMG-900,6,average_effect,cells,0.4173577916950026
+K562+MCF7,AMG-900,6,nearest_neighbor,cells,0.6120434280540983
+K562+MCF7,AMG-900,6,scgen,cells,0.5537360273994532
+K562+MCF7,AMG-900,6,average_effect,gaussian,
+K562+MCF7,AMG-900,6,nearest_neighbor,gaussian,
+K562+MCF7,AMG-900,6,scgen,gaussian,
+K562+MCF7,AMG-900,7,real_blend,real,0.1302017732363521
+K562+MCF7,AMG-900,7,average_effect,cells,0.4591171694292783
+K562+MCF7,AMG-900,7,nearest_neighbor,cells,0.6483447934133243
+K562+MCF7,AMG-900,7,scgen,cells,0.6815174521531254
+K562+MCF7,AMG-900,7,average_effect,gaussian,
+K562+MCF7,AMG-900,7,nearest_neighbor,gaussian,
+K562+MCF7,AMG-900,7,scgen,gaussian,
+K562+MCF7,AR-42,0,real_blend,real,0.2109080546026283
+K562+MCF7,AR-42,0,average_effect,cells,0.8270038542812084
+K562+MCF7,AR-42,0,nearest_neighbor,cells,0.8870231176593811
+K562+MCF7,AR-42,0,scgen,cells,0.9412008098332768
+K562+MCF7,AR-42,0,average_effect,gaussian,
+K562+MCF7,AR-42,0,nearest_neighbor,gaussian,-0.327793372886924
+K562+MCF7,AR-42,0,scgen,gaussian,
+K562+MCF7,AR-42,1,real_blend,real,0.1655708748312197
+K562+MCF7,AR-42,1,average_effect,cells,0.803053312600305
+K562+MCF7,AR-42,1,nearest_neighbor,cells,0.8655039975507146
+K562+MCF7,AR-42,1,scgen,cells,0.9439646258628894
+K562+MCF7,AR-42,1,average_effect,gaussian,
+K562+MCF7,AR-42,1,nearest_neighbor,gaussian,-0.2685894046496992
+K562+MCF7,AR-42,1,scgen,gaussian,
+K562+MCF7,AR-42,2,real_blend,real,0.19081419933763605
+K562+MCF7,AR-42,2,average_effect,cells,0.7868538008656617
+K562+MCF7,AR-42,2,nearest_neighbor,cells,0.8602791764090242
+K562+MCF7,AR-42,2,scgen,cells,0.9245729890888535
+K562+MCF7,AR-42,2,average_effect,gaussian,
+K562+MCF7,AR-42,2,nearest_neighbor,gaussian,
+K562+MCF7,AR-42,2,scgen,gaussian,
+K562+MCF7,AR-42,3,real_blend,real,0.21904238332961953
+K562+MCF7,AR-42,3,average_effect,cells,0.7966818270419063
+K562+MCF7,AR-42,3,nearest_neighbor,cells,0.855435065231642
+K562+MCF7,AR-42,3,scgen,cells,0.9537477149503114
+K562+MCF7,AR-42,3,average_effect,gaussian,
+K562+MCF7,AR-42,3,nearest_neighbor,gaussian,-0.43274903207645926
+K562+MCF7,AR-42,3,scgen,gaussian,
+K562+MCF7,AR-42,4,real_blend,real,0.1991001513384369
+K562+MCF7,AR-42,4,average_effect,cells,0.7973639234581947
+K562+MCF7,AR-42,4,nearest_neighbor,cells,0.8705021622977636
+K562+MCF7,AR-42,4,scgen,cells,0.9077407218238337
+K562+MCF7,AR-42,4,average_effect,gaussian,
+K562+MCF7,AR-42,4,nearest_neighbor,gaussian,-0.4044828192162539
+K562+MCF7,AR-42,4,scgen,gaussian,
+K562+MCF7,AR-42,5,real_blend,real,0.19461995729676382
+K562+MCF7,AR-42,5,average_effect,cells,0.8216453977483683
+K562+MCF7,AR-42,5,nearest_neighbor,cells,0.8785304641505765
+K562+MCF7,AR-42,5,scgen,cells,0.9430998827675421
+K562+MCF7,AR-42,5,average_effect,gaussian,
+K562+MCF7,AR-42,5,nearest_neighbor,gaussian,-0.3603297297308435
+K562+MCF7,AR-42,5,scgen,gaussian,
+K562+MCF7,AR-42,6,real_blend,real,0.1996066743494774
+K562+MCF7,AR-42,6,average_effect,cells,0.783390012095971
+K562+MCF7,AR-42,6,nearest_neighbor,cells,0.84187117441364
+K562+MCF7,AR-42,6,scgen,cells,0.887498472806323
+K562+MCF7,AR-42,6,average_effect,gaussian,
+K562+MCF7,AR-42,6,nearest_neighbor,gaussian,-0.30589159390017234
+K562+MCF7,AR-42,6,scgen,gaussian,
+K562+MCF7,AR-42,7,real_blend,real,0.2352630843648523
+K562+MCF7,AR-42,7,average_effect,cells,0.8081597409675532
+K562+MCF7,AR-42,7,nearest_neighbor,cells,0.866561531620765
+K562+MCF7,AR-42,7,scgen,cells,0.9361293412242686
+K562+MCF7,AR-42,7,average_effect,gaussian,
+K562+MCF7,AR-42,7,nearest_neighbor,gaussian,
+K562+MCF7,AR-42,7,scgen,gaussian,

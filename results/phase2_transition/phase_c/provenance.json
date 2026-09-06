@@ -1,0 +1,23 @@
+{
+  "input_h5ad": "/data/boom/Tahoe-100M/h5ad/plate3_filt_Vevo_Tahoe100M_WServicesFrom_ParseGigalab_preprocessed_cpu.h5ad",
+  "input_sha256": "dfca387b6d7e35e49a841ac708be8ad151227317d98302cf91a44dc69daff6bb",
+  "n_contexts": 44,
+  "constants": {
+    "STATES": [
+      "G1",
+      "G2M"
+    ],
+    "MIN_STATE_CELLS": 50,
+    "GATE2_CELLS_PER_ARM": 300,
+    "GATE2_SEED": 0
+  },
+  "gate1_rows": 3992,
+  "gate1_scored": 3620,
+  "gate1_exclusions": {
+    "treated_state_too_few": 372,
+    "vehicle_state_too_few": 0
+  },
+  "gate2_rows": 3992,
+  "gate2_label": "treated(q,c) vs vehicle(c); external, not expression-derived",
+  "runtime_seconds": 1055.4
+}

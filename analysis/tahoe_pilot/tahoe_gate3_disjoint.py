@@ -6,7 +6,7 @@ The first pass asked whether the mean-signature similarity of two drugs ranks th
 their G2M-compartment responses. That statistic has a mechanical component and should not be
 reported without one: the mean signature is taken over ALL cells, so it CONTAINS the G2M cells
 (about 26% of them here). Part of any correlation is therefore arithmetic rather than biology.
-The manuscript's tissue statistic (rho = +0.878, Fig. 5f) has the same structure, so this is a
+The manuscript's tissue statistic (rho = +0.878, quoted in the Results) has the same structure, so this is a
 correction that applies to the existing result too, not only to the new one.
 
 The clean version uses disjoint cell sets: does the MAJORITY compartment's response similarity

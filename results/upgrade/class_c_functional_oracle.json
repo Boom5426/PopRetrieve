@@ -5,9 +5,9 @@
   "oracle": "Spearman corr of GDSC2 AUC profiles across cell lines, SciPlex3 lines held out, cell-line-mean centered on all 286 drugs",
   "min_shared_lines": 100,
   "energy_rho": {
-    "median": 0.2760886172650878,
-    "mean": 0.21055034236061734,
-    "frac_positive": 0.7184466019417476
+    "median": 0.2650401069518717,
+    "mean": 0.21161207053511405,
+    "frac_positive": 0.7378640776699029
   },
   "mean_cosine_ctrl_rho": {
     "median": 0.08255347593582889,
@@ -35,8 +35,8 @@
     "frac_positive": 0.7475728155339806
   },
   "energy_rho_partial_magmatch": {
-    "median": 0.09692513368983958,
-    "mean": 0.0971230078910216
+    "median": 0.10528074866310161,
+    "mean": 0.09694017260035125
   },
   "oracle_vs_potencymatch_rho": {
     "median": 0.39872994652406424,
@@ -44,39 +44,39 @@
   },
   "per_line": {
     "A549": {
-      "energy": 0.4500334224598931,
+      "energy": 0.44585561497326204,
       "mean_cosine_ctrl": 0.10060160427807488,
       "mean_cosine_raw": 0.38669786096256686,
       "magnitude_match": 0.42630347593582885,
       "magnitude_only": -0.5147058823529412,
       "potency_match": 0.6794786096256684,
       "n_queries": 34,
-      "energy_partial": 0.13068181818181818
+      "energy_partial": 0.11547459893048129
     },
     "K562": {
-      "energy": 0.1900066844919786,
+      "energy": 0.2050467914438503,
       "mean_cosine_ctrl": 0.03442513368983957,
       "mean_cosine_raw": 0.1801470588235294,
       "magnitude_match": 0.21122994652406418,
       "magnitude_only": -0.3170120320855615,
       "potency_match": 0.3577874331550802,
       "n_queries": 34,
-      "energy_partial": 0.05330882352941177
+      "energy_partial": 0.05648395721925134
     },
     "MCF7": {
-      "energy": 0.2296409472880061,
+      "energy": 0.22750190985485103,
       "mean_cosine_ctrl": 0.12452253628724218,
       "mean_cosine_raw": 0.21925133689839568,
       "magnitude_match": 0.11352177234530175,
       "magnitude_only": -0.2519480519480519,
       "potency_match": 0.19511077158135978,
       "n_queries": 35,
-      "energy_partial": 0.16243315508021391
+      "energy_partial": 0.17983193277310922
     }
   },
   "wilcoxon_energy_vs_magmatch": {
-    "stat": 2132.5,
-    "p": 0.07270918401503497,
+    "stat": 2050.0,
+    "p": 0.0542963839030368,
     "n": 103,
     "note": "queries within a cell line share a candidate pool, so this p-value is anticonservative. The honest unit is the 3 cell lines."
   }

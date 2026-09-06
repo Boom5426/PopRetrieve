@@ -1,4 +1,4 @@
 check,value,threshold,pass
 no_conflict_flip_rate,0.0,0.05,1
-median_boundary_margin,0.2719674052021699,1.0,1
-predicted_mean_dart_eq_mean,0.05555555555555555,0.1,1
+median_boundary_margin,0.2916666666666667,1.0,1
+predicted_mean_dart_eq_mean,0.05133928571428571,0.1,1

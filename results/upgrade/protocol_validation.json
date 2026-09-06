@@ -2,7 +2,7 @@
   "probe1_translation_invariance": {
     "probe": "translation_invariance",
     "spearman_raw_vs_shifted": 0.9999999999999998,
-    "max_abs_score_diff": 2.6702880859375e-05,
+    "max_abs_score_diff": 9.5367431640625e-06,
     "is_translation_invariant": true,
     "interpretation": "If invariant, raw-vs-delta comparison is fair; delta-asymmetry objection falsified."
   },
@@ -10,23 +10,23 @@
     "probe": "subsampling_power",
     "by_n": {
       "60": {
-        "mean": -0.8997482299804688,
-        "std": 0.053290318066632376,
-        "cv": 0.059228033232952226
+        "mean": -0.018612194061279296,
+        "std": 0.052423242070092635,
+        "cv": 2.8166073217739034
       },
       "120": {
-        "mean": -0.4440662384033203,
-        "std": 0.016919226322843848,
-        "cv": 0.03810068151913627
+        "mean": -0.003985118865966797,
+        "std": 0.017083237323429853,
+        "cv": 4.286757282206856
       },
       "250": {
-        "mean": -0.5445794105529785,
-        "std": 0.028545775172290563,
-        "cv": 0.05241802135569559
+        "mean": -0.28168649673461915,
+        "std": 0.028733041338150283,
+        "cv": 0.10200361632924879
       }
     },
-    "cv_at_smallest_n": 0.059228033232952226,
-    "power_loss_likely": false,
+    "cv_at_smallest_n": 2.8166073217739034,
+    "power_loss_likely": true,
     "interpretation": "Low CV at operating n means the estimator is stable; power loss does not explain the null."
   },
   "probe3_metric_blindspot": {

@@ -1,52 +1,52 @@
 seed,query,scorer,hit@1,hit@3,mrr,rank
 0,AT9283,mean_cosine,0.0,0.0,0.045454545454545456,22
-0,AT9283,global_energy,0.0,0.0,0.058823529411764705,17
-0,AT9283,coverage_mean,0.0,1.0,0.5,2
-0,AT9283,coverage_worst,0.0,1.0,0.3333333333333333,3
+0,AT9283,global_energy,0.0,0.0,0.05555555555555555,18
+0,AT9283,coverage_mean,0.0,0.0,0.25,4
+0,AT9283,coverage_worst,0.0,0.0,0.25,4
 0,Apicidin,mean_cosine,1.0,1.0,1.0,1
 0,Apicidin,global_energy,0.0,1.0,0.5,2
 0,Apicidin,coverage_mean,0.0,0.0,0.1111111111111111,9
-0,Apicidin,coverage_worst,0.0,0.0,0.045454545454545456,22
+0,Apicidin,coverage_worst,0.0,0.0,0.04,25
 0,BI 2536,mean_cosine,0.0,0.0,0.16666666666666666,6
 0,BI 2536,global_energy,0.0,0.0,0.041666666666666664,24
-0,BI 2536,coverage_mean,0.0,0.0,0.05,20
-0,BI 2536,coverage_worst,0.0,0.0,0.05555555555555555,18
+0,BI 2536,coverage_mean,1.0,1.0,1.0,1
+0,BI 2536,coverage_worst,0.0,0.0,0.16666666666666666,6
 0,BMS-536924,mean_cosine,1.0,1.0,1.0,1
 0,BMS-536924,global_energy,0.0,1.0,0.3333333333333333,3
 0,BMS-536924,coverage_mean,1.0,1.0,1.0,1
-0,BMS-536924,coverage_worst,0.0,1.0,0.5,2
+0,BMS-536924,coverage_worst,1.0,1.0,1.0,1
 0,BRD-K76674262,mean_cosine,1.0,1.0,1.0,1
 0,BRD-K76674262,global_energy,1.0,1.0,1.0,1
 0,BRD-K76674262,coverage_mean,1.0,1.0,1.0,1
 0,BRD-K76674262,coverage_worst,1.0,1.0,1.0,1
 0,Bisindolylmaleimide II,mean_cosine,0.0,0.0,0.2,5
 0,Bisindolylmaleimide II,global_energy,0.0,0.0,0.03571428571428571,28
-0,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.03571428571428571,28
-0,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.030303030303030304,33
+0,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.05555555555555555,18
+0,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.05,20
 0,Bortezomib,mean_cosine,0.0,0.0,0.14285714285714285,7
-0,Bortezomib,global_energy,0.0,0.0,0.2,5
+0,Bortezomib,global_energy,0.0,0.0,0.25,4
 0,Bortezomib,coverage_mean,0.0,0.0,0.041666666666666664,24
-0,Bortezomib,coverage_worst,0.0,0.0,0.041666666666666664,24
+0,Bortezomib,coverage_worst,0.0,0.0,0.08333333333333333,12
 0,Brefeldin A,mean_cosine,1.0,1.0,1.0,1
 0,Brefeldin A,global_energy,1.0,1.0,1.0,1
-0,Brefeldin A,coverage_mean,0.0,0.0,0.1,10
-0,Brefeldin A,coverage_worst,0.0,0.0,0.07142857142857142,14
+0,Brefeldin A,coverage_mean,0.0,1.0,0.5,2
+0,Brefeldin A,coverage_worst,0.0,1.0,0.3333333333333333,3
 0,Chaetocin,mean_cosine,0.0,0.0,0.25,4
-0,Chaetocin,global_energy,0.0,0.0,0.05,20
-0,Chaetocin,coverage_mean,0.0,0.0,0.06666666666666667,15
-0,Chaetocin,coverage_worst,0.0,0.0,0.058823529411764705,17
+0,Chaetocin,global_energy,0.0,0.0,0.05263157894736842,19
+0,Chaetocin,coverage_mean,0.0,0.0,0.25,4
+0,Chaetocin,coverage_worst,0.0,0.0,0.16666666666666666,6
 0,Crizotinib,mean_cosine,0.0,0.0,0.07692307692307693,13
-0,Crizotinib,global_energy,0.0,0.0,0.14285714285714285,7
-0,Crizotinib,coverage_mean,0.0,0.0,0.125,8
-0,Crizotinib,coverage_worst,0.0,0.0,0.07692307692307693,13
+0,Crizotinib,global_energy,0.0,0.0,0.125,8
+0,Crizotinib,coverage_mean,0.0,0.0,0.07142857142857142,14
+0,Crizotinib,coverage_worst,0.0,0.0,0.1111111111111111,9
 0,Dabrafenib,mean_cosine,1.0,1.0,1.0,1
 0,Dabrafenib,global_energy,1.0,1.0,1.0,1
-0,Dabrafenib,coverage_mean,0.0,1.0,0.5,2
-0,Dabrafenib,coverage_worst,0.0,1.0,0.5,2
+0,Dabrafenib,coverage_mean,1.0,1.0,1.0,1
+0,Dabrafenib,coverage_worst,1.0,1.0,1.0,1
 0,Decitabine,mean_cosine,1.0,1.0,1.0,1
 0,Decitabine,global_energy,1.0,1.0,1.0,1
 0,Decitabine,coverage_mean,1.0,1.0,1.0,1
-0,Decitabine,coverage_worst,0.0,0.0,0.04,25
+0,Decitabine,coverage_worst,0.0,0.0,0.25,4
 0,Dexamethasone,mean_cosine,1.0,1.0,1.0,1
 0,Dexamethasone,global_energy,1.0,1.0,1.0,1
 0,Dexamethasone,coverage_mean,1.0,1.0,1.0,1
@@ -54,87 +54,87 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 0,Dorsomorphin,mean_cosine,1.0,1.0,1.0,1
 0,Dorsomorphin,global_energy,1.0,1.0,1.0,1
 0,Dorsomorphin,coverage_mean,1.0,1.0,1.0,1
-0,Dorsomorphin,coverage_worst,0.0,1.0,0.3333333333333333,3
+0,Dorsomorphin,coverage_worst,1.0,1.0,1.0,1
 0,EX-527,mean_cosine,0.0,1.0,0.3333333333333333,3
 0,EX-527,global_energy,0.0,0.0,0.16666666666666666,6
 0,EX-527,coverage_mean,1.0,1.0,1.0,1
-0,EX-527,coverage_worst,0.0,0.0,0.25,4
+0,EX-527,coverage_worst,1.0,1.0,1.0,1
 0,Etomoxir,mean_cosine,0.0,0.0,0.14285714285714285,7
-0,Etomoxir,global_energy,0.0,0.0,0.16666666666666666,6
-0,Etomoxir,coverage_mean,1.0,1.0,1.0,1
-0,Etomoxir,coverage_worst,1.0,1.0,1.0,1
+0,Etomoxir,global_energy,0.0,0.0,0.2,5
+0,Etomoxir,coverage_mean,0.0,1.0,0.5,2
+0,Etomoxir,coverage_worst,0.0,1.0,0.5,2
 0,GW-843682X,mean_cosine,0.0,0.0,0.0625,16
-0,GW-843682X,global_energy,0.0,0.0,0.125,8
-0,GW-843682X,coverage_mean,0.0,0.0,0.0625,16
-0,GW-843682X,coverage_worst,0.0,0.0,0.045454545454545456,22
+0,GW-843682X,global_energy,0.0,0.0,0.09090909090909091,11
+0,GW-843682X,coverage_mean,0.0,0.0,0.058823529411764705,17
+0,GW-843682X,coverage_worst,0.0,0.0,0.047619047619047616,21
 0,Geldanamycin,mean_cosine,0.0,0.0,0.0625,16
 0,Geldanamycin,global_energy,0.0,0.0,0.08333333333333333,12
-0,Geldanamycin,coverage_mean,0.0,0.0,0.0625,16
-0,Geldanamycin,coverage_worst,0.0,0.0,0.05555555555555555,18
+0,Geldanamycin,coverage_mean,0.0,0.0,0.08333333333333333,12
+0,Geldanamycin,coverage_worst,0.0,0.0,0.14285714285714285,7
 0,JNK-9L (JNK Inhibitor),mean_cosine,0.0,0.0,0.041666666666666664,24
 0,JNK-9L (JNK Inhibitor),global_energy,0.0,0.0,0.043478260869565216,23
-0,JNK-9L (JNK Inhibitor),coverage_mean,0.0,1.0,0.3333333333333333,3
-0,JNK-9L (JNK Inhibitor),coverage_worst,0.0,1.0,0.3333333333333333,3
+0,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.2,5
+0,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.047619047619047616,21
 0,NFkB Activation Inhibitor II,mean_cosine,1.0,1.0,1.0,1
 0,NFkB Activation Inhibitor II,global_energy,1.0,1.0,1.0,1
-0,NFkB Activation Inhibitor II,coverage_mean,0.0,0.0,0.2,5
-0,NFkB Activation Inhibitor II,coverage_worst,0.0,0.0,0.1,10
+0,NFkB Activation Inhibitor II,coverage_mean,1.0,1.0,1.0,1
+0,NFkB Activation Inhibitor II,coverage_worst,0.0,1.0,0.5,2
 0,NVP-AUY922,mean_cosine,0.0,0.0,0.16666666666666666,6
-0,NVP-AUY922,global_energy,0.0,1.0,0.3333333333333333,3
-0,NVP-AUY922,coverage_mean,0.0,1.0,0.5,2
-0,NVP-AUY922,coverage_worst,0.0,0.0,0.14285714285714285,7
+0,NVP-AUY922,global_energy,0.0,0.0,0.25,4
+0,NVP-AUY922,coverage_mean,0.0,0.0,0.25,4
+0,NVP-AUY922,coverage_worst,0.0,0.0,0.2,5
 0,Neratinib,mean_cosine,0.0,0.0,0.125,8
 0,Neratinib,global_energy,0.0,0.0,0.047619047619047616,21
-0,Neratinib,coverage_mean,0.0,1.0,0.5,2
-0,Neratinib,coverage_worst,0.0,1.0,0.5,2
+0,Neratinib,coverage_mean,0.0,1.0,0.3333333333333333,3
+0,Neratinib,coverage_worst,0.0,0.0,0.1111111111111111,9
 0,Niclosamide,mean_cosine,1.0,1.0,1.0,1
 0,Niclosamide,global_energy,0.0,0.0,0.041666666666666664,24
-0,Niclosamide,coverage_mean,0.0,0.0,0.041666666666666664,24
-0,Niclosamide,coverage_worst,0.0,0.0,0.03225806451612903,31
+0,Niclosamide,coverage_mean,0.0,0.0,0.05263157894736842,19
+0,Niclosamide,coverage_worst,0.0,0.0,0.045454545454545456,22
 0,PHA-793887,mean_cosine,1.0,1.0,1.0,1
-0,PHA-793887,global_energy,0.0,0.0,0.08333333333333333,12
-0,PHA-793887,coverage_mean,0.0,0.0,0.125,8
-0,PHA-793887,coverage_worst,0.0,0.0,0.07142857142857142,14
+0,PHA-793887,global_energy,0.0,0.0,0.1,10
+0,PHA-793887,coverage_mean,0.0,1.0,0.5,2
+0,PHA-793887,coverage_worst,0.0,0.0,0.25,4
 0,Penfluridol,mean_cosine,1.0,1.0,1.0,1
 0,Penfluridol,global_energy,0.0,0.0,0.06666666666666667,15
-0,Penfluridol,coverage_mean,0.0,0.0,0.25,4
-0,Penfluridol,coverage_worst,0.0,0.0,0.08333333333333333,12
+0,Penfluridol,coverage_mean,0.0,1.0,0.3333333333333333,3
+0,Penfluridol,coverage_worst,1.0,1.0,1.0,1
 0,Pevonedistat,mean_cosine,1.0,1.0,1.0,1
 0,Pevonedistat,global_energy,1.0,1.0,1.0,1
 0,Pevonedistat,coverage_mean,1.0,1.0,1.0,1
 0,Pevonedistat,coverage_worst,1.0,1.0,1.0,1
 0,Purmorphamine,mean_cosine,0.0,0.0,0.2,5
 0,Purmorphamine,global_energy,0.0,0.0,0.25,4
-0,Purmorphamine,coverage_mean,1.0,1.0,1.0,1
-0,Purmorphamine,coverage_worst,0.0,1.0,0.5,2
+0,Purmorphamine,coverage_mean,0.0,0.0,0.25,4
+0,Purmorphamine,coverage_worst,0.0,1.0,0.3333333333333333,3
 0,Rucaparib,mean_cosine,0.0,1.0,0.5,2
 0,Rucaparib,global_energy,0.0,1.0,0.5,2
-0,Rucaparib,coverage_mean,0.0,0.0,0.2,5
-0,Rucaparib,coverage_worst,0.0,0.0,0.1111111111111111,9
+0,Rucaparib,coverage_mean,0.0,1.0,0.5,2
+0,Rucaparib,coverage_worst,1.0,1.0,1.0,1
 0,Sapanisertib,mean_cosine,1.0,1.0,1.0,1
 0,Sapanisertib,global_energy,1.0,1.0,1.0,1
 0,Sapanisertib,coverage_mean,1.0,1.0,1.0,1
 0,Sapanisertib,coverage_worst,1.0,1.0,1.0,1
 0,Sorafenib,mean_cosine,0.0,0.0,0.25,4
 0,Sorafenib,global_energy,0.0,1.0,0.5,2
-0,Sorafenib,coverage_mean,0.0,1.0,0.5,2
-0,Sorafenib,coverage_worst,1.0,1.0,1.0,1
+0,Sorafenib,coverage_mean,1.0,1.0,1.0,1
+0,Sorafenib,coverage_worst,0.0,1.0,0.5,2
 0,belinostat,mean_cosine,1.0,1.0,1.0,1
 0,belinostat,global_energy,1.0,1.0,1.0,1
-0,belinostat,coverage_mean,0.0,0.0,0.07692307692307693,13
-0,belinostat,coverage_worst,0.0,0.0,0.043478260869565216,23
+0,belinostat,coverage_mean,0.0,0.0,0.2,5
+0,belinostat,coverage_worst,0.0,0.0,0.05555555555555555,18
 0,camptothecin,mean_cosine,1.0,1.0,1.0,1
 0,camptothecin,global_energy,0.0,0.0,0.125,8
-0,camptothecin,coverage_mean,0.0,0.0,0.047619047619047616,21
-0,camptothecin,coverage_worst,0.0,0.0,0.043478260869565216,23
+0,camptothecin,coverage_mean,0.0,0.0,0.125,8
+0,camptothecin,coverage_worst,0.0,1.0,0.5,2
 0,digoxin,mean_cosine,0.0,0.0,0.16666666666666666,6
 0,digoxin,global_energy,0.0,0.0,0.08333333333333333,12
-0,digoxin,coverage_mean,0.0,0.0,0.2,5
-0,digoxin,coverage_worst,0.0,0.0,0.14285714285714285,7
+0,digoxin,coverage_mean,0.0,0.0,0.05555555555555555,18
+0,digoxin,coverage_worst,0.0,0.0,0.07142857142857142,14
 0,navitoclax,mean_cosine,0.0,0.0,0.25,4
 0,navitoclax,global_energy,0.0,1.0,0.5,2
-0,navitoclax,coverage_mean,0.0,0.0,0.14285714285714285,7
-0,navitoclax,coverage_worst,0.0,0.0,0.125,8
+0,navitoclax,coverage_mean,0.0,0.0,0.07142857142857142,14
+0,navitoclax,coverage_worst,0.0,0.0,0.05555555555555555,18
 0,panobinostat,mean_cosine,1.0,1.0,1.0,1
 0,panobinostat,global_energy,1.0,1.0,1.0,1
 0,panobinostat,coverage_mean,1.0,1.0,1.0,1
@@ -145,50 +145,50 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 0,ruxolitinib,coverage_worst,1.0,1.0,1.0,1
 1,AT9283,mean_cosine,0.0,0.0,0.25,4
 1,AT9283,global_energy,0.0,0.0,0.047619047619047616,21
-1,AT9283,coverage_mean,0.0,0.0,0.0625,16
-1,AT9283,coverage_worst,0.0,0.0,0.05263157894736842,19
+1,AT9283,coverage_mean,0.0,0.0,0.1,10
+1,AT9283,coverage_worst,0.0,0.0,0.2,5
 1,Apicidin,mean_cosine,0.0,0.0,0.09090909090909091,11
 1,Apicidin,global_energy,0.0,0.0,0.08333333333333333,12
-1,Apicidin,coverage_mean,1.0,1.0,1.0,1
-1,Apicidin,coverage_worst,1.0,1.0,1.0,1
+1,Apicidin,coverage_mean,0.0,1.0,0.5,2
+1,Apicidin,coverage_worst,0.0,0.0,0.1111111111111111,9
 1,BI 2536,mean_cosine,0.0,1.0,0.3333333333333333,3
 1,BI 2536,global_energy,0.0,0.0,0.14285714285714285,7
-1,BI 2536,coverage_mean,0.0,0.0,0.05263157894736842,19
-1,BI 2536,coverage_worst,0.0,0.0,0.047619047619047616,21
+1,BI 2536,coverage_mean,0.0,0.0,0.2,5
+1,BI 2536,coverage_worst,0.0,0.0,0.2,5
 1,BMS-536924,mean_cosine,1.0,1.0,1.0,1
 1,BMS-536924,global_energy,1.0,1.0,1.0,1
 1,BMS-536924,coverage_mean,1.0,1.0,1.0,1
-1,BMS-536924,coverage_worst,0.0,0.0,0.14285714285714285,7
+1,BMS-536924,coverage_worst,1.0,1.0,1.0,1
 1,BRD-K76674262,mean_cosine,1.0,1.0,1.0,1
 1,BRD-K76674262,global_energy,1.0,1.0,1.0,1
 1,BRD-K76674262,coverage_mean,1.0,1.0,1.0,1
-1,BRD-K76674262,coverage_worst,0.0,1.0,0.5,2
+1,BRD-K76674262,coverage_worst,1.0,1.0,1.0,1
 1,Bisindolylmaleimide II,mean_cosine,0.0,1.0,0.5,2
-1,Bisindolylmaleimide II,global_energy,0.0,0.0,0.25,4
-1,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.07142857142857142,14
-1,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.07142857142857142,14
+1,Bisindolylmaleimide II,global_energy,0.0,0.0,0.2,5
+1,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.25,4
+1,Bisindolylmaleimide II,coverage_worst,0.0,1.0,0.3333333333333333,3
 1,Bortezomib,mean_cosine,0.0,0.0,0.07142857142857142,14
-1,Bortezomib,global_energy,0.0,0.0,0.07142857142857142,14
+1,Bortezomib,global_energy,0.0,0.0,0.06666666666666667,15
 1,Bortezomib,coverage_mean,1.0,1.0,1.0,1
 1,Bortezomib,coverage_worst,1.0,1.0,1.0,1
 1,Brefeldin A,mean_cosine,0.0,0.0,0.2,5
 1,Brefeldin A,global_energy,0.0,1.0,0.5,2
-1,Brefeldin A,coverage_mean,0.0,0.0,0.09090909090909091,11
-1,Brefeldin A,coverage_worst,0.0,0.0,0.0625,16
+1,Brefeldin A,coverage_mean,0.0,0.0,0.16666666666666666,6
+1,Brefeldin A,coverage_worst,0.0,0.0,0.1111111111111111,9
 1,Chaetocin,mean_cosine,1.0,1.0,1.0,1
 1,Chaetocin,global_energy,0.0,1.0,0.3333333333333333,3
-1,Chaetocin,coverage_mean,0.0,0.0,0.25,4
-1,Chaetocin,coverage_worst,0.0,0.0,0.125,8
+1,Chaetocin,coverage_mean,1.0,1.0,1.0,1
+1,Chaetocin,coverage_worst,0.0,1.0,0.5,2
 1,Crizotinib,mean_cosine,0.0,0.0,0.058823529411764705,17
-1,Crizotinib,global_energy,0.0,0.0,0.14285714285714285,7
-1,Crizotinib,coverage_mean,0.0,0.0,0.0625,16
-1,Crizotinib,coverage_worst,0.0,0.0,0.05,20
+1,Crizotinib,global_energy,0.0,0.0,0.16666666666666666,6
+1,Crizotinib,coverage_mean,0.0,0.0,0.07692307692307693,13
+1,Crizotinib,coverage_worst,0.0,0.0,0.08333333333333333,12
 1,Dabrafenib,mean_cosine,1.0,1.0,1.0,1
-1,Dabrafenib,global_energy,0.0,0.0,0.2,5
-1,Dabrafenib,coverage_mean,0.0,0.0,0.2,5
-1,Dabrafenib,coverage_worst,0.0,0.0,0.14285714285714285,7
+1,Dabrafenib,global_energy,0.0,0.0,0.25,4
+1,Dabrafenib,coverage_mean,0.0,0.0,0.25,4
+1,Dabrafenib,coverage_worst,0.0,0.0,0.25,4
 1,Decitabine,mean_cosine,1.0,1.0,1.0,1
-1,Decitabine,global_energy,0.0,0.0,0.16666666666666666,6
+1,Decitabine,global_energy,0.0,0.0,0.1111111111111111,9
 1,Decitabine,coverage_mean,1.0,1.0,1.0,1
 1,Decitabine,coverage_worst,1.0,1.0,1.0,1
 1,Dexamethasone,mean_cosine,1.0,1.0,1.0,1
@@ -198,87 +198,87 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 1,Dorsomorphin,mean_cosine,1.0,1.0,1.0,1
 1,Dorsomorphin,global_energy,1.0,1.0,1.0,1
 1,Dorsomorphin,coverage_mean,1.0,1.0,1.0,1
-1,Dorsomorphin,coverage_worst,0.0,1.0,0.5,2
+1,Dorsomorphin,coverage_worst,1.0,1.0,1.0,1
 1,EX-527,mean_cosine,0.0,0.0,0.08333333333333333,12
 1,EX-527,global_energy,0.0,0.0,0.25,4
-1,EX-527,coverage_mean,0.0,1.0,0.3333333333333333,3
-1,EX-527,coverage_worst,0.0,1.0,0.3333333333333333,3
+1,EX-527,coverage_mean,0.0,0.0,0.16666666666666666,6
+1,EX-527,coverage_worst,0.0,0.0,0.045454545454545456,22
 1,Etomoxir,mean_cosine,0.0,0.0,0.03333333333333333,30
-1,Etomoxir,global_energy,0.0,0.0,0.041666666666666664,24
-1,Etomoxir,coverage_mean,0.0,0.0,0.25,4
+1,Etomoxir,global_energy,0.0,0.0,0.04,25
+1,Etomoxir,coverage_mean,0.0,0.0,0.16666666666666666,6
 1,Etomoxir,coverage_worst,0.0,1.0,0.3333333333333333,3
 1,GW-843682X,mean_cosine,0.0,1.0,0.3333333333333333,3
-1,GW-843682X,global_energy,0.0,0.0,0.0625,16
+1,GW-843682X,global_energy,0.0,0.0,0.058823529411764705,17
 1,GW-843682X,coverage_mean,0.0,1.0,0.3333333333333333,3
-1,GW-843682X,coverage_worst,0.0,0.0,0.2,5
+1,GW-843682X,coverage_worst,0.0,0.0,0.1111111111111111,9
 1,Geldanamycin,mean_cosine,1.0,1.0,1.0,1
 1,Geldanamycin,global_energy,1.0,1.0,1.0,1
-1,Geldanamycin,coverage_mean,0.0,0.0,0.1111111111111111,9
-1,Geldanamycin,coverage_worst,0.0,0.0,0.05,20
+1,Geldanamycin,coverage_mean,0.0,0.0,0.09090909090909091,11
+1,Geldanamycin,coverage_worst,0.0,0.0,0.0625,16
 1,JNK-9L (JNK Inhibitor),mean_cosine,0.0,0.0,0.16666666666666666,6
 1,JNK-9L (JNK Inhibitor),global_energy,0.0,1.0,0.3333333333333333,3
-1,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.2,5
-1,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.14285714285714285,7
+1,JNK-9L (JNK Inhibitor),coverage_mean,1.0,1.0,1.0,1
+1,JNK-9L (JNK Inhibitor),coverage_worst,0.0,1.0,0.3333333333333333,3
 1,NFkB Activation Inhibitor II,mean_cosine,0.0,1.0,0.5,2
-1,NFkB Activation Inhibitor II,global_energy,0.0,1.0,0.5,2
-1,NFkB Activation Inhibitor II,coverage_mean,0.0,0.0,0.058823529411764705,17
-1,NFkB Activation Inhibitor II,coverage_worst,0.0,0.0,0.05,20
+1,NFkB Activation Inhibitor II,global_energy,0.0,1.0,0.3333333333333333,3
+1,NFkB Activation Inhibitor II,coverage_mean,0.0,1.0,0.5,2
+1,NFkB Activation Inhibitor II,coverage_worst,0.0,1.0,0.3333333333333333,3
 1,NVP-AUY922,mean_cosine,0.0,1.0,0.3333333333333333,3
-1,NVP-AUY922,global_energy,0.0,1.0,0.5,2
+1,NVP-AUY922,global_energy,0.0,1.0,0.3333333333333333,3
 1,NVP-AUY922,coverage_mean,1.0,1.0,1.0,1
-1,NVP-AUY922,coverage_worst,0.0,1.0,0.3333333333333333,3
+1,NVP-AUY922,coverage_worst,0.0,0.0,0.1,10
 1,Neratinib,mean_cosine,1.0,1.0,1.0,1
-1,Neratinib,global_energy,1.0,1.0,1.0,1
-1,Neratinib,coverage_mean,0.0,1.0,0.3333333333333333,3
+1,Neratinib,global_energy,0.0,1.0,0.5,2
+1,Neratinib,coverage_mean,0.0,1.0,0.5,2
 1,Neratinib,coverage_worst,0.0,0.0,0.16666666666666666,6
 1,Niclosamide,mean_cosine,1.0,1.0,1.0,1
-1,Niclosamide,global_energy,1.0,1.0,1.0,1
-1,Niclosamide,coverage_mean,0.0,0.0,0.09090909090909091,11
-1,Niclosamide,coverage_worst,0.0,0.0,0.05263157894736842,19
+1,Niclosamide,global_energy,0.0,1.0,0.5,2
+1,Niclosamide,coverage_mean,0.0,0.0,0.2,5
+1,Niclosamide,coverage_worst,0.0,0.0,0.09090909090909091,11
 1,PHA-793887,mean_cosine,1.0,1.0,1.0,1
-1,PHA-793887,global_energy,0.0,1.0,0.3333333333333333,3
-1,PHA-793887,coverage_mean,0.0,0.0,0.25,4
-1,PHA-793887,coverage_worst,0.0,0.0,0.125,8
+1,PHA-793887,global_energy,0.0,0.0,0.25,4
+1,PHA-793887,coverage_mean,1.0,1.0,1.0,1
+1,PHA-793887,coverage_worst,1.0,1.0,1.0,1
 1,Penfluridol,mean_cosine,0.0,1.0,0.5,2
 1,Penfluridol,global_energy,0.0,0.0,0.2,5
-1,Penfluridol,coverage_mean,0.0,0.0,0.2,5
-1,Penfluridol,coverage_worst,0.0,0.0,0.07142857142857142,14
+1,Penfluridol,coverage_mean,0.0,0.0,0.25,4
+1,Penfluridol,coverage_worst,0.0,1.0,0.5,2
 1,Pevonedistat,mean_cosine,1.0,1.0,1.0,1
 1,Pevonedistat,global_energy,0.0,0.0,0.2,5
 1,Pevonedistat,coverage_mean,1.0,1.0,1.0,1
 1,Pevonedistat,coverage_worst,1.0,1.0,1.0,1
 1,Purmorphamine,mean_cosine,1.0,1.0,1.0,1
 1,Purmorphamine,global_energy,0.0,0.0,0.14285714285714285,7
-1,Purmorphamine,coverage_mean,0.0,1.0,0.3333333333333333,3
-1,Purmorphamine,coverage_worst,0.0,0.0,0.16666666666666666,6
+1,Purmorphamine,coverage_mean,0.0,0.0,0.16666666666666666,6
+1,Purmorphamine,coverage_worst,0.0,0.0,0.125,8
 1,Rucaparib,mean_cosine,0.0,0.0,0.09090909090909091,11
-1,Rucaparib,global_energy,0.0,0.0,0.07142857142857142,14
-1,Rucaparib,coverage_mean,0.0,0.0,0.07692307692307693,13
-1,Rucaparib,coverage_worst,0.0,0.0,0.05,20
+1,Rucaparib,global_energy,0.0,0.0,0.1111111111111111,9
+1,Rucaparib,coverage_mean,0.0,1.0,0.3333333333333333,3
+1,Rucaparib,coverage_worst,1.0,1.0,1.0,1
 1,Sapanisertib,mean_cosine,1.0,1.0,1.0,1
 1,Sapanisertib,global_energy,1.0,1.0,1.0,1
 1,Sapanisertib,coverage_mean,1.0,1.0,1.0,1
 1,Sapanisertib,coverage_worst,1.0,1.0,1.0,1
 1,Sorafenib,mean_cosine,1.0,1.0,1.0,1
-1,Sorafenib,global_energy,0.0,0.0,0.06666666666666667,15
-1,Sorafenib,coverage_mean,1.0,1.0,1.0,1
-1,Sorafenib,coverage_worst,0.0,1.0,0.5,2
+1,Sorafenib,global_energy,0.0,0.0,0.07142857142857142,14
+1,Sorafenib,coverage_mean,0.0,1.0,0.5,2
+1,Sorafenib,coverage_worst,0.0,0.0,0.125,8
 1,belinostat,mean_cosine,1.0,1.0,1.0,1
 1,belinostat,global_energy,0.0,1.0,0.5,2
-1,belinostat,coverage_mean,0.0,0.0,0.037037037037037035,27
-1,belinostat,coverage_worst,0.0,0.0,0.030303030303030304,33
+1,belinostat,coverage_mean,0.0,0.0,0.045454545454545456,22
+1,belinostat,coverage_worst,0.0,0.0,0.034482758620689655,29
 1,camptothecin,mean_cosine,1.0,1.0,1.0,1
-1,camptothecin,global_energy,1.0,1.0,1.0,1
-1,camptothecin,coverage_mean,0.0,0.0,0.07692307692307693,13
-1,camptothecin,coverage_worst,0.0,0.0,0.07142857142857142,14
+1,camptothecin,global_energy,0.0,1.0,0.5,2
+1,camptothecin,coverage_mean,0.0,0.0,0.16666666666666666,6
+1,camptothecin,coverage_worst,0.0,0.0,0.16666666666666666,6
 1,digoxin,mean_cosine,0.0,0.0,0.045454545454545456,22
-1,digoxin,global_energy,0.0,0.0,0.041666666666666664,24
-1,digoxin,coverage_mean,1.0,1.0,1.0,1
-1,digoxin,coverage_worst,0.0,1.0,0.5,2
+1,digoxin,global_energy,0.0,0.0,0.043478260869565216,23
+1,digoxin,coverage_mean,0.0,0.0,0.07692307692307693,13
+1,digoxin,coverage_worst,0.0,0.0,0.14285714285714285,7
 1,navitoclax,mean_cosine,1.0,1.0,1.0,1
-1,navitoclax,global_energy,0.0,0.0,0.1111111111111111,9
-1,navitoclax,coverage_mean,0.0,0.0,0.05263157894736842,19
-1,navitoclax,coverage_worst,0.0,0.0,0.038461538461538464,26
+1,navitoclax,global_energy,0.0,0.0,0.1,10
+1,navitoclax,coverage_mean,0.0,0.0,0.04,25
+1,navitoclax,coverage_worst,0.0,0.0,0.03333333333333333,30
 1,panobinostat,mean_cosine,1.0,1.0,1.0,1
 1,panobinostat,global_energy,1.0,1.0,1.0,1
 1,panobinostat,coverage_mean,1.0,1.0,1.0,1
@@ -290,51 +290,51 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 2,AT9283,mean_cosine,0.0,0.0,0.125,8
 2,AT9283,global_energy,0.0,0.0,0.05555555555555555,18
 2,AT9283,coverage_mean,0.0,1.0,0.5,2
-2,AT9283,coverage_worst,0.0,0.0,0.16666666666666666,6
+2,AT9283,coverage_worst,1.0,1.0,1.0,1
 2,Apicidin,mean_cosine,1.0,1.0,1.0,1
 2,Apicidin,global_energy,0.0,0.0,0.2,5
-2,Apicidin,coverage_mean,1.0,1.0,1.0,1
-2,Apicidin,coverage_worst,0.0,1.0,0.3333333333333333,3
+2,Apicidin,coverage_mean,0.0,1.0,0.5,2
+2,Apicidin,coverage_worst,0.0,0.0,0.2,5
 2,BI 2536,mean_cosine,0.0,1.0,0.5,2
 2,BI 2536,global_energy,0.0,1.0,0.5,2
-2,BI 2536,coverage_mean,0.0,0.0,0.041666666666666664,24
-2,BI 2536,coverage_worst,0.0,0.0,0.037037037037037035,27
+2,BI 2536,coverage_mean,0.0,0.0,0.06666666666666667,15
+2,BI 2536,coverage_worst,0.0,0.0,0.1111111111111111,9
 2,BMS-536924,mean_cosine,1.0,1.0,1.0,1
 2,BMS-536924,global_energy,1.0,1.0,1.0,1
 2,BMS-536924,coverage_mean,1.0,1.0,1.0,1
-2,BMS-536924,coverage_worst,0.0,0.0,0.0625,16
+2,BMS-536924,coverage_worst,1.0,1.0,1.0,1
 2,BRD-K76674262,mean_cosine,1.0,1.0,1.0,1
 2,BRD-K76674262,global_energy,1.0,1.0,1.0,1
 2,BRD-K76674262,coverage_mean,1.0,1.0,1.0,1
-2,BRD-K76674262,coverage_worst,0.0,0.0,0.047619047619047616,21
+2,BRD-K76674262,coverage_worst,1.0,1.0,1.0,1
 2,Bisindolylmaleimide II,mean_cosine,0.0,1.0,0.5,2
-2,Bisindolylmaleimide II,global_energy,0.0,0.0,0.25,4
-2,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.037037037037037035,27
-2,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.03333333333333333,30
+2,Bisindolylmaleimide II,global_energy,0.0,0.0,0.2,5
+2,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.058823529411764705,17
+2,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.04,25
 2,Bortezomib,mean_cosine,0.0,0.0,0.07142857142857142,14
 2,Bortezomib,global_energy,0.0,0.0,0.2,5
-2,Bortezomib,coverage_mean,0.0,0.0,0.045454545454545456,22
-2,Bortezomib,coverage_worst,0.0,0.0,0.04,25
+2,Bortezomib,coverage_mean,0.0,0.0,0.041666666666666664,24
+2,Bortezomib,coverage_worst,0.0,0.0,0.037037037037037035,27
 2,Brefeldin A,mean_cosine,0.0,0.0,0.125,8
 2,Brefeldin A,global_energy,0.0,0.0,0.038461538461538464,26
-2,Brefeldin A,coverage_mean,0.0,0.0,0.09090909090909091,11
-2,Brefeldin A,coverage_worst,0.0,0.0,0.0625,16
+2,Brefeldin A,coverage_mean,0.0,0.0,0.14285714285714285,7
+2,Brefeldin A,coverage_worst,1.0,1.0,1.0,1
 2,Chaetocin,mean_cosine,1.0,1.0,1.0,1
 2,Chaetocin,global_energy,0.0,1.0,0.3333333333333333,3
-2,Chaetocin,coverage_mean,0.0,0.0,0.2,5
-2,Chaetocin,coverage_worst,0.0,0.0,0.1,10
+2,Chaetocin,coverage_mean,0.0,1.0,0.5,2
+2,Chaetocin,coverage_worst,1.0,1.0,1.0,1
 2,Crizotinib,mean_cosine,0.0,0.0,0.058823529411764705,17
 2,Crizotinib,global_energy,0.0,0.0,0.25,4
-2,Crizotinib,coverage_mean,0.0,0.0,0.07692307692307693,13
-2,Crizotinib,coverage_worst,0.0,0.0,0.07692307692307693,13
+2,Crizotinib,coverage_mean,0.0,0.0,0.0625,16
+2,Crizotinib,coverage_worst,0.0,0.0,0.05,20
 2,Dabrafenib,mean_cosine,1.0,1.0,1.0,1
-2,Dabrafenib,global_energy,0.0,0.0,0.1111111111111111,9
-2,Dabrafenib,coverage_mean,0.0,1.0,0.3333333333333333,3
+2,Dabrafenib,global_energy,0.0,0.0,0.09090909090909091,11
+2,Dabrafenib,coverage_mean,1.0,1.0,1.0,1
 2,Dabrafenib,coverage_worst,0.0,1.0,0.3333333333333333,3
 2,Decitabine,mean_cosine,1.0,1.0,1.0,1
 2,Decitabine,global_energy,1.0,1.0,1.0,1
 2,Decitabine,coverage_mean,1.0,1.0,1.0,1
-2,Decitabine,coverage_worst,0.0,0.0,0.25,4
+2,Decitabine,coverage_worst,1.0,1.0,1.0,1
 2,Dexamethasone,mean_cosine,1.0,1.0,1.0,1
 2,Dexamethasone,global_energy,1.0,1.0,1.0,1
 2,Dexamethasone,coverage_mean,1.0,1.0,1.0,1
@@ -344,141 +344,141 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 2,Dorsomorphin,coverage_mean,1.0,1.0,1.0,1
 2,Dorsomorphin,coverage_worst,1.0,1.0,1.0,1
 2,EX-527,mean_cosine,0.0,0.0,0.07692307692307693,13
-2,EX-527,global_energy,0.0,0.0,0.14285714285714285,7
+2,EX-527,global_energy,0.0,0.0,0.125,8
 2,EX-527,coverage_mean,1.0,1.0,1.0,1
-2,EX-527,coverage_worst,0.0,0.0,0.14285714285714285,7
+2,EX-527,coverage_worst,1.0,1.0,1.0,1
 2,Etomoxir,mean_cosine,0.0,1.0,0.5,2
-2,Etomoxir,global_energy,0.0,1.0,0.3333333333333333,3
+2,Etomoxir,global_energy,0.0,1.0,0.5,2
 2,Etomoxir,coverage_mean,0.0,1.0,0.5,2
-2,Etomoxir,coverage_worst,0.0,1.0,0.3333333333333333,3
+2,Etomoxir,coverage_worst,0.0,1.0,0.5,2
 2,GW-843682X,mean_cosine,0.0,0.0,0.125,8
-2,GW-843682X,global_energy,0.0,1.0,0.3333333333333333,3
-2,GW-843682X,coverage_mean,0.0,1.0,0.3333333333333333,3
-2,GW-843682X,coverage_worst,0.0,0.0,0.25,4
+2,GW-843682X,global_energy,0.0,0.0,0.25,4
+2,GW-843682X,coverage_mean,0.0,0.0,0.25,4
+2,GW-843682X,coverage_worst,0.0,0.0,0.1111111111111111,9
 2,Geldanamycin,mean_cosine,0.0,0.0,0.1,10
-2,Geldanamycin,global_energy,0.0,0.0,0.25,4
-2,Geldanamycin,coverage_mean,0.0,0.0,0.09090909090909091,11
-2,Geldanamycin,coverage_worst,0.0,0.0,0.08333333333333333,12
+2,Geldanamycin,global_energy,0.0,0.0,0.16666666666666666,6
+2,Geldanamycin,coverage_mean,0.0,0.0,0.05555555555555555,18
+2,Geldanamycin,coverage_worst,0.0,0.0,0.0625,16
 2,JNK-9L (JNK Inhibitor),mean_cosine,0.0,0.0,0.043478260869565216,23
-2,JNK-9L (JNK Inhibitor),global_energy,0.0,0.0,0.2,5
-2,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.09090909090909091,11
-2,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.07142857142857142,14
+2,JNK-9L (JNK Inhibitor),global_energy,0.0,0.0,0.25,4
+2,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.25,4
+2,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.25,4
 2,NFkB Activation Inhibitor II,mean_cosine,1.0,1.0,1.0,1
 2,NFkB Activation Inhibitor II,global_energy,1.0,1.0,1.0,1
-2,NFkB Activation Inhibitor II,coverage_mean,0.0,0.0,0.16666666666666666,6
-2,NFkB Activation Inhibitor II,coverage_worst,0.0,0.0,0.2,5
+2,NFkB Activation Inhibitor II,coverage_mean,0.0,1.0,0.3333333333333333,3
+2,NFkB Activation Inhibitor II,coverage_worst,0.0,0.0,0.25,4
 2,NVP-AUY922,mean_cosine,0.0,0.0,0.2,5
 2,NVP-AUY922,global_energy,1.0,1.0,1.0,1
-2,NVP-AUY922,coverage_mean,0.0,0.0,0.14285714285714285,7
-2,NVP-AUY922,coverage_worst,0.0,0.0,0.08333333333333333,12
+2,NVP-AUY922,coverage_mean,0.0,0.0,0.1,10
+2,NVP-AUY922,coverage_worst,0.0,1.0,0.3333333333333333,3
 2,Neratinib,mean_cosine,0.0,1.0,0.5,2
 2,Neratinib,global_energy,0.0,1.0,0.5,2
-2,Neratinib,coverage_mean,1.0,1.0,1.0,1
-2,Neratinib,coverage_worst,0.0,1.0,0.5,2
+2,Neratinib,coverage_mean,0.0,1.0,0.5,2
+2,Neratinib,coverage_worst,0.0,1.0,0.3333333333333333,3
 2,Niclosamide,mean_cosine,1.0,1.0,1.0,1
 2,Niclosamide,global_energy,1.0,1.0,1.0,1
-2,Niclosamide,coverage_mean,0.0,0.0,0.07692307692307693,13
-2,Niclosamide,coverage_worst,0.0,0.0,0.045454545454545456,22
+2,Niclosamide,coverage_mean,1.0,1.0,1.0,1
+2,Niclosamide,coverage_worst,1.0,1.0,1.0,1
 2,PHA-793887,mean_cosine,1.0,1.0,1.0,1
 2,PHA-793887,global_energy,1.0,1.0,1.0,1
-2,PHA-793887,coverage_mean,0.0,0.0,0.1111111111111111,9
-2,PHA-793887,coverage_worst,0.0,0.0,0.06666666666666667,15
+2,PHA-793887,coverage_mean,0.0,1.0,0.5,2
+2,PHA-793887,coverage_worst,1.0,1.0,1.0,1
 2,Penfluridol,mean_cosine,1.0,1.0,1.0,1
 2,Penfluridol,global_energy,0.0,0.0,0.04,25
 2,Penfluridol,coverage_mean,1.0,1.0,1.0,1
-2,Penfluridol,coverage_worst,0.0,1.0,0.3333333333333333,3
+2,Penfluridol,coverage_worst,0.0,1.0,0.5,2
 2,Pevonedistat,mean_cosine,1.0,1.0,1.0,1
 2,Pevonedistat,global_energy,1.0,1.0,1.0,1
 2,Pevonedistat,coverage_mean,1.0,1.0,1.0,1
 2,Pevonedistat,coverage_worst,1.0,1.0,1.0,1
 2,Purmorphamine,mean_cosine,0.0,1.0,0.3333333333333333,3
-2,Purmorphamine,global_energy,0.0,0.0,0.05555555555555555,18
+2,Purmorphamine,global_energy,0.0,0.0,0.0625,16
 2,Purmorphamine,coverage_mean,1.0,1.0,1.0,1
-2,Purmorphamine,coverage_worst,0.0,1.0,0.5,2
+2,Purmorphamine,coverage_worst,1.0,1.0,1.0,1
 2,Rucaparib,mean_cosine,0.0,1.0,0.5,2
-2,Rucaparib,global_energy,0.0,0.0,0.07142857142857142,14
-2,Rucaparib,coverage_mean,0.0,0.0,0.16666666666666666,6
-2,Rucaparib,coverage_worst,0.0,0.0,0.1,10
+2,Rucaparib,global_energy,0.0,0.0,0.07692307692307693,13
+2,Rucaparib,coverage_mean,0.0,1.0,0.3333333333333333,3
+2,Rucaparib,coverage_worst,0.0,1.0,0.3333333333333333,3
 2,Sapanisertib,mean_cosine,1.0,1.0,1.0,1
 2,Sapanisertib,global_energy,1.0,1.0,1.0,1
 2,Sapanisertib,coverage_mean,1.0,1.0,1.0,1
 2,Sapanisertib,coverage_worst,1.0,1.0,1.0,1
 2,Sorafenib,mean_cosine,1.0,1.0,1.0,1
 2,Sorafenib,global_energy,0.0,0.0,0.0625,16
-2,Sorafenib,coverage_mean,0.0,0.0,0.16666666666666666,6
-2,Sorafenib,coverage_worst,0.0,0.0,0.1111111111111111,9
+2,Sorafenib,coverage_mean,0.0,0.0,0.08333333333333333,12
+2,Sorafenib,coverage_worst,0.0,0.0,0.05263157894736842,19
 2,belinostat,mean_cosine,1.0,1.0,1.0,1
 2,belinostat,global_energy,1.0,1.0,1.0,1
-2,belinostat,coverage_mean,0.0,0.0,0.16666666666666666,6
-2,belinostat,coverage_worst,0.0,0.0,0.0625,16
+2,belinostat,coverage_mean,1.0,1.0,1.0,1
+2,belinostat,coverage_worst,1.0,1.0,1.0,1
 2,camptothecin,mean_cosine,0.0,1.0,0.3333333333333333,3
 2,camptothecin,global_energy,1.0,1.0,1.0,1
-2,camptothecin,coverage_mean,0.0,0.0,0.0625,16
-2,camptothecin,coverage_worst,0.0,0.0,0.06666666666666667,15
+2,camptothecin,coverage_mean,1.0,1.0,1.0,1
+2,camptothecin,coverage_worst,1.0,1.0,1.0,1
 2,digoxin,mean_cosine,0.0,0.0,0.045454545454545456,22
 2,digoxin,global_energy,0.0,0.0,0.25,4
-2,digoxin,coverage_mean,1.0,1.0,1.0,1
-2,digoxin,coverage_worst,1.0,1.0,1.0,1
+2,digoxin,coverage_mean,0.0,0.0,0.25,4
+2,digoxin,coverage_worst,0.0,0.0,0.1,10
 2,navitoclax,mean_cosine,1.0,1.0,1.0,1
 2,navitoclax,global_energy,0.0,0.0,0.25,4
-2,navitoclax,coverage_mean,0.0,0.0,0.0625,16
-2,navitoclax,coverage_worst,0.0,0.0,0.05,20
+2,navitoclax,coverage_mean,0.0,0.0,0.14285714285714285,7
+2,navitoclax,coverage_worst,0.0,0.0,0.06666666666666667,15
 2,panobinostat,mean_cosine,1.0,1.0,1.0,1
 2,panobinostat,global_energy,1.0,1.0,1.0,1
 2,panobinostat,coverage_mean,1.0,1.0,1.0,1
-2,panobinostat,coverage_worst,0.0,0.0,0.16666666666666666,6
+2,panobinostat,coverage_worst,1.0,1.0,1.0,1
 2,ruxolitinib,mean_cosine,1.0,1.0,1.0,1
 2,ruxolitinib,global_energy,1.0,1.0,1.0,1
 2,ruxolitinib,coverage_mean,1.0,1.0,1.0,1
 2,ruxolitinib,coverage_worst,1.0,1.0,1.0,1
 3,AT9283,mean_cosine,0.0,0.0,0.041666666666666664,24
 3,AT9283,global_energy,0.0,0.0,0.16666666666666666,6
-3,AT9283,coverage_mean,0.0,0.0,0.1111111111111111,9
-3,AT9283,coverage_worst,0.0,0.0,0.0625,16
+3,AT9283,coverage_mean,0.0,0.0,0.0625,16
+3,AT9283,coverage_worst,0.0,0.0,0.041666666666666664,24
 3,Apicidin,mean_cosine,1.0,1.0,1.0,1
-3,Apicidin,global_energy,0.0,0.0,0.0625,16
-3,Apicidin,coverage_mean,0.0,0.0,0.0625,16
-3,Apicidin,coverage_worst,0.0,0.0,0.038461538461538464,26
+3,Apicidin,global_energy,0.0,0.0,0.06666666666666667,15
+3,Apicidin,coverage_mean,0.0,0.0,0.043478260869565216,23
+3,Apicidin,coverage_worst,0.0,0.0,0.037037037037037035,27
 3,BI 2536,mean_cosine,0.0,0.0,0.25,4
-3,BI 2536,global_energy,0.0,0.0,0.1,10
-3,BI 2536,coverage_mean,0.0,0.0,0.08333333333333333,12
-3,BI 2536,coverage_worst,0.0,0.0,0.06666666666666667,15
+3,BI 2536,global_energy,0.0,0.0,0.07692307692307693,13
+3,BI 2536,coverage_mean,1.0,1.0,1.0,1
+3,BI 2536,coverage_worst,0.0,0.0,0.1111111111111111,9
 3,BMS-536924,mean_cosine,1.0,1.0,1.0,1
 3,BMS-536924,global_energy,0.0,1.0,0.3333333333333333,3
 3,BMS-536924,coverage_mean,1.0,1.0,1.0,1
-3,BMS-536924,coverage_worst,0.0,1.0,0.3333333333333333,3
+3,BMS-536924,coverage_worst,0.0,0.0,0.25,4
 3,BRD-K76674262,mean_cosine,1.0,1.0,1.0,1
 3,BRD-K76674262,global_energy,1.0,1.0,1.0,1
 3,BRD-K76674262,coverage_mean,1.0,1.0,1.0,1
-3,BRD-K76674262,coverage_worst,0.0,1.0,0.5,2
+3,BRD-K76674262,coverage_worst,1.0,1.0,1.0,1
 3,Bisindolylmaleimide II,mean_cosine,1.0,1.0,1.0,1
-3,Bisindolylmaleimide II,global_energy,0.0,0.0,0.16666666666666666,6
-3,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.1,10
-3,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.1,10
+3,Bisindolylmaleimide II,global_energy,0.0,0.0,0.2,5
+3,Bisindolylmaleimide II,coverage_mean,1.0,1.0,1.0,1
+3,Bisindolylmaleimide II,coverage_worst,1.0,1.0,1.0,1
 3,Bortezomib,mean_cosine,0.0,0.0,0.07692307692307693,13
-3,Bortezomib,global_energy,0.0,0.0,0.08333333333333333,12
-3,Bortezomib,coverage_mean,0.0,0.0,0.05555555555555555,18
-3,Bortezomib,coverage_worst,0.0,0.0,0.047619047619047616,21
+3,Bortezomib,global_energy,0.0,0.0,0.09090909090909091,11
+3,Bortezomib,coverage_mean,0.0,0.0,0.16666666666666666,6
+3,Bortezomib,coverage_worst,0.0,0.0,0.1,10
 3,Brefeldin A,mean_cosine,1.0,1.0,1.0,1
 3,Brefeldin A,global_energy,0.0,1.0,0.5,2
-3,Brefeldin A,coverage_mean,0.0,0.0,0.05,20
-3,Brefeldin A,coverage_worst,0.0,0.0,0.037037037037037035,27
+3,Brefeldin A,coverage_mean,1.0,1.0,1.0,1
+3,Brefeldin A,coverage_worst,0.0,1.0,0.5,2
 3,Chaetocin,mean_cosine,1.0,1.0,1.0,1
 3,Chaetocin,global_energy,0.0,0.0,0.14285714285714285,7
-3,Chaetocin,coverage_mean,0.0,0.0,0.047619047619047616,21
-3,Chaetocin,coverage_worst,0.0,0.0,0.03333333333333333,30
+3,Chaetocin,coverage_mean,0.0,0.0,0.06666666666666667,15
+3,Chaetocin,coverage_worst,0.0,0.0,0.058823529411764705,17
 3,Crizotinib,mean_cosine,0.0,1.0,0.5,2
-3,Crizotinib,global_energy,0.0,0.0,0.16666666666666666,6
-3,Crizotinib,coverage_mean,0.0,0.0,0.08333333333333333,12
-3,Crizotinib,coverage_worst,0.0,0.0,0.05555555555555555,18
+3,Crizotinib,global_energy,0.0,0.0,0.2,5
+3,Crizotinib,coverage_mean,0.0,0.0,0.09090909090909091,11
+3,Crizotinib,coverage_worst,0.0,0.0,0.14285714285714285,7
 3,Dabrafenib,mean_cosine,1.0,1.0,1.0,1
 3,Dabrafenib,global_energy,0.0,0.0,0.25,4
-3,Dabrafenib,coverage_mean,0.0,1.0,0.3333333333333333,3
-3,Dabrafenib,coverage_worst,0.0,1.0,0.3333333333333333,3
+3,Dabrafenib,coverage_mean,0.0,1.0,0.5,2
+3,Dabrafenib,coverage_worst,1.0,1.0,1.0,1
 3,Decitabine,mean_cosine,1.0,1.0,1.0,1
 3,Decitabine,global_energy,1.0,1.0,1.0,1
 3,Decitabine,coverage_mean,1.0,1.0,1.0,1
-3,Decitabine,coverage_worst,0.0,0.0,0.2,5
+3,Decitabine,coverage_worst,1.0,1.0,1.0,1
 3,Dexamethasone,mean_cosine,1.0,1.0,1.0,1
 3,Dexamethasone,global_energy,1.0,1.0,1.0,1
 3,Dexamethasone,coverage_mean,1.0,1.0,1.0,1
@@ -488,49 +488,49 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 3,Dorsomorphin,coverage_mean,1.0,1.0,1.0,1
 3,Dorsomorphin,coverage_worst,1.0,1.0,1.0,1
 3,EX-527,mean_cosine,0.0,0.0,0.1111111111111111,9
-3,EX-527,global_energy,0.0,0.0,0.25,4
-3,EX-527,coverage_mean,0.0,0.0,0.25,4
-3,EX-527,coverage_worst,0.0,0.0,0.08333333333333333,12
+3,EX-527,global_energy,0.0,0.0,0.2,5
+3,EX-527,coverage_mean,0.0,0.0,0.09090909090909091,11
+3,EX-527,coverage_worst,0.0,0.0,0.047619047619047616,21
 3,Etomoxir,mean_cosine,0.0,0.0,0.07692307692307693,13
-3,Etomoxir,global_energy,0.0,1.0,0.5,2
-3,Etomoxir,coverage_mean,0.0,1.0,0.5,2
-3,Etomoxir,coverage_worst,0.0,1.0,0.5,2
+3,Etomoxir,global_energy,0.0,1.0,0.3333333333333333,3
+3,Etomoxir,coverage_mean,0.0,0.0,0.14285714285714285,7
+3,Etomoxir,coverage_worst,0.0,0.0,0.2,5
 3,GW-843682X,mean_cosine,0.0,0.0,0.0625,16
-3,GW-843682X,global_energy,0.0,0.0,0.09090909090909091,11
-3,GW-843682X,coverage_mean,0.0,0.0,0.1111111111111111,9
-3,GW-843682X,coverage_worst,0.0,0.0,0.1,10
+3,GW-843682X,global_energy,0.0,0.0,0.1,10
+3,GW-843682X,coverage_mean,0.0,0.0,0.1,10
+3,GW-843682X,coverage_worst,0.0,0.0,0.125,8
 3,Geldanamycin,mean_cosine,0.0,0.0,0.125,8
-3,Geldanamycin,global_energy,0.0,1.0,0.3333333333333333,3
-3,Geldanamycin,coverage_mean,0.0,0.0,0.14285714285714285,7
-3,Geldanamycin,coverage_worst,0.0,0.0,0.09090909090909091,11
+3,Geldanamycin,global_energy,0.0,1.0,0.5,2
+3,Geldanamycin,coverage_mean,0.0,0.0,0.058823529411764705,17
+3,Geldanamycin,coverage_worst,0.0,0.0,0.14285714285714285,7
 3,JNK-9L (JNK Inhibitor),mean_cosine,0.0,0.0,0.09090909090909091,11
-3,JNK-9L (JNK Inhibitor),global_energy,0.0,0.0,0.045454545454545456,22
-3,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.07692307692307693,13
-3,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.05263157894736842,19
+3,JNK-9L (JNK Inhibitor),global_energy,0.0,0.0,0.047619047619047616,21
+3,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.05263157894736842,19
+3,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.04,25
 3,NFkB Activation Inhibitor II,mean_cosine,1.0,1.0,1.0,1
-3,NFkB Activation Inhibitor II,global_energy,0.0,0.0,0.08333333333333333,12
-3,NFkB Activation Inhibitor II,coverage_mean,0.0,0.0,0.07692307692307693,13
-3,NFkB Activation Inhibitor II,coverage_worst,0.0,0.0,0.05555555555555555,18
+3,NFkB Activation Inhibitor II,global_energy,0.0,0.0,0.07142857142857142,14
+3,NFkB Activation Inhibitor II,coverage_mean,0.0,1.0,0.5,2
+3,NFkB Activation Inhibitor II,coverage_worst,0.0,0.0,0.25,4
 3,NVP-AUY922,mean_cosine,0.0,1.0,0.3333333333333333,3
-3,NVP-AUY922,global_energy,0.0,0.0,0.2,5
-3,NVP-AUY922,coverage_mean,0.0,1.0,0.3333333333333333,3
+3,NVP-AUY922,global_energy,0.0,0.0,0.16666666666666666,6
+3,NVP-AUY922,coverage_mean,1.0,1.0,1.0,1
 3,NVP-AUY922,coverage_worst,0.0,0.0,0.2,5
 3,Neratinib,mean_cosine,0.0,1.0,0.5,2
 3,Neratinib,global_energy,0.0,1.0,0.3333333333333333,3
-3,Neratinib,coverage_mean,0.0,1.0,0.5,2
-3,Neratinib,coverage_worst,0.0,1.0,0.3333333333333333,3
+3,Neratinib,coverage_mean,1.0,1.0,1.0,1
+3,Neratinib,coverage_worst,0.0,0.0,0.0625,16
 3,Niclosamide,mean_cosine,0.0,0.0,0.16666666666666666,6
-3,Niclosamide,global_energy,0.0,0.0,0.07142857142857142,14
-3,Niclosamide,coverage_mean,0.0,0.0,0.05555555555555555,18
-3,Niclosamide,coverage_worst,0.0,0.0,0.041666666666666664,24
+3,Niclosamide,global_energy,0.0,0.0,0.08333333333333333,12
+3,Niclosamide,coverage_mean,0.0,0.0,0.1,10
+3,Niclosamide,coverage_worst,0.0,0.0,0.05263157894736842,19
 3,PHA-793887,mean_cosine,1.0,1.0,1.0,1
-3,PHA-793887,global_energy,0.0,0.0,0.06666666666666667,15
-3,PHA-793887,coverage_mean,0.0,0.0,0.14285714285714285,7
-3,PHA-793887,coverage_worst,0.0,0.0,0.1,10
+3,PHA-793887,global_energy,0.0,0.0,0.07142857142857142,14
+3,PHA-793887,coverage_mean,0.0,0.0,0.25,4
+3,PHA-793887,coverage_worst,0.0,1.0,0.3333333333333333,3
 3,Penfluridol,mean_cosine,1.0,1.0,1.0,1
 3,Penfluridol,global_energy,0.0,1.0,0.5,2
-3,Penfluridol,coverage_mean,0.0,0.0,0.2,5
-3,Penfluridol,coverage_worst,0.0,0.0,0.09090909090909091,11
+3,Penfluridol,coverage_mean,1.0,1.0,1.0,1
+3,Penfluridol,coverage_worst,1.0,1.0,1.0,1
 3,Pevonedistat,mean_cosine,1.0,1.0,1.0,1
 3,Pevonedistat,global_energy,0.0,0.0,0.25,4
 3,Pevonedistat,coverage_mean,1.0,1.0,1.0,1
@@ -538,35 +538,35 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 3,Purmorphamine,mean_cosine,0.0,0.0,0.06666666666666667,15
 3,Purmorphamine,global_energy,0.0,0.0,0.08333333333333333,12
 3,Purmorphamine,coverage_mean,1.0,1.0,1.0,1
-3,Purmorphamine,coverage_worst,0.0,1.0,0.5,2
+3,Purmorphamine,coverage_worst,1.0,1.0,1.0,1
 3,Rucaparib,mean_cosine,0.0,0.0,0.04,25
 3,Rucaparib,global_energy,0.0,0.0,0.1111111111111111,9
-3,Rucaparib,coverage_mean,0.0,0.0,0.07692307692307693,13
-3,Rucaparib,coverage_worst,0.0,0.0,0.05263157894736842,19
+3,Rucaparib,coverage_mean,0.0,0.0,0.06666666666666667,15
+3,Rucaparib,coverage_worst,0.0,0.0,0.1,10
 3,Sapanisertib,mean_cosine,1.0,1.0,1.0,1
 3,Sapanisertib,global_energy,1.0,1.0,1.0,1
 3,Sapanisertib,coverage_mean,1.0,1.0,1.0,1
 3,Sapanisertib,coverage_worst,1.0,1.0,1.0,1
 3,Sorafenib,mean_cosine,0.0,1.0,0.5,2
 3,Sorafenib,global_energy,0.0,0.0,0.2,5
-3,Sorafenib,coverage_mean,0.0,1.0,0.5,2
-3,Sorafenib,coverage_worst,0.0,1.0,0.3333333333333333,3
+3,Sorafenib,coverage_mean,1.0,1.0,1.0,1
+3,Sorafenib,coverage_worst,1.0,1.0,1.0,1
 3,belinostat,mean_cosine,0.0,1.0,0.5,2
 3,belinostat,global_energy,0.0,0.0,0.125,8
-3,belinostat,coverage_mean,0.0,0.0,0.125,8
-3,belinostat,coverage_worst,0.0,0.0,0.1111111111111111,9
+3,belinostat,coverage_mean,0.0,1.0,0.3333333333333333,3
+3,belinostat,coverage_worst,0.0,0.0,0.14285714285714285,7
 3,camptothecin,mean_cosine,0.0,1.0,0.5,2
 3,camptothecin,global_energy,1.0,1.0,1.0,1
 3,camptothecin,coverage_mean,0.0,0.0,0.14285714285714285,7
-3,camptothecin,coverage_worst,0.0,0.0,0.09090909090909091,11
+3,camptothecin,coverage_worst,1.0,1.0,1.0,1
 3,digoxin,mean_cosine,0.0,0.0,0.07692307692307693,13
-3,digoxin,global_energy,0.0,0.0,0.041666666666666664,24
-3,digoxin,coverage_mean,1.0,1.0,1.0,1
-3,digoxin,coverage_worst,0.0,1.0,0.5,2
+3,digoxin,global_energy,0.0,0.0,0.045454545454545456,22
+3,digoxin,coverage_mean,0.0,0.0,0.2,5
+3,digoxin,coverage_worst,0.0,0.0,0.08333333333333333,12
 3,navitoclax,mean_cosine,0.0,0.0,0.2,5
 3,navitoclax,global_energy,0.0,0.0,0.0625,16
-3,navitoclax,coverage_mean,0.0,0.0,0.125,8
-3,navitoclax,coverage_worst,0.0,0.0,0.07692307692307693,13
+3,navitoclax,coverage_mean,1.0,1.0,1.0,1
+3,navitoclax,coverage_worst,1.0,1.0,1.0,1
 3,panobinostat,mean_cosine,1.0,1.0,1.0,1
 3,panobinostat,global_energy,1.0,1.0,1.0,1
 3,panobinostat,coverage_mean,1.0,1.0,1.0,1
@@ -577,52 +577,52 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 3,ruxolitinib,coverage_worst,1.0,1.0,1.0,1
 4,AT9283,mean_cosine,0.0,0.0,0.14285714285714285,7
 4,AT9283,global_energy,0.0,0.0,0.1,10
-4,AT9283,coverage_mean,0.0,0.0,0.08333333333333333,12
-4,AT9283,coverage_worst,0.0,0.0,0.05555555555555555,18
+4,AT9283,coverage_mean,0.0,0.0,0.07142857142857142,14
+4,AT9283,coverage_worst,0.0,0.0,0.05,20
 4,Apicidin,mean_cosine,1.0,1.0,1.0,1
-4,Apicidin,global_energy,0.0,0.0,0.07142857142857142,14
-4,Apicidin,coverage_mean,0.0,0.0,0.16666666666666666,6
+4,Apicidin,global_energy,0.0,0.0,0.0625,16
+4,Apicidin,coverage_mean,0.0,0.0,0.09090909090909091,11
 4,Apicidin,coverage_worst,0.0,0.0,0.06666666666666667,15
 4,BI 2536,mean_cosine,0.0,0.0,0.06666666666666667,15
 4,BI 2536,global_energy,0.0,1.0,0.5,2
-4,BI 2536,coverage_mean,0.0,0.0,0.07142857142857142,14
-4,BI 2536,coverage_worst,0.0,0.0,0.0625,16
+4,BI 2536,coverage_mean,0.0,0.0,0.25,4
+4,BI 2536,coverage_worst,1.0,1.0,1.0,1
 4,BMS-536924,mean_cosine,1.0,1.0,1.0,1
 4,BMS-536924,global_energy,1.0,1.0,1.0,1
 4,BMS-536924,coverage_mean,1.0,1.0,1.0,1
-4,BMS-536924,coverage_worst,0.0,0.0,0.25,4
+4,BMS-536924,coverage_worst,1.0,1.0,1.0,1
 4,BRD-K76674262,mean_cosine,1.0,1.0,1.0,1
 4,BRD-K76674262,global_energy,1.0,1.0,1.0,1
 4,BRD-K76674262,coverage_mean,1.0,1.0,1.0,1
-4,BRD-K76674262,coverage_worst,0.0,0.0,0.05263157894736842,19
+4,BRD-K76674262,coverage_worst,0.0,0.0,0.16666666666666666,6
 4,Bisindolylmaleimide II,mean_cosine,1.0,1.0,1.0,1
 4,Bisindolylmaleimide II,global_energy,0.0,0.0,0.25,4
-4,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.037037037037037035,27
-4,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.03225806451612903,31
+4,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.1111111111111111,9
+4,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.125,8
 4,Bortezomib,mean_cosine,0.0,0.0,0.1,10
 4,Bortezomib,global_energy,0.0,0.0,0.2,5
-4,Bortezomib,coverage_mean,0.0,0.0,0.058823529411764705,17
-4,Bortezomib,coverage_worst,0.0,0.0,0.043478260869565216,23
+4,Bortezomib,coverage_mean,0.0,0.0,0.06666666666666667,15
+4,Bortezomib,coverage_worst,0.0,0.0,0.04,25
 4,Brefeldin A,mean_cosine,0.0,1.0,0.5,2
 4,Brefeldin A,global_energy,0.0,0.0,0.08333333333333333,12
-4,Brefeldin A,coverage_mean,0.0,0.0,0.037037037037037035,27
-4,Brefeldin A,coverage_worst,0.0,0.0,0.04,25
+4,Brefeldin A,coverage_mean,0.0,0.0,0.045454545454545456,22
+4,Brefeldin A,coverage_worst,0.0,0.0,0.038461538461538464,26
 4,Chaetocin,mean_cosine,0.0,1.0,0.3333333333333333,3
 4,Chaetocin,global_energy,0.0,0.0,0.125,8
-4,Chaetocin,coverage_mean,0.0,0.0,0.1111111111111111,9
-4,Chaetocin,coverage_worst,0.0,0.0,0.07692307692307693,13
+4,Chaetocin,coverage_mean,1.0,1.0,1.0,1
+4,Chaetocin,coverage_worst,0.0,1.0,0.5,2
 4,Crizotinib,mean_cosine,1.0,1.0,1.0,1
-4,Crizotinib,global_energy,0.0,1.0,0.5,2
-4,Crizotinib,coverage_mean,0.0,1.0,0.3333333333333333,3
-4,Crizotinib,coverage_worst,0.0,1.0,0.3333333333333333,3
+4,Crizotinib,global_energy,1.0,1.0,1.0,1
+4,Crizotinib,coverage_mean,1.0,1.0,1.0,1
+4,Crizotinib,coverage_worst,1.0,1.0,1.0,1
 4,Dabrafenib,mean_cosine,0.0,1.0,0.3333333333333333,3
 4,Dabrafenib,global_energy,0.0,0.0,0.047619047619047616,21
-4,Dabrafenib,coverage_mean,0.0,0.0,0.16666666666666666,6
-4,Dabrafenib,coverage_worst,0.0,0.0,0.1111111111111111,9
+4,Dabrafenib,coverage_mean,0.0,0.0,0.09090909090909091,11
+4,Dabrafenib,coverage_worst,0.0,0.0,0.058823529411764705,17
 4,Decitabine,mean_cosine,1.0,1.0,1.0,1
 4,Decitabine,global_energy,1.0,1.0,1.0,1
-4,Decitabine,coverage_mean,0.0,1.0,0.5,2
-4,Decitabine,coverage_worst,0.0,0.0,0.04,25
+4,Decitabine,coverage_mean,1.0,1.0,1.0,1
+4,Decitabine,coverage_worst,1.0,1.0,1.0,1
 4,Dexamethasone,mean_cosine,1.0,1.0,1.0,1
 4,Dexamethasone,global_energy,1.0,1.0,1.0,1
 4,Dexamethasone,coverage_mean,1.0,1.0,1.0,1
@@ -633,60 +633,60 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 4,Dorsomorphin,coverage_worst,1.0,1.0,1.0,1
 4,EX-527,mean_cosine,0.0,0.0,0.038461538461538464,26
 4,EX-527,global_energy,0.0,0.0,0.16666666666666666,6
-4,EX-527,coverage_mean,0.0,0.0,0.07142857142857142,14
-4,EX-527,coverage_worst,0.0,0.0,0.05555555555555555,18
+4,EX-527,coverage_mean,0.0,0.0,0.043478260869565216,23
+4,EX-527,coverage_worst,0.0,0.0,0.038461538461538464,26
 4,Etomoxir,mean_cosine,0.0,0.0,0.25,4
-4,Etomoxir,global_energy,0.0,0.0,0.14285714285714285,7
-4,Etomoxir,coverage_mean,0.0,1.0,0.3333333333333333,3
-4,Etomoxir,coverage_worst,0.0,0.0,0.25,4
+4,Etomoxir,global_energy,0.0,0.0,0.2,5
+4,Etomoxir,coverage_mean,0.0,0.0,0.14285714285714285,7
+4,Etomoxir,coverage_worst,0.0,0.0,0.08333333333333333,12
 4,GW-843682X,mean_cosine,0.0,0.0,0.05263157894736842,19
-4,GW-843682X,global_energy,0.0,0.0,0.045454545454545456,22
-4,GW-843682X,coverage_mean,0.0,1.0,0.5,2
-4,GW-843682X,coverage_worst,0.0,1.0,0.3333333333333333,3
+4,GW-843682X,global_energy,0.0,0.0,0.043478260869565216,23
+4,GW-843682X,coverage_mean,1.0,1.0,1.0,1
+4,GW-843682X,coverage_worst,1.0,1.0,1.0,1
 4,Geldanamycin,mean_cosine,0.0,1.0,0.3333333333333333,3
 4,Geldanamycin,global_energy,0.0,1.0,0.5,2
-4,Geldanamycin,coverage_mean,0.0,0.0,0.14285714285714285,7
-4,Geldanamycin,coverage_worst,0.0,0.0,0.08333333333333333,12
+4,Geldanamycin,coverage_mean,0.0,0.0,0.125,8
+4,Geldanamycin,coverage_worst,0.0,0.0,0.16666666666666666,6
 4,JNK-9L (JNK Inhibitor),mean_cosine,0.0,0.0,0.06666666666666667,15
-4,JNK-9L (JNK Inhibitor),global_energy,0.0,0.0,0.16666666666666666,6
-4,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.05,20
-4,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.043478260869565216,23
+4,JNK-9L (JNK Inhibitor),global_energy,0.0,0.0,0.14285714285714285,7
+4,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.06666666666666667,15
+4,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.125,8
 4,NFkB Activation Inhibitor II,mean_cosine,1.0,1.0,1.0,1
 4,NFkB Activation Inhibitor II,global_energy,0.0,0.0,0.2,5
-4,NFkB Activation Inhibitor II,coverage_mean,0.0,0.0,0.05555555555555555,18
-4,NFkB Activation Inhibitor II,coverage_worst,0.0,0.0,0.041666666666666664,24
+4,NFkB Activation Inhibitor II,coverage_mean,0.0,1.0,0.5,2
+4,NFkB Activation Inhibitor II,coverage_worst,1.0,1.0,1.0,1
 4,NVP-AUY922,mean_cosine,0.0,1.0,0.3333333333333333,3
 4,NVP-AUY922,global_energy,0.0,0.0,0.16666666666666666,6
-4,NVP-AUY922,coverage_mean,0.0,0.0,0.16666666666666666,6
-4,NVP-AUY922,coverage_worst,0.0,0.0,0.08333333333333333,12
+4,NVP-AUY922,coverage_mean,0.0,0.0,0.25,4
+4,NVP-AUY922,coverage_worst,0.0,0.0,0.2,5
 4,Neratinib,mean_cosine,1.0,1.0,1.0,1
 4,Neratinib,global_energy,0.0,0.0,0.25,4
-4,Neratinib,coverage_mean,0.0,0.0,0.1,10
-4,Neratinib,coverage_worst,0.0,0.0,0.06666666666666667,15
+4,Neratinib,coverage_mean,0.0,0.0,0.25,4
+4,Neratinib,coverage_worst,0.0,0.0,0.08333333333333333,12
 4,Niclosamide,mean_cosine,1.0,1.0,1.0,1
 4,Niclosamide,global_energy,0.0,1.0,0.5,2
-4,Niclosamide,coverage_mean,0.0,0.0,0.08333333333333333,12
-4,Niclosamide,coverage_worst,0.0,0.0,0.05555555555555555,18
+4,Niclosamide,coverage_mean,0.0,0.0,0.16666666666666666,6
+4,Niclosamide,coverage_worst,0.0,0.0,0.07692307692307693,13
 4,PHA-793887,mean_cosine,1.0,1.0,1.0,1
 4,PHA-793887,global_energy,1.0,1.0,1.0,1
-4,PHA-793887,coverage_mean,0.0,0.0,0.1,10
-4,PHA-793887,coverage_worst,0.0,0.0,0.05555555555555555,18
+4,PHA-793887,coverage_mean,0.0,0.0,0.2,5
+4,PHA-793887,coverage_worst,0.0,0.0,0.08333333333333333,12
 4,Penfluridol,mean_cosine,0.0,0.0,0.16666666666666666,6
 4,Penfluridol,global_energy,1.0,1.0,1.0,1
-4,Penfluridol,coverage_mean,0.0,1.0,0.5,2
-4,Penfluridol,coverage_worst,0.0,0.0,0.14285714285714285,7
+4,Penfluridol,coverage_mean,1.0,1.0,1.0,1
+4,Penfluridol,coverage_worst,1.0,1.0,1.0,1
 4,Pevonedistat,mean_cosine,1.0,1.0,1.0,1
 4,Pevonedistat,global_energy,1.0,1.0,1.0,1
 4,Pevonedistat,coverage_mean,1.0,1.0,1.0,1
 4,Pevonedistat,coverage_worst,1.0,1.0,1.0,1
 4,Purmorphamine,mean_cosine,0.0,0.0,0.1111111111111111,9
 4,Purmorphamine,global_energy,0.0,0.0,0.03333333333333333,30
-4,Purmorphamine,coverage_mean,0.0,0.0,0.2,5
-4,Purmorphamine,coverage_worst,0.0,0.0,0.14285714285714285,7
+4,Purmorphamine,coverage_mean,0.0,0.0,0.07142857142857142,14
+4,Purmorphamine,coverage_worst,0.0,0.0,0.06666666666666667,15
 4,Rucaparib,mean_cosine,0.0,0.0,0.05,20
 4,Rucaparib,global_energy,0.0,0.0,0.038461538461538464,26
-4,Rucaparib,coverage_mean,0.0,0.0,0.125,8
-4,Rucaparib,coverage_worst,0.0,0.0,0.09090909090909091,11
+4,Rucaparib,coverage_mean,0.0,0.0,0.25,4
+4,Rucaparib,coverage_worst,1.0,1.0,1.0,1
 4,Sapanisertib,mean_cosine,1.0,1.0,1.0,1
 4,Sapanisertib,global_energy,1.0,1.0,1.0,1
 4,Sapanisertib,coverage_mean,1.0,1.0,1.0,1
@@ -697,20 +697,20 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 4,Sorafenib,coverage_worst,1.0,1.0,1.0,1
 4,belinostat,mean_cosine,1.0,1.0,1.0,1
 4,belinostat,global_energy,0.0,0.0,0.05555555555555555,18
-4,belinostat,coverage_mean,0.0,0.0,0.2,5
-4,belinostat,coverage_worst,0.0,0.0,0.09090909090909091,11
+4,belinostat,coverage_mean,1.0,1.0,1.0,1
+4,belinostat,coverage_worst,1.0,1.0,1.0,1
 4,camptothecin,mean_cosine,1.0,1.0,1.0,1
 4,camptothecin,global_energy,1.0,1.0,1.0,1
-4,camptothecin,coverage_mean,0.0,0.0,0.05555555555555555,18
-4,camptothecin,coverage_worst,0.0,0.0,0.04,25
+4,camptothecin,coverage_mean,0.0,0.0,0.16666666666666666,6
+4,camptothecin,coverage_worst,0.0,0.0,0.06666666666666667,15
 4,digoxin,mean_cosine,0.0,0.0,0.034482758620689655,29
-4,digoxin,global_energy,0.0,0.0,0.09090909090909091,11
-4,digoxin,coverage_mean,0.0,1.0,0.5,2
-4,digoxin,coverage_worst,0.0,1.0,0.3333333333333333,3
+4,digoxin,global_energy,0.0,0.0,0.125,8
+4,digoxin,coverage_mean,0.0,0.0,0.06666666666666667,15
+4,digoxin,coverage_worst,0.0,0.0,0.125,8
 4,navitoclax,mean_cosine,0.0,1.0,0.5,2
-4,navitoclax,global_energy,0.0,0.0,0.14285714285714285,7
+4,navitoclax,global_energy,0.0,0.0,0.16666666666666666,6
 4,navitoclax,coverage_mean,1.0,1.0,1.0,1
-4,navitoclax,coverage_worst,0.0,1.0,0.3333333333333333,3
+4,navitoclax,coverage_worst,1.0,1.0,1.0,1
 4,panobinostat,mean_cosine,1.0,1.0,1.0,1
 4,panobinostat,global_energy,1.0,1.0,1.0,1
 4,panobinostat,coverage_mean,1.0,1.0,1.0,1
@@ -720,53 +720,53 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 4,ruxolitinib,coverage_mean,1.0,1.0,1.0,1
 4,ruxolitinib,coverage_worst,1.0,1.0,1.0,1
 5,AT9283,mean_cosine,0.0,0.0,0.16666666666666666,6
-5,AT9283,global_energy,0.0,0.0,0.0625,16
-5,AT9283,coverage_mean,0.0,0.0,0.25,4
-5,AT9283,coverage_worst,0.0,1.0,0.3333333333333333,3
+5,AT9283,global_energy,0.0,0.0,0.058823529411764705,17
+5,AT9283,coverage_mean,0.0,0.0,0.2,5
+5,AT9283,coverage_worst,0.0,0.0,0.1111111111111111,9
 5,Apicidin,mean_cosine,0.0,1.0,0.5,2
 5,Apicidin,global_energy,0.0,0.0,0.08333333333333333,12
-5,Apicidin,coverage_mean,0.0,1.0,0.5,2
-5,Apicidin,coverage_worst,0.0,0.0,0.25,4
+5,Apicidin,coverage_mean,0.0,1.0,0.3333333333333333,3
+5,Apicidin,coverage_worst,1.0,1.0,1.0,1
 5,BI 2536,mean_cosine,0.0,1.0,0.3333333333333333,3
-5,BI 2536,global_energy,0.0,1.0,0.5,2
-5,BI 2536,coverage_mean,0.0,0.0,0.045454545454545456,22
-5,BI 2536,coverage_worst,0.0,0.0,0.043478260869565216,23
+5,BI 2536,global_energy,1.0,1.0,1.0,1
+5,BI 2536,coverage_mean,1.0,1.0,1.0,1
+5,BI 2536,coverage_worst,0.0,1.0,0.3333333333333333,3
 5,BMS-536924,mean_cosine,1.0,1.0,1.0,1
-5,BMS-536924,global_energy,0.0,0.0,0.25,4
-5,BMS-536924,coverage_mean,0.0,1.0,0.5,2
-5,BMS-536924,coverage_worst,0.0,0.0,0.2,5
+5,BMS-536924,global_energy,0.0,1.0,0.3333333333333333,3
+5,BMS-536924,coverage_mean,1.0,1.0,1.0,1
+5,BMS-536924,coverage_worst,1.0,1.0,1.0,1
 5,BRD-K76674262,mean_cosine,1.0,1.0,1.0,1
 5,BRD-K76674262,global_energy,1.0,1.0,1.0,1
 5,BRD-K76674262,coverage_mean,1.0,1.0,1.0,1
-5,BRD-K76674262,coverage_worst,0.0,0.0,0.07142857142857142,14
+5,BRD-K76674262,coverage_worst,1.0,1.0,1.0,1
 5,Bisindolylmaleimide II,mean_cosine,0.0,1.0,0.3333333333333333,3
 5,Bisindolylmaleimide II,global_energy,0.0,1.0,0.3333333333333333,3
-5,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.047619047619047616,21
-5,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.05,20
+5,Bisindolylmaleimide II,coverage_mean,1.0,1.0,1.0,1
+5,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.1111111111111111,9
 5,Bortezomib,mean_cosine,0.0,0.0,0.2,5
 5,Bortezomib,global_energy,0.0,1.0,0.5,2
-5,Bortezomib,coverage_mean,0.0,0.0,0.14285714285714285,7
-5,Bortezomib,coverage_worst,0.0,0.0,0.1111111111111111,9
+5,Bortezomib,coverage_mean,1.0,1.0,1.0,1
+5,Bortezomib,coverage_worst,0.0,1.0,0.5,2
 5,Brefeldin A,mean_cosine,0.0,0.0,0.25,4
 5,Brefeldin A,global_energy,1.0,1.0,1.0,1
-5,Brefeldin A,coverage_mean,0.0,0.0,0.045454545454545456,22
-5,Brefeldin A,coverage_worst,0.0,0.0,0.047619047619047616,21
+5,Brefeldin A,coverage_mean,0.0,0.0,0.07142857142857142,14
+5,Brefeldin A,coverage_worst,0.0,0.0,0.09090909090909091,11
 5,Chaetocin,mean_cosine,0.0,1.0,0.5,2
 5,Chaetocin,global_energy,0.0,0.0,0.125,8
-5,Chaetocin,coverage_mean,0.0,0.0,0.1,10
-5,Chaetocin,coverage_worst,0.0,0.0,0.06666666666666667,15
+5,Chaetocin,coverage_mean,0.0,0.0,0.2,5
+5,Chaetocin,coverage_worst,0.0,1.0,0.5,2
 5,Crizotinib,mean_cosine,1.0,1.0,1.0,1
-5,Crizotinib,global_energy,0.0,0.0,0.1111111111111111,9
-5,Crizotinib,coverage_mean,0.0,0.0,0.047619047619047616,21
-5,Crizotinib,coverage_worst,0.0,0.0,0.04,25
+5,Crizotinib,global_energy,0.0,0.0,0.08333333333333333,12
+5,Crizotinib,coverage_mean,0.0,0.0,0.041666666666666664,24
+5,Crizotinib,coverage_worst,0.0,0.0,0.03571428571428571,28
 5,Dabrafenib,mean_cosine,0.0,1.0,0.5,2
 5,Dabrafenib,global_energy,1.0,1.0,1.0,1
-5,Dabrafenib,coverage_mean,1.0,1.0,1.0,1
-5,Dabrafenib,coverage_worst,1.0,1.0,1.0,1
+5,Dabrafenib,coverage_mean,0.0,1.0,0.5,2
+5,Dabrafenib,coverage_worst,0.0,0.0,0.14285714285714285,7
 5,Decitabine,mean_cosine,1.0,1.0,1.0,1
 5,Decitabine,global_energy,1.0,1.0,1.0,1
 5,Decitabine,coverage_mean,1.0,1.0,1.0,1
-5,Decitabine,coverage_worst,0.0,0.0,0.2,5
+5,Decitabine,coverage_worst,1.0,1.0,1.0,1
 5,Dexamethasone,mean_cosine,1.0,1.0,1.0,1
 5,Dexamethasone,global_energy,1.0,1.0,1.0,1
 5,Dexamethasone,coverage_mean,1.0,1.0,1.0,1
@@ -774,143 +774,143 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 5,Dorsomorphin,mean_cosine,1.0,1.0,1.0,1
 5,Dorsomorphin,global_energy,1.0,1.0,1.0,1
 5,Dorsomorphin,coverage_mean,1.0,1.0,1.0,1
-5,Dorsomorphin,coverage_worst,0.0,1.0,0.5,2
+5,Dorsomorphin,coverage_worst,1.0,1.0,1.0,1
 5,EX-527,mean_cosine,1.0,1.0,1.0,1
 5,EX-527,global_energy,0.0,1.0,0.5,2
 5,EX-527,coverage_mean,0.0,0.0,0.125,8
-5,EX-527,coverage_worst,0.0,0.0,0.06666666666666667,15
+5,EX-527,coverage_worst,0.0,0.0,0.25,4
 5,Etomoxir,mean_cosine,0.0,0.0,0.125,8
 5,Etomoxir,global_energy,1.0,1.0,1.0,1
-5,Etomoxir,coverage_mean,0.0,1.0,0.3333333333333333,3
+5,Etomoxir,coverage_mean,0.0,0.0,0.14285714285714285,7
 5,Etomoxir,coverage_worst,0.0,0.0,0.2,5
 5,GW-843682X,mean_cosine,0.0,0.0,0.04,25
 5,GW-843682X,global_energy,0.0,0.0,0.09090909090909091,11
-5,GW-843682X,coverage_mean,0.0,1.0,0.3333333333333333,3
-5,GW-843682X,coverage_worst,0.0,0.0,0.25,4
+5,GW-843682X,coverage_mean,0.0,0.0,0.14285714285714285,7
+5,GW-843682X,coverage_worst,0.0,0.0,0.09090909090909091,11
 5,Geldanamycin,mean_cosine,0.0,1.0,0.3333333333333333,3
 5,Geldanamycin,global_energy,1.0,1.0,1.0,1
-5,Geldanamycin,coverage_mean,0.0,0.0,0.2,5
-5,Geldanamycin,coverage_worst,0.0,0.0,0.16666666666666666,6
+5,Geldanamycin,coverage_mean,0.0,1.0,0.5,2
+5,Geldanamycin,coverage_worst,1.0,1.0,1.0,1
 5,JNK-9L (JNK Inhibitor),mean_cosine,0.0,0.0,0.058823529411764705,17
 5,JNK-9L (JNK Inhibitor),global_energy,0.0,0.0,0.05263157894736842,19
-5,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.07692307692307693,13
-5,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.05555555555555555,18
+5,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.047619047619047616,21
+5,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.037037037037037035,27
 5,NFkB Activation Inhibitor II,mean_cosine,0.0,1.0,0.5,2
-5,NFkB Activation Inhibitor II,global_energy,0.0,0.0,0.038461538461538464,26
-5,NFkB Activation Inhibitor II,coverage_mean,0.0,0.0,0.1,10
-5,NFkB Activation Inhibitor II,coverage_worst,0.0,0.0,0.06666666666666667,15
+5,NFkB Activation Inhibitor II,global_energy,0.0,0.0,0.037037037037037035,27
+5,NFkB Activation Inhibitor II,coverage_mean,0.0,1.0,0.3333333333333333,3
+5,NFkB Activation Inhibitor II,coverage_worst,1.0,1.0,1.0,1
 5,NVP-AUY922,mean_cosine,0.0,0.0,0.2,5
 5,NVP-AUY922,global_energy,0.0,0.0,0.058823529411764705,17
-5,NVP-AUY922,coverage_mean,0.0,0.0,0.07692307692307693,13
-5,NVP-AUY922,coverage_worst,0.0,0.0,0.043478260869565216,23
+5,NVP-AUY922,coverage_mean,0.0,1.0,0.3333333333333333,3
+5,NVP-AUY922,coverage_worst,1.0,1.0,1.0,1
 5,Neratinib,mean_cosine,1.0,1.0,1.0,1
 5,Neratinib,global_energy,0.0,1.0,0.3333333333333333,3
-5,Neratinib,coverage_mean,0.0,1.0,0.5,2
-5,Neratinib,coverage_worst,0.0,1.0,0.3333333333333333,3
+5,Neratinib,coverage_mean,1.0,1.0,1.0,1
+5,Neratinib,coverage_worst,1.0,1.0,1.0,1
 5,Niclosamide,mean_cosine,0.0,1.0,0.3333333333333333,3
 5,Niclosamide,global_energy,1.0,1.0,1.0,1
-5,Niclosamide,coverage_mean,0.0,0.0,0.25,4
-5,Niclosamide,coverage_worst,0.0,0.0,0.08333333333333333,12
+5,Niclosamide,coverage_mean,1.0,1.0,1.0,1
+5,Niclosamide,coverage_worst,1.0,1.0,1.0,1
 5,PHA-793887,mean_cosine,1.0,1.0,1.0,1
-5,PHA-793887,global_energy,0.0,1.0,0.5,2
-5,PHA-793887,coverage_mean,0.0,0.0,0.25,4
-5,PHA-793887,coverage_worst,0.0,0.0,0.08333333333333333,12
+5,PHA-793887,global_energy,1.0,1.0,1.0,1
+5,PHA-793887,coverage_mean,1.0,1.0,1.0,1
+5,PHA-793887,coverage_worst,1.0,1.0,1.0,1
 5,Penfluridol,mean_cosine,1.0,1.0,1.0,1
-5,Penfluridol,global_energy,0.0,1.0,0.3333333333333333,3
-5,Penfluridol,coverage_mean,0.0,0.0,0.125,8
-5,Penfluridol,coverage_worst,0.0,0.0,0.125,8
+5,Penfluridol,global_energy,0.0,0.0,0.25,4
+5,Penfluridol,coverage_mean,0.0,1.0,0.3333333333333333,3
+5,Penfluridol,coverage_worst,0.0,0.0,0.1111111111111111,9
 5,Pevonedistat,mean_cosine,1.0,1.0,1.0,1
 5,Pevonedistat,global_energy,1.0,1.0,1.0,1
 5,Pevonedistat,coverage_mean,1.0,1.0,1.0,1
 5,Pevonedistat,coverage_worst,1.0,1.0,1.0,1
 5,Purmorphamine,mean_cosine,1.0,1.0,1.0,1
 5,Purmorphamine,global_energy,0.0,0.0,0.125,8
-5,Purmorphamine,coverage_mean,0.0,1.0,0.5,2
-5,Purmorphamine,coverage_worst,0.0,0.0,0.25,4
+5,Purmorphamine,coverage_mean,0.0,0.0,0.25,4
+5,Purmorphamine,coverage_worst,0.0,1.0,0.5,2
 5,Rucaparib,mean_cosine,0.0,0.0,0.2,5
 5,Rucaparib,global_energy,0.0,0.0,0.2,5
-5,Rucaparib,coverage_mean,0.0,0.0,0.09090909090909091,11
-5,Rucaparib,coverage_worst,0.0,0.0,0.06666666666666667,15
+5,Rucaparib,coverage_mean,0.0,1.0,0.5,2
+5,Rucaparib,coverage_worst,1.0,1.0,1.0,1
 5,Sapanisertib,mean_cosine,1.0,1.0,1.0,1
 5,Sapanisertib,global_energy,1.0,1.0,1.0,1
 5,Sapanisertib,coverage_mean,1.0,1.0,1.0,1
 5,Sapanisertib,coverage_worst,1.0,1.0,1.0,1
 5,Sorafenib,mean_cosine,1.0,1.0,1.0,1
 5,Sorafenib,global_energy,1.0,1.0,1.0,1
-5,Sorafenib,coverage_mean,1.0,1.0,1.0,1
+5,Sorafenib,coverage_mean,0.0,1.0,0.3333333333333333,3
 5,Sorafenib,coverage_worst,1.0,1.0,1.0,1
 5,belinostat,mean_cosine,1.0,1.0,1.0,1
 5,belinostat,global_energy,1.0,1.0,1.0,1
-5,belinostat,coverage_mean,0.0,1.0,0.3333333333333333,3
-5,belinostat,coverage_worst,0.0,0.0,0.1111111111111111,9
+5,belinostat,coverage_mean,1.0,1.0,1.0,1
+5,belinostat,coverage_worst,1.0,1.0,1.0,1
 5,camptothecin,mean_cosine,1.0,1.0,1.0,1
 5,camptothecin,global_energy,1.0,1.0,1.0,1
-5,camptothecin,coverage_mean,0.0,0.0,0.09090909090909091,11
-5,camptothecin,coverage_worst,0.0,0.0,0.08333333333333333,12
+5,camptothecin,coverage_mean,0.0,0.0,0.1111111111111111,9
+5,camptothecin,coverage_worst,0.0,1.0,0.5,2
 5,digoxin,mean_cosine,0.0,1.0,0.3333333333333333,3
 5,digoxin,global_energy,1.0,1.0,1.0,1
-5,digoxin,coverage_mean,1.0,1.0,1.0,1
-5,digoxin,coverage_worst,0.0,1.0,0.5,2
+5,digoxin,coverage_mean,0.0,1.0,0.3333333333333333,3
+5,digoxin,coverage_worst,1.0,1.0,1.0,1
 5,navitoclax,mean_cosine,1.0,1.0,1.0,1
 5,navitoclax,global_energy,0.0,0.0,0.16666666666666666,6
-5,navitoclax,coverage_mean,0.0,0.0,0.08333333333333333,12
-5,navitoclax,coverage_worst,0.0,0.0,0.07692307692307693,13
+5,navitoclax,coverage_mean,0.0,1.0,0.3333333333333333,3
+5,navitoclax,coverage_worst,0.0,0.0,0.2,5
 5,panobinostat,mean_cosine,1.0,1.0,1.0,1
 5,panobinostat,global_energy,1.0,1.0,1.0,1
 5,panobinostat,coverage_mean,1.0,1.0,1.0,1
-5,panobinostat,coverage_worst,0.0,1.0,0.5,2
+5,panobinostat,coverage_worst,1.0,1.0,1.0,1
 5,ruxolitinib,mean_cosine,1.0,1.0,1.0,1
 5,ruxolitinib,global_energy,1.0,1.0,1.0,1
 5,ruxolitinib,coverage_mean,1.0,1.0,1.0,1
-5,ruxolitinib,coverage_worst,0.0,0.0,0.045454545454545456,22
+5,ruxolitinib,coverage_worst,1.0,1.0,1.0,1
 6,AT9283,mean_cosine,0.0,0.0,0.25,4
-6,AT9283,global_energy,0.0,0.0,0.14285714285714285,7
-6,AT9283,coverage_mean,0.0,0.0,0.05555555555555555,18
-6,AT9283,coverage_worst,0.0,0.0,0.043478260869565216,23
+6,AT9283,global_energy,0.0,0.0,0.16666666666666666,6
+6,AT9283,coverage_mean,0.0,0.0,0.05263157894736842,19
+6,AT9283,coverage_worst,0.0,0.0,0.041666666666666664,24
 6,Apicidin,mean_cosine,1.0,1.0,1.0,1
 6,Apicidin,global_energy,1.0,1.0,1.0,1
-6,Apicidin,coverage_mean,1.0,1.0,1.0,1
-6,Apicidin,coverage_worst,0.0,1.0,0.5,2
+6,Apicidin,coverage_mean,0.0,0.0,0.2,5
+6,Apicidin,coverage_worst,0.0,0.0,0.16666666666666666,6
 6,BI 2536,mean_cosine,0.0,0.0,0.1,10
 6,BI 2536,global_energy,0.0,0.0,0.05555555555555555,18
-6,BI 2536,coverage_mean,0.0,0.0,0.08333333333333333,12
-6,BI 2536,coverage_worst,0.0,0.0,0.125,8
+6,BI 2536,coverage_mean,0.0,1.0,0.3333333333333333,3
+6,BI 2536,coverage_worst,0.0,0.0,0.08333333333333333,12
 6,BMS-536924,mean_cosine,0.0,1.0,0.5,2
 6,BMS-536924,global_energy,1.0,1.0,1.0,1
-6,BMS-536924,coverage_mean,0.0,1.0,0.3333333333333333,3
-6,BMS-536924,coverage_worst,0.0,0.0,0.125,8
+6,BMS-536924,coverage_mean,1.0,1.0,1.0,1
+6,BMS-536924,coverage_worst,1.0,1.0,1.0,1
 6,BRD-K76674262,mean_cosine,1.0,1.0,1.0,1
 6,BRD-K76674262,global_energy,1.0,1.0,1.0,1
 6,BRD-K76674262,coverage_mean,1.0,1.0,1.0,1
-6,BRD-K76674262,coverage_worst,0.0,0.0,0.05555555555555555,18
+6,BRD-K76674262,coverage_worst,1.0,1.0,1.0,1
 6,Bisindolylmaleimide II,mean_cosine,0.0,0.0,0.1111111111111111,9
 6,Bisindolylmaleimide II,global_energy,0.0,0.0,0.05555555555555555,18
-6,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.037037037037037035,27
-6,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.03333333333333333,30
+6,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.14285714285714285,7
+6,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.125,8
 6,Bortezomib,mean_cosine,0.0,0.0,0.1111111111111111,9
-6,Bortezomib,global_energy,0.0,0.0,0.16666666666666666,6
-6,Bortezomib,coverage_mean,0.0,0.0,0.16666666666666666,6
-6,Bortezomib,coverage_worst,0.0,0.0,0.1,10
+6,Bortezomib,global_energy,0.0,0.0,0.2,5
+6,Bortezomib,coverage_mean,1.0,1.0,1.0,1
+6,Bortezomib,coverage_worst,0.0,1.0,0.3333333333333333,3
 6,Brefeldin A,mean_cosine,0.0,0.0,0.16666666666666666,6
-6,Brefeldin A,global_energy,0.0,0.0,0.05263157894736842,19
-6,Brefeldin A,coverage_mean,0.0,0.0,0.05,20
-6,Brefeldin A,coverage_worst,0.0,0.0,0.047619047619047616,21
+6,Brefeldin A,global_energy,0.0,0.0,0.05,20
+6,Brefeldin A,coverage_mean,0.0,0.0,0.14285714285714285,7
+6,Brefeldin A,coverage_worst,0.0,0.0,0.043478260869565216,23
 6,Chaetocin,mean_cosine,1.0,1.0,1.0,1
 6,Chaetocin,global_energy,0.0,1.0,0.5,2
-6,Chaetocin,coverage_mean,0.0,0.0,0.037037037037037035,27
-6,Chaetocin,coverage_worst,0.0,0.0,0.03125,32
+6,Chaetocin,coverage_mean,0.0,0.0,0.1111111111111111,9
+6,Chaetocin,coverage_worst,0.0,0.0,0.09090909090909091,11
 6,Crizotinib,mean_cosine,0.0,1.0,0.5,2
-6,Crizotinib,global_energy,0.0,0.0,0.1,10
-6,Crizotinib,coverage_mean,0.0,0.0,0.125,8
-6,Crizotinib,coverage_worst,0.0,0.0,0.14285714285714285,7
+6,Crizotinib,global_energy,0.0,0.0,0.125,8
+6,Crizotinib,coverage_mean,0.0,0.0,0.1111111111111111,9
+6,Crizotinib,coverage_worst,0.0,0.0,0.125,8
 6,Dabrafenib,mean_cosine,1.0,1.0,1.0,1
-6,Dabrafenib,global_energy,0.0,0.0,0.1,10
-6,Dabrafenib,coverage_mean,0.0,0.0,0.14285714285714285,7
-6,Dabrafenib,coverage_worst,0.0,0.0,0.1,10
+6,Dabrafenib,global_energy,0.0,0.0,0.08333333333333333,12
+6,Dabrafenib,coverage_mean,0.0,1.0,0.5,2
+6,Dabrafenib,coverage_worst,0.0,0.0,0.25,4
 6,Decitabine,mean_cosine,1.0,1.0,1.0,1
 6,Decitabine,global_energy,1.0,1.0,1.0,1
 6,Decitabine,coverage_mean,1.0,1.0,1.0,1
-6,Decitabine,coverage_worst,0.0,0.0,0.041666666666666664,24
+6,Decitabine,coverage_worst,1.0,1.0,1.0,1
 6,Dexamethasone,mean_cosine,1.0,1.0,1.0,1
 6,Dexamethasone,global_energy,1.0,1.0,1.0,1
 6,Dexamethasone,coverage_mean,1.0,1.0,1.0,1
@@ -922,83 +922,83 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 6,EX-527,mean_cosine,0.0,0.0,0.1111111111111111,9
 6,EX-527,global_energy,0.0,0.0,0.25,4
 6,EX-527,coverage_mean,1.0,1.0,1.0,1
-6,EX-527,coverage_worst,1.0,1.0,1.0,1
+6,EX-527,coverage_worst,0.0,0.0,0.14285714285714285,7
 6,Etomoxir,mean_cosine,0.0,1.0,0.3333333333333333,3
-6,Etomoxir,global_energy,0.0,0.0,0.25,4
-6,Etomoxir,coverage_mean,0.0,0.0,0.16666666666666666,6
+6,Etomoxir,global_energy,0.0,1.0,0.3333333333333333,3
+6,Etomoxir,coverage_mean,0.0,0.0,0.125,8
 6,Etomoxir,coverage_worst,0.0,0.0,0.14285714285714285,7
 6,GW-843682X,mean_cosine,0.0,0.0,0.25,4
 6,GW-843682X,global_energy,0.0,1.0,0.3333333333333333,3
 6,GW-843682X,coverage_mean,1.0,1.0,1.0,1
-6,GW-843682X,coverage_worst,1.0,1.0,1.0,1
+6,GW-843682X,coverage_worst,0.0,0.0,0.16666666666666666,6
 6,Geldanamycin,mean_cosine,0.0,1.0,0.5,2
-6,Geldanamycin,global_energy,0.0,1.0,0.5,2
-6,Geldanamycin,coverage_mean,0.0,0.0,0.1111111111111111,9
-6,Geldanamycin,coverage_worst,0.0,0.0,0.125,8
+6,Geldanamycin,global_energy,0.0,1.0,0.3333333333333333,3
+6,Geldanamycin,coverage_mean,0.0,0.0,0.07142857142857142,14
+6,Geldanamycin,coverage_worst,0.0,0.0,0.043478260869565216,23
 6,JNK-9L (JNK Inhibitor),mean_cosine,0.0,0.0,0.1,10
 6,JNK-9L (JNK Inhibitor),global_energy,0.0,0.0,0.1111111111111111,9
-6,JNK-9L (JNK Inhibitor),coverage_mean,1.0,1.0,1.0,1
-6,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.125,8
+6,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.25,4
+6,JNK-9L (JNK Inhibitor),coverage_worst,1.0,1.0,1.0,1
 6,NFkB Activation Inhibitor II,mean_cosine,0.0,1.0,0.5,2
-6,NFkB Activation Inhibitor II,global_energy,0.0,0.0,0.047619047619047616,21
-6,NFkB Activation Inhibitor II,coverage_mean,0.0,0.0,0.2,5
-6,NFkB Activation Inhibitor II,coverage_worst,0.0,1.0,0.3333333333333333,3
+6,NFkB Activation Inhibitor II,global_energy,0.0,0.0,0.05555555555555555,18
+6,NFkB Activation Inhibitor II,coverage_mean,0.0,1.0,0.5,2
+6,NFkB Activation Inhibitor II,coverage_worst,0.0,0.0,0.16666666666666666,6
 6,NVP-AUY922,mean_cosine,1.0,1.0,1.0,1
-6,NVP-AUY922,global_energy,0.0,0.0,0.08333333333333333,12
-6,NVP-AUY922,coverage_mean,0.0,0.0,0.1111111111111111,9
-6,NVP-AUY922,coverage_worst,0.0,0.0,0.06666666666666667,15
+6,NVP-AUY922,global_energy,0.0,0.0,0.125,8
+6,NVP-AUY922,coverage_mean,0.0,1.0,0.5,2
+6,NVP-AUY922,coverage_worst,1.0,1.0,1.0,1
 6,Neratinib,mean_cosine,0.0,0.0,0.25,4
 6,Neratinib,global_energy,1.0,1.0,1.0,1
-6,Neratinib,coverage_mean,0.0,0.0,0.14285714285714285,7
-6,Neratinib,coverage_worst,0.0,0.0,0.09090909090909091,11
+6,Neratinib,coverage_mean,0.0,0.0,0.16666666666666666,6
+6,Neratinib,coverage_worst,0.0,0.0,0.16666666666666666,6
 6,Niclosamide,mean_cosine,0.0,0.0,0.14285714285714285,7
 6,Niclosamide,global_energy,0.0,1.0,0.3333333333333333,3
-6,Niclosamide,coverage_mean,0.0,0.0,0.045454545454545456,22
-6,Niclosamide,coverage_worst,0.0,0.0,0.03225806451612903,31
+6,Niclosamide,coverage_mean,0.0,0.0,0.043478260869565216,23
+6,Niclosamide,coverage_worst,0.0,0.0,0.03333333333333333,30
 6,PHA-793887,mean_cosine,1.0,1.0,1.0,1
-6,PHA-793887,global_energy,0.0,1.0,0.5,2
+6,PHA-793887,global_energy,1.0,1.0,1.0,1
 6,PHA-793887,coverage_mean,1.0,1.0,1.0,1
-6,PHA-793887,coverage_worst,0.0,0.0,0.25,4
+6,PHA-793887,coverage_worst,1.0,1.0,1.0,1
 6,Penfluridol,mean_cosine,1.0,1.0,1.0,1
-6,Penfluridol,global_energy,0.0,0.0,0.08333333333333333,12
+6,Penfluridol,global_energy,0.0,0.0,0.07692307692307693,13
 6,Penfluridol,coverage_mean,1.0,1.0,1.0,1
-6,Penfluridol,coverage_worst,0.0,1.0,0.5,2
+6,Penfluridol,coverage_worst,1.0,1.0,1.0,1
 6,Pevonedistat,mean_cosine,1.0,1.0,1.0,1
 6,Pevonedistat,global_energy,1.0,1.0,1.0,1
 6,Pevonedistat,coverage_mean,1.0,1.0,1.0,1
 6,Pevonedistat,coverage_worst,1.0,1.0,1.0,1
 6,Purmorphamine,mean_cosine,0.0,0.0,0.07142857142857142,14
-6,Purmorphamine,global_energy,0.0,0.0,0.07142857142857142,14
-6,Purmorphamine,coverage_mean,1.0,1.0,1.0,1
-6,Purmorphamine,coverage_worst,1.0,1.0,1.0,1
+6,Purmorphamine,global_energy,0.0,0.0,0.07692307692307693,13
+6,Purmorphamine,coverage_mean,0.0,1.0,0.5,2
+6,Purmorphamine,coverage_worst,0.0,0.0,0.14285714285714285,7
 6,Rucaparib,mean_cosine,0.0,1.0,0.5,2
 6,Rucaparib,global_energy,0.0,0.0,0.1111111111111111,9
-6,Rucaparib,coverage_mean,0.0,0.0,0.038461538461538464,26
-6,Rucaparib,coverage_worst,0.0,0.0,0.03571428571428571,28
+6,Rucaparib,coverage_mean,0.0,0.0,0.037037037037037035,27
+6,Rucaparib,coverage_worst,0.0,0.0,0.03225806451612903,31
 6,Sapanisertib,mean_cosine,1.0,1.0,1.0,1
 6,Sapanisertib,global_energy,1.0,1.0,1.0,1
 6,Sapanisertib,coverage_mean,1.0,1.0,1.0,1
 6,Sapanisertib,coverage_worst,1.0,1.0,1.0,1
 6,Sorafenib,mean_cosine,1.0,1.0,1.0,1
-6,Sorafenib,global_energy,0.0,1.0,0.3333333333333333,3
+6,Sorafenib,global_energy,0.0,1.0,0.5,2
 6,Sorafenib,coverage_mean,1.0,1.0,1.0,1
-6,Sorafenib,coverage_worst,1.0,1.0,1.0,1
+6,Sorafenib,coverage_worst,0.0,1.0,0.5,2
 6,belinostat,mean_cosine,1.0,1.0,1.0,1
 6,belinostat,global_energy,1.0,1.0,1.0,1
-6,belinostat,coverage_mean,0.0,0.0,0.09090909090909091,11
-6,belinostat,coverage_worst,0.0,0.0,0.058823529411764705,17
+6,belinostat,coverage_mean,1.0,1.0,1.0,1
+6,belinostat,coverage_worst,0.0,0.0,0.125,8
 6,camptothecin,mean_cosine,1.0,1.0,1.0,1
 6,camptothecin,global_energy,0.0,0.0,0.05555555555555555,18
-6,camptothecin,coverage_mean,0.0,0.0,0.06666666666666667,15
-6,camptothecin,coverage_worst,0.0,0.0,0.07692307692307693,13
+6,camptothecin,coverage_mean,1.0,1.0,1.0,1
+6,camptothecin,coverage_worst,0.0,0.0,0.14285714285714285,7
 6,digoxin,mean_cosine,0.0,0.0,0.14285714285714285,7
 6,digoxin,global_energy,0.0,0.0,0.04,25
-6,digoxin,coverage_mean,0.0,1.0,0.3333333333333333,3
-6,digoxin,coverage_worst,0.0,0.0,0.2,5
+6,digoxin,coverage_mean,0.0,0.0,0.058823529411764705,17
+6,digoxin,coverage_worst,0.0,0.0,0.05555555555555555,18
 6,navitoclax,mean_cosine,0.0,0.0,0.25,4
 6,navitoclax,global_energy,1.0,1.0,1.0,1
-6,navitoclax,coverage_mean,0.0,1.0,0.3333333333333333,3
-6,navitoclax,coverage_worst,0.0,0.0,0.125,8
+6,navitoclax,coverage_mean,0.0,0.0,0.16666666666666666,6
+6,navitoclax,coverage_worst,0.0,0.0,0.14285714285714285,7
 6,panobinostat,mean_cosine,1.0,1.0,1.0,1
 6,panobinostat,global_energy,1.0,1.0,1.0,1
 6,panobinostat,coverage_mean,1.0,1.0,1.0,1
@@ -1009,52 +1009,52 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 6,ruxolitinib,coverage_worst,1.0,1.0,1.0,1
 7,AT9283,mean_cosine,0.0,0.0,0.06666666666666667,15
 7,AT9283,global_energy,0.0,0.0,0.04,25
-7,AT9283,coverage_mean,0.0,0.0,0.1111111111111111,9
-7,AT9283,coverage_worst,0.0,0.0,0.06666666666666667,15
+7,AT9283,coverage_mean,0.0,0.0,0.06666666666666667,15
+7,AT9283,coverage_worst,0.0,0.0,0.09090909090909091,11
 7,Apicidin,mean_cosine,0.0,1.0,0.5,2
-7,Apicidin,global_energy,0.0,0.0,0.0625,16
-7,Apicidin,coverage_mean,0.0,0.0,0.16666666666666666,6
-7,Apicidin,coverage_worst,0.0,0.0,0.05,20
+7,Apicidin,global_energy,0.0,0.0,0.07142857142857142,14
+7,Apicidin,coverage_mean,0.0,0.0,0.14285714285714285,7
+7,Apicidin,coverage_worst,0.0,0.0,0.05555555555555555,18
 7,BI 2536,mean_cosine,0.0,0.0,0.14285714285714285,7
 7,BI 2536,global_energy,0.0,0.0,0.125,8
-7,BI 2536,coverage_mean,0.0,0.0,0.1,10
-7,BI 2536,coverage_worst,0.0,0.0,0.1,10
+7,BI 2536,coverage_mean,0.0,1.0,0.5,2
+7,BI 2536,coverage_worst,0.0,0.0,0.1111111111111111,9
 7,BMS-536924,mean_cosine,0.0,1.0,0.5,2
 7,BMS-536924,global_energy,0.0,1.0,0.3333333333333333,3
 7,BMS-536924,coverage_mean,1.0,1.0,1.0,1
-7,BMS-536924,coverage_worst,0.0,1.0,0.3333333333333333,3
+7,BMS-536924,coverage_worst,1.0,1.0,1.0,1
 7,BRD-K76674262,mean_cosine,1.0,1.0,1.0,1
 7,BRD-K76674262,global_energy,1.0,1.0,1.0,1
 7,BRD-K76674262,coverage_mean,1.0,1.0,1.0,1
-7,BRD-K76674262,coverage_worst,0.0,0.0,0.08333333333333333,12
+7,BRD-K76674262,coverage_worst,1.0,1.0,1.0,1
 7,Bisindolylmaleimide II,mean_cosine,1.0,1.0,1.0,1
-7,Bisindolylmaleimide II,global_energy,0.0,0.0,0.14285714285714285,7
-7,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.037037037037037035,27
-7,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.037037037037037035,27
+7,Bisindolylmaleimide II,global_energy,0.0,0.0,0.125,8
+7,Bisindolylmaleimide II,coverage_mean,0.0,0.0,0.07142857142857142,14
+7,Bisindolylmaleimide II,coverage_worst,0.0,0.0,0.06666666666666667,15
 7,Bortezomib,mean_cosine,0.0,1.0,0.5,2
-7,Bortezomib,global_energy,0.0,0.0,0.1,10
-7,Bortezomib,coverage_mean,0.0,0.0,0.05,20
-7,Bortezomib,coverage_worst,0.0,0.0,0.038461538461538464,26
+7,Bortezomib,global_energy,0.0,0.0,0.1111111111111111,9
+7,Bortezomib,coverage_mean,0.0,0.0,0.08333333333333333,12
+7,Bortezomib,coverage_worst,0.0,0.0,0.043478260869565216,23
 7,Brefeldin A,mean_cosine,0.0,1.0,0.5,2
-7,Brefeldin A,global_energy,0.0,0.0,0.06666666666666667,15
-7,Brefeldin A,coverage_mean,0.0,0.0,0.07692307692307693,13
-7,Brefeldin A,coverage_worst,0.0,0.0,0.06666666666666667,15
+7,Brefeldin A,global_energy,0.0,0.0,0.058823529411764705,17
+7,Brefeldin A,coverage_mean,0.0,0.0,0.14285714285714285,7
+7,Brefeldin A,coverage_worst,0.0,0.0,0.14285714285714285,7
 7,Chaetocin,mean_cosine,1.0,1.0,1.0,1
 7,Chaetocin,global_energy,0.0,0.0,0.25,4
-7,Chaetocin,coverage_mean,0.0,0.0,0.1111111111111111,9
-7,Chaetocin,coverage_worst,0.0,0.0,0.08333333333333333,12
+7,Chaetocin,coverage_mean,0.0,1.0,0.5,2
+7,Chaetocin,coverage_worst,0.0,0.0,0.25,4
 7,Crizotinib,mean_cosine,0.0,1.0,0.3333333333333333,3
 7,Crizotinib,global_energy,0.0,1.0,0.3333333333333333,3
-7,Crizotinib,coverage_mean,0.0,0.0,0.25,4
-7,Crizotinib,coverage_worst,0.0,0.0,0.2,5
+7,Crizotinib,coverage_mean,0.0,0.0,0.16666666666666666,6
+7,Crizotinib,coverage_worst,0.0,0.0,0.16666666666666666,6
 7,Dabrafenib,mean_cosine,1.0,1.0,1.0,1
-7,Dabrafenib,global_energy,1.0,1.0,1.0,1
+7,Dabrafenib,global_energy,0.0,1.0,0.5,2
 7,Dabrafenib,coverage_mean,0.0,1.0,0.3333333333333333,3
-7,Dabrafenib,coverage_worst,0.0,0.0,0.125,8
+7,Dabrafenib,coverage_worst,0.0,0.0,0.09090909090909091,11
 7,Decitabine,mean_cosine,1.0,1.0,1.0,1
 7,Decitabine,global_energy,1.0,1.0,1.0,1
 7,Decitabine,coverage_mean,1.0,1.0,1.0,1
-7,Decitabine,coverage_worst,0.0,0.0,0.07692307692307693,13
+7,Decitabine,coverage_worst,1.0,1.0,1.0,1
 7,Dexamethasone,mean_cosine,1.0,1.0,1.0,1
 7,Dexamethasone,global_energy,1.0,1.0,1.0,1
 7,Dexamethasone,coverage_mean,1.0,1.0,1.0,1
@@ -1065,82 +1065,82 @@ seed,query,scorer,hit@1,hit@3,mrr,rank
 7,Dorsomorphin,coverage_worst,1.0,1.0,1.0,1
 7,EX-527,mean_cosine,0.0,0.0,0.07692307692307693,13
 7,EX-527,global_energy,0.0,0.0,0.05,20
-7,EX-527,coverage_mean,0.0,1.0,0.3333333333333333,3
-7,EX-527,coverage_worst,0.0,0.0,0.1111111111111111,9
+7,EX-527,coverage_mean,0.0,0.0,0.09090909090909091,11
+7,EX-527,coverage_worst,0.0,1.0,0.3333333333333333,3
 7,Etomoxir,mean_cosine,0.0,0.0,0.14285714285714285,7
 7,Etomoxir,global_energy,0.0,0.0,0.16666666666666666,6
-7,Etomoxir,coverage_mean,1.0,1.0,1.0,1
-7,Etomoxir,coverage_worst,0.0,0.0,0.25,4
+7,Etomoxir,coverage_mean,0.0,1.0,0.5,2
+7,Etomoxir,coverage_worst,1.0,1.0,1.0,1
 7,GW-843682X,mean_cosine,0.0,0.0,0.25,4
-7,GW-843682X,global_energy,0.0,1.0,0.3333333333333333,3
-7,GW-843682X,coverage_mean,0.0,0.0,0.25,4
+7,GW-843682X,global_energy,0.0,1.0,0.5,2
+7,GW-843682X,coverage_mean,0.0,0.0,0.2,5
 7,GW-843682X,coverage_worst,0.0,0.0,0.125,8
 7,Geldanamycin,mean_cosine,0.0,0.0,0.16666666666666666,6
 7,Geldanamycin,global_energy,0.0,0.0,0.2,5
-7,Geldanamycin,coverage_mean,0.0,0.0,0.08333333333333333,12
-7,Geldanamycin,coverage_worst,0.0,0.0,0.07142857142857142,14
+7,Geldanamycin,coverage_mean,0.0,0.0,0.06666666666666667,15
+7,Geldanamycin,coverage_worst,0.0,0.0,0.07692307692307693,13
 7,JNK-9L (JNK Inhibitor),mean_cosine,0.0,0.0,0.047619047619047616,21
-7,JNK-9L (JNK Inhibitor),global_energy,0.0,0.0,0.045454545454545456,22
-7,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.07692307692307693,13
-7,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.05263157894736842,19
+7,JNK-9L (JNK Inhibitor),global_energy,0.0,0.0,0.047619047619047616,21
+7,JNK-9L (JNK Inhibitor),coverage_mean,0.0,0.0,0.2,5
+7,JNK-9L (JNK Inhibitor),coverage_worst,0.0,0.0,0.25,4
 7,NFkB Activation Inhibitor II,mean_cosine,0.0,1.0,0.5,2
 7,NFkB Activation Inhibitor II,global_energy,0.0,1.0,0.5,2
-7,NFkB Activation Inhibitor II,coverage_mean,0.0,0.0,0.09090909090909091,11
-7,NFkB Activation Inhibitor II,coverage_worst,0.0,0.0,0.058823529411764705,17
+7,NFkB Activation Inhibitor II,coverage_mean,0.0,0.0,0.2,5
+7,NFkB Activation Inhibitor II,coverage_worst,0.0,0.0,0.1111111111111111,9
 7,NVP-AUY922,mean_cosine,1.0,1.0,1.0,1
 7,NVP-AUY922,global_energy,0.0,1.0,0.3333333333333333,3
-7,NVP-AUY922,coverage_mean,0.0,1.0,0.3333333333333333,3
-7,NVP-AUY922,coverage_worst,0.0,0.0,0.1111111111111111,9
+7,NVP-AUY922,coverage_mean,0.0,0.0,0.25,4
+7,NVP-AUY922,coverage_worst,0.0,1.0,0.5,2
 7,Neratinib,mean_cosine,1.0,1.0,1.0,1
 7,Neratinib,global_energy,0.0,0.0,0.09090909090909091,11
-7,Neratinib,coverage_mean,0.0,1.0,0.5,2
-7,Neratinib,coverage_worst,0.0,1.0,0.3333333333333333,3
+7,Neratinib,coverage_mean,1.0,1.0,1.0,1
+7,Neratinib,coverage_worst,0.0,1.0,0.5,2
 7,Niclosamide,mean_cosine,1.0,1.0,1.0,1
 7,Niclosamide,global_energy,0.0,0.0,0.08333333333333333,12
-7,Niclosamide,coverage_mean,0.0,0.0,0.125,8
-7,Niclosamide,coverage_worst,0.0,0.0,0.07692307692307693,13
+7,Niclosamide,coverage_mean,0.0,1.0,0.5,2
+7,Niclosamide,coverage_worst,0.0,0.0,0.16666666666666666,6
 7,PHA-793887,mean_cosine,0.0,1.0,0.5,2
-7,PHA-793887,global_energy,0.0,0.0,0.0625,16
-7,PHA-793887,coverage_mean,0.0,0.0,0.058823529411764705,17
-7,PHA-793887,coverage_worst,0.0,0.0,0.041666666666666664,24
+7,PHA-793887,global_energy,0.0,0.0,0.06666666666666667,15
+7,PHA-793887,coverage_mean,0.0,1.0,0.5,2
+7,PHA-793887,coverage_worst,0.0,0.0,0.1111111111111111,9
 7,Penfluridol,mean_cosine,1.0,1.0,1.0,1
-7,Penfluridol,global_energy,0.0,0.0,0.047619047619047616,21
-7,Penfluridol,coverage_mean,0.0,0.0,0.2,5
-7,Penfluridol,coverage_worst,0.0,0.0,0.125,8
+7,Penfluridol,global_energy,0.0,0.0,0.045454545454545456,22
+7,Penfluridol,coverage_mean,0.0,0.0,0.14285714285714285,7
+7,Penfluridol,coverage_worst,0.0,0.0,0.09090909090909091,11
 7,Pevonedistat,mean_cosine,1.0,1.0,1.0,1
 7,Pevonedistat,global_energy,1.0,1.0,1.0,1
 7,Pevonedistat,coverage_mean,1.0,1.0,1.0,1
 7,Pevonedistat,coverage_worst,1.0,1.0,1.0,1
 7,Purmorphamine,mean_cosine,0.0,1.0,0.3333333333333333,3
 7,Purmorphamine,global_energy,0.0,0.0,0.2,5
-7,Purmorphamine,coverage_mean,0.0,0.0,0.09090909090909091,11
-7,Purmorphamine,coverage_worst,0.0,0.0,0.0625,16
+7,Purmorphamine,coverage_mean,0.0,0.0,0.045454545454545456,22
+7,Purmorphamine,coverage_worst,0.0,0.0,0.038461538461538464,26
 7,Rucaparib,mean_cosine,0.0,1.0,0.3333333333333333,3
 7,Rucaparib,global_energy,0.0,1.0,0.5,2
-7,Rucaparib,coverage_mean,0.0,0.0,0.125,8
-7,Rucaparib,coverage_worst,0.0,0.0,0.09090909090909091,11
+7,Rucaparib,coverage_mean,1.0,1.0,1.0,1
+7,Rucaparib,coverage_worst,0.0,1.0,0.5,2
 7,Sapanisertib,mean_cosine,1.0,1.0,1.0,1
 7,Sapanisertib,global_energy,1.0,1.0,1.0,1
 7,Sapanisertib,coverage_mean,1.0,1.0,1.0,1
 7,Sapanisertib,coverage_worst,1.0,1.0,1.0,1
 7,Sorafenib,mean_cosine,1.0,1.0,1.0,1
 7,Sorafenib,global_energy,0.0,0.0,0.2,5
-7,Sorafenib,coverage_mean,0.0,1.0,0.3333333333333333,3
-7,Sorafenib,coverage_worst,0.0,1.0,0.3333333333333333,3
+7,Sorafenib,coverage_mean,0.0,0.0,0.14285714285714285,7
+7,Sorafenib,coverage_worst,0.0,0.0,0.2,5
 7,belinostat,mean_cosine,1.0,1.0,1.0,1
 7,belinostat,global_energy,0.0,1.0,0.5,2
-7,belinostat,coverage_mean,0.0,0.0,0.125,8
-7,belinostat,coverage_worst,0.0,0.0,0.07692307692307693,13
+7,belinostat,coverage_mean,0.0,1.0,0.3333333333333333,3
+7,belinostat,coverage_worst,1.0,1.0,1.0,1
 7,camptothecin,mean_cosine,1.0,1.0,1.0,1
 7,camptothecin,global_energy,1.0,1.0,1.0,1
-7,camptothecin,coverage_mean,0.0,0.0,0.0625,16
-7,camptothecin,coverage_worst,0.0,0.0,0.05555555555555555,18
+7,camptothecin,coverage_mean,0.0,1.0,0.5,2
+7,camptothecin,coverage_worst,0.0,0.0,0.25,4
 7,digoxin,mean_cosine,0.0,0.0,0.02857142857142857,35
 7,digoxin,global_energy,1.0,1.0,1.0,1
-7,digoxin,coverage_mean,1.0,1.0,1.0,1
-7,digoxin,coverage_worst,1.0,1.0,1.0,1
+7,digoxin,coverage_mean,0.0,0.0,0.058823529411764705,17
+7,digoxin,coverage_worst,0.0,0.0,0.05555555555555555,18
 7,navitoclax,mean_cosine,1.0,1.0,1.0,1
-7,navitoclax,global_energy,0.0,0.0,0.08333333333333333,12
+7,navitoclax,global_energy,0.0,0.0,0.09090909090909091,11
 7,navitoclax,coverage_mean,1.0,1.0,1.0,1
 7,navitoclax,coverage_worst,1.0,1.0,1.0,1
 7,panobinostat,mean_cosine,1.0,1.0,1.0,1

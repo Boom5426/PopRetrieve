@@ -201,8 +201,14 @@ for cell_line in ['A549', 'K562', 'MCF7']:
 
 # --- Aggregate results ---
 res_df = pd.DataFrame(all_results)
-res_df.to_csv(str(_P(RESULTS_AUDIT) / 'class_c_viability.csv'), index=False)
-print(f"\nSaved class_c_viability.csv: {len(res_df)} queries")
+# Writes into results/upgrade/_retracted/, NOT beside the live results. This script's output is
+# retracted (see the banner at the top of this file and CORRECTIONS.md R14a); writing it next to
+# the current tables is how it came to sit there unmarked, where its schema reads like a finished
+# decision-level analysis.
+_out = _P(RESULTS_AUDIT) / '_retracted'
+_out.mkdir(parents=True, exist_ok=True)
+res_df.to_csv(str(_out / 'class_c_viability.csv'), index=False)
+print(f"\nSaved _retracted/class_c_viability.csv: {len(res_df)} queries (RETRACTED, see R14a)")
 
 # --- Summary statistics ---
 print(f"\n{'='*60}")

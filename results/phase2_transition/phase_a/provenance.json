@@ -1,0 +1,29 @@
+{
+  "input_h5ad": "/data/boom/Tahoe-100M/h5ad/plate3_filt_Vevo_Tahoe100M_WServicesFrom_ParseGigalab_preprocessed_cpu.h5ad",
+  "input_sha256": "dfca387b6d7e35e49a841ac708be8ad151227317d98302cf91a44dc69daff6bb",
+  "freeze_dir": "results/phase2_transition/eligibility",
+  "device": "cuda",
+  "n_contexts": 44,
+  "n_candidates": 92,
+  "n_eligible_queries": 3992,
+  "constants": {
+    "N_SOURCE": 200,
+    "N_TARGET": 200,
+    "N_BANK": 100,
+    "SW_N_PROJ": 200,
+    "SW_N_QUANTILE": 100,
+    "N_BOOTSTRAP": 2000
+  },
+  "seeds": [
+    13,
+    29,
+    47,
+    71,
+    101
+  ],
+  "bank_slots": 20240,
+  "bank_slots_below_N_BANK": 1274,
+  "bank_slots_falling_back_to_both_halves": 0,
+  "oracle_disclaimer": "oracle information ceiling, not deployment evaluation",
+  "runtime_seconds": 182.5
+}

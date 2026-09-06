@@ -23,10 +23,14 @@ from data.population import RetrievalResult
 from retrieval.evaluation import rank_of
 from retrieval.metrics import (
     energy_distance, mmd_rbf, sliced_wasserstein, _tensor,
-    score_mean_cosine, score_energy, score_coverage,
+    score_mean_cosine, score_mean_l2, score_energy, score_coverage,
 )
 
-SCORERS = ["mean_cosine", "global_energy", "coverage_mean", "coverage_worst"]
+# mean_l2 sits beside mean_cosine deliberately: it is not a fifth method competing with the
+# others but the control that says how much of any population scorer's advantage over cosine is
+# response magnitude rather than population structure. Added 2026-09-03, after Phase A found that
+# two thirds of the oracle gain over cosine is recovered by it.
+SCORERS = ["mean_cosine", "mean_l2", "global_energy", "coverage_mean", "coverage_worst"]
 METRIC_SET = ["mean_cosine", "energy", "mmd", "sliced_w"]
 
 
@@ -51,6 +55,7 @@ def score_controlled(q: dict, max_cells=None, seed: int = 0) -> dict:
     out = {s: {} for s in SCORERS}
     for name, P in q["candidates"].items():
         out["mean_cosine"][name] = score_mean_cosine(P, target, control_P=pc, control_Q=pc)
+        out["mean_l2"][name] = score_mean_l2(P, target, control_P=pc, control_Q=pc)
         out["global_energy"][name] = score_energy(P, target, max_cells=max_cells, seed=seed)
         labP = split_labels(P)
         out["coverage_mean"][name] = score_coverage(P, target, labP, lab,
@@ -70,6 +75,7 @@ def score_labeled(q: dict, max_cells=None, seed: int = 0) -> dict:
     out = {s: {} for s in SCORERS}
     for name, (P, plab, cP) in q["cands"].items():
         out["mean_cosine"][name] = score_mean_cosine(P, T, control_P=cP, control_Q=cT)
+        out["mean_l2"][name] = score_mean_l2(P, T, control_P=cP, control_Q=cT)
         out["global_energy"][name] = score_energy(P, T, max_cells=max_cells, seed=seed)
         out["coverage_mean"][name] = score_coverage(P, T, plab, tlab,
                                                     aggregator="mean", max_cells=max_cells, seed=seed)

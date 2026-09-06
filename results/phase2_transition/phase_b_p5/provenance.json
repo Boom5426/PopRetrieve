@@ -1,0 +1,35 @@
+{
+  "input_h5ad": "/data/boom/Tahoe-100M/h5ad/plate3_filt_Vevo_Tahoe100M_WServicesFrom_ParseGigalab_preprocessed_cpu.h5ad",
+  "input_sha256": "dfca387b6d7e35e49a841ac708be8ad151227317d98302cf91a44dc69daff6bb",
+  "freeze_dir": "results/phase2_transition/eligibility",
+  "device": "cuda",
+  "n_held_out_contexts": 44,
+  "n_usable_contexts": 44,
+  "n_candidates": 92,
+  "predictors": [
+    "average_effect",
+    "state_conditioned_average_effect",
+    "ot_map"
+  ],
+  "constants": {
+    "N_SOURCE": 200,
+    "N_TARGET": 200,
+    "LATENT_VAR_TARGET": 0.8,
+    "LATENT_DIM_MAX": 512,
+    "LATENT_DIM_OT": 50,
+    "N_PCA_CELLS": 50000,
+    "N_FIT_CELLS": 200,
+    "OT_SHRINKAGE": 0.001,
+    "SW_N_PROJ": 200,
+    "N_BOOTSTRAP": 2000
+  },
+  "seeds": [
+    13,
+    29,
+    47,
+    71,
+    101
+  ],
+  "leakage_rule": "no treated cell of the held-out context enters any fit or any ranker",
+  "runtime_seconds": 576.3
+}

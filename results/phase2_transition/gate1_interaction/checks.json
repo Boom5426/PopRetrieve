@@ -1,0 +1,34 @@
+{
+  "n_scored": 3620,
+  "n_queries": 3992,
+  "check5_effect_size_audit": {
+    "spearman_S_int_vs_response_norm": 0.6625856704905014,
+    "spearman_S_int_vs_n_treated": 0.09981908596512157,
+    "spearman_R_int_vs_response_norm": 0.5064105819547242,
+    "spearman_D_old_vs_response_norm": -0.6943437583008348,
+    "spearman_D_old_vs_n_treated": -0.4253497639348287,
+    "spearman_S_int_vs_D_old": -0.3333005080354235
+  },
+  "observed": {
+    "S_int_median": 0.00013747240037547374,
+    "S_int_mean": 0.00020918410521359216,
+    "S_int_q05": -1.8334564568552487e-06,
+    "S_int_q95": 0.0006769652087758809,
+    "frac_S_int_positive": 0.9461325966850829,
+    "R_int_median": 0.16938685294522957,
+    "D_old_median": 0.30573992154374857
+  },
+  "check3_positive_control": {
+    "n": 176,
+    "S_int_median": 0.0009926692065265444,
+    "R_int_median": 0.5677435079093862,
+    "D_old_median": 0.7843474183823251,
+    "ratio_to_real_median": 7.220861815282925
+  },
+  "permutation_null": {
+    "n": 365,
+    "median_z": 3.638784942559656,
+    "frac_p_below_0.1": 0.726027397260274,
+    "frac_z_above_2": 0.6958904109589041
+  }
+}

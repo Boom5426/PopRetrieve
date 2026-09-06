@@ -187,7 +187,7 @@ def main():
                                                control_P=rna_ctrl, control_Q=rna_ctrl))
                 # THE CONTROL THAT DECIDES WHAT THE SHAPE EFFECT ACTUALLY IS.
                 # Both "distributional" objects here are energy distances, and an energy distance
-                # is known to track a candidate's own response magnitude (rho = +0.791). So a
+                # is known to track a candidate's own response magnitude (rho = +0.780). So a
                 # magnitude-to-magnitude channel would reproduce the swap without any distribution
                 # being compared. Rank by how closely the candidate's RNA response magnitude
                 # matches the query's: query-dependent, and it compares no distributions at all.

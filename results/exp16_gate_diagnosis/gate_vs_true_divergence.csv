@@ -1,4 +1,4 @@
 test,statistic,pvalue,effect_size_rank_biserial,n_recommended,n_nonrecommended,median_recommended,median_nonrecommended
-recommended_vs_nonrecommended_divergence,40663.0,0.09016900605108379,0.09055734478439792,621,144,1.6595363774999785,1.6797684831932576
-spearman_preference_conflict_vs_divergence,0.18252612507325278,3.716627947031583e-07,,765,0,,
-spearman_structure_reliability_vs_divergence,-0.21100856839666957,3.7891890905098105e-09,,765,0,,
+recommended_vs_nonrecommended_divergence,40857.0,0.3060487370806029,0.05561334165453158,627,138,1.661378759659114,1.670957903443862
+spearman_preference_conflict_vs_divergence,0.19275245405987562,7.743061759691534e-08,,765,0,,
+spearman_structure_reliability_vs_divergence,-0.18850464631876837,1.5011920617185174e-07,,765,0,,

@@ -1,6 +1,6 @@
 # exp13 provenance
 
-These artifacts come from the **FULL** configuration: **239 tasks**, seeds [0, 1, 2].
+These artifacts come from the **FULL** configuration: **239 tasks** (of 239 built, 0 failed), seeds [0, 1, 2].
 
 | configuration | tasks | what it is |
 |---|---:|---|

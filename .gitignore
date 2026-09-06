@@ -89,6 +89,12 @@ analysis/**/*.xlsx
 # `exp11_hir_benchmark.py --skip-method-perf`, which writes results/exp11_hir_benchmark/).
 results/upgrade/exp11_lean/
 
+# ...and except the raw GDSC workbooks. `*.xlsx` above was meant to keep them out, but the
+# `!results/upgrade/**` re-include on the line before overrode it and made 100 MB of
+# non-redistributable vendor data stageable. DATA.md is explicit: the release is downloaded from
+# cancerrxgene.org and renamed, it is not shipped here.
+results/upgrade/*.xlsx
+
 # ---- figures live with the manuscript (kept local), not the code repo ----
 results/main_figures/
 

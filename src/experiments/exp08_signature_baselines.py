@@ -67,7 +67,8 @@ OUT = "exp08_signature_baselines"
 GT = "covers-both"
 REF = "global_energy"                      # PopRetrieve reference ranker for flip/overlap/Δrank
 
-DART_METHODS = ["mean_cosine", "global_energy", "coverage_mean", "coverage_worst"]
+DART_METHODS = ["mean_cosine", "mean_l2", "global_energy", "coverage_mean",
+                "coverage_worst"]
 SIG_RANKERS = [CMapSignatureRetrieval("cosine"), CMapSignatureRetrieval("wtcs"),
                PCALatentRetrieval(mode="mean"), PCALatentRetrieval(mode="dist")]
 SIG_METHODS = [r.name for r in SIG_RANKERS]

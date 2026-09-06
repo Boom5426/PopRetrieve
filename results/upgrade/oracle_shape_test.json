@@ -1,14 +1,14 @@
 {
   "n_queries": 659,
-  "energy_vs_oracleMEAN": 0.14619146516405057,
-  "energy_vs_oracleDIST": 0.5291068574324588,
+  "energy_vs_oracleMEAN": 0.22220576195859812,
+  "energy_vs_oracleDIST": 0.39300120636902613,
   "mean_vs_oracleMEAN": 0.24209909368848342,
-  "mean_vs_oracleDIST": 0.33398815870326043,
+  "mean_vs_oracleDIST": 0.2298769378711681,
   "magmatch_vs_oracleMEAN": 0.1246532298935714,
-  "magmatch_vs_oracleDIST": 0.35235323233328253,
+  "magmatch_vs_oracleDIST": 0.2763731786462837,
   "magnitude_confound": {
-    "energy_minus_magmatch_under_DIST": 0.17675362509917625,
-    "energy_minus_magmatch_under_MEAN": 0.02153823527047917,
+    "energy_minus_magmatch_under_DIST": 0.11662802772274244,
+    "energy_minus_magmatch_under_MEAN": 0.09755253206502672,
     "reading": "If energy barely exceeds the magnitude scalar under the DIST oracle, the swap is a magnitude channel shared by two energy distances rather than a distributional effect. The scalar compares no distributions at all."
   },
   "winner_under_mean_oracle": "mean",
@@ -16,32 +16,32 @@
   "verdict": "THE ORACLE'S SHAPE PICKS THE WINNER. The same two rankings, scored on the same cells and the same proteins, swap places when the oracle is rebuilt from a mean to a distribution. Neither method is 'better' on this readout; the criterion decides. Objective alignment operates even among external, oracle-blind criteria, which is the strongest form of this paper's claim.",
   "per_condition": {
     "Co-culture": {
-      "energy_vs_oracleMEAN": 0.24756163456921967,
+      "energy_vs_oracleMEAN": 0.2661210689483624,
       "mean_vs_oracleMEAN": 0.30738201705132834,
       "magmatch_vs_oracleMEAN": 0.12185137973751772,
-      "energy_vs_oracleDIST": 0.5805194857844785,
-      "mean_vs_oracleDIST": 0.3326144153859251,
-      "magmatch_vs_oracleDIST": 0.396571085714749,
+      "energy_vs_oracleDIST": 0.4411077050668078,
+      "mean_vs_oracleDIST": 0.2760117891732578,
+      "magmatch_vs_oracleDIST": 0.2864503851056572,
       "n": 219,
       "flips": true
     },
     "Control": {
-      "energy_vs_oracleMEAN": 0.004676363645523323,
+      "energy_vs_oracleMEAN": 0.24289886686658446,
       "mean_vs_oracleMEAN": 0.23781192025622389,
       "magmatch_vs_oracleMEAN": 0.13473796368481838,
-      "energy_vs_oracleDIST": 0.47917802801787923,
-      "mean_vs_oracleDIST": 0.2554871390553821,
-      "magmatch_vs_oracleDIST": 0.304775986690059,
+      "energy_vs_oracleDIST": 0.331587306185319,
+      "mean_vs_oracleDIST": 0.11997968495304866,
+      "magmatch_vs_oracleDIST": 0.21737975019930908,
       "n": 213,
-      "flips": true
+      "flips": false
     },
     "IFN\u03b3": {
-      "energy_vs_oracleMEAN": 0.1707925616935012,
+      "energy_vs_oracleMEAN": 0.17421547547606928,
       "mean_vs_oracleMEAN": 0.20863696022247344,
       "magmatch_vs_oracleMEAN": 0.12954244798773276,
-      "energy_vs_oracleDIST": 0.5230512130781126,
-      "mean_vs_oracleDIST": 0.38713656387665196,
-      "magmatch_vs_oracleDIST": 0.377166940123709,
+      "energy_vs_oracleDIST": 0.39288926822588316,
+      "mean_vs_oracleDIST": 0.2684854391641651,
+      "magmatch_vs_oracleDIST": 0.3107553961508973,
       "n": 227,
       "flips": true
     }

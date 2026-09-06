@@ -1,2 +1,2 @@
-predictor,backend,note
-scgen,cpa_linear,cpa_linear = in-repo linear-latent fallback; scgen = real scvi-tools VAE
+predictor,backend,synth,leave_one_context_out,note
+scgen,cpa_linear,cells,False,"cpa_linear = in-repo linear-latent fallback; scgen = real scvi-tools VAE. synth='cells' applies the predicted effect to real control cells; 'gaussian' is the legacy unimodal synthesizer. loco=False means the nearest-neighbor donor set still contains the query's own contexts, i.e. an in-sample ceiling."

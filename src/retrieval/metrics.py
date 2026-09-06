@@ -14,6 +14,13 @@ project plan §7::
 Convention: a *similarity* is returned as-is; a *distance* is returned negated,
 so every scorer ranks candidates in descending ``score``.
 
+Two of the kernels come in a U-statistic and a V-statistic form (``energy_distance_u`` /
+``energy_distance``, ``mmd_rbf_u`` / ``mmd_rbf``). The V forms include self-pairs, are biased
+upward by O(1/m), and are what every published number here was computed with; the U forms exclude
+self-pairs and are unbiased at any sample size. ``DEFAULT_ESTIMATOR`` is 'v' so that an unchanged
+call site keeps reproducing an old number, not because it is the better estimator. Pass
+``estimator='u'`` in new work.
+
   score_mean_cosine        cosine of mean-delta signatures     (the "mean-out" incumbent)
   score_mean_l2            -||mean(P) - mean(Q)||
   score_energy             -energy_distance                    (K=1 distributional distance)
@@ -23,6 +30,8 @@ so every scorer ranks candidates in descending ``score``.
 """
 from __future__ import annotations
 
+import os
+import sys
 from typing import Optional, Sequence
 
 import numpy as np
@@ -41,18 +50,68 @@ def _pdist2(a: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
 
 
 def energy_distance(X: torch.Tensor, Y: torch.Tensor) -> torch.Tensor:
-    """E-distance = 2 E|X-Y| - E|X-X'| - E|Y-Y'|  (scPerturbBench metric, lower=closer)."""
+    """V-statistic energy distance, 2 E|X-Y| - E|X-X'| - E|Y-Y'| with self-pairs INCLUDED.
+
+    This is the scPerturbBench convention and the estimator behind every number this
+    repository produced before 2026-09-02. It is retained unchanged so those numbers stay
+    reproducible, and it is NOT the estimator to reach for in new work.
+
+    The within-sample means run over all m^2 (respectively n^2) pairs, m of which are the zero
+    self-distances, so each within term is deflated by a factor (m-1)/m and
+
+        E_V = E_U + (1/m) E|X-X'| + (1/n) E|Y-Y'| + O(1/m^2),
+
+    an upward bias of order 1/m. It cancels out of a ranking only when every candidate
+    population has the same size. When they do not, the smaller candidates are pushed away from
+    the query by an amount that has nothing to do with the biology, which is a ranking artefact
+    rather than a rounding error: see docs/phase2/03_ORACLE_RETRIEVAL_RESULTS.md, where it
+    consumes the whole of the measured population advantage. Use ``energy_distance_u`` unless
+    you are reproducing an old number.
+    """
     dxy = _pdist2(X, Y).mean()
     dxx = _pdist2(X, X).mean()
     dyy = _pdist2(Y, Y).mean()
     return 2 * dxy - dxx - dyy
 
 
-def mmd_rbf(X: torch.Tensor, Y: torch.Tensor, sigmas=None,
-            scales=(0.25, 1.0, 4.0)) -> torch.Tensor:
-    """Multi-bandwidth RBF MMD^2. By default uses the MEDIAN-HEURISTIC bandwidth
-    (fixed small sigmas vanish in high-dim gene space, where pairwise distances are
-    large). Pass explicit ``sigmas`` to override."""
+# Explicit alias, so a call site can name the estimator it means rather than inherit a default.
+energy_distance_v = energy_distance
+
+
+def _offdiag_mean(D: torch.Tensor) -> torch.Tensor:
+    """Mean of a square distance matrix over its off-diagonal entries only."""
+    n = D.shape[0]
+    if n < 2:
+        return torch.zeros((), dtype=D.dtype, device=D.device)
+    return (D.sum() - D.diagonal().sum()) / (n * (n - 1))
+
+
+def energy_distance_u(X: torch.Tensor, Y: torch.Tensor) -> torch.Tensor:
+    """U-statistic energy distance: self-pairs EXCLUDED from both within-sample terms.
+
+        E_U = 2/(mn) sum_ij |x_i-y_j|
+              - 1/(m(m-1)) sum_{i!=j} |x_i-x_j|
+              - 1/(n(n-1)) sum_{i!=j} |y_i-y_j|
+
+    Unbiased for the population energy distance at any m and n, so two candidate populations of
+    different sizes are on the same scale and only their variances differ. This is the estimator
+    to use whenever the populations being compared are not all the same size, which in this
+    project is the common case rather than the exception.
+
+    Degenerate inputs: with m < 2 or n < 2 the corresponding within term is undefined; it is
+    taken as zero, which makes the value a cross-term-only quantity rather than an error. Callers
+    that care should guard on the sample size themselves, as ``_base_dist`` does.
+    """
+    dxy = _pdist2(X, Y).mean()
+    return 2 * dxy - _offdiag_mean(_pdist2(X, X)) - _offdiag_mean(_pdist2(Y, Y))
+
+
+def _mmd_kernel(X: torch.Tensor, Y: torch.Tensor, sigmas, scales):
+    """Return the multi-bandwidth RBF kernel closure shared by both MMD estimators.
+
+    The bandwidth is the median heuristic taken on the POOLED sample, which is what makes the two
+    estimators below differ only in which pairs they average over.
+    """
     if sigmas is None:
         with torch.no_grad():
             Z = torch.cat([X, Y], 0)
@@ -68,7 +127,48 @@ def mmd_rbf(X: torch.Tensor, Y: torch.Tensor, sigmas=None,
         for dn in denoms:
             out = out + torch.exp(-d2 / dn)
         return out / len(denoms)
+    return k
+
+
+def mmd_rbf(X: torch.Tensor, Y: torch.Tensor, sigmas=None,
+            scales=(0.25, 1.0, 4.0)) -> torch.Tensor:
+    """V-statistic multi-bandwidth RBF MMD^2, with self-pairs INCLUDED.
+
+    This is the estimator behind every MMD number this repository produced before 2026-09-02 and
+    it is kept unchanged for reproducibility. It is biased: k(x,x) = 1 for every RBF kernel, so
+    the within terms carry m (respectively n) ones that do not belong to the population quantity,
+    and
+
+        MMD^2_V = MMD^2_U + (1 - E k(X,X'))/m + (1 - E k(Y,Y'))/n + O(1/m^2).
+
+    The bias is positive and of order 1/m, the same shape as the energy distance's, so it has the
+    same consequence for a ranking over candidate populations of unequal size. Use
+    ``mmd_rbf_u`` in new work.
+
+    By default the bandwidth is the median heuristic; fixed small sigmas underflow to zero in
+    2000-dimensional gene space. Pass explicit ``sigmas`` to override.
+    """
+    k = _mmd_kernel(X, Y, sigmas, scales)
     return k(X, X).mean() + k(Y, Y).mean() - 2 * k(X, Y).mean()
+
+
+mmd_rbf_v = mmd_rbf
+
+
+def mmd_rbf_u(X: torch.Tensor, Y: torch.Tensor, sigmas=None,
+              scales=(0.25, 1.0, 4.0)) -> torch.Tensor:
+    """U-statistic multi-bandwidth RBF MMD^2, with self-pairs EXCLUDED.
+
+        MMD^2_U = 1/(m(m-1)) sum_{i!=j} k(x_i,x_j)
+                + 1/(n(n-1)) sum_{i!=j} k(y_i,y_j)
+                - 2/(mn) sum_ij k(x_i,y_j)
+
+    Unbiased at any m and n. Unlike the V-statistic it can be negative when the two samples come
+    from the same distribution, which is correct rather than a defect: an unbiased estimator of a
+    quantity that is zero must straddle zero.
+    """
+    k = _mmd_kernel(X, Y, sigmas, scales)
+    return _offdiag_mean(k(X, X)) + _offdiag_mean(k(Y, Y)) - 2 * k(X, Y).mean()
 
 
 def sliced_wasserstein(X: torch.Tensor, Y: torch.Tensor, n_proj: int = 64,
@@ -153,22 +253,53 @@ def _cos(a: np.ndarray, b: np.ndarray) -> float:
     return 0.0 if na < 1e-12 or nb < 1e-12 else float(a @ b / (na * nb))
 
 
+# Which estimator the scorers use for the two U/V pairs.
+#
+# Set process-wide by the POPRETRIEVE_ESTIMATOR environment variable so that the entire legacy
+# experiment suite can be re-run under either estimator without editing thirty call sites; the
+# audit driver in analysis/estimator_audit/ uses exactly that to produce the old-vs-new table.
+#
+# 'v' is the default ONLY so that every result produced before 2026-09-02 keeps reproducing from
+# an unchanged call site. It is the biased estimator and it is the wrong choice on its merits
+# whenever candidate populations differ in size. New work should pass estimator='u' explicitly,
+# and the audit in analysis/estimator_audit/ reports both side by side for every affected result.
+_ESTIMATORS = ("u", "v")
+DEFAULT_ESTIMATOR = os.environ.get("POPRETRIEVE_ESTIMATOR", "v").strip().lower()
+if DEFAULT_ESTIMATOR not in _ESTIMATORS:
+    raise ValueError(f"POPRETRIEVE_ESTIMATOR={DEFAULT_ESTIMATOR!r}; expected one of {_ESTIMATORS}")
+if DEFAULT_ESTIMATOR != "v":
+    # Loud on purpose. This switch changes every population score in the process, so a run that
+    # uses it must never be mistaken for a run that did not.
+    print(f"[retrieval.metrics] DEFAULT_ESTIMATOR={DEFAULT_ESTIMATOR!r} "
+          f"(set by POPRETRIEVE_ESTIMATOR); population scores are NOT the published ones",
+          file=sys.stderr, flush=True)
+
+
+def _check_estimator(estimator: str) -> str:
+    if estimator not in _ESTIMATORS:
+        raise ValueError(f"unknown estimator {estimator!r}; expected one of {_ESTIMATORS}")
+    return estimator
+
+
 def _energy_dist(P, Q, max_cells: Optional[int] = 500, seed: int = 0,
-                 min_cells: int = 2) -> float:
+                 min_cells: int = 2, estimator: str = DEFAULT_ESTIMATOR) -> float:
     """Positive energy distance with subsampling + a small-population guard."""
+    _check_estimator(estimator)
     P = _subsample(P, max_cells, seed)
     Q = _subsample(Q, max_cells, seed + 1)
     if len(P) < min_cells or len(Q) < min_cells:
         return _PENALTY
+    fn = energy_distance_u if estimator == "u" else energy_distance
     with torch.no_grad():
-        return float(energy_distance(_tensor(P), _tensor(Q)))
+        return float(fn(_tensor(P), _tensor(Q)))
 
 
 _BASE_METRICS = {"energy", "mmd", "sliced_w"}
 
 
 def _base_dist(P, Q, base_metric: str, max_cells: Optional[int], seed: int,
-               min_cells: int = 2) -> float:
+               min_cells: int = 2, estimator: str = DEFAULT_ESTIMATOR) -> float:
+    _check_estimator(estimator)
     P = _subsample(P, max_cells, seed)
     Q = _subsample(Q, max_cells, seed + 1)
     if len(P) < min_cells or len(Q) < min_cells:
@@ -176,10 +307,12 @@ def _base_dist(P, Q, base_metric: str, max_cells: Optional[int], seed: int,
     with torch.no_grad():
         Pt, Qt = _tensor(P), _tensor(Q)
         if base_metric == "energy":
-            return float(energy_distance(Pt, Qt))
+            return float((energy_distance_u if estimator == "u" else energy_distance)(Pt, Qt))
         if base_metric == "mmd":
-            return float(mmd_rbf(Pt, Qt))
+            return float((mmd_rbf_u if estimator == "u" else mmd_rbf)(Pt, Qt))
         if base_metric == "sliced_w":
+            # Sliced Wasserstein has no U/V pair: it is a quantile-matched estimator and does not
+            # average over within-sample pairs at all, so ``estimator`` does not apply to it.
             return float(sliced_wasserstein(Pt, Qt))
     raise ValueError(f"unknown base_metric {base_metric!r}; expected one of {_BASE_METRICS}")
 
@@ -215,23 +348,50 @@ def score_mean_cosine(P, Q, control_P: Optional[np.ndarray] = None,
     return _cos(sig_Q, sig_P)
 
 
-def score_mean_l2(P, Q, **_) -> float:
-    """-Euclidean distance between population means."""
-    return -float(np.linalg.norm(_np(P).mean(0) - _np(Q).mean(0)))
+def score_mean_l2(P, Q, control_P: Optional[np.ndarray] = None,
+                  control_Q: Optional[np.ndarray] = None, **_) -> float:
+    """-Euclidean distance between mean-delta signatures.
+
+    The magnitude-aware counterpart of ``score_mean_cosine``, and the control that separates two
+    claims the project used to make as one. Cosine keeps only the DIRECTION of a mean response;
+    this keeps direction and magnitude and nothing else. A population scorer that beats cosine has
+    not yet shown that it used the population: it may only have used the magnitude, which is what
+    Phase A measured (docs/phase2/03_ORACLE_RETRIEVAL_RESULTS.md: of a +0.0303 MRR gain over
+    cosine, +0.0201 is recovered here).
+
+    The control arguments mirror ``score_mean_cosine`` exactly, so the two scorers compare the
+    same pair of vectors and differ only in how they compare them. Passing controls matters
+    whenever the candidate and the query have DIFFERENT matched controls; where they share one, as
+    in the controlled mixture task, the control cancels out of the difference and the arguments
+    change nothing.
+    """
+    sig_P = _np(P).mean(0)
+    sig_Q = _np(Q).mean(0)
+    if control_P is not None:
+        sig_P = sig_P - _np(control_P)
+    if control_Q is not None:
+        sig_Q = sig_Q - _np(control_Q)
+    return -float(np.linalg.norm(sig_P - sig_Q))
 
 
-def score_energy(P, Q, max_cells: int = 500, seed: int = 0, **_) -> float:
-    """-energy_distance (global K=1 distributional distance)."""
-    return -_energy_dist(P, Q, max_cells=max_cells, seed=seed)
+def score_energy(P, Q, max_cells: int = 500, seed: int = 0,
+                 estimator: str = DEFAULT_ESTIMATOR, **_) -> float:
+    """-energy_distance (global K=1 distributional distance).
+
+    ``estimator='v'`` (default) is the biased self-pair-including form the manuscript's published
+    numbers were computed with; ``estimator='u'`` is the unbiased form, which is what should be
+    used when the candidate populations do not all have the same number of cells.
+    """
+    return -_energy_dist(P, Q, max_cells=max_cells, seed=seed, estimator=estimator)
 
 
 def score_mmd_rbf(P, Q, bandwidth: str = "median", max_cells: int = 500,
-                  seed: int = 0, **_) -> float:
-    """-MMD^2. ``bandwidth`` must be 'median' (median heuristic) — fixed small
-    bandwidths underflow to 0 in 2000-d gene space."""
+                  seed: int = 0, estimator: str = DEFAULT_ESTIMATOR, **_) -> float:
+    """-MMD^2. ``bandwidth`` must be 'median' (median heuristic): fixed small bandwidths
+    underflow to 0 in 2000-d gene space. See ``score_energy`` for ``estimator``."""
     if bandwidth != "median":
-        raise ValueError("only bandwidth='median' is supported (see plan §7.4)")
-    return -_base_dist(P, Q, "mmd", max_cells=max_cells, seed=seed)
+        raise ValueError("only bandwidth='median' is supported (see plan section 7.4)")
+    return -_base_dist(P, Q, "mmd", max_cells=max_cells, seed=seed, estimator=estimator)
 
 
 def score_sliced_wasserstein(P, Q, n_projections: int = 128, max_cells: int = 500,
@@ -248,7 +408,7 @@ def score_sliced_wasserstein(P, Q, n_projections: int = 128, max_cells: int = 50
 def score_coverage(P, Q, labels_P: np.ndarray, labels_Q: np.ndarray,
                    base_metric: str = "energy", aggregator: str = "mean",
                    beta: Optional[float] = None, max_cells: int = 500,
-                   seed: int = 0, **_) -> float:
+                   seed: int = 0, estimator: str = DEFAULT_ESTIMATOR, **_) -> float:
     """-aggregate_k base_metric(P_k, Q_k) over subpopulations shared by P and Q.
 
     Subpopulations are defined by the target labels ``labels_Q``; a candidate that
@@ -263,7 +423,8 @@ def score_coverage(P, Q, labels_P: np.ndarray, labels_Q: np.ndarray,
     for k in sorted(np.unique(labels_Q).tolist()):
         Qk = Q[labels_Q == k]
         Pk = P[labels_P == k]
-        dists.append(_base_dist(Pk, Qk, base_metric, max_cells=max_cells, seed=seed))
+        dists.append(_base_dist(Pk, Qk, base_metric, max_cells=max_cells, seed=seed,
+                                estimator=estimator))
     agg = coverage_aggregate(torch.tensor(dists, dtype=torch.float32),
                              _beta_for(aggregator, beta))
     return -float(agg)

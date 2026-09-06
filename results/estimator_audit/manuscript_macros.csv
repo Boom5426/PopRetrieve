@@ -1,0 +1,106 @@
+macro,value,uses_in_tex,quoted_precision,matched_file,matched_column,arm_v,arm_u,category,visible_at_quoted_precision
+CONTROLRANGE,1 to 4,1,0.5,exp03_crossline_semireal/crossline_retrieval.csv,coverage_worst_hit@1,0.6635555555555556,0.8693333333333333,A,False
+TAHOELINES,45,1,0.5,,,,,no numeric match,False
+TAHOEDRUGS,92,1,0.5,,,,,no numeric match,False
+TAHOECONDS,3630,1,0.5,,,,,no numeric match,False
+TAHOEGONE,0.739,1,0.0005,estimator_audit/dispersion_channel.csv,energy_u,0.7387217669575302,0.7387217669575302,unchanged,False
+TAHOEGONEQ,0.600 to 0.836,1,0.0005,exp13_real_data_projection/projection.csv,bootstrap_rank_stability,0.6,0.6251046025104604,B,True
+TAHOEBELOWREAL,0.9,1,0.05,exp01_sciplex3_controlled/metrics_summary.csv,coverage_mean_hit@1,0.8566666666666666,0.7733333333333332,A,True
+TAHOEBELOWMIX,0.11,1,0.005,exp11_hir_benchmark/sanity_checks.csv,value,0.1141121031746031,0.1143353174603174,B,False
+TAHOEGTWOCEIL,0.853,1,0.0005,,,,,no numeric match,False
+TAHOEGTWOUNSUP,0.611,1,0.0005,,,,,no numeric match,False
+TAHOEGTWOGAP,0.157,1,0.0005,upgrade/signal_decode.csv,dart_welfare,0.1568823294758441,0.1568823294758441,unchanged,False
+TAHOEGTWOPAIRS,960,1,0.5,,,,,no numeric match,False
+TAHOEGTWOLINES,48,1,0.5,exp16_gate_diagnosis/gate_vs_true_divergence.csv,n_nonrecommended,48.0,48.0,unchanged,False
+TAHOEGTWOLINESPOS,48,1,0.5,exp16_gate_diagnosis/gate_vs_true_divergence.csv,n_nonrecommended,48.0,48.0,unchanged,False
+TAHOEKMEANS,0.592,1,0.0005,exp08_signature_baselines/summary.csv,hit@1,0.592013888888889,0.6084821428571429,B,True
+TAHOEGMM,0.582,1,0.0005,upgrade/exp11_lean/method_independent_full.csv,standard_kendall_conflict,0.5817713222450064,0.5817713222450064,unchanged,False
+TAHOELEIDEN,0.563,1,0.0005,,,,,no numeric match,False
+TAHOEGTHREECC,0.841,1,0.0005,,,,,no numeric match,False
+TAHOEGTHREECCN,44,1,0.5,,,,,no numeric match,False
+TAHOEGTHREEST,0.778,1,0.0005,,,,,no numeric match,False
+TAHOEGTHREESTN,45,1,0.5,,,,,no numeric match,False
+TAHOEGTHREESTOPEN,2,1,0.5,exp08_signature_baselines/summary_by_task.csv,rank,2.4108796296296298,2.203240740740741,A,False
+TAHOEGTHREESTMIN,0.236,1,0.0005,,,,,no numeric match,False
+TAHOEGTHREEOVERLAP,0.905,1,0.0005,,,,,no numeric match,False
+TAHOECOUPLING,0.620,1,0.0005,,,,,no numeric match,False
+TAHOECOUPLINGN,44,1,0.5,,,,,no numeric match,False
+TAHOEOPENGONE,0.394 to 0.534,1,0.0005,,,,,no numeric match,False
+TAHOEOPENGTHREE,0.605 to 0.764,1,0.0005,,,,,no numeric match,False
+TAHOECOUPLINGCROSS,0.129,1,0.0005,,,,,no numeric match,False
+TAHOEPARTAGREE,0.466,1,0.0005,exp07_ranking_flip/ranking_flip_summary.csv,mean_delta_rank,0.4657777777777778,0.4509999999999999,B,True
+PREMISEOVERLAP,+0.878,2,0.0005,,,,,no numeric match,False
+PREMISEDISJOINT,+0.835,3,0.0005,upgrade/kmeans_quality_results.csv,cluster_size_ratio,0.8345800000000001,0.8345800000000001,unchanged,False
+PREMISESHARE,43\%,2,0.5,,,,,no numeric match,False
+CTXLINES,966,2,0.5,,,,,no numeric match,False
+NGDSCDRUGS,286,1,0.5,,,,,no numeric match,False
+NCQUERIES,103,3,0.5,,,,,no numeric match,False
+ENERGYFUNC,+0.276,2,0.0005,,,,,no numeric match,False
+MEANCTRLFUNC,+0.083,2,0.0005,,,,,no numeric match,False
+MEANRAWFUNC,+0.241,1,0.0005,upgrade/class_c_protein_oracle.csv,mean_cosine_ctrl_rho,0.2412702647841256,0.2412702647841256,unchanged,False
+MAGMATCHFUNC,+0.232,2,0.0005,exp06_theory_limits/degenerate_limit_real.csv,e_K562,0.2319374084472656,0.2319374084472656,unchanged,False
+MAGONLYFUNC,+0.330,1,0.0005,,,,,no numeric match,False
+POTMATCHFUNC,+0.399,1,0.0005,zhao_gbm/compartment_validation.csv,frac_unassigned,0.399475769962867,0.399475769962867,unchanged,False
+ENERGYPARTIAL,+0.097,3,0.0005,upgrade/class_c_functional_oracle.csv,energy_rho_partial_magmatch,0.0971230078910215,0.0971230078910215,unchanged,False
+ENERGYWINS,62,3,0.5,,,,,no numeric match,False
+ENERGYWINSP,0.073,3,0.0005,,,,,no numeric match,False
+CENTERUNCEN,"85\% of drug pairs positive, median $+0.178$, versus 52\% and
+  $+0.015$ once corrected",1,0.5,,,,,no numeric match,False
+NALL,765,2,0.5,,,,,no numeric match,False
+NMOA,600,2,0.5,,,,,no numeric match,False
+NMOAEXCL,165,1,0.5,,,,,no numeric match,False
+NREC,621,1,0.5,,,,,no numeric match,False
+NNONREC,133,1,0.5,,,,,no numeric match,False
+NMEANSUFF,11,1,0.5,,,,,no numeric match,False
+REGRETALL,+0.118,2,0.0005,exp12_partial_observed_retrieval/recommendation_vs_outcome.csv,mean_regret_reduction,0.1181309048177005,0.0348907010910479,A,True
+REGRETALLMEAN,+0.258,1,0.0005,,,,,no numeric match,False
+REGRETALLFRAC,72\%,1,0.5,,,,,no numeric match,False
+REGRETALLP,1.6\times10^{-66,1,0.05,exp03_crossline_semireal/crossline_divergence.csv,eff_a,1.5968235628613343,1.5968235628613343,unchanged,False
+CLASSAMED,+0.129,1,0.0005,,,,,no numeric match,False
+CLASSAMEAN,+0.275,1,0.0005,,,,,no numeric match,False
+CLASSBMED,0.000,1,0.0005,exp12_partial_observed_retrieval/recommendation_vs_outcome.csv,mean_minority_cov_gain,-0.0002744170712055,-0.0010708201531039,A,True
+CLASSBMEAN,-0.037,1,0.0005,exp16_gate_diagnosis/_merged_query_divergence.csv,moa_ndcg_gap,-0.0370729372163581,-0.0370729372163581,unchanged,False
+CLASSBWORSE,41.3\%,1,0.05,,,,,no numeric match,False
+CLASSBBETTER,34.2\%,1,0.05,,,,,no numeric match,False
+CLASSBTIED,24.5\%,1,0.05,,,,,no numeric match,False
+CLASSBP,2.5\times10^{-4,3,0.05,upgrade/subpop_identifiability.csv,gap_best_k,2.523684210526316,2.523684210526316,unchanged,False
+CLASSARANGE,$+0.053$ to $+0.129$,2,0.0005,upgrade/kmeans_quality_results.csv,ARI,0.0527,0.0527,unchanged,False
+CLASSBRANGE,$-0.011$ to $-0.037$,1,0.0005,,,,,no numeric match,False
+VARIANTCOUPLING,$-0.90$,1,0.005,,,,,no numeric match,False
+GATEREC,+0.119,2,0.0005,exp03_crossline_semireal/per_query_scores.csv,mean_cosine,0.118855964651159,0.118855964651159,unchanged,False
+GATENONREC,+0.122,2,0.0005,upgrade/class_c_functional_oracle.csv,mean_cosine_raw_rho_uncentered,0.1224923222378831,0.1224923222378831,unchanged,False
+GATEDIFF,-0.003,3,0.0005,,,,,no numeric match,False
+GATEDIFFCI,$-0.062$ to $+0.058$,3,0.0005,,,,,no numeric match,False
+GATEDIFFP,0.97,3,0.005,exp12_partial_observed_retrieval/summary.csv,minority_state_coverage,0.9699459877886336,0.9696618166350368,unchanged,False
+PROJMEAN,+0.0018,1,5e-05,estimator_audit/unequal_sizes.csv,sliced_wasserstein_se,0.0018481811200802,0.0018481811200802,unchanged,False
+PROJP,2.6\times10^{-7,2,0.05,,,,,no numeric match,False
+PROJN,239,1,0.5,exp13_real_data_projection/PROVENANCE.csv,n_tasks,239.0,239.0,unchanged,False
+PROJTIED,102,1,0.5,,,,,no numeric match,False
+PROJNONZERO,137,1,0.5,,,,,no numeric match,False
+ENERGYCANDMAG,+0.791,1,0.0005,exp08_signature_baselines/summary_by_task.csv,ndcg@10,0.7912805816245655,0.8023377568208637,B,True
+ENERGYUNCEN,+0.0967,2,5e-05,,,,,no numeric match,False
+MEANCTRLUNCEN,+0.138,1,0.0005,exp16_gate_diagnosis/gate_variants_sweep.csv,bh_qvalue,0.1376591400340052,0.1376591400340052,unchanged,False
+MAGMATCHUNCEN,+0.217,1,0.0005,,,,,no numeric match,False
+SHAPEN,659,1,0.5,,,,,no numeric match,False
+SHAPENCTRL,213,1,0.5,,,,,no numeric match,False
+SHAPENIFN,227,1,0.5,,,,,no numeric match,False
+SHAPENCO,219,1,0.5,upgrade/class_c_protein_oracle.csv,n_cand,218.8163884673748,218.8163884673748,unchanged,False
+SHAPEMEANORACLEMEAN,+0.242,1,0.0005,exp11_hir_benchmark/phase_grid_method_independent.csv,theoretical_boundary_margin,0.242481200974638,0.242481200974638,unchanged,False
+SHAPEMEANORACLEENERGY,+0.146,1,0.0005,,,,,no numeric match,False
+SHAPEDISTORACLEENERGY,+0.529,1,0.0005,,,,,no numeric match,False
+SHAPEDISTORACLEMEAN,+0.334,1,0.0005,,,,,no numeric match,False
+SHAPEMAGMEAN,+0.125,1,0.0005,exp15_resistance_precursor_exploration/dart_vs_mean_minority_rescue.csv,same_pick,0.125,0.125,unchanged,False
+SHAPEMAGDIST,+0.352,1,0.0005,exp10_pdgrapher_comparison/drug_ranking_comparison.csv,ndcg@10,0.3516743138581733,0.3516743138581733,unchanged,False
+SHAPEEDGEDIST,+0.177,1,0.0005,,,,,no numeric match,False
+SHAPEEDGEMEAN,+0.022,1,0.0005,,,,,no numeric match,False
+SHAPECELLS,"218{,",2,0.5,,,,,no numeric match,False
+PROTMARKERS,20,1,0.5,exp12_partial_observed_retrieval/per_query_scores.csv,moa_rank,20.27166236003445,19.986391042205,B,False
+HITENERGY,0.837,1,0.0005,,,,,no numeric match,False
+HITMEAN,0.388,2,0.0005,,,,,no numeric match,False
+HITPCADIST,0.778,1,0.0005,,,,,no numeric match,False
+HITPCAMEAN,0.518,1,0.0005,zhao_gbm/compartment_validation.csv,expr_malignant,0.5180258577068647,0.5180258577068647,unchanged,False
+HITENERGYW,0.887,1,0.0005,,,,,no numeric match,False
+HITMEANW,0.421,1,0.0005,,,,,no numeric match,False
+HITFRANGMEAN,0.600,1,0.0005,exp13_real_data_projection/projection.csv,bootstrap_rank_stability,0.6,0.6251046025104604,B,True
+HITFRANGENERGY,0.578,1,0.0005,,,,,no numeric match,False
+HITWTCS,0.4635,1,5e-05,,,,,no numeric match,False
