@@ -8,62 +8,63 @@ Two layers, and the whole panel exists to keep them apart:
                      mean representation mu, or the population P itself
     SCORING RULE     what a score then reads off that representation
 
-They are not the same layer, and conflating them is the error this cut of the panel was written
-to remove. A mean representation is NOT direction-only: mu carries a direction and a magnitude.
-It is the COSINE that discards the magnitude. So one representation, mu, supports two scoring
-rules, and the figure's vocabulary is fixed here for the rest of the paper:
+They are not the same layer, and conflating them is the error this panel was written to remove.
+A mean representation is NOT direction-only: mu carries a direction and a magnitude. It is the
+COSINE that discards the magnitude. So one representation, mu, supports two scoring rules, and
+the figure's vocabulary is fixed here for the rest of the paper:
 
-    directional mean score       cos(mu_Q, mu_d)          reads direction only
-    magnitude-aware mean score   -||mu_Q - mu_d||         reads direction and magnitude
-    population score             -D(P_Q, P_d)             reads the distribution as well
+    direction-only mean cosine     cos(mu_Q, mu_d)          reads direction
+    magnitude-aware mean (L2)      -||mu_Q - mu_d||         reads direction and magnitude
+    population distance            -D(P_Q, P_d)             reads the distribution as well
 
-The information those three read is NESTED, not parallel, and the nesting is the drawing:
+The information those three read is NESTED, not parallel, and the drawing has to say so.
 
-    direction  <  direction + magnitude  <  direction + magnitude + population structure
+THE 2026-09-06 CUT: A THREE-COLUMN READING, AND WHY THE MATRIX REPLACED THE BARS
+--------------------------------------------------------------------------------
+Until now the retained information was three bars of increasing length on one shared ordinal
+axis. That drew the containment well and had one cost: the three THINGS being retained were
+named only under the axis, as segment labels, so "direction", "magnitude" and "population
+structure" read as parts of a quantity rather than as three separate properties a rule either
+keeps or drops. Two readers took the segment widths for effect sizes, which is the one reading
+the axis cannot support and the caption had to deny in a clause.
 
-Each score's bar starts at the same origin and reaches one segment further along one shared
-information axis. Three bars of increasing length on one axis is a containment statement; three
-separate boxes would have been three rival methods, which is what the previous cut drew.
+The panel now reads left to right in three columns, which is the order the sentence goes in:
 
-WHAT LEFT THIS PANEL, AND WHERE IT WENT
----------------------------------------
-The 2026-08-31 cut ran a pipeline: query -> two representations -> a four-candidate library ->
-two ranked stacks that disagreed at rank 1. Every part of it was correct and two parts belonged
-elsewhere.
+    SOURCE       one single-cell response population, in SHARED grey, drawn with two visible
+                 states so that "population structure" has something to point at
+    RULE         the three scoring rules, each with the geometry it actually reads: a unit
+                 arrow on a faint unit circle (orientation only), the same arrow at its true
+                 length (orientation and size), and the cells with their centroid
+    RETAINED     a three-column matrix, filled disc for retained and open ring for discarded
 
-  * The two-route fork became a two-LAYER fork, because "mean route versus population route" is
-    exactly the conflation above: it makes the mean route one thing when it is two.
-  * The library and the two ranked stacks are gone. A ranking outcome is panel d's job, on a
-    construction where the means are equal by design and the tie is therefore provable rather
-    than arranged; e draws retrieval as a ranking handed to a judge. Panel a is now definitional,
-    and a definition panel that also shows an outcome invites the outcome to be read as evidence.
+The matrix keeps the containment, because a filled cell is never followed by an open one to its
+left, and it gains what the bars could not state: the three properties are NAMED as properties,
+at the head of their own columns, and a discarded property is drawn rather than left absent.
+The dot is the deck's rung colour, so a reader who learns the ladder here finds the same three
+hues on Figure 2a and Figure 5b.
+
+WHAT IS DELIBERATELY NOT DRAWN
+------------------------------
+No normalised mean vector mu-hat. A reference layout for this panel carried the three rows as a
+"hierarchy of response REPRESENTATIONS", with mu/||mu|| as the first of them. The paper defines
+no such representation: it has two, mu and P, and the normalisation lives inside the cosine.
+Drawing it as a third would reintroduce exactly the conflation named above, and would contradict
+the Results, which call these three the scoring rules of Fig. 1a.
+
+No magnitude colour ramp on the source cells. A blue-to-orange ramp reads as response size in
+isolation and as POP-to-MEAN inside this figure, where those two hues are frozen roles. Cell-to-
+cell heterogeneity is carried by drawing two states in one grey instead, which is what the third
+matrix column needs to refer to.
 
 Nothing here is measured and nothing here is a number: draw_1a asserts that no text it drew
 contains a digit, so the panel cannot acquire one.
 
-WHY THE MARKS ARE THE ONES THEY ARE
------------------------------------
-The two representation marks are the figure's own glyphs, taught here and reused unchanged:
-fig1_style.centroid for "this population became one vector" and fig1_style.cells for "the
-population is still here". The three score rows then carry those SAME two marks at key size,
-which is the panel's second sentence made without a word: rows one and two carry the same orange
-diamond, so a reader sees one representation feeding two scoring rules before reading either
-name. Panel d's verdict rows use the identical grammar, mark then name then consequence.
-
-Colour follows fig1_style. The three information segments take the deck's three RUNG colours,
-MEAN orange, MAGNITUDE slate and POP blue, which are the colours Figures 2a and 5b already give
-the same three rungs; a reader who learns the ladder here has to find it again there. The two
-SCORE rows that read the mean representation are tied together by their MARK instead, the same
-orange centroid diamond, which is the stronger statement and the one this panel exists to make.
-
 LAYOUT, FOR A 3.15 x 1.58 IN AXES
 ---------------------------------
-Two bands. The upper band is the representation fork, read left to right; the lower band is the
-three scoring rules, read as rows against one shared axis at their foot. Positions are held in
-INCHES on the printed page and converted at draw time, because every constraint in this panel is
-a collision between a point size and a length. The bar block does not start at a typed x: it
-starts past the MEASURED width of the widest score name, so renaming a score moves the bars
-instead of printing them over the name.
+Positions are held in INCHES on the printed page and converted at draw time, because every
+constraint in this panel is a collision between a point size and a length. Neither the rule
+column nor the matrix starts at a typed x: the rule names are MEASURED and the matrix is placed
+after the widest of them, so renaming a rule moves the columns instead of printing over them.
 
 Run standalone: python3 fig1a.py
 """
@@ -75,6 +76,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from matplotlib.patches import FancyArrowPatch  # noqa: E402
 from fig1_style import (FAINT, LW_HAIR, MAGNITUDE, MEAN, POP, PT_ANNOT,  # noqa: E402
                         PT_SMALL, PT_TICK, SHARED, TEXT, arrow, blank, cells, centroid,
                         renderer as _renderer, text_w_in as _text_w_in)
@@ -96,48 +98,53 @@ def _fy(y_in):
     return y_in / PANEL_H_IN
 
 
-# ------------------------------------------------------------------ band 1: the representations
-# The source population, its two states drawn only so that "population structure" has something
-# to refer to further down. It is SHARED grey: both representations are taken from these cells.
-SRC_CXY = (0.300, 1.150)
-SRC_RX, SRC_RY = 0.150, 0.150
-SRC_STATES = ((0.074, +0.076, 3.0, 0.50, 11),   # (ry, dy, marker area, alpha, seed)
-              (0.068, -0.076, 3.4, 0.92, 23))
-SRC_N = 34                          # per state; enough dots to read as a population at 0.3 in
-SRC_LABEL_TOP = 1.560               # va="top", so the two lines hang from a fixed edge
+# ---------------------------------------------------------------------- column 1: the source
+SRC_CXY = (0.255, 0.735)
+SRC_RX = 0.138
+SRC_STATES = ((0.068, +0.088, 3.0, 0.34, 11),   # (ry, dy, marker area, alpha, seed)
+              (0.064, -0.088, 3.6, 1.00, 23))
+SRC_N = 30                          # per state; enough dots to read as a population at 0.3 in
+SRC_LABEL_TOP = 1.255               # va="top", so the two lines hang from a fixed edge
+FORK_X0 = 0.415                     # arrow tails, just clear of the source population's rim
+FORK_X1 = 0.548                     # arrow heads, at the left edge of the rule column
 
-# The two representations, in one column so the fork is one horizontal step and the eye compares
-# them without travelling. mu sits above P for no reason except reading order: the paper meets
-# the mean representation first, in the literature it inherits.
-MU_XY = (0.790, 1.395)
-P_XY = (0.790, 0.985)
-P_RX, P_RY = 0.088, 0.092
-P_N = 26
-MARK_LABEL_X = 0.905                # left edge of both representation names
-FORK_X0 = 0.480                     # arrow tails, just clear of the source population's rim
+# ---------------------------------------------------------------------- column 2: the rules
+ROW_Y = (1.070, 0.700, 0.330)       # 0.370 in pitch: two 7.2 pt lines are 0.21 in, so the rows
+                                    # read as three rows and not as a block
+NAME_X = 0.600                      # rule names, flush left
+GLYPH_GAP = 0.075                   # widest name -> the geometry glyph, MEASURED at draw time
+GLYPH_W = 0.260                     # the geometry each rule reads
+GLYPH_GAP_R = 0.090                 # geometry glyph -> the first matrix column
 
-# ------------------------------------------------------------------ band 2: the scoring rules
-ROW_Y = (0.640, 0.455, 0.270)       # 0.185 in pitch: a 7.2 pt line is 0.10 in, so the rows read
-                                    # as three rows and not as a block
-HEADER_Y = 0.792                    # the two column names, on one baseline over the block
-MARK_X = 0.055                      # the row's representation mark
-NAME_X = 0.145                      # the score's name, flush left
-NAME_GAP = 0.100                    # widest name -> the axis origin, MEASURED at draw time
-BAR_X1 = 3.100                      # the axis ends where the panel's ink ends
-BAR_H = 0.072
-MARK_PT = 5.4                       # a row mark, a little under the 7.2 pt name beside it
+# The unit circle behind the first rule's arrow. It is the one mark that says the cosine threw
+# a length away, rather than never having had one, and it is FAINT because it is a construction
+# line: the reader should see the arrow stop on it, not stop on the circle.
+GLYPH_R = 0.104                     # the unit radius, and rule 1's whole arrow length
+GLYPH_LONG = 1.62                   # rule 2's arrow, as a multiple of GLYPH_R
+GLYPH_ANG = 38.0                    # degrees, the shared orientation of both arrows
+TAIL_DX, TAIL_DY = -0.040, -0.032   # both arrows leave one tail, left of centre
+GLYPH_MARK = 9                      # one diamond size across all three glyphs
+GLYPH_CLOUD_R = 0.088               # rule 3's population, in place of an arrow
 
-# The information axis, and the one thing about it that is not free: the three segments are equal
-# in WIDTH and that width carries no quantity. The axis is ordinal, and the caption says so; an
-# unequal split would invite a reader to measure how much magnitude is worth, which is Fig. 2a.
-SEG_LABELS = ("direction", "+ magnitude", "+ population\nstructure")
-SEG_COLOURS = (MEAN, MAGNITUDE, POP)
-TICK_DROP = 0.032                   # segment boundary ticks, below the bottom bar
-SEG_LABEL_TOP = 0.198               # va="top" for the segment names
-SEG_ALPHA = (0.95, 0.95, 0.95)      # one weight; the rungs are told apart by hue, which is the
-                                    # hue Figures 2a and 5b give the same three rungs. That the
-                                    # first two rungs come from ONE representation is carried by
-                                    # the row MARK, the shared orange diamond, not by the fill.
+# ---------------------------------------------------------------------- column 3: what is kept
+# The three properties, named as properties. Equal columns, and the columns carry no quantity:
+# a filled disc means the rule retains that property and an open ring means it discards it.
+PROPS = ("direction", "magnitude", "distribution")
+PROP_COLOURS = (MEAN, MAGNITUDE, POP)
+KEPT = ((True, False, False),       # direction-only mean cosine
+        (True, True, False),        # magnitude-aware mean L2
+        (True, True, True))         # population distance
+MATRIX_X1 = 3.140                   # the matrix ends where the panel's ink ends
+HEADER_TOP = 1.480                  # va="top" for the property names
+RULE_Y = 1.320                      # the hairline under the property names
+DISC_PT = 5.2                       # marker size for a retained property
+RING_PT = 4.8                       # and for a discarded one, a shade smaller so the filled
+                                    # discs carry the row without the rings competing
+BAND_X0 = 0.560                     # the row bands start clear of the fork arrowheads
+BAND_H = 0.290                      # under the 0.370 row pitch, so the rows stay three rows
+BAND_ALPHA = 0.085                  # a tint, not a fill: the dots and glyphs carry the row
+ARROW_Y = 0.150                     # the less-to-more information arrow, under the matrix
+ARROW_LABEL_TOP = 0.112
 
 _DIGITS = set("0123456789")
 
@@ -147,24 +154,27 @@ def _axes_in(ax):
     return float(w), float(h)
 
 
-def _named(ax, x_in, y_in, words, sym, rend):
-    """``words`` flush left at x, then its italic symbol after a measured word space.
+def _bands(ax):
+    """One faint band per rule, in that rule's rung colour, from the name to the panel edge.
 
-    Two artists rather than one string because the symbol is a variable and a variable is italic.
-    They share a gid so figures/check_overlaps.py compares the pair with everything except each
-    other: set snug, as one label, their tight boxes touch.
+    The panel is 3.15 in wide and a reader has to carry a rule name across all of it to its own
+    three dots. Without the band the matrix reads as a separate object that happens to have
+    three rows. The tint is the rung the row REACHES, which is the colour Figures 2a and 5b give
+    the same three rungs, and it is set low enough that it never competes with the marks.
     """
-    gid = "sym-%d" % round(y_in * 1e4)
-    ax.text(_fx(x_in), _fy(y_in), words, ha="left", va="center", fontsize=PT_ANNOT,
-            color=TEXT, gid=gid, zorder=5)
-    w = _text_w_in(ax, rend, words + " ", PT_ANNOT)
-    ax.text(_fx(x_in + w), _fy(y_in), sym, ha="left", va="center", fontsize=PT_ANNOT,
-            color=TEXT, style="italic", gid=gid, zorder=5)
-    return x_in + w + _text_w_in(ax, rend, sym, PT_ANNOT, style="italic")
+    from matplotlib.patches import Rectangle
+    for y, colour in zip(ROW_Y, (MEAN, MAGNITUDE, POP)):
+        ax.add_patch(Rectangle((_fx(BAND_X0), _fy(y - BAND_H / 2.0)),
+                               _fx(MATRIX_X1 - BAND_X0), _fy(BAND_H),
+                               fc=colour, ec="none", alpha=BAND_ALPHA, zorder=1))
 
 
 def _source(ax):
-    """The single-cell response population both representations are taken from."""
+    """The single-cell response population all three rules are computed from.
+
+    SHARED grey, because every rule takes its input from these cells; the two states are what
+    the third property, population structure, refers to.
+    """
     cx, cy = SRC_CXY
     for ry, dy, s, alpha, seed in SRC_STATES:
         cells(ax, _fx(cx), _fy(cy + dy), SRC_N, _fx(SRC_RX), _fy(ry), color=SHARED,
@@ -173,100 +183,125 @@ def _source(ax):
             fontsize=PT_ANNOT, color=TEXT, linespacing=1.15, zorder=5)
 
 
-def _representations(ax, rend):
-    """The fork: one population, two summaries of it, each named beside its own mark."""
-    mx, my = MU_XY
-    px, py = P_XY
-    centroid(ax, _fx(mx), _fy(my), size=34)
-    cells(ax, _fx(px), _fy(py), P_N, _fx(P_RX), _fy(P_RY), color=POP,
-          rng=np.random.default_rng(41), s=3.2, alpha=0.85, zorder=3)
-
-    # One tail, two heads: the two representations are alternatives taken from the same cells,
-    # not two stages of one pipeline.
-    for x1, y1 in ((mx - 0.055, my), (px - 0.052, py)):
-        arrow(ax, (_fx(FORK_X0), _fy(SRC_CXY[1])), (_fx(x1), _fy(y1)), color=SHARED,
+def _fork(ax):
+    """One tail, three heads: the rules are alternatives on one population, not three stages."""
+    for y in ROW_Y:
+        arrow(ax, (_fx(FORK_X0), _fy(SRC_CXY[1])), (_fx(FORK_X1), _fy(y)), color=SHARED,
               connectionstyle="arc3,rad=0.0")
 
-    _named(ax, MARK_LABEL_X, my, "mean representation", "μ", rend)
-    _named(ax, MARK_LABEL_X, py, "population representation", "P", rend)
 
+def _vec(ax, p0, p1, colour):
+    """A vector that ends exactly where it is told to, unlike fig1_style.arrow.
 
-def _row_mark(ax, x_in, y_in, colour):
-    """What the row's score reads: the collapsed one-vector diamond, or the cells themselves.
-
-    The same two glyphs as the band above, at key size. Rows one and two get the SAME mark on
-    purpose: one representation, two scoring rules, which is the panel's whole correction.
+    FancyArrowPatch defaults to shrinkA = shrinkB = 2 points, and 2 points is 0.028 in: on the
+    0.104 in unit vector below that removes 54% of the arrow and stops it well inside the circle
+    it is drawn to touch. The flow arrows everywhere else in this figure are ten times longer and
+    WANT the standoff, so the shared helper keeps it and this one vector type opts out.
     """
-    if colour is MEAN:
-        centroid(ax, _fx(x_in), _fy(y_in), color=MEAN, size=MARK_PT ** 2)
+    ax.add_patch(FancyArrowPatch(p0, p1, arrowstyle="-|>", mutation_scale=4.5, lw=1.0,
+                                 color=colour, zorder=4, shrinkA=0, shrinkB=0))
+
+
+def _glyph(ax, kind, cx_in, cy_in):
+    """The geometry each rule actually reads, at 0.30 x 0.26 in.
+
+    ``unit``   an arrow that stops on a faint unit circle: the orientation is read and the
+               length is not, which is the cosine.
+    ``vector`` the same orientation at its true length: direction and magnitude, the mean L2.
+    ``cloud``  the cells with their centroid still on them: the population distance.
+    """
+    # Rows one and two draw the SAME orange centroid at the arrow's tail, which is the
+    # correction this panel exists to make: one representation, two scoring rules. It used to be
+    # a separate mark in its own column between the fork and the name; folded into the glyph it
+    # says the same thing beside the geometry it belongs to, and gives the matrix 0.15 in it
+    # could not otherwise have had for three named columns.
+    ang = np.deg2rad(GLYPH_ANG)
+    if kind == "cloud":
+        cells(ax, _fx(cx_in), _fy(cy_in), 24, _fx(GLYPH_CLOUD_R), _fy(GLYPH_CLOUD_R * 0.80),
+              color=POP, rng=np.random.default_rng(17), s=2.6, alpha=0.85, zorder=4)
+        centroid(ax, _fx(cx_in), _fy(cy_in), color=MEAN, size=GLYPH_MARK)
+        return
+    # Both arrows leave the SAME tail, and the circle is centred on that tail rather than on
+    # the box, so "the arrow stops on the unit circle" is literally what is drawn. The first cut
+    # centred the circle on the box and started the arrow at its rim, which drew the arrow
+    # running inward to the centre: the opposite of the statement.
+    x0, y0 = cx_in + TAIL_DX, cy_in + TAIL_DY
+    if kind == "unit":
+        th = np.linspace(0, 2 * np.pi, 96)
+        ax.plot(_fx(x0 + GLYPH_R * np.cos(th)), _fy(y0 + GLYPH_R * np.sin(th)),
+                color=FAINT, lw=LW_HAIR, zorder=2)
+        length, colour = GLYPH_R, MEAN
     else:
-        r = MARK_PT / 2.0 / 72.0
-        cells(ax, _fx(x_in), _fy(y_in), 11, _fx(r), _fy(r), color=POP,
-              rng=np.random.default_rng(5), s=2.6, alpha=0.95, zorder=5)
+        length, colour = GLYPH_R * GLYPH_LONG, MAGNITUDE
+    _vec(ax, (_fx(x0), _fy(y0)),
+         (_fx(x0 + length * np.cos(ang)), _fy(y0 + length * np.sin(ang))), colour)
+    # The tail diamond is deliberately small. At size 12 it covered the first third of the unit
+    # arrow's shaft, so the row that is ABOUT length was the row whose length could not be seen.
+    centroid(ax, _fx(x0), _fy(y0), color=MEAN, size=GLYPH_MARK)
 
 
-def _scores(ax, rend):
-    """Three scoring rules as three reaches along one shared information axis."""
-    # The three names carry no "score", because the column they sit in is headed with the word
-    # once. Set in full they measure 1.37 in at 7.2 pt, which leaves the information axis 1.49 in
-    # for three segments and puts "+ magnitude" (0.51 in) through its neighbours.
-    names = ("directional mean", "magnitude-aware mean", "population")
-    marks = (MEAN, MEAN, POP)
+def _rules(ax, rend):
+    """The three scoring rules, each beside the geometry it reads."""
+    # Set on two lines: at 7.2 pt "magnitude-aware mean" measures 0.83 in on one, which leaves
+    # the matrix 1.3 in for three named columns and puts "population structure" through its
+    # neighbour. The L2 suffix the Results use is dropped rather than set here, because draw_1a
+    # forbids a digit on this panel and "mean L2" carries one; the caption names the norm.
+    names = ("direction-only\nmean cosine", "magnitude-\naware mean",
+             "population\ndistance")
+    kinds = ("unit", "vector", "cloud")
 
-    widest = max(_text_w_in(ax, rend, s, PT_ANNOT) for s in names)
-    bar_x0 = NAME_X + widest + NAME_GAP
-    span = BAR_X1 - bar_x0
-    assert span > 1.30, (
-        f"the score names now leave only {span:.2f} in for the information axis, which cannot "
-        f"carry three labelled segments; shorten a name rather than shrinking the axis.")
-    seg = span / len(SEG_LABELS)
-    edges = [bar_x0 + i * seg for i in range(len(SEG_LABELS) + 1)]
-
-    # Two column names, on one baseline, at the size panel f gives its own columns. They are what
-    # keeps the two layers apart in one reading: the left column is the SCORING RULE, the right
-    # one is the information that rule retains, and neither is the representation drawn above.
-    ax.text(_fx(NAME_X), _fy(HEADER_Y), "scoring rule", ha="left", va="baseline",
-            fontsize=PT_TICK, color=TEXT, zorder=5)
-    ax.text(_fx((bar_x0 + BAR_X1) / 2.0), _fy(HEADER_Y), "information retained", ha="center",
-            va="baseline", fontsize=PT_TICK, color=TEXT, zorder=5)
-
-    reach = []
-    for y, name, mark, n_seg in zip(ROW_Y, names, marks, (1, 2, 3)):
-        _row_mark(ax, MARK_X, y, mark)
+    widest = max(_text_w_in(ax, rend, line, PT_ANNOT)
+                 for s in names for line in s.split("\n"))
+    glyph_x = NAME_X + widest + GLYPH_GAP
+    for y, name, kind in zip(ROW_Y, names, kinds):
         ax.text(_fx(NAME_X), _fy(y), name, ha="left", va="center", fontsize=PT_ANNOT,
-                color=TEXT, zorder=5)
-        for i in range(n_seg):
-            ax.add_patch(plt_rect(_fx(edges[i]), _fy(y - BAR_H / 2), _fx(seg), _fy(BAR_H),
-                                  SEG_COLOURS[i], SEG_ALPHA[i]))
-        # A white hairline at every interior boundary, so the segments are countable rather than
-        # inferred from two shades.
-        for i in range(1, n_seg):
-            ax.plot([_fx(edges[i])] * 2, [_fy(y - BAR_H / 2), _fy(y + BAR_H / 2)],
-                    color="white", lw=0.7, zorder=5, solid_capstyle="butt")
-        reach.append(edges[n_seg])
-    # The nesting is the panel's claim, so it is asserted on the drawn geometry rather than left
-    # to the three integers above: each score must reach strictly further than the one before it,
-    # and the last must reach the end of the axis.
-    assert reach[0] < reach[1] < reach[2], (
-        f"the three scores no longer reach in increasing order ({reach}); the panel draws a "
+                color=TEXT, linespacing=1.16, zorder=5)
+        _glyph(ax, kind, glyph_x + GLYPH_W / 2.0, y)
+    return glyph_x + GLYPH_W + GLYPH_GAP_R
+
+
+def _matrix(ax, x0_in):
+    """Three properties as three columns, retained or discarded, one row per rule."""
+    span = MATRIX_X1 - x0_in
+    assert span > 1.10, (
+        f"the rule names now leave only {span:.2f} in for the retained-information matrix, "
+        f"which cannot carry three named columns; shorten a rule name rather than shrinking "
+        f"the columns.")
+    col_w = span / len(PROPS)
+    centres = [x0_in + (i + 0.5) * col_w for i in range(len(PROPS))]
+
+    for cx, prop in zip(centres, PROPS):
+        ax.text(_fx(cx), _fy(HEADER_TOP), prop, ha="center", va="top", fontsize=PT_SMALL,
+                color=TEXT, linespacing=1.15, zorder=5)
+    ax.plot([_fx(x0_in), _fx(MATRIX_X1)], [_fy(RULE_Y)] * 2, color=FAINT, lw=LW_HAIR,
+            zorder=2, solid_capstyle="butt")
+
+    for y, row in zip(ROW_Y, KEPT):
+        for cx, colour, kept in zip(centres, PROP_COLOURS, row):
+            if kept:
+                ax.scatter([_fx(cx)], [_fy(y)], s=DISC_PT ** 2, c=colour, lw=0, zorder=5)
+            else:
+                ax.scatter([_fx(cx)], [_fy(y)], s=RING_PT ** 2, facecolors="none",
+                           edgecolors=FAINT, lw=0.8, zorder=5)
+
+    # The containment is the panel's claim, so it is asserted on the drawn matrix rather than
+    # left to the three tuples above: no rule may retain a property that a rule below it drops,
+    # and each row must retain strictly more than the one before it.
+    counts = [sum(r) for r in KEPT]
+    assert counts[0] < counts[1] < counts[2] == len(PROPS), (
+        f"the three rules no longer retain in increasing order ({counts}); the panel draws a "
         f"containment and this is what makes it one.")
-    assert abs(reach[-1] - BAR_X1) < 1e-9
+    for upper, lower in zip(KEPT, KEPT[1:]):
+        assert all(l or not u for u, l in zip(upper, lower)), (
+            "a rule discards a property that a weaker rule retains; the ladder is not nested.")
 
-    # ---- the axis itself, under the bottom bar ----
-    y0 = ROW_Y[-1] - BAR_H / 2
-    for x in edges:
-        ax.plot([_fx(x)] * 2, [_fy(y0), _fy(y0 - TICK_DROP)], color=FAINT, lw=LW_HAIR,
-                zorder=2, solid_capstyle="butt")
-    for i, label in enumerate(SEG_LABELS):
-        ax.text(_fx((edges[i] + edges[i + 1]) / 2.0), _fy(SEG_LABEL_TOP), label,
-                ha="center", va="top", fontsize=PT_SMALL, color=TEXT, linespacing=1.15,
-                zorder=5)
-    return edges
-
-
-def plt_rect(x, y, w, h, colour, alpha):
-    from matplotlib.patches import Rectangle
-    return Rectangle((x, y), w, h, fc=colour, ec="none", alpha=alpha, zorder=4)
+    # ---- less to more, under the matrix ----
+    arrow(ax, (_fx(x0_in + 0.16), _fy(ARROW_Y)), (_fx(MATRIX_X1 - 0.16), _fy(ARROW_Y)),
+          color=FAINT, lw=LW_HAIR, ms=6)
+    ax.text(_fx(x0_in), _fy(ARROW_LABEL_TOP), "less", ha="left", va="top",
+            fontsize=PT_SMALL, color=TEXT, zorder=5)
+    ax.text(_fx(MATRIX_X1), _fy(ARROW_LABEL_TOP), "more", ha="right", va="top",
+            fontsize=PT_SMALL, color=TEXT, zorder=5)
 
 
 def draw_1a(ax):
@@ -278,9 +313,10 @@ def draw_1a(ax):
     blank(ax)
     rend = _renderer(ax)
 
+    _bands(ax)
     _source(ax)
-    _representations(ax, rend)
-    _scores(ax, rend)
+    _fork(ax)
+    _matrix(ax, _rules(ax, rend))
 
     # A definition panel states no quantity. This is the mechanical form of that rule: the panel
     # cannot acquire a number without the build failing, which is what stops a later edit from

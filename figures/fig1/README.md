@@ -84,22 +84,35 @@ written before the swap unless they say otherwise; the table just below is curre
 
 ## Design notes
 
-- **a** is the figure's definition panel and, since 2026-09-03, nothing else. Upper band: one
-  single-cell response population and the two summaries taken from it, an orange diamond for the
-  mean `mu` and a blue cell cloud for the population `P`. Lower band: three scoring rules as three
-  rows against one shared information axis, each row carrying the mark of the representation it
-  reads. Rows one and two carry the SAME diamond, which is the panel's whole correction made
-  without a word. The bars are cumulative on one ordinal axis, so the nesting is drawn rather than
-  asserted; `_scores` refuses to draw unless the three reaches increase strictly and the last one
-  lands on the axis end. The three segments are equal in width by construction and carry no
-  quantity, because how much magnitude is worth is Fig. 2a's measurement, not a schematic's.
+- **a** is the figure's definition panel and, since 2026-09-03, nothing else. It reads left to
+  right in three columns, which is the order the sentence goes in: the source population in
+  SHARED grey with two visible states, then the three scoring rules each beside the geometry it
+  actually reads, then a matrix of what each one keeps. The glyphs are the argument in miniature,
+  a unit arrow on a faint circle, the same arrow at its true length, and the cells with the
+  centroid still on them, and rows one and two carry the SAME orange diamond, which is the
+  panel's whole correction made without a word. The nesting is drawn rather than asserted:
+  `_matrix` refuses to draw unless each row retains strictly more than the one above it and no
+  row drops a property a weaker row keeps. The columns name properties and carry no quantity,
+  because how much magnitude is worth is Fig. 2a's measurement, not a schematic's.
   **`draw_1a` rejects any drawn text containing a digit.** A definition panel states no quantity,
-  and that is now a build failure rather than a convention.
+  and that is now a build failure rather than a convention. It is also why the middle rule is
+  labelled "magnitude-aware mean" and not "mean L2": the digit would fail the build, and the
+  caption names the norm instead.
   The four-candidate library and the two ranked stacks this panel drew until 2026-09-03 are gone:
   a ranking outcome on a definition panel invites the outcome to be read as evidence, and d owns
   the outcome on a construction where the tie is provable while e draws retrieval as a ranking
-  handed to a judge. The bar block's left edge is set from the MEASURED width of the widest score
-  name, so renaming a score moves the bars instead of printing them over the name.
+  handed to a judge. The matrix's left edge is set from the MEASURED width of the widest rule
+  name, so renaming a rule moves the columns instead of printing them over the name.
+- **a was re-cut on 2026-09-06** from a reference layout supplied as an image. Two things in that
+  reference were deliberately not carried over. It presented the three rows as a hierarchy of
+  response REPRESENTATIONS, with `mu/||mu||` as the first of them; the paper defines two
+  representations, `mu` and `P`, the normalisation lives inside the cosine, and the Results call
+  these three the scoring rules of Fig. 1a. And it coloured the source cells on a blue-to-orange
+  response-magnitude ramp, which inside this figure reads as POP-to-MEAN, two frozen roles;
+  cell-to-cell heterogeneity is carried by two states in one grey instead. What was carried over
+  is the three-column reading, the per-rule geometry glyph and the retained/discarded matrix,
+  which name the three properties as properties where the previous cut named them only as
+  segments under an ordinal axis and had two readers take the segment widths for effect sizes.
 - **b** shares row 1 with a. Everything sits on one shared response axis, so
   "identical mean shift" is geometry the reader can check rather than a caption assertion: both
   drugs' population-mean markers land on the same orange rule. Drug B's bulk overshoots (1.25 vs
@@ -260,7 +273,8 @@ or a ranked list, and a must not regain either.
 ## Agreement with the manuscript caption
 
 The Figure 1 caption in `manuscript/latex/PopRetrieve_manuscript.tex` assigns all eight letters:
-a = representation and scoring rule as two layers with the nested information axis, b = the
+a = one population, the three scoring rules and the geometry each reads, with the
+retained-information matrix, b = the
 premise on one response coordinate, c = one pair of populations and the three scoring rules,
 d = two candidate populations on a shared sample mean with three verdicts, e = objective-aligned
 against less score-aligned evaluation, f = the three evidence classes on a coupling axis,
