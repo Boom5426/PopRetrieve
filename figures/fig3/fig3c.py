@@ -4,20 +4,57 @@ WHAT THIS PANEL SHOWS
 ---------------------
 Four quartile means of the population-minus-mean minority-coverage gain, each with its bootstrap
 95 per cent interval, read against zero, with the rows ordered by increasing true divergence.
-Two facts are meant to be readable from the marks alone:
+Three facts are meant to be readable from the marks alone:
 
-  * every interval lies wholly to the right of the zero rule, in the population half-plane, and
-  * every interval is longer than the whole spread of the four estimates, the shortest by a
-    factor of 1.6 and the longest by 3.2, and all four mutually overlap, with Q4 below Q3, so
-    the column does not march right as divergence increases.
+  * the LOWEST-divergence quartile does not gain. Its mean is -0.0035 and its interval reaches
+    from -0.0076 to +0.0001, so it sits mostly in the mean half-plane;
+  * the upper three quartiles do, wholly clear of the zero rule (+0.0038, +0.0054, +0.0051); and
+  * those three are not separated from EACH OTHER: their intervals mutually overlap, so the panel
+    shows a break at the bottom of the divergence range and not a ranking above it.
 
-Both are asserted in ``draw_3c`` before anything is drawn. The panel states neither in words: the
-caption carries the argument, this panel carries the evidence for it.
+All three are asserted in ``draw_3c`` before anything is drawn. The panel states none of them in
+words: the caption carries the argument, this panel carries the evidence for it.
 
-That second fact is why this panel belongs with d, e and f. The pre-specified gate assumes the
-gain is concentrated where the true response distribution diverges from its mean, and along
-exactly that axis no concentration is detectable: Spearman rho = +0.050, p = 0.165 over all 765
-queries, the one statistic the panel prints.
+This is why the panel opens the block d, e, f, and the reason has changed. The pre-specified gate
+assumes the gain is concentrated where the true response distribution diverges from its mean.
+Along that axis the concentration is REAL: Spearman rho = +0.141, p = 1e-04 over all 765 queries,
+the one statistic the panel prints, and a clean break between the bottom quartile and the rest.
+
+Panel d then asks the same question of a judge that does NOT share the retrieval objective, and
+finds the same axis grading a quantity that never turns positive. Panels e and f show that the
+GATE finds neither: it does not enrich for the gain (e), its own reliability score runs opposite
+to true divergence and the queries it declines are the more divergent ones (f). **The failure is
+in the surrogate, not in the axis.**
+
+WHAT THE ESTIMATOR REPAIR AND THE EXP16 REMERGE DID TO THIS PANEL, 2026-09-03
+-----------------------------------------------------------------------------
+This panel reversed, and the reversal has two causes that arrived together.
+
+The first is the unbiased estimator. The second is a stale derived file: exp16 is a pure
+re-analysis of exp12's per-query CSV, it is NOT in analysis/estimator_audit/run_legacy_suite.sh
+(whose list is scripts that CALL an energy kernel, which exp16 does not), and so
+results/exp16_gate_diagnosis/_merged_query_divergence.csv was still the V-arm merge sitting
+downstream of a U-arm exp12. Its gate verdict split, 621 / 133 / 11, disagreed with exp12's own
+627 / 127 / 11, and the verdict panel asserted the stale numbers while the enrichment panel,
+reading exp12 directly, asserted the live ones.
+exp16 and exp17 were re-run on 2026-09-03; the pre-remerge files are in
+results/_pre_exp16_remerge_backup/.
+
+What the panel said before, and says now:
+
+| | V arm, stale merge | U arm, rebuilt merge |
+|---|---:|---:|
+| Spearman rho (n = 765) | +0.050, p = 0.165 | **+0.141, p = 1e-04** |
+| Q1 mean [95% CI] | +0.0042 [+0.0008, +0.0073] | **-0.0035 [-0.0076, +0.0001]** |
+| Q2 mean | +0.0050 | +0.0038 |
+| Q3 mean | +0.0062 | +0.0054 |
+| Q4 mean | +0.0056 | +0.0051 |
+| fraction of queries with a positive gain, Q1 to Q4 | 0.55 / 0.69 / 0.70 / 0.71 | **0.41 / 0.55 / 0.61 / 0.65** |
+
+The old panel's claim was "all four positive, no trend visible". Both halves are now false, and
+the panel is drawn and asserted on what replaced them. The paper's argument does not weaken here;
+it sharpens, because "true divergence predicts the gain and the gate does not" is a statement
+about the surrogate, which is what Figure 3 is about.
 
 Source data: results/exp16_gate_diagnosis/_merged_query_divergence.csv, 765 queries with both
 true_divergence and minority_state_coverage_gap. Every number drawn or written here is computed
@@ -49,10 +86,13 @@ WHAT THIS PANEL REFUSES TO CLAIM, AND WHY (CORRECTIONS.md R48, unchanged and sti
 An earlier version drew four bars with s.e.m. on an axis truncated at 0.012, titled "Minority-
 coverage gain is negligible". Both halves were wrong.
 
-  * THE BARS SHOWED A TREND THAT IS NOT THERE. Q1 to Q3 rise, and a truncated bar axis turns that
-    into a visible ramp, but Spearman rho with divergence is +0.050 at p = 0.165, Q4 is below Q3,
-    and all four intervals overlap. Point estimates with intervals make the overlap the visible
-    fact instead.
+  * THE BARS SHOWED A TREND ON EVIDENCE THAT COULD NOT CARRY ONE. A truncated bar axis turns any
+    rise into a visible ramp, whatever its uncertainty. That the trend has since turned out to be
+    real (rho = +0.141 at p = 1e-04) does not retire the correction: the old drawing would have
+    shown the same ramp had the trend still been rho = +0.050 at p = 0.165, which is what it was
+    when R48 was written. Point estimates with intervals show the uncertainty alongside the
+    pattern, so a reader can see that Q2, Q3 and Q4 are not separated from one another even
+    though all three are separated from Q1.
   * "NEGLIGIBLE" DEPENDED ON THE DENOMINATOR, and the denominators disagree hard. The largest
     quartile mean, +0.0062, is 0.6 per cent of the nominal [0, 1] metric range, 2.6 per cent of
     the metric's observed range, 5.1 per cent of its central 98 per cent, and 53 per cent of the
@@ -64,33 +104,40 @@ coverage gain is negligible". Both halves were wrong.
 JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
 -------------------------------------------------------
   1. THE POINT ESTIMATE IS THE MEAN, not the median, because the brief for this panel fixes it and
-     because a mean is what the quartile intervals and the Spearman test are about. The medians
-     are three to five times smaller (+0.0009, +0.0015, +0.0017, +0.0018, asserted below to be
-     positive and below their means): this gain has a heavy right tail, so the mean is not the
-     typical query. Drawing both needs a two-symbol key that does not fit in 1.87 x 0.78 in, so
+     because a mean is what the quartile intervals and the Spearman test are about. In the upper
+     three quartiles the medians are three to four times smaller (+0.0004, +0.0012, +0.0020,
+     asserted below to be positive and below their means): the gain has a heavy right tail there,
+     so the mean is not the typical query. In Q1 the relation inverts, and that is the finding
+     rather than an exception: its median is exactly 0.0000 while its mean is -0.0035, so the
+     lowest-divergence quartile has a heavy LEFT tail and a typical query in it neither gains nor
+     loses. Drawing both estimates needs a two-symbol key that does not fit in 1.87 x 0.78 in, so
      THE MEDIANS BELONG IN THE CAPTION, and ``draw_3c`` returns them for it.
   2. NO SCALE REFERENCE IS DRAWN ON THE GAIN AXIS. A bracket for the metric's own IQR would make
      "the gain is half an IQR" the panel's visual argument, and that is the largest of the four
      available denominators, i.e. the one that most flatters the gain. It is a caption number.
-  3. THE VIEW STARTS AT A SMALL NEGATIVE VALUE so zero is a datum inside the frame rather than the
-     left edge. The negative half-plane is therefore a thin wash, which is honest: no quartile
-     interval reaches it.
+  3. THE VIEW IS SYMMETRIC ABOUT ZERO. It used to start a hair below zero, because no quartile
+     interval reached the mean half-plane and a wide left field would have been empty. Q1's
+     interval now runs to -0.0076, so the left half is a half of the panel with a mark in it. The
+     range is still the true scale of the effect and is still not expanded to separate the points.
   4. QUARTILES ARE pandas.qcut ON true_divergence, giving 192 / 191 / 191 / 191. The n are equal
      to one query and are not drawn; they are asserted to stay equal to one, and returned for the
      caption.
   5. Q1 IS AT THE BOTTOM so the y axis increases with divergence, the direction the "no growth
      with divergence" reading runs in. groupby is not trusted to return that order: it is
      asserted on the per-quartile median divergence before anything is drawn.
-  6. THE ASSERTED CLAIM IS "ALL FOUR QUARTILE MEANS POSITIVE", NOT "positive everywhere". The
-     latter would be read at the query level and is false there: 26.9 per cent of the 765 queries
-     have a negative gain and the smallest is -0.130. What is positive is each of the four
-     quartile means together with its whole interval, which is what the panel draws, and the
-     caption must say it at that level too.
-  7. THE ABSENCE OF A TREND IS A STATEMENT ABOUT THIS PANEL, NOT ABOUT THE POPULATION. rho = +0.050
-     at n = 765 has a normal approximate 95 per cent interval of about [-0.02, +0.12], so a weak
-     positive trend is not excluded; what can be reported is that none is detectable here. That is
-     why the panel prints rho and P and leaves the reading to the caption: asserting the bare null
-     from a non-significant test is the same overclaim, mirrored, that this paper criticises.
+  6. THE ASSERTED CLAIM IS ABOUT QUARTILE MEANS, NOT ABOUT QUERIES. "The upper three quartiles
+     gain" would be false read at the query level: 33 to 40 per cent of the queries inside each of
+     them have a negative gain, and over all 765 queries 37 per cent do, the smallest being
+     -0.131. What is positive is each quartile mean together with its whole
+     interval, which is what the panel draws, and the caption must say it at that level too. The
+     same discipline applies to Q1: the panel says its MEAN does not clear zero, not that no query
+     in it gains, and 41 per cent of them do.
+  7. THE TREND IS REPORTED AS A CORRELATION, NOT AS AN EFFECT SIZE. rho = +0.141 at n = 765 is
+     detectable (p = 1e-04) and small: it accounts for about 2 per cent of the rank variance, and
+     the gain it grades runs from a mean of -0.0035 to +0.0054 against a metric whose own
+     interquartile range is 0.0124. The panel prints rho and p and draws the four quartiles, and
+     leaves the reading to the caption; what it must not be read as is that true divergence
+     LOCATES the gain well enough to select queries on.
   8. THE ONE PRINTED STATISTIC KEEPS THE WORD "Spearman". It names which correlation was run,
      which is part of the statistic rather than a sentence about it, and rho alone would leave a
      reader to guess between rank and product-moment.
@@ -120,10 +167,11 @@ GAIN = "minority_state_coverage_gap"
 POP_ARM = "minority_state_coverage_dart"
 MEAN_ARM = "minority_state_coverage_mean"
 
-# The view. XLO is a hair below zero so the zero rule is a datum with room on both sides; XHI
-# clears the widest interval. Both are asserted against the data below. This range is the true
-# scale of the effect and is deliberately not expanded to separate the points.
-XLO, XHI = -0.0014, 0.0092
+# The view. It is symmetric about zero as of 2026-09-03, and it has to be: Q1's interval now
+# reaches -0.0076, so the negative half-plane holds a drawn mark rather than only a thin wash.
+# Both bounds are asserted against the data below. This range is the true scale of the effect and
+# is deliberately not expanded to separate the points.
+XLO, XHI = -0.0090, 0.0092
 
 # Rows are one data unit apart, Q1 at y = 0 and Q4 at y = 3. Everything else on the y axis is
 # clearance, in the same units, and the axes are 0.78 in tall, so one row unit prints at 0.167 in.
@@ -143,6 +191,15 @@ LINE_H = 1.15
 # which no text-versus-text layout check can see.
 ROW_OVERHANG = 0.38     # rows are one unit apart, so this is 0.38 of a row past each end
 CAP = 0.17              # half-height of the tick drawn at each interval bound, in row units
+
+
+def _p_text(p: float) -> str:
+    """The printed p, in the panel's italic lowercase form, with a floor rather than a rounded 0.
+
+    Two decimals were enough while this test did not reject. It now does, at 1e-4, and "p = 0.00"
+    would read as a rounding of a number the panel never measured.
+    """
+    return "$p$ < 0.001" if p < 0.001 else f"$p$ = {p:.2f}"
 
 
 def _load():
@@ -197,27 +254,41 @@ def draw_3c(ax):
 
     rho, p_rho = stats.spearmanr(d["true_divergence"].values, d[GAIN].values)
 
-    # ---- the two facts the marks must carry, asserted before they are drawn ------------------
-    assert (los > 0).all(), (
-        f"a quartile interval reaches zero, so the caption's 'all four positive' is false: lower "
-        f"bounds {los}")
-    for i in range(len(means)):
+    # ---- the three facts the marks must carry, asserted before they are drawn ----------------
+    # THE PATTERN, not "all four positive". Under the V-statistic every quartile interval cleared
+    # zero and no trend was detectable; under the unbiased estimator, and with exp16's merge
+    # rebuilt from the U-arm exp12, the lowest-divergence quartile no longer gains and the upper
+    # three do. That is the panel now, and it is pinned as an exact pattern so that a change in
+    # ANY quartile stops the build rather than quietly restating the claim.
+    gained = tuple(bool(lo > 0) for lo in los)
+    assert gained == (False, True, True, True), (
+        f"the panel and its caption say the lowest-divergence quartile shows no gain and the "
+        f"upper three do; the drawn intervals give {dict(zip(labels, gained))} with lower bounds "
+        f"{np.round(los, 5)}. Restate the caption in the same commit as this tuple.")
+    # The break has to be VISIBLE, or a reader cannot see the pattern the caption states.
+    assert his[0] < los[1], (
+        f"Q1's interval [{los[0]:.5f}, {his[0]:.5f}] overlaps Q2's [{los[1]:.5f}, {his[1]:.5f}]; "
+        f"the break the panel is drawn around is no longer readable off the ends")
+    # And the upper three must NOT be separated from one another: the panel's claim is a break at
+    # the bottom, not a ranking of Q2, Q3 and Q4, whose means are within one interval width.
+    for i in range(1, len(means)):
         for j in range(i + 1, len(means)):
             assert los[i] <= his[j] and los[j] <= his[i], (
-                f"intervals {labels[i]} and {labels[j]} are disjoint; the four estimates are then "
-                f"separated and the caption's 'no trend visible' is false")
-    # The estimates must stay small against their own uncertainty, or "the intervals are longer
-    # than the spread" stops being what the panel shows.
-    assert means.max() - means.min() < (his - los).min(), (
-        f"the spread of the four means, {means.max() - means.min():.5f}, exceeds the shortest "
-        f"interval, {(his - los).min():.5f}; the overlap is no longer the visible fact")
-    assert p_rho > 0.05, (
-        f"Spearman p = {p_rho:.3g} is significant; 'no trend visible' is no longer what the data "
-        f"say and the caption for this panel must change")
-    # Docstring judgement call 1: the mean is drawn, and it is not the typical query.
-    assert (meds > 0).all() and (meds < means).all(), (
-        f"quartile medians {meds} are no longer positive-and-below-the-means; the docstring's "
-        f"reason for drawing the mean, a heavy right tail, no longer holds")
+                f"intervals {labels[i]} and {labels[j]} are disjoint; the panel would be showing "
+                f"an ordering among the upper quartiles that it does not claim")
+    assert rho > 0 and p_rho < 0.01, (
+        f"Spearman rho = {rho:+.4f}, p = {p_rho:.3g}: the per-query trend the panel prints is no "
+        f"longer positive and detectable, and the caption's reading of panel c must change with "
+        f"it")
+    # Docstring judgement call 1: the mean is drawn, and in the upper three quartiles it is not
+    # the typical query. In Q1 the relation inverts, which is the finding rather than an
+    # exception: its median is exactly zero and its mean is dragged below that by a left tail.
+    assert (meds[1:] > 0).all() and (meds[1:] < means[1:]).all(), (
+        f"quartile medians {meds[1:]} are no longer positive-and-below-their-means; the "
+        f"docstring's reason for drawing the mean, a heavy right tail, no longer holds above Q1")
+    assert meds[0] >= means[0], (
+        f"Q1's median {meds[0]:+.5f} is no longer at or above its mean {means[0]:+.5f}; the "
+        f"left tail that makes the lowest-divergence quartile's mean negative has gone")
 
     # ---- the metric's own scale, pooled over both arms. Computed for the CAPTION, not drawn ---
     metric = np.concatenate([d[POP_ARM].values, d[MEAN_ARM].values])
@@ -274,13 +345,13 @@ def draw_3c(ax):
 
     # ---- the one statistic, stated once, in the data-free band above the rows -----------------
     ax.text(XLO + 0.0004, STAT_Y,
-            f"Spearman $\\rho$ = {rho:+.2f}, $p$ = {p_rho:.2f}",
+            f"Spearman $\\rho$ = {rho:+.2f}, {_p_text(p_rho)}",
             fontsize=PT_ANNOT, color=TEXT, ha="left", va="bottom")
 
     ax.set_yticks(ys)
     ax.set_yticklabels(labels, fontsize=PT_TICK)
     # Labels are formatted FROM the tick positions, so a moved tick cannot keep an old number.
-    xticks = [0.0, 0.004, 0.008]
+    xticks = [-0.008, -0.004, 0.0, 0.004, 0.008]
     assert all(XLO <= t <= XHI for t in xticks), f"a tick lies outside the view: {xticks}"
     ax.set_xticks(xticks)
     ax.set_xticklabels([f"{t:g}" for t in xticks], fontsize=PT_TICK)

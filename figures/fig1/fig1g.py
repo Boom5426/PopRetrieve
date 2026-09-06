@@ -1,9 +1,26 @@
-"""PopRetrieve Figure 1 panel 1g: mean retrieval is the zero-variance limit, not a rival method.
+"""PopRetrieve Figure 1 panel 1g: the population representation contains the mean as a limit.
+
+WHAT THE LIMIT ACTUALLY IS, AND WHAT IT IS NOT
+----------------------------------------------
+At lambda = 0 the population distance equals ``two_dmu``, and exp06 defines that as 2||mu_P -
+mu_T||: TWICE the Euclidean distance between the two means. The factor of two is what the energy
+distance between two point masses carries (Methods), it is constant in lambda, and it cannot
+reorder candidates, so the panel draws the limit as PROPORTIONAL to the mean-only distance rather
+than equal to it. Saying "equal" here is the one thing this panel must not do, because the
+Methods state the constant explicitly and the two would then contradict each other. So the endpoint of this curve is the
+magnitude-aware mean score of panel a, and it is not the cosine. The cosine discards the length
+of that difference, so it is a further coarsening of the mean and not the limit of anything drawn
+here. The panel said "mean retrieval is the zero-variance limit" until 2026-09-03, which left a
+reader to attach the identity to whichever mean score they had in mind, and the one most of them
+have in mind is the CMap-style cosine. The correct statement is about the REPRESENTATION: a
+population contains its own mean as its zero-variance limit, and which score reads that mean is a
+separate choice (panel a).
 
 WHAT THE PANEL HAS TO MAKE VISIBLE
 ----------------------------------
 Contract the residual of two response populations by a scale lambda: at lambda = 0 the population
-distance IS the mean-only distance, exactly, and it falls away from it as variation is restored.
+distance IS the mean-only distance, up to that constant factor, and it falls away from it as
+variation is restored.
 The identity was never in doubt; the reading was. The claim is geometric, so the panel has to be geometric: one horizontal orange rule
 for what means alone can see, one blue curve for what the population sees, and a gap between them
 that closes to nothing at a single point. A reader who takes only the shape away has taken the
@@ -170,8 +187,10 @@ def draw_1g(ax, ax_top):
 
     # ---------------------------------------------------------------- cartoon strip
     blank(ax_top)
-    # No phrase: the caption says "Mean retrieval is the zero-variance limit of population
-    # retrieval", and the panel shows the wash closing to nothing at lambda = 0.
+    # No phrase: the caption says that the population representation contains its own mean as
+    # the zero-variance limit, and that the endpoint is the mean-to-mean EUCLIDEAN distance, so
+    # the magnitude-aware mean score rather than the cosine. The panel shows the wash closing to
+    # nothing at lambda = 0; the naming of the endpoint is argued where it can be qualified.
     # Provenance, in the panel's own top corner and at the floor: this is a construction, and a
     # reader must not carry it away as a measurement on cells. It never becomes a claim, so it is
     # SUBTLE and it is the smallest thing here.
@@ -212,12 +231,21 @@ def draw_1g(ax, ax_top):
     # The rule is named directly, in the widest span the guides leave clear: 0.87 in of type in
     # the 1.04 in between the lambda = 0.5 and lambda = 1 guides, so no guide runs through it. It
     # is the only in-plot label; the curve is named by the y axis and the ends by the x ticks.
-    ax.text((GLYPH_X[1] + GLYPH_X[2]) / 2, 0.998, "mean-only distance", transform=ax.transAxes,
+    ax.text((GLYPH_X[1] + GLYPH_X[2]) / 2, 0.998, "2 \u00d7 distance between means",
+            transform=ax.transAxes,
             ha="center", va="top", fontsize=PT_ANNOT, color=TEXT)
     # The identity, verified and demoted: an analytic check (Methods), both sides read from the
     # file, in the corner the curve has left empty. A reader who never reads it has read the panel.
-    ax.text(0.012, 0.02, f"{energy[at_limit][0]:.2f} = {two_dmu:.2f}", transform=ax.transAxes,
-            ha="left", va="bottom", fontsize=PT_SMALL, color=SUBTLE)
+    #
+    # It named its two sides only from 2026-09-04. It printed "98.50 = 98.50", which is a true
+    # statement about nothing: two identical numbers with no subject, in grey, in a corner. A
+    # reader who did read it learned less than one who did not, which is the opposite of demoted.
+    # Both sides are now named in the words already on the panel, the y axis and the dashed rule,
+    # and the number is printed once because the two sides are equal, which is the whole point.
+    ax.text(0.012, 0.02,
+            f"at λ = 0, population distance = 2 × distance between means = "
+            f"{energy[at_limit][0]:.2f}",
+            transform=ax.transAxes, ha="left", va="bottom", fontsize=PT_SMALL, color=SUBTLE)
 
     ax.set_xlim(*XLIM)
     ax.set_ylim(y_lo, y_hi)

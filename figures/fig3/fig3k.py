@@ -5,7 +5,7 @@ WHAT THIS PANEL SHOWS
 For each of the 103 leave-one-drug-out queries, the energy DISTANCE between the query population
 and a candidate population is Spearman-correlated, across that query's candidates, with the
 CANDIDATE'S OWN response magnitude. The panel draws the distribution of those 103 per-query
-correlations: median +0.791, with 95 of 103 queries positive and 78 above +0.5. Ranking candidates
+correlations: median +0.780, with 95 of 103 queries positive and 76 above +0.5. Ranking candidates
 nearest-first therefore reproduces, to a large degree, ranking them by how small their own response
 is. Nothing here measures retrieval quality, and nothing here is a comparison between retrieval
 families.
@@ -24,8 +24,8 @@ Be precise about where each number now lives, because the assertions below name 
 maintainer must edit when one fires. The CAPTION (manuscript/latex, Fig. 3 entry m) carries the
 median and the fact of the left tail, and nothing more: "the per-query Spearman correlation
 between the query-candidate energy distance and the candidate's own response magnitude, median
-+0.791. The distribution has a left tail reaching below zero, so this describes the typical query
-and not every one." The three COUNTS, 95 positive, 78 above +0.5 and 8 at or below zero, are
++0.780. The distribution has a left tail reaching below zero, so this describes the typical query
+and not every one." The three COUNTS, 95 positive, 76 above +0.5 and 8 at or below zero, are
 prose in this docstring and in figures/fig3/README.md; they have never been in the caption and
 they are not drawn. The assertions that policed the deleted phrase were not deleted with it, and
 each one now names its own reader.
@@ -52,9 +52,9 @@ docstring has to forestall. Panel h reports energy at +0.276 against drug-drug f
 similarity and +0.097 after partialling out MAGNITUDE MATCH, the query-dependent ranking by
 -|mag(c) - mag(q)|, whose own median on that oracle is +0.232. What is drawn here is the coupling
 to the candidate's own magnitude, a query-INDEPENDENT quantity: scored on h's oracle that ranking
-reaches median -0.330, on the far side of zero from energy's +0.276, and its per-query
+reaches median -0.506, on the far side of zero from energy's +0.265, and its per-query
 correlations are essentially unrelated to magnitude match (Pearson r = +0.007 across the 103
-queries). A median rho of +0.791 says the two candidate ORDERINGS largely agree; it does not say
+queries). A median rho of +0.780 says the two candidate ORDERINGS largely agree; it does not say
 that energy's external win is a magnitude effect, and the control refuses that reading. Running
 this module standalone prints both functional-oracle medians from the file, so the paragraph above
 can be checked rather than believed.
@@ -134,7 +134,7 @@ SRC = os.path.join(REPO, "figures", "source_data", "fig3hi_class_c_potency.csv")
 FUNCTIONAL = os.path.join(REPO, "figures", "source_data", "fig3hi_class_c_functional.csv")
 COL = "energydist_vs_candmag_rho"
 
-N_QUERIES = 103             # panel l reads the same file and states the same n; keep them equal
+N_QUERIES = 103             # panel j reads the same file and states the same n; keep them equal
 
 RHO_BOUND = 1.0             # Spearman rho cannot exceed this; the density is reflected about it
 XLO, XHI = -0.38, 1.02      # the view; asserted below to contain every observation
@@ -201,8 +201,8 @@ def _assert_claims(v, med):
         f"the caption claims the typical query is magnitude-ordered, but only {n_pos} of "
         f"{v.size} queries have rho > 0.")
     # The docstring's three counts. They are recomputed, never typed into the prose from memory.
-    assert (n_pos, n_strong, n_le0) == (95, 78, 8), (
-        f"this module's docstring and figures/fig3/README.md say 95 of 103 positive, 78 above "
+    assert (n_pos, n_strong, n_le0) == (95, 76, 8), (
+        f"this module's docstring and figures/fig3/README.md say 95 of 103 positive, 76 above "
         f"+0.5 and 8 at or below zero; the file now gives {n_pos}, {n_strong} and {n_le0}. "
         "Update both. The caption quotes none of these three, so it needs no edit for this.")
     # The caption's "largely" is a hedge and must stay one: a left tail that vanished would make

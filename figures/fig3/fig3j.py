@@ -104,13 +104,13 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    conclude the magnitude ranking is the steadiest across queries; it is constant across queries
    by construction, and the caption has to say so. The row is kept in the same grammar because
    the panel's claim is about where the four medians sit, not about how wide they are.
-5. ROW ORDER IS FIXED BY FAMILY AND STORY, not sorted by median. Energy (-0.520) and the raw mean
+5. ROW ORDER IS FIXED BY FAMILY AND STORY, not sorted by median. Energy (-0.506) and the raw mean
    cosine (-0.533) differ by 0.013, which is not an ordering, and sorting on it would invite a
    reader to rank them.
 6. THE FUNCTIONAL-SIMILARITY COUNTERPARTS ARE NOT DRAWN, although the same 103 queries carry them
-   in fig3hi_class_c_functional.csv (energy +0.276, raw mean cosine +0.241, control-subtracted
+   in fig3hi_class_c_functional.csv (energy +0.265, raw mean cosine +0.241, control-subtracted
    mean cosine +0.083, magnitude alone -0.330). Drawing arrows from those to these would put the
-   study's one external win, +0.276, on the page being dragged across zero, which competes with
+   study's one external win, +0.265, on the page being dragged across zero, which competes with
    the number panel h exists to make and reads as a refutation rather than as a control. The
    endpoint-to-endpoint comparison belongs to the caption. Run this module standalone and it
    prints both endpoints side by side, so the docstring above can be checked against the files.
@@ -137,13 +137,18 @@ _assert_endpoints_differ reads the functional table at draw time and requires th
 changes below to still be there. If the endpoints ever stop disagreeing, the build fails instead
 of leaving a caption the numbers no longer support.
 
-BE EXACT ABOUT WHAT CHANGES SIGN. Between the functional endpoint and this one, energy (+0.276 to
--0.520), the raw mean cosine (+0.241 to -0.533) and magnitude alone (-0.330 to +0.692) all change
+BE EXACT ABOUT WHAT CHANGES SIGN. Between the functional endpoint and this one, energy (+0.265 to
+-0.506), the raw mean cosine (+0.241 to -0.533) and magnitude alone (-0.330 to +0.692) all change
 sign; the control-subtracted mean cosine does NOT, moving from +0.083 to +0.105, a collapse
 towards zero. The retired ed5.py phrasing "every ranking's correlation with potency inverts" is
 wrong on the third row of this panel and is not reproduced here or in the caption.
 
 Run standalone: python fig3j.py
+
+EVERY NUMBER IN THIS DOCSTRING IS THE U-ARM VALUE, reissued 2026-09-03 when the
+Class-C source-data views were brought under figures/sync_source_data.py and resynced
+from results/upgrade/. The V-arm values they replaced are in
+docs/phase2/POST_REPAIR_MASTER_RESULTS.md, Category B and C1.
 """
 from __future__ import annotations
 

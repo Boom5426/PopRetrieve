@@ -1,96 +1,100 @@
-"""PopRetrieve Figure 5 panel 5g: conditional advantage by response-divergence stratum.
-Source data: results/exp17_true_divergence_subset/divergence_stratified.csv
+"""Figure 5 panel g: the interaction statistic the gate used to be built on measured effect size.
+Source data: results/phase2_transition/gate1_interaction/checks.json (via phase2_data.interaction_audit)
 Run standalone: python fig5g.py
 
-Rewritten 2026-07-12 for two reasons.
+WHY A STATISTIC GETS ITS OWN PANEL
+-----------------------------------
+Panel f asks whether drug-by-state interaction locates the population route's advantage, and
+answers no. That answer is only worth reading if the statistic being conditioned on measures
+interaction. The one earlier drafts used, D_old = 1 − cos(r_1, r_2), does not: it runs at −0.69
+with the response norm and −0.43 with the number of cells per arm, so the weakest drugs and the
+smallest arms score as the most state-dependent. A gate built on it selects for weak signal.
 
-1. It re-derived its own tertile means from upgrade/conditional_advantage_per_query.csv.
-   exp17 already computes exactly this quantity, stratified by TRUE response divergence and
-   Benjamini-Hochberg corrected, and it is the source the verdict document quotes. Reading
-   exp17 directly means this panel cannot drift away from the verdict.
+Its replacement is a cross-fitted inner product, S_int = <I_A, I_B>/p, which is exactly zero in
+expectation under the additive null. On the same queries it runs at +0.66 with the response norm,
+which is the sign a real interaction should have, since a larger response can carry a larger
+interaction; and at +0.10 with cell count, which is the number that should be near zero.
 
-2. It printed "trend rho=+0.08 (p=0.046) / identifiability rho=-0.01 (p=0.90)" as a literal
-   string that would not update if the data changed, and those numbers predate the sentinel
-   fix: 165 of 765 MoA-nDCG values are UNDEFINED (the leave-MoA-out and partial-library
-   splits remove the mechanism class from the library) and were carrying a -1 that was
-   differenced as if it were a measurement, so (-1)-(-1)=0 pinned every stratum's median at
-   exactly 0.000. Significance is now read from the file, per stratum.
-
-The corrected picture is stronger than the one it replaces: the gain is not merely "near
-zero", it is significantly NEGATIVE in the lowest-divergence stratum and indistinguishable
-from zero everywhere else.
+TWO ROWS, TWO DIFFERENT TARGETS, AND THE CAPTION CARRIES THAT
+---------------------------------------------------------------
+The two rows are not read the same way. On response magnitude the disqualifying result is a
+NEGATIVE correlation, because it inverts the quantity being measured; on cells per arm the target
+is zero, because a statistic of biology must not track how many cells were sequenced. The panel
+draws both and states neither target: a target line would be a threshold this study did not
+pre-register for the magnitude row, and the caption is where the two readings can be given.
 """
-import os
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
+import os as _os
+import sys as _sys
 
-# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
-# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
-# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
-import sys as _sys, os as _os
+import matplotlib.pyplot as plt
+import numpy as np
+
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
-from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
-from fig5_style import PT_SMALL  # noqa: E402
-REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-STRAT = f"{REPO}/results/exp17_true_divergence_subset/divergence_stratified.csv"
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from figstyle import INK  # noqa: E402
+from phase2_data import CONFOUND_LABEL, interaction_audit  # noqa: E402
+from phase2_style import (FAINT, LW_HAIR, MEAN, POP, PT_ANNOT,  # noqa: E402
+                          PT_SMALL, PT_TICK, SHARED, TEXT, key_label)
+
+# The retired statistic takes the deck's mean-family orange, exactly as it does in panel f: it is
+# the quantity the population route does not get to use. Its replacement takes POP.
+STAT_COLOUR = {"D_old": MEAN, "S_int": POP}
+STAT_KEY = {"D_old": "naive cosine", "S_int": "cross-fitted interaction"}
+ROWS = ("response_norm", "n_treated")
+
+# The axes fig5_assemble gives this panel, which phase2_style.key_label needs and cannot know.
+# The axes size is measured at draw time; see phase2_style.axes_size_in.
 
 
 def draw_5g(ax):
-    d = pd.read_csv(STRAT)
-    d = d[(d.metric == "moa_ndcg") & (d.stratum.isin(["Q1", "Q2", "Q3", "Q4"]))] \
-        .sort_values("stratum")
-    if d.empty:
-        raise KeyError(f"no moa_ndcg quartile rows in {STRAT}; re-run exp17.")
+    a = interaction_audit()
+    d = a["rows"]
+    ys = np.arange(len(ROWS))[::-1]
 
-    xs = np.arange(len(d))
-    vals = d["mean_gap"].values
-    errs = (d["sd_gap"] / np.sqrt(d["n"])).values          # standard error, not the raw sd
-    qs = d["bh_qvalue"].values
-    cols = [COMP_SOFT if v < 0 else GREY for v in vals]
+    for y, conf in zip(ys, ROWS):
+        sub = {r.stat: float(r.rho) for _, r in d[d.confound == conf].iterrows()}
+        # The join first, under both markers: it is what makes the pair one comparison rather
+        # than two readings that happen to share a row.
+        ax.plot([sub["D_old"], sub["S_int"]], [y, y], lw=1.0, color=FAINT, zorder=2,
+                solid_capstyle="butt")
+        for stat, rho in sub.items():
+            ax.plot([rho], [y], "o", ms=5.4, color=STAT_COLOUR[stat], zorder=4)
+            below = stat == "D_old"
+            # INK, not the marker's colour. The value sits directly against its own dot, so the
+            # dot is already carrying the hue and the letters were spending it a second time at
+            # 6.5 pt, where MEAN measures 2.23:1 against white and POP 3.84:1, both under the
+            # 4.5:1 small text is held to. Panel h, on this same row, labels the same kind of
+            # value in ink beside a coloured marker and loses nothing by it.
+            ax.text(rho, y + (-0.30 if below else 0.30), f"{rho:+.2f}".replace("-", "−"),
+                    ha="center", va="top" if below else "bottom", fontsize=PT_SMALL, color=TEXT)
+    ax.axvline(0, ls="--", lw=1.0, color=SHARED, zorder=1)
 
-    ax.axhline(0, ls="-", lw=1.2, color="k", zorder=2)
-    ax.bar(xs, vals, yerr=errs, width=0.60, color=cols, alpha=0.8,
-           error_kw=dict(lw=1.0, capsize=3), zorder=3)
-
-    lo = float((vals - errs).min())
-    hi = float((vals + errs).max())
-    pad = max(abs(lo), abs(hi)) * 0.55
-    ax.set_ylim(lo - pad, hi + pad * 1.15)
-    # Value labels go on the far side of each bar from zero (below a negative bar, above a
-    # positive one) so no label is ever printed on top of the bar it belongs to.
-    for x, m, e, q in zip(xs, vals, errs, qs):
-        star = "*" if q < 0.05 else "ns"
-        if m < 0:
-            ax.text(x, m - e - pad * 0.12, f"{m:+.3f} {star}".replace("-", "\u2212"), ha="center", va="top",
-                    fontsize=PT_SMALL, color=INK)
-        else:
-            ax.text(x, m + e + pad * 0.12, f"{m:+.3f} {star}".replace("-", "\u2212"), ha="center", va="bottom",
-                    fontsize=PT_SMALL, color=INK)
-
-    ax.set_xticks(xs)
-    ax.set_xticklabels([f"{s}\ndiv {dm:.2f}" for s, dm in
-                        zip(d["stratum"], d["divergence_median"])], fontsize=PT_SMALL)
-    # labelpad 1.5, not the default: row 2 reserves 0.38 in under its axes and the two-line
-    # x tick labels ("Q1 / div 0.02") already spend most of it, so at the default pad this
-    # label hung 0.03 in BELOW the canvas. bbox_inches="tight" would then have expanded the
-    # exported media box past the authored 6.90 in and reintroduced a LaTeX rescale.
-    ax.set_xlabel("true response-divergence quartile (median divergence)", labelpad=1.5)
-    ax.set_ylabel("MoA-nDCG gain,\ndistributional $-$ mean")
-    # Direct label on the null line: what "zero" means here, and what the stars mean.
-    ax.set_xlim(-0.62, len(xs) - 0.38)
-    ax.text(-0.57, pad * 0.10, "no difference", ha="left", va="bottom",
-            fontsize=PT_SMALL, color=GREY)
-    # THE SIGNIFICANCE KEY IS IN THE CAPTION, where a Nature legend has to define the test and
-    # its correction anyway. The per-bar "*" and "ns" marks stay; only their definition moves.
-    _UNUSED_SIG_KEY = (lambda *a, **k: None)(0.015, 0.02, "",
-            transform=ax.transAxes, ha="left", va="bottom", fontsize=PT_SMALL, color=GREY)
-    for sp in ["right", "top"]:
+    ax.set_yticks(ys)
+    ax.set_yticklabels([CONFOUND_LABEL[c] for c in ROWS], fontsize=PT_TICK, linespacing=1.12)
+    ax.set_ylim(-0.72, len(ROWS) - 0.28)
+    ax.set_xlim(-0.92, 0.92)
+    ax.set_xticks([-0.5, 0.0, 0.5])
+    ax.set_xticklabels(["−0.5", "0", "0.5"], fontsize=PT_TICK)
+    ax.set_xlabel("Spearman ρ with the statistic", fontsize=PT_ANNOT, labelpad=1.5)
+    ax.grid(axis="x", lw=LW_HAIR, color="#EDEDED", zorder=0)
+    ax.set_axisbelow(True)
+    for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)
+
+    # The key on the top band, where nothing is plotted. A SWATCH carries the colour and the name
+    # is ink, which is the deck's rule and is what the value labels above now follow. These two
+    # names have no marker beside them to inherit a hue from, so they get one of their own.
+    for x, stat in ((0.0, "D_old"), (1.0, "S_int")):
+        w = key_label(ax, x, 1.02, STAT_KEY[stat], STAT_COLOUR[stat],
+                      ha="left" if x == 0 else "right")
+        assert w < 0.5, (
+            f"the key {STAT_KEY[stat]!r} plus its swatch spans {w:.0%} of the panel; the two keys "
+            f"sit at opposite ends of one band and would meet in the middle.")
+    return ax
 
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(figsize=(3.4, 3.0))
+    fig, ax = plt.subplots(figsize=(2.30, 1.02))
     draw_5g(ax)
-    fig.savefig(os.path.join(os.path.dirname(__file__), "5g.png"), dpi=200, bbox_inches="tight")
+    fig.savefig(_os.path.join(_os.path.dirname(__file__), "5g.png"), dpi=200, bbox_inches="tight")
     print("wrote 5g.png")

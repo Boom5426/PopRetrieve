@@ -1,17 +1,24 @@
-"""PopRetrieve Figure 2 panel 2g: the eight scorers are two families, and the families do not talk.
+"""PopRetrieve Figure 2 panel 2f: what a scoring rule KEEPS is the axis the seven rules separate on.
 
 WHAT THE PANEL SHOWS
 --------------------
-One thing, about SCORING RULES and nothing else: the six scorers this export covers split into two
-blocks whose members agree strongly inside a block and essentially not at all across blocks. Every
-within-family Spearman rho is at least 0.72; the largest cross-family |rho| is 0.076 over nine
-pairs. That is why Figure 2 draws two colour families instead of eight separate methods.
+One thing, about SCORING RULES and nothing else: ordered by what they retain, the seven scorers
+this export covers fall into a direction block (rho at least 0.850 within it), a population block
+(at least 0.894 within it), and one row between them. The nine direction-by-distribution pairs are
+the panel's headline and none exceeds |rho| = 0.060.
+
+The row between them is why this panel was reframed on 2026-09-03. mean L2 is computed from the
+same collapsed mean signature as mean cosine, so under the retired two-family reading it belonged
+with the direction block; it correlates 0.17 to 0.20 with that block and 0.68 to 0.80 with the
+population one. A scorer sits in this matrix by what it keeps, not by what it is computed from,
+which is the finding docs/phase2/FIG2_MAGNITUDE_CONTROL_VERDICT.md records and the reason the row
+order is direction, magnitude, population rather than family-blocked.
 
 Two cells carry the panel and are ringed:
   * mean cosine / CMap cosine = 1.00. It is the largest off-diagonal value in the matrix and it
     equals a diagonal cell to within 1e-10, so it is drawn exactly as dark as a self-correlation.
     This is why panel a treats the two as ONE baseline rather than two.
-  * coverage-mean / coverage-worst = 0.97, the closest pair inside the population family.
+  * coverage-mean / coverage-worst = 0.98, the closest pair inside the population block.
 Both are asserted to be the largest off-diagonal value of their own block at draw time, so the
 rings cannot end up on the wrong cells if the export is regenerated.
 
@@ -59,24 +66,29 @@ the colour semantics:
 
 WHICH FILE IT READS
 -------------------
-figures/source_data/ed1_metric_correlation.csv, a 6 x 6 Spearman matrix. Per
-figures/source_data/README.md this file is PRIMARY: it is an input with no upstream parent in
-results/, so unlike panels c, d and f there is no authoritative file to move onto. Every number
-drawn is read out of it at draw time; none is typed.
+figures/source_data/ed1_metric_correlation.csv, a 7 x 7 Spearman matrix. Every number drawn is read
+out of it at draw time; none is typed.
+
+That file used to be PRIMARY in the sense figures/source_data/README.md gives the word: an input
+with no upstream parent in results/, hand-exported once and thereafter unreproducible. It is not
+any more. figures/source_data/build_metric_correlation.py, written on 2026-09-03, regenerates it
+from results/exp08_signature_baselines/per_query_scores.csv, which is what let the magnitude
+control enter this panel at all: the old export had no mean_l2 column and no way to gain one.
 
 COVERAGE, STATED BECAUSE IT IS INCOMPLETE
 -----------------------------------------
-The export holds six of the eight scorers panel a ranks. pca_dist and pca_mean, the two PCA-latent
+The export holds seven of the nine scorers panel a ranks. pca_dist and pca_mean, the two PCA-latent
 baselines, are NOT in it and are not invented here: the panel counts what is present, names the two
 that are missing on its own bottom line, and refuses to draw if the missing set stops being exactly
-those two. So the block structure shown is a statement about six rules, not about all eight. That
+those two. So the block structure shown is a statement about seven rules, not about all nine. That
 line is the one note that may never be traded for space.
 
 The correlation is over 54,180 query-candidate scored pairs (1,260 queries against 43 candidates
 each; the unit is the scored PAIR, not the query, which is the correction CORRECTIONS.md R29
-makes). That n is NOT printed on the panel, because this CSV is a bare 6 x 6 matrix and does not
+makes). That n is NOT printed on the panel, because this CSV is a bare 7 x 7 matrix and does not
 carry it: printing it here would mean typing a literal copied from the manuscript, which is exactly
-the laundering this deck forbids. The n lives in the caption and in Methods, where it is checkable.
+the laundering this deck forbids. The n lives in the caption and in Methods, where it is checkable,
+and in build_metric_correlation.py, which counts the pairs it correlates.
 
 JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
 -------------------------------------------------------
@@ -114,7 +126,7 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
     shrinking them below the 6.5 pt floor is not an option. Panel f abbreviates sliced-Wasserstein
     for the same reason. The caption spells both out. The abbreviation is a SUBSTITUTION on the
     fig2_style label ("coverage-" to "cov-"), not a second spelling stored here, and the number of
-    labels it fires on is asserted; a rename in fig2_style therefore reaches panel g or breaks the
+    labels it fires on is asserted; a rename in fig2_style therefore reaches panel f or breaks the
     build, and cannot leave a and g naming one scorer two ways. Every other label is
     fig2_style.SCORERS verbatim.
  9. NO aspect="equal". At 2.49 x 1.04 in a square matrix would be a small square in a wide box.
@@ -145,31 +157,52 @@ import pandas as pd
 from matplotlib.patches import Rectangle
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fig2_style import (FAMILY_COLOUR, FAMILY_NAME, PT_ANNOT,  # noqa: E402
-                        PT_SMALL, PT_TICK, REPO, SCORERS, SHARED, SUBTLE, TEXT)
+from fig2_style import (MAGNITUDE, MEAN, POP, PT_ANNOT,  # noqa: E402
+                        PT_SMALL, PT_TICK, REPO, SCORERS, SHARED, SUBTLE, TEXT,
+                        TIER, TIER_NAME)
+
+# One colour per tier, the same three panels a and b use.
+TIER_COLOUR = {"direction": MEAN, "magnitude": MAGNITUDE, "population": POP}
 
 SRC = f"{REPO}/figures/source_data/ed1_metric_correlation.csv"
 
-# Row/column order: the two families, each with its closest pair adjacent to the diagonal. The
-# FAMILY of each key is not restated here; it is read from fig2_style.SCORERS and asserted, so a
-# regrouping of the vocabulary cannot leave this panel silently mislabelled.
+# Row/column order, with each block's closest pair adjacent to the diagonal. The TIER of each key
+# is not restated here; it is read from fig2_style.TIER and asserted, so a regrouping of the
+# vocabulary cannot leave this panel silently mislabelled.
+# TIER ORDER SINCE 2026-09-03, not family order. The panel used to block the matrix into the two
+# fig2_style families and its whole reading was that they separate. They do not: the magnitude
+# control correlates 0.80 with the energy distance where mean cosine correlates 0.06, so what the
+# matrix separates on is what a scorer KEEPS, not what it is computed from. The rows now run
+# direction, magnitude, population, and the magnitude tier is one scorer wide because there is
+# one of it. See docs/phase2/FIG2_MAGNITUDE_CONTROL_VERDICT.md.
 ORDER = ["mean_cosine", "cmap_cosine", "cmap_wtcs",
+         "mean_l2",
          "global_energy", "coverage_mean", "coverage_worst"]
+TIER_OF = ["direction"] * 3 + ["magnitude"] + ["population"] * 3
+BLOCK_STARTS = (3, 4)       # the two gutters, after direction and after magnitude
 
 # The one shortening applied to a fig2_style label, written as a SUBSTITUTION rather than as a
-# second vocabulary: if panel a renames the coverage scorers, panel g renames them the same way or
+# second vocabulary: if panel a renames the coverage scorers, panel f renames them the same way or
 # the count assertion in draw_2f fires. See docstring note 8.
 LONG, SHORT = "coverage-", "cov-"
+# The key sits on one band above a 2.60 in matrix and three swatches plus TIER_NAME's full
+# wording sets 2.9 in, so the key uses one word each. The full tier names are in the caption.
+KEY_NAME = {"direction": "direction", "magnitude": "magnitude", "population": "distribution"}
+# Column labels get a second abbreviation: a column is 0.35 in wide and "CMap-style" alone sets
+# 0.42 in at 6.8 pt. Row labels keep the full form, where there is room for it.
+COL_LABEL = {"cmap_cosine": "CMap\ncos.", "cmap_wtcs": "CMap\nWTCS",
+             "coverage_mean": "cov-\nmean", "coverage_worst": "cov-\nworst",
+             "mean_cosine": "mean\ncosine", "mean_l2": "mean\nL2", "global_energy": "energy"}
 N_ABBREV = 2         # coverage-mean and coverage-worst, the only labels too wide for a column
 
 # ------------------------------------------------------------------------------ drawing constants
 ALPHA_MAX = 0.85     # fill alpha at |rho| = 1. Above this, 7.2 pt ink on POP blue loses contrast.
 SHADE_MID = 0.5      # the midpoint of the shading ramp; the block gap is asserted to straddle it
-GUT_X, GUT_Y = 0.090, 0.055        # white gutter between the two families, in inches
+GUT_X, GUT_Y = 0.090, 0.055        # white gutter between two tier blocks, in inches
 CELL_EDGE = 0.5                    # white hairline articulating the cells inside a dark block
 
 # The two halves of the panel BOX that lie outside the axes, from fig2_assemble's ledger for g:
-# PADS["g"] = (0.86 left, 0.10 right, 0.50 bottom) and LETTER_BLOCK = 0.17 above every row. They
+# PADS["f"] = (0.75 left, 0.10 right, 0.50 bottom) and LETTER_BLOCK = 0.16 above every row. They
 # are duplicated rather than imported because importing fig2_assemble would import every sibling
 # panel; the standalone preview at the foot of this file draws the same two numbers, and the
 # harness fails the panel if either is wrong, because ink would then leave the box.
@@ -215,11 +248,11 @@ def _stack(label: str) -> str:
 
 
 def load_matrix() -> "tuple[pd.DataFrame, list[str]]":
-    """The 6 x 6 Spearman matrix in family order, plus the labels of the scorers it does not cover.
+    """The 7 x 7 Spearman matrix in tier order, plus the labels of the scorers it does not cover.
 
     Everything the panel later states about shape is checked here: that the file is a symmetric
-    correlation matrix, that its six columns are exactly ORDER, and that ORDER is the two
-    fig2_style families in one block each.
+    correlation matrix, that its seven columns are exactly ORDER, and that ORDER runs
+    direction, magnitude, population with each tier contiguous.
     """
     raw = pd.read_csv(SRC, index_col=0)
     assert list(raw.index) == list(raw.columns), f"{SRC} is not a square labelled matrix"
@@ -232,9 +265,8 @@ def load_matrix() -> "tuple[pd.DataFrame, list[str]]":
     assert np.allclose(np.diag(v), 1.0, rtol=0.0, atol=1e-12), "the diagonal is not 1"
     assert np.all(np.abs(v) <= 1.0 + 1e-12), "a value outside [-1, 1]"
 
-    fams = [SCORERS[k]["family"] for k in ORDER]
-    assert fams == ["mean"] * 3 + ["pop"] * 3, (
-        f"ORDER is no longer two contiguous fig2_style families: {fams}")
+    assert [TIER[k] for k in ORDER] == TIER_OF, (
+        f"ORDER is no longer three contiguous fig2_style tiers: {[TIER[k] for k in ORDER]}")
 
     missing = [SCORERS[k]["label"] for k in SCORERS if k not in raw.columns]
     assert sorted(missing) == ["PCA-dist", "PCA-mean"], (
@@ -250,23 +282,35 @@ def draw_2f(ax):
     fams = [SCORERS[k]["family"] for k in ORDER]
     labels = [SCORERS[k]["label"].replace(LONG, SHORT) for k in ORDER]
     assert sum(SCORERS[k]["label"].startswith(LONG) for k in ORDER) == N_ABBREV, (
-        f"the {LONG!r} prefix no longer names exactly {N_ABBREV} of {ORDER}; panel g would stop "
+        f"the {LONG!r} prefix no longer names exactly {N_ABBREV} of {ORDER}; panel f would stop "
         "naming a scorer the way panel a names it")
 
     lower = [(i, j) for i in range(n) for j in range(i)]
-    within = [(i, j) for i, j in lower if fams[i] == fams[j]]
-    cross = [(i, j) for i, j in lower if fams[i] != fams[j]]
-    assert len(within) == 6 and len(cross) == 9, "the 3 + 3 blocking changed shape"
+    tiers = [TIER[k] for k in ORDER]
+    within = [(i, j) for i, j in lower if tiers[i] == tiers[j]]
+    cross = [(i, j) for i, j in lower if tiers[i] != tiers[j]]
+    assert len(within) == 6 and len(cross) == 15, "the 3 + 1 + 3 blocking changed shape"
 
-    # What the drawing has to carry on its own now that no phrase states it, refusing to draw
-    # itself if the file stops supporting it: every within-family pair sits above the middle of the
-    # shading ramp and every cross-family pair below it, so the two dark blocks and the two white
-    # blocks are a property of the data rather than of the palette.
+    # THE PANEL'S SUBJECT, asserted so the drawing cannot outlive it. The magnitude tier is one
+    # scorer, and it sits with the population tier rather than with the direction tier it shares a
+    # representation with. Both halves of that are checked: high toward population, low toward
+    # direction, and the two do not overlap.
+    mag = ORDER.index("mean_l2")
+    to_pop = [abs(v[mag, k]) for k in range(n) if tiers[k] == "population"]
+    to_dir = [abs(v[mag, k]) for k in range(n) if tiers[k] == "direction"]
+    assert min(to_pop) > max(to_dir), (
+        f"the magnitude scorer no longer sits nearer the population tier than the direction "
+        f"tier: min |rho| to population {min(to_pop):.4f}, max |rho| to direction "
+        f"{max(to_dir):.4f}. That ordering IS this panel; restate it, do not redraw it.")
+
+    # The direction and population tiers are each internally coherent, and the pairs that cross
+    # between THEM, which is the comparison the panel used to be about, stay near zero.
+    dp = [(i, j) for i, j in cross if {tiers[i], tiers[j]} == {"direction", "population"}]
     w_min = min(v[i, j] for i, j in within)
-    c_max = max(abs(v[i, j]) for i, j in cross)
+    c_max = max(abs(v[i, j]) for i, j in dp)
     assert w_min > SHADE_MID > c_max, (
-        f"the blocks no longer separate across the shading midpoint: weakest within-family "
-        f"{w_min:.4f}, strongest cross-family |rho| {c_max:.4f}")
+        f"the direction and population blocks no longer separate across the shading midpoint: "
+        f"weakest within-tier {w_min:.4f}, strongest direction-population |rho| {c_max:.4f}")
     # Sign is carried by the printed number, not by the colour; that is only honest while nothing
     # dark is negative. See docstring note 2.
     assert all(v[i, j] > 0 for i, j in lower if abs(v[i, j]) >= SHADE_MID), \
@@ -274,9 +318,9 @@ def draw_2f(ax):
 
     # The two ringed cells: each family's closest pair, which must be the one just under the
     # diagonal for the ring to sit where the layout puts it.
-    ring_mean = max((p for p in within if fams[p[0]] == "mean"), key=lambda p: v[p])
-    ring_pop = max((p for p in within if fams[p[0]] == "pop"), key=lambda p: v[p])
-    assert ring_mean == (1, 0) and ring_pop == (5, 4), (
+    ring_mean = max((p for p in within if tiers[p[0]] == "direction"), key=lambda p: v[p])
+    ring_pop = max((p for p in within if tiers[p[0]] == "population"), key=lambda p: v[p])
+    assert ring_mean == (1, 0) and ring_pop == (6, 5), (
         f"the closest pair moved off the sub-diagonal: {ring_mean}, {ring_pop}")
     assert abs(v[ring_mean] - 1.0) < 1e-10, (
         f"mean cosine and CMap cosine no longer agree at every pair (rho = {v[ring_mean]:.10f}); "
@@ -284,13 +328,12 @@ def draw_2f(ax):
     assert v[ring_mean] == max(v[p] for p in lower), "1.00 is no longer the largest off-diagonal"
 
     # -------------------------------------------------------------------- geometry, in inches
-    # Three grey lines, in the order a reader needs them: what the number is, how to read the
-    # drawing, what the drawing does not cover. The coverage line counts the scorers rather than
-    # stating a total, so it cannot outlive a change to the export. It is also the line that stays
-    # if the box ever shrinks again: a reader must not take this matrix for all eight scorers.
-    notes = ["Spearman $\\rho$ between scoring rules, not retrieval evidence",
-             "Cell shade = $|\\rho|$; ring = each family's closest pair",
-             f"{n} of {len(SCORERS)} scorers in panel a; {' and '.join(missing)} absent"]
+    # ONE grey line since 2026-09-04, and it is the line the docstring always said would be the
+    # one to keep: a reader must not take this matrix for all nine scorers. The other two said
+    # what the number is and how to read the shading, and the caption says both; a legend and a
+    # caveat are caption work, and on the panel they cost 0.19 in of matrix. The line counts the
+    # scorers rather than stating a total, so it cannot outlive a change to the export.
+    notes = [f"{n} of {len(SCORERS)} scorers in panel a; {' and '.join(missing)} absent"]
 
     fig = ax.figure
     w_in = ax.get_position().width * fig.get_figwidth()
@@ -310,8 +353,8 @@ def draw_2f(ax):
     col_h = 2 * COL_LINESP * PT_TICK / 72.0
     notes_h = (len(notes) - 1) * NOTE_STEP + PT_SMALL / 72.0
     below = COL_GAP + col_h + NOTE_GAP + notes_h + BOX_SLACK
-    cw = (w_in - GUT_X) / n
-    ch = (h_in + BOTTOM_PAD - GUT_Y - below) / n
+    cw = (w_in - GUT_X * len(BLOCK_STARTS)) / n
+    ch = (h_in + BOTTOM_PAD - GUT_Y * len(BLOCK_STARTS) - below) / n
     assert ch >= NUM_BOX + 2 * CELL_CLEAR, (
         f"a cell is {ch:.4f} in high and a printed value needs "
         f"{NUM_BOX + 2 * CELL_CLEAR:.4f} in to clear both edges; the values would touch")
@@ -319,8 +362,10 @@ def draw_2f(ax):
         f"the family gutter is {GUT_Y:.4f} in against a {ch:.4f} in cell, so the two blocks "
         "are no longer separated by a readable band of white")
 
-    grp_x = [j * cw + (GUT_X if j >= 3 else 0.0) for j in range(n)]          # cell left edges
-    grp_y = [h_in - i * ch - (GUT_Y if i >= 3 else 0.0) for i in range(n)]   # cell top edges
+    def _off(k, gut):
+        return gut * sum(1 for b in BLOCK_STARTS if k >= b)
+    grp_x = [j * cw + _off(j, GUT_X) for j in range(n)]          # cell left edges
+    grp_y = [h_in - i * ch - _off(i, GUT_Y) for i in range(n)]   # cell top edges
 
     def cell_xy(i, j):
         """Bottom-left corner of cell (row i, column j), in axes inches."""
@@ -329,24 +374,28 @@ def draw_2f(ax):
     # -------------------------------------------------------------------- cells
     for i in range(n):
         for j in range(n):
-            base = FAMILY_COLOUR[fams[i]] if fams[i] == fams[j] else SHARED
+            base = TIER_COLOUR[tiers[i]] if tiers[i] == tiers[j] else SHARED
             fill = mcolors.to_rgba(base, ALPHA_MAX * abs(v[i, j]))
             x0, y0 = cell_xy(i, j)
             ax.add_patch(Rectangle((x0, y0), cw, ch, facecolor=fill, edgecolor="white",
                                    linewidth=CELL_EDGE, zorder=2, clip_on=False))
 
-    # values, lower triangle only, within-family cells only
-    for i, j in within:
+    # Values in the lower triangle: every within-tier cell, and every cell in the magnitude
+    # scorer's row. The second set is the panel's subject and was unlabelled while this figure
+    # argued about families, because under that reading it was just another cross-family cell.
+    mag_cells = [(i, j) for i, j in lower if mag in (i, j)]
+    for i, j in sorted(set(within) | set(mag_cells)):
         x0, y0 = cell_xy(i, j)
-        heavy = (i, j) in (ring_mean, ring_pop)
+        heavy = (i, j) in (ring_mean, ring_pop) or (mag in (i, j) and tiers[i] != tiers[j]
+                                                    and "population" in (tiers[i], tiers[j]))
         ax.text(x0 + cw / 2, y0 + ch / 2, f"{v[i, j]:.2f}", ha="center", va="center",
                 fontsize=PT_ANNOT, color=TEXT, fontweight="bold" if heavy else "normal",
                 zorder=4, clip_on=False)
 
     # the nine cross-family pairs, as one computed bound instead of nine near-zero numbers
     cx = (grp_x[0] + grp_x[2] + cw) / 2
-    cy = (grp_y[3] + grp_y[5] - ch) / 2
-    ax.text(cx, cy, f"{len(cross)} cross-family pairs\nmax $|\\rho|$ = {c_max:.3f}",
+    cy = (grp_y[5] + grp_y[6] - ch) / 2
+    ax.text(cx, cy, f"direction $\\times$ population\n{len(dp)} pairs, max $|\\rho|$ = {c_max:.3f}",
             ha="center", va="center", fontsize=PT_ANNOT, color=TEXT, linespacing=1.25, zorder=4,
             clip_on=False)
 
@@ -363,19 +412,24 @@ def draw_2f(ax):
 
     mat_floor = grp_y[n - 1] - ch
     col_top = mat_floor - COL_GAP
-    for j, lab in enumerate(labels):
-        ax.text(grp_x[j] + cw / 2, col_top, _stack(lab), ha="center", va="top",
+    for j, key in enumerate(ORDER):
+        ax.text(grp_x[j] + cw / 2, col_top, COL_LABEL[key], ha="center", va="top",
                 fontsize=PT_TICK, color=TEXT, linespacing=COL_LINESP, clip_on=False)
 
     # Family key, above the matrix and beside the panel letter: a swatch at the left edge of each
     # block of columns, at the same strength the block itself is drawn at. This is the one place
     # colour may sit beside letters, because the label names a whole family and has no mark of its
     # own. See docstring note 11 for why it is up here rather than under the column labels.
-    for start, fam in ((0, "mean"), (3, "pop")):
-        ax.add_patch(Rectangle((grp_x[start], h_in + HEAD_GAP + SW_RISE), SW_W, SW_H,
-                               facecolor=mcolors.to_rgba(FAMILY_COLOUR[fam], ALPHA_MAX),
+    # Swatch and label CENTRED on each block rather than left-aligned to it. Left-aligned, the
+    # middle block is one column wide and its label ran straight into the third block's.
+    for lo, hi, fam in ((0, 2, "direction"), (3, 3, "magnitude"), (4, 6, "population")):
+        mid = (grp_x[lo] + grp_x[hi] + cw) / 2
+        txt = KEY_NAME[fam]
+        half = 0.5 * (SW_W + SW_GAP + len(txt) * PT_TICK / 72.0 * 0.50)
+        ax.add_patch(Rectangle((mid - half, h_in + HEAD_GAP + SW_RISE), SW_W, SW_H,
+                               facecolor=mcolors.to_rgba(TIER_COLOUR[fam], ALPHA_MAX),
                                edgecolor="none", clip_on=False, zorder=3))
-        ax.text(grp_x[start] + SW_W + SW_GAP, h_in + HEAD_GAP, FAMILY_NAME[fam],
+        ax.text(mid - half + SW_W + SW_GAP, h_in + HEAD_GAP, txt,
                 ha="left", va="bottom", fontsize=PT_TICK, color=TEXT, clip_on=False)
 
     y = col_top - col_h - NOTE_GAP
@@ -397,11 +451,12 @@ def draw_2f(ax):
 
 
 if __name__ == "__main__":
-    # The standalone preview is drawn at panel g's real box and real pads, so the inch geometry
-    # above is the geometry on the page. These numbers mirror fig2_assemble's ledger for g (half of
-    # a 6.90 in canvas; PADS["g"] = 0.86 left, 0.10 right, 0.50 bottom; the 1.54 in row plus its
+    # The standalone preview is drawn at panel f's real box and real pads, so the inch geometry
+    # above is the geometry on the page. These numbers mirror fig2_assemble's ledger for f (half of
+    # a 6.90 in canvas; PADS["f"] = 0.75 left, 0.10 right, 0.50 bottom; the 2.02 in row plus its
     # 0.17 in letter block) and are duplicated rather than imported because importing fig2_assemble
-    # would import every sibling panel.
+    # would import every sibling panel. The row grew from 1.90 to 2.02 in on 2026-09-03 when the
+    # matrix went from 6 scorers to 7.
     sys.path.insert(0, os.path.join(REPO, "figures"))
     from figstyle import apply_style
     from fig2_style import PT_TITLE
@@ -409,9 +464,9 @@ if __name__ == "__main__":
     # Without this the preview sets in matplotlib's default face, which is wider than the deck's
     # and would have every width on the page read 6 per cent long.
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
-    BOX_W, BOX_H = 3.45, 1.71
+    BOX_W, BOX_H = 3.45, 2.19
     fig = plt.figure(figsize=(BOX_W, BOX_H))
-    ax = fig.add_axes([0.86 / BOX_W, BOTTOM_PAD / BOX_H, 2.49 / BOX_W, 1.04 / BOX_H])
+    ax = fig.add_axes([0.75 / BOX_W, BOTTOM_PAD / BOX_H, 2.60 / BOX_W, 1.52 / BOX_H])
     draw_2f(ax)
-    fig.savefig(os.path.join(os.path.dirname(__file__), "2g.png"), dpi=300)
-    print("wrote 2g.png")
+    fig.savefig(os.path.join(os.path.dirname(__file__), "2f.png"), dpi=300)
+    print("wrote 2f.png")

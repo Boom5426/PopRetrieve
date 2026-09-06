@@ -1,26 +1,47 @@
-"""Figure 4 panel c: the oracle's SHAPE picks the winner.
+"""Figure 4: the evaluator's FORM picks the winner, and magnitude contributes under both forms.
 
 Source: results/upgrade/oracle_shape_test.json (analysis/class_c/oracle_shape_test.py)
+
+NO NUMBER FROM THAT FILE IS WRITTEN OUT IN THIS DOCSTRING, and that is a rule rather than a
+style. Until 2026-09-03 this text carried six hand-copied values from the V-statistic arm while
+the panel below it read the U-statistic file, so the drawing was right and its own explanation was
+wrong, with nothing to catch it. Every value now lives in the source file, in the panel's marks,
+and in docs/phase2/FINAL_FIGURE_NUMBER_LEDGER.md; the assertions in draw_shape pin the CLAIMS to
+the file instead.
 
 THE PANEL IN ONE SENTENCE
 ------------------------
 Same 218,331 cells, same 20 surface proteins, same two RNA rankings, byte-identical across the two
-columns; the only thing that changes is whether the protein oracle is computed as a MEAN (cosine of
-mean protein deltas) or as a DISTRIBUTION (energy distance between protein-response cell clouds).
-The winner swaps.
+columns; the only thing that changes is whether the protein evaluator is computed as a MEAN
+(cosine of mean protein deltas) or as a DISTRIBUTION (energy distance between protein-response
+cell clouds). The winner swaps.
 
-This is the sharpest result in the paper because no scorer can see either oracle. Class-A
-circularity is a method grading its own objective; this is something else and worse: two EXTERNAL,
+That is the result, and it is a strong one because no scorer can see either evaluator. Class-A
+circularity is a method grading its own objective; this is something else: two EXTERNAL,
 independent, blind criteria, built from the same measurements, handing victory to opposite methods
 purely because of their own statistical form.
 
+WHAT THE THIRD BAR IS FOR, AND THE EXPLANATION IT RETIRED
+----------------------------------------------------------
 The magnitude scalar is drawn as a third bar and it is not decoration. Both distributional objects
-here are energy distances, and an energy distance tracks a candidate's own response magnitude
-(rho = +0.791), so a magnitude-to-magnitude channel could have produced the swap with no
-distribution ever compared. It does not, quite: the scalar climbs steeply under the distributional
-oracle (+0.125 -> +0.352, the confound behaving exactly as predicted), but energy still leads it by
-+0.177 there against +0.022 under the mean-shaped oracle. Dropping the scalar would leave the
-reader unable to see either fact.
+here are energy distances, and an energy distance tracks a candidate's own response magnitude, so
+a magnitude-to-magnitude channel could produce the swap with no distribution ever compared.
+
+Under the V-statistic energy's lead over that scalar was eight times larger under the
+distributional evaluator than under the mean-shaped one, and this panel and its caption read that
+as distribution-specific compatibility: population evaluators reward population scorers. **Under
+the unbiased U-statistic the two leads are within twenty per cent of each other, and that reading
+is retired.** The asserted claim is now the weaker and correct one:
+
+    The statistical form of an external evaluator can change which retrieval strategy appears
+    preferable, even when the ranking and the biological measurements are held fixed. Response
+    magnitude contributes substantially under both evaluator forms, so the reversal cannot be
+    attributed uniquely to distribution-specific compatibility.
+
+See docs/phase2/POST_REPAIR_MASTER_RESULTS.md section C1, which is where the sentence was frozen.
+The residual under each form is recomputed from the six drawn values in draw_shape, checked
+against the source file's own record of it, and asserted to be of the same order under both; a
+return to an eightfold gap stops the build rather than quietly restoring the old sentence.
 
 TYPOGRAPHY, 2026-08-31: RAISED TO THIS FIGURE'S 6.5 pt FLOOR
 ------------------------------------------------------------
@@ -37,10 +58,11 @@ WHAT PAID FOR THE LARGER TYPE
     once, in the column where that series flies no winner flag and where its own bar is shorter:
     "energy" and "magnitude scalar" over the mean-oracle column, "mean cosine" over the
     distributional one.
-  * The six value labels are set ROTATED. At PT_ANNOT "+0.529" prints 21.5 pt long while
-    neighbouring bar centres are 17.2 pt apart, so horizontal value labels cannot clear each other
-    at any size at or above the floor in a 1.93 in axes carrying six bars. Turned on their side
-    each label is 6.7 pt of printed width and clears its neighbour by 10.5 pt.
+  * The six value labels are set ROTATED. At PT_ANNOT a signed three-decimal value prints about
+    21.5 pt long while neighbouring bar centres are 17.2 pt apart, so horizontal value labels
+    cannot clear each other at any size at or above the floor in a 1.93 in axes carrying six bars.
+    Turned on their side each label is 6.7 pt of printed width and clears its neighbour by
+    10.5 pt.
   * The annotation stack above each bar is measured rather than guessed: _len_pt() reads the
     printed length of each string from the font metrics, so the value label, the winner triangle
     and the word above it are placed by what they actually measure. _assert_fits then refuses to
@@ -107,9 +129,16 @@ YMAX = 0.85                  # top of the axes. Set by the tallest annotation st
 YTICKS = (0.0, 0.2, 0.4, 0.6)
 GAP_BAR_PT = 2.5             # bar top -> the foot of its rotated value label
 GAP_NAME_PT = 6.5            # value label -> the series name, wide enough that the two do not read
-                             # as one string ("+0.146 energy" is a value and a name, not a quantity)
+                             # as one string: a value followed by a name is two things, not a
+                             # quantity, and at a narrower gap the pair reads as one
 GAP_STACK_PT = 4.0           # between the winner triangle and what sits either side of it
 MS_WIN = 4.0                 # winner triangle, in points
+
+# The largest ratio the two magnitude residuals may take before "the same order under both
+# evaluator forms" stops being what the panel shows. Measured at 1.20 under the U statistic; it
+# was 8.1 under the V statistic, which is the reading this panel retired. A bound of 2.0 sits
+# clear of both, so neither a small drift nor a return to the old picture can pass unnoticed.
+RESID_RATIO_MAX = 2.0
 
 
 def _len_pt(s: str, size: float) -> float:
@@ -171,6 +200,38 @@ def draw_shape(ax):
             f"the {suffix} oracle column reaches {max(vals.values()):+.3f}, past the top tick "
             f"{YTICKS[-1]}. Extend YTICKS (and YMAX with it); the spine may not stop short of a bar.")
         winners.append(stated)
+
+    # ---- the claim the caption makes, pinned to the file the panel draws from ----------------
+    # Two things are checked, and both are about the MAGNITUDE RESIDUAL rather than about the
+    # reversal, because the reversal was never in doubt and the residual is what changed.
+    #
+    #   1. The residual recomputed from the six drawn values must equal the one the source file
+    #      records for itself. If they part, either the panel is drawing a different quantity from
+    #      the one the analysis reported or the file is internally inconsistent, and in both cases
+    #      a caption quoting one of them is quoting the wrong one.
+    #   2. The two residuals must stay within RESID_RATIO_MAX of each other, which is what "energy
+    #      exceeds the magnitude control by a similar amount under both evaluator forms" means.
+    #      This is the assertion that stops the retired sentence, "population evaluators reward
+    #      population scorers", from coming back without being re-argued.
+    resid = {}
+    for suffix, _, _ in COLS:
+        drawn = d[f"energy_vs_oracle{suffix}"] - d[f"magmatch_vs_oracle{suffix}"]
+        stated = d["magnitude_confound"][f"energy_minus_magmatch_under_{suffix}"]
+        assert abs(drawn - stated) < 1e-9, (
+            f"under the {suffix} evaluator the residual computed from the two drawn bars is "
+            f"{drawn:+.5f}, and {SRC} records {stated:+.5f} for the same quantity. The panel and "
+            f"its own source do not agree; do not caption either number until they do.")
+        resid[suffix] = drawn
+    assert min(resid.values()) > 0, (
+        f"energy no longer exceeds the magnitude scalar under both evaluator forms: {resid}. The "
+        f"panel's third bar is a control, and if it wins outright the caption must say so.")
+    ratio = max(resid.values()) / min(resid.values())
+    assert ratio <= RESID_RATIO_MAX, (
+        f"the magnitude residual is {ratio:.1f} times larger under one evaluator form than the "
+        f"other ({resid}), past the {RESID_RATIO_MAX} this panel calls the same order. At that "
+        f"separation the retired reading, that the reversal is distribution-specific, becomes "
+        f"arguable again and the caption must be re-argued rather than re-used. See "
+        f"docs/phase2/POST_REPAIR_MASTER_RESULTS.md C1.")
 
     tops = []
     for i, (key, name, col, name_at) in enumerate(ROWS):

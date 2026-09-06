@@ -1,64 +1,44 @@
-"""PopRetrieve Figure 5: three requirements connect heterogeneity to a change in candidate ranking.
+"""PopRetrieve Figure 5: what population information is worth when candidate responses are observed.
 
-Eleven panels, a-k, assembled into fig5_two_gate.{pdf,svg,png}.
+Eight panels, a-h, assembled into fig5_intervention_oracle.{pdf,svg,png}.
 
-WHAT CHANGED ON 2026-09-01, AND WHY THE PANEL COUNT AND THE TYPE FLOOR WERE ONE DECISION
------------------------------------------------------------------------------------------
-This figure carried fourteen panels and was the worst page in the deck: 239 of its 263 text
-artists sat below 6.5 pt, 33 of them at exactly 5.0 pt, and every one of the fourteen panels
-failed the floor the other four figures had already adopted.
+THE 2026-09-03 SPLIT
+--------------------
+This page used to carry both halves of the Phase-II result: the oracle measurement AND what
+happens to it under forward prediction. Eight panels could hold both only by giving each half four,
+and the two halves do not answer the same question. They are now two figures, and no experiment was
+re-run to make the split: every panel on both pages reads the same Phase-II tree it read before.
 
-The cause was geometric, not careless. Seven panels arrived here on 2026-08-30 when the Extended
-Data deck was retired, and they arrived as a three-across row and a four-across row at 1.06 to
-1.50 in wide. Measured at 6.5 pt against the slot each packing can afford (6.90 in less a 0.15 in
-left margin and a 0.10 in right margin, divided by the number across):
+    Figure 5   candidate responses are OBSERVED. How much is population information worth, where
+               does that worth come from, and does anything about the biology locate it?
+    Figure 6   candidate responses are PREDICTED. What survives, and why not.
 
-    packing        slot     a b d f      c          e          g        Tahoe panels
-    four-across    1.66 in  fit         +0.099     +0.130     +0.587    +0.31 / +0.16 on two
-    three-across   2.22 in  fit         +0.099     +0.006     +0.252    fit but for +0.020
-    two-across     3.33 in  fit         +0.099     fit        fit       fit
+The two task schematics are one function with one switch (figures/phase2_task.py), so a reader
+comparing the pages can see that the experiment changed in exactly one station.
 
-So the floor could not be raised while fourteen panels were on the page, and raising it was not a
-matter of editing font sizes. Panel c's overflow is the one that does not move with width: it is a
-second y axis, and it needs a right margin rather than a wider axes.
+WHAT THIS FIGURE ARGUES
+------------------------
+    the population carries information beyond the mean signature   +0.0303 MRR at the oracle
+    two thirds of that is response magnitude, not distribution     +0.0102 remains
+    it changes a top-1 decision in a minority of queries           5.6 per cent corrected
+    and almost all of it comes from a fifth of the queries         on the rest the mean route is
+                                                                   already perfect, at every seed
 
-WHAT LEFT, AND WHERE IT WENT
-----------------------------
-Panels h, i and j left: median ARI across nine clustering configurations, per-population
-silhouette under a raw k=2 partition, and the seed-averaged ARI grid over separation by cell
-budget. All three measure recoverability of the constructed two-state mixture, which is panel e's
-subject, and all three now sit in Supplementary Note 2 under "Unsupervised recovery of constructed
-two-state structure", written before they were removed because, unlike the panels cut from
-Figures 3 and 4, no Supplementary Note carried their numbers.
-
-Removing them also repaired a citation. The Results sentence "This is an algebraic property of the
-model class rather than a consequence of insufficient training" cited Fig. 5h-j, but h, i and j
-were clustering diagnostics on the constructed mixture and showed nothing about predictor algebra;
-the caption said as much on its own face ("h-j, Recoverability measured three further ways on the
-constructed mixture of e"). Supplementary Note 3 carries that claim and now carries it alone.
-
-The four Tahoe-100M panels stay, as h, i, j and k. Their numbers ARE duplicated in Supplementary
-Note 4, so they were the cheaper cut in content terms, and they were kept anyway: they are the
-paper's answer to the objection that a negative result about mixtures the authors built is a fact
-about the authors' mixtures, and a reader who accepts that objection stops reading before the
-Supplementary Information. The rebuttal has to sit in the figure that makes the claim.
+The last line is the figure's own correction to itself. The headroom correlation reported in an
+earlier draft as the strongest explanation of where population scoring pays is reproduced by a null
+that keeps the ceiling and destroys the pairing (panel e), so what survives is the ceiling fact and
+not a relationship. Of the three gates the plan proposed, only recoverability has a coefficient
+that survives conditioning on the mean route's own performance (panel h), and the statistic the
+interaction gate used to be built on measured effect size rather than interaction (panel g).
 
 GEOMETRY, AUTHORED 1:1
 ----------------------
 The manuscript text block is 6.951 in and the figure enters with \\includegraphics[width=\\textwidth],
 so the canvas is authored at 6.90 in: nominal point size IS printed point size and LaTeX applies
-no rescale. figstyle.pin_canvas pins the tight bbox to the authored width, since bbox_inches="tight"
-would otherwise crop to the ink and hand LaTeX a narrower figure to scale back up.
+no rescale. figstyle.pin_canvas pins the tight bbox to the authored width.
 
-Four rows rather than the old five. Deleting the three-across row returned 2.07 in, and the page
-went from 234 mm, which was the deck maximum and 0.02 in inside the float budget, to a height in
-the same class as Figures 3 and 4. The float budget is the 9.461 in text block less about 16/72 in
-of float overhead, i.e. 9.238 in.
-
-Row 3 is the one row that is four-across, and it is four-across on measurement rather than
-preference: at 1.09 in of axes the four Tahoe panels need 6.99 in of slot against the 6.90 in
-available, an excess of 0.09 in, which is about three characters of label at 6.5 pt. The
-alternative, splitting them two-by-two, costs a whole row and puts the page back at 226 mm.
+Two panels per row throughout, which is what the 6.5 pt floor costs: at three across a box is
+2.30 in and panel d's three-line tick labels alone need 2.0 in of it.
 """
 import os
 import re
@@ -75,10 +55,10 @@ for _p in (_HERE, _FIGROOT, os.path.join(_FIGROOT, "ed7")):
 
 # The one canonical output stem for this figure; build_all asserts it equals STEMS[5], because
 # that is the name copied to manuscript/latex/figures/fig5.pdf.
-STEM = "fig5_two_gate"
+STEM = "fig5_intervention_oracle"
 
 from figstyle import pin_canvas, strip_titles          # noqa: E402
-from fig5_style import PT_ANNOT, PT_FLOOR, PT_LETTER, PT_TICK, PT_TITLE, TEXT  # noqa: E402
+from phase2_style import PT_ANNOT, PT_FLOOR, PT_LETTER, PT_TICK, PT_TITLE, TEXT  # noqa: E402
 from fig5a import draw_5a                              # noqa: E402
 from fig5b import draw_5b                              # noqa: E402
 from fig5c import draw_5c                              # noqa: E402
@@ -86,15 +66,15 @@ from fig5d import draw_5d                              # noqa: E402
 from fig5e import draw_5e                              # noqa: E402
 from fig5f import draw_5f                              # noqa: E402
 from fig5g import draw_5g                              # noqa: E402
-import ed7_tahoe as _ed7                               # noqa: E402
+from fig5h import draw_5h                              # noqa: E402
 
 _SUBSUP = re.compile(r"\$[^$]*[\^_][^$]*\$")
 
 FIGW = 6.90
-PAD_TOP, PAD_BOT = 0.05, 0.08
+PAD_TOP, PAD_BOT = 0.05, 0.03
 # The panel letter alone. Figure 5 never drew a conclusion phrase over a panel on the composite,
 # which calls strip_titles, but it carried a TITLES dict of fourteen of them and three panel files
-# still set one for their standalone run. Both are gone; see fig5_style.
+# still set one for their standalone run. Both are gone; see phase2_style.
 LETTER_BLOCK = 0.15
 # 0.10, not the 0.22 this ledger was written with. 2026-09-01: measured against the ink rather
 # than against the ledger, the corridor a reader saw between two rows here was 0.47 to 0.56 in,
@@ -132,32 +112,44 @@ ROW_GAP = 0.10
 # panel in that row lost the same amount off its bottom pad. Axes heights are therefore UNCHANGED
 # to the hundredth: what left the page is white, not plotting area. Per row: 0.13, 0.12, 0.04,
 # 0.04 in.
+# Row heights are the tallest axes in the row plus that panel's bottom pad. Two panels per row,
+# so every box is at least 2.60 in and every axes at least 1.96 in.
+#
+# CUT AGAIN ON 2026-09-04, 1.95/1.56/1.50/1.46 to 1.74/1.44/1.20/1.20, and this time the axes DO
+# shrink. Two separate findings.
+#
+# First, white. Rendered at the old ledger, the corridor between rows 1 and 2, from the last ink
+# above to the first ink below, measured 0.46 in on a figure whose ROW_GAP is 0.10: panel a's
+# 0.28 in bottom pad was entirely unused, because a is a schematic with no x apparatus at all,
+# and b's 0.49 in pad used 0.28 of it. a's pad is now 0.11 and b's 0.32, which is what they were
+# measured to occupy.
+#
+# Second, plotting area that was not carrying anything. Rows 3 and 4 held four panels of two to
+# four categorical rows each in 1.06 to 1.12 in of axes; e is a single interval against a null
+# band. Each row was lowered until this figure's own gates and figures/check_overlaps.py fired,
+# and then stepped back: row 2 collides at 1.40 (panel c's tallest value label reaches its own
+# legend) and rows 3 and 4 at 1.14 by crowding rather than by collision, so they stop at 1.20.
+#
+# One collision that appeared during this pass was NOT a layout problem and was fixed at its
+# source: panels f and g placed their series keys using a hard-coded copy of their own axes size,
+# which no longer matched once a row moved. phase2_style.key_label measures the axes now.
 ROWS = [
-    (1.67, [("a", 1.98), ("b", 2.16), ("c", 2.76)]),
-    (1.44, [("d", 2.70), ("e", 4.20)]),
-    (1.66, [("f", 3.00), ("g", 3.90)]),
-    (1.54, [("h", 1.86), ("i", 1.74), ("j", 1.62), ("k", 1.68)]),
+    (1.74, [("a", 4.45), ("b", 2.45)]),
+    (1.44, [("c", 3.30), ("d", 3.60)]),
+    (1.20, [("e", 3.60), ("f", 3.30)]),
+    (1.20, [("g", 3.40), ("h", 3.50)]),
 ]
 
 # (left, right, bottom) pad in inches inside the panel BOX. Top is always zero: the panel letter
-# sits in the LETTER_BLOCK band above the row. Left pads hold the panel's y apparatus plus the
-# room the letter needs, and they differ because the apparatus does: a is a schematic and carries
-# none, b carries wrapped predictor names, and c is the only panel in the deck with a right pad
-# larger than 0.10 in, which is its second y axis.
-# Left pads are the MEASURED furniture of each panel plus 0.22 in for the letter, not a common
-# value: an over-wide pad is axes width thrown away, and at this panel count there is none to
-# spare. c is the only panel with a right pad above 0.10 in, and it is its second y axis.
-# THE LETTER RESERVE IS 0.14 IN, NOT 0.22, SINCE 2026-09-01. Measured, every panel but a had
-# exactly 0.22 in between its box edge and its leftmost ink, which is the reserve arriving
-# untouched: the letter is drawn at the box edge by _letter() and a 9.5 pt bold letter is about
-# 0.08 in wide, so 0.14 in gives it its width and 0.06 in of air. The 0.08 in freed per panel goes
-# into axes WIDTH, since box widths still sum to FIGW. a keeps 0.30: it is the schematic, its ink
-# already runs 0.21 in left of its own axes, and 0.09 in is all the slack it has.
-PADS = {"a": (0.30, 0.06, 0.31), "b": (0.64, 0.06, 0.33), "c": (0.50, 0.47, 0.33),
-        "d": (0.64, 0.10, 0.32), "e": (0.63, 0.10, 0.34),
-        "f": (0.58, 0.10, 0.40), "g": (0.73, 0.10, 0.44),
-        "h": (0.51, 0.06, 0.44), "i": (0.49, 0.06, 0.44),
-        "j": (0.61, 0.06, 0.44), "k": (0.61, 0.06, 0.44)}
+# sits in the LETTER_BLOCK band above the row. Left pads are each panel's measured y apparatus
+# plus the 0.14 in letter reserve, and they differ because the apparatus does: the schematic
+# carries no y axis, e carries none either, g and h carry two-line term names.
+# Bottom pads hold the x apparatus: d carries three-line tick labels (a two-line group name and
+# its n), f a two-line first tick under an axis label, the schematic none.
+PADS = {"a": (0.30, 0.06, 0.11), "b": (0.60, 0.06, 0.32),
+        "c": (0.58, 0.06, 0.45), "d": (0.74, 0.08, 0.46),
+        "e": (0.30, 0.10, 0.38), "f": (0.64, 0.10, 0.44),
+        "g": (0.86, 0.10, 0.40), "h": (0.86, 0.10, 0.45)}
 
 
 def _boxes():
@@ -240,12 +232,8 @@ def _assert_no_titles(fig, cap=PT_ANNOT):
     return fig
 
 
-# a-g are this figure's own panels; h-k are the four Tahoe-100M panels, whose draw functions live
-# in figures/ed7/ed7_tahoe.py because that module still assembles a standalone preview of them.
-# Figure 5 is their only gated consumer, so ed7_tahoe takes its type ladder from fig5_style.
-DRAW = {"a": draw_5a, "b": draw_5b, "c": draw_5c, "d": draw_5d, "e": draw_5e, "f": draw_5f,
-        "g": draw_5g,
-        "h": _ed7.draw_a, "i": _ed7.draw_b, "j": _ed7.draw_c, "k": _ed7.draw_d}
+DRAW = {"a": draw_5a, "b": draw_5b, "c": draw_5c, "d": draw_5d,
+        "e": draw_5e, "f": draw_5f, "g": draw_5g, "h": draw_5h}
 
 
 def build(apply_style, panel_letter):

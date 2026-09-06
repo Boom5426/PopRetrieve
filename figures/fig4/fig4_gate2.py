@@ -141,8 +141,17 @@ def draw_gate2(ax):
     # group, which is the taller pair and is the group a reader meets first; the encoding is
     # constant across arms, so labelling one group names both. Ink on the open bar, white on the
     # filled one. The 0.075 offset lifts both off the chance rule that passes behind the bars.
-    for dx, lab, col in ((-w / 2, "best unsupervised", TEXT),
-                         (w / 2, "supervised ceiling", "white")):
+    #
+    # SET ON TWO LINES SINCE 2026-09-05, and that is a height constraint rather than a taste.
+    # A label rotated into a bar runs along the bar, so its PRINTED LENGTH is what has to fit
+    # between the chance rule and the bar top, and that length does not shrink when the panel
+    # does. On one line "best unsupervised" measures 0.68 in, which put this panel's floor at
+    # 1.59 in of axes and made it the tallest thing in Figure 4's lower half. Broken at the
+    # space the run is 0.48 in, the floor is 1.20 in, and no word was dropped: "best" and
+    # "ceiling" are the two words that stop the pair reading as two competing methods, which is
+    # the misreading this panel exists to prevent.
+    for dx, lab, col in ((-w / 2, "best\nunsupervised", TEXT),
+                         (w / 2, "supervised\nceiling", "white")):
         ax.text(x[0] + dx, YMIN + 0.075, lab, rotation=90, rotation_mode="anchor", ha="left",
                 va="center", fontsize=PT_SMALL, color=col, zorder=6)
 

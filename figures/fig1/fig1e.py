@@ -1,5 +1,15 @@
 """PopRetrieve Figure 1 panel e: the objective-utility mismatch, drawn as two judging scenarios.
 
+THE TWO LANE NAMES, AND WHY THE SECOND ONE IS NOT "INDEPENDENT"
+--------------------------------------------------------------
+They read "Coupled evaluation" and "Independent evaluation" until 2026-09-03. The second name
+was the problem: it invites "independent, therefore neutral, therefore the truth", and Figure 4
+is the demonstration that it is not. Two external protein evaluators built from the SAME cells,
+on the SAME ranking, prefer opposite retrieval scores when only the statistical form of the
+evaluator changes. So the axis this figure draws is a RELATIVE one and the names now say so:
+objective-aligned at one end, LESS score-aligned at the other, with no end of it called neutral.
+Panel f carries the same correction on its own axis.
+
 Schematic. No measured value is plotted and no data file stands behind this panel; it states the
 paper's central conceptual claim, that a retrieval method can be graded by the very quantity it
 was optimised to maximise, and that a grade of that kind cannot say whether the retrieved
@@ -19,7 +29,7 @@ them. The claim is about WHO HOLDS THE INSTRUMENT, so the drawing is now about t
   * The coupled lane CLOSES. A return path leaves the evaluator, runs back under the chain and
     points up into the retriever, and the words "shared objective" sit inside the loop it makes.
     A closed circuit is the one figure a reader cannot mistake for a pipeline.
-  * The independent lane does not close. Its third stage is a rectangle rather than a circle, in
+  * The less score-aligned lane does not close. Its third stage is a rectangle rather than a circle, in
     EXT green rather than POP blue, and it holds pictures of things the retrieval score never
     saw: a target, a protein with a ligand in its pocket, a dose-response curve. It opens to the
     right onto two outcomes instead of returning.
@@ -36,8 +46,10 @@ Three things were cut so the marks could be drawn large enough to be read as mar
   * The green judge's three icons are unlabelled. A bullseye, a bound protein and a sigmoid at
     0.11 in do not name themselves, so the caption has to say what they are: mechanism of action,
     target engagement, and viability from GDSC2 dose response.
-  * "Retriever" and "Evaluator" are written once, in the coupled lane only. The independent lane
-    inherits them from the column: same centre, same mark, therefore the same object.
+  * "retriever" and "evaluator" are written once, in the objective-aligned lane only. The other
+    lane inherits the FIRST of them from the column: same centre, same mark, therefore the same
+    object. It cannot inherit the second, because its judge is a different shape in a different
+    colour, so that one stage is named in its own lane; see _independent.
   * The word "ranking" under the coupled lane's middle stage is gone. Three numbered cards ARE a
     ranking, and the independent lane still names it, because "fixed ranking" is the assertion
     that the SAME list is handed on unchanged.
@@ -119,7 +131,7 @@ X_VERDICT_TEXT = 2.190          # the verdict's words, set flush left; 0.96 in o
 Y_HEADLINE = 2.026              # va="top"
 Y_HEAD_A = 1.856                # lane name. 0.055 in under the headline's descenders: any less
                                 # and two bold lines read as one two-line title.
-Y_ROLE_A = 1.718                # Retriever / Evaluator
+Y_ROLE_A = 1.718                # retriever / evaluator
 Y_INST_A = 1.606                # their concrete instance, tight under the role it belongs to
 Y_STAGE_A = 1.202               # stage centres
 Y_LOOP_LABEL = 0.950            # inside the loop, between the card stack and the return run
@@ -292,9 +304,9 @@ def _lane_name(ax, y, text):
 
 
 def _coupled(ax):
-    _lane_name(ax, Y_HEAD_A, "Coupled evaluation")
+    _lane_name(ax, Y_HEAD_A, "Objective-aligned evaluation")
 
-    for x, role in ((X1, "Retriever"), (X3, "Evaluator")):
+    for x, role in ((X1, "retriever"), (X3, "evaluator")):
         ax.text(_fx(x), _fy(Y_ROLE_A), role, ha="center", va="top", fontsize=PT_ANNOT,
                 color=TEXT, zorder=5)
     # The concrete instance, small, under the role it instantiates. The first and third columns
@@ -316,18 +328,33 @@ def _coupled(ax):
 
     _verdict_arrow(ax, X3 + D_STAGE / 2 + X_FLOW_GAP, Y_STAGE_A, Y_STAGE_A, POP)
     _gain_mark(ax, Y_STAGE_A)
-    _verdict_text(ax, Y_STAGE_A, "objective-aligned\ngain")
+    _verdict_text(ax, Y_STAGE_A, "gain under the\nsame objective")
 
 
 def _independent(ax):
-    _lane_name(ax, Y_HEAD_B, "Independent evaluation")
+    _lane_name(ax, Y_HEAD_B, "Less score-aligned evaluation")
 
     # The one label the lane needs: the list is not re-ranked, it is handed over as it stands.
     # Set at the weight of the coupled lane's role names, not at the lane name's: it sits in
-    # the same row as "Retriever" and "Evaluator" and is the same kind of label, and a second
+    # the same row as "retriever" and "evaluator" and is the same kind of label, and a second
     # bold line under a bold lane name reads as a two-line heading.
     ax.text(_fx(X2), _fy(Y_INST_B), "fixed ranking", ha="center", va="top", fontsize=PT_ANNOT,
             color=TEXT, zorder=5)
+    # THE JUDGE IS NOT NAMED HERE, AND IT WAS TRIED. It is the only stage in the figure without a
+    # name: the coupled lane labels its first and third stages, this lane inherits the first from
+    # the column above it, and it cannot inherit the third, because a green card is not the blue
+    # circle it sits under. So the three 0.11 in pictograms are a reader's only handle on it and
+    # the caption is the only place they are named, which is a real gap.
+    #
+    # It does not fit, measured rather than guessed. A label centred on X3 on this row may be
+    # 0.670 in wide before it touches "fixed ranking"; "external evaluator" is 0.830 and overlaps
+    # it by 14%, "external judge" is 0.660 and leaves 0.7 pt, under a word space, so the two read
+    # as one phrase. Two lines are blocked from below: this row's baseline clears the judge card
+    # by 0.144 in and a second 7.2 pt line needs 0.215. Setting it at PT_SMALL would put two
+    # weights on one baseline, and shifting it right would uncentre it from the card it names.
+    # Widening the X1/X2/X3 pitch moves both lanes and every flow arrow between them.
+    #
+    # So the naming stays in the caption. Reopen this only with the stage pitch, not with the type.
 
     _stage_circle(ax, X1, Y_STAGE_B)
     _cards(ax, X2, Y_STAGE_B)

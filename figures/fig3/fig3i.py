@@ -3,9 +3,9 @@ must beat, read as a side of the equality line.
 
 WHAT THIS PANEL SHOWS
 ---------------------
-Panel h reports the Class-C aggregate: energy retrieval reaches a median rho of +0.276 against
+Panel h reports the Class-C aggregate: energy retrieval reaches a median rho of +0.265 against
 the matched functional oracle, the query-dependent response-magnitude scalar reaches +0.232, and
-partialling that channel out leaves energy +0.097. This panel shows the same 103 queries one at a
+partialling that channel out leaves energy +0.105. This panel shows the same 103 queries one at a
 time. What a reader takes from it is a SPLIT: the cloud straddles y = x, and the two half-plane
 counts, 62 against 41, are a 60/40 division rather than a sweep. That split is the reason the
 paper does not read h as a clean win for distributional retrieval. A reader who takes "energy
@@ -56,7 +56,7 @@ similarity retriever was ever asked to optimise, and it is largely response magn
 magnitude scalar was near-guaranteed to win it; and a 103-of-103 sweep over queries that share a
 candidate library within each cell line counts pseudo-replicates as independent evidence, which
 this study refuses to do elsewhere. The potency comparison survives only as the endpoint audit in
-panels l and m.
+panels j and k.
 
 JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
 -------------------------------------------------------
@@ -83,7 +83,7 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    each label coordinate is on the side its own text names, the count under each label is that
    side's count, and every drawn label clears its own strip on all four edges by a MEASURED
    margin. Because the strips push the x limits out to about +/- 1.14, past the range a Spearman
-   rho can take, the bottom spine is cut back to the data the way panels e, h and l cut theirs
+   rho can take, the bottom spine is cut back to the data the way panels f, h and j cut theirs
    back, so the strips read as margin and not as a scale; the drawn ticks are asserted to lie
    inside that cut-back span.
 4. THE WILCOXON P IS CUT INTO THE CAPTION, and the cut is now a choice rather than a space
@@ -104,6 +104,11 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    its own, in a panel whose whole point is that the two numbers are close.
 
 Run standalone: python3 fig3i.py
+
+EVERY NUMBER IN THIS DOCSTRING IS THE U-ARM VALUE, reissued 2026-09-03 when the
+Class-C source-data views were brought under figures/sync_source_data.py and resynced
+from results/upgrade/. The V-arm values they replaced are in
+docs/phase2/POST_REPAIR_MASTER_RESULTS.md, Category B and C1.
 """
 from __future__ import annotations
 
@@ -136,7 +141,9 @@ STRIP_IN = 0.35
 LABEL_AIR_PT = 0.8
 # Data-unit air between the outermost query and the strip it must not enter, and between the
 # outermost query and the top or bottom frame.
-PAD_X, PAD_Y = 0.035, 0.050
+# PAD_X pads the INNER BAND, which is the union of the two columns' ranges, and PAD_Y the
+# y view. PAD_X must exceed PAD_Y or the equality line still reaches a strip; asserted below.
+PAD_X, PAD_Y = 0.065, 0.050
 # Where each half-plane label sits inside its strip, as a fraction of the y range, and how far
 # below it the count is set, in points. The offset is in points because it separates two pieces of
 # type; the label heights that set it are in points too. The high fraction was 0.72, which put
@@ -145,6 +152,10 @@ PAD_X, PAD_Y = 0.035, 0.050
 # score. 0.80 lifts it onto its own row, between the 0.0 and 0.5 tick rows.
 LY_FRAC_LOW, LY_FRAC_HIGH = 0.30, 0.80
 COUNT_DROP_PT = 13.0
+# Where the exact-tie note sits in the left label strip, as a fraction of the y range. Low, so it
+# clears the "scalar better" block at LY_FRAC_HIGH and is read as a panel note rather than as part
+# of that half-plane's count.
+TIE_Y_FRAC = 0.07
 
 MS = 3.4          # marker diameter in points; 103 queries inside about 1.28 x 0.90 in
 LW_DIAG = 1.0     # the equality line, the datum this panel is read against
@@ -205,11 +216,16 @@ def draw_3i(ax):
 
     energy_wins = int((x > y).sum())
     scalar_wins = int((x < y).sum())
-    if energy_wins + scalar_wins != n:
-        raise ValueError(
-            f"{n - energy_wins - scalar_wins} of {n} queries score EXACTLY equal on {XCOL} and "
-            f"{YCOL}. The two half-plane labels no longer partition the queries, and the two "
-            f"counts drawn under them would not be a two-way split.")
+    ties = int((x == y).sum())
+    # A TIE IS DRAWN, NOT REFUSED (2026-09-03). This used to raise if the two half-planes did not
+    # partition the queries, on the reasoning that two counts under two labels must sum to n.
+    # Under the unbiased estimator exactly one query, A549 / Fulvestrant, scores identically on
+    # both rules (0.663436 each), so they no longer do. Raising would have made an exact tie
+    # unpublishable; the panel names it instead, on the equality line where it happened, which is
+    # the same thing panels a and 2c do with theirs.
+    assert energy_wins + scalar_wins + ties == n, (
+        f"{energy_wins} + {scalar_wins} + {ties} does not account for all {n} queries on {XCOL} "
+        f"against {YCOL}; a NaN has entered one of the two columns.")
     p_wilcoxon = float(stats.wilcoxon(x, y).pvalue)
 
     # ---- the view. Solve the x limits so each label strip is STRIP_IN wide on the page.
@@ -217,7 +233,15 @@ def draw_3i(ax):
     if ax_w <= 3.0 * STRIP_IN:
         raise ValueError(f"panel i is {ax_w:.2f} in wide; two {STRIP_IN} in label strips would "
                          f"leave the 103 queries under a third of the axes.")
-    inner_lo, inner_hi = x.min() - PAD_X, x.max() + PAD_X
+    # The inner band has to contain the y range as well as the x range, or the equality line
+    # leaves the frame through a label strip and that strip's single label is false over part of
+    # itself. Deriving it from BOTH axes makes that structural rather than lucky: until
+    # 2026-09-03 it was x alone, and it held only because the energy column happened to be the
+    # wider of the two. Under the unbiased estimator the energy column narrowed and the
+    # magnitude-match column did not, y ran 0.004 past it, and the assertion below fired. PAD_X is
+    # still the pad; what changed is what it is a pad around.
+    inner_lo = min(float(x.min()), float(y.min())) - PAD_X
+    inner_hi = max(float(x.max()), float(y.max())) + PAD_X
     span = inner_hi - inner_lo
     x_range = span / (1.0 - 2.0 * STRIP_IN / ax_w)
     strip = 0.5 * (x_range - span)
@@ -306,6 +330,17 @@ def draw_3i(ax):
     assert all(YLO <= t <= YHI for t in ax.get_yticks()), (
         f"a y tick falls outside the drawn y range [{YLO:.3f}, {YHI:.3f}].")
 
+    # The tie. It belongs to NEITHER half-plane, so it is not a third count under either label:
+    # it goes low in the left strip, which is data-free by the assertion above, where it reads as
+    # a note about the panel rather than as part of a count. Naming it is not optional now that
+    # the two drawn counts no longer sum to n: a reader who adds 62 and 40 and finds 102 must be
+    # able to see what the missing query did. It was drawn at the tied point first, and that point
+    # sits in the densest part of the cloud at (0.663, 0.663), where the note was unreadable.
+    if ties:
+        ax.text(0.5 * (XLO + inner_lo), YLO + TIE_Y_FRAC * (YHI - YLO),
+                f"{ties} exact tie" if ties == 1 else f"{ties} exact ties",
+                ha="center", va="center", fontsize=PT_SMALL, color=SUBTLE, zorder=4)
+
     ax.set_xlabel(r"energy retrieval, $\rho$", fontsize=PT_ANNOT)
     ax.set_ylabel("response-magnitude\nmatch (a scalar), " r"$\rho$", fontsize=PT_ANNOT,
                   linespacing=1.15)
@@ -342,8 +377,8 @@ def draw_3i(ax):
             and sum(k for _, k in per_line.values()) == n), (
         f"the per-cell-line counts {per_line} do not add up to the {energy_wins}/{n} drawn in the "
         f"blue half-plane; the caption would contradict the figure.")
-    return {"energy_wins": energy_wins, "scalar_wins": scalar_wins, "n_queries": n,
-            "wilcoxon_p": p_wilcoxon, "per_cell_line": per_line}
+    return {"energy_wins": energy_wins, "scalar_wins": scalar_wins, "ties": ties,
+            "n_queries": n, "wilcoxon_p": p_wilcoxon, "per_cell_line": per_line}
 
 
 if __name__ == "__main__":

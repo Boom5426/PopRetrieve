@@ -1,22 +1,21 @@
-"""PopRetrieve Figure 2: cell populations carry retrievable information beyond mean signatures.
+"""PopRetrieve Figure 2: response magnitude explains most information beyond directional signatures.
 
-ARCHETYPE: quantitative grid with one hero panel (a, at 30 per cent of panel area). Seven panels,
+ARCHETYPE: quantitative grid with one hero panel (a, at 30 per cent of panel area). Six panels,
 read in one order:
 
-    HOW BIG IS IT?
-      a  The Hit@1 ladder          every population-level scorer above every mean-level one
+    WHAT IS THE GAIN MADE OF?
+      a  The Hit@1 ladder          direction, then magnitude (+0.399), then distribution (+0.048)
 
-    HOW GENERAL IS IT?
-      b  Per task                  large on both constructed tasks, reversed on Frangieh
-      c  Per query                 it survives partial observation on most of 765 queries
+    HOW GENERAL IS THAT DECOMPOSITION?
+      b  Per task                  the magnitude step dominates twice and vanishes on Frangieh
+      c  Per query                 a modest response-matching advantage on 765 queries
 
-    CAN WE SAY WHERE IT WILL BE?
-      d  The pre-specified gate    does not enrich for the gain
-      e  Minority-state fraction   starving the minority state does not universally erase it
+    WHERE DOES IT COME FROM?
+      d  Minority-state fraction   starving the minority state does not universally erase it
 
-    IS IT A PROPERTY OF ONE SCORE, OR OF A FAMILY?
-      f  Five population scorers   all five gain, and the coverage pair gains most
-      g  Score-to-score agreement  the two families are internally coherent and near orthogonal
+    WHAT SURVIVES A MAGNITUDE-AWARE CONTROL?
+      e  Five population scorers   all five gain over direction; the residue over magnitude is zero
+      f  Score-to-score agreement  a scorer sits by what it KEEPS, not by what it is computed from
 
 Everything here is objective-aligned (Class A): the criteria reward correspondence between
 response populations, which is the information population-level retrieval uses. That is the
@@ -112,15 +111,15 @@ from fig2f import draw_2f  # noqa: E402
 # ------------------------------------------------------------------------------------------
 FIGW = 6.90
 
-PAD_TOP, PAD_BOT = 0.05, 0.08
+PAD_TOP, PAD_BOT = 0.05, 0.04
 # The panel letter alone. It was 0.26 in while every panel also stated a bold conclusion phrase;
 # removing those (see fig2_style) returns 0.36 in to the four rows, and the row gap tightens with
 # them. The height a figure spends on sentences is height it does not spend on evidence.
 LETTER_BLOCK = 0.16
-# 0.16, not 0.22. Measured 2026-09-01: the corridors a reader saw between rows were 0.33 and
-# 0.31 in. Row 0 also carried 0.11 in of unused bottom pad, which comes off its row height below
-# so that no axes changes size; rows 1 and 2 had 0.04 and 0.02 in, i.e. none.
-ROW_GAP = 0.16
+# 0.10, not 0.16, since 2026-09-04. The corridor a reader sees between two rows is the gap plus
+# the letter block, and it measured 0.33 in on both corridors: 0.17 in of white above a letter
+# whose ink is 0.09 in tall. The gap only has to say that one row has ended.
+ROW_GAP = 0.10
 
 # (panel keys in the row, row height in inches). Box widths sum to FIGW per row.
 #
@@ -145,9 +144,20 @@ ROW_GAP = 0.16
 # panel over: d's curve was 3.23 x 0.66 in, a 4.9:1 strip, which is the very proportion panel a
 # was rebuilt to escape. Its composition strip is a fixed 0.34 in, so every inch added to the row
 # goes to the curve. Aspects after: a 1.52:1, c 1.31:1, d 2.86:1, e 1.73:1, f 1.78:1.
-ROWS = [(("a", "b"), 2.47),
-        (("c", "d"), 2.05),
-        (("e", "f"), 1.90)]
+#
+# ROWS SHORTENED ON 2026-09-04, each for a stated reason and none of them by eye. Row 0: panel a's
+# ladder ran at a 0.220 in pitch for names that set 0.094 in, so the bars were separated by more
+# than two of their own heights; at 0.180 in the ratio is the one the rest of the deck uses, and
+# 0.32 in leaves the page. Row 1: panel d's curve gives back 0.12 in, which takes its aspect from
+# 2.86:1 to 3.11:1 and leaves it the widest panel here either way. Row 2: panel f's note block
+# went from three grey lines to one, and the row drops by exactly the 0.19 in that frees, so the
+# matrix cell height is unchanged to the hundredth.
+ROWS = [(("a", "b"), 2.15),
+        (("c", "d"), 1.93),
+        # Row 2 gained 0.12 in on 2026-09-03: panel f's matrix went from 6 scorers in two blocks
+        # to 7 in three when the magnitude control entered the figure, and its own cell-height
+        # assertion refused to draw at the old height. The extra row is content, not slack.
+        (("e", "f"), 1.83)]
 
 # Box widths per row, in inches, summing to FIGW. Row 0 gives a the width its ladder needs and no
 # more; row 1 gives d the width its five alpha points and composition strip need.
@@ -169,10 +179,10 @@ ROW_WIDTHS = {("a", "b"): (3.97, 2.93),
 # pad is the page margin and is left alone.
 PADS = {"a": (0.94, 0.08, 0.53),
         "b": (0.50, 0.10, 0.43),
-        "c": (0.72, 0.10, 0.50),
+        "c": (0.72, 0.10, 0.38),
         "d": (0.72, 0.10, 0.50),
         "e": (0.90, 0.10, 0.48),
-        "f": (0.75, 0.10, 0.50)}
+        "f": (0.75, 0.10, 0.40)}
 
 # d (the old e) is a curve under a schematic strip that says what its x axis physically means, the
 # same construction figure 1 uses for its two continuum panels.

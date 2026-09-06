@@ -1,115 +1,63 @@
-"""PopRetrieve Figure 5 panel 5c: Gate 1 — structure is preserved, DIVERGENCE is not.
-Source data: results/exp09_structure_diagnostics/
+"""Figure 5 panel c: decision correction at the oracle, corrected against reverse top-1 flips.
+Source data: results/phase2_transition/synthesis/gate3_decision_relevance.csv (via phase2_data)
 Run standalone: python fig5c.py
 
-Rewritten 2026-07-12. The old panel plotted "predictors collapse subpopulation variance,
-5.1x collapse, real 0.046". That claim is retracted: it was an artifact of the repository's
-own population synthesizer on both sides of the comparison (predicted populations were built
-as control_mean + delta + iid Gaussian noise, which is unimodal by construction, so their
-variance ratio was just the null value of the statistic; and the "real" reference was a
-single-context population rather than the blended candidate a scorer actually ranks).
-
-With the effect applied to real control cells instead, predicted populations retain as much
-baseline structure as real ones. What they lack is DIVERGENCE: the two subpopulations respond
-in nearly the same direction. This panel shows both facts at once, which is the finding.
+WHY BOTH BARS
+-------------
+A corrected-flip rate on its own is not interpretable. Any rule that reshuffles the top of a
+ranking produces corrected flips in proportion to how often it flips at all, so the quantity that
+carries the claim is the balance against flips in the other direction. The reverse bar is not a
+control added for completeness; without it the corrected bar means nothing.
 """
-import os, numpy as np, pandas as pd, matplotlib.pyplot as plt
-# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
-# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
-# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
-import sys as _sys, os as _os
+import os, sys as _sys, os as _os
+import numpy as np, matplotlib.pyplot as plt
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
-from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
-from fig5_style import PT_SMALL, PT_TICK  # noqa: E402
-REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from figstyle import INK  # noqa: E402
+from phase2_style import POP, MEAN, SHARED, PT_SMALL, PT_TICK, PT_ANNOT, LW_HAIR  # noqa: E402
+from phase2_data import oracle_flips  # noqa: E402
 
-DIAG = f"{REPO}/results/exp09_structure_diagnostics"
-ORDER = ["real_blend", "average_effect", "scgen", "nearest_neighbor"]
-# "avg-effect" is wrapped for geometry only: Figure 5 is authored at its printed width, so this
-# panel is 1.86 in wide and one x category is 0.465 in, while "avg-effect" is 0.42 in at 6 pt and
-# butted against its neighbour. Wrapped, the widest single line here is "(scGen-fam.)".
-LABS = {"real_blend": "real", "average_effect": "avg-\neffect",
-        "scgen": "linear-\nlatent", "nearest_neighbor": "nearest\nneighbour"}
-
-
-def _pick(df, pred, col):
-    """Row for a predictor under the faithful ('cells') synthesizer; real under 'real'."""
-    synth = "real" if pred.startswith("real") else "cells"
-    sub = df[(df.predictor == pred) & (df.synth == synth)]
-    if sub.empty:
-        raise KeyError(f"no row for predictor={pred!r} synth={synth!r} in {DIAG}. "
-                       f"Re-run exp09_structure_diagnostics.py --synth both.")
-    return float(sub[col].iloc[0])
+W = 0.34
 
 
 def draw_5c(ax):
-    sd = pd.read_csv(f"{DIAG}/exp09_structure_diagnostics_summary.csv")
-    g1 = pd.read_csv(f"{DIAG}/gate1_response_divergence_summary.csv")
-
-    xs = np.arange(len(ORDER))
-    var = [_pick(sd, p, "subpop_variance_ratio_mean") for p in ORDER]
-    verr = [_pick(sd, p, "subpop_variance_ratio_std") for p in ORDER]
-    cos = [_pick(g1, p, "mean") for p in ORDER]
-    cerr = [_pick(g1, p, "std") for p in ORDER]
-
-    # A quiet band separates the one observed reference from the three predicted candidates,
-    # so the reader does not have to read four x-labels to see which is which. This replaces
-    # three leader-line annotations that used to cross the error bars.
-    ax.axvspan(0.5, len(ORDER) - 0.5, color="#F2F2F2", zorder=0, lw=0)
-
-    # left axis: baseline structure — flat across real and predicted (structure IS preserved)
-    ax.errorbar(xs - 0.09, var, yerr=verr, fmt="o", color=FOCAL_SOFT, ms=6, capsize=3, lw=1.3,
-                zorder=3, label="subpop variance ratio")
-    ax.axhline(var[0], ls="--", lw=1.0, color=FOCAL_SOFT, alpha=0.7, zorder=1)
-    ax.set_ylabel("subpop variance ratio", color=FOCAL_SOFT)
-    ax.tick_params(axis="y", colors=FOCAL_SOFT)
-    ax.set_ylim(0, max(var) * 1.25)
-
-    # right axis: induced response cosine — the thing that actually fails.
-    #
-    # The scale must run to 1, because 1 is where the algebra puts an additive predictor:
-    # if the same delta is added to every cell then d_maj = d_min, so cos = 1 EXACTLY and the
-    # divergence a distributional score could exploit is exactly zero. Plotting this axis on a
-    # 0-0.6 range hides that ceiling and invites the reader to confuse "cosine 0.19" with
-    # "divergence zero". Real candidate populations sit near cos = 0 (orthogonal responses,
-    # maximal divergence); predicted ones sit between, below the ceiling only because a scorer
-    # must estimate the subpopulation partition and estimates it imperfectly (Gate 2).
-    ax2 = ax.twinx()
-    ax2.axhline(1.0, ls="-", lw=1.0, color=COMP_SOFT, alpha=0.55, zorder=1)
-    # Short label only: this marks the algebraic ceiling so the line is not mistaken for data.
-    # The full statement (additive predictor => identical subpopulation responses => cosine
-    # exactly 1, divergence exactly zero) belongs in the caption, where it already is.
-    # BELOW the ceiling line, not above it. Above, the label overlapped the "predicted" group
-    # header by 15 per cent of its area (figures/check_overlaps.py). Below is empty down to about
-    # 0.7 on this axis, because the predicted cosines are 0.19 to 0.37 and the real one is 0.014.
-    ax2.text(len(ORDER) - 0.58, 0.975, "additive limit, $\\cos = 1$",
-             ha="right", va="top", fontsize=PT_SMALL, color=INK, style="italic")
-    ax2.errorbar(xs + 0.09, cos, yerr=cerr, fmt="s", color=COMP_SOFT, ms=5, capsize=3, lw=1.3,
-                 zorder=3, label=r"induced $\cos(d_{maj}, d_{min})$")
-    ax2.axhline(cos[0], ls=":", lw=1.0, color=COMP_SOFT, alpha=0.7, zorder=1)
-    ax2.text(-0.44, cos[0] + 0.02, "real", ha="left", va="bottom", fontsize=PT_SMALL, color=INK)
-    ax2.set_ylabel(r"induced response cosine", color=COMP_SOFT)
-    ax2.tick_params(axis="y", colors=COMP_SOFT)
-    ax2.set_ylim(-0.05, 1.20)
-    ax2.set_yticks([0, 0.25, 0.5, 0.75, 1.0])
-    ax2.spines["top"].set_visible(False)
+    d = oracle_flips()
+    xs = np.arange(len(d))
+    for x, (_, r) in zip(xs, d.iterrows()):
+        for off, key, col in ((-W / 2 - 0.02, "corrected", POP), (W / 2 + 0.02, "reverse", MEAN)):
+            v, lo, hi = r[key], r[f"{key}_lo"], r[f"{key}_hi"]
+            ax.bar(x + off, v * 100, width=W, color=col, lw=0, zorder=2)
+            ax.plot([x + off, x + off], [lo * 100, hi * 100], lw=0.9, color=INK, zorder=3)
+            ax.text(x + off, hi * 100 + 0.16, f"{v * 100:.1f}", ha="center", va="bottom",
+                    fontsize=PT_SMALL, color=INK)
+        # The ratio is the quantity, so it is written once per reference rather than left to be
+        # divided off the two bar heights.
+        ax.text(x, -0.62, f"{r.corrected / r.reverse:.1f} : 1", ha="center", va="top",
+                fontsize=PT_SMALL, color=SHARED)
 
     ax.set_xticks(xs)
-    ax.set_xticklabels([LABS[p] for p in ORDER], fontsize=PT_TICK)
-    ax.set_xlim(-0.5, len(ORDER) - 0.5)
-    ax.set_ylim(0, max(var) * 1.42)
-    for sp in ["right", "top"]:
+    ax.set_xticklabels(d.label, fontsize=PT_TICK, linespacing=1.15)
+    ax.tick_params(axis="x", pad=12)
+    ax.set_xlabel("reference for the top-1 comparison", fontsize=PT_ANNOT, labelpad=1.0)
+    ax.set_xlim(-0.6, len(d) - 0.4)
+    ax.set_ylim(0, 8.6)
+    ax.set_ylabel("decisions changed (%)", fontsize=PT_ANNOT, labelpad=2.0)
+    ax.tick_params(axis="y", labelsize=PT_TICK)
+    ax.grid(axis="y", lw=LW_HAIR, color="#EDEDED", zorder=0)
+    ax.set_axisbelow(True)
+    for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)
-
-    # Group headers, inside the axes (above every marker) so they cannot hit the panel title.
-    ax.text(0.125, 0.955, "observed", transform=ax.transAxes,
-            ha="center", va="center", fontsize=PT_SMALL, color=GREY)
-    ax.text(0.625, 0.955, "predicted", transform=ax.transAxes,
-            ha="center", va="center", fontsize=PT_SMALL, color=GREY)
+    # A two-swatch key on the top band, the same idiom as panel f. Set beside the bars it
+    # landed on the first value label, which is 5.6 and the largest number in the panel.
+    from matplotlib.patches import Rectangle
+    for i, (txt, col) in enumerate((("corrected", POP), ("broken", MEAN))):
+        x0 = -0.52 + i * 0.72
+        ax.add_patch(Rectangle((x0, 8.02), 0.10, 0.30, color=col, lw=0, clip_on=False, zorder=5))
+        ax.text(x0 + 0.14, 8.17, txt, ha="left", va="center", fontsize=PT_SMALL, color=INK)
 
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(figsize=(1.86, 1.80))   # the slot it occupies in fig5_assemble
+    fig, ax = plt.subplots(figsize=(1.96, 1.15))
     draw_5c(ax)
     fig.savefig(os.path.join(os.path.dirname(__file__), "5c.png"), dpi=200, bbox_inches="tight")
     print("wrote 5c.png")

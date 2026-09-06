@@ -1,158 +1,87 @@
-"""PopRetrieve Figure 3 panel 3d: the queries the pre-specified gate recommends and the queries it
-declines carry the same per-query regret reduction.
+"""PopRetrieve Figure 3 panel 3d: the mechanism-recovery gain, by the SAME true-divergence quartile.
 
 WHAT THIS PANEL SHOWS
 ---------------------
-Two median estimates with seeded bootstrap 95 per cent intervals on one signed axis, one row per
-gate verdict, and under them the quantity that decides the question: the difference of the two
-medians and the two-sided rank test on them. The evidence is that the two rows land in the same
-place, well clear of zero, with intervals that overlap along most of their length.
+Panel c and this panel are one comparison drawn twice. Both split the queries into quartiles of
+measured true response divergence, using the SAME quartile edges, and both plot the mean
+population-minus-mean gain with a bootstrap 95 per cent interval. Only the judge changes: panel c
+scores minority-state coverage, which is objective-aligned, and this panel scores mechanism-of-action
+nDCG, which is not.
 
-The panel states no conclusion. "The gate does not enrich" is a caption sentence, and the caption
-also carries what a bounded null needs and this panel cannot hold: the difference interval, the
-name of the test, the quartiles, the pooled reading of "not recommended", and the independence
-caveat behind the p.
+Three facts are meant to be readable from the marks alone:
 
-THE 2026-08-31 RESTRAINT PASS
------------------------------
-Three things changed, and none of them is a number.
+  * NO quartile mean clears zero on the positive side. Not the most divergent one.
+  * the two LEAST divergent quartiles are wholly negative (-0.050 and -0.039): where the response
+    distribution is closest to its own mean, population-level retrieval actively costs mechanism
+    recovery.
+  * the two most divergent quartiles straddle zero (-0.016 and +0.014), so what more divergence
+    buys is the disappearance of the harm, not the appearance of a benefit.
 
-  * THE PHRASE IS GONE. This panel used to set "Gate does not enrich" over itself at PT_TITLE.
-    Thirteen such phrases on one page is thirteen claims competing for the reader, so fig3_style
-    deleted title() outright and fig3_assemble._assert_no_titles now refuses to build a figure in
-    which any panel draws text above PT_ANNOT. The phrase opens this panel's caption entry.
-  * THE AXES GREW, 0.58 to 0.65 in, because the six rows got back the 0.42 in the phrases held.
-    It went to the marks: the rows are further apart and the interval caps are taller, both set in
-    INCHES so that the next change to the row height does not silently rescale them.
-  * THE STATISTICS ARE ONE LINE, not two, and it holds the difference and its p. The difference
-    interval and the name of the test came off with the phrase.
+All three are asserted in ``draw_3d`` before anything is drawn. The panel states none of them in
+words: the caption carries the argument, this panel carries the evidence for it.
 
-Everything that came off the panel is still COMPUTED and asserted here, including the difference
-interval and the 144-query pooled reading, and draw_3d still returns all of it, so the caption
-cannot drift away from the data it describes.
+The per-query trend has the SAME sign as panel c's and about the same strength (Spearman
+rho = +0.155, p = 1e-04, n = 600, against +0.141 and 1e-04 on n = 765). Read together, the pair is
+the figure's cleanest statement: true response divergence grades both metrics in the same
+direction, and it carries the objective-aligned one from zero up to positive while it carries the
+independent one from negative up to zero.
 
-WHY IT IS IN FIGURE 3, HAVING ALREADY APPEARED IN FIGURE 2
-----------------------------------------------------------
-This is the same measurement as Fig. 2 panel d, shown for a different reason. Fig. 2d asks
-whether the pre-specified diagnostic finds the RESPONSE-MATCHING gain, inside the figure where
-that gain is the result. Here it is the first of three panels (d, e, f) showing that the same
-diagnostic fails, inside the figure about biological evaluation: it does not enrich for the gain
-(d), its own reliability axis runs opposite to true divergence (e), and its binary verdict does
-not sort queries by divergence (f). The numbers, the direction of subtraction and the group names
-are identical to Fig. 2d by intent; only the size of the panel and what it is used to argue differ.
+WHY THIS PANEL EXISTS, AND WHERE IT CAME FROM
+----------------------------------------------
+It was Figure 5 panel g until Figure 5 was rebuilt around the intervention-retrieval benchmark on
+2026-09-03. The measurement is unchanged; what changed is which argument it serves. Beside the old
+Figure 5 it was a robustness check on a predictor; beside panel c it is the control that stops
+panel c's positive trend from being read as a biological result. Panel c alone would say
+"divergence predicts where population retrieval helps"; the two together say "it predicts where
+each judge's verdict lands, and the two judges do not agree on the sign".
 
-SCOPE. The quantity is objective-aligned (Class A) throughout, exactly as in Fig. 2d. Regret
-reduction compares two RETRIEVAL decisions against the same candidate library. Nothing on this
-panel says whether the retrieved perturbation is biologically useful; that is what h, i, l and m
-are for. What the panel adds to Figure 3 is that the gate cannot be used to tell in advance which
-queries the population representation helps.
+WHY IT IS NOT DRAWN THE WAY FIGURE 5g DREW IT
+----------------------------------------------
+Figure 5g drew four bars with significance markers, asterisk for q < 0.05 after Benjamini-Hochberg
+and "ns" otherwise. That drawing is not reproduced here, and the reason is on the record for this
+exact quantity's sibling: CORRECTIONS.md R48 retired four-bars-with-error-marks from panel c
+because a truncated bar axis turns any rise into a visible ramp whatever its uncertainty, and
+because a significance marker answers a different question from the one the panel asks. A reader
+of this pair needs to compare an INTERVAL in c against an INTERVAL in d, at a glance, in two
+panels that sit side by side. Two identical chart types is what makes that possible; two chart
+types with different visual grammars would make the pair unreadable as a pair.
+
+The BH q values are not lost. They are computed by
+results/exp17_true_divergence_subset/divergence_stratified.csv, returned by ``draw_3d`` for the
+caption, and they say the same thing the intervals say: q = 0.002 and 0.025 for the two negative
+quartiles, 0.643 and 0.126 for the two that straddle zero.
 
 SOURCE
 ------
-results/exp12_partial_observed_retrieval/per_query_scores.csv, the per-query rows, paired inside
-each query on split_type, cell_line, heldout_drug, observed_library_fraction and seed, as
-mean_cosine decision_regret minus DART_coverage_worst decision_regret. Every number drawn or
-written here (medians, intervals, counts, the difference and the rank test) is recomputed from
-those rows at draw time; nothing is a literal.
-
-results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv, which an earlier cut of
-this panel read, is deliberately NOT read. It holds pre-aggregated medians only, so an interval
-drawn beside them would carry an n that is not the n the panel plots.
-
-THE 765 ADD UP, AND THE 11 DO NOT CHANGE THE ANSWER
----------------------------------------------------
-The 765 paired queries split three ways by recommendation_mode: 621 DART_recommended, 133
-mean_or_no_call, 11 mean_sufficient. The first two are the manuscript's two-way comparison; the
-11 mean-sufficient queries (median regret reduction exactly 0.000) are neither plotted nor named
-on this panel, and the three counts are asserted to sum to 765 so they cannot be lost silently.
-
-mean_sufficient is a third gate state, and those 11 queries were also not recommended, so the set
-of queries the gate declined is 144 rather than the plotted 133. The plotted row follows the
-manuscript's defined term. Because the negative result could otherwise be an artefact of which
-queries were set aside, the panel recomputes the same difference over all 144 declined queries
-and asserts that reading reaches the same verdict (+0.005, 95% CI -0.055 to +0.065, Mann-Whitney
-p = 0.81, against -0.003, -0.062 to +0.058, p = 0.97 for the plotted 133). Only the plotted
-reading is drawn; the pooled one is a guard.
+results/exp16_gate_diagnosis/_merged_query_divergence.csv, the same file panel c reads. 765 queries
+carry ``true_divergence``; 600 of them carry ``moa_ndcg_gap``, because mechanism recovery is only
+defined on the leave-drug-out split where a held-out drug has a mechanism label to recover. Every
+number drawn is computed from that file at draw time; none is a literal.
 
 JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
 -------------------------------------------------------
- 1. BOTH ROWS ARE SHARED GREY, NOT BLUE. Each row plots a signed difference (a population-level
-    scorer's advantage over a mean-level one), and in this figure's vocabulary blue and orange
-    are a statement about SIGN, carried by the half-planes behind a neutral mark, never about a
-    positive difference. Fig. 2d draws the same two rows in the population blue under Fig. 2's
-    older convention. Same numbers, different ink; the two rows are told apart by fill and by
-    position, as they are there.
- 2. THE DIFFERENCE IS STATED, NOT PLOTTED. Fig. 2d gives it a third row with its own marker and
-    interval. This axes is 1.24 x 0.65 in; a third row would cost the interval geometry that
-    makes the panel readable, and it would put a third row name on a panel whose point is that
-    there are two groups and no difference between them. The trade is acceptable because both
-    estimates share one axis, so a reader SEES that the two medians coincide rather than only
-    reading that they do.
- 3. NO SPREAD IS DRAWN. Both distributions are strongly right-skewed (q25 +0.0000 and +0.0001,
-    medians +0.119 and +0.122, q75 +0.328 and +0.344, ranges -1.02 to +2.82 and -0.42 to +1.75).
-    Reaching q75 and still leaving the n column clear needs a view running to about +0.47, half
-    as wide again as the one drawn, and the two intervals this panel exists to compare would lose
-    a third of their length on it. So the panel says nothing at all about spread, and the
-    quartiles live here and in the caption. Fig. 2d, at twice the width, draws them.
- 4. THE DIFFERENCE INTERVAL IS NOT PRINTED, and neither is the test's name. Of everything cut
-    here the interval is the one deletion that costs evidence rather than rhetoric, because a null
-    is a statement about an effect size and not about a p value. Two things make it survivable.
-    The bound is still ASSERTED (the difference interval must be small against the gains it is a
-    null about), so the caption's claim cannot outlive the data; and the precision behind it is
-    DRAWN, the two group intervals being 0.04 and 0.12 wide on medians of +0.12, which is what
-    tells a reader this is a measured null rather than an underpowered one. The written interval
-    never fitted on one line anyway: 2.22 in at the 6.5 pt floor in a 2.10 in box, so the old
-    panel bought it with a second line of statistics, and a second line of statistics is what
-    this pass removes.
- 5. THE ROW LABELS SIT IN THE BOX'S LEFT PAD, left-aligned with the statistics line so the panel
-    has one text margin. At PT_TICK "Not recommended" is 0.776 in against 0.755 in of usable pad,
-    so its last glyph ends about 0.02 in into the mean-side wash. (Measure it against the vector
-    metrics: a 100 dpi raster quantises the same string to 0.770 in and understates it.)
-    Right-aligning the column instead, which is the forest plot convention, would push it out of
-    the panel box, and dropping it to PT_SMALL, where the string is 0.740 in, would make it fit
-    by shrinking a group name, which this figure does not do.
- 6. THE WASH AND THE ZERO RULE ARE CUT TO THE ROWS BAND rather than running the full height of
-    the axes, so the statistics line below them sits on white and does not cross the sign
-    boundary. Panel c lets its notes sit on its wash, but c's negative half-plane is a 2 per cent
-    sliver; here it is 17 per cent of the axis width and a line of text would run straight
-    through the boundary.
- 7. THE p IS PRINTED AND ITS CAVEAT IS NOT. The test is a two-sided Mann-Whitney, named in the
-    caption. Queries inside one cell line share a candidate library, so its independence
-    assumption is violated and p is anticonservative. That bias runs towards rejecting; the test
-    did not reject even so, which makes this negative stronger rather than weaker, so a reader who
-    takes p = 0.97 at face value is not misled in the direction the panel supports. The caveat
-    belongs in the caption.
- 8. NEITHER HALF-PLANE IS LABELLED "population better". Panels a and g, both above this one on the
-    page, label theirs; this panel is 1.24 in wide, its axis name already states the direction of
-    the subtraction, and the sign of the gain is not what it is about. A reader who reads the
-    washes as decoration still reads this panel correctly.
- 9. QUERY_KEY IS DUPLICATED from fig2c rather than imported, so that a concurrent edit
-    to a sibling panel cannot change what this panel pairs on. The pairing is guarded instead by
-    asserting that it yields exactly 765 queries, that each method's rows are unique on the key,
-    and that the gate's verdict is a property of the query rather than of the scorer.
-10. EVERY STATED DIRECTION IS BUILT FROM WHAT IT DESCRIBES. The axis label is built from
-    METHOD_LABEL, keyed by the method ids the subtraction actually uses, so a renamed method
-    raises at import rather than printing an inverted direction. The tick labels are formatted
-    from XTICKS. And the sign convention behind the half-planes is asserted against the
-    method_family column rather than trusted from the method names: mean_cosine must be
-    mean_signature and coverage-worst must be DART_coverage, or the washes label the wrong
-    retrievers.
-
-    The statistics line no longer names the two rows it subtracts (the old two-line block opened
-    "Recommended - not recommended"), which is the price of one line. What replaces that naming is
-    an assertion: the printed difference must be smaller than either drawn interval is wide, so it
-    can never become a number whose SIGN a reader would want to act on. If it ever does, the
-    assertion fires and the direction has to go back onto the panel.
-
-    The minus in the axis label and in the difference is the literal U+2212, not mathtext. In this
-    deck's body face (Arial, or Liberation Sans as its metric clone) a mathtext $-$ prints 6.48 pt
-    wide at 7.2 pt nominal against 4.32 pt for U+2212, which is 90 per cent of an em dash: it reads
-    as one, and it made this panel print two different minus glyphs for the same operation.
-11. THE INTERVAL BOUNDS ARE A SEEDED PERCENTILE BOOTSTRAP at n_boot = 4000, the same estimator,
-    seed and count as Fig. 2d, so the two panels cannot print different intervals for the same
-    data. In the 133-query group the bootstrap median takes only about 38 distinct values, so the
-    drawn lower cap moves by about 0.005 across seeds. The medians themselves are exact; no CI
-    bound from this panel should be quoted to four decimals.
+  1. THE QUARTILE EDGES COME FROM ALL 765 QUERIES, then the rows are subset to the 600 that have a
+     mechanism-recovery gain. The alternative, quartiling the 600 directly, gives four rows of 150
+     but four DIFFERENT divergence ranges from panel c's, and the pair would then be comparing
+     strata that are not the same strata. The cost is uneven n (166 / 150 / 141 / 143), which is
+     drawn on the panel rather than hidden: the 165 queries without a mechanism gain are the
+     partial-library ones and they are slightly more divergent than average, so they come mostly
+     out of Q2 to Q4.
+  2. THE POINT ESTIMATE IS THE MEAN, matching panel c, and here the medians are nearly useless as
+     a summary: three of the four are exactly 0.000, because 17 to 32 per cent of the queries in
+     each quartile select the same candidate under both scorers and score an exact tie. Those
+     medians are returned for the caption; drawing them would put three dots on the zero rule and
+     say less than the intervals do.
+  3. THE VIEW IS SYMMETRIC ABOUT ZERO even though every mark is on or left of it. The empty right
+     half is the panel's second statement: at this scale, on this metric, there is nothing over
+     there. Cropping to the marks would hide that.
+  4. THE X SCALE IS NOT SHARED WITH PANEL c. The two metrics differ by an order of magnitude
+     (c's largest interval end is +0.0073, this panel's is -0.0755), and a shared scale would draw
+     panel c as four dots on a rule. Each panel is labelled with its own metric, and the pair is
+     read as two verdicts on the same strata, never as two magnitudes on one ruler.
+  5. THE PANEL PRINTS rho AND p FOR THE 600, NOT FOR THE 765. Panel c's statistic is over all 765
+     because every one of them has a coverage gain. Quoting a 765-query correlation here would be
+     quoting a correlation over queries this panel does not draw.
 
 Run standalone: python3 fig3d.py
 """
@@ -163,272 +92,175 @@ import sys
 
 import numpy as np
 import pandas as pd
-from matplotlib.backends.backend_agg import RendererAgg
-from scipy.stats import mannwhitneyu
+from scipy import stats
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fig3_style import (LW_HAIR, LW_LINE, MS_DOT, PT_ANNOT, PT_SMALL,  # noqa: E402
-                        PT_TICK, REPO, SHARED, SUBTLE, TEXT, bare_axes, boot_ci,
-                        sign_field, zero_rule)
+from fig3_style import (LW_HAIR, LW_LINE, LW_STEM, MS_DOT, PT_ANNOT,  # noqa: E402
+                        PT_TICK, REPO, SHARED, SUBTLE, TEXT, bare_axes, boot_ci, sign_field,
+                        zero_rule)
 
-SRC = os.path.join(REPO, "results", "exp12_partial_observed_retrieval", "per_query_scores.csv")
+SRC = os.path.join(REPO, "results", "exp16_gate_diagnosis", "_merged_query_divergence.csv")
 
-# The query identity Fig. 2c and Fig. 2d pair on. Duplicated rather than imported: docstring 9.
-QUERY_KEY = ["split_type", "cell_line", "heldout_drug", "observed_library_fraction", "seed"]
-N_QUERIES = 765
-POP_METHOD, MEAN_METHOD = "DART_coverage_worst", "mean_cosine"
-POP_FAMILY, MEAN_FAMILY = "DART_coverage", "mean_signature"
+GAIN = "moa_ndcg_gap"
+POP_ARM = "moa_ndcg_dart"
+MEAN_ARM = "moa_ndcg_mean"
+DIV = "true_divergence"
 
-# The reader-facing name of each method, keyed BY the id, so the axis label cannot outlive a
-# renamed constant: that label states the direction of the subtraction, and a stale direction
-# would invert the claim the half-planes make. A rename raises KeyError at import.
-METHOD_LABEL = {MEAN_METHOD: "mean cosine", POP_METHOD: "coverage-worst"}
-XLABEL = f"regret reduction,\n{METHOD_LABEL[MEAN_METHOD]} − {METHOD_LABEL[POP_METHOD]}"
+N_ALL = 765           # queries carrying true_divergence; the quartile edges are cut on these
+N_SCORED = 600        # of those, the ones carrying a mechanism-recovery gain
 
-# The two compared gate states, in drawing order, with the marker fill that separates them.
-# Hue is not available to separate them: both rows plot a signed difference, so both are grey.
-GROUPS = [("DART_recommended", "Recommended", SHARED),
-          ("mean_or_no_call", "Not recommended", "white")]
-MEAN_SUFFICIENT = "mean_sufficient"
+# The view, symmetric about zero: see judgement call 3. Asserted against the data below.
+XLO, XHI = -0.090, 0.090
+XTICKS = [-0.08, -0.04, 0.0, 0.04, 0.08]
 
-# ---- the view. Every number here is asserted against the data before anything is drawn --------
-XLO, XHI = -0.06, 0.29
-XTICKS = [0.0, 0.1, 0.2]
-ROW_Y = [0.80, 0.50]        # the two rows, in axes-height units (ylim is 0..1)
-WASH_BOT = 0.30             # the sign wash and the zero rule stop here; below is type, on white
-CAP_HALF_IN = 0.030         # half-height of an interval cap, in INCHES, so the row height of the
-                            # panel can change without rescaling the marks
-N_X = 0.73                  # left edge of the per-row n, clear of the widest interval cap
-STAT_Y = 0.10               # baseline of the one statistics line
-TEXT_INSET = 0.005          # how far inside the panel box's left edge the type starts, in inches
-MIN_LEFT_PAD = 0.60         # the label column does not fit in less than this much pad, in inches
-MAX_STAT_IN = 2.05          # the statistics line must stay inside the 2.10 in panel box, which
-                            # is what limits how much wording it can carry
-N_BOOT, SEED = 4000, 0
+# Rows are one data unit apart, Q1 at y = 0 and Q4 at y = 3; the rest of the y axis is clearance,
+# in the same units. Identical to panel c, because the two panels are read as a pair.
+CLEAR_BOT = 0.45
+CLEAR_TOP = 0.50
+STAT_Y = 3.0 + CLEAR_TOP
+YLO, YHI = -CLEAR_BOT, 4.22
+LINE_H = 1.15
+ROW_OVERHANG = 0.38
+CAP = 0.17
 
 
-def _left_margin(ax) -> float:
-    """x of the panel box's left edge plus TEXT_INSET, in axes-width units.
-
-    Measured from the axes rather than written down, so that a change to the inch ledger in
-    fig3_assemble.PADS moves this panel's text column instead of pushing it out of the panel box.
-
-    It assumes panel d is the leftmost panel of its row, which is what makes the box's left edge
-    the figure's left edge; that is true in fig3_assemble.ROWS and in the standalone preview
-    below. Both ends of that assumption are asserted. Too little pad and the label column does
-    not fit; more pad than the axes is wide means this is no longer the leftmost panel, the
-    measured offset is then most of a row rather than one panel's pad, and the text column would
-    start outside the panel box instead.
-    """
-    fig_w = ax.figure.get_figwidth()
-    pos = ax.get_position()
-    left_in, width_in = pos.x0 * fig_w, pos.width * fig_w
-    assert MIN_LEFT_PAD <= left_in < width_in, (
-        f"this panel sets its row labels and its statistics line in the {left_in:.2f} in of pad "
-        f"to the left of its {width_in:.2f} in axes; it needs at least {MIN_LEFT_PAD} in of it, "
-        f"and a pad wider than the axes means panel d is no longer the leftmost panel of its row")
-    return -(left_in - TEXT_INSET) / width_in
+def _p_text(p: float) -> str:
+    """The printed p, in this figure's italic lowercase form, with a floor rather than a rounded 0."""
+    return "$p$ < 0.001" if p < 0.001 else f"$p$ = {p:.2f}"
 
 
-def _fmt(v: float, digits: int = 3) -> str:
-    """Signed number with a typographic minus, so the panel never mixes hyphens and minuses."""
-    return f"{v:+.{digits}f}".replace("-", "−")
-
-
-def regret_reduction_by_mode() -> pd.DataFrame:
-    """Per-query Class-A regret reduction with the gate's verdict attached.
-
-    One row per paired query. ``rr`` is mean-cosine decision regret minus coverage-worst decision
-    regret, so it is positive where the population-level scorer decided better, and ``mode`` is
-    the pre-specified recommendation the gate issued for that query.
-    """
-    d = pd.read_csv(SRC)
-
-    # The half-planes behind the rows say which side favours which representation, so the sign
-    # convention has to be checked rather than inferred from the two method names.
-    fam = d.groupby("method")["method_family"].unique()
-    assert list(fam[MEAN_METHOD]) == [MEAN_FAMILY], (
-        f"{MEAN_METHOD} is not in the {MEAN_FAMILY} family ({fam[MEAN_METHOD]}); the orange "
-        f"half-plane would be labelling the wrong retriever")
-    assert list(fam[POP_METHOD]) == [POP_FAMILY], (
-        f"{POP_METHOD} is not in the {POP_FAMILY} family ({fam[POP_METHOD]}); the blue half-plane "
-        f"claims population-level retrieval is favoured, and would be labelling something else")
-
-    base = d[d.method == MEAN_METHOD].set_index(QUERY_KEY)
-    pop = d[d.method == POP_METHOD].set_index(QUERY_KEY)
-    for name, frame in (("mean", base), ("pop", pop)):
-        assert not frame.index.has_duplicates, (
-            f"{name} rows are not unique on {QUERY_KEY}; the pairing below would compare "
-            f"mismatched queries")
-    j = pd.concat([base["decision_regret"].rename("mean"),
-                   pop["decision_regret"].rename("pop"),
-                   pop["recommendation_mode"].rename("mode"),
-                   base["recommendation_mode"].rename("mode_base")], axis=1).dropna()
-    assert len(j) == N_QUERIES, f"expected {N_QUERIES} paired queries, got {len(j)}"
-    assert (j["mode"] == j["mode_base"]).all(), (
-        "the gate's verdict differs between the two methods' rows for the same query; the split "
-        "is supposed to be a property of the query, not of the scorer")
-    j["rr"] = j["mean"] - j["pop"]
-    return j.drop(columns=["mode_base"])
-
-
-def boot_diff_ci(a, b, n_boot: int = N_BOOT, seed: int = SEED, alpha: float = 0.05):
-    """Percentile bootstrap CI for median(a) - median(b), each group resampled at its own n.
-
-    Resampling each group at its own n is the right null for two groups of very different size
-    (621 against 133): the interval then inherits the small group's imprecision instead of hiding
-    it. Same estimator, seed and n_boot as fig3_style.boot_ci, so the difference interval and the
-    two group intervals come from one bootstrap convention.
-    """
-    a = np.asarray(a, dtype=float)
-    b = np.asarray(b, dtype=float)
-    rng = np.random.default_rng(seed)
-    draws = (np.median(rng.choice(a, size=(n_boot, a.size), replace=True), axis=1)
-             - np.median(rng.choice(b, size=(n_boot, b.size), replace=True), axis=1))
-    lo, hi = np.percentile(draws, [100 * alpha / 2, 100 * (1 - alpha / 2)])
-    return float(np.median(a) - np.median(b)), float(lo), float(hi)
+def _load():
+    """The 600 scored queries, carrying the divergence quartile cut on all 765."""
+    raw = pd.read_csv(SRC)
+    assert len(raw) == N_ALL, (
+        f"the quartile edges are cut on all {N_ALL} queries so that this panel's rows are panel "
+        f"c's rows; the file now holds {len(raw)}")
+    assert raw[DIV].notna().all(), (
+        "a query lacks true_divergence, so the quartile it belongs to is undefined and the edges "
+        "would be cut on a subset without saying so")
+    d = raw.assign(divq=pd.qcut(raw[DIV], 4, labels=["Q1", "Q2", "Q3", "Q4"]))
+    scored = d.dropna(subset=[GAIN])
+    assert len(scored) == N_SCORED, (
+        f"expected {N_SCORED} queries with a mechanism-recovery gain, found {len(scored)}")
+    # The axis label says "population - mean". Assert it, so the label cannot outlive the data.
+    ok = scored[[POP_ARM, MEAN_ARM]].notna().all(axis=1)
+    assert np.allclose(scored.loc[ok, GAIN].values,
+                       scored.loc[ok, POP_ARM].values - scored.loc[ok, MEAN_ARM].values,
+                       atol=1e-12), (
+        f"{GAIN} is not {POP_ARM} minus {MEAN_ARM}; the signed axis label would be false")
+    return scored
 
 
 def draw_3d(ax):
-    """Median regret reduction inside and outside the gate's recommendation, and the difference."""
-    j = regret_reduction_by_mode()
-    counts = j["mode"].value_counts()
-    n_ms = int(counts.get(MEAN_SUFFICIENT, 0))
-    n_plot = [int(counts[m]) for m, _, _ in GROUPS]
-    assert sum(n_plot) + n_ms == N_QUERIES, (
-        f"the three recommendation modes must account for all {N_QUERIES} queries, "
-        f"got {n_plot} + {n_ms}")
+    """Four quartile means with bootstrap 95 per cent intervals, against zero.
 
-    stats = []
-    for (mode, _, _), n in zip(GROUPS, n_plot):
-        x = j.loc[j["mode"] == mode, "rr"].values
-        assert len(x) == n, f"{mode}: counted {n} queries and then selected {len(x)}"
-        stats.append(boot_ci(x, stat=np.median, n_boot=N_BOOT, seed=SEED))
-    (med_r, lo_r, hi_r), (med_n, lo_n, hi_n) = stats
+    Returns every number the caption for this panel quotes, so the caption is checkable against a
+    run of this module rather than against a memory of one.
+    """
+    d = _load()
+    n_total = len(d)
 
-    a = j.loc[j["mode"] == GROUPS[0][0], "rr"].values
-    b = j.loc[j["mode"] == GROUPS[1][0], "rr"].values
-    diff, dlo, dhi = boot_diff_ci(a, b)
-    p = float(mannwhitneyu(a, b, alternative="two-sided").pvalue)
+    labels, means, los, his, meds, ns, divs, ties = [], [], [], [], [], [], [], []
+    for name, sub in d.groupby("divq", observed=True):
+        v = sub[GAIN].to_numpy(dtype=float)
+        m, lo, hi = boot_ci(v, stat=np.mean, seed=0)
+        labels.append(str(name))
+        means.append(m)
+        los.append(lo)
+        his.append(hi)
+        meds.append(float(np.median(v)))
+        ns.append(int(v.size))
+        divs.append(float(sub[DIV].median()))
+        ties.append(float((v == 0).mean()))
+    means, los, his = np.asarray(means), np.asarray(los), np.asarray(his)
+    meds, ties = np.asarray(meds), np.asarray(ties)
+    ys = np.arange(len(labels), dtype=float)
 
-    # ---- everything the panel and its caption are about to say, asserted first ----------------
-    # The caption says the gate does not ENRICH, so both groups having a gain is its premise: a
-    # difference of zero between two groups that gained nothing would be a different panel.
-    assert lo_r > 0 and lo_n > 0, (
-        f"both group intervals are supposed to exclude zero, got [{lo_r:.4f}, {hi_r:.4f}] and "
-        f"[{lo_n:.4f}, {hi_n:.4f}]")
-    assert lo_n < hi_r and lo_r < hi_n, "the two group intervals are supposed to overlap"
-    assert dlo < 0.0 < dhi, (
-        f"the caption states that the difference interval contains zero; it is "
-        f"[{dlo:.4f}, {dhi:.4f}]")
-    assert p > 0.05, f"the panel prints a p from a rank test that did not reject; p = {p:.4f}"
-    # "Does not enrich" has to be a BOUNDED measurement rather than a failure to measure, and the
-    # bound comes from the data rather than from a chosen number. The interval itself is no longer
-    # printed (docstring 4), so this assertion is now the only thing standing between the caption
-    # and an inconclusive test read as a negative result.
-    assert max(abs(dlo), abs(dhi)) < min(med_r, med_n), (
-        f"the difference interval [{dlo:.4f}, {dhi:.4f}] is not small against the gains it is "
-        f"supposed to be a null about ({med_r:+.4f}, {med_n:+.4f}); the panel would be reporting "
-        f"an inconclusive test as a negative result")
-    # The statistics line prints the difference without naming which row is subtracted from which
-    # (docstring 10). That is only safe while the number is too small to have a readable sign.
-    assert abs(diff) < min(hi_r - lo_r, hi_n - lo_n), (
-        f"the printed difference {diff:+.4f} is no longer smaller than the narrower drawn "
-        f"interval ({min(hi_r - lo_r, hi_n - lo_n):.4f} wide); its sign now means something and "
-        f"the line has to name the direction of the subtraction again")
-    assert abs(diff) < 1.0, (
-        f"the difference {diff:+.4f} would print wider than the fixed +0.xxx this panel's one "
-        f"statistics line was measured against")
-    # The 11 mean-sufficient queries were also declined by the gate. The claim must not depend on
-    # which of the two readings of "not recommended" is plotted, so the other one is recomputed.
-    b_all = j.loc[j["mode"] != GROUPS[0][0], "rr"].values
-    diff_all, dlo_all, dhi_all = boot_diff_ci(a, b_all)
-    p_all = float(mannwhitneyu(a, b_all, alternative="two-sided").pvalue)
-    assert dlo_all < 0.0 < dhi_all and p_all > 0.05, (
-        f"the negative holds only on the {len(b)}-query reading of 'not recommended'; pooling the "
-        f"{n_ms} mean-sufficient queries in gives [{dlo_all:.4f}, {dhi_all:.4f}], p = {p_all:.4f}")
+    rho, p_rho = stats.spearmanr(d[DIV].values, d[GAIN].values)
 
-    # ---- the view ----------------------------------------------------------------------------
+    # ---- the three facts the marks must carry, asserted before they are drawn ----------------
+    assert np.all(np.diff(divs) > 0), f"rows are not in ascending divergence order: {divs}"
+    assert sum(ns) == n_total, f"quartile sizes {ns} do not account for all {n_total} queries"
+    # Uneven n is expected here and is DRAWN; what must not happen is a quartile emptying out.
+    assert min(ns) >= 100, (
+        f"a divergence quartile holds only {min(ns)} scored queries ({ns}); at that size its "
+        f"interval carries the panel's claim on too little data")
+
+    assert not (los > 0).any(), (
+        f"a quartile mean now clears zero on the positive side ({dict(zip(labels, np.round(los, 4)))}); "
+        f"the panel's whole claim is that none does, and the caption must change with it")
+    assert his[0] < 0.0 and his[1] < 0.0, (
+        f"the two least divergent quartiles are supposed to be wholly negative; their upper "
+        f"bounds are {his[0]:+.4f} and {his[1]:+.4f}")
+    for i in (2, 3):
+        assert los[i] < 0.0 < his[i], (
+            f"{labels[i]} is supposed to straddle zero; its interval is "
+            f"[{los[i]:+.4f}, {his[i]:+.4f}]")
+    assert rho > 0 and p_rho < 0.01, (
+        f"Spearman rho = {rho:+.4f}, p = {p_rho:.3g}: the trend this panel prints no longer runs "
+        f"in the same direction as panel c's, which is the pair's whole point")
+
+    # Judgement call 2: the medians are drawn from a distribution with a large exact-tie atom, and
+    # the panel says so through the n column rather than by plotting three dots on the zero rule.
+    assert (ties > 0.10).all(), (
+        f"the exact-tie fractions {np.round(ties, 3)} no longer justify judgement call 2's reason "
+        f"for drawing the mean rather than the median")
+
+    # ---- the view --------------------------------------------------------------------------
     assert XLO < 0.0 < XHI, "zero must be a datum inside the frame, not an edge of it"
-    assert XLO < min(lo_r, lo_n) and max(hi_r, hi_n) < XHI, (
-        f"the view clips an interval: [{min(lo_r, lo_n):.4f}, {max(hi_r, hi_n):.4f}] outside "
-        f"[{XLO}, {XHI}]")
-    n_col_x = XLO + N_X * (XHI - XLO)
-    assert max(hi_r, hi_n) + 0.010 < n_col_x, (
-        f"the widest interval reaches {max(hi_r, hi_n):.4f} and would run into the n column at "
-        f"{n_col_x:.4f}")
+    assert his.max() < XHI and los.min() > XLO and means.min() > XLO and means.max() < XHI, (
+        f"the view clips a drawn mark: means [{means.min():.4f}, {means.max():.4f}], intervals "
+        f"[{los.min():.4f}, {his.max():.4f}] against [{XLO}, {XHI}]")
+    assert STAT_Y > ys.max() + max(ROW_OVERHANG, CAP), "the statistic sits on the top row"
+    assert YLO < ys.min() - max(CAP, ROW_OVERHANG), (
+        f"the y view [{YLO}, {YHI}] clips a cap or the end of the zero rule")
+    ax_h_in = ax.get_position().height * ax.figure.get_figheight()
+    band_in = (YHI - STAT_Y) / (YHI - YLO) * ax_h_in
+    assert band_in >= LINE_H * PT_ANNOT / 72.0, (
+        f"the band above the rows is {band_in:.4f} in on a {ax_h_in:.3f} in axes, under the "
+        f"{LINE_H * PT_ANNOT / 72.0:.4f} in one {PT_ANNOT} pt line prints at")
 
+    # Sign, not object: the plotted quantity is a signed difference, so it is SHARED grey and the
+    # two half-planes carry blue and orange behind it. Identical to panel c.
     ax.set_xlim(XLO, XHI)
-    ax.set_ylim(0.0, 1.0)
-    label_x = _left_margin(ax)
-    cap = CAP_HALF_IN / (ax.get_position().height * ax.figure.get_figheight())
-
-    # Sign, not object: each row plots a signed difference, so the rows are drawn in SHARED grey
-    # and blue/orange live in the half-planes behind them.
+    ax.set_ylim(YLO, YHI)
     lo_wash, hi_wash = sign_field(ax, vertical=True, at=0.0, pop_side="right")
-    # sign_field spans the plane to +/-1e9. Cut both washes to the view, and to the band that
-    # holds the rows, so the statistics line below sits on white instead of straddling the sign
-    # boundary. x is in data coordinates and y is in axes coordinates: axvspan blends the two.
-    lo_wash.set_bounds(XLO, WASH_BOT, -XLO, 1.0 - WASH_BOT)
-    hi_wash.set_bounds(0.0, WASH_BOT, XHI, 1.0 - WASH_BOT)
-    zero_rule(ax, at=0.0, vertical=True, color=TEXT, lw=0.8).set_ydata([WASH_BOT, 1.0])
+    lo_wash.set_bounds(XLO, 0.0, -XLO, 1.0)
+    hi_wash.set_bounds(0.0, 0.0, XHI, 1.0)
+    zr = zero_rule(ax, at=0.0, vertical=True, color=TEXT, lw=0.8)
+    zr.set_ydata([(ys.min() - ROW_OVERHANG - YLO) / (YHI - YLO),
+                  (ys.max() + ROW_OVERHANG - YLO) / (YHI - YLO)])
 
-    # ---- the two point estimates -------------------------------------------------------------
-    for (_, label, face), y, (med, lo, hi), n in zip(GROUPS, ROW_Y, stats, n_plot):
-        ax.plot([lo, hi], [y, y], lw=LW_LINE, color=SHARED, solid_capstyle="butt", zorder=4)
-        for bnd in (lo, hi):
-            ax.plot([bnd, bnd], [y - cap, y + cap], lw=LW_LINE, color=SHARED, zorder=4)
-        ax.scatter([med], [y], s=MS_DOT, facecolor=face, edgecolor=SHARED, linewidths=0.9,
-                   zorder=5)
-        ax.text(label_x, y, label, transform=ax.transAxes, fontsize=PT_TICK, color=TEXT,
-                ha="left", va="center")
-        ax.text(N_X, y, f"n = {n}", transform=ax.transAxes, fontsize=PT_SMALL, color=SUBTLE,
-                ha="left", va="center")
+    ax.hlines(ys, los, his, color=SHARED, lw=LW_LINE, zorder=3)
+    ax.vlines(np.concatenate([los, his]), np.concatenate([ys, ys]) - CAP,
+              np.concatenate([ys, ys]) + CAP, color=SHARED, lw=LW_STEM, zorder=3)
+    ax.scatter(means, ys, s=MS_DOT, color=SHARED, zorder=4, linewidths=0, clip_on=False)
 
-    # ---- the one statistic the marks cannot show: how far apart the two rows are --------------
-    stat = ax.text(label_x, STAT_Y, f"difference {_fmt(diff)}, p = {p:.2f}",
-                   transform=ax.transAxes, fontsize=PT_ANNOT, color=TEXT, ha="left", va="bottom")
+    # The n per row, because they are uneven here and panel c's are not (judgement call 1). They
+    # sit in the empty right half, which is the only part of this panel with room and the part a
+    # reader has no other reason to look at.
+    for y, n in zip(ys, ns):
+        ax.text(XHI - 0.004, y, f"n = {n}", fontsize=PT_TICK, color=SUBTLE, ha="right",
+                va="center", zorder=5)
 
-    # ---- frame -------------------------------------------------------------------------------
-    bare_axes(ax, keep=("bottom",))
+    ax.text(XLO + 0.004, STAT_Y, f"Spearman $\\rho$ = {rho:+.2f}, {_p_text(p_rho)}",
+            fontsize=PT_ANNOT, color=TEXT, ha="left", va="bottom")
+
+    ax.set_yticks(ys)
+    ax.set_yticklabels(labels, fontsize=PT_TICK)
+    assert all(XLO <= t <= XHI for t in XTICKS), f"a tick lies outside the view: {XTICKS}"
     ax.set_xticks(XTICKS)
     ax.set_xticklabels([f"{t:g}" for t in XTICKS], fontsize=PT_TICK)
-    ax.set_yticks([])
+    ax.set_xlabel("MoA-nDCG gain,\npopulation − mean", fontsize=PT_ANNOT, labelpad=1.5)
+    ax.set_ylabel("true-divergence\nquartile", fontsize=PT_ANNOT, labelpad=1.5)
+
+    bare_axes(ax, keep=("bottom",))
     ax.tick_params(axis="y", length=0)
     ax.spines["bottom"].set_linewidth(LW_HAIR)
-    # The bottom pad this panel is given is 0.42 in, and a two-line 7.2 pt label under 6.8 pt
-    # tick numbers needs 0.424 in of it at the deck's default tick pad. The 1.5 pt of tick pad
-    # and of label pad recovered here are what keep the label's descenders inside the panel box;
-    # the alternative was a smaller label, and this figure does not shrink type.
-    ax.tick_params(axis="x", pad=2.0)
-    ax.set_xlabel(XLABEL, fontsize=PT_ANNOT, labelpad=1.0)
 
-    # The statistics line starts at the panel box's left edge, so its width is what decides
-    # whether ink leaves the box. Measured, not estimated: a p that needed another digit or a
-    # longer wording would overrun the box silently otherwise. The renderer is built here, as in
-    # fig3a, rather than taken from fig.canvas, so the measurement neither forces a draw of a
-    # half-assembled figure nor assumes which backend fig3_assemble is building under.
-    fig = ax.figure
-    r = RendererAgg(int(fig.get_figwidth() * fig.dpi), int(fig.get_figheight() * fig.dpi), fig.dpi)
-    stat_bb = stat.get_window_extent(renderer=r)
-    stat_in = stat_bb.width / fig.dpi
-    assert stat_in <= MAX_STAT_IN, (
-        f"the statistics line prints {stat_in:.3f} in wide and this panel's box allows "
-        f"{MAX_STAT_IN} in; shorten the wording before dropping either number")
-    # Docstring 6: the line has to sit on WHITE, below the wash band, or it runs through the sign
-    # boundary the two rows are read against. STAT_Y, PT_ANNOT and WASH_BOT are three independent
-    # numbers, so the clearance is measured rather than assumed.
-    ax_bb = ax.get_window_extent(renderer=r)
-    stat_top = (stat_bb.y1 - ax_bb.y0) / ax_bb.height
-    assert stat_top < WASH_BOT, (
-        f"the statistics line reaches {stat_top:.3f} of the axes height and the sign wash starts "
-        f"at {WASH_BOT}; the line would straddle the zero boundary instead of sitting on white")
-
-    return {"n": {lab: n for (_, lab, _), n in zip(GROUPS, n_plot)},
-            "n_mean_sufficient": n_ms,
-            "recommended": (med_r, lo_r, hi_r), "not_recommended": (med_n, lo_n, hi_n),
-            "difference": (diff, dlo, dhi), "p": p,
-            "difference_pooled_144": (diff_all, dlo_all, dhi_all), "p_pooled_144": p_all}
+    return {"labels": labels, "n_per_quartile": ns, "mean": means, "lo": los, "hi": his,
+            "median": meds, "tie_fraction": ties, "rho": float(rho), "p": float(p_rho),
+            "n": n_total}
 
 
 if __name__ == "__main__":
@@ -436,19 +268,15 @@ if __name__ == "__main__":
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     from figstyle import apply_style
     from fig3_style import PT_TITLE
 
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
-    # apply_style sets savefig.bbox = "tight", which would crop the preview back to its ink and
-    # hand back a PNG at a different scale from the printed panel. This preview is a 1:1
-    # reproduction of the panel BOX this panel occupies in fig3_assemble, so keep the canvas.
-    plt.rcParams["savefig.bbox"] = None
-    fig = plt.figure(figsize=(2.10, 1.24))
-    ax = fig.add_axes([0.76 / 2.10, 0.42 / 1.24, 1.24 / 2.10, 0.65 / 1.24])
-    stats_out = draw_3d(ax)
-    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "3d.png")
-    fig.savefig(out, dpi=300)
-    print(stats_out)
-    print(f"wrote {out}")
+    BOX_W, BOX_H, PAD_L, PAD_B, AX_W, AX_H = 2.75, 1.36, 0.72, 0.42, 1.93, 0.78
+    fig = plt.figure(figsize=(BOX_W, BOX_H))
+    ax = fig.add_axes([PAD_L / BOX_W, PAD_B / BOX_H, AX_W / BOX_W, AX_H / BOX_H])
+    out = draw_3d(ax)
+    print({k: (np.round(v, 5).tolist() if isinstance(v, np.ndarray) else v)
+           for k, v in out.items()})
+    fig.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), "3d.png"), dpi=300)
+    print("wrote 3d.png")

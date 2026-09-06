@@ -151,6 +151,21 @@ def apply_style(sizes=(8, 7, 6)):
         "figure.facecolor": "white", "savefig.facecolor": "white",
         "savefig.bbox": "tight", "savefig.pad_inches": 0.01,
         "pdf.fonttype": 42, "ps.fonttype": 42, "svg.fonttype": "none",
+        # THE DEFAULT COLOUR CYCLE IS REPLACED BY ONE COLOUR, and that is the point of it.
+        #
+        # Every colour in this deck is passed explicitly, because a hue here means something
+        # ("blue is population-level") and a colour nobody chose cannot mean anything. But
+        # ``ax.plot([x], [y], marker="o", mfc=SHARED)`` does not pass one, and matplotlib then
+        # hands the artist the next entry of tab10. Figure 3 accumulated sixteen artists carrying
+        # #1f77b4 through #8c564b that way, across five panels. None of them rendered: every one
+        # was covered by an explicit mfc and mec, which is exactly why nobody saw it for months.
+        #
+        # A single-entry cycle makes the failure impossible rather than invisible. An unset colour
+        # is now INK, which is a colour this deck owns, so a forgotten keyword shows up as black
+        # ink in the wrong place instead of as a teal line that happens to be hidden today and
+        # renders the day someone changes a marker. Verified inert when adopted: across all six
+        # main figures, zero artists were rendering a cycle colour, so nothing on the page moves.
+        "axes.prop_cycle": mpl.cycler(color=[INK]),
         # Mathtext in the TEXT face, not matplotlib's DejaVu default. Every rho, alpha,
         # italic P and minus sign in this deck is mathtext, 55 strings in all, and they
         # were being set in DejaVu Sans beside Arial digits. The minus was the worst of

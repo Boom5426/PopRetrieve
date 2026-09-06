@@ -12,6 +12,13 @@
 > down one place. This file is not renumbered: it is a record of a plan, and half its
 > references are to file stems from a still earlier deck. `figures/build_all.py` `STEMS` is
 > the authority for what the deck currently is.
+> ⚠️ **SUPERSEDED NUMBERS, 2026-09-03.** Every retrieval number below is the V-statistic arm.
+> The manuscript's arm is now the unbiased U-statistic, and the reissue moved the headline values
+> this plan quotes (exp12 median +0.119 / 72% / p = 4.3e-56 became +0.031 / 56% / p = 1.6e-12; the
+> gate verdict split 621 / 133 / 11 became 627 / 127 / 11). The authority for every current number
+> is [docs/phase2/FINAL_FIGURE_NUMBER_LEDGER.md](../docs/phase2/FINAL_FIGURE_NUMBER_LEDGER.md),
+> and for what changed and why, [docs/phase2/POST_REPAIR_MASTER_RESULTS.md](../docs/phase2/POST_REPAIR_MASTER_RESULTS.md).
+
 # PopRetrieve figure deck: 6-figure Nature Methods style plan (merged with external review)
 
 Editor pass 2026-07-12, merged with external NM-editor feedback (pasted-text-2026-07-12). Locked to

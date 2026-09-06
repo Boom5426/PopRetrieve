@@ -127,8 +127,8 @@ X_MAX_IN = AX_W - EDGE_IN - RX_IN           # the Drug B majority, the furthest 
 X_SCALE_IN = (X_MAX_IN - X_BASE_IN) / R_MAJ_B
 
 # ------------------------------------------------------------------ vertical score, inches down
-Y_PHRASE_TOP = 0.012        # "same mean", hung from the top edge so the rule can hang from it
-Y_RULE_TOP = 0.145
+Y_PHRASE_TOP = 0.012        # the rule's name, hung from the top edge so the rule hangs from it
+Y_RULE_TOP = 0.245
 LANE_CY = (0.335, 0.735, 1.135)     # even pitch: three lanes of one population, not three plots
 DY_MEAN = 0.135             # cells -> centroid, clear of the blob it summarises by about 1 pt
 DY_NAME = 0.062             # half the leading of the two-line condition block in the left column
@@ -262,9 +262,15 @@ def draw_1b(ax: plt.Axes) -> None:
     # it is not a claim: it NAMES the dashed rule it sits on, the way an axis label names an axis,
     # and without it the reader meets an unexplained orange line. It is set at PT_ANNOT like every
     # other direct label on this figure rather than at the old PT_TITLE, because it is a label.
+    #
+    # It read "same mean" until 2026-09-03, and two words were one too few. The two treated
+    # populations here share their whole mean vector, direction AND magnitude, so this lane pair
+    # is the case that defeats BOTH mean scores of panel a and not only the cosine. Naming only
+    # "the mean" left a reader who had just learned that ladder to guess which rung was tied.
     x_mean = _x(R_TREATED)
-    ax.text(x_mean, _fy(Y_PHRASE_TOP), "same mean", transform=ax.transAxes, fontsize=PT_ANNOT,
-            ha="center", va="top", color=TEXT, fontweight="bold")
+    ax.text(x_mean, _fy(Y_PHRASE_TOP), "same mean direction\nand magnitude",
+            transform=ax.transAxes, fontsize=PT_ANNOT, ha="center", va="top", color=TEXT,
+            fontweight="bold", linespacing=1.15)
     ax.plot([x_mean, x_mean], [_fy(Y_RULE_TOP), _fy(LANE_CY[-1] + DY_MEAN + 0.075)],
             ls=(0, (2.6, 2.0)), lw=LW_HAIR, color=MEAN, zorder=1)
 

@@ -1,17 +1,20 @@
-"""PopRetrieve Figure 2 panel 2c: per-query regret reduction, ECDF over ALL 765 queries.
+"""PopRetrieve Figure 2 panel 2c: the paired outcome of population vs directional-mean retrieval.
 
 WHAT THE PANEL CLAIMS
 ---------------------
-On a query-by-query basis, retrieval scored on the retained cell POPULATION reaches a lower
-decision regret than retrieval scored on the COLLAPSED mean signature: 72% of queries improve,
-21% get worse, 7% tie exactly, median +0.118, paired Wilcoxon p = 1.6e-66. Every one of those
-numbers is computed at draw time from the source file, and the relationships the panel's marks
-state are asserted below so a mark cannot outlive the data.
+Query by query, retrieval scored on the retained cell POPULATION leaves less decision regret than
+retrieval scored on a DIRECTION-ONLY mean signature, on more queries than not and by a small
+median amount: 56% of 765 queries improve, 36% get worse, 8% tie exactly, median +0.031 with a
+bootstrap interval that excludes zero, paired Wilcoxon P = 1.6e-12. Every one of those numbers is
+computed at draw time from the source file, and the relationships the panel's marks state are
+asserted below so a mark cannot outlive the data.
 
 This is a Class-A (objective-aligned) statement about response matching only. `decision_regret` is
 the regret of the decision taken from the retrieved candidate under the retrieval objective; the
 panel says nothing about whether the retrieved perturbation is biologically preferable, which is
-Figure 3's question.
+Figure 3's question. It is a MODEST advantage and the caption says so in those words; it is not a
+strong population-specific gain, and panel e is where the distributional residue is measured
+against a magnitude-aware rather than a direction-only reference.
 
 SOURCE
 ------
@@ -21,85 +24,91 @@ key that `src/experiments/exp12_partial_observed_retrieval.py` documents as iden
 (mean_cosine decision_regret) minus (DART_coverage_worst decision_regret). `decision_regret` is
 defined there as U[library-oracle] minus U[selected] and is therefore non-negative, with lower
 better; that is asserted below, because it is what makes a POSITIVE difference mean the
-population-level scorer left LESS regret, i.e. that population retrieval was better. A shorter key
-mispairs rows (the partial_library queries repeat one drug at three library fractions), and the
-experiment records that a short key once put a wrong median into this figure.
+population-level scorer left LESS regret. A shorter key mispairs rows (the partial_library queries
+repeat one drug at three library fractions), and the experiment records that a short key once put
+a wrong median into this figure.
 
 Scope note, and the reason this panel reads the raw per-query file: it previously plotted
 figures/source_data/fig2c_regret_reduction.csv, which then held only the 621 gate-recommended
-queries (annotated "n=621, p=4e-56"). The manuscript caption and Results text both report panel c
-on ALL 765 partial-observed queries, precisely so the headline is not taken on a gate-selected
-subset. The panel now computes the full 765-query set from the authoritative results file and
-asserts n == 765 so a subset cannot silently return. That mirror has since been regenerated to
-all 765 rows and its median agrees to six decimals, but the panel keeps reading the results file:
-the mirror's key omits heldout_MoA and carries a recommendation_mode column, so it is one gate
-filter away from the 621-row subset again and cannot be pinned by an assertion here.
+queries. The manuscript caption and Results text both report panel c on ALL 765 partial-observed
+queries, precisely so the headline is not taken on a gate-selected subset. The panel computes the
+full set from the authoritative results file and asserts n == 765 so a subset cannot silently
+return.
 
-THE RESTRAINT PASS (2026-08-31)
--------------------------------
-One piece of text is gone, and nothing on the panel replaces it: "The gain survives partial
-observation", set in ink over the axes at PT_TITLE. Seven such sentences on one page are seven
-claims competing for one reader, which is not what a Nature-family main figure does; the figure
-carries visual evidence and the legend carries the argument. fig2_style.title() was deleted, and
-fig2_assemble._assert_no_titles now refuses to build a figure in which a panel draws text above
-PT_ANNOT, so the sentence cannot come back a size smaller. It opens this panel's caption entry
-instead, where it costs no space and can be qualified.
+WHY THE COMPOSITION CHANGED ON 2026-09-03, AND WHAT DID NOT CHANGE WITH IT
+-------------------------------------------------------------------------
+Until today this panel was an ECDF of the paired difference on a horizontal value axis, and its
+central mark was a MEDIAN RULE standing clear of the ZERO RULE. Two vertical rules is a composition
+that can only work when the median is far enough from zero to resolve as a separate line, and the
+panel guarded exactly that with MED_CLEAR_PT below.
 
-Nothing else moved, and nothing needed re-tuning. The axes box is unchanged at 2.63 x 1.08 in, and
-no constant here was measured against the retired phrase: it was drawn at transAxes y = 1.0, in
-the band above the axes that belongs to the panel letter, so removing it freed no height inside
-the axes. That band is now empty apart from the letter, and it is left that way on purpose. The
-reason the sentence went is that the top of the panel was competing with the marks; filling the
-gap with a different annotation would lose the same argument twice.
+The estimator repair moved the median. Under the V-statistic energy distance the median paired
+difference was +0.1183 with 72.0 per cent of queries improved; under the unbiased U-statistic it is
++0.0311 with 56.2 per cent improved (docs/phase2/POST_REPAIR_MASTER_RESULTS.md, section A5). The
+direction and the significance survive; a quarter of the size does. At the printed width of this
+panel the median rule then stood 0.86 pt from the zero rule against a 2.5 pt requirement, and the
+gate refused to draw it.
 
-What the sentence said is now said by MARKS, and three things it used to carry in words are
-asserted of those marks instead, because a position can be wrong exactly as a phrase can:
+Three things were NOT done about that, and they are the reason this docstring is long:
 
-  * the 21 / 72 split is stated by the two half-plane blocks, each sitting inside the half-plane
-    it names with its family colour on the bar. The ECDF must clear both blocks by
-    CURVE_CLEAR_PT printed points, measured against their RENDERED extents rather than an
-    em-width estimate, so a longer label or a shifted curve cannot run the evidence through the
-    mark that reports it.
-  * the shift is stated by the median rule, which must stand MED_CLEAR_PT printed points clear of
-    the zero rule on the resolved x scale. Below that the two verticals merge, and the panel then
-    shows a distribution centred on zero while its label claims a shift.
-  * the 7 per cent tie note names the vertical step at the origin, so that step has to exist. If
-    no query ties, the note points at nothing and must be deleted with the tie.
+  * MED_CLEAR_PT was not lowered. It is unchanged at 2.5 pt and still asserted, in the inverted
+    form the new composition needs: the panel checks that the retired composition is still
+    illegible, so that a future change to the data or the estimator that would make it legible
+    again surfaces as a build failure rather than as a quietly worse figure.
+  * The scorer was not swapped. `coverage_worst` is the scorer this panel has always been about
+    and it is the one the estimator repair moved MOST (P2_LEGACY_RERUN.md: it went from the best
+    of the population family to the worst). Substituting `global_energy`, whose median against
+    mean cosine is +0.0566 and would have drawn under the old composition, would have been
+    choosing the setting that preserves the old picture.
+  * The panel was not demoted to the supplement. The result is smaller, not absent.
 
-Pairwise text collision and the panel-box overhang are NOT asserted here. They are properties of
-the assembled page rather than of the data, and they are checked at the printed size by the layout
-harness that fig2_assemble is verified with; duplicating them here with estimated text widths
-would add a fudge factor and catch nothing the harness does not.
+What changed is the drawing. The composition is now a PAIRED-OUTCOME panel, built for a small
+effect on a heavy-tailed difference:
+
+  * The x axis is the query percentile, so the three outcome PROPORTIONS are read directly as
+    x extents rather than inferred from a curve's height. The bottom axis is drawn as three
+    coloured segments whose widths ARE 36 / 8 / 56 per cent, which is the stacked proportion bar
+    the panel needs, occupying no plot area.
+  * The y axis is the paired difference, and the curve is its quantile function. Where the curve
+    lies below zero the population scorer lost, and the fill is orange; where above, it won, and
+    the fill is blue. The sign change and the flat run of exact ties are therefore visible as
+    positions on the axis, and they line up with the segment boundaries below them by
+    construction: both are computed from the same three counts.
+  * The median is a POINT with a bootstrap interval and a leader to its value, not a rule. Nothing
+    in the panel now depends on two rules resolving from each other.
+
+WHY THE VALUE AXIS IS A SIGNED SQUARE ROOT
+------------------------------------------
+The paired difference runs from -2.22 to +2.85 while 68 per cent of queries fall within +/-0.25 of
+zero. On a linear axis that puts the entire region the claim is about into 5 per cent of the panel
+height, and the panel would show two spikes and a flat line. A signed square root, sign(y)*sqrt|y|,
+is monotone, is applied identically to both signs, has no threshold to tune, and compresses the
+tails much less than a log would. It is CONSERVATIVE here rather than flattering: the longer tail
+is the positive one, so compressing tails takes visual weight away from the population scorer's
+best wins, not away from its losses. The tick labels are real values at their real positions, so
+the compression is stated by the axis itself.
+
+The transform does mean that the median dot's distance above zero is not proportional to +0.031.
+That is why the median carries a printed value and an interval, and why the caption says modest.
 
 JUDGEMENT CALLS A READER COULD DISAGREE WITH
 --------------------------------------------
-1. The curve is INK, not POP blue. The plotted quantity is a signed DIFFERENCE between the two
-   families, so it belongs to neither; and the two half-plane washes already spend both family
-   colours here. A blue curve would fuse with the blue wash on the right and contrast with the
-   orange on the left, which would say the curve is a population-level score, which it is not.
-   The washes carry the families; the curve carries the data and is the strongest ink in the box.
-2. The half-planes are named in family language ("mean retrieval" / "population retrieval") while
-   the axis definition line names the two exact scorers ("mean-cosine regret - coverage-worst
-   regret"). The panel compares one population-level scorer, not the whole family; panel f is what
-   generalises the result across the five. Naming the family in the wash and the scorer on the axis
-   keeps the fast read plain and the precise read available in the same 2.63 in.
-3. The mean (+0.258) is NOT drawn. At this x scale it lands 0.09 in from the median rule, so two
-   central-tendency rules would read as one thick rule, and the reason the mean exceeds the median
-   (a long right tail out to +2.82) is already the most conspicuous feature of the ECDF's upper
-   arm. The caption carries the mean; the panel shows the tail that explains it.
-4. The ECDF is drawn as a true step function over the full data range rather than as an
-   interpolated line, and both tails are kept in view (xlim spans the observed min and max). That
-   costs horizontal room in the crowded region near zero, and buys an honest picture of how far the
-   right tail runs.
-5. The ties are labelled at 7% next to the vertical step at the origin rather than left implicit,
-   so that "72% better" and "21% worse" are not read as a pair that should sum to 100.
-6. The curve POOLS all 765 queries. Six hundred of them are leave_drug_out, where the library is
-   fully observed (observed_library_fraction == 1.0) and only the optimal drug is hidden, which is
-   this project's information condition; only 165 have a genuinely incomplete library. A pooled
-   ECDF can therefore hide a gain that exists only where the library is complete, so the direction
-   is asserted TWICE: over all 765, and over the 165 with fraction < 1 (median +0.087, 68%
-   improved). The panel draws one curve and says nothing about partial observation in words; the
-   second assertion is what keeps the caption entitled to say the gain survives it.
+1. The curve is INK, not POP blue. The plotted quantity is a signed DIFFERENCE between two
+   scorers, so it belongs to neither; the two fills already spend both tier colours here.
+2. The two outcome blocks name the exact scorers ("mean cosine", "coverage-worst") rather than the
+   tiers. This panel compares one population-level scorer against one direction-only scorer; panel
+   f is what generalises across the five, and after the magnitude control entered the figure
+   "mean retrieval" is no longer an unambiguous name for a direction-only method.
+3. The mean (+0.132) is not drawn. It is four times the median because of the right tail, which is
+   the most conspicuous feature of the curve; the caption carries the number.
+4. Both tails are kept in view, so nothing is clipped and no count has to be reported as
+   off-panel.
+5. The ties are labelled at the plateau rather than left implicit, so that 56 and 36 are not read
+   as a pair that should sum to 100.
+6. The curve POOLS all 765 queries. Six hundred are leave_drug_out with a fully observed library;
+   only 165 have a genuinely incomplete one. A pooled curve can therefore hide a gain that exists
+   only where the library is complete, so the direction is asserted TWICE: over all 765, and over
+   the 165 with fraction < 1 (median +0.035, 60 per cent improved, P = 6.0e-05).
 
 Run standalone: python fig2c.py
 """
@@ -120,7 +129,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from fig2_style import (FAINT, LW_HAIR, LW_LINE, MEAN, MEAN_WASH, MS_DOT,  # noqa: E402
                         POP, POP_WASH, PT_ANNOT, PT_SMALL, REPO, SHARED, SUBTLE,
-                        TEXT, bare_axes, zero_rule)
+                        TEXT, bare_axes, boot_median_ci, zero_rule)
 
 QUERY_KEY = ["split_type", "cell_line", "heldout_drug", "heldout_MoA",
              "observed_library_fraction", "seed"]
@@ -128,16 +137,30 @@ N_QUERIES = 765          # all partial-observed queries; see module docstring
 N_INCOMPLETE = 165       # of those, the ones whose library is genuinely incomplete
 SRC = "results/exp12_partial_observed_retrieval/per_query_scores.csv"
 
-XLIM = (-1.35, 2.95)     # must contain both tails; asserted against the data in draw_2c
-YLIM = (-0.03, 1.05)
-WASH_ALPHA = 0.6        # the half-plane tint; see draw_2c
+XLIM = (0.0, 1.0)        # query percentile, by construction
+# The value range. These are the numbers the retired composition used as its x limits, kept because
+# the quantity is the same one: they bound the observed [-2.219, +2.853] and the bound is asserted.
+YLIM = (-2.35, 2.95)
+YTICKS = (-2, -1, -0.5, -0.1, 0, 0.1, 0.5, 1, 2)
 
-# Two geometric guards, in PRINTED POINTS on the resolved scale, standing where the deleted
-# sentence used to stand: see the restraint-pass note in the module docstring. Both are well
-# inside the current margins: median-to-zero measures 5.2 pt, and the tighter of the two block
-# clearances 4.8 pt (47.2 pt at the mean block). They are regression guards, not fitted limits.
-MED_CLEAR_PT = 2.5       # the median rule must be separable from the zero rule
-CURVE_CLEAR_PT = 1.5     # air between the ECDF and each half-plane block
+# Two geometric guards, in PRINTED POINTS on the resolved scale.
+#
+# MED_CLEAR_PT is UNCHANGED at 2.5 and is the constant that retired the previous composition; see
+# the module docstring. It is now asserted the other way round, as the condition under which this
+# composition is the necessary one.
+MED_CLEAR_PT = 2.5
+CURVE_CLEAR_PT = 1.5     # air between the quantile curve and each text block
+
+# Where the three text blocks sit. x values are data coordinates and the x axis runs 0 to 1, so
+# they are also axes fractions; y offsets from the axes floor are in PRINTED POINTS, which keeps
+# the stacking independent of the non-linear value scale.
+BLOCK_PCT_DY, BLOCK_NAME_DY = 12.0, 3.0
+MEAN_BLOCK_X, POP_BLOCK_X = 0.02, 0.985
+MED_X, MED_HALF_W = 0.5, 0.08       # the median point, and the half-width of its interval band
+MED_TEXT_XY = (0.40, 0.46)          # right-aligned, in the empty upper-left quadrant
+MED_LEADER = ((0.415, 0.42), (0.475, 0.075))
+TIE_BRACKET_Y, TIE_BRACKET_TIP, TIE_TEXT_Y = -0.055, -0.012, -0.075
+N_TEXT_XY = (0.02, 2.62)
 
 
 def regret_reduction():
@@ -149,7 +172,7 @@ def regret_reduction():
     d = pd.read_csv(os.path.join(REPO, SRC))
     assert d["decision_regret"].notna().all() and (d["decision_regret"] >= 0).all(), (
         "decision_regret is documented as a non-negative regret (lower is better); if that "
-        "changes, the sign of every difference plotted here inverts and both half-plane labels "
+        "changes, the sign of every difference plotted here inverts and both outcome labels "
         "become false.")
     cols = {}
     for method, name in (("mean_cosine", "mean"), ("DART_coverage_worst", "pop")):
@@ -163,13 +186,23 @@ def regret_reduction():
     return j["mean"] - j["pop"]
 
 
-def _stroked_extent(artist, renderer, dpi) -> Bbox:
-    """One block artist's PRINTED extent in pixels, with a stroked line's width included.
+def _signed_sqrt(v):
+    v = np.asarray(v, dtype=float)
+    return np.sign(v) * np.sqrt(np.abs(v))
 
-    ``Line2D.get_window_extent`` returns the bbox of the vertices and ignores linewidth, so the
-    2.2 pt colour bar that caps each block would measure 1.1 pt thinner at the top than it prints.
-    The guard below is a 1.5 pt threshold, so a systematic 1.1 pt is the difference between
-    reporting air that exists and air that does not; the half-width is added back here.
+
+def _signed_square(t):
+    t = np.asarray(t, dtype=float)
+    return np.sign(t) * t * t
+
+
+def _stroked_extent(artist, renderer, dpi) -> Bbox:
+    """One artist's PRINTED extent in pixels, with a stroked line's width included.
+
+    ``Line2D.get_window_extent`` returns the bbox of the vertices and ignores linewidth, so a
+    stroked segment would measure half its width thin on every side. The guard below is a 1.5 pt
+    threshold, so a systematic point is the difference between reporting air that exists and air
+    that does not; the half-width is added back here.
     """
     bb = artist.get_window_extent(renderer=renderer)
     if isinstance(artist, Line2D):
@@ -178,34 +211,34 @@ def _stroked_extent(artist, renderer, dpi) -> Bbox:
     return bb
 
 
-def _block_clearance_pt(ax, artists, ecdf, curve_below: bool) -> float:
-    """Least vertical air, in printed points, between the ECDF and one half-plane block.
+def _curve_clearance_pt(ax, artists, curve, curve_above: bool) -> float:
+    """Least vertical air, in printed points, between the quantile curve and one text block.
 
-    The block is MEASURED rather than estimated: its width is set by the printed width of its two
-    text lines, so a longer label, a larger type size or a shifted curve would otherwise close the
-    gap silently and run the evidence through its own legend. The renderer is built here, as fig3d
+    The block is MEASURED rather than estimated: its width is set by the printed width of its text,
+    so a longer label, a larger type size or a shifted curve would otherwise close the gap silently
+    and run the evidence through the mark that reports it. The renderer is built here, as fig3d
     does it, so the measurement neither forces a draw of a half-assembled figure nor assumes which
-    backend fig2_assemble is building under. The ECDF is non-decreasing, so over the block's x span
-    the curve is nearest the block at one known end: its right end when the curve runs below the
-    block, its left end when the curve runs above.
+    backend fig2_assemble is building under. The quantile curve is non-decreasing, so over the
+    block's x span it is nearest the block at one known end: its left end when the curve runs above
+    the block, its right end when the curve runs below.
     """
     fig = ax.figure
     r = RendererAgg(int(fig.get_figwidth() * fig.dpi), int(fig.get_figheight() * fig.dpi), fig.dpi)
     bb = Bbox.union([_stroked_extent(a, r, fig.dpi) for a in artists])
     inv = ax.transData.inverted()
-    x_near = inv.transform((bb.x1 if curve_below else bb.x0, bb.y0))[0]
-    y_px = ax.transData.transform((x_near, ecdf(x_near)))[1]
-    gap_px = (bb.y0 - y_px) if curve_below else (y_px - bb.y1)
+    x_near = inv.transform((bb.x0 if curve_above else bb.x1, bb.y0))[0]
+    y_px = ax.transData.transform((x_near, curve(x_near)))[1]
+    gap_px = (y_px - bb.y1) if curve_above else (bb.y0 - y_px)
     return 72.0 * gap_px / fig.dpi
 
 
 def draw_2c(ax):
-    """ECDF of the Class-A per-query regret reduction over all 765 partial-observed queries."""
+    """Paired outcome of coverage-worst against mean-cosine over all 765 partial-observed queries."""
     rr_s = regret_reduction()
     rr = rr_s.to_numpy(dtype=float)
     n = rr.size
 
-    med = float(np.median(rr))
+    med, med_lo, med_hi = boot_median_ci(rr, n_boot=4000, seed=0)
     f_up = float((rr > 0).mean())
     f_dn = float((rr < 0).mean())
     f_ti = float((rr == 0).mean())
@@ -218,122 +251,152 @@ def draw_2c(ax):
         f"the three drawn percentages {pct} do not sum to 100, so the panel would have to "
         f"explain the remainder; re-word before drawing.")
     assert med > 0 and f_up > f_dn and p < 1e-6, (
-        f"the marks say the population half-plane holds the larger block and the median rule "
-        f"stands right of zero; median {med:.4f}, up {f_up:.3f}, down {f_dn:.3f}, "
-        f"p {p:.2e} do not support that reading.")
+        f"the marks say the blue segment is the wider one and the median point sits above zero; "
+        f"median {med:.4f}, up {f_up:.3f}, down {f_dn:.3f}, p {p:.2e} do not support that reading.")
+    # The median is drawn as a point with an interval rather than as a rule, so the interval is
+    # what now carries "systematic" on the panel. If it straddles zero the point is decoration.
+    assert med_lo > 0, (
+        f"the bootstrap median interval [{med_lo:+.4f}, {med_hi:+.4f}] includes zero, so the "
+        f"drawn point and its whisker no longer state a positive shift.")
     assert f_ti > 0, (
-        "no query ties exactly, so there is no vertical step at the origin for the tie note to "
-        "name; drop the note before drawing, and check that the two percentages still cannot be "
-        "read as a pair that should sum to 100.")
+        "no query ties exactly, so there is no flat run at zero for the tie bracket to name; drop "
+        "the bracket before drawing, and check that the two percentages still cannot be read as a "
+        "pair that should sum to 100.")
     frac_obs = rr_s.index.get_level_values("observed_library_fraction").to_numpy(dtype=float)
     part = rr[frac_obs < 1.0]
     assert part.size == N_INCOMPLETE, f"expected {N_INCOMPLETE} incomplete-library queries"
+    # THE THRESHOLD MOVED FROM 1e-6 TO 1e-3 ON 2026-09-03, and only because the estimator did.
+    # Under the V-statistic energy distance this subset gave p < 1e-6; under the unbiased
+    # U-statistic it gives 5.96e-05. The gain is unchanged in direction and barely changed in size
+    # (median +0.035, 60 per cent of 165 queries improved), so the claim the panel makes stands;
+    # what fell is the extremity of a p-value on 165 queries, which the caption never quoted. The
+    # new bound is stated here rather than removed, and the measured value is printed in the
+    # failure message so the next move is visible instead of inferred.
+    part_p = float(wilcoxon(part).pvalue)
     assert (float(np.median(part)) > 0 and float((part > 0).mean()) > 0.5
-            and float(wilcoxon(part).pvalue) < 1e-6), (
-        "the gain does not hold on the queries whose library is genuinely incomplete, so the "
-        "pooled curve drawn here would be carried by the fully observed ones alone and the "
-        "caption must not say the gain survives partial observation.")
-    assert XLIM[0] < rr.min() and rr.max() < XLIM[1], "the x range clips a tail"
+            and part_p < 1e-3), (
+        f"the gain does not hold on the queries whose library is genuinely incomplete "
+        f"(median {float(np.median(part)):+.4f}, {float((part > 0).mean()):.1%} improved, "
+        f"p {part_p:.2e}), so the pooled curve drawn here would be carried by the fully observed "
+        f"ones alone and the caption must not say the gain survives partial observation.")
+    assert YLIM[0] < rr.min() and rr.max() < YLIM[1], "the value range clips a tail"
 
     # The scale is resolved first, so every geometric check below measures the PRINTED panel
     # rather than a default view that the last line of this function would have replaced.
     ax.set_xlim(*XLIM)
+    ax.set_yscale("function", functions=(_signed_sqrt, _signed_square))
     ax.set_ylim(*YLIM)
 
-    # ---- the two half-planes: zero is the centre of the reading, and each side is named
-    # WASH_ALPHA keeps the frozen wash hues but takes them down to a tint that names the
-    # half-plane without competing with the curve; at full strength they read as two filled bars.
-    ax.axvspan(XLIM[0], 0.0, color=MEAN_WASH, alpha=WASH_ALPHA, lw=0, zorder=0)
-    ax.axvspan(0.0, XLIM[1], color=POP_WASH, alpha=WASH_ALPHA, lw=0, zorder=0)
-    zero_rule(ax, 0.0, color=SUBTLE, lw=0.8, zorder=3)
-
-    # ---- the ECDF itself, a true step over the full observed range
-    xs = np.sort(rr)
-    ys = np.arange(1, n + 1) / n
-    ax.plot(np.concatenate([[XLIM[0]], xs, [XLIM[1]]]), np.concatenate([[0.0], ys, [1.0]]),
-            drawstyle="steps-post", color=TEXT, lw=LW_LINE, zorder=6,
+    # ---- the quantile curve, and the two fills that name which scorer won each query
+    # x is the cumulative fraction of queries, so the curve crosses zero at exactly f_dn and leaves
+    # zero at exactly f_dn + f_ti: the sign changes on the curve and the segment boundaries on the
+    # axis below are the same three counts, not two independent drawings.
+    ys = np.sort(rr)
+    xs = np.arange(1, n + 1) / n
+    xs_full = np.concatenate([[XLIM[0]], xs])
+    ys_full = np.concatenate([[ys[0]], ys])
+    zero_rule(ax, 0.0, vertical=False, color=SUBTLE, lw=0.8, zorder=3)
+    ax.fill_between(xs_full, ys_full, 0.0, where=ys_full < 0, color=MEAN_WASH, lw=0, zorder=1)
+    ax.fill_between(xs_full, ys_full, 0.0, where=ys_full > 0, color=POP_WASH, lw=0, zorder=1)
+    ax.plot(xs_full, ys_full, color=TEXT, lw=LW_LINE, zorder=6,
             solid_joinstyle="round", solid_capstyle="butt")
 
-    # ---- the median, as a primary annotation: a rule, the 50% crossing, and a direct label
-    ax.plot([med, med], [YLIM[0], 0.5], ls=(0, (1.6, 1.6)), lw=0.8, color=SHARED, zorder=4)
-    ax.plot([XLIM[0], med], [0.5, 0.5], ls=(0, (1.6, 1.6)), lw=LW_HAIR, color=FAINT, zorder=4)
-    ax.scatter([med], [0.5], s=MS_DOT, color=TEXT, zorder=7, linewidths=0)
-    ax.text(med + 0.06, 0.36, f"median +{med:.3f}", fontsize=PT_ANNOT, color=TEXT,
-            ha="left", va="center", zorder=7)
+    def _curve(u):
+        return float(np.interp(u, xs_full, ys_full))
 
-    # ---- the ties: the flat step at the origin, named at the MIDDLE of the step it explains,
-    # so the leader lands on the riser rather than on the corner where the curve turns
-    y_tie = f_dn + f_ti / 2.0
-    ax.plot([-0.42, -0.015], [y_tie, y_tie], lw=LW_HAIR, color=SHARED, zorder=4)
-    ax.text(-0.46, y_tie, f"{pct['ti']} tied", fontsize=PT_SMALL, color=SUBTLE,
-            ha="right", va="center", zorder=7)
+    # ---- the median: a point, an interval, and its value on a leader. No second rule.
+    #
+    # The interval prints 3.1 pt tall and the point mark is 5.7 pt across, so a plain vertical
+    # whisker would sit entirely inside its own dot. It is drawn as a BAND with capped ends
+    # instead, wider in x than the dot, so the two ends stay visible on either side of it. What
+    # the band has to show is that its lower end clears the zero rule, which it does by 4.5 pt.
+    ax.fill_between([MED_X - MED_HALF_W, MED_X + MED_HALF_W], [med_lo, med_lo], [med_hi, med_hi],
+                    color=FAINT, lw=0, zorder=4)
+    for v in (med_lo, med_hi):
+        ax.plot([MED_X - MED_HALF_W, MED_X + MED_HALF_W], [v, v], lw=LW_HAIR, color=SHARED,
+                zorder=6, solid_capstyle="butt")
+    ax.scatter([MED_X], [med], s=MS_DOT, color=TEXT, zorder=7, linewidths=0)
+    ax.plot([MED_LEADER[0][0], MED_LEADER[1][0]], [MED_LEADER[0][1], MED_LEADER[1][1]],
+            lw=LW_HAIR, color=SHARED, zorder=5)
+    med_text = ax.text(MED_TEXT_XY[0], MED_TEXT_XY[1], f"median +{med:.3f}", fontsize=PT_ANNOT,
+                       color=TEXT, ha="right", va="center", zorder=7)
 
-    # ---- the two half-plane blocks. The bar is the mark that carries the family colour; every
-    # letter stays ink or grey. Each block sits inside the half-plane it names, so position and
-    # colour say the same thing twice.
-    mean_block = [
-        ax.plot([0.030, 0.115], [0.975, 0.975], transform=ax.transAxes, lw=2.2, color=MEAN,
-                solid_capstyle="butt", zorder=5, clip_on=False)[0],
-        ax.text(0.030, 0.955, pct["dn"], transform=ax.transAxes, fontsize=PT_ANNOT, color=TEXT,
-                fontweight="bold", ha="left", va="top", zorder=7),
-        ax.text(0.030, 0.845, "mean retrieval\nbetter", transform=ax.transAxes,
-                fontsize=PT_SMALL, color=TEXT, ha="left", va="top", linespacing=1.25, zorder=7)]
+    # ---- the ties: the flat run of the curve on the zero rule, bracketed and named
+    ax.plot([f_dn, f_dn, f_dn + f_ti, f_dn + f_ti],
+            [TIE_BRACKET_TIP, TIE_BRACKET_Y, TIE_BRACKET_Y, TIE_BRACKET_TIP],
+            lw=LW_HAIR, color=SHARED, zorder=5, solid_joinstyle="miter")
+    ax.text(f_dn + f_ti / 2.0, TIE_TEXT_Y, f"{pct['ti']} tied", fontsize=PT_SMALL, color=SUBTLE,
+            ha="center", va="top", zorder=7)
 
-    pop_block = [
-        ax.plot([0.885, 0.970], [0.845, 0.845], transform=ax.transAxes, lw=2.2, color=POP,
-                solid_capstyle="butt", zorder=5, clip_on=False)[0],
-        ax.text(0.970, 0.825, pct["up"], transform=ax.transAxes, fontsize=PT_ANNOT, color=TEXT,
-                fontweight="bold", ha="right", va="top", zorder=7),
-        ax.text(0.970, 0.715, "population retrieval\nbetter", transform=ax.transAxes,
-                fontsize=PT_SMALL, color=TEXT, ha="right", va="top", linespacing=1.25, zorder=7)]
+    # ---- the proportion bar IS the x axis: three segments whose widths are the three outcomes
+    ax.spines["bottom"].set_visible(False)
+    for x0, x1, colour in ((XLIM[0], f_dn, MEAN), (f_dn, f_dn + f_ti, FAINT),
+                           (f_dn + f_ti, XLIM[1], POP)):
+        ax.plot([x0, x1], [YLIM[0], YLIM[0]], lw=2.6, color=colour, solid_capstyle="butt",
+                clip_on=False, zorder=5)
 
-    ax.text(0.970, 0.030, f"n = {n} queries", transform=ax.transAxes, fontsize=PT_SMALL,
-            color=SUBTLE, ha="right", va="bottom", zorder=7)
+    # ---- the two outcome blocks, each standing over the segment whose share it states
+    def _block(x, ha, share, name):
+        return [ax.annotate(share, xy=(x, YLIM[0]), xytext=(0, BLOCK_PCT_DY),
+                            textcoords="offset points", ha=ha, va="bottom",
+                            fontsize=PT_ANNOT, fontweight="bold", color=TEXT, zorder=7),
+                ax.annotate(name, xy=(x, YLIM[0]), xytext=(0, BLOCK_NAME_DY),
+                            textcoords="offset points", ha=ha, va="bottom",
+                            fontsize=PT_SMALL, color=TEXT, zorder=7)]
+
+    mean_block = _block(MEAN_BLOCK_X, "left", pct["dn"], "mean cosine better")
+    pop_block = _block(POP_BLOCK_X, "right", pct["up"], "coverage-worst better")
+
+    ax.text(N_TEXT_XY[0], N_TEXT_XY[1], f"n = {n} paired queries", fontsize=PT_SMALL,
+            color=SUBTLE, ha="left", va="top", zorder=7)
 
     # ---- axes (the limits are already set, above the geometric checks)
-    ax.set_xticks([-1, 0, 1, 2])
-    ax.set_yticks([0, 0.25, 0.5, 0.75, 1.0])
-    ax.set_yticklabels(["0", "0.25", "0.50", "0.75", "1.00"])
-    ax.set_ylabel("cumulative fraction", fontsize=PT_ANNOT)
-    bare_axes(ax)
+    ax.set_xticks([0.0, 0.25, 0.5, 0.75, 1.0])
+    ax.set_xticklabels(["0", "25", "50", "75", "100"])
+    ax.set_yticks(list(YTICKS))
+    ax.set_yticklabels(["0" if v == 0 else f"{v:g}" for v in YTICKS])
+    ax.set_ylabel("regret reduction", fontsize=PT_ANNOT, labelpad=1.5)
+    bare_axes(ax, keep=("left",))
 
-    # The plain-language reading leads; the definition follows a size down, so two method names
-    # never have to share the axis title. Neither line carries a sub/superscript, so neither is
-    # printed at 0.7x and both stand at their nominal size.
+    # ONE line under the axis since 2026-09-04. The second line set the sign convention,
+    # "mean-cosine regret - coverage-worst regret", and the panel already says it twice: the two
+    # end blocks name which method is better on which side. It is now stated once, in the caption,
+    # where a definition belongs, and the 0.12 in it occupied has left the figure.
     #
-    # Both drops are INCHES, converted here, not axes fractions. They were -0.19 and -0.30 of the
-    # axes height, which printed as 0.205 and 0.324 in at the 1.08 in axes this panel had until
-    # 2026-09-01; those printed values are what is preserved. As fractions they moved with the box:
-    # when the row grew to give this panel 1.55 in, the second line dropped 0.465 in against a
-    # 0.50 in pad and its descenders left the panel. fig2a lost this defect on 2026-08-31 and
-    # fig2b on 2026-09-01; this is the last of the three.
+    # The drop is INCHES, converted here, not an axes fraction: as a fraction it moves with the
+    # box, and when row 1 grew this label once dropped its descenders out of the figure.
     ax_h_in = ax.get_position().height * ax.figure.get_figheight()
+
     def _below(inches):
         return -inches / ax_h_in
-    ax.text(0.5, _below(0.205), "Regret reduction vs mean retrieval", transform=ax.transAxes,
-            fontsize=PT_ANNOT, color=TEXT, ha="center", va="top")
-    ax.text(0.5, _below(0.324), "mean-cosine regret $-$ coverage-worst regret",
-            transform=ax.transAxes, fontsize=PT_SMALL, color=SUBTLE, ha="center", va="top")
 
-    # ---- what the deleted sentence used to assert, now asserted of the MARKS that replaced it
-    # (module docstring, restraint pass). Both are measured on the printed scale: this panel is
-    # authored at the width it prints at, so a point here is a point on paper.
+    ax.text(0.5, _below(0.205), "Queries ranked by regret reduction (percentile)",
+            transform=ax.transAxes, fontsize=PT_ANNOT, color=TEXT, ha="center", va="top")
+
+    # ---- geometry, measured on the printed scale: this panel is authored at the width it prints
+    # at, so a point here is a point on paper.
+    #
+    # The first check is the constant that retired the previous composition, asserted in the form
+    # the new one needs. If the median ever stands MED_CLEAR_PT clear of the zero rule again, a
+    # value-axis ECDF with a median rule becomes legible and this small-effect composition is no
+    # longer the necessary drawing: that is a change worth a build failure, because it would mean
+    # the paired difference has moved by a factor of three and the caption's "modest" with it.
     ax_w_pt = ax.get_position().width * ax.figure.get_figwidth() * 72.0
-    med_pt = med / (XLIM[1] - XLIM[0]) * ax_w_pt
-    assert med_pt >= MED_CLEAR_PT, (
-        f"the median rule prints {med_pt:.2f} pt from the zero rule and {MED_CLEAR_PT} pt is the "
-        f"least that reads as two rules; below it the panel shows a distribution centred on zero "
-        f"while its label claims a shift.")
+    med_on_value_axis_pt = med / (YLIM[1] - YLIM[0]) * ax_w_pt
+    assert med_on_value_axis_pt < MED_CLEAR_PT, (
+        f"the median now prints {med_on_value_axis_pt:.2f} pt from zero on a value axis of this "
+        f"panel's width, at or above the {MED_CLEAR_PT} pt that reads as two separate rules. This "
+        f"composition exists because it did not; re-read docs/phase2/POST_REPAIR_MASTER_RESULTS.md "
+        f"section A5 and decide the panel again rather than editing this bound.")
 
-    def _ecdf(x):
-        return float((rr <= x).mean())
-
-    for artists, below, name in ((mean_block, True, "mean"), (pop_block, False, "population")):
-        gap_pt = _block_clearance_pt(ax, artists, _ecdf, below)
+    for artists, above, name in ((mean_block, True, "mean-cosine"),
+                                 (pop_block, True, "coverage-worst"),
+                                 ([med_text], False, "median")):
+        gap_pt = _curve_clearance_pt(ax, artists, _curve, above)
         assert gap_pt >= CURVE_CLEAR_PT, (
-            f"the ECDF passes within {gap_pt:.2f} pt of the {name}-retrieval block and "
-            f"{CURVE_CLEAR_PT} pt is the least air that keeps them separable; the curve would "
-            f"run through the mark that states the {name} share.")
+            f"the quantile curve passes within {gap_pt:.2f} pt of the {name} text and "
+            f"{CURVE_CLEAR_PT} pt is the least air that keeps them separable; the curve would run "
+            f"through the mark that states the {name} share.")
 
 
 if __name__ == "__main__":
@@ -344,12 +407,12 @@ if __name__ == "__main__":
     from figstyle import apply_style
     from fig2_style import PT_TICK, PT_TITLE
 
-    # The real printed box: a half-width column of Figure 2, drawn at 1:1. BOX_H is
-    # fig2_assemble's LETTER_BLOCK (0.17) plus its row-2 height (1.58); it was 1.84 while the
-    # letter band was 0.26 in and had to hold a panel phrase as well as the letter. The AXES are
-    # unchanged at AX_W x AX_H, which is why nothing inside this panel was re-tuned.
+    # The real printed box, drawn at 1:1: fig2_assemble's row-1 height (2.05) under its
+    # LETTER_BLOCK (0.16), at the width ROW_WIDTHS gives c (2.85) and the pads PADS gives it
+    # (0.72 left, 0.10 right, 0.50 bottom). Axes 2.03 x 1.55 in. Every printed-point assertion in
+    # draw_2c measures this box, so the harness has to be the box.
     apply_style(sizes=(PT_TITLE, PT_ANNOT, PT_TICK))
-    BOX_W, BOX_H, PAD_L, PAD_B, AX_W, AX_H = 3.45, 1.75, 0.72, 0.50, 2.63, 1.08
+    BOX_W, BOX_H, PAD_L, PAD_B, AX_W, AX_H = 2.85, 2.21, 0.72, 0.50, 2.03, 1.55
     fig = plt.figure(figsize=(BOX_W, BOX_H))
     ax = fig.add_axes([PAD_L / BOX_W, PAD_B / BOX_H, AX_W / BOX_W, AX_H / BOX_H])
     draw_2c(ax)

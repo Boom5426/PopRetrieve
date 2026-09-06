@@ -195,9 +195,26 @@ def draw_b(ax):
 
 
 def draw_c(ax):
-    """The premise: does the mean already know what the compartments do?"""
+    """The premise, on DISJOINT compartments: does one compartment rank what another does?
+
+    The x quantity is the MYELOID response similarity, not the mean signature. The mean signature
+    is the equal-weight average of the malignant and myeloid compartment deltas, so the malignant
+    compartment it would be used to rank is half of it and correlating the two mixes biology with
+    arithmetic (corrected 2026-09-06 from "contains 43% of the malignant cells", which counted a
+    three-compartment cell share the signature is not built from); the myeloid and malignant compartments share
+    no cells, and each is already referred to its own matched control upstream. That disjoint form
+    is what the manuscript's argument rests on, and it is the only one this panel may draw: the
+    caption and the Results sentence both describe the disjoint statistic. Drawing the overlapping
+    one here (as this panel did until 2026-09-01) put rho = +0.878 and an x label reading
+    "cos(mean signature ...)" under a caption that said myeloid-versus-malignant at +0.835.
+
+    Both values come from the same per-pair table and neither is retyped: the overlapping form is
+    quoted in the Results by its own macro, this panel computes the disjoint one from the column
+    it plots. See analysis/natural/zhao_premise_disjoint.py.
+    """
     p = pd.read_csv(f"{SRC}/premise_mean_vs_compartment.csv")
-    x, y = p.cos_mean_signature.values, p.cos_malignant_response.values
+    # x = myeloid, NOT cos_mean_signature. See the docstring before changing this line.
+    x, y = p.cos_myeloid_response.values, p.cos_malignant_response.values
     r = stats.spearmanr(x, y)
 
     lo, hi = -0.2, 0.95
@@ -206,7 +223,7 @@ def draw_c(ax):
     ax.set_xlim(lo, hi)
     ax.set_ylim(lo, hi)
     ax.set_aspect("equal", adjustable="box")
-    ax.set_xlabel("cos(mean signature of drug A, drug B)", fontsize=6.2)
+    ax.set_xlabel("cos(myeloid-compartment response of A, B)", fontsize=6.2)
     # Sentence case: the compartment is named in the caption and caps-for-emphasis in an axis
     # label is a slide idiom.
     ax.set_ylabel("cos(malignant-compartment\nresponse of A, B)", fontsize=6.2)

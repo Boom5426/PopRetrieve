@@ -1,18 +1,29 @@
-"""PopRetrieve Figure 1: from perturbation signatures to population-to-population drug retrieval.
+"""PopRetrieve Figure 1: response representation, scoring rule, and how the result is judged.
 
-Figure 1 is the paper's visual thesis, and it is read in one order:
+Figure 1 answers two questions and nothing else. It does not preview a result, name a dataset or
+mention forward prediction; Figures 2 to 6 do that. The two questions are:
 
-    WHAT IS POPULATION RETRIEVAL?
-      a  Task                         one query, one candidate library, two representations
-      b  Why averaging can fail       the same mean shift can hide opposite fates for a minority
-      c  What mathematically changes  the same pair, scored at two resolutions
-      d  How ranking can change       means tie, distributions separate, the preference flips
+    WHAT INFORMATION IS RETAINED?
+      a  The two layers, kept apart    representation (mu or P), then the rule that reads it
+      b  Why averaging can fail        the same mean shift can hide opposite fates for a minority
+      c  What is actually computed     one pair of populations, three scoring rules
+      d  What that does to a ranking   both mean scores tie, the population score separates
 
-    HOW SHOULD WE EVALUATE AND FORMALIZE IT?
-      e  Why evaluation can mislead   objective-aligned versus independent evaluation
-      f  How this study evaluates it  the evidence ladder, and how far each body of work reports
-      g  Mean retrieval is a limit    the population score\'s lambda -> 0 endpoint
+    HOW SHOULD THAT INFORMATION BE JUDGED?
+      e  Why evaluation can mislead    objective-aligned versus less score-aligned evaluation
+      f  How this study evaluates it   the evidence ladder, and how far each body of work reports
+      g  P contains mu as a limit      the population distance\'s lambda -> 0 endpoint
       h  Population scoring is itself a continuum, from mean aggregation to worst-case emphasis
+
+THE ONE TERMINOLOGY RULE THIS FIGURE EXISTS TO FIX
+--------------------------------------------------
+A mean representation is not direction-only. mu carries a direction AND a magnitude, and it is
+the COSINE that throws the magnitude away. So "direction-only" names a SCORING RULE, the mean
+cosine, and never a representation. Panels a, c and d were rebuilt on 2026-09-03 around that
+distinction, because the paper\'s own measurement depends on it: restoring magnitude to a mean
+signature is worth +0.399 in Hit@1 and adding the full distribution on top of it a further
++0.048 (Fig. 2a). A figure that had collapsed the first two rungs into one would have made the
+larger of those two effects invisible by construction.
 
 THE 2026-08-31 REBUILD, AND WHAT IT WAS FIXING
 ----------------------------------------------
@@ -84,17 +95,22 @@ from fig1h import draw_1h  # noqa: E402
 # get the deepest row, g and h carry a cartoon strip above a curve.
 FIGW = 6.90
 
-PAD_TOP, PAD_BOT = 0.05, 0.10
-# 0.17 and 0.22, matching Figures 2, 3 and 5, since 2026-09-01. They were 0.24 and 0.30 while
-# every row also carried a bold conclusion phrase inside its panels and needed the separation to
-# keep two phrases from reading as one block. With the phrases gone the band only has to hold a
-# 9.5 pt letter, which is 0.13 in. The saving is 0.52 in over four rows and three gaps, and it is
-# the whole of this figure's compaction: the panels themselves are schematics whose text is
-# absolute while their layout is fractional, so shrinking a row compresses the drawing around type
-# that does not shrink with it. Rows give back only the little each row's TIGHTEST panel has
-# spare, measured rather than guessed: 0.025 in for b, 0.024 for d, 0.044 for f, 0.022 for g.
-LETTER_BLOCK = 0.17
-ROW_GAP = 0.22
+PAD_TOP, PAD_BOT = 0.05, 0.04
+# 0.15 and 0.11 since 2026-09-04, down from 0.17 and 0.22. The band only has to hold a 9.5 pt
+# letter, whose ink measures 0.09 in, and the gap only has to say that one row has ended. Both
+# were sized when every row also carried a bold conclusion phrase inside its panels and needed
+# the separation to keep two phrases from reading as one block; the phrases went on 2026-09-01
+# and the band did not follow them down. Measured on the render rather than chosen: the white
+# between the last ink of one row and the letter of the next was 0.26 in on all three corridors.
+# With PAD_BOT this is 0.47 in of the figure's height, and it is white in every case.
+#
+# The rows themselves are near their content. Panels a, c and d are laid out in absolute inches
+# and points, so a shorter row does not compress them, it clips them; a asserts its own height
+# for that reason. Rows 3 and 4 are fractional and gave back the slack their tightest panel was
+# measured to have: 0.08 in for the e/f row, 0.15 for g/h once the cartoon strip lost the 0.12 in
+# of white above its marks. Rows 1 and 2 gave nothing, because b and d already fill them.
+LETTER_BLOCK = 0.15
+ROW_GAP = 0.11
 
 LETTER_GUTTER = 0.24        # box left edge -> axes left edge, for a panel with no y axis
 Y_FURNITURE = 0.32          # extra, for the two panels that have one
@@ -107,12 +123,13 @@ RIGHT_MARGIN = 0.06
 
 ROWS = [(("a", "b"), 1.58),
         (("c", "d"), 1.58),
-        (("e", "f"), 2.00),
-        (("g", "h"), 1.95)]
+        (("e", "f"), 1.92),
+        (("g", "h"), 1.80)]
 COL_X = (0.0, FIGW / 2.0)
 
 DATA_PANELS = ("g", "h")    # the only two with axes furniture
-CARTOON_H = 0.78            # the strip that gives each curve its intuition
+CARTOON_H = 0.66            # the strip that gives each curve its intuition; 0.78 until
+                            # 2026-09-04, when the render showed 0.12 in of white over its marks
 CARTOON_GAP = 0.10
 DATA_BELOW = 0.37           # x tick labels and the x label, under the curve
 
@@ -178,11 +195,12 @@ def _assert_floor(fig, floor=PT_FLOOR):
     return fig
 
 
-# A symbol is not a claim. Panel a composes its subscripted distances by hand, base at PT_EQ and
-# subscript at PT_SMALL, which reproduces mathtext's own 1.43 ratio exactly and prints d with a
-# 9.3 pt base; panel h sets its y axis to $D_\beta$ at the same size. Both are correct and both
-# are above the cap, so the gate exempts text that is entirely mathtext. A conclusion sentence is
-# never wrapped in dollar signs.
+# A symbol is not a claim. Panel h sets its y axis to $D_\beta$ at PT_EQ, which is the smallest
+# nominal size whose 0.7x subscript still clears this figure's 6.5 pt floor, so it is correct and
+# above the cap; the gate therefore exempts text that is entirely mathtext. Panel c composes its
+# subscripts from two artists instead and needs no exemption, and panel a carried a third case
+# until 2026-09-03 and now draws no subscript at all. A conclusion sentence is never wrapped in
+# dollar signs.
 _PURE_MATH = re.compile(r"^\s*\$[^$]*\$\s*$")
 
 
@@ -227,7 +245,14 @@ def build(apply_style, panel_letter):
         x, top, w, h = RECTS[key]
         return fig.add_axes([x / FIGW, 1.0 - (top + h) / FIGH, w / FIGW, h / FIGH])
 
-    for key, fn in (("a", draw_1a), ("b", draw_1b), ("c", draw_1c), ("d", draw_1d),
+    # SLOTS b AND c EXCHANGED THEIR CONTENT ON 2026-09-05, and the module names were left alone,
+    # as in fig3_assemble and fig4_assemble: fig1c.py draws panel b. Two reasons, and they point
+    # the same way. Citation order: the Results cite the scoring-rule pair first and the
+    # shared-mean pair second, so with the old assignment panel c was cited before panel b.
+    # Grouping: row 1 now holds the representation and the three rules that read it, and row 2
+    # holds the two cases where the mean is the same and the populations are not, which is what
+    # each row is arguing. The two boxes are identical, 3.45 x 1.58 in, so nothing was resized.
+    for key, fn in (("a", draw_1a), ("b", draw_1c), ("c", draw_1b), ("d", draw_1d),
                     ("e", draw_1e), ("f", draw_1f)):
         fn(_ax(key))
     draw_1g(_ax("g"), _ax("g_top"))

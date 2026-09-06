@@ -8,32 +8,49 @@ them as one answer. That breaks the same two ways Figure 1 broke, so it is settl
 once, here: a colour that means one thing in panel a and another in panel f, and a type size
 chosen per panel to make that panel's own crowding go away.
 
-COLOUR: TWO FAMILIES, AND THE REASON THERE IS NO THIRD
-------------------------------------------------------
-    POP     blue    a score computed from the RETAINED cell population. Four of the eight
-                    scorers on panel a: global energy, PCA-latent energy, and the two
-                    subpopulation-coverage variants.
-    MEAN    orange  a score computed from a COLLAPSED per-perturbation signature. The other
-                    four: PCA-latent cosine, CMap WTCS, CMap cosine, mean cosine.
-    SHARED  grey    context, machinery, and anything both families have in common.
-    FAINT   pale    structure that must be visible without being read.
+COLOUR: THREE TIERS, AND THE TWO-FAMILY READING THEY REPLACED
+------------------------------------------------------------
+    MEAN       orange  DIRECTION only: a score that discards response magnitude. Four of the nine
+                       scorers on panel a: mean cosine, CMap cosine, CMap WTCS, PCA-latent cosine.
+    MAGNITUDE  slate   direction AND magnitude, and nothing higher. One scorer: mean L2.
+    POP        blue    the retained cell POPULATION. The other four: global energy, PCA-latent
+                       energy, and the two subpopulation-coverage variants.
+    SHARED     grey    context, machinery, and anything the tiers have in common.
+    FAINT      pale    structure that must be visible without being read.
 
-The first draft of this figure had three families, splitting the two CMap baselines off as
-"reference". That was dropped for a reason that is about the science rather than about the
+Until 2026-09-03 this figure had two colours because it argued a two-way split, mean
+representation against population representation, and the split was worth colouring because it
+SEPARATED: every population scorer's macro-mean Hit@1 sat above every mean scorer's, so panel a's
+ladder was sorted by value and grouped by family at once, and fig2a asserted it at draw time.
+
+The magnitude control ended that. mean_l2 is a mean-representation scorer and it reaches 0.788,
+above three of the four population scorers; it takes 89 per cent of the step the figure used to
+attribute to population structure; and it correlates 0.80 with the energy distance where mean
+cosine correlates 0.06. The assertion was removed rather than repaired, and the grouping with it:
+what it protected was a property of WHICH mean scorer was in the panel, not of two representation
+families. See docs/phase2/FIG2_MAGNITUDE_CONTROL_VERDICT.md, which was written before any panel
+was touched, and the TIER map at the foot of this file.
+
+The tiers are assigned by construction, never by result: a cosine discards magnitude whatever it
+scores, and a distance between point clouds retains the distribution whatever latent it lives in.
+That is what makes panel f's ordering a prediction the matrix can contradict rather than a
+restatement of it.
+
+MEAN and POP keep their hues under the new reading because a direction-only scorer is exactly the
+mean-family scorer the figure always drew orange, and a population scorer exactly the one it drew
+blue. What changed is that a third mark now stands between them.
+
+The first draft of this figure had a different third group, splitting the two CMap baselines off
+as "reference". That was dropped for a reason that is about the science rather than about the
 palette. The CMap-style cosine baseline applies the same operation to the same mean differential
 expression vector as mean cosine and scores identically to it (Spearman rho = 1.000 over 54,180
-query-candidate scores, panel g), and CMap WTCS is rank enrichment on the same collapsed
-signature. All three are mean-representation methods. Colouring them as a separate family would
-say the opposite of what panel g measures, in the same figure.
+query-candidate scores, panel f), and CMap WTCS is rank enrichment on the same collapsed
+signature. All three are direction-only methods. Colouring them as a separate group would say the
+opposite of what panel f measures, in the same figure.
 
 What survives of the distinction is real and is carried by a different channel: the two CMap rows
 are PUBLISHED baselines, and panel a marks them with a glyph rather than a hue. Provenance and
-representation are two different facts about a scorer, and they get two different channels.
-
-The families are worth colouring at all only because they SEPARATE. Every population-level
-scorer's macro-mean Hit@1 (down to 0.589) is above every mean-level scorer's (up to 0.518), so
-the ladder in panel a is simultaneously sorted by value and grouped by family, and the grouping
-costs the sort nothing. That is a measured property of the data, asserted at draw time in fig2a.
+what a scorer keeps are two different facts about it, and they get two different channels.
 
 TYPE: A LADDER, NOT A BUDGET
 ----------------------------
@@ -56,7 +73,7 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from figstyle import (COMP_SOFT, FOCAL_SOFT, GREY, INK, LIGHT_GREY,  # noqa: E402
+from figstyle import (COMP_SOFT, FOCAL_SOFT, GREY, INK, LIGHT_GREY, SLATE, TRACK,  # noqa: E402
                       META, RULE, TRACK)
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -81,6 +98,22 @@ SUBTLE = META               # units, n, provenance; never a claim
 # What actually matters is contrast, so the rule is now the measurable one: INK on either wash
 # holds about 14:1, so text may sit on a wash, but a wash may never be the only thing separating
 # two regions and no COLOURED text may sit on one.
+# THE THIRD TIER, ADDED 2026-09-03.
+#
+# Figure 2 used to argue a two-way split, mean representation against population representation,
+# and its colour axis had two hues because the argument had two sides. The magnitude control
+# measured on 2026-09-03 ends that: a magnitude-aware mean scorer takes 89 per cent of the step
+# the panel attributed to population structure, and it correlates 0.80 with the energy distance
+# where mean cosine correlates 0.06 (docs/phase2/FIG2_MAGNITUDE_CONTROL_VERDICT.md). The axis the
+# scorers actually separate on is what they KEEP, so the figure now carries three tiers and needs
+# a third mark for the middle one.
+#
+# SLATE is the deck's "filled bar carrying no family semantics", which is exactly what is wanted:
+# the magnitude tier is not a third competing family, it is the control that sits between the
+# other two. Figure 5 panel b already draws mean_l2 in it, so the two figures agree on sight.
+MAGNITUDE = SLATE           # #4F6D7A  direction + magnitude, and nothing higher
+BAR_TRACK = TRACK           # #EDEDED  the full-extent track a value bar is drawn on
+
 POP_WASH = "#E4EDF6"
 MEAN_WASH = "#FBF0E4"
 
@@ -100,7 +133,7 @@ LW_STEM = 0.9               # a lollipop stem
 MS_DOT = 26                 # a point estimate carrying a claim
 
 # ---------------------------------------------------------------------------------- families
-# The eight scorers of panel a, by REPRESENTATION. `published` is provenance and is deliberately
+# The nine scorers of panel a, by REPRESENTATION. `published` is provenance and is deliberately
 # a separate field: see the module docstring. Order within a family is by value at draw time,
 # never by this dict.
 SCORERS = {
@@ -110,11 +143,35 @@ SCORERS = {
     "coverage_worst": dict(label="coverage-worst", family="pop",  published=False),
     "pca_mean":       dict(label="PCA-mean",       family="mean", published=False),
     "cmap_wtcs":      dict(label="CMap WTCS",      family="mean", published=True),
-    "cmap_cosine":    dict(label="CMap cosine",    family="mean", published=True),
+    # NOT marked published. The canonical CMap score is WTCS (above); this row is a cosine
+    # applied to the same mean signatures, which is the score the equivalence result concerns
+    # and which the main text calls "the implemented CMap-style cosine". Carrying the dagger
+    # here would present a cosine baseline built in this study as the canonical CMap score.
+    "cmap_cosine":    dict(label="CMap-style cos.", family="mean", published=False),
     "mean_cosine":    dict(label="mean cosine",    family="mean", published=False),
+    # The magnitude control. Its family is "mean" because that is what it is computed from; its
+    # tier is "magnitude" because that is what it keeps, and after 2026-09-03 the tier is the
+    # axis this figure argues along. Keeping both fields is deliberate: panel d still asks which
+    # representation a scorer is built on, and that question has not changed.
+    "mean_l2":        dict(label="mean L2",        family="mean", published=False),
 }
 FAMILY_COLOUR = {"pop": POP, "mean": MEAN}
 FAMILY_NAME = {"pop": "Population-level", "mean": "Mean-level"}
+
+# What each scorer KEEPS, which is the axis Figure 2 now argues along. Assigned by construction,
+# not by result: a cosine discards magnitude whatever it scores, and a distance between point
+# clouds retains the distribution whatever latent it lives in.
+TIER = {
+    "mean_cosine": "direction", "cmap_cosine": "direction", "cmap_wtcs": "direction",
+    "pca_mean": "direction",
+    "mean_l2": "magnitude",
+    "global_energy": "population", "pca_dist": "population",
+    "coverage_mean": "population", "coverage_worst": "population",
+}
+TIER_NAME = {"direction": "direction only", "magnitude": "+ magnitude",
+             "population": "+ distribution"}
+# The three scorers that carry the argument. Everything else on the panel is a reference point.
+PRIMARY = ("mean_cosine", "mean_l2", "global_energy")
 
 
 # THERE IS NO title() HELPER, AND THAT IS THE POINT.

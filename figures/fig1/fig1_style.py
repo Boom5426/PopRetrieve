@@ -12,17 +12,33 @@ COLOUR: FOUR ROLES, AND NOT A FIFTH
 -----------------------------------
     POP     blue    population-level / distributional. The retained cell population, the
                     population score, and anything that is a consequence of keeping cells.
-    MEAN    orange  mean-level / collapsed signature. The centroid, the cosine, the mean score,
-                    and anything that is a consequence of averaging.
+    MEAN    orange  the MEAN REPRESENTATION and everything downstream of it: the centroid, both
+                    of the scoring rules that read it (the cosine and the mean L2), and the two
+                    information segments they retain. It marks the representation, never one of
+                    its two scores, which is why panel a's first two rows and panel c's first two
+                    equations carry the same orange diamond.
     SHARED  grey    the query, the candidate library, the ranking machinery: everything both
                     routes have in common. If two things are shared, they are this colour, which
                     is what makes the branch colours mean something.
     EXT     green   an evaluator the retrieval method never saw. Used in e and f only, because
                     those are the only panels where an outside judge exists.
 
-A fifth functional colour is not available. If a panel needs to separate two things and has run
+    MAGNITUDE slate the middle rung of the information ladder, direction + magnitude and nothing
+                    higher. Panel a only, and it is NOT a fifth role: it is the deck's existing
+                    tier colour, `figstyle.SLATE`, which `fig2_style.MAGNITUDE` gives the same
+                    meaning on Figure 2a's ladder and `phase2_style.MATERIAL` on Figure 5's. Panel a
+                    defines that ladder, so it must be drawn in the colours the two figures that
+                    measure it already use, or a reader who learned the rungs here finds a
+                    different colour on the next page.
+
+                    Panel a's own point, that direction and magnitude come from ONE representation,
+                    is carried by the MARK rather than by the hue: rows one and two both take the
+                    orange centroid diamond. That is a stronger statement than a shared fill, and
+                    it leaves the fill free to carry the rung.
+
+A sixth functional colour is not available. If a panel needs to separate two things and has run
 out, it separates them by shape, fill, or position, not by inventing a hue: the reader has been
-taught four meanings by the time they reach panel e and a fifth one silently redefines the figure.
+taught these meanings by the time they reach panel e and a new one silently redefines the figure.
 
 TYPE: A LADDER, NOT A BUDGET
 ----------------------------
@@ -36,9 +52,11 @@ sub/superscript at 0.7x nominal, so the smallest nominal size whose subscript st
 figure's floor is 6.5 / 0.7 = 9.286, rounded up to 9.3. It was 9.0 in the first cut of this file,
 on the claim that 9.0 x 0.7 "clears this figure's floor"; 9.0 x 0.7 is 6.30, which does not, and
 fig1_assemble._assert_floor would have rejected every panel that used it. Three panel authors
-caught it independently and composed their subscripts by hand instead. Panels a and c still do,
-setting the subscript as its own 6.5 pt artist, which lands a shade LARGER than mathtext would;
-that is left alone rather than reverted, since nothing was shrunk to reach it.
+caught it independently and composed their subscripts by hand instead. Panel c still does, setting
+the subscript as its own 6.5 pt artist, which lands a shade LARGER than mathtext would; that is
+left alone rather than reverted, since nothing was shrunk to reach it. Panel a did too until
+2026-09-03 and now draws no subscript: its rebuild carries the symbols mu and P as plain italic
+labels beside the marks they name, so PT_EQ has one user left, panel h's y axis.
 
 At the 7.2 pt the rest of the deck uses for mathtext a subscript prints at 5.04 pt, which clears
 Nature's floor and not ours.
@@ -53,13 +71,14 @@ from matplotlib.patches import FancyArrowPatch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from figstyle import (COMP_SOFT, FOCAL_SOFT, GREEN_SOFT, GREY, INK,  # noqa: E402
-                      LIGHT_GREY, META)
+                      LIGHT_GREY, META, SLATE)
 
 # ---------------------------------------------------------------------------------- colour
 POP = FOCAL_SOFT            # #5185C0
 MEAN = COMP_SOFT            # #E99D4E
 SHARED = GREY               # #767676
 EXT = GREEN_SOFT            # #55966B
+MAGNITUDE = SLATE           # #4F6D7A, the middle rung of the information ladder ONLY; see below
 FAINT = LIGHT_GREY          # #D4D4D4, structure that must be visible without being read
 TEXT = INK                  # all body text; colour carries meaning through MARKS, not letters
 SUBTLE = META               # units, provenance, "n = ...", never a claim
@@ -134,6 +153,31 @@ def blank(ax):
     ax.set_ylim(0, 1)
     ax.axis("off")
     return ax
+
+
+def renderer(ax):
+    """A renderer the panel can measure text against, drawn once so the metrics are real."""
+    fig = ax.figure
+    fig.canvas.draw()
+    return fig.canvas.get_renderer()
+
+
+def text_w_in(ax, rend, s, pt, weight="normal", style="normal"):
+    """The printed width of a string in INCHES, so a column can be set from measurement.
+
+    Lives here rather than in a panel because two panels now set a column this way and a second
+    copy is how the palette came to be duplicated across forty-three files. Panel a sets its
+    information axis after the widest scoring-rule name; panel d sets its relation column after
+    the widest route name. Both must survive a rename of the thing they measure, which a typed
+    column position does not: it goes on looking correct and quietly overlaps or strands.
+
+    The probe is placed at data (0, -1). Every Figure 1 panel is on ``blank`` unit axes, so that
+    is off-panel, and it is removed before it can be found by the floor and overlap checks.
+    """
+    t = ax.text(0.0, -1.0, s, fontsize=pt, fontweight=weight, style=style)
+    bb = t.get_window_extent(renderer=rend)
+    t.remove()
+    return float(bb.width) / ax.figure.dpi
 
 
 # THERE IS NO title() HELPER, AND THERE MUST NOT BE ONE AGAIN.

@@ -67,6 +67,47 @@ panel verifies its own agreement with the retired mirror at draw time.
 | `fig3d_recommendation_vs_outcome.csv` | `results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv` |
 | `fig3g_exp13_projection.csv` | `results/exp13_real_data_projection/projection.csv` |
 | `fig4a_theoretical_boundary.csv` | `results/exp11_hir_benchmark/theoretical_boundary.csv` |
+| `fig5b_oracle_ladder.csv` | `results/phase2_transition/phase_a/summary.csv` |
+| `fig5bd_oracle_deltas.csv` | `results/phase2_transition/phase_a/delta_vs_reference.csv` |
+| `fig5c_decision_relevance.csv` | `results/phase2_transition/synthesis/gate3_decision_relevance.csv` |
+| `fig5e_headroom_null.json` | `results/phase2_transition/bottleneck/summary.json` |
+| `fig5g_interaction_checks.json` | `results/phase2_transition/gate1_interaction/checks.json` |
+| `fig5h_conditional_regression.csv` | `results/phase2_transition/bottleneck/regression.csv` |
+| `fig6bcd_predicted_summary.csv` | `results/phase2_transition/phase_b/summary.csv` |
+| `fig6cd_predicted_deltas.csv` | `results/phase2_transition/phase_b/delta_vs_reference.csv` |
+| `fig6cf_state_conditioned.csv` | `results/phase2_transition/phase_b_p5/summary.csv` |
+| `fig6c_state_conditioned_deltas.csv` | `results/phase2_transition/phase_b_p5/delta_vs_reference.csv` |
+| `fig6g_oracle_to_prediction.csv` | `results/phase2_transition/synthesis/oracle_to_prediction.csv` |
+
+Eleven of those arrived on 2026-09-03 with the Figure 5/6 split. Every panel on both pages reads
+one of them through `figures/phase2_data.py`, and none was under sync before: the Phase-II rebuild
+had landed eight panels on Figure 5 with no source data at all while the other four figures had it.
+
+## GENERATED, rebuilt and drift-checked by `sync_source_data.py`
+
+A generated view has a builder, so `--check` compares its contents, not just the existence of its
+parent. Prefer this over DERIVED whenever a builder can be written.
+
+| file | built from | what the builder does |
+|---|---|---|
+| `fig5d_ceiling.csv` | `results/phase2_transition/bottleneck/bottleneck_per_query.csv` | five columns of thirty-two: the two reciprocal ranks the ceiling panel splits on and the per-query gain |
+| `fig5f_recoverability.csv` | `results/phase2_transition/phase_c/gate2_observed.csv` | the supervised and unsupervised state-recovery accuracies the histogram is built from |
+
+Both are projections rather than mirrors because their parents are 1.3 MB and 279 kB of columns
+no panel touches. A projection stays drift-checked; a hand-built DERIVED view would not be.
+
+Until 2026-09-01 this file sat in DERIVED and shipped the numbers of a run that `fig5c.py` itself
+retracts (`real` 0.046, predictors ~0.009, plus a predictor named `scgen_cpa_linear` that exists in
+no file under `results/`). Existence-checking a parent cannot catch that; a builder can.
+
+## RETIRED, moved to `_stale/` on 2026-09-03
+
+`fig5b_predictor_gaps.csv` and `fig5cd_structure_diagnostics.csv` were views of Figure 5 panels
+that the Phase-II rebuild removed. After the Figure 5/6 split their names point at panels that
+mean something else: `fig5b` is now the oracle MRR ladder and `fig5c` the decision-correction
+counts. A source-data file named for a panel it does not describe is worse than a missing one,
+because a reader checks the panel against it. The experiments behind both are untouched and still
+under `results/`.
 
 ## DERIVED, a hand-built view of one parent
 
@@ -75,7 +116,5 @@ panel verifies its own agreement with the retired mirror at draw time.
 | `fig2a_hit1_ladder.csv` | `results/exp08_signature_baselines/summary.csv` | one method-level Hit@1 column, aggregated over tasks and settings |
 | `fig2c_regret_reduction.csv` | `results/exp12_partial_observed_retrieval/per_query_scores.csv` | one scorer's per-query regret reduction, 765 of 6,885 rows |
 | `fig3ef_gate_divergence.csv` | `results/exp16_gate_diagnosis/_merged_query_divergence.csv` | column projection onto the gate and divergence axes |
-| `fig5b_predictor_gaps.csv` | `results/exp09_predict_then_rank/summary.csv` | the distributional-minus-mean gap per predictor, one row per predictor |
-| `fig5cd_structure_diagnostics.csv` | `results/exp09_structure_diagnostics/exp09_structure_diagnostics_summary.csv` | the `synth` axis collapsed to the faithful synthesizer |
 
 `_stale/` holds superseded files kept for provenance. Nothing reads them.

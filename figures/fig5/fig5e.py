@@ -1,164 +1,86 @@
-"""PopRetrieve Figure 5 panel 5e: Gate 2. Is the structure UNRECOVERABLE, or merely unclustered?
-
-Source data: results/upgrade/gate2_supervised_upper_bound.csv (real separation, s = 1.0)
-
-WHAT CHANGED, AND WHY IT MATTERS
---------------------------------
-This panel used to show nine columns of adjusted Rand index, all near 0.1, and conclude that
-subpopulations "cannot be reliably identified". Two things were wrong with that.
-
-  1. Every method tested was centroid- or Gaussian-based (k-means, GMM, PCA variants). The
-     obvious objection, that graph-based (Leiden) and density-based (HDBSCAN) clustering are
-     the field's actual defaults and were never run, was left open. They are run here.
-
-  2. There was NO SUPERVISED UPPER BOUND, so the result could not distinguish
-       (a) the information is absent from the representation, from
-       (b) the information is present and unsupervised methods cannot find it.
-     These have opposite implications: (a) is an information ceiling no method can beat,
-     (b) is a solvable engineering problem. Concluding (a) from clustering failure alone is
-     the same species of error this paper criticizes elsewhere.
-
-Every method is now scored in the SAME unit, best-permutation accuracy against the true
-labels, with the label matching given to each clusterer for free (an over-partitioning method
-is never penalised for splitting a true class). The supervised ceiling is a classifier handed
-the ground-truth partition, with the representation fit INSIDE the training fold so nothing
-leaks; the unsupervised methods get the easier transductive representation.
-
-CORRECTED (CORRECTIONS.md R22): this docstring used to say that arrangement "biases the comparison
-AGAINST the conclusion drawn". It biases it FOR. The conclusion is that the GAP is small, and
-inflating the unsupervised arm while deflating the supervised one makes the gap smaller, so the
-+0.018 below is an underestimate that was presented as a conservative bound. The ceiling is now
-also reported under the MATCHED representation (the same transductive PCA the clusterers get,
-which leaks no labels because PCA never sees them), and that is the number the manuscript uses.
-
-THE ANSWER: ceiling 0.692, best unsupervised 0.674, gap 0.018. Unsupervised clustering already
-extracts essentially everything this representation contains about this partition, so WITHIN THIS
-CONSTRUCTED MIXTURE the limit is informational rather than algorithmic. Nonlinear learners (forest
-0.669, kNN 0.605) do not beat the linear probe (0.685), so it is not a hidden nonlinear boundary.
-
-THAT QUALIFIER IS EVERYTHING, AND WE ONLY FOUND OUT LATER. This HDAC-versus-JAK mixture is one WE
-BUILT, and the ceiling is largely an artefact of POOLING several drugs into each class: split the
-same K562 cells one drug against one drug and it is 0.879 against 0.837 unsupervised. Posed as that
-same drug-versus-drug question in a patient's tumour, the ceiling is 0.923 and the best
-unsupervised method reaches only 0.777, a median paired gap of +0.117. So the general claim once
-drawn from this panel, that identifiability is an information limit, is WITHDRAWN: in real tissue
-Gate 2 is an ALGORITHMIC bottleneck. See main-text Fig. 4d and CORRECTIONS.md R18 and R21. (An
-earlier withdrawal cited 0.964 with Leiden at 0.949; that test separated malignant from myeloid
-CONTROL cells, a cell-type rather than a drug-response partition, and is itself withdrawn by R21.)
-
+"""Figure 5 panel e: the headroom correlation is reproduced by a null with no relationship in it.
+Source data: results/phase2_transition/bottleneck/summary.json (via phase2_data.headroom_null)
 Run standalone: python fig5e.py
-"""
-import os
 
-import numpy as np
-import pandas as pd
+WHAT THIS PANEL RETRACTS
+------------------------
+Spearman(headroom, gain) = +0.79 was reported in an earlier draft as the strongest explanation of
+where population scoring pays: the more room the mean route leaves, the more the population route
+gains. The quantity is arithmetic. Gain is RR_pop − RR_mean and headroom is 1 − RR_mean, so the two
+share a term with the same sign, and reciprocal rank is capped at 1, which bounds the gain by the
+headroom query for query.
+
+The null draws that out and nothing else. It reshuffles the population route's reciprocal ranks
+WITHIN each context, so both marginals, the cap and the clustering survive and only the pairing
+between the two scorers is destroyed. It reproduces the observed value. The panel therefore draws
+the observed number INSIDE its own null, which is the only honest way to show a statistic that
+measures its own construction.
+
+WHY THE OBSERVED MARKER IS NOT COLOURED AS A FINDING
+-----------------------------------------------------
+It is drawn in the deck's neutral rather than in POP blue. Blue means population-level retrieval
+throughout this deck, and a blue marker here would read as a property of the population route. It
+is a property of the pairing of two reciprocal ranks under a ceiling, which is not a method.
+"""
+import os as _os
+import sys as _sys
+
 import matplotlib.pyplot as plt
 
-# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
-# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
-# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
-import sys as _sys, os as _os
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
-from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
-from fig5_style import PT_SMALL, PT_TICK  # noqa: E402
-GREEN_SOFT = "#55966B"
-REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-SRC = f"{REPO}/results/upgrade/gate2_supervised_upper_bound.csv"
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from figstyle import INK  # noqa: E402
+from phase2_data import headroom_null  # noqa: E402
+from phase2_style import (FAINT, LW_HAIR, PT_ANNOT, PT_SMALL, PT_TICK,  # noqa: E402
+                          SHARED)
 
-# Tick labels are data labels and cannot move to the caption, so they must be legible (>= 5.5 pt).
-# "(true $k$ given)" is dropped from the k-means / GMM ticks to make room; that concession is
-# stated in the Fig. 5e caption ("both handed the true $k$"), so no information is lost.
-UNSUP = [("acc_kmeans_k2", "$k$-means"),
-         ("acc_gmm_k2",    "Gaussian\nmixture"),
-         ("acc_leiden",    "Leiden\n(graph)"),
-         ("acc_hdbscan",   "HDBSCAN\n(density)")]
-SUP = [("probe_knn_acc",    "kNN"),
-       ("probe_forest_acc", "random\nforest"),
-       ("probe_linear_acc", "logistic")]
+XLIM = (0.740, 0.830)       # wide enough to show the band is not a hairline, tight enough that
+                            # the 0.004 between the observed value and the null mean is visible
+Y_BAND = 0.60               # the null, drawn as a band on its own row
+Y_OBS = 0.60                # the observed, on the SAME row: the panel's whole point is that one
+                            # sits inside the other, and two rows would let a reader read them
+                            # as two measurements to compare
 
 
 def draw_5e(ax):
-    if not os.path.exists(SRC):
-        raise FileNotFoundError(
-            f"{SRC} does not exist. Run analysis/identifiability/gate2_supervised_upper_bound.py. "
-            f"This panel will not render a placeholder ceiling.")
-    d = pd.read_csv(SRC)
-    d = d[d.separation_scale == 1.0]                       # the real-data regime
-    if d.empty:
-        raise ValueError("no rows at separation_scale == 1.0 (the real-data regime).")
+    n = headroom_null()
+    assert n["inside"], (
+        "the summary no longer reports the observed correlation inside its null; this panel draws "
+        "a retraction and must not draw it if the retraction has stopped holding.")
+    assert XLIM[0] < n["null_lo"] and n["null_hi"] < XLIM[1] and XLIM[0] < n["observed"] < XLIM[1], (
+        f"the view {XLIM} no longer contains the null {n['null_lo']:.3f} to {n['null_hi']:.3f} or "
+        f"the observed {n['observed']:.3f}")
 
-    ceiling = float(d.probe_acc.median())
-    best_unsup = max(float(d[c].median()) for c, _ in UNSUP)
+    ax.axhspan(Y_BAND - 0.17, Y_BAND + 0.17, xmin=0, xmax=0, color="none")   # keeps the y scale
+    ax.add_patch(plt.Rectangle((n["null_lo"], Y_BAND - 0.17), n["null_hi"] - n["null_lo"], 0.34,
+                               fc=FAINT, ec="none", zorder=2))
+    ax.plot([n["null_mean"]] * 2, [Y_BAND - 0.17, Y_BAND + 0.17], lw=1.1, color=SHARED, zorder=3,
+            solid_capstyle="butt")
+    ax.plot([n["observed"]], [Y_OBS], "o", ms=5.6, color="white", mec=INK, mew=1.2, zorder=5)
 
-    xs = np.arange(len(UNSUP) + len(SUP))
-    vals = [float(d[c].median()) for c, _ in UNSUP] + [float(d[c].median()) for c, _ in SUP]
-    labs = [l for _, l in UNSUP] + [l for _, l in SUP]
-    cols = [FOCAL_SOFT] * len(UNSUP) + [GREEN_SOFT] * len(SUP)
-
-    # Lollipops measured FROM chance, not bars grown from an arbitrary axis floor. A bar chart
-    # on a 0.44 baseline exaggerates every difference by construction; here the stem length is
-    # accuracy above chance, which is the quantity that means something, and HDBSCAN's exact
-    # 0.500 correctly becomes a marker sitting on the chance line with no stem at all.
-    ax.axhline(0.5, ls="--", lw=0.9, color=GREY, zorder=2)
-    for x, v, c in zip(xs, vals, cols):
-        ax.plot([x, x], [0.5, v], lw=1.6, color=c, alpha=0.55, solid_capstyle="butt", zorder=3)
-        ax.plot([x], [v], "o", ms=6, color=c, mec="white", mew=0.6, zorder=4)
-        if v > ceiling - 0.021:
-            # a value this close to the ceiling has no room above it: the ceiling rule would
-            # be drawn straight through the digits
-            ax.text(x - 0.16, v, f"{v:.3f}", ha="right", va="center", fontsize=PT_SMALL, color=INK)
-        else:
-            ax.text(x, v + 0.010, f"{v:.3f}", ha="center", va="bottom", fontsize=PT_SMALL,
-                    color=INK)
-
-    ax.text(-0.46, 0.504, "chance", ha="left", va="bottom", fontsize=PT_SMALL, color=GREY)
-    ax.axhline(ceiling, ls="-", lw=1.0, color=INK, zorder=2)
-    ax.text(-0.46, ceiling + 0.005, f"supervised ceiling {ceiling:.3f}", ha="left",
+    ax.text(n["observed"], Y_OBS + 0.245, f"observed {n['observed']:.3f}", ha="center",
             va="bottom", fontsize=PT_SMALL, color=INK)
-    # best unsupervised, carried across to the gap bracket
-    ax.plot([2, len(UNSUP) - 0.5], [best_unsup] * 2, ls=":", lw=1.0, color=FOCAL_SOFT, zorder=2)
+    ax.text(n["null_lo"] - 0.003, Y_BAND, f"ceiling null\n{n['n_shuffles']} shuffles",
+            ha="right", va="center", fontsize=PT_SMALL, color=SHARED, linespacing=1.15)
+    ax.text(n["null_hi"] + 0.003, Y_BAND - 0.02,
+            f"{n['null_lo']:.3f} to {n['null_hi']:.3f}", ha="left", va="center",
+            fontsize=PT_SMALL, color=SHARED)
 
-    # The gap itself, drawn in the gutter between the two groups so it crosses nothing. The
-    # reading of this gap (informational vs algorithmic limit) is contested and lives in the
-    # caption, which also records that it is superseded; the panel states only the number.
-    gx = len(UNSUP) - 0.5
-    ax.annotate("", xy=(gx, ceiling), xytext=(gx, best_unsup),
-                arrowprops=dict(arrowstyle="<->", lw=1.0, color=COMP_SOFT,
-                                shrinkA=0, shrinkB=0), zorder=6)
-    ax.text(gx, ceiling + 0.011, f"gap {ceiling - best_unsup:+.3f}", ha="center", va="bottom",
-            fontsize=PT_SMALL, color=INK, zorder=6)
-
-    ax.set_xticks(xs)
-    ax.set_xticklabels(labs, fontsize=PT_TICK)
-    ax.set_xlim(-0.62, len(xs) - 0.38)
-    ax.set_ylabel("accuracy recovering\nthe true partition", fontsize=PT_SMALL, labelpad=2)
-    ax.set_ylim(0.478, 0.762)
-    ax.set_yticks([0.50, 0.55, 0.60, 0.65, 0.70, 0.75])
-    ax.tick_params(axis="y", labelsize=PT_TICK)
-    for sp in ("right", "top"):
+    ax.set_ylim(0.0, 1.35)
+    ax.set_yticks([])
+    ax.set_xlim(*XLIM)
+    ax.set_xticks([0.75, 0.78, 0.81])
+    ax.set_xticklabels(["0.75", "0.78", "0.81"], fontsize=PT_TICK)
+    ax.set_xlabel("Spearman ρ, headroom against oracle gain", fontsize=PT_ANNOT, labelpad=1.5)
+    ax.grid(axis="x", lw=LW_HAIR, color="#EDEDED", zorder=0)
+    ax.set_axisbelow(True)
+    for sp in ("right", "top", "left"):
         ax.spines[sp].set_visible(False)
-
-    # Group headers above everything, so they never sit on top of the data.
-    for x0, x1, txt, col in [(0, len(UNSUP) - 1, "unsupervised", FOCAL_SOFT),
-                             (len(UNSUP), len(xs) - 1, "supervised (given the labels)", GREEN_SOFT)]:
-        ax.plot([x0 - 0.3, x1 + 0.3], [0.7305] * 2, lw=0.8, color=col, zorder=5)
-        # The bracket rule directly beneath is the coloured mark; the header is ink.
-        ax.text((x0 + x1) / 2, 0.734, txt, ha="center", va="bottom", fontsize=PT_SMALL, color=INK,
-                zorder=6)
-    # The methods footnote that used to sit here (at 4.5 pt, illegible in print) has been moved
-    # to the Fig. 5e caption. It is load-bearing (it is the leakage control), so it must NOT be
-    # dropped: "All methods are scored in one unit, and clusterers are given best-permutation
-    # label matching for free; every supervised bar, not only the ceiling, fits its
-    # representation inside the training fold, so no test information leaks into any of them."
+    return ax
 
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(figsize=(4.3, 3.0))
+    fig, ax = plt.subplots(figsize=(2.30, 0.92))
     draw_5e(ax)
-    # Must stay identical to fig5_assemble.TITLES["e"], which overrides whatever this file sets
-    # when the panel is composited. The old string here, "The information is not there to be
-    # found", is the retracted reading: it asserts a general information limit that the natural
-    # tumour arm contradicts, so a standalone run of this file printed a claim the manuscript no
-    # longer makes.
-    fig.savefig(os.path.join(os.path.dirname(__file__), "5e.png"), dpi=200, bbox_inches="tight")
+    fig.savefig(_os.path.join(_os.path.dirname(__file__), "5e.png"), dpi=200, bbox_inches="tight")
     print("wrote 5e.png")

@@ -1,0 +1,39 @@
+{
+  "n_queries": 3992,
+  "n_complete": 3618,
+  "spearman_with_oracle_gain": {
+    "headroom": 0.7826692804391278,
+    "interaction_share": 0.039190000968870785,
+    "S_int": -0.21336376175115948,
+    "R_int": -0.1971240695700282,
+    "A_sup": -0.3188648305888136,
+    "D_old": 0.25396238829696
+  },
+  "spearman_with_magnitude_controlled_gain": {
+    "headroom": 0.5254701553274441,
+    "interaction_share": 0.002690219485107965,
+    "A_sup": -0.2124916918320358,
+    "D_old": 0.18159952634041768
+  },
+  "headroom_correlation_is_mechanical": {
+    "observed_spearman_H_vs_G": 0.78986546910642,
+    "null_mean": 0.786022008845809,
+    "null_ci": [
+      0.7665423503797324,
+      0.8050228126857237
+    ],
+    "observed_inside_null": true,
+    "n_shuffles": 200,
+    "note": "the null keeps both marginals, the RR<=1 ceiling and the clustering, and destroys only the pairing between the two scorers"
+  },
+  "queries_with_zero_headroom": 3110,
+  "nested_r2": {
+    "headroom only": 0.6837226311438622,
+    "headroom + interaction share": 0.6851468597895934,
+    "plus recoverability": 0.6913797739466521,
+    "plus interaction term": 0.6914620065169877,
+    "absolute interaction instead of share": 0.6874825247872425,
+    "the old statistic, for contrast": 0.6910245442012317
+  },
+  "runtime_seconds": 1.5
+}

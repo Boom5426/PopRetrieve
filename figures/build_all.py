@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 from figstyle import (apply_style, panel_letter, assert_min_fontsize,
                       mathtext_offenders, MIN_PT, save)
 
-FIGS = [1, 2, 3, 4, 5]
+FIGS = [1, 2, 3, 4, 5, 6]
 # The single canonical output stem per figure. This is the name that gets copied to
 # manuscript/latex/figures/figN.pdf, so it is the authority; each figN_assemble.py declares the
 # same string as its own module-level STEM and _check_stem below refuses to build if the two
@@ -35,6 +35,14 @@ FIGS = [1, 2, 3, 4, 5]
 # fig2_apparent_gains) from inside build(), so each composite sat on disk twice under two names
 # with nothing to say which one the manuscript compiled.
 #
+# SIX main figures since 2026-09-03. Figure 5 used to carry the whole Phase-II intervention
+# result, oracle and forward prediction together, on one eight-panel page. The two halves answer
+# different questions and were competing for the same room, so they are two pages: Figure 5 with
+# candidate responses OBSERVED, Figure 6 with them PREDICTED. No experiment was re-run for the
+# split; both pages read the same result tree through figures/phase2_data.py, and their two task
+# schematics are one function with one switch (figures/phase2_task.py).
+#
+# The note below is the earlier count change and is kept for the record.
 # FIVE main figures since 2026-08-29, not six. The old Figure 2 (the zero-variance-limit figure)
 # carried no measured value from real cells: every claim on it was either an algebraic identity
 # proved in Methods or a definitional property of the coverage score, and two of its six panels
@@ -42,7 +50,8 @@ FIGS = [1, 2, 3, 4, 5]
 # query-candidate scores rather than over three macro-means. Its two surviving panels are now
 # Extended Data Fig. 1d,e and the old figures 3-6 moved down one place.
 STEMS = {1: "fig1_problem", 2: "fig2_temptation", 3: "fig3_collapse",
-         4: "fig4_benchmarks", 5: "fig5_two_gate"}
+         4: "fig4_benchmarks", 5: "fig5_intervention_oracle",
+         6: "fig6_prediction_bottleneck"}
 
 
 def _check_stem(n, mod):

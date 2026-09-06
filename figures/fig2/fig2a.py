@@ -1,119 +1,61 @@
-"""PopRetrieve Figure 2 panel a: the Hit@1 ladder, grouped by representation family.
+"""PopRetrieve Figure 2 panel a: the Hit@1 ladder, read as an information hierarchy.
 
 WHAT THIS PANEL CLAIMS
 ----------------------
-One thing, and it is a claim about RETRIEVAL, not about biology: scorers that keep the retained
-cell population retrieve the right response population more often than scorers that first collapse
-that population into a signature. The claim is carried by a separation, not by a winner. Every
-population-level scorer sits above every mean-level scorer on macro-average Hit@1, so the ladder
-is sorted by value and grouped by family at the same time and the grouping costs the sort nothing.
-That separation is ASSERTED at draw time (`_load`), because it is the whole design: if new data
-broke it, the grouping and the two family washes would start lying quietly.
+One thing: most of the retrieval information a mean-cosine scorer misses is response MAGNITUDE,
+and population structure adds a smaller residue on top of it. Three scorers carry that claim and
+the other six are reference points:
 
-IT IS A PROPERTY OF THE MACRO-MEAN, AND THE PANEL SAYS SO ON ITS X AXIS. Per individual task
-setting the separation holds in only 3 of the 7: in the other four coverage-worst is beaten by
-PCA-mean or CMap WTCS, and on Frangieh mean cosine is the best of all eight scorers. Nothing here
-over-claims, because the axis label, the caption and panel b all scope it, but the consequence is
-worth writing down: do NOT add per-cell dispersion to this panel. Dots over the bars would break
-the grouping in four of seven columns, and the grouping is what the panel is for. Panel b is where
-the per-task picture, including the reversal, belongs.
+    mean cosine     direction only                      0.3885
+    mean L2         direction + magnitude               0.7877     +0.3992
+    energy          + the rest of the distribution      0.8357     +0.0480
 
-Everything here is objective-aligned (Class A). Hit@1 rewards correspondence between response
-populations, which is the information population-level retrieval uses. Whether that information is
-biologically valuable is Figure 3's question and is deliberately absent from this panel.
+WHAT THIS PANEL USED TO CLAIM, AND WHY IT STOPPED
+--------------------------------------------------
+Until 2026-09-03 it claimed that every population-level scorer sits above every mean-level one on
+macro-average Hit@1, grouped the ladder into two family blocks, washed each block in its family
+colour, and ASSERTED the separation at draw time so that new data could not break it quietly.
+
+New data broke it. `mean_l2` is a mean-family scorer and it lands at 0.7877, above three of the
+four population scorers; only the energy distance stays above it. The assertion fired, which is
+the gate working. It is removed rather than repaired, and the family washes and the rotated family
+labels went with it, because the separation they drew was a property of which mean scorer was in
+the panel and not of the two representation families.
+
+The replacement is not a different grouping. It is a different axis: what a scorer KEEPS, in
+three tiers, direction then magnitude then distribution. `fig2_style.TIER` assigns it by
+construction rather than by result, so no scorer's tier can move when its number does.
 
 SOURCE
 ------
-results/exp08_signature_baselines/summary.csv, the only file this module reads. Eight scorers x
+results/exp08_signature_baselines/summary.csv, the only file this module reads. Nine scorers x
 seven task x setting cells: controlled x {K562, A549, MCF7}, cross-line x {K562+A549, A549+MCF7,
 K562+MCF7}, and Frangieh x {Control+IFNg}. The plotted quantity is the UNWEIGHTED macro-mean of
 hit@1 over those seven cells; the cell count is read from the file and asserted to be seven for
 every method, and it is interpolated into the x axis label so the label cannot outlive the data.
 
-Every number drawn is computed here. Nothing is typed as a literal, and nothing is read from a
-summary table that could drift away from the source.
+Every number drawn is computed here. Nothing is typed as a literal.
 
 JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
 -------------------------------------------------------
 1.  UNWEIGHTED macro-mean over the seven cells, so a 30-query cell counts as much as a 360-query
-    cell. The query-weighted variant is larger (energy 0.887 vs collapsed cosine 0.421) and is
-    quoted in the manuscript text. Unweighted is plotted because the seven cells are seven
-    experimental conditions rather than seven samples of one population, and weighting would let
-    the three 360-query cross-line cells set the headline almost by themselves. Every claim this
-    panel STATES survives either weighting: the families still separate (weakest population
-    0.595 against strongest mean 0.499), the two collapsed-cosine scorers are still tied, and the
-    bracketed pair is still the widest. One thing the panel draws without claiming it does not
-    survive: query weighting lifts CMap WTCS (0.499) past PCA-mean (0.482) and swaps the fifth
-    and sixth rungs. It is named here rather than hidden under a blanket "nothing changes".
-2.  pca_dist is drawn as a POPULATION scorer. It is an energy distance between two point clouds
-    that happens to live in a PCA latent, so its input is the retained population. An earlier cut
-    coloured it "other", which put a distributional statistic outside the distributional family
-    and weakened the very claim the panel exists to make.
-3.  cmap_cosine and mean_cosine are IDENTICAL, not merely close: they agree to full precision in
-    every numeric column of all seven cells, which this module asserts. The asserted pair is the
-    pair the tie marker is drawn beside, read out of the sort rather than typed, so the marker
-    cannot come to rest against two rows the assertion never looked at. Their order in the ladder
-    is therefore a tie with no data-driven answer, and it is broken deterministically by ascending
-    method name (cmap_cosine above mean_cosine). The tie is marked on the panel rather than left
-    for the reader to notice two equal bars, and the marker points at panel g, where the agreement
-    is measured per query-candidate pair rather than per cell. The panel prints no number for that
-    correlation: it is not in this file, and quoting it here would be laundering it.
-4.  The two CMap rows are PUBLISHED baselines. That is PROVENANCE, not representation, so it is
-    marked with a dagger and never with a colour; see the fig2_style docstring on why a third
-    family colour would contradict what panel g measures.
-5.  The left-hand family labels read "Population" and "Mean", derived by stripping the "-level"
-    suffix from fig2_style.FAMILY_NAME rather than retyped. The full names do not fit: rotated at
-    PT_SMALL, "Population-level" sets 0.65 in against a four-row group 0.62 in tall, and the floor
-    forbids shrinking it. The unabbreviated names belong in the caption.
-6.  The headline bracket compares the best population scorer with the worst mean scorer, which is
-    the widest honest pair on the panel. The narrowest pair, the two rows either side of the
-    family gap, is visible as a gap the reader can read off the same axis. Nothing on the panel
-    now STATES the separation that holds for ALL pairs; the two washes do it, by not overlapping
-    along the axis, and the caption says it in words.
-7.  The difference is printed from unrounded values, +0.448, not as the difference of the two
-    printed three-decimal values, which would read +0.449.
-
-THE RESTRAINT PASS AND THE SHORTER BOX (2026-08-31)
----------------------------------------------------
-The panel stated one bold sentence over itself, "Every population scorer beats every mean scorer".
-It is deleted, not shrunk: seven panels each stating a conclusion is seven claims competing for one
-page, and the figure carries evidence while the legend carries the argument. That phrase now opens
-this panel's caption entry. fig2_style.title() is gone and fig2_assemble._assert_no_titles caps
-panel text at PT_ANNOT, so it cannot come back at a smaller size. Nothing on the panel replaces it.
-
-"+0.448 Hit@1" came down with it, from PT_TITLE (8.5 pt) to PT_ANNOT (7.2 pt). It is a statistic
-rather than a sentence, so it survived the deletion, but the cap applies to statistics too. It is
-still meant to be the most prominent thing here, and it is now carried by three things that are not
-type size: bold weight against a page of regular text, its isolation in the right-hand block that
-nothing else occupies, and the bracket, whose stroke went from 0.7 to 0.9 so it ranks visibly above
-every hairline on the panel while staying below a plotted mark.
-
-The box went from 5.88 x 1.34 in to 5.88 x 1.20 in. Two consequences were re-measured rather than
-scaled by eye:
-
-  * Every vertical offset that used to be a fraction of the axes height, the x label and the
-    provenance key at -0.175 in axes coordinates and the two headline lines at +-0.55 row units,
-    is now written in INCHES and converted through ``_v`` / ``AXES_H_IN``. A fraction of a height
-    that moved is a constant that quietly means something else.
-  * The row pitch fell from 0.1537 to 0.1361 in. The scorer names set at PT_TICK, so the pitch is
-    asserted against that type size (``ROW_IN``) rather than eyeballed off the render, and the two
-    bar heights stay in row units so they tighten with the pitch instead of colliding with it.
-    BAR_H rose from 0.46 to 0.50 row units and BAR_H_HEAD from 0.66 to 0.70 so the bars keep close
-    to their old PRINTED thickness on the tighter pitch; the family gap rose from 0.60 to 0.70 row
-    units for the same reason, which leaves the white channel between the two families slightly
-    wider in inches than it was on the taller panel. That channel is the separation the deleted
-    sentence used to assert, so it is the last thing that should have been allowed to shrink.
-
-Two things the audit of that pass changed. The tie marker read "identical on all 7 settings
-(panel g)", which states the asserted fact as a phrase rather than as a statistic and was the
-longest string of ink inside the plotting area. It now reads "identical, 7/7 settings (panel g)",
-the same fact as a count, 1.28 in wide against 1.42 in, in the part of the panel the eye crosses
-on its way to the headline. And AXES_IN / AXES_H_IN were an unchecked copy of fig2_assemble's
-ledger, which every inch offset in this module is derived from, so a ledger change would have
-moved the x label, the provenance key and the two headline lines without a word. draw_2a now
-asserts that the axes it is handed IS the box it was authored against. The check is made against
-the axes rather than against the ledger because fig2_assemble imports this module and cannot be
-imported back.
+    cell. Unweighted is plotted because the seven cells are seven experimental conditions rather
+    than seven samples of one population.
+2.  The two increments are drawn as brackets between three rungs, not as a stacked bar. A stack
+    would imply the three tiers partition one quantity; they do not, because the ladder is sorted
+    by value and the three primaries are not adjacent in it.
+3.  The magnitude step is the panel's largest quantity and it is drawn as such. That is the
+    result, not an emphasis choice: at +0.3992 against +0.0480 it is eight times the step above
+    it, and a panel that gave them equal weight would be the one making a claim.
+4.  cmap_cosine and mean_cosine are IDENTICAL, not merely close: they agree to full precision in
+    every numeric column of all seven cells, which this module asserts. The tie is marked, and
+    the marked pair is read out of the sort so the marker cannot come to rest against two rows
+    the assertion never looked at.
+5.  The two CMap rows are PUBLISHED baselines. That is PROVENANCE, not representation, so it is
+    marked with a dagger and never with a colour.
+6.  Secondary scorers are drawn in one neutral tone rather than in tier colours. Colouring all
+    nine by tier would put four blue bars and four grey-blue bars on the panel and lose the three
+    the argument runs through. The tier of every scorer is in the caption.
 
 Run standalone: python fig2a.py
 """
@@ -127,9 +69,13 @@ import pandas as pd
 from matplotlib.patches import Rectangle
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fig2_style import (FAMILY_NAME, HAIRLINE, LW_HAIR, MEAN, MEAN_WASH,  # noqa: E402
-                        POP, POP_WASH, PT_ANNOT, PT_SMALL, PT_TICK, PT_TITLE,
-                        SCORERS, SHARED, SUBTLE, TEXT)
+from fig2_style import (BAR_TRACK, FAINT, HAIRLINE, LW_HAIR, MAGNITUDE, MEAN,  # noqa: E402
+                        POP, PRIMARY, PT_ANNOT, PT_SMALL, PT_TICK, PT_TITLE,
+                        SCORERS, SHARED, SUBTLE, TEXT, TIER, TIER_NAME)
+
+# One colour per tier, and only the three primaries get one. TIER_COLOUR is keyed by tier rather
+# than by scorer so a scorer cannot be given a colour its tier does not have.
+TIER_COLOUR = {"direction": MEAN, "magnitude": MAGNITUDE, "population": POP}
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SRC = os.path.join(REPO, "results", "exp08_signature_baselines", "summary.csv")
@@ -161,23 +107,26 @@ SRC = os.path.join(REPO, "results", "exp08_signature_baselines", "summary.csv")
 # value column in the deck does. 0.6 mm is not worth being the one panel that reads differently.
 TRACK_IN = 1.75             # inches spanned by Hit@1 = 0 .. 1
 AXES_IN = 2.95              # the panel's axes width, from fig2_assemble's ledger
-AXES_H_IN = 1.94            # the panel's axes height, same ledger
+AXES_H_IN = 1.62            # the panel's axes height, same ledger
 XMAX = AXES_IN / TRACK_IN   # right edge of the axes, in Hit@1 units
 
 def _u(inches: float) -> float:
     """Inches on the printed page -> x-axis (Hit@1) units. Keeps the ledger readable."""
     return inches / TRACK_IN
 
-FAM_GAP = 0.70              # blank rows between the two family blocks
-Y_PAD = 0.56                # air above the top wash and below the bottom one, in row units
-BAR_H, BAR_H_HEAD = 0.46, 0.58   # row units; 0.101 and 0.128 in at the 0.220 in pitch
+FAM_GAP = 0.0               # the family blocks are gone; the ladder is one run of rows
+Y_PAD = 0.50                # air above the top wash and below the bottom one, in row units
+# Row units, so a bar's printed height follows the pitch. Raised with the 2026-09-04 compaction so
+# that the ladder keeps the ink-to-white ratio it was drawn with: 0.100 and 0.122 in at the
+# 0.180 in pitch, against 0.101 and 0.128 in at the 0.220 in pitch it had before.
+BAR_H, BAR_H_HEAD = 0.555, 0.680
 assert BAR_H_HEAD < 1.0, "a bar taller than the row pitch would touch its neighbour"
 
 # The y axis is measured in ROW UNITS, one per scorer, so the printed pitch is whatever the box
 # height divides into. It is derived here rather than left implicit, because the box lost 0.14 in
 # and the pitch is what has to clear the scorer names.
 Y_SPAN = (len(SCORERS) - 1) + FAM_GAP + 2 * Y_PAD
-ROW_IN = AXES_H_IN / Y_SPAN          # printed inches per row unit: 0.2200 at 1.94 in
+ROW_IN = AXES_H_IN / Y_SPAN          # printed inches per row unit: 0.1800 at 1.62 in
 assert ROW_IN * 72.0 >= PT_TICK * 1.30, (
     f"the ladder's row pitch is {ROW_IN * 72.0:.2f} pt and the scorer names set at {PT_TICK} pt; "
     "adjacent rows would crowd. Drop a row, widen the box, or take the names into the caption.")
@@ -188,14 +137,24 @@ def _v(inches: float) -> float:
 
 X_LABEL_R = -_u(0.062)      # right edge of the scorer-name column
 X_DAGGER = -_u(0.030)       # the published-baseline glyph, on its own fixed column
-X_FAMILY = -_u(0.845)       # the rotated family label
-X_SWATCH = -_u(0.740)       # the family swatch, a rule the length of the group
+# The family column is gone. What used to be 0.845 in of rotated family label and swatch is now
+# axes width: the ladder needs no left apparatus beyond the scorer names and the dagger column.
 # The block right of the track is 1.20 in wide (AXES_IN - TRACK_IN) and holds three things in
 # order: the value column, the bracket, the headline. Every offset below is inches past the track.
 X_VALUE_R = 1.0 + _u(0.280)  # right edge of the value column; "0.837" sets 0.23 in
 X_ARM = 1.0 + _u(0.330)      # where the bracket's arms stop, clear of the value column
-X_BRACKET = 1.0 + _u(0.420)  # the headline bracket's spine
+X_BRACKET = 1.0 + _u(0.420)   # the magnitude step's spine
+X_BRACKET2 = 1.0 + _u(0.780)  # the distribution step's spine, in its own column
 X_HEAD = 1.0 + _u(0.470)     # left edge of the headline text
+# ONE PRECISION FOR THE WHOLE PANEL, and it is the manuscript's. The value column set three
+# decimals and the two step brackets set four, so the panel printed "0.836", "0.788" and
+# "+0.0480" together: a reader who subtracted the two printed values got +0.048 and was shown a
+# number with a digit the values it came from do not carry. The manuscript's macros are worse
+# than a mismatch inside the panel, they are a mismatch with it: \HITSTEPDIST is +0.048 and
+# \HITSTEPMAG is +0.399, three decimals, so the same two quantities appeared at two precisions
+# in one paper. Both now read from here. The step is still computed unrounded; only its display
+# changes, so +0.399 remains the difference of the underlying values and not of their roundings.
+VALUE_DP = 3
 LW_HEAD = 0.9               # headline bracket: above LW_HAIR, and inked, so the brackets rank
 FOOT_IN = 0.245             # drop of the x axis label below the axes, in inches
 # The provenance key gets its own baseline. At full width it shared FOOT_IN with the x label,
@@ -229,21 +188,28 @@ def _load():
     assert agg.between(0.0, 1.0).all(), (
         "the full-extent track states 0..1 as the attainable range; a value left it")
 
-    # Ties broken by ascending method name, so the ladder is reproducible run to run.
-    order = sorted(SCORERS, key=lambda m: (0 if SCORERS[m]["family"] == "pop" else 1,
-                                           -agg[m], m))
-    pop = [m for m in order if SCORERS[m]["family"] == "pop"]
-    mean = [m for m in order if SCORERS[m]["family"] == "mean"]
-    assert min(agg[m] for m in pop) > max(agg[m] for m in mean), (
-        "panel a is grouped by family AND sorted by value only because the families separate; "
-        f"weakest population {min(agg[m] for m in pop):.6f} is not above strongest mean "
-        f"{max(agg[m] for m in mean):.6f}. Regroup or restate the panel, do not redraw it.")
+    # Sorted by value alone, ties broken by ascending method name so the ladder is reproducible.
+    # There is no family grouping and no family assertion: the assertion that every population
+    # scorer beats every mean scorer FIRED on 2026-09-03 when the magnitude control entered the
+    # panel, and it is removed rather than repaired. See this module's docstring.
+    order = sorted(SCORERS, key=lambda m: (-agg[m], m))
 
-    # The tie marker is drawn beside whichever rows share the bottom of the mean family, so the
-    # pair is READ OUT OF THE SORT here and the assertion below checks that same pair. Naming the
-    # two scorers as literals instead would let a data change slide the marker to a pair whose
-    # identity was never tested, and the panel would keep saying "identical" without evidence.
-    tied = [m for m in mean if float(agg[m]) == float(agg[mean[-1]])]
+    # The three rungs the panel argues along, checked to be one scorer per tier so the hierarchy
+    # cannot silently acquire two of anything.
+    tiers = [TIER[m] for m in PRIMARY]
+    assert sorted(tiers) == ["direction", "magnitude", "population"], (
+        f"PRIMARY must hold exactly one scorer per tier; it holds {dict(zip(PRIMARY, tiers))}")
+    prim = {TIER[m]: m for m in PRIMARY}
+    assert agg[prim["direction"]] < agg[prim["magnitude"]] < agg[prim["population"]], (
+        "the panel draws the three tiers as a rising ladder and labels the two steps between "
+        f"them; measured they are {agg[prim['direction']]:.4f}, {agg[prim['magnitude']]:.4f}, "
+        f"{agg[prim['population']]:.4f}, which is not rising. Restate the panel, do not reorder "
+        "it: a non-monotone hierarchy is a finding.")
+
+    # The tie marker's pair is READ OUT OF THE SORT rather than named as literals, so a data
+    # change cannot slide the marker onto two rows whose identity was never tested.
+    lowest = agg.min()
+    tied = sorted([m for m in SCORERS if float(agg[m]) == float(lowest)])
     assert len(tied) == 2, f"the tie marker assumes exactly two equal scorers, found {len(tied)}"
 
     # And the marked tie is stronger than equal macro-means: the two scorers agree to full
@@ -257,20 +223,15 @@ def _load():
     assert (a[num].values == b[num].values).all(), (
         f"the panel marks {tied[0]} and {tied[1]} as identical on all {n} settings; they are not")
 
-    # The bracketed pair is the extremes of the whole ladder, so name them from the sort.
-    best, worst = pop[0], mean[-1]
-    assert agg[best] == agg.max() and agg[worst] == agg.min(), (
-        "the bracket labels itself as the panel's widest pair; the sort disagrees")
-    return agg, pop, mean, tied, best, worst, n
+    return agg, order, prim, tied, n
 
 
 def draw_2a(ax):
-    """The Hit@1 ladder: every population-level scorer above every mean-level one."""
+    """The Hit@1 ladder, read as direction then magnitude then distribution."""
     # Everything below is positioned in INCHES and converted through ROW_IN, _u and _v, so the
     # panel is only correct inside the box it was authored for. fig2_assemble owns that box and
     # cannot be imported here (it imports this module), so the ledger is checked against the axes
-    # actually handed in. Without this the two constants above are a copy that can go stale in
-    # silence, and a stale AXES_H_IN moves the x label, the key and the headline lines together.
+    # actually handed in.
     fig_w, fig_h = ax.figure.get_size_inches()
     box = ax.get_position()
     got_w, got_h = box.width * fig_w, box.height * fig_h
@@ -278,54 +239,39 @@ def draw_2a(ax):
         f"panel a is authored against a {AXES_IN} x {AXES_H_IN} in axes and was handed "
         f"{got_w:.3f} x {got_h:.3f} in. Update AXES_IN / AXES_H_IN from fig2_assemble's ledger "
         "and re-measure FOOT_IN and the headline offsets; do not let the inch constants drift.")
-    agg, pop, mean, tied, best, worst, n_cells = _load()
-    rows = [(m, "pop") for m in pop] + [(m, "mean") for m in mean]
-    ys = {m: (i if f == "pop" else i + FAM_GAP) for i, (m, f) in enumerate(rows)}
-    head = {best, worst}
+    agg, order, prim, tied, n_cells = _load()
+    ys = {m: i for i, m in enumerate(order)}
+    head = set(prim.values())
 
-    # One pale block per family, running the full attainable range. It is both the group wash and
-    # the full-extent track: the block's right edge IS Hit@1 = 1, so each bar is read against the
-    # ceiling without the eye travelling to the axis.
-    for members, wash in ((pop, POP_WASH), (mean, MEAN_WASH)):
-        y0 = ys[members[0]] - 0.5
-        ax.add_patch(Rectangle((0.0, y0), 1.0, (ys[members[-1]] + 0.5) - y0,
-                               facecolor=wash, edgecolor="none", zorder=0))
+    # One full-extent track behind the whole ladder, not one wash per family. Its right edge IS
+    # Hit@1 = 1, so every bar is read against the ceiling without the eye travelling to the axis,
+    # and no block of rows is shaded as though it were a group.
+    ax.add_patch(Rectangle((0.0, -0.5), 1.0, len(order), facecolor=BAR_TRACK,
+                           edgecolor="none", zorder=0))
 
-    for m, fam in rows:
+    for m in order:
         v, y = float(agg[m]), ys[m]
         big = m in head
-        ax.barh(y, v, height=BAR_H_HEAD if big else BAR_H, color=POP if fam == "pop" else MEAN,
-                linewidth=0, zorder=2)
-        # Scorer name, right-aligned into the panel's left pad. The letters are never coloured:
-        # the bar carries the family and the type stays above the contrast floor.
+        # Only the three primaries carry a tier colour. The other six are one neutral tone: they
+        # are reference points, and colouring them by tier would put eight coloured bars on the
+        # panel and lose the three the argument runs through.
+        ax.barh(y, v, height=BAR_H_HEAD if big else BAR_H,
+                color=TIER_COLOUR[TIER[m]] if big else FAINT, linewidth=0, zorder=2)
         ax.text(X_LABEL_R, y, SCORERS[m]["label"], fontsize=PT_TICK, color=TEXT,
                 fontweight="bold" if big else "normal", ha="right", va="center", clip_on=False)
         if SCORERS[m]["published"]:
-            # Provenance, on its own column and in a separate channel from representation.
-            ax.text(X_DAGGER, y, "†", fontsize=PT_SMALL, color=SUBTLE, ha="center",
+            ax.text(X_DAGGER, y, "\u2020", fontsize=PT_SMALL, color=SUBTLE, ha="center",
                     va="center", clip_on=False)
-        # Value column, right-aligned past the end of the block rather than chasing each bar tip.
-        # The two bracketed rows are emphasised by WEIGHT and by ink, not by size: they used to set
-        # at PT_ANNOT, which put two more 7.2 pt bold strings on the panel and left the headline
-        # number competing with the very values it is the difference of.
-        ax.text(X_VALUE_R, y, f"{v:.3f}", ha="right", va="center", clip_on=False,
+        ax.text(X_VALUE_R, y, f"{v:.{VALUE_DP}f}", ha="right", va="center", clip_on=False,
                 fontsize=PT_SMALL, color=TEXT if big else SUBTLE,
                 fontweight="bold" if big else "normal")
-
-    # Family labels: ink letters plus a swatch, which is the one place this figure lets a label
-    # name a family. The letters are NOT set in the family colour, because MEAN on white is a
-    # 2:1 contrast ratio at 6.5 pt; the swatch beside them carries the hue at mark scale instead.
-    for members, fam in ((pop, "pop"), (mean, "mean")):
-        y0, y1 = ys[members[0]] - 0.5, ys[members[-1]] + 0.5
-        ax.text(X_FAMILY, 0.5 * (y0 + y1), FAMILY_NAME[fam].replace("-level", ""), rotation=90,
-                fontsize=PT_SMALL, color=TEXT, ha="center", va="center", clip_on=False)
-        ax.add_patch(Rectangle((X_SWATCH - _u(0.014), y0), _u(0.028), y1 - y0, clip_on=False,
-                               facecolor=POP if fam == "pop" else MEAN, edgecolor="none",
-                               zorder=3))
+        # The tier name sits inside the bar of the primary it belongs to, which is the one place
+        # a tier is named without a legend and without a margin column.
+        if big:
+            ax.text(_u(0.055), y, TIER_NAME[TIER[m]], fontsize=PT_SMALL, color="white",
+                    ha="left", va="center", zorder=3)
 
     # ---------------------------------------------------------------- the tie, marked not implied
-    # `tied` comes from _load, which asserted these two rows identical in every column of every
-    # cell. The marker and the assertion therefore always point at the same pair.
     y_hi, y_lo = ys[tied[0]], ys[tied[-1]]
     x_t = float(agg[tied[0]]) + _u(0.130)
     ax.plot([x_t, x_t], [y_hi, y_lo], color=SHARED, lw=LW_HAIR, zorder=3, clip_on=False)
@@ -335,34 +281,27 @@ def draw_2a(ax):
             f"identical, {n_cells}/{n_cells} (f)", fontsize=PT_SMALL, color=TEXT,
             ha="left", va="center")
 
-    # ---------------------------------------------------------------- the headline comparison
-    d = float(agg[best]) - float(agg[worst])          # unrounded, so this prints +0.448 not +0.449
-    ratio = float(agg[best]) / float(agg[worst])
-    y_b, y_w = ys[best], ys[worst]
-    # Ink, where the tie marker is grey: the two brackets do different jobs and now rank by both
-    # weight and tone. This one is the only structural mark on the panel that is not machinery.
-    ax.plot([X_BRACKET, X_BRACKET], [y_b, y_w], color=TEXT, lw=LW_HEAD, zorder=3,
-            clip_on=False)
-    for y in (y_b, y_w):
-        ax.plot([X_ARM, X_BRACKET], [y, y], color=TEXT, lw=LW_HEAD, zorder=3, clip_on=False)
-    y_mid = 0.5 * (y_b + y_w)
-    # PT_ANNOT, not PT_TITLE: the cap applies to statistics too. What makes this the loudest thing
-    # on the panel is the bold weight, the empty block around it, and the bracket, not the size.
-    ax.text(X_HEAD, y_mid - _v(0.075), f"+{d:.3f} Hit@1", fontsize=PT_ANNOT, fontweight="bold",
-            color=TEXT, ha="left", va="center", clip_on=False)
-    # Second line: the ratio alone. "energy above mean cosine" sets 1.35 in and the whole block
-    # right of the track is 1.20 in, so the naming moved to the caption, which already carries it.
-    ax.text(X_HEAD, y_mid + _v(0.075), f"{ratio:.2f}x",
-            fontsize=PT_SMALL, color=SUBTLE, ha="left", va="center", clip_on=False)
+    # ---------------------------------------------------------------- the two steps
+    # These are the panel. Each bracket spans two of the three primaries and carries the step
+    # between them, computed unrounded so the printed difference is the difference of the values
+    # and not the difference of their printed roundings.
+    steps = (("direction", "magnitude", X_BRACKET), ("magnitude", "population", X_BRACKET2))
+    for lo_t, hi_t, x in steps:
+        lo, hi = prim[lo_t], prim[hi_t]
+        d = float(agg[hi]) - float(agg[lo])
+        y_a, y_b = ys[hi], ys[lo]
+        ax.plot([x, x], [y_a, y_b], color=TEXT, lw=LW_HEAD, zorder=3, clip_on=False)
+        for y in (y_a, y_b):
+            ax.plot([X_ARM, x], [y, y], color=TEXT, lw=LW_HEAD, zorder=3, clip_on=False)
+        ax.text(x + _u(0.050), 0.5 * (y_a + y_b), f"+{d:.{VALUE_DP}f}", fontsize=PT_ANNOT,
+                fontweight="bold", color=TEXT, ha="left", va="center", clip_on=False)
 
     # ---------------------------------------------------------------- axes furniture
     ax.set_xlim(0.0, XMAX)
-    ax.set_ylim(ys[rows[-1][0]] + Y_PAD, ys[rows[0][0]] - Y_PAD)   # inverted: best scorer on top
+    ax.set_ylim(len(order) - 1 + Y_PAD, -Y_PAD)          # inverted: best scorer on top
     ax.set_xticks([0.0, 0.25, 0.5, 0.75, 1.0])
     ax.set_yticks([])
     ax.set_xlabel(f"Hit@1, macro-average across {n_cells} task settings")
-    # Centred under the TRACK rather than under the axes, which extends past it, and dropped by a
-    # measured 0.245 in rather than by a fraction of a height that has already changed once.
     ax.xaxis.set_label_coords(0.5 / XMAX, -FOOT_IN / AXES_H_IN)
     ax.tick_params(axis="y", length=0)
     ax.tick_params(axis="x", length=2.2, width=0.6, color=HAIRLINE, labelcolor=TEXT,
@@ -371,9 +310,8 @@ def draw_2a(ax):
         ax.spines[sp].set_visible(False)
     ax.spines["bottom"].set_color(HAIRLINE)
     ax.spines["bottom"].set_linewidth(LW_HAIR)
-    ax.spines["bottom"].set_bounds(0.0, 1.0)       # the scale exists only under the tracks
-    # Key for the provenance glyph, kept off the ladder and out of a legend box.
-    ax.text(1.0, -KEY_IN / AXES_H_IN, "† published baseline", transform=ax.transAxes,
+    ax.spines["bottom"].set_bounds(0.0, 1.0)       # the scale exists only under the track
+    ax.text(1.0, -KEY_IN / AXES_H_IN, "\u2020 published baseline", transform=ax.transAxes,
             fontsize=PT_SMALL, color=SUBTLE, ha="right", va="center")
 
 

@@ -4,10 +4,26 @@ WHAT THIS PANEL CLAIMS
 ----------------------
 Both rows are the SAME signed quantity, the population-minus-mean retrieval advantage, on the
 SAME 600 paired leave-drug-out queries. Nothing is retrained between the rows; only the metric
-doing the judging changes. Judged by response matching, the advantage has median +0.129 and 73
+doing the judging changes. Judged by response matching, the advantage has median +0.028 and 55
 per cent of queries favour population retrieval. Judged by mechanism recovery, the median is
-exactly 0.000 and 34 per cent of queries favour population retrieval. That is the reversal the
-whole figure exists to carry, and it is two of the figure's four skeleton numbers.
+exactly 0.000, 24 per cent of queries tie exactly, and 36 per cent favour population retrieval.
+That is the collapse the whole figure exists to carry, and it is two of the figure's four
+skeleton numbers.
+
+WHAT THE ESTIMATOR REPAIR DID TO THIS PANEL, 2026-09-03
+-------------------------------------------------------
+Under the V-statistic energy distance the response-matching row read median +0.129 with 73 per
+cent favouring population. Under the unbiased U-statistic it reads +0.028 with 55 per cent. The
+mechanism-recovery row barely moved (34 to 36 per cent, median still exactly 0.000), because
+`moa_ndcg` is scored on the retrieved drug's mechanism label and does not pass through an energy
+distance at all: what moved is the retrieval, not the judging.
+
+So the CONTRAST this panel exists for survives and is narrower. The gap in "favour population"
+falls from 39 points to 19; the gap in medians falls from +0.129 to +0.028 against an unchanged
+0.000. The panel prints both rows' statistics rather than asking a reader to measure two
+densities, which is why the composition did not have to change with the numbers. The word for
+what is drawn is a COLLAPSE of the advantage under a different evaluator, not a sign reversal;
+the caption and the Results text are held to that.
 
 SOURCE
 ------
@@ -34,7 +50,7 @@ rows. Those 480 are the leave-drug-out queries INTERSECTED with the information-
 ``recommendation_mode == "DART_recommended"`` verdict, with no column, README line or generator
 recording the restriction. The manuscript reports this analysis on all 600 leave-drug-out queries
 ("Among the 600 partial-observation queries"), precisely so that the paper's headline does not
-rest on a subset chosen by the diagnostic that panels d, e and f show does not work. The panel was
+rest on a subset chosen by the diagnostic that panels e and f show does not work. The panel was
 stale against its own text, and the identical defect was found and fixed in Figure 2c first; its
 docstring records that history.
 
@@ -77,10 +93,15 @@ pt, the interquartile bars and the median dots grew with them, and no text was a
 JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
 -------------------------------------------------------
 1. ORIENTATION. The advantage runs along x, and the two evaluators are stacked rows, so the sign
-   semantics read left/right rather than up/down. The panel is 3.16 x 0.92 in. On a vertical value
-   axis the whole claim, a median shift of +0.129 against 0.000, would print as about 3 pt of
-   offset; along x it prints as 11.7 pt. The argument has to be visible in three seconds, so the
-   long side of the axes carries the quantity that carries it.
+   semantics read left/right rather than up/down. The panel is 3.16 x 0.92 in, so the long side is
+   3.4 times the short one and a shift printed along x is 3.4 times as far as the same shift
+   printed along y. That mattered more when the median shift was +0.129 (11.7 pt along x against
+   3.4 pt along y). It matters more still now that it is +0.028: 2.5 pt along x, and 0.7 pt along
+   y, which is under a printed point and would not be a mark at all. THE PANEL DOES NOT ASK THE
+   READER TO MEASURE THAT SHIFT. Both rows print their median, their percentage and their mean,
+   and what the drawing carries is the difference in SHAPE between a broad row and one piled on
+   zero with a quarter of its queries tied there. If this panel ever has to make the shift itself
+   visible, no orientation will do it and the panel needs a different chart.
 2. NOTHING LINKS THE TWO ROWS EXPLICITLY, now that the connector is gone. A reader who does not
    read the caption could take the rows for two separate experiments. The alternative was ink or
    words that state a construction rather than a measurement, and the shared axis, the single n
@@ -274,11 +295,16 @@ def draw_3a(ax):
     assert abs(med_b) < 5e-4, f"mechanism-recovery median is no longer 0.000: {med_b}"
     assert tie_b > 0, "the exact-tie statement needs exact ties"
 
-    # Only the response-matching row leaves the view, and only on the right. The truncation note
-    # says "beyond view, max <max>", which is a claim about WHICH side is cut.
-    assert a.max() > XMAX > b.max(), "the truncation note assumes only row A exceeds the view"
-    assert min(a.min(), b.min()) > XMIN, "nothing may leave the view on the left unannounced"
+    # Only the response-matching row leaves the view, and after the estimator repair it leaves on
+    # BOTH sides: removing the V-statistic's positive O(1/m) bias, which was roughly common to the
+    # two scorers, widened the spread of their difference and took the left tail from -1.09 to
+    # -2.22. Each side that is cut gets its own note naming the fraction and the extreme, so a
+    # reader is never asked to take a truncated density for the whole one.
+    assert b.min() > XMIN and b.max() < XMAX, (
+        "the mechanism-recovery row now leaves the view; only the response-matching row is "
+        "annotated as truncated, so either widen the view or give row B its own notes.")
     beyond = float((a > XMAX).mean())
+    beyond_lo = float((a < XMIN).mean())
     assert beyond > 0, "the truncation note needs something beyond the view"
 
     fig = ax.get_figure()
@@ -334,6 +360,9 @@ def draw_3a(ax):
     # The response-matching row continues past the view; say so in ink as well as in words.
     ax.plot(XMAX, yat(T_BASE_A), marker=">", ms=3.2, color=SHARED, mec="none", zorder=5,
             clip_on=False)
+    if beyond_lo > 0:
+        ax.plot(XMIN, yat(T_BASE_A), marker="<", ms=3.2, color=SHARED, mec="none", zorder=5,
+                clip_on=False)
 
     # ---------------------------------------------------------------- the two evaluators
     ax.set_yticks([yat(T_BASE_A), yat(T_BASE_B)])
@@ -355,9 +384,27 @@ def draw_3a(ax):
     # "of this row": only response matching is cut, and 4 per cent is 4 per cent OF IT. Read as a
     # panel-wide fraction the same number would be false, and the assertion above is what makes
     # "this row" the true one.
+    # ONE GRAMMAR FOR THE TWO NOTES since 2026-09-04. They describe the same thing at the two ends
+    # of one row and they described it two ways: "4% of this row beyond view, max +2.85" against
+    # "1% below, min -2.22". "below" did not say below WHAT, and it dropped the qualifier the note
+    # opposite it was carrying deliberately. Both now say which row, which end, and where the tail
+    # reaches. "this row" shortened to "row" because the two full phrases do not fit: measured at
+    # 6.5 pt they set 1.55 and 1.59 in against the 3.16 in of axes, and "of row" brings the pair
+    # to 2.79 in with 0.37 in of clearance.
     note = ax.text(1.0, yat(T_NOTE),
-                   f"{beyond:.0%} of this row beyond view, max {_signed(a.max(), 2)}",
+                   f"{beyond:.0%} of row above view, max {_signed(a.max(), 2)}",
                    transform=ax.transAxes, ha="right", va="top", fontsize=PT_SMALL, color=TEXT)
+    # The left tail's note is separate rather than a second line of the one above, and it is
+    # placed at the opposite corner, for one measured reason: the note above clears the density it
+    # sits over only because it starts to the RIGHT of the peak. A second line would deepen it
+    # into the same low-density pocket, and moving the pair leftward to fit would put both over
+    # the peak. Each note therefore sits over its own tail, which is also where it is read.
+    note_lo = None
+    if beyond_lo > 0:
+        note_lo = ax.text(0.0, yat(T_NOTE),
+                          f"{beyond_lo:.0%} of row below view, min {_signed(a.min(), 2)}",
+                          transform=ax.transAxes, ha="left", va="top", fontsize=PT_SMALL,
+                          color=TEXT)
     # Lead with the MEDIAN on both rows, in identical form, because the panel's whole claim is the
     # comparison of these two lines and a reader can only compare them at a glance if they are
     # built the same way; the denominator both percentages take is the n stated under both rows.
@@ -420,8 +467,13 @@ def draw_3a(ax):
         h = 0.0 if d.size == 0 else RIDGE_MAX * float(d.max()) / peak
         return base_t[i] - h
 
-    clear = _ridge_top_t(0, _data_span(note.get_window_extent(renderer=r))) - (T_NOTE + _pt_h(note))
-    assert clear > 0.5, f"truncation note sits {clear:.2f} pt into the density it annotates"
+    for lab, side in ((note, "right"), (note_lo, "left")):
+        if lab is None:
+            continue
+        clear = _ridge_top_t(0, _data_span(lab.get_window_extent(renderer=r))) - (
+            T_NOTE + _pt_h(lab))
+        assert clear > 0.5, (
+            f"the {side} truncation note sits {clear:.2f} pt into the density it annotates")
     clear = _ridge_top_t(1, _data_span(stat_al.get_window_extent(renderer=r))) - (
         T_STAT_A + _pt_h(stat_al))
     assert clear > 0.5, f"the mechanism-recovery ridge reaches {clear:.2f} pt into the line above"

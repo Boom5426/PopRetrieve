@@ -1,6 +1,6 @@
 """PopRetrieve Figure 4: The benchmark decides the answer.
 
-ARCHETYPE: quantitative grid, three rows of three.
+ARCHETYPE: quantitative grid, three rows of two.
 
 WHY THESE TWO THINGS ARE NOW ONE FIGURE
 ---------------------------------------
@@ -119,173 +119,143 @@ STEM = "fig4_benchmarks"
 
 from figstyle import pin_canvas, soften_axes, strip_titles
 from fig4_style import PT_ANNOT, PT_FLOOR, PT_LETTER, PT_TICK, PT_TITLE, TEXT
-from fig4b import draw_4b                        # analytic flip boundary
-from fig4f import draw_4f                        # 2x2: observable vs oracle-derived x CV unit
-from fig4_shape import draw_shape                # the oracle's SHAPE picks the winner (real data)
-from fig4_gate2 import draw_gate2                # Gate 2, same construct in both settings
-from fig4_nat import draw_nat_gate1, draw_nat_premise   # natural-tissue arm, retuned for 6.9 in
-from ed6_panel_c import draw_ed6b               # g: energy - mean Hit@1 phase grid  (old ED6c)
-from ed6_panel_d import draw_ed6c               # h: decision regret by information condition (ED6d)
-from ed6_panel_e import draw_ed6d               # i: the three benchmark sanity checks  (old ED6e)
+from fig4_design import draw_design              # a: what is held fixed across b's two columns
+from fig4_shape import draw_shape                # b: the evaluator's FORM picks the winner
+from fig4_residual import draw_residual          # c: energy's lead over the magnitude control
+# fig4_tissue.draw_tissue drew the tumour-cohort schematic and LEFT ON 2026-09-05. It carried no
+# data: it restated in a flowchart the design that the Results sentence citing it already states in
+# full ("each tumour was split by cell identity into disjoint malignant and myeloid compartments
+# that share no cells and received the same drug and matched control"), and the caption states it
+# again. It was also what made this figure 2-3-2, so its row could never be filled by the two
+# aspect-locked panels below it. The module is kept on disk; nothing imports it.
+from fig4b import draw_4b                        # d: the analytic existence proof
+from fig4_gate2 import draw_gate2                # e: recoverability, constructed against natural
+from fig4_nat import draw_nat_premise            # f: disjoint-compartment ordering
+#
+# THE PANEL ORDER CHANGED ON 2026-09-05, AND CITATION ORDER IS WHY. The analytic boundary was
+# the last panel in the figure and the fourth thing the Results cites: the text runs design,
+# reversal, magnitude control, THEN the boundary as the bridge into the tumour section ("that
+# boundary does not transfer reliably to the real datasets analysed here"), then the two tumour
+# panels. So the reader met a on page one and was sent to g before d. Nature asks for panels in
+# citation order and the same defect was fixed in Figure 3 on 2026-09-04, so the boundary moves
+# from last to fourth and the two tumour panels keep the letters they already had. Only one
+# letter changes in the manuscript, g to d, on top of dropping the citation to the schematic
+# that left on 2026-09-05.
+#
+# FIVE PANELS LEFT THIS FIGURE ON 2026-09-03, and none of them left the paper.
+#
+#   the old b, draw_4f            the honest-versus-leaky classifier AUC matrix
+#   the old e, draw_nat_gate1     induced response cosine, 17 patient-drug pairs
+#   the old g, draw_ed6b          the empirical energy-minus-mean phase grid
+#   the old h, draw_ed6c          decision regret by information condition
+#   the old i, draw_ed6d          the three HIR-Bench sanity checks
+#
+# Four of the five were HIR-Bench, which left this figure carrying five synthetic panels against
+# four real ones while a real transition-to-intervention benchmark now exists elsewhere in the
+# paper. HIR-Bench keeps exactly one panel here, g, and it keeps the one that is an EXISTENCE
+# PROOF rather than a measurement: the analytic boundary, which shows constructively that
+# within-population structure can change the preferred candidate. Everything the other four
+# showed is prose in Supplementary Note 1, which already carried most of it.
+#
+# The fifth, the induced response cosine, was cut for a different reason. A cosine between two
+# response directions is confounded with effect size and signal-to-noise, so it cannot support
+# the quantitative reading the main text gave it, that compartment pharmacology differs strongly.
+# It is described in Supplementary Note 4 as a descriptive alignment and is explicitly not used
+# as a measure of differential-response strength.
+#
+# THE SUPPLEMENTARY INFORMATION HOLDS NO FIGURES AND STILL HOLDS NONE. It has never contained a
+# float, no script can build one, and two sentences in the manuscript assert that there are no
+# Extended Data figures. Every demotion here is therefore a move of CONTENT into an existing
+# Supplementary Note, not a new supplementary figure, and those two sentences stay true.
 
 TITLES = {
     # Every title is a claim that must survive being read against its own panel. The 2026-07-12
-    # audit found three in this figure that described panels other than the ones drawn; the risk
-    # is highest for d, where the same axes carry a constructed arm and a natural one that reach
-    # opposite conclusions, so d names the setting its claim holds in.
-    #
-    # 2026-07-26: the titles are shorter because the panels are now 1.3-2.5 in wide rather than
-    # 2-4 in, and an 8 pt title that overruns its own panel lands on the next panel's letter. Each
-    # one is still a claim its own data supports; nothing was broadened, and no earlier title was
-    # restored.
-    "a": r"The mean suffices below $\alpha^*$",
-    "b": "Objective alignment, measured",
-    "c": "The evaluator's shape picks the winner",
-    # scoped to the tumour on purpose: the constructed arms in this same panel show a gap of
-    # +0.007 and -0.002 (fixed pairs), i.e. there the limit is NOT algorithmic. An unscoped title
-    # would contradict two of its own three bar groups.
-    "d": "Recoverability in a tumour: an algorithmic limit",
-    "e": "Divergence is overstated",
-    "f": "The mean ranks most of it",
-    # g-m, added 2026-08-30. Each is the claim the panel's own draw function used to set as its
-    # standalone title, restated to hold at this size; strip_titles() still removes all of them
-    # from the composite, and the caption is what a reader sees.
-    "g": "The advantage is regime-dependent",
-    "h": "Losing structure inflates regret",
-    "i": "The benchmark behaves as specified",
-    "j": "The compartment calls match their markers",
-    # k, l and m are all the SAME sweep, so each says which quantity it follows across it; a title
-    # of "threshold-robust" on three panels would be one claim printed three times.
-    "k": "Retention falls with the threshold",
-    "l": "Divergence is threshold-stable",
-    "m": "The recoverability gap persists",
+    # audit found three in this figure that described panels other than the ones drawn, and by
+    # 2026-09-05 the dict had drifted again: it still carried the thirteen-panel deck's letters,
+    # so "a" named the analytic boundary while panel a had been the design schematic for two
+    # revisions. It is rewritten here against the six panels that exist. Nothing draws these;
+    # strip_titles() removes any title from the composite and the caption is what a reader sees.
+    # They are kept because the caption has to be checkable against a written statement of what
+    # each panel argues.
+    "a": "One experiment, two evaluator forms",
+    "b": "The evaluator's shape picks the winner",
+    "c": "The magnitude control carries most of the lead",
+    "d": r"The mean suffices below $\alpha^*$",
+    # scoped to the tumour on purpose: the constructed arm in this same panel shows a gap of
+    # +0.007, i.e. there the limit is NOT algorithmic. An unscoped title would contradict one of
+    # its own two bar groups.
+    "e": "Recoverability in a tumour: an algorithmic limit",
+    "f": "Divergence is overstated",
 }
 ROW_LABELS = [
-    "From the inside: analytically, inside a synthetic benchmark, and between two real evaluators",
-    "From the outside: our constructed benchmark, checked against tissue nobody assembled",
-    # Rows 3 and 4 are not a third and fourth argument. Each is the audit of the row two above it,
-    # which is why they are worded as verification and not as findings.
-    "Row 1 audited: the boundary measured, the cost of losing structure, and the benchmark's own QC",
-    "Row 2 audited: are the compartments row 2 is computed within real, and does the threshold matter",
+    # Three rows since 2026-09-05, and they are not three arguments. Rows 1 and 2 are one
+    # argument in two halves, and row 3 is the same question asked of tissue nobody assembled.
+    "The external protein evaluator: what is held fixed, and what changes when only its form does",
+    "How much of that reversal needs no distribution, and where structure can change a decision at all",
+    "Naturally heterogeneous tissue: what is recoverable in it, and whether it reorders anything",
 ]
 
-# LAYOUT, in inches on a 6.90 x 8.09 in canvas.
-#   x0, y0 measured from the bottom-left corner; w, h are the AXES box (titles, tick labels, axis
-#   labels and panel letters live outside it, in the gutters).
-# Panel widths are deliberately unequal: c (the swap between two real external oracles) and d (the
-# one constructive finding in the paper, and the panel the Results text sends readers to for the
-# robustness numbers) carry the two argument rows and are the two widest panels; a, e and f are
-# supporting. The gutters are sized by the text that has to fit in them, not by a uniform wspace:
-#   1.91 -> 2.46  b's two-line row labels ("observable / at query time")
-#   3.82 -> 4.78  b's colour-bar label, then c's two-line y-axis label
-#   3.05 -> 3.38  e's y-axis label;   5.02 -> 5.45  f's two-line y-axis label
-#   2.02 -> 2.94  g's colour bar, which make_axes carves out of g's own box and then hangs a
-#                 two-line "energy - mean Hit@1" label and its tick labels to the right of; 0.92 in
-#                 is what that apparatus measures, and it is the widest gutter in the figure
-#   4.50 -> 5.35  i's three two-line row labels. The widest, "pred-mean: / distributional=mean",
-#                 measures 0.67 in and starts at 4.60, so the pad is 0.85 and not the 0.83 the
-#                 Extended Data version used: at 0.83 the label would clear h by 0.08 in
-#   5.21 -> 5.76  m's two-line y-axis label
-# Rows 3 and 4 keep the pad-and-width pairs the retired Extended Data figures had measured for
-# these exact draw functions at this exact canvas width, so they are re-used rather than re-derived;
-# only the last panel in each row is pulled in by 0.07-0.08 in, because there the row used to end
-# flush with the canvas and here the tight bbox is pinned to the canvas (see pin_canvas) and a
-# right-hand tick label hanging over the edge would widen the exported page.
+# LAYOUT, in inches on a 6.90 x 5.48 in canvas.
+#   x0, y0 measured from the bottom-left corner; w, h are the AXES box (tick labels, axis labels
+#   and panel letters live outside it, in the gutters).
 #
-# VERTICAL LEDGER, bottom-up, in inches. y0 is measured from the BOTTOM, so putting two rows in
-# UNDERNEATH moves every number in the table; they are all recomputed here rather than patched,
-# because a partial recompute is exactly how a row ends up 0.02 in inside its neighbour's gutter.
+# 5.48 IN, NOT 6.35, SINCE 2026-09-05, and the width is why the height could move.
+# The 2026-09-04 cut left six panels in three rows of two on a 6.35 in canvas, and measured on
+# the render the two lower rows carried 0.82 and 0.87 in of dead gutter between their columns
+# while every row's own panels sat at their authored heights. Two panels per row cannot fill
+# 6.90 in here, because two of the six are aspect-locked squares: fig4_nat sets
+# set_aspect("equal") so its box collapses to a square of side equal to the ROW HEIGHT, and the
+# boundary panel is a unit square in all but name. A square of side h contributes h of width, so
+# the wide panel beside it has to run to about 5.5 - h inches to reach the page edge, and at
+# these heights that is a 4 in bar chart. The gutter is therefore structural, and the way to
+# stop the figure reading as loose is to take the height out, not to stretch the panels.
 #
-#   0.15  above row 1      the letters, set with va="top" above their own axes
-#   1.46  row 1  a b c     y0 = 6.48
-#   0.46  gap              row 1's tick labels and x-labels, then row 2's letters
-#   1.56  row 2  d e f     y0 = 4.46
-#   0.48  gap
-#   1.46  row 3  g h i     y0 = 2.52
-#   0.50  gap              g's colour-bar ticks and i's x-label sit lower than most
-#   1.56  row 4  j k l m   y0 = 0.46
-#   0.46  below row 4      row 4's tick labels and its four "marker floor = margin" x-labels
-#   ----
-#   8.09  canvas, against a 9.30 in ceiling
+# Each row now stands at what its own tightest panel was MEASURED to need, by bisecting the
+# panel alone on a canvas until either its own draw-time assertions or figures/check_overlaps.py
+# fired, and then stepping back:
+#   row 1  1.66 in   a, the design schematic. Its two evaluator boxes put their titles into
+#                    their own two-line bodies at 1.65. b needs 1.39 and follows the row.
+#   row 2  1.05 in   neither binds; c holds four rows of markers and clears at 0.88, and the
+#                    boundary panel is two washes and a line. 1.05 is chosen rather than
+#                    measured, to keep the boundary nearer 45 degrees than the row above it.
+#   row 3  1.25 in   e, the recoverability panel, floor 1.17 after its in-bar labels were set on
+#                    two lines (see fig4_gate2). At one line that floor was 1.59 in and this was
+#                    the tallest row in the figure's lower half.
+# Corridors between rows are 0.07 and 0.05 in of clear space, last ink to first ink, measured on
+# the render; the page margins are 0.08 left, 0.07 right, 0.06 top and 0.06 bottom. Nothing was
+# resized, no annotation was cut, and no panel moved to a different scale.
 #
-# ROWS 1 AND 2 ARE TALLER THAN THEY WERE (1.18 -> 1.46 and 1.34 -> 1.56). The note above records
-# that they were "the shortest row in the deck" and that this is what forced panel d to give up its
-# robustness block; that constraint came from a ~5 in ceiling that the caption move has removed.
-# Nothing they plot changed and no type was resized, so the whole effect is that the same
-# annotations now have 24 and 16 per cent more vertical room than they were tuned in.
-#
-# THE TWO ROW HEIGHTS ARE 1.46 AND 1.56 FOR REASONS, NOT TO FILL THE PAGE.
-#   1.46 is panel a's own WIDTH, so a is exactly square. a is a phase diagram on two 0-1 axes whose
-#   content is the boundary alpha* = B/(A+B), i.e. the identity line: off-square it prints at some
-#   angle other than 45 degrees and the panel misdraws the one thing it exists to state. Row 3 is
-#   1.46 as well, because g is the measured version of exactly that boundary.
-#   1.56 is the tallest row 2 can be before f, a scatter carrying an identity line of its own, is
-#   stretched more than a quarter past square (1.56 / 1.27 = 1.23). d wants every inch it can get
-#   and would take more; f is what stops it. Row 4 matches row 2 for the same reason rows 1 and 3
-#   match: they are the outside argument and its audit, and equal heights say so.
-# The remaining 1.21 in of the 9.30 in ceiling is left unclaimed on purpose. A figure authored
-# flush against a hard page limit has to be re-laid-out the first time any label grows, and the
-# panels above do not get more legible from being stretched away from their own aspect ratios.
-# 7.97 in, not 8.09: nine panels instead of thirteen, each taller. See the RECTS note.
-W, H = 6.9, 7.09
+# Panel widths are deliberately unequal, and the gutters are sized by the text that has to fit in
+# them rather than by a uniform wspace:
+#   3.32 -> 3.77  b's two-line y-axis label and its tick labels
+#   4.33 -> 4.78  the boundary panel's y-axis label and tick labels
+#   4.41 -> 4.89  f's y-axis label and tick labels
+W, H = 6.9, 5.48
+Y1, Y2, Y3 = 3.66, 2.18, 0.38     # row baselines, bottom of the axes box
 RECTS = {                     # x0,   y0,   w,    h     (inches, from the bottom left)
-    # NINE PANELS SINCE 2026-08-31, and every axes is taller. j to m, the four marker-floor
-    # robustness sweeps, left the page for Supplementary Note 4, which already carried all of
-    # their content in prose. That freed a whole row, and the height went back into the nine
-    # panels that remain rather than off the page: each axes grows from 1.46 or 1.56 in to
-    # 1.75 in, which is what pays for this figure's move to a 6.5 pt floor.
-    #
-    # The x geometry is close to what it was, because it has no slack: the gaps between panels
-    # are not margins, they are furniture. In row 1 the 0.60 in after a holds b's two-line row
-    # labels and the 0.80 in after b holds b's colour bar and c's y axis; in row 3 the 0.88 in
-    # after h holds i's category labels, which are its only y furniture. Those three numbers
-    # grew with the type, which is why b, c and i each moved right.
-    # THE THREE ROW ORIGINS DROPPED ON 2026-09-01 and the panels did not move relative to each
-    # other. Measured against ink rather than against this table, the corridor between two rows
-    # was 0.48 and 0.53 in, the second loosest in the deck; Figure 3 runs 0.21 to 0.32 and
-    # Figure 1 runs 0.04. Each row carries 0.29 to 0.33 in of x apparatus below its axes and
-    # 0.11 in of letter above, so the rows were placed 0.92 in apart to hold 0.40 in of
-    # furniture. They are now placed to leave a 0.22 in corridor, bottom-anchored at a 0.06 in
-    # page margin, which is what sets H:
-    #   0.06  below row 3     (was 0.30)
-    #   1.75  row 3  g h i    y0 = 0.39   (was 0.63)
-    #   0.22  corridor        (was 0.53)
-    #   1.75  row 2  d e f    y0 = 2.76   (was 3.30)
-    #   0.22  corridor        (was 0.48)
-    #   1.75  row 1  a b c    y0 = 5.17   (was 5.97)
-    #   0.06  above row 1     (was 0.14)
-    # NO AXES CHANGED HEIGHT. All nine are still 1.75 in, so nothing was re-tuned and the 6.5 pt
-    # floor this figure was raised to is untouched; 0.88 in of white left the page.
-    "a": (0.55, 5.17, 1.55, 1.75),
-    "b": (2.70, 5.17, 1.40, 1.75),   # includes the colour bar, which is stolen from this box
-    "c": (4.90, 5.17, 1.93, 1.75),
-    "d": (0.58, 2.76, 2.28, 1.75),
-    "e": (3.22, 2.76, 1.70, 1.75),
-    "f": (5.40, 2.76, 1.43, 1.75),
-    "g": (0.60, 0.39, 1.58, 1.75),   # colour bar drawn OUTSIDE to the right, into the gutter
-    # h starts 0.20 in further left and is 0.20 in wider. Row 3's two corridors were 0.51 and
-    # 0.11 in, the most uneven pair in the figure; this makes them 0.31 and 0.11 and the 0.20 in
-    # goes into h's axes, since the row already spans 0.18 to 6.88 and has no slack to reclaim.
-    "h": (2.85, 0.39, 1.82, 1.75),
-    "i": (5.55, 0.39, 1.28, 1.75),   # its category labels ARE its y furniture, 0.88 in of them
+    # Row 1 is the external evaluator: what is held fixed (a), and what changes when only the
+    # evaluator's form does (b). a is a schematic and needs width rather than furniture, so it
+    # starts at the page margin; b gains 0.57 in over the 2026-09-04 cut, which its six bars and
+    # their rotated value labels absorb.
+    "a": (0.22, Y1, 3.10, 1.66),
+    "b": (4.33, Y1, 2.50, 1.66),
+    # Row 2 is the magnitude control (c) and the analytic boundary (d). c is a dot plot on four
+    # rows and takes the width; d is given 1.50 in against a 1.05 in row so its boundary prints
+    # at 35 degrees rather than the 32 it printed at on the previous canvas. It is not 45: that
+    # would cost the row 0.45 in of width for one panel, and both half-planes are washed, so the
+    # partition reads from the fill rather than from the angle.
+    "c": (0.68, Y2, 3.65, 1.05),
+    "d": (5.15, Y2, 1.50, 1.05),
+    # Row 3 is the tumour. f is squared by set_aspect upstream and can use no more than the row
+    # height whatever box it is given, so its box IS the square and e takes the rest of the row.
+    "e": (0.56, Y3, 3.85, 1.25),
+    "f": (5.30, Y3, 1.25, 1.25),
 }
-# BANNER_Y was here until 2026-09-01: three row-banner positions, referenced nowhere in this
-# file or any other, left behind when the row headings moved into the caption. It also still
-# held the pre-2026-08-31 canvas height, so a reader checking the geometry against it would
-# have been reading a number two revisions stale.
-# the panel letter must clear its own panel's y-axis furniture, which differs a lot between a bare
-# strip (e) and a heat map with two-line row labels (b); given here in inches to the LEFT of the
-# axes box and converted to the axes-fraction dx that panel_letter() wants
-# a: 0.32, not 0.21. With no title above the axes the letter sits on the top tick label's
-# baseline, and 0.21 in put it on panel a's "1.0".
-# g: 0.40, not 0.36. dx is a fraction of the axes box, and the colour bar shrinks g's axes to about
-# 0.91 of the box RECTS gives it, so the offset that reaches the page is 0.91 of the number here.
-# i: 0.75, which puts the letter on the left edge of the widest row label rather than on top of it.
-# That is 4.60 in absolute, 0.10 in clear of h's right edge at 4.50, and it is the one letter in
-# the figure positioned by a measured label rather than by the y-axis furniture, because i has no
-# y-axis furniture: its categories ARE the labels.
-LETTER_IN = {"a": 0.32, "b": 0.56, "c": 0.36, "d": 0.42, "e": 0.30, "f": 0.44,
-             "g": 0.40, "h": 0.34, "i": 0.75}
+# The panel letter must clear its own panel's y-axis furniture, which differs a lot between a
+# schematic with the axis off (a, where only the letter itself sits left of the box) and a dot
+# plot whose categories ARE its two-line row labels (c). Given here in inches to the LEFT of the
+# axes box and converted to the axes-fraction dx that the letter call wants.
+LETTER_IN = {"a": 0.14, "b": 0.56, "c": 0.60, "d": 0.37, "e": 0.48, "f": 0.27}
 
 
 _SUBSUP = re.compile(r"\$[^$]*[\^_][^$]*\$")
@@ -346,9 +316,8 @@ def build(apply_style, panel_letter):
     # Pin the tight bbox to the authored canvas, so the exported page size is authored rather than
     # emergent (see the height note above the RECTS table).
     pin_canvas(fig)
-    fns = {"a": draw_4b, "b": draw_4f, "c": draw_shape,
-           "d": draw_gate2, "e": draw_nat_gate1, "f": draw_nat_premise,
-           "g": draw_ed6b, "h": draw_ed6c, "i": draw_ed6d}
+    fns = {"a": draw_design, "b": draw_shape, "c": draw_residual,
+           "d": draw_4b, "e": draw_gate2, "f": draw_nat_premise}
     assert set(fns) == set(RECTS), "every panel needs a rectangle and a draw function"
 
     for k, (x0, y0, w, h) in RECTS.items():

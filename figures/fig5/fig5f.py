@@ -1,102 +1,112 @@
-"""PopRetrieve Figure 5 panel 5f: the separation ladder, and the positive control Gate 2 needs.
-
-Source data: results/upgrade/gate2_supervised_upper_bound.csv
-
-Panel 6e reports that on this CONSTRUCTED mixture the supervised ceiling (0.692) and the best
-unsupervised method (0.674) are 0.018 apart, so within that benchmark the limit is informational
-rather than algorithmic. (Posed as the same drug-versus-drug question in a patient's tumour the
-ceiling is 0.923 against 0.777 unsupervised: the information limit was a property of the benchmark,
-not of biology. See main-text Fig. 4d and CORRECTIONS.md R21.) That conclusion is only safe if the
-probe is capable of pulling away from clustering WHEN THERE IS SOMETHING TO PULL AWAY WITH.
-Otherwise "no gap" could simply mean the probe is insensitive, and the whole argument collapses.
-
-This panel is that control. Artificially raise the separation between the two source populations
-and the gap opens exactly as it should: +0.114 at 1.5x, +0.162 at 2.0x, before both saturate at
-perfect recovery. The probe detects exploitable structure whenever exploitable structure exists.
-Its failure to detect any on real data (leftmost point, separation = 1.0) is therefore a
-measurement, not a null result.
-
-The panel replaces an ARI phase diagram over (separation x cell budget). The cell-budget axis was
-flat and is reported in Extended Data; the separation axis is the one that carries the argument,
-and it now carries the ceiling with it.
-
+"""Figure 5 panel f: the perturbation response is detectable at single-cell resolution.
+Source data: results/phase2_transition/phase_c/gate2_observed.csv (via phase2_data.recoverability)
 Run standalone: python fig5f.py
+
+WHY THE GATE NEEDS ITS OWN PANEL
+---------------------------------
+Panel h reports that response detectability is the one quantity whose coefficient survives conditioning on the
+mean route's own performance, at +0.0084 of reciprocal rank per standard deviation. A coefficient
+on a quantity a reader has not seen is not evidence, so this panel is the quantity.
+
+Two accuracies, on the same cells, for the same 3,992 queries. Given the state labels, the two
+response arms are separable at a median of 0.80. Without them, the same separation is 0.555, on a
+two-class balanced problem where 0.5 is chance. The supervised curve is therefore a CEILING, not a
+method, and it is drawn in the deck's EXT green for exactly that reason: green in this figure means
+a readout handed information the retrieval method does not have, so it can never be misread as a
+competing score.
+
+WHAT THE PANEL DOES NOT SAY
+----------------------------
+It does not say that unsupervised recovery is impossible; 30 per cent of queries clear 0.6. It says
+that the median query does not, which is what makes the gate's positive coefficient in panel h a
+statement about a quantity a deployed pipeline cannot read off its own data.
 """
-import os
+import os as _os
+import sys as _sys
 
-import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
-# Palette comes from the house-style module; do NOT re-declare the hex values here. Every
-# panel file used to carry its own copy, which made figstyle's "one edit here recolours the
-# whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
-import sys as _sys, os as _os
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
-from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
-from fig5_style import PT_SMALL, PT_TICK  # noqa: E402
-GREEN_SOFT = "#55966B"
-REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-SRC = f"{REPO}/results/upgrade/gate2_supervised_upper_bound.csv"
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from figstyle import INK  # noqa: E402
+from phase2_data import recoverability  # noqa: E402
+from phase2_style import (EXT, LW_HAIR, POP, PT_ANNOT, PT_SMALL,  # noqa: E402
+                          PT_TICK, SHARED, TEXT, axes_size_in, key_label)
 
-UNSUP = ["acc_kmeans_k2", "acc_gmm_k2", "acc_leiden", "acc_hdbscan"]
+BINS = np.linspace(0.50, 1.00, 26)      # 0.02 wide: fine enough to show the pile-up at chance
+Y_MED = 0.150                           # one baseline for both median rules, clear of every bin
+Y_TOP = 0.232
+
+# The axes size is MEASURED at draw time (phase2_style.axes_size_in). It used to be declared
+# here as a copy of fig5_assemble's ledger, and the copy went stale the first time a row height
+# moved: the two series keys below are placed one 6.5 pt line down from a fraction computed
+# against this number, so a stale value put the "labels given" key on top of the n annotation
+# that sits above the axes.
+SERIES = (("unsup", "without labels", POP), ("sup", "labels given", EXT))
+CHANCE = 0.5
 
 
 def draw_5f(ax):
-    if not os.path.exists(SRC):
-        raise FileNotFoundError(
-            f"{SRC} does not exist. Run analysis/identifiability/gate2_supervised_upper_bound.py.")
-    d = pd.read_csv(SRC)
+    r = recoverability()
+    for key, label, colour in SERIES:
+        v = r[key]
+        h, _ = np.histogram(v, bins=BINS)
+        frac = h / len(v)
+        # Step outline plus a light fill: two filled histograms at this overlap read as one shape,
+        # and two bare outlines lose the one that sits lower.
+        ax.stairs(frac, BINS, color=colour, lw=1.2, fill=False, zorder=4)
+        ax.stairs(frac, BINS, color=colour, alpha=0.16, lw=0, fill=True, zorder=2)
+        med = float(np.median(v))
+        # Both median rules run to one height, and both value labels sit on one baseline above
+        # every bin: drawn to a fraction of their own peak they land inside the histogram they
+        # describe, and the two peaks differ threefold.
+        ax.plot([med, med], [0, Y_MED], lw=1.0, color=colour, ls="--", zorder=5,
+                dash_capstyle="butt")
+        # Ink. The label sits on the head of its own coloured median rule, so the rule is already
+        # carrying the hue; setting the digits in it too spent a colour twice and did it at 6.5 pt,
+        # where POP measures 3.84:1 against white and EXT 3.52:1.
+        ax.text(med, Y_MED + 0.004, f"{med:.3f}", ha="center", va="bottom",
+                fontsize=PT_SMALL, color=TEXT)
 
-    g = d.groupby("separation_scale")
-    seps = np.array(sorted(d.separation_scale.unique()))
-    ceil = np.array([float(g.get_group(s).probe_acc.median()) for s in seps])
-    best = np.array([max(float(g.get_group(s)[c].median()) for c in UNSUP) for s in seps])
+    ax.axvline(CHANCE, lw=LW_HAIR, color=SHARED, zorder=1)
 
-    ax.fill_between(seps, best, ceil, color=COMP_SOFT, alpha=0.18, zorder=1)
-    ax.plot(seps, ceil, "-o", color=GREEN_SOFT, ms=4, lw=1.5, zorder=3)
-    ax.plot(seps, best, "-s", color=FOCAL_SOFT, ms=4, lw=1.5, zorder=3)
-    ax.axhline(0.5, ls="--", lw=0.8, color=GREY, zorder=1)
-    ax.text(7.9, 0.508, "chance", ha="right", va="bottom", fontsize=PT_SMALL, color=GREY)
+    # Each series named over its OWN distribution and in its OWN colour: unsupervised recovery
+    # piles up against chance on the left, supervised sits out to the right.
+    # Not top-left: the unsupervised histogram's first bin reaches 0.21 there, which is the
+    # tallest ink in the panel. The name sits to the right of its own median, over the empty
+    # band both distributions leave between 0.6 and 0.7.
+    # Each name takes a swatch rather than coloured letters. The unsupervised one needs it most:
+    # the comment above places it in the band BOTH distributions leave empty, so it is the one
+    # series name on this panel that is not sitting over its own ink and cannot rely on position.
+    ax_h_in = axes_size_in(ax)[1]
+    x_unsup = (0.615 - ax.get_xlim()[0]) / (ax.get_xlim()[1] - ax.get_xlim()[0])
+    y_unsup = (Y_TOP - 0.012 - PT_SMALL / 72.0 / ax_h_in * Y_TOP) / Y_TOP
+    key_label(ax, x_unsup, y_unsup, SERIES[0][1], SERIES[0][2], ha="left")
+    key_label(ax, 0.98, 0.99 - PT_SMALL / 72.0 / ax_h_in, SERIES[1][1], SERIES[1][2],
+              ha="right")
 
-    # Direct labels on the two curves, in their own colours, instead of a boxed legend: the
-    # widest part of the wedge is the only place in this panel with room, and it is also the
-    # place a reader is looking when the panel's point lands.
-    ax.text(2.0, 0.948, "supervised ceiling", ha="right", va="bottom", fontsize=PT_SMALL,
-            color=INK)
-    ax.text(2.2, 0.700, "best unsupervised", ha="left", va="center", fontsize=PT_SMALL,
-            color=INK)
-    ax.text(2.02, 0.843, "gap", ha="center", va="center", fontsize=PT_SMALL,
-            color=INK)
-    # THE SHADING KEY IS IN THE CAPTION. Defining an encoding is what a figure legend is for,
-    # and the wedge is already bounded by the two curves it lies between and labelled "gap".
-    _UNUSED_SHADING_KEY = (lambda *a, **k: None)(2.35, 0.615, "", ha="left", va="top",
-            fontsize=PT_SMALL, color=COMP_SOFT, linespacing=1.25)
-
-    # the real-data regime: the gap is closed, and that is what panel e measures
-    ax.axvline(1.0, ls=":", lw=1.0, color=INK, zorder=2)
-    ax.annotate(f"real separation:\ngap {ceil[0] - best[0]:+.3f}",
-                xy=(1.0, (ceil[0] + best[0]) / 2), xytext=(1.30, 0.545),
-                fontsize=PT_SMALL, color=INK, linespacing=1.25,
-                arrowprops=dict(arrowstyle="->", lw=0.8, color=INK))
-
-    ax.set_xlabel(r"source separation ($\times$ real)", fontsize=PT_SMALL)
-    ax.set_ylabel("accuracy recovering\nthe true partition", fontsize=PT_SMALL, labelpad=2)
-    ax.set_xscale("log")
-    ax.set_xticks(seps)
-    ax.set_xticklabels([f"{s:g}" for s in seps], fontsize=PT_TICK)
-    ax.set_xlim(0.93, 8.7)
-    ax.set_ylim(0.45, 1.06)
+    ax.set_xlim(0.485, 1.005)
+    ax.set_ylim(0.0, Y_TOP)
+    ax.set_xticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+    # "chance" is set as part of its own tick rather than as a rotated label beside the rule:
+    # rotated, it stood inside the tallest bin in the panel.
+    ax.set_xticklabels(["0.5\nchance", "0.6", "0.7", "0.8", "0.9", "1.0"], fontsize=PT_TICK,
+                       linespacing=1.12)
+    ax.set_xlabel("response-detectability accuracy", fontsize=PT_ANNOT, labelpad=1.5)
+    ax.set_ylabel("share of queries", fontsize=PT_ANNOT, labelpad=1.5)
     ax.tick_params(axis="y", labelsize=PT_TICK)
-    ax.minorticks_off()
+    ax.grid(axis="y", lw=LW_HAIR, color="#EDEDED", zorder=0)
+    ax.set_axisbelow(True)
     for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)
+    ax.text(1.0, 1.0, f"n = {r['n']:,} queries", transform=ax.transAxes, ha="right",
+            va="bottom", fontsize=PT_SMALL, color=SHARED)
+    return ax
 
 
 if __name__ == "__main__":
-    fig, ax = plt.subplots(figsize=(3.6, 3.0))
+    fig, ax = plt.subplots(figsize=(2.40, 1.16))
     draw_5f(ax)
-    # Must stay identical to fig5_assemble.TITLES["f"], which overrides whatever this file sets
-    # when the panel is composited.
-    fig.savefig(os.path.join(os.path.dirname(__file__), "5f.png"), dpi=200, bbox_inches="tight")
+    fig.savefig(_os.path.join(_os.path.dirname(__file__), "5f.png"), dpi=200, bbox_inches="tight")
     print("wrote 5f.png")

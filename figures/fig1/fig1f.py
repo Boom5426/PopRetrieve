@@ -151,6 +151,8 @@ Y_FOOT = (0.155, 0.035)     # the footer band, shared by the arrow label and the
 X_PUB, X_OURS = 2.32, 2.80  # 0.48 in pitch: the headers are 0.40 and 0.44 in wide, so their two
                             # half-widths plus a 0.06 in gap are what set the columns apart
 X_PROV_R = 3.10             # provenance is right-aligned into the corner, away from the ladder
+Y_CAVEAT = 1.815            # what the top of the axis does NOT mean, at the head of the arrow
+CAVEAT = "less score-aligned \u2260 automatically neutral"
 Y_HEADER = 1.80             # column names, in the band between the ladder and the title
 Y_LEGEND = 1.93             # what a filled mark means, directly over the marks it explains
 X_LEGEND = (X_PUB + X_OURS) / 2.0       # centred on the pair, so it reads as their heading
@@ -228,14 +230,26 @@ def draw_1f(ax):
     # No panel title. "Evidence ladder" was set here at PT_TITLE and is the caption's own
     # opening clause for this panel; the axis below already names what the staircase orders.
 
-    # ---- the axis the steps are ordered on: independence, not strength ----
+    # ---- the axis the steps are ordered on: coupling to the score, not strength ----
+    # It read "more independent / of the retrieval objective" until 2026-09-03. "Independent" is
+    # an absolute, and this axis has no absolute end: every evaluator on it was chosen by someone,
+    # and Figure 4 shows two of them, built from the same cells, disagreeing about which retrieval
+    # score to prefer. The axis is relative, so its label is now relative and its head carries the
+    # one inference a reader must not draw from it.
     # It spans exactly the ladder, tail on the bottom platform and head on the top one, so the
     # arrow and the rise are the same measurement drawn twice.
     arrow(ax, (_fx(X_ARROW), _fy(Y_LADDER_B)), (_fx(X_ARROW), _fy(Y_LADDER_T)), color=TEXT,
           lw=LW_ARROW, ms=MS_ARROW, zorder=4)
-    for line, y_in in zip(("more independent", "of the retrieval objective"), Y_FOOT):
+    for line, y_in in zip(("less coupled to the", "retrieval score"), Y_FOOT):
         ax.text(_fx(X_LABEL), _fy(y_in), line, ha="left", va="baseline", fontsize=PT_ANNOT,
                 color=TEXT, zorder=5)
+    # The one thing the axis must not be read as, set at the HEAD of it, where the misreading
+    # would happen. It is a gloss on the axis and not a finding: it says what "up" does not mean,
+    # the way "filled = headline metric" says what a filled mark does mean. Figure 4 is where the
+    # evidence for it lives, two external protein evaluators built from the same cells on the same
+    # ranking preferring opposite scores, and the caption is where that is argued.
+    ax.text(_fx(X_LABEL), _fy(Y_CAVEAT), CAVEAT, ha="left", va="baseline", fontsize=PT_SMALL,
+            color=SUBTLE, zorder=5)
 
     # ---- the ladder ----
     for i, level in enumerate(LEVELS):

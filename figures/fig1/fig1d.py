@@ -81,7 +81,7 @@ import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig1_style import (FAINT, LW_HAIR, LW_LINE, MEAN, POP, PT_ANNOT,  # noqa: E402
-                        SHARED, TEXT, blank, cells, centroid)
+                        SHARED, TEXT, blank, cells, centroid, renderer, text_w_in)
 
 # ------------------------------------------------------------------ the box this is tuned for
 # The axes the composite gives panel d (fig1_assemble: half of FIGW less the letter gutter and the
@@ -109,11 +109,17 @@ def _fy(pt):
 # them hung on one guide, and what the two retrieval routes therefore return.
 KEY_Y = (3.8, 12.3, 20.8)       # 8.5 pt leading: the tightest that keeps 7.2 pt rows apart, and
                                 # the first row clears the top edge by its own half height
-MARG_TOP, MARG_BASE = 27.0, 54.5
-SC_CY = 71.5                    # centre of the cell band; its radius follows from R_Q and K
-FLOOR_Y = 86.0
-UNDER_Y = 91.5                  # the guide's name and the axis name share one line under the floor
-VERDICT_Y = (102.0, 110.5)      # the verdict is set off by white space, not by a box or a rule
+MARG_TOP, MARG_BASE = 27.0, 51.0
+SC_CY = 65.5                    # centre of the cell band; its radius follows from R_Q and K
+FLOOR_Y = 78.5
+UNDER_Y = 84.0                  # the guide's name and the axis name share one line under the floor
+# THREE verdict rows since 2026-09-03, not two, at the key's own 8.5 pt leading. The mean
+# REPRESENTATION supports two scoring rules and this construction ties them BOTH: the three
+# populations share one sample mean exactly, so every score that reads only the mean returns the
+# same number, whether it reads the mean's direction or its magnitude as well. The 8.5 pt the
+# third row costs came out of the drawing, which gives up 3.5 pt of density height and 7.5 pt of
+# floor; the cells themselves are untouched, since their radius is what sets the panel's scale.
+VERDICT_Y = (94.0, 102.5, 111.0)    # the verdict is set off by white space, not by a box or rule
 
 # ------------------------------------------------------------------ horizontal, pt from left
 X0_PT, X1_PT = 3.4, 223.4       # the shared x axis runs the full panel width; panel d has no y axis
@@ -129,8 +135,27 @@ OP_W = 4.32                     # a bold 7.2 pt "=" or ">"; equal widths keep th
 REL_STUB_W = 8.0                # the key's stub, shortened to sit inside a relation
 REL_MARK_GAP = 2.0              # stub -> its letter: tight, so the pair reads as one token
 REL_OP_GAP = 4.0                # token -> operator: loose, so the relation reads as three parts
-# The verdict ends where the axis above it ends, so the panel has one right edge, not two.
-REL_X = X1_PT - (2 * (REL_STUB_W + REL_MARK_GAP + CAP_W) + 2 * REL_OP_GAP + OP_W)
+REL_W = 2 * (REL_STUB_W + REL_MARK_GAP + CAP_W) + 2 * REL_OP_GAP + OP_W
+ROUTE_GUTTER = 12.0             # widest route name -> the relation column; see below
+# The relation column is MEASURED from the longest route name at draw time, not pinned to the
+# panel's right edge. It was pinned, at X1_PT - REL_W = 181.0 pt, on the argument that "the
+# verdict ends where the axis above it ends, so the panel has one right edge, not two". That
+# bought an edge and cost the row: the three names end at 48, 67 and 90 pt, so each row was a
+# name and a relation separated by 1.85, 1.58 and 1.26 in of empty paper with no rule, leader or
+# shared column between them. At 7.2 pt a reader does not carry an association that far, and the
+# block stopped reading as three rows and started reading as two unrelated lists of three, which
+# is the one thing the verdict must not be: it is the panel's conclusion and it is a TABLE.
+#
+# Measured rather than typed for the same reason panel a sets its information axis that way. A
+# typed column survives a rename of the thing it clears by overlapping it, silently.
+
+# ------------------------------------------------------------------ the three verdict rows
+# Lower case, matching panel a's three scoring-rule names and this panel's own key above it. They
+# were capitalised, which made one figure name the same three rules three ways: "directional mean"
+# in a, "Directional mean" here, s_dir in c.
+VERDICT_ROWS = (("directional mean", MEAN, "="),
+                ("magnitude-aware mean", MEAN, "="),
+                ("population", POP, ">"))
 MARK_PT = 5.4                   # width of a verdict row's mark, a little under the 7.2 pt beside
                                 # it, so the two routes are marked at the weight of a key
 
@@ -194,6 +219,20 @@ def _population(ax, spec, colour, seed, s, alpha, zorder):
     # the equality of means is the panel's claim, so it is asserted rather than assumed
     assert abs(xs.mean() - MX) < 1e-12 and abs(ys.mean() - Y_SC) < 1e-12
     return xs
+
+
+def _energy_1d(x, y):
+    """The energy distance between two 1D samples: 2E|X-Y| - E|X-X'| - E|Y-Y'|.
+
+    Written out rather than imported, because the whole point is to check the drawn cells with
+    the same statistic the paper's population score uses, on the axis the panel says the three
+    populations differ on. The cells arrive in axes units, and a common positive scaling leaves
+    the ORDER of two energy distances unchanged, which is all the verdict claims.
+    """
+    x, y = np.asarray(x, float), np.asarray(y, float)
+    cross = np.abs(x[:, None] - y[None, :]).mean()
+    return float(2 * cross - np.abs(x[:, None] - x[None, :]).mean()
+                 - np.abs(y[:, None] - y[None, :]).mean())
 
 
 def _marginal(x, grid, h):
@@ -289,15 +328,34 @@ def draw_1d(ax):
     ax.text(MX, _fy(UNDER_Y), "shared mean", fontsize=PT_ANNOT, color=TEXT,
             ha="center", va="center")
 
-    # ---- the verdict, which is why the panel is in the figure ----
+    # ---- the verdict, ASSERTED on the cells that were drawn ----
+    # Three rows, and each of them is a claim about this construction, so each is checked here
+    # before it is printed. The two mean rows tie because A and B were translated onto the same
+    # sample mean, and any score that reads ONLY that mean is then the same number for both,
+    # whatever it reads off it. The population row separates because the marginals do not.
+    assert abs(cand_a.mean() - cand_b.mean()) < 1e-12, (
+        "the two candidates no longer share a sample mean, so neither mean score ties and two "
+        "of the three verdict rows are false.")
+    e_a, e_b = _energy_1d(tgt, cand_a), _energy_1d(tgt, cand_b)
+    assert e_a < e_b, (
+        f"candidate A is no longer the closer population (energy {e_a:.4f} against {e_b:.4f}), "
+        f"so the population row's A > B is false.")
+
+
     # Each row: the mark of what the route compares, the route, then the relation with its two
     # candidates marked in their own colours. Same grammar as the key, so no lookup is needed.
-    for y_pt, colour, route, op in ((VERDICT_Y[0], MEAN, "Mean retrieval", "="),
-                                    (VERDICT_Y[1], POP, "Population retrieval", ">")):
+    rend = renderer(ax)
+    widest = max(text_w_in(ax, rend, r[0], PT_ANNOT) for r in VERDICT_ROWS) * 72.0
+    rel_x = ROUTE_DX + widest + ROUTE_GUTTER
+    assert rel_x + REL_W <= X1_PT, (
+        f"the verdict block runs to {rel_x + REL_W:.1f} pt, past the panel's {X1_PT} pt right "
+        f"edge: the route names have grown and no longer leave room for the relation.")
+
+    for y_pt, (route, colour, op) in zip(VERDICT_Y, VERDICT_ROWS):
         _route_mark(ax, MARK_CX, y_pt, colour)
         ax.text(_fx(ROUTE_DX), _fy(y_pt), route, fontsize=PT_ANNOT, color=TEXT,
                 ha="left", va="center")
-        x = REL_X
+        x = rel_x
         for cand_colour, cand in ((POP, "A"), (MEAN, "B")):
             _stub(ax, x, y_pt, cand_colour, w=REL_STUB_W)
             x += REL_STUB_W + REL_MARK_GAP

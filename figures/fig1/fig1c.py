@@ -4,6 +4,14 @@ Panel b says WHY averaging can fail. Panel c says what is actually COMPUTED, on 
 populations, at two resolutions. Panel d then says what that does to a ranking, and reuses this
 panel's cloud vocabulary, because d is this panel's consequence.
 
+THE DRAWING IS A REPRESENTATION FORK; THE BLOCK BELOW IT IS A SCORING LADDER
+---------------------------------------------------------------------------
+Those are two different layers and the panel keeps them apart, which is the 2026-09-03 change.
+The drawing has two rows because there are two REPRESENTATIONS: one vector each, or the cells
+themselves. The block has three lines because there are three SCORING RULES, and two of them read
+the same representation. A mean is not direction-only; a cosine is. So the link in row 1 is named
+"means only" rather than "cosine", and the first two equations sit behind the same orange diamond.
+
 THE DRAWING IS THE ARGUMENT
 ---------------------------
 The panel is two rows over the SAME two populations, and the only thing that differs is the route
@@ -29,14 +37,18 @@ Three constructions carry the meaning, and each replaces a sentence:
     same seeds) rather than by two tuned constants that happen to agree.
   * THE LINK CARRIES ITS OWN RESOLUTION. One drawing routine draws both links, and each row hands
     it what its own comparison is made of: the mean route hands it ONE segment, between two
-    centroids, because that is what a cosine of two vectors is; the population route hands it one
-    segment per pair of facing cells, because a distributional distance consumes the whole
-    population. One line against a sheaf of them is the two equations, made without letters.
+    centroids, because one vector each is all the mean route keeps; the population route hands it
+    one segment per pair of facing cells, because a distributional distance consumes the whole
+    population. One line against a sheaf of them is the representation fork, made without letters.
   * THE COLLAPSE IS DRAWN, NOT NAMED. Two arrows leave the two clouds and land on two diamonds;
     fig1_style.centroid draws that diamond wherever in this figure a population has become one
     vector, so the glyph is taught before a reader arrives here. The word "collapse" is therefore
     gone, and the labels that remain, mu_Q and mu_d, name the two objects the equation at the
-    foot of the panel compares.
+    foot of the panel compares. The population row is labelled P_Q and P_d for the same reason
+    and in the same places: from 2026-09-04, because until then the panel drew four objects and
+    named two of them, and the third equation referred to a P_Q and a P_d that appeared nowhere
+    on the drawing. A reader had to assume the lower pair was the upper pair kept whole, which is
+    the one thing the panel exists to say and so is the last thing it should leave to assumption.
 
 WHY THE TYPE SITS WHERE IT DOES
 -------------------------------
@@ -111,22 +123,27 @@ CELL = dict(s=3.2, alpha=0.85)
 
 # Baselines and centres, pt from the top of a 115.2 pt tall axes. The drawing owns 4 to 78 and the
 # reference block 87 to 112, so two thirds of the panel is the thing that has to be seen.
-CY_MEAN = 15.0              # row 1, the two populations of the mean route
-ARR_TOP, ARR_BOT = 26.5, 36.3   # the collapse: cloud rim down onto the diamond, shaft visible
+CY_MEAN = 13.0              # row 1, the two populations of the mean route
+ARR_TOP, ARR_BOT = 24.5, 34.3   # the collapse: cloud rim down onto the diamond, shaft visible
 # The centroids sit 10.6 pt under the clouds they came from, joined to them by the collapse arrow,
 # and 11.7 pt above the next row, so they group upward with their own populations rather than
 # reading as a third row. Row 2 in turn sits 11.7 pt below row 1 and 9.3 pt above the reference
 # block, which is what keeps it a row of the drawing rather than a heading for the equations.
-CENT_CY = 39.5              # row 1, the two centroids the mean route actually compares
-CY_POP = 67.0               # row 2, the same two populations, compared as populations
-EQ_MEAN_B, EQ_POP_B = 92.5, 102.0   # one equation per row, in row order
-FAM_B = 111.0               # the score family, a gloss on the D one line above it
+CENT_CY = 37.5              # row 1, the two centroids the mean route actually compares
+CY_POP = 62.0               # row 2, the same two populations, compared as populations
+# THREE equations, not two, since 2026-09-03: the mean REPRESENTATION supports two scoring
+# rules, and calling the pair of centroids "the cosine" was the conflation panel a now exists to
+# undo. The block therefore needs a fourth line, and the 9.5 pt it takes was found by moving the
+# drawing up (row 1 by 2 pt, row 2 by 5 pt) rather than by tightening the leading: row 2's cells
+# now end at 73 pt and the first equation's caps begin at 77.3, a 4.3 pt corridor.
+EQ_DIR_B, EQ_MAG_B, EQ_POP_B = 82.5, 92.0, 101.5    # one line per scoring rule, in ladder order
+FAM_B = 110.5               # the score family, a gloss on the D one line above it
 
 MARK_HALF = 3.0             # half the diagonal of the centroid diamond, whose area is 34 pt^2
 LABEL_GAP = 4.0             # diamond edge -> its mu label
 LINK_PAD = 3.5              # link line -> the label it makes way for
 LABEL_HALF = 0.36 * PT_ANNOT  # half the cap height of a link label, which is the height of the
-                            # rectangle the link has to leave clear; "cosine" and "distance D"
+                            # rectangle the link has to leave clear; "means only" and "distance D"
                             # carry no descender, so the box is symmetric about the link
 N_LEAD = 7                  # cells per rim that the population link leaves from; see _rim
 LEAD_ALPHA = 0.55           # a link line is lighter than any cell it joins
@@ -142,15 +159,26 @@ TEXT_X = 11.0               # left edge of the reference block's type, clear of 
 # the reason the runs are composed from fragments rather than set as one string.
 VAR, OP, VSUB, TSUB = "var", "op", "vsub", "tsub"
 
-EQ_MEAN = [("s", VAR), ("mean", TSUB), ("(", OP), ("d", VAR), (", ", OP), ("Q", VAR),
-           (") = cos(", OP), ("μ", VAR), ("Q", VSUB), (", ", OP), ("μ", VAR),
-           ("d", VSUB), (")", OP)]
+# Arial carries no U+2016 DOUBLE VERTICAL LINE (its glyph index is 0, which prints as a box), so
+# the norm is set as two U+007C bars, which is what the character looks like and is the standard
+# plain-text form of it. The 2 is a subscript on the closing pair, so the line says L2 rather than
+# leaving the norm unspecified.
+EQ_DIR = [("s", VAR), ("dir", TSUB), ("(", OP), ("d", VAR), (", ", OP), ("Q", VAR),
+          (") = cos(", OP), ("μ", VAR), ("Q", VSUB), (", ", OP), ("μ", VAR),
+          ("d", VSUB), (")", OP)]
+EQ_MAG = [("s", VAR), ("mag", TSUB), ("(", OP), ("d", VAR), (", ", OP), ("Q", VAR),
+          (") = −||", OP), ("μ", VAR), ("Q", VSUB), (" − ", OP), ("μ", VAR),
+          ("d", VSUB), ("||", OP), ("2", TSUB)]
 EQ_POP = [("s", VAR), ("pop", TSUB), ("(", OP), ("d", VAR), (", ", OP), ("Q", VAR),
-          (") = −", OP), ("D", VAR), ("(", OP), ("P", VAR), ("d", VSUB), (", ", OP),
-          ("Q", VAR), (")", OP)]
+          (") = −", OP), ("D", VAR), ("(", OP), ("P", VAR), ("Q", VSUB), (", ", OP),
+          ("P", VAR), ("d", VSUB), (")", OP)]
 FAMILY = [("examples of ", OP), ("D", VAR),
           (": energy, MMD, Wasserstein, coverage", OP)]
-LINK_MEAN = [("cosine", OP)]
+# NOT "cosine". The one segment between two centroids is what BOTH mean scores read; which of the
+# two a reader is looking at is the angle it subtends or the length it has, and neither is a
+# property of the representation. Naming the link for the representation is what keeps the two
+# layers apart on the drawing as well as in the block below it.
+LINK_MEAN = [("means only", OP)]
 LINK_POP = [("distance ", OP), ("D", VAR)]
 
 _T2P = TextToPath()
@@ -303,7 +331,8 @@ def draw_1c(ax):
         arrow(ax, (g.x(mx), g.y(ARR_TOP)), (g.x(mx), g.y(ARR_BOT)),
               color=MEAN, lw=LW_ARROW, ms=MS_ARROW)
 
-    # One line between two points, because that is what a cosine of two vectors is.
+    # One line between two points, because one vector each is all the mean route kept. What a
+    # score then reads off it, the angle it subtends or the length it has, is the block below.
     _link(ax, g, CENT_CY, [((mq, CENT_CY), (md, CENT_CY))], LINK_MEAN, MEAN, LW_LINE)
     for mx in (mq, md):
         centroid(ax, g.x(mx), g.y(CENT_CY), color=MEAN)
@@ -323,16 +352,29 @@ def draw_1c(ax):
     # takes cells. Two of the pairs cross, which is what says many to many rather than a pairing
     # of one query cell with one candidate cell. Under the cells, so the populations stay the
     # object being drawn.
+    # P_Q and P_d, mirroring mu_Q and mu_d one row up: same baseline offset, same gap, and set
+    # against the cells' own measured rim rather than a recomputed radius, so the label follows
+    # the cloud that was actually drawn.
+    for x_pt, frags, ha in ((qx2.min() - LABEL_GAP, [("P", VAR), ("Q", VSUB)], "right"),
+                            (dx2.max() + LABEL_GAP, [("P", VAR), ("d", VSUB)], "left")):
+        w = g.run(x_pt, CY_POP + CAP_MID * PT_ANNOT, frags, ha=ha)
+        lo = x_pt - w if ha == "right" else x_pt
+        assert 0.0 <= lo and lo + w <= g.w, (
+            f"the population label runs from {lo:.1f} to {lo + w:.1f} pt, outside the panel's "
+            f"0 to {g.w:.1f} pt: the clouds have moved and no longer leave room to name them.")
+
     qi, di = _rim(qx2, qy2, +1), _rim(dx2, dy2, -1)
     pairs = list(zip(qi, di)) + [(qi[1], di[5]), (qi[5], di[1])]
     segs = [((qx2[a], qy2[a]), (dx2[b], dy2[b])) for a, b in pairs]
     _link(ax, g, CY_POP, segs, LINK_POP, POP, LW_HAIR, alpha=LEAD_ALPHA, zorder=2)
 
     # ------------------------------------------------- the reference block, below the drawing
-    # One equation per row, in row order, each behind the mark of the route it states: the MEAN
-    # diamond and a POP cell cluster, which are panel d's verdict marks and this panel's two rows
-    # in miniature. The marks are what bind an equation to a row, so neither line needs prose.
-    for base, frags, color in ((EQ_MEAN_B, EQ_MEAN, MEAN), (EQ_POP_B, EQ_POP, POP)):
+    # One equation per SCORING RULE, in ladder order, each behind the mark of the representation
+    # it reads: the MEAN diamond and a POP cell cluster, which are panel a's row marks and panel
+    # d's verdict marks. The first two lines carry the SAME diamond, which is the figure's whole
+    # correction made without a word: one representation, two scoring rules.
+    for base, frags, color in ((EQ_DIR_B, EQ_DIR, MEAN), (EQ_MAG_B, EQ_MAG, MEAN),
+                               (EQ_POP_B, EQ_POP, POP)):
         y = g.y(base - CAP_MID * PT_ANNOT)
         if color is MEAN:
             # scatter sizes are areas, so a mark MARK_PT across is MARK_PT squared

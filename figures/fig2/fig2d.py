@@ -384,7 +384,13 @@ def draw_2d(ax, ax_top):
     # rather than drawn. The draw order below is unchanged, so the picture is unchanged.
     _assert_strip_reads(ax_top, clouds)
     for y0, xs, ys in clouds:
+        # color= is passed although ls="none" hides the line: without it matplotlib hands each
+        # of these ten calls the next entry of its default tab10 cycle, and the strip's artists
+        # then carry #1f77b4 through #17becf. Nothing renders wrong today, mfc covers every one of
+        # them, but an undeclared colour sitting on a visible artist is one deleted keyword away
+        # from a rainbow, and it makes the deck's palette audit report ten false positives here.
         ax_top.plot(xs, ys, ls="none", marker="o", ms=MS_STRIP, mfc=SHARED, mec="none",
+                    color=SHARED,
                     alpha=0.85, zorder=3)
     for y0, name in ((Y_MAJ, class_a), (Y_MIN, class_b)):
         ax_top.text(lab_x, y0, name, ha="right", va="center", fontsize=PT_SMALL, color=TEXT)

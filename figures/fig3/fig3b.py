@@ -154,7 +154,13 @@ N_PER_LINE = 200
 LINES = [("A549", (0, ())), ("K562", (0, (3.0, 1.5))), ("MCF7", (0, (0.8, 1.3)))]
 
 VIEW_PAD = 1.03      # the symmetric x view, as a multiple of the largest absolute gain
-X_TICKS = (-0.5, 0.0, 0.5)             # labelled
+X_TICKS = (-0.5, 0.0, 0.5)             # labelled; every one of these must fit the view
+# The unlabelled quarter-marks. They are a GRID OFFER rather than a fixed set: the view is
+# data-driven, and on 2026-09-03 the largest absolute gain fell from 0.73 to 0.68 under the
+# unbiased estimator, which put +/-0.75 outside the axes. Ticks outside a view are not drawn but
+# they are still SET, and a reader who compares this panel across versions would be comparing two
+# different grids without being told. The draw filters them to the view and the labelled ticks
+# stay pinned, so losing a labelled tick is still a build failure.
 X_TICKS_MINOR = (-0.75, -0.25, 0.25, 0.75)
 
 # The two text blocks, in axes fraction. They sit where the curves cannot reach, and _numbers
@@ -222,8 +228,10 @@ def _numbers():
             f"ECDFs are not a matched comparison")
 
     half = VIEW_PAD * float(np.max(np.abs(gain["gain"].to_numpy(dtype=float))))
-    assert half > max(abs(t) for t in X_TICKS + X_TICKS_MINOR), (
-        f"the view is +/- {half:.3f}, narrower than the tick grid the panel sets")
+    assert half > max(abs(t) for t in X_TICKS), (
+        f"the view is +/- {half:.3f} and no longer holds every LABELLED tick {X_TICKS}; the "
+        f"panel would print a scale a reader cannot locate. Re-choose X_TICKS, do not widen "
+        f"VIEW_PAD to make room for a tick.")
     key_x0 = (2.0 * KEY_X0 - 1.0) * half     # where the key starts, in data units
 
     rows = []
@@ -335,7 +343,9 @@ def draw_3b(ax):
 
     # The step at zero, counted once, directly above it. It sits where _numbers has already
     # proved the curves are not: none reaches ANN_FLOOR anywhere left of zero.
-    ax.text(ANN_X, ANN_Y, f"{lo_pct}-{hi_pct}% exact ties", transform=ax.transAxes, ha="right",
+    # En dash, not a hyphen: this is a numeric range and the manuscript sets its ranges with one
+    # (120--150, 34--35). A hyphen here made one paper punctuate the same construction two ways.
+    ax.text(ANN_X, ANN_Y, f"{lo_pct}\u2013{hi_pct}% exact ties", transform=ax.transAxes, ha="right",
             va="center", fontsize=PT_ANNOT, color=TEXT, zorder=5)
 
     # The key IS the median statement: each cell line, its dash, and its own median, one place,
@@ -359,7 +369,7 @@ def draw_3b(ax):
     ax.set_ylim(0.0, 1.0)
     ax.set_xticks(list(X_TICKS))
     ax.set_xticklabels([_tick(t) for t in X_TICKS], fontsize=PT_TICK)
-    ax.set_xticks(list(X_TICKS_MINOR), minor=True)
+    ax.set_xticks([t for t in X_TICKS_MINOR if abs(t) < half], minor=True)
     ax.tick_params(axis="x", which="minor", length=1.3, width=0.6, color=FAINT)
     Y_TICKS = (0.0, MEDIAN_LEVEL, 1.0)
     ax.set_yticks(list(Y_TICKS))

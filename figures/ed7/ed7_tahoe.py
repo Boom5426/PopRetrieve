@@ -52,7 +52,7 @@ REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(REPO, "figures"))
 from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK, PURPLE_SOFT, apply_style, panel_letter, save, soften_axes, strip_titles  # noqa: E402
 sys.path.insert(0, os.path.join(REPO, "figures", "fig5"))
-from fig5_style import MATERIAL, PT_SMALL, PT_TICK  # noqa: E402
+from phase2_style import MATERIAL, PT_SMALL, PT_TICK  # noqa: E402
 
 P = os.path.join(REPO, "results", "tahoe_pilot")
 STEM = "ed7_tahoe"
@@ -89,7 +89,7 @@ def draw_a(ax):
     # Anchor labels go INSIDE the panel and rotated, at staggered heights. Placed above the axis
     # as horizontal text they collided with each other (0.03 and 0.205 are 0.17 apart on an axis
     # 1.17 wide, i.e. 0.19 in, and each label was 0.30 in) and with the two-line title.
-    # Colours follow fig5_style, which orange does not get to break: orange is the additive
+    # Colours follow phase2_style, which orange does not get to break: orange is the additive
     # limit, so it is on the ceiling at cosine 1 and NOT on the constructed-mixture anchor, which
     # is a material and takes MATERIAL slate. Before 2026-09-01 this panel had them the other way
     # round, so the same ceiling was orange in panel c and near-black here.

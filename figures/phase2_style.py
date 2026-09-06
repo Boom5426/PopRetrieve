@@ -80,7 +80,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from figstyle import (COMP_SOFT, FOCAL_SOFT, GREEN_SOFT, GREY, INK,  # noqa: E402
                       LIGHT_GREY, META, PURPLE_SOFT, RULE, SLATE, TRACK)
 
-REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))   # figures/ -> repo root
 
 # ---------------------------------------------------------------------------------- colour
 POP = FOCAL_SOFT            # #5185C0  distributional / population-level
@@ -112,3 +112,71 @@ PT_TITLE = 8.5              # passed to apply_style only; no panel may draw at t
 LW_HAIR = 0.6
 LW_LINE = 1.1
 MS_DOT = 24
+
+
+# ---------------------------------------------------------------------------------- keys
+# THE ONE WAY THIS DECK NAMES A COLOURED SERIES, and the reason it exists.
+#
+# figstyle's presentation layer states that a label is INK or META and that colour reaches the
+# reader through marks, not letters. It is not a preference. Measured against white, COMP_SOFT
+# sits at 2.23:1, FOCAL_SOFT at 3.84:1, PURPLE_SOFT at 3.63:1 and GREEN_SOFT at 3.52:1, and every
+# one of those is under the 4.5:1 that small text is normally held to. Figures 5 and 6 were
+# setting forty series names and value labels in exactly those colours at 6.5 pt.
+#
+# Two cases, and only the second needs this helper:
+#
+#   * a label that sits against its own marker inherits the hue from the marker. It is set in ink
+#     and nothing else is drawn. Figure 5h was already doing this beside coloured dots.
+#   * a label with no marker beside it, a key or a series name in open space, gets a swatch of
+#     its own and is then set in ink.
+#
+# The swatch and its name are placed as ONE unit whose width is measured, so a rename moves the
+# swatch with the text instead of stranding it at a typed offset.
+STUB_W_IN = 0.085           # the mark: shorter than the 6.5 pt name beside it
+STUB_GAP_IN = 0.030         # mark -> its name, so the pair reads as one token
+STUB_H_IN = 0.026           # a little under the x-height it sits against
+STUB_DROP_IN = 0.012        # lifts the bar onto the name's optical centre
+
+
+def axes_size_in(ax):
+    """The axes box in inches, measured. Panels used to carry this as a pair of constants.
+
+    Four panels declared their own AX_W_IN / AX_H_IN copied from their figure's inch ledger, and
+    used them to turn a printed point size into an axes fraction. That is a duplicated constant
+    with nothing checking it: when a row height changed on 2026-09-04 the constants did not, so
+    a key drawn "one line below the axes top" landed wherever the stale ratio put it, and in
+    Figure 5f it landed on the n annotation above the panel. The size is measurable here, so it
+    is measured here.
+    """
+    w, h = ax.get_position().size * ax.figure.get_size_inches()
+    return float(w), float(h)
+
+
+def key_label(ax, x, y, text, colour, ax_w_in=None, ax_h_in=None, ha="left", pt=PT_SMALL,
+              zorder=5):
+    """Draw ``text`` in ink with a ``colour`` swatch before it, in axes coordinates.
+
+    ``x``/``y`` are the anchor of the whole unit: with ha="left" the swatch starts there, with
+    ha="right" the text ends there. The axes size is measured from ``ax``; the two size arguments
+    are kept only so an existing caller does not break, and are ignored. Returns the unit's width
+    as an axes fraction so a caller can assert it fits.
+    """
+    from matplotlib.patches import Rectangle
+
+    fig = ax.figure
+    fig.canvas.draw()
+    ax_w_in, ax_h_in = axes_size_in(ax)
+    probe = ax.text(0.0, -1.0, text, fontsize=pt, transform=ax.transAxes)
+    tw = float(probe.get_window_extent(renderer=fig.canvas.get_renderer()).width)
+    probe.remove()
+    tw = tw / fig.dpi / ax_w_in
+
+    sw, gap = STUB_W_IN / ax_w_in, STUB_GAP_IN / ax_w_in
+    sh, drop = STUB_H_IN / ax_h_in, STUB_DROP_IN / ax_h_in
+    total = sw + gap + tw
+    x0 = x if ha == "left" else x - total
+    ax.add_patch(Rectangle((x0, y + drop), sw, sh, transform=ax.transAxes,
+                           fc=colour, ec="none", zorder=zorder, clip_on=False))
+    ax.text(x0 + sw + gap, y, text, transform=ax.transAxes, ha="left", va="bottom",
+            fontsize=pt, color=TEXT, zorder=zorder)
+    return total

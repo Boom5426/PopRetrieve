@@ -2,12 +2,14 @@
 
 WHAT THIS PANEL CLAIMS
 ----------------------
-Exactly one thing, and it is a restraint: the population-level advantage in Hit@1 is large on the
-two constructed mixture tasks (at the time of writing +0.56 controlled, +0.50 cross-line) and
-reverses on Frangieh (-0.02), where mean cosine is in fact the best of all eight scorers. Those
-three numbers are recomputed and redrawn from the source file on every build. The claim is about response
-matching under the retrieval objective and nothing else; whether the Frangieh reversal matters
-biologically is Figure 3's question, not this panel's.
+Exactly one thing, and it is a restraint: the SHAPE of the three-tier ladder in panel a is not the
+same on every task. Restoring response magnitude to a mean signature buys +0.52 on the controlled
+mixture and +0.41 across cell lines and +0.01 on Frangieh; adding the full distribution on top of
+it buys +0.03, +0.09 and -0.03. On Frangieh, the only natural biological dataset here, the ladder
+is flat and mean L2 is the best of all nine scorers. Those six numbers are recomputed and redrawn
+from the source file on every build. The claim is about response matching under the retrieval
+objective and nothing else; whether the Frangieh reversal matters biologically is Figure 3's
+question, not this panel's.
 
 SOURCE
 ------
@@ -68,7 +70,7 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    gains. That orientation is a choice; it makes the Frangieh connector the only one that falls.
 3. The other six scorers are drawn as one faint column per task with no per-scorer identity. They
    are benchmark context, and identifying them here would compete with the three differences.
-   Panel a is where the eight scorers are individually named and ranked.
+   Panel a is where the nine scorers are individually named and ranked.
 4. cmap_cosine is kept in that background column even though it is identical to the orange mean
    marker, so the column honestly holds "the other six scorers". Its dot therefore sits at exactly
    the orange marker's height, one dodge step to the left, on all three tasks.
@@ -119,8 +121,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # The vocabulary is frozen in fig2_style; this file declares no colour of its own, and takes both
 # the marker size that carries a claim and the two scorer names it prints in ink from there. Every
 # panel used to carry its own copy of the palette, which made "one edit recolours the deck" untrue.
-from fig2_style import (FAINT, HAIRLINE, LW_HAIR, LW_LINE, MEAN, MS_DOT,  # noqa: E402
-                        POP, PT_ANNOT, PT_SMALL, PT_TICK, SCORERS, SHARED, SUBTLE, TEXT)
+from fig2_style import (FAINT, HAIRLINE, LW_HAIR, LW_LINE, MAGNITUDE, MEAN,  # noqa: E402
+                        MS_DOT, POP, PT_ANNOT, PT_SMALL, PT_TICK, SCORERS, SHARED,
+                        SUBTLE, TEXT, TIER)
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SRC = "results/exp08_signature_baselines/summary_by_task.csv"
@@ -129,8 +132,15 @@ SRC = "results/exp08_signature_baselines/summary_by_task.csv"
 TASKS = [("controlled", "Controlled\nmixture", True),
          ("crossline", "Cross-line\nmixture", True),
          ("frangieh", "Frangieh", False)]
-POP_METHOD, MEAN_METHOD = "global_energy", "mean_cosine"
+# THREE protagonists since 2026-09-03, not two. The panel used to draw energy against mean
+# cosine, which is a comparison that cannot separate response magnitude from population
+# structure; with the magnitude control in it, the same three tasks split into three regimes
+# instead of into a win and a loss. See docs/phase2/FIG2_MAGNITUDE_CONTROL_VERDICT.md.
+DIR_METHOD, MAG_METHOD, POP_METHOD = "mean_cosine", "mean_l2", "global_energy"
+PROTAG = (DIR_METHOD, MAG_METHOD, POP_METHOD)
+PROTAG_COLOUR = {DIR_METHOD: MEAN, MAG_METHOD: MAGNITUDE, POP_METHOD: POP}
 CONTEXT = ["coverage_mean", "coverage_worst", "pca_dist", "pca_mean", "cmap_wtcs", "cmap_cosine"]
+MEAN_METHOD = DIR_METHOD    # kept: the identical-to-CMap assertion below is about this scorer
 ANCHOR = "controlled"       # the slot the two direct labels hang off; see the note where drawn
 
 # The word "large" is no longer drawn: it survives in this module's opening claim and in
@@ -169,12 +179,14 @@ YLIM = (0.10, 1.02)
 # 0.062 in from its own connector against 0.093 in from the next task's scorer column, so every
 # label is nearer its own pair than its neighbour's data. At the 0.335 this once used, that last
 # ratio was inverted and "+0.50" touched the separator.
-CLOUD_DX, MEAN_DX, POP_DX, LABEL_DX = -0.40, -0.14, 0.06, 0.30
+# Four columns per task slot now: the background cloud, then the three protagonists in tier
+# order, then the two step labels. One unit is about 0.82 in printed.
+CLOUD_DX, DIR_DX, MAG_DX, POP_DX, LABEL_DX = -0.42, -0.20, -0.02, 0.16, 0.32
 MS_CONTEXT = 7              # the background column: a quarter of MS_DOT's area, read as a group
 
 
 def draw_2b(ax):
-    """Per-task Hit@1: energy against mean cosine, over a background of the other six scorers."""
+    """Per-task Hit@1: the direction/magnitude/distribution ladder, over the other six scorers."""
     # EVERYTHING BELOW THE AXIS IS MEASURED IN INCHES, since 2026-09-01. The separator rule and
     # the n line were positioned in AXES FRACTION on the xaxis transform, so their descent below
     # the axis was 0.40 and 0.275 of the axes HEIGHT. That was invisible while the height never
@@ -191,21 +203,21 @@ def draw_2b(ax):
     hit = sbt.pivot_table(index="method", columns="task", values="hit@1")
     nq = sbt.pivot_table(index="method", columns="task", values="n_queries")
     tasks = [t for t, _, _ in TASKS]
-    assert set(hit.index) == set([POP_METHOD, MEAN_METHOD] + CONTEXT), \
-        f"the eight scorers of this comparison changed: {sorted(hit.index)}"
+    assert set(hit.index) == set(list(PROTAG) + CONTEXT), \
+        f"the nine scorers of this comparison changed: {sorted(hit.index)}"
     assert set(hit.columns) == set(tasks), f"the three tasks changed: {sorted(hit.columns)}"
     # The background column is labelled "six other scorers" in ink. Six is a drawn number.
     assert len(CONTEXT) == 6, f"the background column no longer holds six scorers: {len(CONTEXT)}"
-    # The two protagonists are coloured by family. fig2_style owns that classification and panel a
-    # draws the same one; if a scorer is reclassified there, this panel must not keep its old hue.
-    assert SCORERS[POP_METHOD]["family"] == "pop" and SCORERS[MEAN_METHOD]["family"] == "mean", \
-        "the family of a protagonist changed in fig2_style; 2b's two colours now disagree with 2a"
+    # The three protagonists are coloured by TIER, which fig2_style owns and panel a draws the
+    # same way. A scorer reclassified there must not keep its old hue here.
+    assert [TIER[m] for m in PROTAG] == ["direction", "magnitude", "population"], \
+        f"2b's three protagonists are no longer one per tier: {[TIER[m] for m in PROTAG]}"
     # Nothing may fall outside the fixed y range, or it would be clipped without a trace.
     assert hit.values.min() >= YLIM[0] and hit.values.max() <= YLIM[1], \
         f"a Hit@1 value is outside the fixed y range {YLIM}: [{hit.values.min()}, {hit.values.max()}]"
     # mean cosine and the CMap cosine baseline apply the same operation to the same collapsed
     # signature and score identically: Spearman rho = 1.000 over 54,180 query-candidate scores,
-    # measured in panel g (it was Extended Data Fig. 1 until the ED deck was retired, and now sits
+    # measured in panel f (it was Extended Data Fig. 1 until the ED deck was retired, and now sits
     # in the same float as the claim). The orange marker is labelled "mean cosine" only because of
     # that, so it has to be true before the label is drawn.
     assert np.allclose(hit.loc[MEAN_METHOD, tasks].values, hit.loc["cmap_cosine", tasks].values), \
@@ -213,24 +225,27 @@ def draw_2b(ax):
     # n is a property of the task, not of the scorer; the n line below each tick says so.
     assert (nq.nunique(axis=0) == 1).all(), "n_queries differs between scorers within a task"
 
-    e = hit.loc[POP_METHOD, tasks].astype(float)
-    m = hit.loc[MEAN_METHOD, tasks].astype(float)
-    d = e - m
-    # The three drawn differences, the "mean wins" label and the prose that survives off the
-    # panel are all claims about these numbers. Assert them so none can outlive the data.
-    assert d["controlled"] > LARGE_GAIN and d["crossline"] > LARGE_GAIN, (
-        f"the mixture gains are no longer above {LARGE_GAIN}, so the word 'large' in this "
-        f"module's opening claim and in figures/fig2/README.md's panel-b row is now false")
-    assert d["frangieh"] < 0, \
-        "energy no longer trails on Frangieh; the drawn difference and 'mean wins' say it does"
-    # mean cosine ties with its own duplicate cmap_cosine on Frangieh, so idxmax could return
-    # either name; compare on value instead.
-    assert m["frangieh"] >= hit["frangieh"].max() - 1e-12, \
-        "mean cosine is no longer the best of the eight on Frangieh; 'mean wins' is too strong"
-    # ... and it has to stay a hair's breadth, because the panel draws no interval and the docstring
-    # tells the reader this is 2 of 90 queries. A wider gap would need an interval, not a bolder word.
-    assert -SMALL_REVERSAL <= d["frangieh"] < 0, \
-        f"the Frangieh reversal is {d['frangieh']:+.3f}, no longer the small one 2b describes"
+    v = {m: hit.loc[m, tasks].astype(float) for m in PROTAG}
+    mag_step = v[MAG_METHOD] - v[DIR_METHOD]      # what response magnitude buys
+    dist_step = v[POP_METHOD] - v[MAG_METHOD]     # what the rest of the distribution buys
+    # The three regimes this panel exists to show, asserted so none can outlive the data.
+    assert (mag_step[["controlled", "crossline"]] > LARGE_GAIN).all(), (
+        f"the magnitude step on the two mixtures is no longer above {LARGE_GAIN}; it is "
+        f"{mag_step.to_dict()}, and this module's opening claim says it is the large one")
+    assert (dist_step[["controlled", "crossline"]] > 0).all(), (
+        f"the distributional step is no longer positive on the mixtures: {dist_step.to_dict()}")
+    assert (dist_step[["controlled", "crossline"]] < mag_step[["controlled", "crossline"]] / 3).all(), (
+        "the panel draws the distributional step as the smaller of the two; measured it is not")
+    assert dist_step["frangieh"] < 0, (
+        "the distributional step no longer reverses on Frangieh, which is the whole of the third "
+        "regime this panel draws")
+    # Frangieh's best scorer is the magnitude-aware mean, not the direction-only one it used to
+    # be. The panel labels that row, so it has to be true before the label is drawn.
+    assert v[MAG_METHOD]["frangieh"] >= hit["frangieh"].max() - 1e-12, (
+        "mean L2 is no longer the best of the nine on Frangieh; the drawn label is wrong")
+    assert -SMALL_REVERSAL <= dist_step["frangieh"] < 0, (
+        f"the Frangieh reversal is {dist_step['frangieh']:+.3f}, no longer the small one 2b "
+        f"describes")
 
     for i, (task, _, _) in enumerate(TASKS):
         # The other six scorers: one faint column per task, no identity, behind everything. They
@@ -238,20 +253,23 @@ def draw_2b(ax):
         ax.scatter([i + CLOUD_DX] * len(CONTEXT), hit.loc[CONTEXT, task].values,
                    s=MS_CONTEXT, color=FAINT, linewidths=0, zorder=1.5)
         # The connector is neutral machinery grey, not a coloured stem: which end is higher is
-        # already carried by the two endpoint markers, and a coloured stem was once the heaviest
-        # ink in this panel.
-        ax.plot([i + MEAN_DX, i + POP_DX], [m[task], e[task]],
+        # already carried by the endpoint markers, and a coloured stem was once the heaviest ink
+        # in this panel. Two segments now, one per step.
+        xs = [i + DIR_DX, i + MAG_DX, i + POP_DX]
+        ax.plot(xs, [v[m][task] for m in PROTAG],
                 color=SHARED, lw=LW_LINE, solid_capstyle="round", zorder=2)
-        ax.scatter([i + MEAN_DX], [m[task]], s=MS_DOT, color=MEAN, linewidths=0, zorder=4)
-        ax.scatter([i + POP_DX], [e[task]], s=MS_DOT, color=POP, linewidths=0, zorder=4)
-        # One format for all three: sign always shown, two decimals always shown.
-        reversed_here = d[task] < 0
-        ax.text(i + LABEL_DX, (e[task] + m[task]) / 2, f"{d[task]:+.2f}",
-                ha="center", va="center", fontsize=PT_ANNOT, color=TEXT,
-                fontweight="bold" if reversed_here else "normal")
-        if reversed_here:
-            ax.text(i + LABEL_DX, (e[task] + m[task]) / 2 - 0.115, "mean wins",
-                    ha="center", va="center", fontsize=PT_ANNOT, color=TEXT, fontweight="bold")
+        for x, mth in zip(xs, PROTAG):
+            ax.scatter([x], [v[mth][task]], s=MS_DOT, color=PROTAG_COLOUR[mth],
+                       linewidths=0, zorder=4)
+        # The two steps, stacked, in the order they are taken. Sign always shown, two decimals
+        # always shown. The distributional step is bold only where it reverses, which is the one
+        # thing on this panel a reader must not miss.
+        ymid = (v[DIR_METHOD][task] + v[POP_METHOD][task]) / 2
+        ax.text(i + LABEL_DX, ymid + 0.065, f"{mag_step[task]:+.2f}", ha="center", va="center",
+                fontsize=PT_ANNOT, color=MAGNITUDE)
+        ax.text(i + LABEL_DX, ymid - 0.065, f"{dist_step[task]:+.2f}", ha="center", va="center",
+                fontsize=PT_ANNOT, color=POP,
+                fontweight="bold" if dist_step[task] < 0 else "normal")
 
     # Constructed mixtures | natural dataset. A hairline group separator, the lightest rule in the
     # vocabulary, because this split is context for the reversal and not the reading itself. It
@@ -267,11 +285,20 @@ def draw_2b(ax):
     # two names are read out of fig2_style, so this panel cannot call a scorer something panel a
     # does not.
     a = [t for t, _, _ in TASKS].index(ANCHOR)
-    ax.text(a + POP_DX + 0.055, e[ANCHOR], SCORERS[POP_METHOD]["label"], ha="left", va="center",
-            fontsize=PT_ANNOT, color=TEXT)
-    ax.text(a + MEAN_DX + 0.05, m[ANCHOR], SCORERS[MEAN_METHOD]["label"], ha="left", va="center",
-            fontsize=PT_ANNOT, color=TEXT)
-    ax.text(-0.55, 0.965, "six other scorers", ha="left", va="center",
+    # Direct labels on the anchor pair. Energy and mean L2 are within 0.033 of each other there,
+    # so their labels cannot both sit beside their own dots; energy's goes above, mean L2's below,
+    # and each is coloured to its own mark rather than relying on proximity.
+    # mean L2 is labelled to the LEFT of its dot; to the right it lands on the step labels, which
+    # sit in the same band. Energy goes above its dot and mean cosine below its own.
+    for dx, mth, dy, ha, va in ((POP_DX, POP_METHOD, 0.055, "left", "bottom"),
+                                (MAG_DX, MAG_METHOD, 0.055, "right", "bottom"),
+                                (DIR_DX, DIR_METHOD, -0.065, "left", "top")):
+        off = 0.05 if ha == "left" else -0.05
+        ax.text(a + dx + off, v[mth][ANCHOR] + dy, SCORERS[mth]["label"],
+                ha=ha, va=va, fontsize=PT_ANNOT, color=PROTAG_COLOUR[mth])
+    # Below the clouds, not above them: the top-left band now carries the mean L2 direct label,
+    # and two grey strings in one band read as one.
+    ax.text(-0.55, 0.135, "six other scorers", ha="left", va="center",
             fontsize=PT_SMALL, color=SUBTLE)
 
     # Task name on the tick in ink, n on a grey line below it. The single middle-dot line this

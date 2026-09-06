@@ -182,7 +182,12 @@ def draw_nat_gate1(ax):
 
 
 def draw_nat_premise(ax):
-    """Panel f. Mean-signature similarity against malignant-compartment response similarity."""
+    """Panel f. Myeloid-compartment against malignant-compartment response similarity.
+
+    Disjoint compartments, which is what the caption and the Results sentence describe. The
+    overlapping mean-signature form is quoted in the Results as a number only; see the docstring
+    of fig7_natural.draw_c for why this panel may not draw it.
+    """
     _draw_premise_natural(ax)
     # The rho line is composed from the data in fig7_natural and nothing here retypes it. It used
     # to be shortened by a .replace() of " of them from one patient", a phrase the upstream string
@@ -197,12 +202,14 @@ def draw_nat_premise(ax):
     # costs 0.12 in of WIDTH, and at PT_ANNOT the two-line form measured 0.53 in of y furniture
     # against the 0.48 in gutter this panel has, i.e. it reached 0.05 in into panel e's axes. The
     # fix is the cut, not a smaller label: at one line the furniture measures 0.41 in.
-    #   x  loses "of drug ... drug": "cos(mean signature A, B)" is 1.17 in under a 1.43 in axes
+    #   x  loses "-compartment" and "of": "cos(myeloid response A, B)" is 1.24 in under a 1.43 in
+    #      axes. It named the mean signature until 2026-09-01, when the panel was corrected to the
+    #      disjoint statistic its caption had always described.
     #   y  loses "compartment" and "of": "cos(malignant response A, B)" is 1.36 in beside a
     #      1.43 in axes, so it no longer overhangs its own spines either
     # The caption must therefore say that A and B are the two drugs of a pair, and that the
     # response cosine is taken WITHIN the malignant compartment.
-    ax.set_xlabel("cos(mean signature A, B)", fontsize=PT_ANNOT)
+    ax.set_xlabel("cos(myeloid response A, B)", fontsize=PT_ANNOT)
     ax.set_ylabel("cos(malignant response A, B)", fontsize=PT_ANNOT)
     # fig7_natural sets labelsize=6 for its own canvas; this figure's floor is 6.5
     ax.tick_params(labelsize=PT_TICK)

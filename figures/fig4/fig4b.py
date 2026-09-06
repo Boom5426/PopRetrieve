@@ -149,7 +149,7 @@ def draw_4b(ax):
     ax.plot(xx, xx, color=TEXT, lw=BOUNDARY_LW, zorder=3)
     # 2026-07-26: the region labels used to read "minority optimal / structure matters" and
     # "majority optimal / mean is sufficient". Which side is the minority-optimal one is already
-    # given by the y axis (minority fraction alpha) and stated in the caption; what the reader
+    # given by the y axis (majority fraction alpha) and stated in the caption; what the reader
     # needs on the panel is which regime each fill means. 2026-08-31: raised to PT_SMALL and moved
     # outward into the corners the taller box opened up.
     ax.text(0.26, 0.84, 'structure\nmatters', fontsize=PT_SMALL, color=TEXT,
@@ -185,7 +185,14 @@ def draw_4b(ax):
     # from 6.2 pt costs the panel nothing and the reader still gets the ratio's definition without
     # going to the caption
     ax.set_xlabel(r'welfare ratio $B/(A{+}B)$', fontsize=PT_ANNOT)
-    ax.set_ylabel(r'minority fraction $\alpha$', fontsize=PT_ANNOT)
+    # 2026-09-06: MAJORITY, not minority. HIR-Bench's alpha is the weight of the FIRST
+    # subpopulation: heterogeneous_retrieval_benchmark.generate_hir_cell sets
+    # weights[0] = majority_fraction, exp11_hir_benchmark.py passes majority_fraction=params
+    # ['alpha'], and the grid holds 0.85 and 0.95, values no minority fraction can take. The
+    # fills above are already right under that reading and the data agree: of the 12,768 rows of
+    # theoretical_boundary.csv, 8,640 of the 10,644 with alpha > alpha_star flip and none of the
+    # 2,124 below it does. Only this label was inverted.
+    ax.set_ylabel(r'majority fraction $\alpha$', fontsize=PT_ANNOT)
     ax.set_xticks([0, 0.5, 1.0]); ax.set_yticks([0, 0.5, 1.0])
     # no tick_params(labelsize=...) here: the panel used to pin 6 pt, under the floor. The tick
     # size is rcParams["xtick.labelsize"], which apply_style sets to fig4_style.PT_TICK.

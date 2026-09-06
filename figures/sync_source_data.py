@@ -51,6 +51,31 @@ MIRRORS: dict[str, str] = {
     "fig3d_recommendation_vs_outcome.csv": "results/exp12_partial_observed_retrieval/recommendation_vs_outcome.csv",
     "fig3g_exp13_projection.csv":    "results/exp13_real_data_projection/projection.csv",
     "fig4a_theoretical_boundary.csv": "results/exp11_hir_benchmark/theoretical_boundary.csv",
+    # ADDED 2026-09-03, and the reason is the failure this whole module exists to prevent.
+    # These two feed Figure 3 panels h, i, j and k. figures/source_data/README.md called them
+    # PRIMARY ("nothing regenerates it") and they were in none of the three tables here, so when
+    # the U-arm Class-C results were installed into results/upgrade/ the two views under
+    # figures/ stayed on the V-arm run and nothing could notice: the panels built clean off
+    # numbers their own results directory had already replaced.
+    "fig3hi_class_c_functional.csv": "results/upgrade/class_c_functional_oracle.csv",
+    "fig3hi_class_c_potency.csv":    "results/upgrade/class_c_magnitude_control_v2.csv",
+
+    # FIGURES 5 AND 6, added 2026-09-03 with the split. Every panel on both pages reads one of
+    # these through figures/phase2_data.py, and none of them was under sync before: the Phase-II
+    # rebuild landed eight panels on Figure 5 without source data while the other four figures
+    # had it. The two per-query files those panels read are large and are projected instead, in
+    # GENERATED below.
+    "fig5b_oracle_ladder.csv":        "results/phase2_transition/phase_a/summary.csv",
+    "fig5bd_oracle_deltas.csv":       "results/phase2_transition/phase_a/delta_vs_reference.csv",
+    "fig5c_decision_relevance.csv":   "results/phase2_transition/synthesis/gate3_decision_relevance.csv",
+    "fig5e_headroom_null.json":       "results/phase2_transition/bottleneck/summary.json",
+    "fig5g_interaction_checks.json":  "results/phase2_transition/gate1_interaction/checks.json",
+    "fig5h_conditional_regression.csv": "results/phase2_transition/bottleneck/regression.csv",
+    "fig6bcd_predicted_summary.csv":  "results/phase2_transition/phase_b/summary.csv",
+    "fig6cd_predicted_deltas.csv":    "results/phase2_transition/phase_b/delta_vs_reference.csv",
+    "fig6cf_state_conditioned.csv":   "results/phase2_transition/phase_b_p5/summary.csv",
+    "fig6c_state_conditioned_deltas.csv": "results/phase2_transition/phase_b_p5/delta_vs_reference.csv",
+    "fig6g_oracle_to_prediction.csv": "results/phase2_transition/synthesis/oracle_to_prediction.csv",
 }
 
 # derived view -> the parent it was built from. Not rewritten; existence-checked only.
@@ -65,8 +90,99 @@ DERIVED: dict[str, str] = {
     "fig2d_alpha_crossover.csv":      "results/exp01_sciplex3_controlled/metrics_summary.csv",
     "fig2e_classA_robustness.csv":    "results/exp12_partial_observed_retrieval/per_query_scores.csv",
     "fig3ef_gate_divergence.csv":     "results/exp16_gate_diagnosis/_merged_query_divergence.csv",
-    "fig5b_predictor_gaps.csv":       "results/exp09_predict_then_rank/summary.csv",
-    "fig5cd_structure_diagnostics.csv": "results/exp09_structure_diagnostics/exp09_structure_diagnostics_summary.csv",
+}
+# RETIRED 2026-09-03, moved to source_data/_stale/: "fig5b_predictor_gaps.csv" (from
+# results/exp09_predict_then_rank/summary.csv) and the GENERATED "fig5cd_structure_diagnostics.csv".
+# Both were views of Figure 5 panels that the Phase-II rebuild removed, and after the 5/6 split
+# their names point at panels that now mean something else entirely: fig5b is the oracle MRR
+# ladder and fig5c the decision-correction counts. A source-data file named for a panel it does
+# not describe is worse than a missing one, because a reader checks the panel against it.
+# The experiments behind them are untouched and still under results/.
+
+
+# generated view -> (builder, the parents it is built from).
+#
+# WHY THIS CATEGORY EXISTS. A DERIVED view is existence-checked only: sync verifies its parent is
+# on disk and never looks at the view's contents. fig5cd_structure_diagnostics.csv sat in DERIVED
+# and silently kept the numbers of a run that figures/fig5/fig5c.py's own docstring retracts (real
+# 0.046, predictors ~0.009, i.e. the "5.1x collapse" claim), together with a predictor named
+# scgen_cpa_linear that exists in no file under results/. The panels had moved to the faithful
+# 'cells' synthesizer; the shipped Source Data had not, and nothing could notice. Nature ships
+# Source Data to reviewers, so the drift was reader-visible.
+#
+# A GENERATED view is rebuilt from its parents on every sync and drift-checked like a MIRROR, so
+# the same divergence fails the gate instead of shipping. Put a view here whenever a builder can
+# be written; keep DERIVED only for hand-built views that have no generator.
+def _build_fig5cd(repo: Path) -> str:
+    """Structure diagnostics and induced-response divergence, faithful synthesizer only.
+
+    Row selection mirrors what the panels plot: figures/fig5/fig5c.py selects synth='real' for
+    real_blend and synth='cells' for each predictor, and figures/fig5/fig5d.py takes the same
+    rows as ratios. The legacy 'gaussian' synthesizer is excluded; it measured an isotropic cloud
+    rather than the predictor.
+    """
+    import pandas as pd
+
+    diag = repo / "results" / "exp09_structure_diagnostics"
+    sd = pd.read_csv(diag / "exp09_structure_diagnostics_summary.csv")
+    g1 = pd.read_csv(diag / "gate1_response_divergence_summary.csv")
+    order = ["real_blend", "average_effect", "scgen", "nearest_neighbor"]
+
+    def pick(df, pred):
+        synth = "real" if pred.startswith("real") else "cells"
+        sub = df[(df.predictor == pred) & (df.synth == synth)]
+        if sub.empty:
+            raise KeyError(f"no row predictor={pred!r} synth={synth!r} in {diag}; "
+                           f"re-run exp09_structure_diagnostics.py --synth both")
+        return sub.iloc[0]
+
+    rows = []
+    for pred in order:
+        s, g = pick(sd, pred), pick(g1, pred)
+        rec = {"predictor": pred, "synth": s.synth}
+        for c in sd.columns:
+            if c not in ("synth", "predictor"):
+                rec[c] = s[c]
+        for c, out in [("mean", "induced_response_cosine_mean"),
+                       ("std", "induced_response_cosine_std"),
+                       ("median", "induced_response_cosine_median"),
+                       ("count", "induced_response_cosine_n")]:
+            rec[out] = g[c]
+        rows.append(rec)
+    return pd.DataFrame(rows).to_csv(index=False)
+
+
+def _project(rel: str, cols: list[str]):
+    """A column projection of one large per-query file, as a GENERATED view builder.
+
+    Two Figure 5 panels read a file of tens of columns and plot two or three of them. Mirroring
+    the whole file byte for byte would ship 1.6 MB of columns no panel touches; projecting it
+    here keeps the view small AND drift-checked, which a hand-built DERIVED view would not be.
+    """
+    def build(repo: Path) -> str:
+        import pandas as pd
+        d = pd.read_csv(repo / rel)
+        missing = [c for c in cols if c not in d.columns]
+        if missing:
+            raise KeyError(f"{rel} no longer has {missing}; the panel that reads them would have "
+                           f"failed too, so fix the panel and this together.")
+        return d[cols].to_csv(index=False)
+    return build
+
+
+GENERATED: dict[str, tuple] = {
+    # Figures 5d and 5f: the two panels that read a per-query file of many columns.
+    "fig5d_ceiling.csv": (
+        _project("results/phase2_transition/bottleneck/bottleneck_per_query.csv",
+                 ["cell_line", "drug", "RR_ref_oracle_vs_cos", "RR_pop_oracle_vs_cos",
+                  "G_oracle_vs_cos"]),
+        ("results/phase2_transition/bottleneck/bottleneck_per_query.csv",),
+    ),
+    "fig5f_recoverability.csv": (
+        _project("results/phase2_transition/phase_c/gate2_observed.csv",
+                 ["cell_line", "drug", "n_per_arm", "A_sup", "A_unsup"]),
+        ("results/phase2_transition/phase_c/gate2_observed.csv",),
+    ),
 }
 
 
@@ -91,6 +207,20 @@ def main() -> int:
             shutil.copyfile(live, mirror)
             synced.append(name)
 
+    for name, (build, parents) in GENERATED.items():
+        absent = [p for p in parents if not (REPO / p).exists()]
+        if absent:
+            missing += [(name, p + "  (parent of a GENERATED view)") for p in absent]
+            continue
+        view = SD / name
+        fresh = build(REPO)
+        if view.exists() and view.read_text() == fresh:
+            continue
+        drifted.append((name, parents[0]))
+        if not args.check:
+            view.write_text(fresh)
+            synced.append(name)
+
     for name, rel in DERIVED.items():
         if not (REPO / rel).exists():
             missing.append((name, rel + "  (parent of a DERIVED view)"))
@@ -108,7 +238,7 @@ def main() -> int:
     if args.check and drifted:
         print(f"\nFAIL: {len(drifted)} mirror(s) drifted. Run without --check to resync.")
         return 1
-    print(f"\nOK: {len(MIRRORS)} mirrors, {len(DERIVED)} derived views"
+    print(f"\nOK: {len(MIRRORS)} mirrors, {len(GENERATED)} generated, {len(DERIVED)} derived views"
           + (f", {len(synced)} resynced." if synced else ", none drifted."))
     return 0
 

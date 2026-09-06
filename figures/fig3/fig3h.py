@@ -7,14 +7,14 @@ Five scores are ranked against ONE external oracle, drug-drug functional similar
 panel puts two things in front of the reader as positions on a common axis:
 
   1. Among the scores that compare a perturbation response representation, the distributional
-     one leads: energy +0.276 against the pre-specified mean-signature incumbent +0.083. This is
+     one leads: energy +0.265 against the pre-specified mean-signature incumbent +0.083. This is
      the only oracle-independent criterion in the study on which the population representation
      wins, and the figure's third skeleton number.
   2. That lead is not a distributional achievement. A query-dependent SCALAR that compares no
      representation at all, preferring candidates whose response magnitude is close to the
-     query's, reaches +0.232, so its dot prints about two marker widths from energy's while the
+     query's, reaches +0.232, so its dot prints about one marker width from energy's while the
      incumbent prints about eight away. Partialling that channel out of energy and out of the
-     oracle leaves energy at +0.097, the figure's fourth skeleton number, drawn as an arrow
+     oracle leaves energy at +0.105, the figure's fourth skeleton number, drawn as an arrow
      leaving the energy dot and landing on a row of its own directly beneath.
 
 The transition is the panel's reason to exist. A reader who takes only the energy dot away from
@@ -65,7 +65,7 @@ analysis/class_c/class_c_functional_oracle.py. 103 leave-one-drug-out queries, S
 
 The oracle is Spearman correlation between GDSC2 dose-response AUC profiles across 966 cell lines
 with the three SciPlex3 lines held out, double-centred on cell-line mean AUC. It is NOT measured
-potency; the absolute-potency scoring of the same rankings is the endpoint audit in panels l and m,
+potency; the absolute-potency scoring of the same rankings is the endpoint audit in panels j and k,
 a control rather than a competitor.
 
 THE VOCABULARY, AS APPLIED HERE
@@ -102,15 +102,15 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    Those per-line medians are cut to the caption; at 2.66 x 0.92 in, fifteen extra marks and an
    x axis stretched to 0.70 to hold them would cost the transition its legibility.
 4. THE PANEL DRAWS COLUMN MEDIANS, SO IT DOES NOT CLAIM A FRACTION REMOVED. Median energy falls
-   from +0.276 to +0.097, but the median of the PER-QUERY drop is only +0.053 (95% bootstrap
+   from +0.265 to +0.105, but the median of the PER-QUERY drop is only +0.042 (95% bootstrap
    +0.007 to +0.122; Wilcoxon p = 1.3e-4, nominal for the same clustering reason), and the partial
    is the higher of the two on 38% of queries. "Most of energy's score is magnitude" would be a
    statement about the difference of two medians read as if it were the median difference, and
    picking that denominator is the error this paper exists to criticise. No drawn label states a
    ratio, and with the panel's phrase deleted there is no longer any drawn text that could.
-5. THE PARTIAL LANDS DIRECTLY ABOVE THE INCUMBENT, AND THAT COMPARISON IS NOT LICENSED. +0.097
+5. THE PARTIAL LANDS DIRECTLY ABOVE THE INCUMBENT, AND THAT COMPARISON IS NOT LICENSED. +0.105
    is energy after residualisation; every other dot on the panel is unresidualised, and there is
-   no partialled mean-cosine column to put beside it, so reading +0.097 against +0.083 sets two
+   no partialled mean-cosine column to put beside it, so reading +0.105 against +0.083 sets two
    different quantities side by side. The layout cannot stop a reader trying. The partial has to
    sit under the row it is derived from, mean cosine is the other member of that group, and the
    two therefore print on adjacent rows about 0.014 apart with overlapping intervals: they are
@@ -150,10 +150,15 @@ WHAT WAS CUT INTO THE CAPTION
 The panel's former phrase, "A scalar control nearly matches energy", which now opens the caption
 entry. The GDSC2 provenance, the per-cell-line medians and the per-line scalar-to-energy ratios,
 the bootstrap and its clustering caveat, the definition of each score, the fact that open means
-"not one of the two compared methods", and the warning that +0.097 and +0.083 are not
+"not one of the two compared methods", and the warning that +0.105 and +0.083 are not
 commensurable because only the first is residualised.
 
 Run standalone: python fig3h.py
+
+EVERY NUMBER IN THIS DOCSTRING IS THE U-ARM VALUE, reissued 2026-09-03 when the
+Class-C source-data views were brought under figures/sync_source_data.py and resynced
+from results/upgrade/. The V-arm values they replaced are in
+docs/phase2/POST_REPAIR_MASTER_RESULTS.md, Category B and C1.
 """
 from __future__ import annotations
 

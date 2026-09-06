@@ -32,7 +32,7 @@ def visible_ticklabels(ax):
 
 
 total = 0
-for n in [int(a) for a in sys.argv[1:]] or [1, 2, 3, 4, 5]:
+for n in [int(a) for a in sys.argv[1:]] or [1, 2, 3, 4, 5, 6]:
     sys.path.insert(0, f"figures/fig{n}")
     mod = importlib.import_module(f"fig{n}.fig{n}_assemble")
     plt.close("all")

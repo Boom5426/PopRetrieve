@@ -45,8 +45,8 @@ panel replaces it, and nothing about the data, the statistic, the row order or t
 WHICH FILE IT READS
 -------------------
 results/exp12_partial_observed_retrieval/per_query_scores.csv, restricted to the rows whose
-recommendation_mode is DART_recommended: 621 of the file's 765 queries, each scored by all nine
-methods, so 5,589 of its 6,885 rows. Paired on (split_type, cell_line, heldout_drug,
+recommendation_mode is DART_recommended: 627 of the file's 765 queries, each scored by all nine
+methods, so 5,643 of its 6,885 rows. Paired on (split_type, cell_line, heldout_drug,
 observed_library_fraction, seed), which is the key panel d uses. Panel c adds heldout_MoA to the
 same list; each of the 144 held-out drugs in this file carries exactly one MoA, so that field
 partitions nothing and the two keys pair the same queries. Regret reduction is
@@ -59,12 +59,16 @@ runs in the standalone __main__ block; as of 2026-08-31 the two agree on all fiv
 five improved fractions exactly (largest median difference 2.8e-17, fractions identical), so
 nothing was lost by the move.
 
-n = 621 IS NOT A TYPO FOR PANEL c's 765
+n = 627 IS NOT A TYPO FOR PANEL c's 765
 ---------------------------------------
 Panel c reports the headline on ALL 765 partial-observed queries, precisely so the headline is not
-taken on a gate-selected subset. This panel reports the per-metric sweep on the 621 queries the
+taken on a gate-selected subset. This panel reports the per-metric sweep on the 627 queries the
 pre-specified gate recommended, which is the subset the sweep was run on. The n is stated on the
 panel so the mismatch reads as a scope note rather than as an error.
+
+That 627 was 621 before 2026-09-03. The gate's verdict is computed inside exp12 from quantities
+that pass through the energy kernel, so the unbiased estimator moved six queries across the
+threshold: 621 / 133 / 11 became 627 / 127 / 11.
 
 JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
 -------------------------------------------------------
@@ -105,7 +109,9 @@ JUDGEMENT CALLS A READER COULD REASONABLY DISAGREE WITH
    tried and abandoned: the bottom pad in the assemble ledger is spent on the tick labels and the
    two-line axis name, so a note there would have overhung the panel box and enlarged the page.
    Splitting the note into the pocket right of the three distance rows was also abandoned: that
-   pocket measures 1.08 in across and the shorter of the two lines measures 1.47 in.
+   pocket measures 1.08 in across and the note's first line measured 1.47 in when it still ended
+   in "queries". Both lines were trimmed on 2026-09-03 to 1.17 and 1.09 in, to make room for the
+   series labels on the same two lines; see the guard at the foot of draw_2e.
 8. There is no direction hint such as "population better". The x axis name says the quantity is a
    regret REDUCTION against mean cosine, which fixes the sign, and this panel is the fifth place
    in the figure a reader meets that convention. A three-word hint would have cost another line
@@ -126,24 +132,43 @@ import numpy as np
 import pandas as pd
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import RendererAgg
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fig2_style import (LW_HAIR, MS_DOT, POP, PT_SMALL, PT_TICK, REPO,  # noqa: E402
+from fig2_style import (LW_HAIR, MEAN, MS_DOT, POP, PT_SMALL, PT_TICK, REPO,  # noqa: E402
                         SUBTLE, TEXT, bare_axes, boot_median_ci, zero_rule)
 
-# The tether to zero is the same POP hue at half strength, derived from POP rather than declared
-# as a second hex, so a recolour of the family carries it. It has to be visible without competing
-# with the interval: at equal weight the stem plus the interval read as one bar, which is the
-# chart type this panel exists to avoid.
-STEM_TINT = tuple(0.45 * np.array(mcolors.to_rgb(POP)) + 0.55)
+# The tether to zero, at half strength against white. Derived from the row's own colour rather
+# than declared as a hex, so a recolour of either family carries it. It has to be visible without
+# competing with the interval: at equal weight the stem plus the interval read as one bar, which
+# is the chart type this panel exists to avoid.
+#
+# ONE TINT PER SERIES since 2026-09-04, not one for the panel. There was a single STEM_TINT, mixed
+# from POP, and both rows used it: the upper row's interval and marker are MEAN orange and its
+# tether to zero was drawn in the blue of the OTHER series. On a panel whose entire key is "orange
+# is the comparison against direction-only, blue is the comparison against magnitude-aware", that
+# put one series' hue inside the other's row.
+def _tint(colour):
+    return tuple(0.45 * np.array(mcolors.to_rgb(colour)) + 0.55)
+
+
+STEM_TINT_MEAN = _tint(MEAN)
+STEM_TINT_POP = _tint(POP)
 
 SRC = f"{REPO}/results/exp12_partial_observed_retrieval/per_query_scores.csv"
 MIRROR = f"{REPO}/figures/source_data/fig2e_classA_robustness.csv"
 
 QUERY_KEY = ["split_type", "cell_line", "heldout_drug", "observed_library_fraction", "seed"]
-BASELINE = "mean_cosine"
+# TWO baselines since 2026-09-03, not one. Against mean cosine a population scorer is credited
+# with everything it gains over a scorer that discarded response magnitude, and that is not
+# evidence about population structure: the magnitude control takes 89 per cent of the equivalent
+# step in panel a and correlates 0.80 with the energy distance in panel f. The reduction against
+# the magnitude-aware mean is the one that can be called distribution-specific, so it is the one
+# drawn in full ink. See docs/phase2/FIG2_MAGNITUDE_CONTROL_VERDICT.md.
+BASELINE = "mean_cosine"             # the apparent gain
+BASELINE2 = "mean_l2"                # the distribution-specific residue
 MODE = "DART_recommended"
-N_QUERIES = 621                      # the gate-recommended subset; see the module docstring
+N_QUERIES = 627                      # the gate-recommended subset; see the module docstring
 
 # (method column, y label, marker). Conceptual order, never value order: the three global
 # distances between two populations first, then the two subpopulation-coverage scores.
@@ -164,7 +189,9 @@ N_ROWS = 5
 # the first coverage row against a pitch of 1.0 within a block is what makes the two sub-families
 # read as two blocks. These are ratios only: the inches they resolve to come from the axes.
 Y_POS = [4.5, 3.5, 2.5, 1.0, 0.0]
-X_MIN, X_MAX = -0.010, 0.155         # a stated scale, round above the largest upper bound
+# The scale now has to hold both baselines, and the residue against the magnitude-aware mean is
+# negative for the two coverage scorers, so the left end is no longer a hair below zero.
+X_MIN, X_MAX = -0.075, 0.115
 
 # ------------------------------------------------------------------------------ geometry, inches
 # Resolved against the axes' real printed height at draw time, so the ledger in fig2_assemble.py
@@ -193,20 +220,23 @@ ZERO_CLEAR_PT = 4.0    # printed points demanded between the zero rule and the n
                        # merely a gap that measures greater than nothing
 LEAD_PT = 2.0          # printed points of lead demanded between two y labels, on top of their own
                        # 6.8 pt type size
+BAND_CLEAR_PT = 4.0    # printed points of air demanded around a series label in the note band:
+                       # from the note when the two share a line, and from the zero rule, which
+                       # reaches up into the band. Measured at 9.2 and 5.4 pt as drawn
 GROUP_EXTRA_PT = 3.0   # printed points by which the sub-family gap must exceed the within-block
                        # row pitch. Under this the block break reads as an uneven row rather than
                        # as a break, and the arrangement stops carrying judgement call 2
 
 
-def paired_gains() -> "dict[str, np.ndarray]":
-    """Per-query regret reduction of each population scorer against mean cosine, on the subset.
+def paired_gains(baseline: str = BASELINE) -> "dict[str, np.ndarray]":
+    """Per-query regret reduction of each population scorer against ``baseline``, on the subset.
 
     Returns one array per method, all of length N_QUERIES and all indexed by the same queries.
     """
     d = pd.read_csv(SRC)
     d = d[d["recommendation_mode"] == MODE]
-    base = d[d["method"] == BASELINE].set_index(QUERY_KEY)["decision_regret"]
-    assert base.index.is_unique, "mean_cosine is not one row per query on the recommended subset"
+    base = d[d["method"] == baseline].set_index(QUERY_KEY)["decision_regret"]
+    assert base.index.is_unique, f"{baseline} is not one row per query on the recommended subset"
 
     out = {}
     for method, _ in DISTANCES + COVERAGE:
@@ -220,19 +250,24 @@ def paired_gains() -> "dict[str, np.ndarray]":
 
 def draw_2e(ax):
     """Five population-level scores, median regret reduction vs mean cosine with bootstrap CIs."""
-    gains = paired_gains()
+    gains = paired_gains(BASELINE)
+    gains2 = paired_gains(BASELINE2)
     stats = {m: boot_median_ci(gains[m]) for m, _ in DISTANCES + COVERAGE}
+    stats2 = {m: boot_median_ci(gains2[m]) for m, _ in DISTANCES + COVERAGE}
 
-    # The caption says every interval clears zero, so the panel refuses to draw itself if that
-    # stops being true of the file it just read. The sentence left the panel; this did not.
+    # Against DIRECTION-ONLY mean cosine every interval clears zero, which is what this panel
+    # used to say and still says. It is now the secondary series.
     lows = {m: lo for m, (_, lo, _) in stats.items()}
     assert all(lo > 0 for lo in lows.values()), f"an interval touches zero: {lows}"
-    # The arrangement claims the coverage pair sits further right than the distance trio. If that
-    # ever reverses, the conceptual ordering stops being legible and the panel needs redesigning.
-    assert (min(stats[m][0] for m, _ in COVERAGE)
-            > max(stats[m][0] for m, _ in DISTANCES)), "coverage no longer leads the distances"
-    hi_max = max(hi for _, _, hi in stats.values())
-    assert hi_max < X_MAX, f"an upper bound {hi_max:.4f} runs past the drawn scale {X_MAX}"
+    # And against the MAGNITUDE-AWARE mean it does not, which is the panel's subject. The
+    # assertion is the finding: if a distributional scorer ever does clear zero here, the claim
+    # this panel makes has changed and the caption must change with it.
+    assert not all(lo > 0 for _, lo, _ in stats2.values()), (
+        "every distribution-specific interval now clears zero against the magnitude-aware mean; "
+        "that would be a positive result and this panel is drawn for a null one")
+    both = [x for _, lo, hi in list(stats.values()) + list(stats2.values()) for x in (lo, hi)]
+    assert X_MIN < min(both) and max(both) < X_MAX, (
+        f"a bound runs past the drawn scale [{X_MIN}, {X_MAX}]: [{min(both):.4f}, {max(both):.4f}]")
 
     rows = [(m, lab, "o") for m, lab in DISTANCES] + [(m, lab, "s") for m, lab in COVERAGE]
     # zip() below would silently drop rows past the end of Y_POS, leaving the panel drawing fewer
@@ -281,15 +316,27 @@ def draw_2e(ax):
     # computed above rather than from the data.
     y_lo = min(Y_POS) - BOTTOM_IN / unit_in
     y_hi = max(Y_POS) + top_in / unit_in
-    zero_rule(ax, 0.0, color=TEXT, lw=1.0, zorder=2).set_ydata(
-        [0.0, (max(Y_POS) + RULE_HEAD - y_lo) / (y_hi - y_lo)])
+    rule = zero_rule(ax, 0.0, color=TEXT, lw=1.0, zorder=2)
+    rule.set_ydata([0.0, (max(Y_POS) + RULE_HEAD - y_lo) / (y_hi - y_lo)])
 
+    # Two series per row, offset so neither hides the other. The upper, in the mean colour, is
+    # the gain over direction-only mean cosine; the lower, in full population ink, is what
+    # survives once the magnitude-aware mean is the reference. The reader is meant to compare
+    # them vertically within a row, which is why they share a row rather than a panel.
+    DY = 0.22
     for y, (method, _, marker) in zip(Y_POS, rows):
         med, lo, hi = stats[method]
-        # thin stem from zero to the median, thicker interval on top of it
-        ax.plot([0.0, med], [y, y], color=STEM_TINT, lw=LW_HAIR, solid_capstyle="butt", zorder=3)
-        ax.plot([lo, hi], [y, y], color=POP, lw=1.4, solid_capstyle="round", zorder=4)
-        ax.scatter([med], [y], s=MS_DOT, marker=marker, color=POP, linewidths=0.6,
+        ax.plot([0.0, med], [y + DY, y + DY], color=STEM_TINT_MEAN, lw=LW_HAIR,
+                solid_capstyle="butt", zorder=3)
+        ax.plot([lo, hi], [y + DY, y + DY], color=MEAN, lw=1.1, solid_capstyle="round", zorder=4)
+        ax.scatter([med], [y + DY], s=MS_DOT * 0.6, marker=marker, color=MEAN, linewidths=0.5,
+                   edgecolors="white", zorder=5)
+
+        med2, lo2, hi2 = stats2[method]
+        ax.plot([0.0, med2], [y - DY, y - DY], color=STEM_TINT_POP, lw=LW_HAIR,
+                solid_capstyle="butt", zorder=3)
+        ax.plot([lo2, hi2], [y - DY, y - DY], color=POP, lw=1.4, solid_capstyle="round", zorder=4)
+        ax.scatter([med2], [y - DY], s=MS_DOT, marker=marker, color=POP, linewidths=0.6,
                    edgecolors="white", zorder=5)
 
     bare_axes(ax, keep=("bottom",))
@@ -298,18 +345,59 @@ def draw_2e(ax):
     ax.tick_params(axis="y", length=0, pad=2.0)
     ax.set_ylim(y_lo, y_hi)
     ax.set_xlim(X_MIN, X_MAX)
-    ax.set_xticks([0.0, 0.05, 0.10, 0.15])
-    ax.set_xticklabels(["0", "0.05", "0.10", "0.15"])
-    ax.set_xlabel("median regret reduction\nvs mean cosine, paired by query", linespacing=1.2)
+    ax.set_xticks([-0.05, 0.0, 0.05, 0.10])
+    ax.set_xticklabels(["\u22120.05", "0", "0.05", "0.10"])
+    ax.set_xlabel("median regret reduction, paired by query", linespacing=1.2)
 
     # Scope note in the band reserved for it above the top row, where it crosses no mark. It says
     # n and it says WHICH n, because panel c's 765 is a different and deliberate scope, and it
     # says what the interval is, because an unnamed interval cannot be read.
     n_drawn = len(next(iter(gains.values())))
-    ax.text(1.0, 1.0 - NOTE_TOP_IN / axh,
-            f"n = {n_drawn} gate-recommended queries\ninterval: bootstrap 95% CI of the median",
-            transform=ax.transAxes, ha="right", va="top", fontsize=PT_SMALL, color=SUBTLE,
-            linespacing=NOTE_LINESP)
+    note = ax.text(1.0, 1.0 - NOTE_TOP_IN / axh,
+                   f"gate-recommended, n = {n_drawn}\ninterval: bootstrap 95% CI",
+                   transform=ax.transAxes, ha="right", va="top", fontsize=PT_SMALL, color=SUBTLE,
+                   linespacing=NOTE_LINESP)
+    # Direct labels for the two series, in the left half of the note band above the top row.
+    # Beside the rows they landed on the top row's own markers, which are the widest on the panel.
+    labels = [ax.text(X_MIN + 0.004, max(Y_POS) + dy, txt, ha="left", va="center",
+                      fontsize=PT_SMALL, color=col)
+              for dy, txt, col in ((0.78, "vs direction-only", MEAN),
+                                   (0.36, "vs magnitude-aware", POP))]
+
+    # THE NOTE BAND HOLDS FOUR STRINGS AND A RULE, AND NOTHING WAS MEASURING THEM, until
+    # 2026-09-03. When the second baseline entered the panel the series labels gained a word each
+    # and the note gained its second line, and the printed figure then carried two overlaps at
+    # once: "vs magnitude-aware mean" ran through "interval: bootstrap 95% CI of the median", and
+    # it also ran through the zero rule. Every one of those marks had a stated reason to be where
+    # it was and none had a way to notice the others, which is what this checks.
+    #
+    # The note is what gave way, not the labels: it is provenance, they are the key without which
+    # two series in two colours cannot be told apart. "queries" came off the first line (the x
+    # axis name already says the pairing is by query) and "of the median" off the second (the same
+    # axis name already says the quantity is a median), which bought 0.30 in. What each interval
+    # IS still stands on the panel, per judgement call 6.
+    r = RendererAgg(int(fig.get_figwidth() * fig.dpi), int(fig.get_figheight() * fig.dpi), fig.dpi)
+    note_bb = note.get_window_extent(renderer=r)
+    rule_x = ax.transData.transform((0.0, 0.0))[0] - 0.5 * rule.get_linewidth() / 72.0 * fig.dpi
+    for t in labels:
+        bb = t.get_window_extent(renderer=r)
+        # ...against the zero rule, which reaches RULE_HEAD above the top row and so runs up
+        # through the band. Both labels sit left of it and both had to be shortened to stay there:
+        # the word "mean" came off each, and it is recoverable from the x axis name and from
+        # panel a, where the same two scorers carry the same two tier words.
+        rule_gap_pt = 72.0 * (rule_x - bb.x1) / fig.dpi
+        assert rule_gap_pt >= BAND_CLEAR_PT, (
+            f"the series label {t.get_text()!r} runs to within {rule_gap_pt:.1f} pt of the zero "
+            f"rule, under the {BAND_CLEAR_PT:.1f} pt floor; the rule reaches into the band, so a "
+            f"label that wide is drawn THROUGH the panel's datum.")
+        # ...and against the note, when the two share a line of the band.
+        if bb.y1 < note_bb.y0 or note_bb.y1 < bb.y0:      # different lines, no shared band
+            continue
+        gap_pt = 72.0 * (note_bb.x0 - bb.x1) / fig.dpi
+        assert gap_pt >= BAND_CLEAR_PT, (
+            f"the note and the series label {t.get_text()!r} share a line of the band and stand "
+            f"{gap_pt:.1f} pt apart, under the {BAND_CLEAR_PT:.1f} pt floor. Shorten the NOTE, "
+            f"not the labels: the labels are the only key to which series is which.")
     return {"stats": stats, "pitch_pt": pitch_pt, "group_pt": group_pt, "zero_clear_pt": clear_pt}
 
 
@@ -322,9 +410,15 @@ def _crosscheck_mirror():
         g = gains[method]
         worst_med = max(worst_med, abs(float(np.median(g)) - float(mir.loc[method, "median_regret_reduction"])))
         worst_frac = max(worst_frac, abs(float((g > 0).mean()) - float(mir.loc[method, "frac_improved"])))
-        assert int(mir.loc[method, "n"]) == len(g), f"mirror n disagrees for {method}"
-    print(f"mirror crosscheck: max |median| diff {worst_med:.2e}, max |frac| diff {worst_frac:.2e}")
-    assert worst_med < 1e-9 and worst_frac < 1e-9, "the source_data mirror has drifted from results/"
+        if int(mir.loc[method, "n"]) != len(g):
+            print(f"  n moved for {method}: mirror {int(mir.loc[method, 'n'])}, now {len(g)} "
+                  f"(the gate-recommended subset itself changed under the estimator repair)")
+    # REPORTED, NOT ASSERTED, since 2026-09-03. The mirror is a hand-built view of the run that
+    # preceded the estimator repair, so it holds V-statistic numbers; asserting agreement with it
+    # would pin this panel to the biased estimator it was repaired away from. The difference is
+    # printed so the size of the reissue is visible rather than hidden.
+    print(f"mirror crosscheck (pre-repair view, reported not asserted): "
+          f"max |median| diff {worst_med:.2e}, max |frac| diff {worst_frac:.2e}")
 
 
 if __name__ == "__main__":
@@ -339,5 +433,5 @@ if __name__ == "__main__":
     info = draw_2e(ax)
     print(f"row pitch {info['pitch_pt']:.1f} pt, sub-family gap {info['group_pt']:.1f} pt, "
           f"nearest lower bound {info['zero_clear_pt']:.1f} pt clear of zero")
-    fig.savefig(os.path.join(os.path.dirname(__file__), "2f.png"), dpi=200)
-    print("wrote 2f.png")
+    fig.savefig(os.path.join(os.path.dirname(__file__), "2e.png"), dpi=200)
+    print("wrote 2e.png")
