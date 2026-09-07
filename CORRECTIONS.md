@@ -2495,3 +2495,132 @@ this file is a record of what was believed when.
 
 **Not revisited here:** the Tahoe comparison quoted inside R42 (26% overlap, +0.064 of rho) was not
 re-derived in this pass and may carry the same class of error.
+
+---
+
+## R76. A preflight audit, and the seven things it changed
+
+An eight-dimension preflight audit (front-half alignment, figure/legend sync, Methods and SI
+anchoring, terminology, statistical reporting, claim-source support, data availability, and a
+reviewer-side rejection pass), each finding adversarially re-checked against the files before it
+was accepted. 75 findings proposed, 34 survived, 7 fixed here. Claim-source support returned
+nothing: the three-stage citation audit of 2026-09-06 holds.
+
+**Figure 3's legend declared the wrong estimator for two panels.** The figure-wide preamble said
+"Points, medians" and flagged its one known exception (panel c, "diamonds, dataset means").
+Panels d and e were unflagged exceptions: `fig3c.py:234` and `fig3d.py:166` both compute the
+drawn point with `stat=np.mean`. Recomputed from the modules' own loaders, panel e's four
+quartile medians are -0.0062, 0.0000, 0.0000 and 0.0000 against the drawn means -0.0497, -0.0391,
+-0.0158 and +0.0142, because 17 to 32% of queries in each quartile score identically under
+mechanism-of-action recovery. The paper reports the same quantity as a MEDIAN everywhere else
+(`\CLASSBMED` = 0.000, Fig. 3a,b), so a reader comparing panel e's -0.050 against panel a's 0.000
+was comparing a mean to a median without being told. The preamble now names both exceptions and
+the d and e entries carry both summaries.
+
+**Two of the three population scores declared for the Tahoe task were reported; the third was
+not, and it has the opposite sign.** Methods specify "MMD and sliced Wasserstein as secondary
+variants". Both were computed and shipped in `results/phase2_transition/phase_a/`. MMD reproduces
+energy (MRR 0.975, +0.0101 over the magnitude-aware mean); **sliced Wasserstein reaches 0.922 and
+sits below both mean baselines**, -0.0230 against direction-only (CI -0.0301 to -0.0166) and
+-0.0431 against the magnitude-aware mean (-0.0509 to -0.0359). Neither interval covers zero. The
+Results sentence asserts a property of the population RUNG ("the three scoring rules of Fig. 1a
+again form a ladder"), so reporting only the two variants that clear the baseline made that
+assertion broader than the evidence. Both are now reported.
+
+**The n=18 premise correlation is 15/18 one patient, and only the neighbouring result said so.**
+`results/zhao_gbm/premise_mean_vs_compartment.csv`: PW030 contributes 15 pairs, three other
+patients one each. rho = +0.835 overall and +0.804 within PW030 alone. Neither .tex contained the
+string "PW030". The SI discloses the same dependency for the recoverability gap at line 416 ("30
+of the 36 splits contributed by a single patient") and even reports a leave-that-patient-out
+check, so the disclosure was present for one natural-tissue result and absent for the other, and
+the absent one carries the stronger conclusion. Both reporting sites now state it.
+
+**Two Methods sentences contradicted each other on control referencing.** Preprocessing said the construction "makes the comparison ... differ in the response
+structure retained rather than in the underlying perturbation or control definition"; the
+baselines paragraph forty lines later said "the population distances are computed on normalized
+expression rather than on control-referenced responses, whereas the mean-signature scores subtract
+the matched control mean". `rankers.py:76-78` passes `control_P`/`control_Q` to both mean scores
+and neither to `score_energy`.
+
+  The first repair of this was itself wrong, in both directions, and an adversarial pass over the
+  edit caught it. **The energy distance and the mean L2 are exactly invariant to subtracting a
+  control that a query and its candidates share** (verified: both scores identical to 8 decimal
+  places under a shared shift; only the cosine changes). So wherever the control IS shared there is
+  no asymmetry to concede at all, and the first repair surrendered the controlled-comparison claim
+  across the whole paper. It was also stated as a global property while being false for the Tahoe
+  arm, where `phase_a_oracle.py:173,181` subtracts the source mean from BOTH the candidate bank and
+  the target before every score. The sentence now states the invariance and scopes the exception to
+  the two-context mixture task, which is the one place the candidate classes carry different
+  matched controls (`tasks.py:253-256`) and therefore the one place the asymmetry has a numerical
+  consequence.
+
+  NOT the artifact it first looked like. The audit proposed that energy's Hit@1 advantage on the
+  cross-line task IS this asymmetry, since energy ranks a single-mode candidate first 0 times
+  against mean cosine's 538 of 1,350. Tested on the controlled task, where `tasks.py:133` passes
+  one `pseudo_control` to every candidate and no between-line offset exists: the pattern holds
+  there too (0.890 against 0.270, single-mode first 33 against 219). The concentration is the
+  paper's own thesis, not a preprocessing artifact. Recorded so the test is not redone.
+
+**The partial-observation p values treat 765 non-independent queries as independent.** Recorded in
+R74 as unfixed and still unfixed as an analysis; what changes here is that the manuscript now says
+so. The Statistical analysis subsection now states
+that those P values and intervals are anticonservative, and marks the arm as an explicit departure
+from the principle its own first sentence asserts.
+
+  The decomposition took two attempts and both failures were the same one, asserting a count that
+  had been inferred rather than read. "144 held-out drugs" counts the literal placeholder `batch`,
+  which covers the 45 partial-library queries that hold out no single drug, as a drug. The verified
+  reading: of the 765 queries, **720 hold out one of 143 drugs and 45 pool the unmeasured drugs into
+  a single batch query**; the 600 on which mechanism recovery is scored come from 130 of those
+  drugs, selected by split type and not, as first written, by whether a mechanism annotation exists;
+  and the 765 rest on **420 distinct drug-by-cell-line contexts**, re-scored across 15 library
+  fractions and 5 seeds, which is a stronger multiplicity than the drug clustering alone.
+
+**Two released Source Data tables had drifted from the files their panels read.**
+`fig2a_hit1_ladder.csv` held eight rows where the caption says nine scores, missing `mean_l2`
+(0.7877), the magnitude-aware mean the whole figure is built around, and carried three stale
+values including `global_energy` 0.8369, the **pre-repair V-statistic** reading.
+`fig2d_alpha_crossover.csv` disagreed in exactly one of fifteen cells, K562 at alpha 0.9, and it
+is the cell the panel's crossover reading depends on (0.35 released against 0.30 live, turning a
+tie into +0.05). Both were classified DERIVED in `sync_source_data.py`, meaning existence-checked
+and never rewritten, which is how they drifted. Both are GENERATED now, computed from their
+parents by a builder and drift-checked like every other generated view.
+
+**Formalism left the Results.** A display equation and the symbols lambda, mu, beta and K sat in
+the Results, duplicating Methods "Connection between mean and population retrieval" (which carries
+the same derivation in more detail) and the coverage-score paragraph. The Results state the two
+relationships in prose and point to Methods. No claim was dropped, but the Fig. 1 caption still
+carries beta and lambda and their in-text gloss left with the equation, so the two symbols are now
+defined only in the Methods; that is open, below.
+
+**Also fixed:** the Fig. 3j caption named "query-magnitude matching", a row the panel does not
+draw and a score that is separately named and strongly positive elsewhere in the same figure
+(`\MAGMATCHFUNC` = +0.232, Fig. 3h); Fig. 3k was cited before Fig. 3j, their only two citations;
+the abstract's one quantified positive result quoted the 5:1 ratio without naming its baseline,
+where the paper's own honest comparator gives 4:1; and the Discussion said the beyond-magnitude
+component "consistently reached the ranking", which Fig. 2e was drawn to contradict.
+
+**R74's second item is stale.** It records that no sentence in either .tex discloses the exp08
+mixture construction. Methods now disclose it in full: the alpha mixture, the held-out re-mixture
+at the same weight as ground truth, the two single-mode candidates and the 43-candidate library.
+
+**The adversarial pass over these repairs** returned 3 blocking problems, all of them in the two
+edits that stated a decomposition rather than reading one, plus the Fig. 3 preamble sweeping panel
+c's 239 raw task dots and panel i's 103 per-query markers into a claim that every non-exception
+point is a median, a causal "because" that the first number it introduced contradicted (a 17.5% tie
+atom does not force Q1's median to zero; its negative mass of 50.6% is what puts the median at
+-0.0062), a caption that named three of panel j's four rows and dropped the one showing the
+correctly specified mean baseline does NOT invert, and an SI implementation spec that does not
+reproduce the two Tahoe numbers this pass published (200 projections and one library-fitted
+bandwidth, against the SI's 128 projections and pooled multi-scale). All are fixed above.
+
+**Still open from this audit,** not fixed here: the Fig. 1 caption gloss for beta and lambda; the
+energy distance's V-statistic row on the Tahoe task (+0.0006, CI -0.0019 to +0.0028 over the
+magnitude-aware mean), deliberately not added to the main text because it is the same score under
+an estimator this paper has argued is biased, not a third score family, but it is a judgement call;
+`figures/source_data/README.md` and `fig2d.py`'s docstring, both stale after the DERIVED to
+GENERATED move; Supplementary Table 1's energy row, which still says "control-referenced"; and 27
+further verified findings of Medium and Low severity,
+including the number-duplication surface (19 caption/Results literal pairs in the main text and 34
+main-text macro values hard-coded in the SI, all currently in agreement and nothing keeping them
+so) and 48 of the 112 macros defined and never used.

@@ -80,14 +80,12 @@ MIRRORS: dict[str, str] = {
 
 # derived view -> the parent it was built from. Not rewritten; existence-checked only.
 DERIVED: dict[str, str] = {
-    "fig2a_hit1_ladder.csv":          "results/exp08_signature_baselines/summary.csv",
     "fig2c_regret_reduction.csv":     "results/exp12_partial_observed_retrieval/per_query_scores.csv",
     # PRIMARY until 2026-08-31, when panels 2e and 2f moved onto the results/ files these were
     # copied from. Both are hand-built views with no generator, so they stay DERIVED (existence
     # of the parent is checked, the content is not rewritten) rather than becoming MIRRORs: a
     # mirror is a byte-for-byte copy, and neither of these is one. They are no longer read by any
     # figure; each panel asserts its agreement with the retired view at draw time.
-    "fig2d_alpha_crossover.csv":      "results/exp01_sciplex3_controlled/metrics_summary.csv",
     "fig2e_classA_robustness.csv":    "results/exp12_partial_observed_retrieval/per_query_scores.csv",
     "fig3ef_gate_divergence.csv":     "results/exp16_gate_diagnosis/_merged_query_divergence.csv",
 }
@@ -152,6 +150,32 @@ def _build_fig5cd(repo: Path) -> str:
     return pd.DataFrame(rows).to_csv(index=False)
 
 
+def _group_mean(rel: str, by: str, value: str):
+    """A group-mean view of one results table, as a GENERATED view builder.
+
+    Figure 2a plots one macro-mean per scoring method over the seven task-setting cells. Shipping
+    the 63-row parent would not be the panel's data and hand-building the aggregate is how the
+    released table came to be missing a whole method and carrying three pre-repair values; the
+    aggregate is therefore computed here and drift-checked like any other generated view.
+    """
+    def build(repo: Path) -> str:
+        import pandas as pd
+        d = pd.read_csv(repo / rel)
+        missing = [c for c in (by, value) if c not in d.columns]
+        if missing:
+            raise KeyError(f"{rel} no longer has {missing}; the panel that reads them would have "
+                           f"failed too, so fix the panel and this together.")
+        # A plain row mean equals the macro-mean only while the grid is balanced. fig2a.py
+        # asserts that at draw time; assert it here too, so an unbalanced parent fails loudly
+        # rather than silently rewriting the released table with a differently defined average.
+        n = d.groupby(by).size()
+        if n.nunique() != 1:
+            raise ValueError(f"{rel} is no longer balanced across {by}: group sizes {dict(n)}. "
+                             f"A row mean is not the macro-mean here; fix the parent or the builder.")
+        return d.groupby(by)[value].mean().reset_index().to_csv(index=False)
+    return build
+
+
 def _project(rel: str, cols: list[str]):
     """A column projection of one large per-query file, as a GENERATED view builder.
 
@@ -171,6 +195,21 @@ def _project(rel: str, cols: list[str]):
 
 
 GENERATED: dict[str, tuple] = {
+    # Figures 2a and 2d. DERIVED until 2026-09-07, i.e. existence-checked and never rewritten,
+    # and both had drifted from the files their panels read: the 2a table was missing `mean_l2`
+    # entirely (the magnitude-aware mean the figure is built around) and carried the pre-repair
+    # V-statistic energy value, and the 2d table disagreed in the single cell the panel's
+    # crossover reading depends on. A view that is only existence-checked will drift; these are
+    # computed from their parents now.
+    "fig2a_hit1_ladder.csv": (
+        _group_mean("results/exp08_signature_baselines/summary.csv", "method", "hit@1"),
+        ("results/exp08_signature_baselines/summary.csv",),
+    ),
+    "fig2d_alpha_crossover.csv": (
+        _project("results/exp01_sciplex3_controlled/metrics_summary.csv",
+                 ["cell_line", "alpha", "mean_cosine_hit@1", "global_energy_hit@1"]),
+        ("results/exp01_sciplex3_controlled/metrics_summary.csv",),
+    ),
     # Figures 5d and 5f: the two panels that read a per-query file of many columns.
     "fig5d_ceiling.csv": (
         _project("results/phase2_transition/bottleneck/bottleneck_per_query.csv",

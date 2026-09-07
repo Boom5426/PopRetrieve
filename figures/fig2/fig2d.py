@@ -12,11 +12,13 @@ here is objective-aligned (Class A).
 
 WHAT IT READS
 -------------
-results/exp01_sciplex3_controlled/metrics_summary.csv, the file the experiment writes.
-NOT figures/source_data/fig2d_alpha_crossover.csv, a hand-copied mirror with no generator. The
-two agreed exactly on their two shared columns when this panel was rebuilt (15 rows, both
-mean_cosine_hit@1 and global_energy_hit@1 identical), so nothing is lost by dropping the mirror;
-the mirror is simply one more copy that can drift and no longer has a reader.
+results/exp01_sciplex3_controlled/metrics_summary.csv, the file the experiment writes, and not
+figures/source_data/fig2d_alpha_crossover.csv. That released view WAS a hand-copied mirror with no
+generator, and it had drifted: fourteen of its fifteen rows matched, and the fifteenth was K562 at
+alpha 0.9, the single cell this panel's crossover reading turns on (0.35 released against 0.30
+live, which turns a tie into +0.05). Since 2026-09-07 it is a GENERATED projection of the same
+parent, rebuilt and drift-checked by figures/sync_source_data.py, so the two cannot separate again
+without --check failing.
 
 Constants that are properties of the experiment rather than of the drawing (n_seeds, the alpha
 grid, the cell lines, the query size n_total, and the two mechanism-of-action classes) are parsed

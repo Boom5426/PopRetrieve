@@ -113,8 +113,16 @@ under `results/`.
 
 | file | derived from | what the view does |
 |---|---|---|
-| `fig2a_hit1_ladder.csv` | `results/exp08_signature_baselines/summary.csv` | one method-level Hit@1 column, aggregated over tasks and settings |
 | `fig2c_regret_reduction.csv` | `results/exp12_partial_observed_retrieval/per_query_scores.csv` | one scorer's per-query regret reduction, 765 of 6,885 rows |
 | `fig3ef_gate_divergence.csv` | `results/exp16_gate_diagnosis/_merged_query_divergence.csv` | column projection onto the gate and divergence axes |
 
 `_stale/` holds superseded files kept for provenance. Nothing reads them.
+
+**Two views moved from DERIVED to GENERATED on 2026-09-07.** `fig2a_hit1_ladder.csv` and
+`fig2d_alpha_crossover.csv` were hand-built views, existence-checked and never rewritten, and both had
+drifted from the files their panels read. The 2a table was missing `mean_l2` entirely, the
+magnitude-aware mean the figure is built around, and carried the pre-repair V-statistic energy value;
+the 2d table disagreed in the one cell the panel's crossover reading depends on. Both are now computed
+from their parents by a builder in `sync_source_data.py` (`_group_mean` over the seven task-setting
+cells for 2a, a four-column projection for 2d) and are drift-checked by `--check` like every other
+generated view.
