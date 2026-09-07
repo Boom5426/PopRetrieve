@@ -444,18 +444,18 @@ Mechanism-of-action recovery is the first task-proximal biological criterion. Am
 \centering
 \includegraphics[trim=0 2 0 3.5, clip, width=\textwidth]{figures/fig3.pdf}
 \caption{\textbf{The population advantage weakens, and can change direction, once the judge stops sharing the retrieval objective.}
-Summary points, medians, except in \textbf{d} and \textbf{e}, where they are quartile means; bars, 95\% bootstrap intervals, except in \textbf{a}, \textbf{g} and \textbf{j}, where they are interquartile ranges; cell lines, line style in \textbf{b}, marker shape in \textbf{i}.
-\textbf{a}, \NMOA\ leave-one-drug-out queries judged twice: median $\CLASSAMED$ under response matching against \CLASSBMED\ under mechanism-of-action recovery (24\% ties; Wilcoxon $p=\CLASSBP$).
+Summary points, medians, except quartile means in \textbf{d} and \textbf{e}; bars, 95\% bootstrap intervals, except interquartile ranges in \textbf{a}, \textbf{g} and \textbf{j}; cell lines, line style in \textbf{b}, marker shape in \textbf{i}.
+\textbf{a}, \NMOA\ leave-one-drug-out queries judged twice: median $\CLASSAMED$ under response matching against \CLASSBMED\ under mechanism recovery (24\% ties; Wilcoxon $p=\CLASSBP$).
 \textbf{b}, Per cell line, medians exactly 0.000 in all three ($n=200$ each).
-\textbf{c}, Minority-state coverage gain over 239 tasks, 102 of which score identically; dots, individual tasks; diamonds, dataset means; daggers, constructed data.
-\textbf{d}, Population-minus-mean gain by divergence quartile, objective-aligned judge ($n=\NALL$); quartile means $-0.0035$ (CI $-0.0076$ to $+0.0001$), $+0.0038$, $+0.0054$, $+0.0051$, against medians $0.0000$, $+0.0004$, $+0.0012$, $+0.0020$ (Spearman $\rho=+0.14$, $p=1\times10^{-4}$).
-\textbf{e}, The same quartiles under mechanism-of-action recovery ($n=\NMOA$): no interval on the quartile mean lies above zero, the two least divergent wholly below it ($-0.050$, $-0.039$; $q=0.002$, $0.025$, Benjamini--Hochberg). With 17 to 32\% of queries in each quartile scoring identically under this criterion, the corresponding medians are $-0.0062$, $0.0000$, $0.0000$ and $0.0000$; the mean is the summary drawn here and the median is the summary quoted in \textbf{a} and \textbf{b}.
+\textbf{c}, Minority-state coverage gain over 239 tasks, 102 scoring identically; dots, tasks; diamonds, dataset means; daggers, constructed data.
+\textbf{d}, Population-minus-mean gain by divergence quartile, objective-aligned judge ($n=\NALL$); means $-0.0035$ (CI $-0.0076$ to $+0.0001$), $+0.0038$, $+0.0054$, $+0.0051$; medians $0.0000$, $+0.0004$, $+0.0012$, $+0.0020$ (Spearman $\rho=+0.14$, $p=1\times10^{-4}$).
+\textbf{e}, The same quartiles under mechanism recovery ($n=\NMOA$): no interval lies above zero, the two least divergent wholly below it ($-0.050$, $-0.039$; $q=0.002$, $0.025$, Benjamini--Hochberg). Medians $-0.0062$ and $0.0000$ in the other three, 17 to 32\% of queries tying per quartile.
 \textbf{f}, Regret reduction, \NREC\ recommended queries against \NNONREC\ declined ($\GATEDIFF$, CI \GATEDIFFCI, Mann--Whitney $p=\GATEDIFFP$).
 \textbf{g}, Below, structure reliability against divergence ($\rho=-0.19$, $P=1.5\times10^{-7}$); above, declined queries are \emph{more} divergent (1.68 against 1.66, $P=0.009$).
 \textbf{h}, Ranking against GDSC2 drug--drug similarity ($n=\NCQUERIES$); filled, ranking methods; arc, energy partialled on magnitude.
 \textbf{i}, Per query: energy beats the magnitude scalar on \ENERGYWINS\ queries and loses on 40 (paired $p=\ENERGYWINSP$).
-\textbf{j}, Rankings against absolute GDSC2 potency: the two rankings computed without control subtraction, energy and raw mean cosine, turn negative ($-0.506$, $-0.533$); the control-subtracted mean cosine stays just above zero ($+0.105$) and candidate magnitude alone is highest ($+0.692$).
-\textbf{k}, Per-query Spearman between energy distance and candidate response magnitude, median $\ENERGYCANDMAG$.}
+\textbf{j}, Rankings against absolute GDSC2 potency: energy and raw mean cosine, computed without control subtraction, turn negative ($-0.506$, $-0.533$); the control-subtracted mean cosine ($+0.105$) and magnitude alone ($+0.692$) stay positive.
+\textbf{k}, Per-query Spearman between energy distance and candidate magnitude, median $\ENERGYCANDMAG$.}
 \label{fig:3}
 \end{figure}
 
