@@ -5,6 +5,8 @@
 ### Objective-aligned evaluation inflates distributional gains in single-cell drug retrieval
 
 <p>
+  <img alt="Single-cell" src="https://img.shields.io/badge/scope-single--cell-7B61FF?logo=cell&logoColor=white">
+  <img alt="Retrieval" src="https://img.shields.io/badge/task-drug%20retrieval-0F9D8A?logo=target&logoColor=white">
   <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white">
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2ea44f"></a>
   <a href="manuscript/PopRetrieve_manuscript.pdf"><img alt="Manuscript PDF" src="https://img.shields.io/badge/manuscript-PDF-B31B1B?logo=adobeacrobatreader&logoColor=white"></a>
@@ -13,19 +15,35 @@
 
 <p><strong>Population-level retrieval metrics for single-cell perturbation response.</strong></p>
 
+<p>
+  <a href="#-installation">🚀 Install</a> ·
+  <a href="#-data">🤗 Data</a> ·
+  <a href="#-reproducing-the-main-results">🧪 Reproduce</a> ·
+  <a href="manuscript/PopRetrieve_manuscript.pdf">📄 Paper</a> ·
+  <a href="CITATION.cff">📚 Cite</a>
+</p>
+
 </div>
 
 <p align="center">
   <img src="assets/fig1_overview.png" alt="PopRetrieve overview" width="920">
 </p>
 
-## Overview
+## ✨ Overview
 
 PopRetrieve studies whether cell-population structure improves drug retrieval beyond mean-based signatures. It provides population retrieval metrics, baseline methods, synthetic benchmarks and experiment drivers used in the accompanying manuscript.
 
 The main comparison includes mean cosine, mean L2, energy distance, MMD, sliced Wasserstein and subpopulation-coverage scores. All scorers return similarities, so larger values rank candidates higher.
 
-## Installation
+<table>
+  <tr>
+    <td align="center" width="33%"><strong>📐 Metrics</strong><br><sub>Mean, energy, MMD, sliced Wasserstein and coverage scorers.</sub></td>
+    <td align="center" width="33%"><strong>🧬 Biological settings</strong><br><sub>SciPlex3, primary CD34+ HSPCs and Perturb-CITE-seq.</sub></td>
+    <td align="center" width="33%"><strong>🔁 Reproducibility</strong><br><sub>Fixed configs, scripts, result summaries and final PDFs.</sub></td>
+  </tr>
+</table>
+
+## 🚀 Installation
 
 ```bash
 git clone https://github.com/Boom5426/PopRetrieve.git
@@ -48,7 +66,7 @@ mean_score = score_mean_cosine(candidate_cells, query_cells)
 
 Energy and MMD use the unbiased U-statistic by default. Set `POPRETRIEVE_ESTIMATOR=v` only when reproducing explicitly labelled legacy V-statistic outputs.
 
-## Data
+## 🤗 Data
 
 The processed datasets are hosted at [Hugging Face](https://huggingface.co/datasets/Boom5426/PopRetrieve). Download them with Git LFS and point PopRetrieve to the clone:
 
@@ -60,21 +78,21 @@ export DIDR_DATA_ROOT="$PWD/popretrieve-data"
 
 The release contains the three core processed matrices and the directly used annotation tables. CIGS-derived optional benchmark tables are not redistributed because their source does not state a clear redistribution license. Dataset schemas, provenance, checksums and this boundary are documented in [`DATA.md`](DATA.md) and the Hugging Face data card.
 
-## Reproducing the main results
+## 🧪 Reproducing the main results
 
 Run commands from the repository root. Full experiments require the corresponding external datasets.
 
 | Task | Command |
 | --- | --- |
-| Core retrieval experiments | `bash scripts/run_all_core.sh` |
-| Baseline and predict-then-rank experiments | `bash scripts/run_all_baselines.sh` |
-| Synthetic HIR-Bench | `bash scripts/run_hir_benchmark.sh` |
+| 🧬 Core retrieval experiments | `bash scripts/run_all_core.sh` |
+| 📊 Baseline and predict-then-rank experiments | `bash scripts/run_all_baselines.sh` |
+| 🧪 Synthetic HIR-Bench | `bash scripts/run_hir_benchmark.sh` |
 
 Set `QUICK=1` for reduced smoke runs. Quick outputs are not the manuscript results.
 
 Selected checked summaries are provided under [`results/`](results/). The latest manuscript and Supplementary Information are available as [`PopRetrieve_manuscript.pdf`](manuscript/PopRetrieve_manuscript.pdf) and [`PopRetrieve_SI.pdf`](manuscript/PopRetrieve_SI.pdf).
 
-## Repository layout
+## 🗂️ Repository layout
 
 | Path | Contents |
 | --- | --- |
@@ -87,6 +105,6 @@ Selected checked summaries are provided under [`results/`](results/). The latest
 
 See [`PROJECT_STRUCTURE.md`](PROJECT_STRUCTURE.md) for package details.
 
-## Citation and license
+## 📚 Citation and license
 
 Citation metadata is provided in [`CITATION.cff`](CITATION.cff). PopRetrieve is released under the MIT License. External datasets retain their original licenses.
