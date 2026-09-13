@@ -1,7 +1,0 @@
-signal,target_ndcg@10,target_recall@1,target_recall@5,target_recall@10,target_recall@20
-distance_reduction,0.43067655807339306,0.0,1.0,1.0,1.0
-field_match,1.0,1.0,1.0,1.0,1.0
-graph_proximity,0.0,0.0,0.0,0.0,0.0
-random,0.0,0.0,0.0,0.0,0.0
-signature_reversal,0.0,0.0,0.0,0.0,0.0
-target_overlap,0.0,0.0,0.0,0.0,0.0

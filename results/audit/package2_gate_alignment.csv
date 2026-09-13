@@ -1,2 +1,0 @@
-panel,metric,scope,statistic,old_point_estimate,old_ci_low,old_ci_high,old_query_level_p,corrected_point_estimate,corrected_cluster_ci_low,corrected_cluster_ci_high,corrected_drug_level_p,one_row_per_drug_point,n_queries,n_drugs,conclusion_changed,manuscript_consequence
-Fig3f/current-gate-alignment,spearman_reliability_vs_divergence,individual_drug_formal,rho,-0.2246873868712452,,,1.0832111097966093e-09,-0.2246873868712452,-0.31443103520258686,-0.12885523932894086,,-0.5249597820020354,720,143,False,UNCHANGED

@@ -1,4 +1,0 @@
-dataset,typical_cross_cos,source,n,regime,clears_gate
-cross-line (SciPlex3),0.03236284479498863,"context_divergence_probe, median over 3 line pairs",3,divergent (cos < 0.9): distributional retrieval may help,True
-CD34+ lineages,0.18573749437928194,exp04_cd34_negative/cd34_lineage_response_cosine.csv:median_lineage_cos (median),36,divergent (cos < 0.9): distributional retrieval may help,True
-Frangieh immune,0.7085981369018555,exp05_frangieh_natural/frangieh_retrieval_by_gene.csv:cross_cos (median),10,divergent (cos < 0.9): distributional retrieval may help,True

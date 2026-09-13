@@ -155,8 +155,7 @@ class _CPALinearLatent:
         themselves near-orthogonal). NONE OF THAT DIVERGENCE IS DRUG RESPONSE. It is the generator's
         reconstruction error. Any structure or divergence diagnostic run on a latent model's output
         against real controls is therefore at risk of measuring the autoencoder rather than the
-        perturbation, and that includes ours. See analysis/predictors/gate1_within_context.py, which
-        reports both baselines, and CORRECTIONS.md R30.
+        perturbation, and that includes this implementation.
 
         ``synth='gaussian'``: legacy synthesizer (see population_synthesis).
         """

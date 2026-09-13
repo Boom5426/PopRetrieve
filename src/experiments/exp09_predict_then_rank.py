@@ -272,7 +272,7 @@ def run(n_seeds=8, n_drugs=10, alphas=(0.5, 0.7, 0.9), lines=("K562", "A549", "M
         # still yields no distributional advantage, the two-gate account is wrong.
         #
         # They live behind a flag because they need scgen 2.1.1 / cpa-tools 0.8.1, which pin an
-        # older scvi-tools and therefore a separate environment (see analysis/predictors/README).
+        # older scvi-tools and therefore a separate optional environment.
         # Nothing else in this experiment changes: same queries, same libraries, same scorers.
         from baselines.nonadditive_predictors import (
             RealScGenPredictor, RealCPAPredictor, OTMapPredictor)

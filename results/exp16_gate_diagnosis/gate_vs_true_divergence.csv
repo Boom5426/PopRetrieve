@@ -1,4 +1,0 @@
-test,statistic,pvalue,effect_size_rank_biserial,n_recommended,n_nonrecommended,median_recommended,median_nonrecommended
-recommended_vs_nonrecommended_divergence,40857.0,0.3060487370806029,0.05561334165453158,627,138,1.661378759659114,1.670957903443862
-spearman_preference_conflict_vs_divergence,0.19275245405987562,7.743061759691534e-08,,765,0,,
-spearman_structure_reliability_vs_divergence,-0.18850464631876837,1.5011920617185174e-07,,765,0,,

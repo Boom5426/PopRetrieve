@@ -63,8 +63,8 @@ def energy_distance_v(X: torch.Tensor, Y: torch.Tensor) -> torch.Tensor:
     an upward bias of order 1/m. It cancels out of a ranking only when every candidate
     population has the same size. When they do not, the smaller candidates are pushed away from
     the query by an amount that has nothing to do with the biology, which is a ranking artefact
-    rather than a rounding error: see docs/phase2/03_ORACLE_RETRIEVAL_RESULTS.md, where it
-    consumes the whole of the measured population advantage. Use ``energy_distance_u`` unless
+    rather than a rounding error; in the Phase A experiment it consumes the whole of the measured
+    population advantage. Use ``energy_distance_u`` unless
     you are reproducing an old number.
     """
     dxy = _pdist2(X, Y).mean()
@@ -348,8 +348,7 @@ def score_mean_l2(P, Q, control_P: Optional[np.ndarray] = None,
     claims the project used to make as one. Cosine keeps only the DIRECTION of a mean response;
     this keeps direction and magnitude and nothing else. A population scorer that beats cosine has
     not yet shown that it used the population: it may only have used the magnitude, which is what
-    Phase A measured (docs/phase2/03_ORACLE_RETRIEVAL_RESULTS.md: of a +0.0303 MRR gain over
-    cosine, +0.0201 is recovered here).
+    Phase A measured: of a +0.0303 MRR gain over cosine, +0.0201 is recovered here.
 
     The control arguments mirror ``score_mean_cosine`` exactly, so the two scorers compare the
     same pair of vectors and differ only in how they compare them. Passing controls matters

@@ -7,7 +7,7 @@ Gate 1 measured differential response as
     D = 1 - cos(r_1, r_2),      r_s = mean(treated in state s) - mean(vehicle in state s)
 
 and on real material that is largely a signal-to-noise measure rather than a pharmacological one.
-Measured over 3,620 Tahoe query conditions (docs/phase2/05_DIFFERENTIAL_RESPONSE_AUDIT.md), D
+Measured over 3,620 Tahoe query conditions, D
 correlates -0.584 with the response norm and -0.529 with the number of treated cells: when both
 state responses are small, their angle is set by sampling noise, the cosine falls, and D rises. The
 drugs that scored highest on "differential response" were systematically the weakest and least

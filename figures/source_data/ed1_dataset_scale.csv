@@ -1,5 +1,0 @@
-dataset,cells,genes,perturbations,type,lines
-SciPlex3,276325,2000.0,188.0,drugs,3.0
-Frangieh,218023,2000.0,239.0,KO,1.0
-CD34,33984,2000.0,36.0,drugs,1.0
-HIR-Bench,13440,,,synthetic,

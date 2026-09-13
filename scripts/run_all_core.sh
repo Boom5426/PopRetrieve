@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Run the core reproduction (exp01-exp06) + ranking-flip (exp07) + consolidation.
 # Usage:
-#   bash scripts/run_all_core.sh              # full run (matches FINDINGS seed counts)
+#   bash scripts/run_all_core.sh              # full run (manuscript seed counts)
 #   QUICK=1 bash scripts/run_all_core.sh      # fast sanity pass (few seeds)
 #   PY=/path/to/python bash scripts/run_all_core.sh
 set -euo pipefail

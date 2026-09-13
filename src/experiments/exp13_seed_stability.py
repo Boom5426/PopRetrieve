@@ -2,7 +2,7 @@
 """Do exp13's "distributionally dominant" real-data tasks survive reseeding? Mostly not.
 
 This experiment exists because a count of threshold crossings looked like a finding and was
-not. It is load-bearing evidence for CORRECTIONS.md R13 and for Result 3, so it ships as a
+not. It is supporting evidence for the real-data projection in Result 3, so it ships as a
 first-class experiment rather than as an analysis script.
 
 WHY THE QUESTION ARISES. exp13 records, per task, the minority-state coverage of the PopRetrieve

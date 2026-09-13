@@ -1,3 +1,0 @@
-statistic,spearman_rho
-"published  (mean signature -> malignant, malignant is HALF of it)",0.8782249742002064
-"disjoint   (myeloid -> malignant, shares no cells)",0.8348813209494325

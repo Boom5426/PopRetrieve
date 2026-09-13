@@ -1,2 +1,0 @@
-dataset,majority_lineage_mean_agreement,raw_response_cos_noise_floor,gate,robust_lineage_divergence,regime
-CD34+,0.695149791616651,0.185737494379282,0.9,False,below gate (no distributional advantage): lineages rank drugs like the mean; matched within~=between at the noise floor

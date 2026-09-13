@@ -45,7 +45,7 @@ cells to push through it, which is what the retrieval harness requires and what 
 ``predict`` does internally via ``celltype_to_predict``.
 
 These models need scgen/cpa-tools, which pin an older scvi-tools stack and are therefore
-installed in a separate environment (``dartpred``/``dartcpa``; see analysis/predictors/README).
+installed in a separate optional environment (``dartpred``/``dartcpa``).
 Importing this module without them raises: it does not silently fall back to a linear model.
 That silent fallback is what produced the error this module exists to correct.
 """
@@ -344,8 +344,7 @@ class OTMapPredictor:
         #      signal. Every deployed neural-OT perturbation model (CellOT and kin) runs OT in a
         #      learned latent space for exactly this reason. We use a PCA-30 latent as the
         #      non-parametric analogue.
-        #   2. CROSS-CONTEXT BASELINE CONFOUND (the same error as the Gate-1 measurement itself,
-        #      CORRECTIONS.md R28). Pooling control and treated cells across non-query contexts
+        #   2. CROSS-CONTEXT BASELINE CONFOUND. Pooling control and treated cells across non-query contexts
         #      in raw space makes the transport learn the context shift, not the drug response.
         #      Each fit context is therefore centred on its OWN control mean, so the map is a
         #      control->treated (response) map. Query cells are matched in the same centred space.
@@ -445,7 +444,7 @@ class OTMapPredictor:
         """The population this model produces with NO drug effect, for the induced-divergence
         baseline. In latent mode the map returns dec(enc(C) + displacement), so its zero-effect
         output is dec(enc(C)) = the PCA reconstruction P(C); subtracting it cancels the same
-        reconstruction bias that the latent additive models carry (CORRECTIONS.md R30). In raw
+        reconstruction bias that the latent additive models carry. In raw
         mode the map adds a displacement to C directly, so its baseline is C itself.
         """
         rng = np.random.default_rng(self.seed if seed is None else seed)

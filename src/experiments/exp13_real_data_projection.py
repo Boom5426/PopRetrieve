@@ -482,7 +482,7 @@ def run(quick=False):
     # configuration builds exactly 37 tasks, and a QUICK run had been quoted in the manuscript
     # as the real-data result ("0 of 37 real-data tasks are distributionally dominant"). The
     # FULL configuration builds 239 and the answer is not zero. Nothing on disk said which had
-    # been run. Now something does. See CORRECTIONS.md R13.
+    # been run. Now the provenance file records it explicitly.
     prov = pd.DataFrame([{
         "configuration": "QUICK" if quick else "FULL",
         "n_tasks": len(df),
@@ -505,7 +505,7 @@ def run(quick=False):
         f"The manuscript once reported \"0 of 37 real-data tasks are distributionally "
         f"dominant\". 37 is the QUICK task count: a sanity run had been quoted as the "
         f"real-data result, and nothing on disk recorded that. On the FULL run 11 of the 215 "
-        f"observed-condition tasks are dominant. See CORRECTIONS.md R13.\n")
+        f"observed-condition tasks are dominant.\n")
     log(f"  stamped PROVENANCE ({'QUICK' if quick else 'FULL'}, {len(df)} tasks)")
     if failures:
         write_csv(pd.DataFrame(failures), results_path(OUT, "failed_tasks.csv"))
@@ -556,4 +556,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

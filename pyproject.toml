@@ -28,26 +28,6 @@ dependencies = [
     "pyyaml>=6.0",
 ]
 
-[project.optional-dependencies]
-analysis = [
-    "anndata>=0.10",
-    "scanpy>=1.10",
-    "hdbscan>=0.8",
-]
-figures = [
-    "matplotlib>=3.7",
-]
-dev = [
-    "pytest>=7.0",
-]
-full = [
-    "anndata>=0.10",
-    "scanpy>=1.10",
-    "hdbscan>=0.8",
-    "matplotlib>=3.7",
-    "pytest>=7.0",
-]
-
 [project.scripts]
 popretrieve-hir-benchmark = "experiments.exp11_hir_benchmark:main"
 popretrieve-recompute-headlines = "experiments.recompute_all:main"
@@ -67,11 +47,5 @@ include = [
     "benchmarks*",
     "data*",
     "experiments*",
-    "plotting*",
     "utils*",
 ]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "-q --durations=5"
-
