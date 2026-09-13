@@ -8,6 +8,7 @@
   <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white">
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2ea44f"></a>
   <a href="manuscript/PopRetrieve_manuscript.pdf"><img alt="Manuscript PDF" src="https://img.shields.io/badge/manuscript-PDF-B31B1B?logo=adobeacrobatreader&logoColor=white"></a>
+  <a href="https://huggingface.co/datasets/Boom5426/PopRetrieve"><img alt="Hugging Face dataset" src="https://img.shields.io/badge/data-Hugging%20Face-FFD21E?logo=huggingface&logoColor=black"></a>
 </p>
 
 <p><strong>Population-level retrieval metrics for single-cell perturbation response.</strong></p>
@@ -49,13 +50,15 @@ Energy and MMD use the unbiased U-statistic by default. Set `POPRETRIEVE_ESTIMAT
 
 ## Data
 
-Large single-cell datasets are not included. Put them under `data/` or set:
+The processed datasets are hosted at [Hugging Face](https://huggingface.co/datasets/Boom5426/PopRetrieve). Download them with Git LFS and point PopRetrieve to the clone:
 
 ```bash
-export DIDR_DATA_ROOT=/absolute/path/to/data
+git lfs install
+git clone https://huggingface.co/datasets/Boom5426/PopRetrieve popretrieve-data
+export DIDR_DATA_ROOT="$PWD/popretrieve-data"
 ```
 
-Dataset names, provenance and expected paths are listed in [`DATA.md`](DATA.md).
+The release contains the three core processed matrices and the directly used annotation tables. CIGS-derived optional benchmark tables are not redistributed because their source does not state a clear redistribution license. Dataset schemas, provenance, checksums and this boundary are documented in [`DATA.md`](DATA.md) and the Hugging Face data card.
 
 ## Reproducing the main results
 
