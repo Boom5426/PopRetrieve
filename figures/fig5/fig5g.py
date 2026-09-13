@@ -31,7 +31,7 @@ import numpy as np
 
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
-from figstyle import INK  # noqa: E402
+from phase2_style import INK  # noqa: E402
 from phase2_data import CONFOUND_LABEL, interaction_audit  # noqa: E402
 from phase2_style import (FAINT, LW_HAIR, MEAN, POP, PT_ANNOT,  # noqa: E402
                           PT_SMALL, PT_TICK, SHARED, TEXT, key_label)
@@ -62,8 +62,8 @@ def draw_5g(ax):
             below = stat == "D_old"
             # INK, not the marker's colour. The value sits directly against its own dot, so the
             # dot is already carrying the hue and the letters were spending it a second time at
-            # 6.5 pt, where MEAN measures 2.23:1 against white and POP 3.84:1, both under the
-            # 4.5:1 small text is held to. Panel h, on this same row, labels the same kind of
+            # 6.5 pt, so the softened method colours are intentionally not used as text. Panel h,
+            # on this same row, labels the same kind of
             # value in ink beside a coloured marker and loses nothing by it.
             ax.text(rho, y + (-0.30 if below else 0.30), f"{rho:+.2f}".replace("-", "−"),
                     ha="center", va="top" if below else "bottom", fontsize=PT_SMALL, color=TEXT)
@@ -76,7 +76,7 @@ def draw_5g(ax):
     ax.set_xticks([-0.5, 0.0, 0.5])
     ax.set_xticklabels(["−0.5", "0", "0.5"], fontsize=PT_TICK)
     ax.set_xlabel("Spearman ρ with the statistic", fontsize=PT_ANNOT, labelpad=1.5)
-    ax.grid(axis="x", lw=LW_HAIR, color="#EDEDED", zorder=0)
+    ax.grid(axis="x", lw=LW_HAIR, color="#E5E7E7", zorder=0)
     ax.set_axisbelow(True)
     for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)

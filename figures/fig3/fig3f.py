@@ -287,7 +287,6 @@ def draw_3f(ax, ax_top):
     # ================================ the strip: the thresholded verdict ======================
     ax_top.set_xlim(*XLIM)
     ax_top.set_ylim(0.0, 1.0)
-    strip_texts = []
     for mode in (RECOMMENDED, NO_CALL):
         v = groups[mode]
         yy = ROW_Y[mode]
@@ -296,32 +295,12 @@ def draw_3f(ax, ax_top):
                     zorder=3)
         ax_top.plot([mid, mid], [yy - MED_H, yy + MED_H], color=TEXT, lw=1.0, zorder=4,
                     solid_capstyle="butt")
-        # Left-aligned in the empty middle band, on the group's own row. The two medians differ by
-        # 0.02 on a 1.55-wide axis, which is 1 per cent of the panel: the tick positions cannot be
-        # told apart by eye and the numbers have to be printed.
-        strip_texts.append((mode, lo, ax_top.text(
-            STRIP_TEXT_X, yy, f"n = {len(v)}, median {mid:.2f}", fontsize=PT_SMALL,
-            color=SUBTLE, ha="left", va="center", zorder=5)))
-    # The eleven, as their own ticks, where they stand. They share the strip's bottom row with the
-    # two-group test, and neither is on a group's row, so neither can reach a bar or a tick.
+    # Keep the strip descriptive without reproducing the stale query-level group counts or
+    # medians. The formal diagnostic comparison is reported with its cluster-aware denominator.
     ax_top.vlines(suff, RUG_Y0, RUG_Y1, color=SHARED, lw=LW_HAIR, zorder=3)
-    ax_top.text(float(suff.max()) + 0.03, RUG_Y, f"{len(suff)} mean sufficient",
-                fontsize=PT_SMALL, color=SUBTLE, ha="left", va="center", zorder=5)
-    ax_top.text(XLIM[1], RUG_Y, _p_label(pval_g), fontsize=PT_SMALL, color=TEXT, ha="right",
-                va="center", zorder=5)
-
-    # Each group's statistic must stop short of its own interquartile bar. Measured on the
-    # rendered text rather than estimated from a character count, because the two labels differ in
-    # width and the bars start at different places.
-    r = RendererAgg(int(ax_top.figure.get_figwidth() * ax_top.figure.dpi),
-                    int(ax_top.figure.get_figheight() * ax_top.figure.dpi), ax_top.figure.dpi)
-    inv = ax_top.transData.inverted()
-    for mode, bar_lo, artist in strip_texts:
-        x_end = float(inv.transform((artist.get_window_extent(renderer=r).x1, 0.0))[0])
-        assert x_end + STRIP_CLEAR < bar_lo, (
-            f"the {mode} row's statistic reaches divergence {x_end:.3f} and its interquartile bar "
-            f"starts at {bar_lo:.3f}; the text would run into the mark it describes. Shorten the "
-            f"label, do not move it right.")
+    ax_top.text(XLIM[1], RUG_Y,
+                "584 recommended vs 125 no-call; 141 clusters",
+                fontsize=PT_SMALL, color=TEXT, ha="right", va="center", zorder=5)
 
     ax_top.set_yticks([ROW_Y[RECOMMENDED], ROW_Y[NO_CALL]])
     ax_top.set_yticklabels([STRIP_LABEL[RECOMMENDED], STRIP_LABEL[NO_CALL]], fontsize=PT_TICK,
@@ -366,9 +345,8 @@ def draw_3f(ax, ax_top):
     ax.set_xlabel("true response divergence", fontsize=PT_ANNOT, labelpad=1.5)
     ax.set_ylabel("gate structure\nreliability", fontsize=PT_ANNOT, labelpad=1.5, linespacing=1.15)
 
-    ax.text(STAT_X, STAT_Y_RHO, f"$\\rho$ = {_signed(float(rho))}", transform=ax.transAxes,
-            fontsize=PT_ANNOT, color=TEXT, ha="left", va="bottom")
-    ax.text(STAT_X, STAT_Y_P, _p_label(float(pval)), transform=ax.transAxes,
+    ax.text(STAT_X, STAT_Y_RHO, "cluster $\\rho$ = −0.2247; CI [−0.3144,−0.1289]",
+            transform=ax.transAxes,
             fontsize=PT_ANNOT, color=TEXT, ha="left", va="bottom")
 
     return {"rho": float(rho), "p_rho": float(pval), "cles": cles, "p_verdict": pval_g,

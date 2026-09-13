@@ -303,7 +303,7 @@ after the phrase removal above there is nothing for one to hold.
   `fig1_assemble` imports `draw_1g` and `draw_1h` from them.
 - `fig1_problem.{pdf,svg,png}` : the composite, and the only stem this figure is written under.
   `python figures/build_all.py --write` enforces the 5 pt floor, writes these, and copies the PDF to
-  `manuscript/latex/figures/fig1.pdf`, which is the file the manuscript compiles. That copy is part
+  `manuscript/figures/fig1.pdf`, which is the file the manuscript compiles. That copy is part
   of the build; it is no longer a manual step.
 - `fig1a_reference.png` is the generated concept image panel a was redrawn from; see above.
 - `fig1b_prompt.md` is a historical artefact from when panel b (then lettered a) was to be an AI

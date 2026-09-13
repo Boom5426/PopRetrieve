@@ -29,7 +29,7 @@ import matplotlib.pyplot as plt
 
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
-from figstyle import INK  # noqa: E402
+from phase2_style import INK  # noqa: E402
 from phase2_data import headroom_null  # noqa: E402
 from phase2_style import (FAINT, LW_HAIR, PT_ANNOT, PT_SMALL, PT_TICK,  # noqa: E402
                           SHARED)
@@ -72,7 +72,7 @@ def draw_5e(ax):
     ax.set_xticks([0.75, 0.78, 0.81])
     ax.set_xticklabels(["0.75", "0.78", "0.81"], fontsize=PT_TICK)
     ax.set_xlabel("Spearman ρ, headroom against oracle gain", fontsize=PT_ANNOT, labelpad=1.5)
-    ax.grid(axis="x", lw=LW_HAIR, color="#EDEDED", zorder=0)
+    ax.grid(axis="x", lw=LW_HAIR, color="#E5E7E7", zorder=0)
     ax.set_axisbelow(True)
     for sp in ("right", "top", "left"):
         ax.spines[sp].set_visible(False)

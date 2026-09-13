@@ -54,7 +54,7 @@ for _p in (_HERE, _FIGROOT, os.path.join(_FIGROOT, "ed7")):
         sys.path.insert(0, _p)
 
 # The one canonical output stem for this figure; build_all asserts it equals STEMS[5], because
-# that is the name copied to manuscript/latex/figures/fig5.pdf.
+# that is the name copied to manuscript/figures/fig5.pdf.
 STEM = "fig5_intervention_oracle"
 
 from figstyle import pin_canvas, strip_titles          # noqa: E402

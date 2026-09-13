@@ -93,7 +93,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # ONE canonical output stem per figure; build_all.STEMS holds the same string and refuses to
-# build if the two drift apart. This is the name that syncs to manuscript/latex/figures/fig2.pdf.
+# build if the two drift apart. This is the name that syncs to manuscript/figures/fig2.pdf.
 STEM = "fig2_temptation"
 
 from figstyle import pin_canvas, strip_titles  # noqa: E402

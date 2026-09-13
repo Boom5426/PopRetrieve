@@ -67,7 +67,7 @@ def _score_method(method_name, P, Q, query_labels, ctrl=None, seed=0):
     if method_name == "mean_cosine":
         return score_mean_cosine(P, Q, control_P=ctrl, control_Q=ctrl)
     elif method_name == "mean_l2":
-        return score_mean_l2(P, Q)
+        return score_mean_l2(P, Q, control_P=ctrl, control_Q=ctrl)
     elif method_name == "cmap_signature_match":
         return score_mean_cosine(P, Q, control_P=ctrl, control_Q=ctrl)
     elif method_name == "cmap_signature_reverse":

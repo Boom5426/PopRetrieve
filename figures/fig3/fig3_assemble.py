@@ -107,7 +107,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # The one canonical output stem; build_all.STEMS[3] holds the same string and the build fails if
-# the two drift apart. This is the name copied to manuscript/latex/figures/fig3.pdf.
+# the two drift apart. This is the name copied to manuscript/figures/fig3.pdf.
 STEM = "fig3_collapse"
 
 from figstyle import pin_canvas, strip_titles  # noqa: E402

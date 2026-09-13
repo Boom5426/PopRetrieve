@@ -1291,6 +1291,6 @@ panel. `phase2_style.key_label` now measures the axes it is drawing into, and th
 are deleted rather than updated.
 
 Verification: `figures/build_all.py --write` reports 6/6 CLEAN against the 6.5 pt floor and syncs
-all six to `manuscript/latex/figures/`; `figures/check_overlaps.py` reports 0 collisions on all
+all six to `manuscript/figures/`; `figures/check_overlaps.py` reports 0 collisions on all
 six; the manuscript compiles with 0 errors, 0 undefined references, no `Float too large` and no
 overfull vbox.

@@ -27,7 +27,7 @@ from scipy.stats import spearmanr
 from itertools import combinations
 
 from data.load_sciplex3 import load_sciplex3
-from retrieval.metrics import energy_distance, _tensor, _subsample
+from retrieval.metrics import energy_distance_v, _tensor, _subsample
 from retrieval.tasks import ControlledMixtureTask
 
 CELL_LINE = "K562"
@@ -44,7 +44,7 @@ def energy_dist_raw(P, Q, max_cells=MAX_CELLS, seed=0):
     P = _subsample(P, max_cells, seed)
     Q = _subsample(Q, max_cells, seed + 1)
     with torch.no_grad():
-        return float(energy_distance(_tensor(P), _tensor(Q)))
+        return float(energy_distance_v(_tensor(P), _tensor(Q)))
 
 def energy_dist_delta(P, Q, ctrl_mean, max_cells=MAX_CELLS, seed=0):
     """Energy distance on delta cells (each cell minus control mean)."""
@@ -53,7 +53,7 @@ def energy_dist_delta(P, Q, ctrl_mean, max_cells=MAX_CELLS, seed=0):
     P_delta = P - ctrl_mean
     Q_delta = Q - ctrl_mean
     with torch.no_grad():
-        return float(energy_distance(_tensor(P_delta), _tensor(Q_delta)))
+        return float(energy_distance_v(_tensor(P_delta), _tensor(Q_delta)))
 
 # ---- load data ----
 print("Loading SciPlex3...")
@@ -208,4 +208,3 @@ summary = {
 }
 pd.DataFrame([summary]).to_csv(f"{OUT_DIR}/step1_summary.csv", index=False)
 print(f"\nSummary saved to {OUT_DIR}/step1_summary.csv")
-

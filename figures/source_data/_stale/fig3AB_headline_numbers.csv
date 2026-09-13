@@ -1,5 +1,0 @@
-panel,metric_class,quantity,value,n,pvalue,frac_improved
-3A,A_objective_aligned,regret_reduction_coverage_worst_median,0.119,621,4.255e-56,0.72
-3A,B_task_proximal,MoA_nDCG_delta_energy_vs_mean,-0.0127,480,,
-3B,A_objective_aligned,regret_reduction_recommended,0.119,621,,
-3B,A_objective_aligned,regret_reduction_nonrecommended,0.122,133,,

@@ -29,7 +29,7 @@ import numpy as np
 
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
-from figstyle import INK  # noqa: E402
+from phase2_style import INK  # noqa: E402
 from phase2_data import recoverability  # noqa: E402
 from phase2_style import (EXT, LW_HAIR, POP, PT_ANNOT, PT_SMALL,  # noqa: E402
                           PT_TICK, SHARED, TEXT, axes_size_in, key_label)
@@ -64,8 +64,8 @@ def draw_5f(ax):
         ax.plot([med, med], [0, Y_MED], lw=1.0, color=colour, ls="--", zorder=5,
                 dash_capstyle="butt")
         # Ink. The label sits on the head of its own coloured median rule, so the rule is already
-        # carrying the hue; setting the digits in it too spent a colour twice and did it at 6.5 pt,
-        # where POP measures 3.84:1 against white and EXT 3.52:1.
+        # carrying the hue; setting the digits in it too would spend a colour twice, so the
+        # softened fills stay separate from the text.
         ax.text(med, Y_MED + 0.004, f"{med:.3f}", ha="center", va="bottom",
                 fontsize=PT_SMALL, color=TEXT)
 
@@ -96,7 +96,7 @@ def draw_5f(ax):
     ax.set_xlabel("response-detectability accuracy", fontsize=PT_ANNOT, labelpad=1.5)
     ax.set_ylabel("share of queries", fontsize=PT_ANNOT, labelpad=1.5)
     ax.tick_params(axis="y", labelsize=PT_TICK)
-    ax.grid(axis="y", lw=LW_HAIR, color="#EDEDED", zorder=0)
+    ax.grid(axis="y", lw=LW_HAIR, color="#E5E7E7", zorder=0)
     ax.set_axisbelow(True)
     for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)

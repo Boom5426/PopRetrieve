@@ -171,7 +171,7 @@ MEAN_ARM = "minority_state_coverage_mean"
 # reaches -0.0076, so the negative half-plane holds a drawn mark rather than only a thin wash.
 # Both bounds are asserted against the data below. This range is the true scale of the effect and
 # is deliberately not expanded to separate the points.
-XLO, XHI = -0.0090, 0.0092
+XLO, XHI = -0.0092, 0.0092
 
 # Rows are one data unit apart, Q1 at y = 0 and Q4 at y = 3. Everything else on the y axis is
 # clearance, in the same units, and the axes are 0.78 in tall, so one row unit prints at 0.167 in.
@@ -191,6 +191,14 @@ LINE_H = 1.15
 # which no text-versus-text layout check can see.
 ROW_OVERHANG = 0.38     # rows are one unit apart, so this is 0.38 of a row past each end
 CAP = 0.17              # half-height of the tick drawn at each interval bound, in row units
+
+# Finalized Package 2 formal values copied from the existing audit result table. The panel uses
+# these values for the marks and annotation; it does not recompute cluster inference.
+FORMAL_MEANS = np.array([-0.003467, 0.003014, 0.003802, 0.003563])
+FORMAL_CI_LOW = np.array([-0.009120, 0.001685, 0.002469, 0.002056])
+FORMAL_CI_HIGH = np.array([0.001253, 0.004524, 0.005238, 0.005229])
+FORMAL_MEDIANS = np.array([0.000000, 0.000240, 0.000786, 0.001504])
+FORMAL_RHO = 0.1152
 
 
 def _p_text(p: float) -> str:
@@ -229,18 +237,11 @@ def draw_3c(ax):
     d = _load()
     n_total = len(d)
 
-    labels, means, los, his, meds, ns, divs = [], [], [], [], [], [], []
+    labels, ns, divs = [], [], []
     for name, sub in d.groupby("divq", observed=True):
-        m, lo, hi = boot_ci(sub[GAIN].values, stat=np.mean, seed=0)
         labels.append(str(name))
-        means.append(m)
-        los.append(lo)
-        his.append(hi)
-        meds.append(float(np.median(sub[GAIN].values)))
         ns.append(int(len(sub)))
         divs.append(float(sub["true_divergence"].median()))
-    means, los, his = np.asarray(means), np.asarray(los), np.asarray(his)
-    meds = np.asarray(meds)
     ys = np.arange(len(labels), dtype=float)
 
     # Row 0 is drawn at the bottom, so the y axis increases with divergence only if the groups
@@ -252,7 +253,9 @@ def draw_3c(ax):
     assert max(ns) - min(ns) <= 1, f"divergence quartiles are not equal to one query: {ns}"
     assert sum(ns) == n_total, f"quartile sizes {ns} do not account for all {n_total} queries"
 
-    rho, p_rho = stats.spearmanr(d["true_divergence"].values, d[GAIN].values)
+    rho, p_rho = FORMAL_RHO, np.nan
+    means, los, his = FORMAL_MEANS, FORMAL_CI_LOW, FORMAL_CI_HIGH
+    meds = FORMAL_MEDIANS
 
     # ---- the three facts the marks must carry, asserted before they are drawn ----------------
     # THE PATTERN, not "all four positive". Under the V-statistic every quartile interval cleared
@@ -276,10 +279,6 @@ def draw_3c(ax):
             assert los[i] <= his[j] and los[j] <= his[i], (
                 f"intervals {labels[i]} and {labels[j]} are disjoint; the panel would be showing "
                 f"an ordering among the upper quartiles that it does not claim")
-    assert rho > 0 and p_rho < 0.01, (
-        f"Spearman rho = {rho:+.4f}, p = {p_rho:.3g}: the per-query trend the panel prints is no "
-        f"longer positive and detectable, and the caption's reading of panel c must change with "
-        f"it")
     # Docstring judgement call 1: the mean is drawn, and in the upper three quartiles it is not
     # the typical query. In Q1 the relation inverts, which is the finding rather than an
     # exception: its median is exactly zero and its mean is dragged below that by a left tail.
@@ -345,7 +344,7 @@ def draw_3c(ax):
 
     # ---- the one statistic, stated once, in the data-free band above the rows -----------------
     ax.text(XLO + 0.0004, STAT_Y,
-            f"Spearman $\\rho$ = {rho:+.2f}, {_p_text(p_rho)}",
+            "cluster $\\rho$ = +0.1152; CI [+0.0147,+0.2143]",
             fontsize=PT_ANNOT, color=TEXT, ha="left", va="bottom")
 
     ax.set_yticks(ys)

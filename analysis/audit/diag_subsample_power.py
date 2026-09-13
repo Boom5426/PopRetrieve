@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 import numpy as np
 import torch
 import pandas as pd
-from retrieval.metrics import energy_distance, _tensor
+from retrieval.metrics import energy_distance_v, _tensor
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -31,7 +31,7 @@ def compute_energy(X, Y, device=DEVICE):
     with torch.no_grad():
         Xt = torch.as_tensor(X, dtype=torch.float32, device=device)
         Yt = torch.as_tensor(Y, dtype=torch.float32, device=device)
-        return float(energy_distance(Xt, Yt))
+        return float(energy_distance_v(Xt, Yt))
 
 def compute_mean_cosine(P, Q, ctrl):
     sig_P = P.mean(0) - ctrl
@@ -269,4 +269,3 @@ for _, r in sub.iterrows():
     print(f"  n={int(r.n_cells):4d} {r.metric:25s} stability={r['mean']:.2f}")
 
 print("\nCODE PATH: exp08 uses max_cells=None (all 400 cells), exp12 uses max_cand_cells=120")
-

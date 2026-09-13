@@ -15,11 +15,10 @@ Convention: a *similarity* is returned as-is; a *distance* is returned negated,
 so every scorer ranks candidates in descending ``score``.
 
 Two of the kernels come in a U-statistic and a V-statistic form (``energy_distance_u`` /
-``energy_distance``, ``mmd_rbf_u`` / ``mmd_rbf``). The V forms include self-pairs, are biased
-upward by O(1/m), and are what every published number here was computed with; the U forms exclude
-self-pairs and are unbiased at any sample size. ``DEFAULT_ESTIMATOR`` is 'v' so that an unchanged
-call site keeps reproducing an old number, not because it is the better estimator. Pass
-``estimator='u'`` in new work.
+``energy_distance_v`` and ``mmd_rbf_u`` / ``mmd_rbf_v``). The V forms include self-pairs and are
+biased upward by O(1/m); the U forms exclude self-pairs. Manuscript-facing scorers default to U.
+The process-wide ``POPRETRIEVE_ESTIMATOR=v`` override is retained only as an explicitly labelled
+legacy reproduction mode; new work should pass ``estimator='u'`` or use the default.
 
   score_mean_cosine        cosine of mean-delta signatures     (the "mean-out" incumbent)
   score_mean_l2            -||mean(P) - mean(Q)||
@@ -49,7 +48,7 @@ def _pdist2(a: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
     return torch.cdist(a, b, p=2)
 
 
-def energy_distance(X: torch.Tensor, Y: torch.Tensor) -> torch.Tensor:
+def energy_distance_v(X: torch.Tensor, Y: torch.Tensor) -> torch.Tensor:
     """V-statistic energy distance, 2 E|X-Y| - E|X-X'| - E|Y-Y'| with self-pairs INCLUDED.
 
     This is the scPerturbBench convention and the estimator behind every number this
@@ -72,10 +71,6 @@ def energy_distance(X: torch.Tensor, Y: torch.Tensor) -> torch.Tensor:
     dxx = _pdist2(X, X).mean()
     dyy = _pdist2(Y, Y).mean()
     return 2 * dxy - dxx - dyy
-
-
-# Explicit alias, so a call site can name the estimator it means rather than inherit a default.
-energy_distance_v = energy_distance
 
 
 def _offdiag_mean(D: torch.Tensor) -> torch.Tensor:
@@ -130,8 +125,8 @@ def _mmd_kernel(X: torch.Tensor, Y: torch.Tensor, sigmas, scales):
     return k
 
 
-def mmd_rbf(X: torch.Tensor, Y: torch.Tensor, sigmas=None,
-            scales=(0.25, 1.0, 4.0)) -> torch.Tensor:
+def mmd_rbf_v(X: torch.Tensor, Y: torch.Tensor, sigmas=None,
+              scales=(0.25, 1.0, 4.0)) -> torch.Tensor:
     """V-statistic multi-bandwidth RBF MMD^2, with self-pairs INCLUDED.
 
     This is the estimator behind every MMD number this repository produced before 2026-09-02 and
@@ -152,9 +147,6 @@ def mmd_rbf(X: torch.Tensor, Y: torch.Tensor, sigmas=None,
     return k(X, X).mean() + k(Y, Y).mean() - 2 * k(X, Y).mean()
 
 
-mmd_rbf_v = mmd_rbf
-
-
 def mmd_rbf_u(X: torch.Tensor, Y: torch.Tensor, sigmas=None,
               scales=(0.25, 1.0, 4.0)) -> torch.Tensor:
     """U-statistic multi-bandwidth RBF MMD^2, with self-pairs EXCLUDED.
@@ -169,6 +161,12 @@ def mmd_rbf_u(X: torch.Tensor, Y: torch.Tensor, sigmas=None,
     """
     k = _mmd_kernel(X, Y, sigmas, scales)
     return _offdiag_mean(k(X, X)) + _offdiag_mean(k(Y, Y)) - 2 * k(X, Y).mean()
+
+
+# Unqualified low-level names are canonical U implementations. V is intentionally available only
+# through the explicit *_v names or the explicit legacy estimator switch in the score wrappers.
+energy_distance = energy_distance_u
+mmd_rbf = mmd_rbf_u
 
 
 def sliced_wasserstein(X: torch.Tensor, Y: torch.Tensor, n_proj: int = 64,
@@ -255,23 +253,17 @@ def _cos(a: np.ndarray, b: np.ndarray) -> float:
 
 # Which estimator the scorers use for the two U/V pairs.
 #
-# Set process-wide by the POPRETRIEVE_ESTIMATOR environment variable so that the entire legacy
-# experiment suite can be re-run under either estimator without editing thirty call sites; the
-# audit driver in analysis/estimator_audit/ uses exactly that to produce the old-vs-new table.
-#
-# 'v' is the default ONLY so that every result produced before 2026-09-02 keeps reproducing from
-# an unchanged call site. It is the biased estimator and it is the wrong choice on its merits
-# whenever candidate populations differ in size. New work should pass estimator='u' explicitly,
-# and the audit in analysis/estimator_audit/ reports both side by side for every affected result.
+# The manuscript pipeline is U by default. The environment override exists only for the
+# explicitly labelled legacy estimator audit, which can re-run old V-statistic outputs without
+# editing every historical call site.
 _ESTIMATORS = ("u", "v")
-DEFAULT_ESTIMATOR = os.environ.get("POPRETRIEVE_ESTIMATOR", "v").strip().lower()
+_requested_estimator = os.environ.get("POPRETRIEVE_ESTIMATOR")
+DEFAULT_ESTIMATOR = (_requested_estimator or "u").strip().lower()
 if DEFAULT_ESTIMATOR not in _ESTIMATORS:
     raise ValueError(f"POPRETRIEVE_ESTIMATOR={DEFAULT_ESTIMATOR!r}; expected one of {_ESTIMATORS}")
-if DEFAULT_ESTIMATOR != "v":
-    # Loud on purpose. This switch changes every population score in the process, so a run that
-    # uses it must never be mistaken for a run that did not.
-    print(f"[retrieval.metrics] DEFAULT_ESTIMATOR={DEFAULT_ESTIMATOR!r} "
-          f"(set by POPRETRIEVE_ESTIMATOR); population scores are NOT the published ones",
+if _requested_estimator is not None:
+    print(f"[retrieval.metrics] POPRETRIEVE_ESTIMATOR={DEFAULT_ESTIMATOR!r} "
+          f"(explicit legacy override; manuscript default is 'u')",
           file=sys.stderr, flush=True)
 
 
@@ -289,7 +281,7 @@ def _energy_dist(P, Q, max_cells: Optional[int] = 500, seed: int = 0,
     Q = _subsample(Q, max_cells, seed + 1)
     if len(P) < min_cells or len(Q) < min_cells:
         return _PENALTY
-    fn = energy_distance_u if estimator == "u" else energy_distance
+    fn = energy_distance_u if estimator == "u" else energy_distance_v
     with torch.no_grad():
         return float(fn(_tensor(P), _tensor(Q)))
 
@@ -307,9 +299,9 @@ def _base_dist(P, Q, base_metric: str, max_cells: Optional[int], seed: int,
     with torch.no_grad():
         Pt, Qt = _tensor(P), _tensor(Q)
         if base_metric == "energy":
-            return float((energy_distance_u if estimator == "u" else energy_distance)(Pt, Qt))
+            return float((energy_distance_u if estimator == "u" else energy_distance_v)(Pt, Qt))
         if base_metric == "mmd":
-            return float((mmd_rbf_u if estimator == "u" else mmd_rbf)(Pt, Qt))
+            return float((mmd_rbf_u if estimator == "u" else mmd_rbf_v)(Pt, Qt))
         if base_metric == "sliced_w":
             # Sliced Wasserstein has no U/V pair: it is a quantile-matched estimator and does not
             # average over within-sample pairs at all, so ``estimator`` does not apply to it.
@@ -376,11 +368,10 @@ def score_mean_l2(P, Q, control_P: Optional[np.ndarray] = None,
 
 def score_energy(P, Q, max_cells: int = 500, seed: int = 0,
                  estimator: str = DEFAULT_ESTIMATOR, **_) -> float:
-    """-energy_distance (global K=1 distributional distance).
+    """-energy_distance (global K=1 distributional distance), U by default.
 
-    ``estimator='v'`` (default) is the biased self-pair-including form the manuscript's published
-    numbers were computed with; ``estimator='u'`` is the unbiased form, which is what should be
-    used when the candidate populations do not all have the same number of cells.
+    ``estimator='v'`` is retained only for explicitly labelled legacy reproduction; ``u`` is the
+    manuscript estimator and is appropriate when candidate populations differ in size.
     """
     return -_energy_dist(P, Q, max_cells=max_cells, seed=seed, estimator=estimator)
 

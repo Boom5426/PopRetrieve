@@ -18,7 +18,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "src"))    # package src on path (like conftest.py)
 sys.path.insert(0, str(HERE))                    # so the test modules import
 
-MODULES = ["test_metrics", "test_estimator_bias", "test_interaction_statistic", "test_retrieval_ranking", "test_degenerate_limits", "test_baseline_metrics", "test_baselines_smoke", "test_predictors_smoke", "test_scgen_predictor", "test_pdgrapher_adapter", "test_hir_generator", "test_exp12_partial_observed", "test_exp13_projection", "test_exp16_17"]
+MODULES = ["test_metrics", "test_estimator_bias", "test_interaction_statistic", "test_retrieval_ranking", "test_degenerate_limits", "test_baseline_metrics", "test_baselines_smoke", "test_predictors_smoke", "test_scgen_predictor", "test_pdgrapher_adapter", "test_hir_generator", "test_exp12_partial_observed", "test_exp13_projection", "test_exp16_17", "test_package_contract"]
 
 
 def main():

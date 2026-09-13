@@ -199,5 +199,5 @@ production limit, and measures mathtext at its effective 0.7x size.
 - `fig3_assemble.py` : the inch ledger, 9.5 pt panel letters, and the 6.5 pt floor gate. Owns
   `STEM`, which `build_all.py` checks against its own `STEMS` dict.
 - `fig3_collapse.{pdf,svg,png}` : the composite. `python figures/build_all.py --write` enforces
-  the floor, writes these, and copies the PDF to `manuscript/latex/figures/fig3.pdf`.
+  the floor, writes these, and copies the PDF to `manuscript/figures/fig3.pdf`.
 - `3a.png` ... `3m.png` : standalone previews, not inputs to the composite, not guaranteed fresh.

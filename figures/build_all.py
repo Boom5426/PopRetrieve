@@ -29,7 +29,7 @@ from figstyle import (apply_style, panel_letter, assert_min_fontsize,
 
 FIGS = [1, 2, 3, 4, 5, 6]
 # The single canonical output stem per figure. This is the name that gets copied to
-# manuscript/latex/figures/figN.pdf, so it is the authority; each figN_assemble.py declares the
+# manuscript/figures/figN.pdf, so it is the authority; each figN_assemble.py declares the
 # same string as its own module-level STEM and _check_stem below refuses to build if the two
 # disagree. Two figures used to write themselves under a SECOND stem (fig2_unification,
 # fig2_apparent_gains) from inside build(), so each composite sat on disk twice under two names
@@ -61,14 +61,14 @@ def _check_stem(n, mod):
         raise ValueError(
             f"fig{n}_assemble.STEM is {declared!r} but build_all.STEMS[{n}] is {STEMS[n]!r}; "
             f"one figure, one stem. Fix the assemble, not this dict: STEMS is the name that syncs "
-            f"to manuscript/latex/figures/fig{n}.pdf.")
+            f"to manuscript/figures/fig{n}.pdf.")
 
-# The figure the manuscript COMPILES is a second copy under manuscript/latex/figures/figN.pdf, and
+# The public final figure is a second copy under manuscript/figures/figN.pdf, and
 # nothing kept it in step with the panel sources. Every one of the six had drifted: three were
 # months-old renders of panel code that has since been rewritten, and the three that had been
 # hand-copied went stale again on the next rebuild. A figure deck that is "regenerable from code"
 # but reaches the PDF through a manual copy is not reproducible, so --write does the copy.
-MANUSCRIPT_FIGDIR = HERE.parent / "manuscript" / "latex" / "figures"
+MANUSCRIPT_FIGDIR = HERE.parent / "manuscript" / "figures"
 
 
 def _sync_to_manuscript(n, stem_path):

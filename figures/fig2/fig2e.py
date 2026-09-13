@@ -170,6 +170,25 @@ BASELINE2 = "mean_l2"                # the distribution-specific residue
 MODE = "DART_recommended"
 N_QUERIES = 627                      # the gate-recommended subset; see the module docstring
 
+# Finalized Package 2 formal values for the reader-facing panel. These are copied from the
+# existing cluster-aware audit table; drawing the panel does not recompute the inference.
+FORMAL_N_QUERIES = 584
+FORMAL_N_DRUGS = 141
+FORMAL_STATS_MEAN_COSINE = {
+    "DART_energy": (0.060016, 0.041631, 0.088902),
+    "DART_mmd": (0.066340, 0.044996, 0.090287),
+    "DART_sliced_wasserstein": (0.067636, 0.040340, 0.092432),
+    "DART_coverage_mean": (0.044729, 0.019844, 0.064797),
+    "DART_coverage_worst": (0.030419, 0.016422, 0.053867),
+}
+FORMAL_STATS_MEAN_L2 = {
+    "DART_energy": (0.0, 0.0, 0.0),
+    "DART_mmd": (0.0, 0.0, 0.0),
+    "DART_sliced_wasserstein": (0.0, -0.001333, 0.0),
+    "DART_coverage_mean": (-0.032430, -0.052012, -0.017206),
+    "DART_coverage_worst": (-0.043813, -0.060337, -0.030712),
+}
+
 # (method column, y label, marker). Conceptual order, never value order: the three global
 # distances between two populations first, then the two subpopulation-coverage scores.
 DISTANCES = [("DART_energy", "energy"),
@@ -250,10 +269,8 @@ def paired_gains(baseline: str = BASELINE) -> "dict[str, np.ndarray]":
 
 def draw_2e(ax):
     """Five population-level scores, median regret reduction vs mean cosine with bootstrap CIs."""
-    gains = paired_gains(BASELINE)
-    gains2 = paired_gains(BASELINE2)
-    stats = {m: boot_median_ci(gains[m]) for m, _ in DISTANCES + COVERAGE}
-    stats2 = {m: boot_median_ci(gains2[m]) for m, _ in DISTANCES + COVERAGE}
+    stats = FORMAL_STATS_MEAN_COSINE
+    stats2 = FORMAL_STATS_MEAN_L2
 
     # Against DIRECTION-ONLY mean cosine every interval clears zero, which is what this panel
     # used to say and still says. It is now the secondary series.
@@ -352,9 +369,10 @@ def draw_2e(ax):
     # Scope note in the band reserved for it above the top row, where it crosses no mark. It says
     # n and it says WHICH n, because panel c's 765 is a different and deliberate scope, and it
     # says what the interval is, because an unnamed interval cannot be read.
-    n_drawn = len(next(iter(gains.values())))
+    n_drawn = FORMAL_N_QUERIES
     note = ax.text(1.0, 1.0 - NOTE_TOP_IN / axh,
-                   f"gate-recommended, n = {n_drawn}\ninterval: bootstrap 95% CI",
+                   f"formal n = {FORMAL_N_QUERIES}; {FORMAL_N_DRUGS} drug clusters\n"
+                   "interval: cluster-bootstrap 95% CI",
                    transform=ax.transAxes, ha="right", va="top", fontsize=PT_SMALL, color=SUBTLE,
                    linespacing=NOTE_LINESP)
     # Direct labels for the two series, in the left half of the note band above the top row.

@@ -28,7 +28,7 @@ import pandas as pd
 import torch
 
 from data.load_sciplex3 import load_sciplex3               # noqa: E402
-from retrieval.metrics import energy_distance, coverage_aggregate  # noqa: E402
+from retrieval.metrics import energy_distance_u, coverage_aggregate  # noqa: E402
 from utils.io import results_path, write_csv                # noqa: E402
 from utils.logging import log, section                     # noqa: E402
 
@@ -50,7 +50,7 @@ def prop1_synthetic():
     muP, muT = P.mean(0), T.mean(0)
     dmu = float((muP - muT).norm())
     Pm, Tm = muP.expand(120, G).clone(), muT.expand(90, G).clone()
-    e_point = float(energy_distance(Pm, Tm))
+    e_point = float(energy_distance_u(Pm, Tm))
     # relative tolerance: float32 cdist (mm-mode) leaves a tiny spurious self-distance
     # residual (~1e-2 at G=2000); the point-mass identity holds to float precision.
     rel = 1e-3
@@ -60,7 +60,7 @@ def prop1_synthetic():
     rows = []
     for t in (1.0, 0.5, 0.25, 0.1, 0.01, 0.0):
         Pt, Tt = muP + t * (P - muP), muT + t * (T - muT)
-        e = float(energy_distance(Pt, Tt))
+        e = float(energy_distance_u(Pt, Tt))
         rows.append({"t_spread": t, "energy": e, "two_dmu": 2 * dmu})
     _check("energy -> 2||dmu|| as spread -> 0",
            abs(rows[-1]["energy"] - 2 * dmu) < rel * (2 * dmu + 1e-9),
@@ -75,7 +75,7 @@ def prop2_synthetic():
     section("Prop 2 — global energy == coverage at K=1")
     torch.manual_seed(1)
     P, T = torch.randn(200, G), torch.randn(180, G) + 0.5
-    g = energy_distance(P, T)
+    g = energy_distance_u(P, T)
     rows, ok = [], True
     for beta in (0.0, 0.1, 1.0, 10.0, 1e3):
         c = float(coverage_aggregate(g.reshape(1), beta))
@@ -120,11 +120,11 @@ def real_anchor(processed=None):
     Pk, Pa = pop("K562", d), pop("A549", d)
     Tk, Ta = pop("K562", d), pop("A549", d)
     Pmix, Tmix = torch.cat([Pk, Pa]), torch.cat([Tk, Ta])
-    g = energy_distance(Pmix, Tmix)
+    g = energy_distance_u(Pmix, Tmix)
     c_k1 = float(coverage_aggregate(g.reshape(1), 1.0))
     _check("K=1 coverage == global energy (real mixture)", abs(c_k1 - float(g)) < 1e-6,
            f"{float(g):.4f}")
-    e_k, e_a = energy_distance(Pk, Tk), energy_distance(Pa, Ta)
+    e_k, e_a = energy_distance_u(Pk, Tk), energy_distance_u(Pa, Ta)
     dists = torch.stack([e_k, e_a])
     cmean = float(coverage_aggregate(dists, 1e-9))
     cworst = float(coverage_aggregate(dists, 1e9))

@@ -17,7 +17,7 @@ import os, sys as _sys, os as _os
 import numpy as np, matplotlib.pyplot as plt
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
-from figstyle import INK  # noqa: E402
+from phase2_style import INK  # noqa: E402
 from phase2_style import (POP, MEAN, SHARED, TISSUE, PT_SMALL, PT_TICK, PT_ANNOT,
                         LW_HAIR, TEXT)  # noqa: E402
 from phase2_data import predicted_interaction  # noqa: E402
@@ -54,7 +54,7 @@ def draw_6e(ax):
             # into the observed-value rule, which is the one line in the panel that must stay
             # unobstructed.
             ax.text(v / SCALE * 0.90, y, f"{v / SCALE:.2g}", ha="right", va="center",
-                    fontsize=PT_SMALL, color="white")
+                    fontsize=PT_SMALL, color=TEXT)
     # The interaction that is actually in the data, cross-fitted so it is unbiased.
     ax.axvline(obs / SCALE, ls="--", lw=1.1, color=TISSUE, zorder=4)
     ax.text(obs / SCALE * 1.12, len(ORDER) - 0.42, "observed", ha="left", va="top",
@@ -69,7 +69,7 @@ def draw_6e(ax):
     ax.set_ylim(-0.62, len(ORDER) - 0.30)
     ax.set_xlabel("predicted drug-by-state interaction (units of 0.0001)",
                   fontsize=PT_ANNOT, labelpad=1.5)
-    ax.grid(axis="x", lw=LW_HAIR, color="#EDEDED", zorder=0)
+    ax.grid(axis="x", lw=LW_HAIR, color="#E5E7E7", zorder=0)
     ax.set_axisbelow(True)
     for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)

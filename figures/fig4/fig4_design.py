@@ -45,7 +45,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle  # noqa: E402
 
-from fig4_style import MEAN, POP, PT_ANNOT, PT_SMALL, REPO, SHARED, SUBTLE, TEXT  # noqa: E402
+from fig4_style import (MEAN, MEAN_WASH, POP, POP_WASH, PT_ANNOT, PT_SMALL, REPO,  # noqa: E402
+                        SHARED, SUBTLE, TEXT)
 
 # The axes fig4_assemble.RECTS gives panel a, in inches. Every length below is authored on
 # the printed page and converted here, because a swatch is a physical mark and a fraction
@@ -116,7 +117,7 @@ def draw_design(ax):
     ax.axis("off")
 
     # ---- the one experiment both columns are built from --------------------------------------
-    cx, cy = _box(ax, SRC_BOX, SHARED, fc="#F7F7F7")
+    cx, cy = _box(ax, SRC_BOX, SHARED, fc="#F3F6F9")
     head = "one Perturb-CITE-seq experiment"
     sub = f"RNA and {markers} surface proteins in the same {cells:,} cells"
     ax.text(cx, cy + 0.030, head, ha="center", va="center", fontsize=PT_ANNOT, color=TEXT)
@@ -129,10 +130,9 @@ def draw_design(ax):
     # A SWATCH AND INK, not coloured letters. These two names are the key that binds panel b's
     # blue and orange bars, and they were the key in the only channel the deck forbids for text:
     # figstyle states that a label is INK or META and that colour reaches the reader through
-    # marks. It is not a style preference. Measured against white, COMP_SOFT sits at 2.23:1 and
-    # FOCAL_SOFT at 3.84:1, both under the 4.5:1 small text is normally held to, and these were
-    # set at 6.5 pt. Two rows further down this same panel already does it correctly: "evaluator
-    # as a mean" and "as a distribution" are INK inside a coloured box.
+    # marks. It is not a style preference: the Figure 1 reference reserves its saturated hues for
+    # marks, while explanatory text stays in the dark structural ink. Thus "as a mean" and "as a
+    # distribution" are INK inside a coloured box.
     #
     # The stub plus its name is centred as one unit, so the pair stays centred in the box however
     # the names are edited, and the panel asserts the unit fits before it draws.
@@ -165,13 +165,13 @@ def draw_design(ax):
     _arrow(ax, (0.68, SRC_BOX[1]), (px, PRO_BOX[1] + PRO_BOX[3]))
 
     # ---- the one thing that changes ----------------------------------------------------------
-    lx, ly = _box(ax, EVAL_L, MEAN, fc="#FDF8F2")
+    lx, ly = _box(ax, EVAL_L, MEAN, fc=MEAN_WASH)
     ax.text(lx, ly + 0.048, "evaluator as a mean", ha="center", va="center", fontsize=PT_SMALL,
             color=TEXT)
     ax.text(lx, ly - 0.032, "cosine between\nmean protein deltas", ha="center", va="center",
             fontsize=PT_SMALL, color=SUBTLE, linespacing=1.15)
 
-    ex, ey = _box(ax, EVAL_R, POP, fc="#F2F7FC")
+    ex, ey = _box(ax, EVAL_R, POP, fc=POP_WASH)
     ax.text(ex, ey + 0.048, "as a distribution", ha="center", va="center", fontsize=PT_SMALL,
             color=TEXT)
     ax.text(ex, ey - 0.032, "energy between\nprotein cell clouds", ha="center", va="center",

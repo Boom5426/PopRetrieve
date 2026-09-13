@@ -29,7 +29,7 @@ import numpy as np
 
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
-from figstyle import INK  # noqa: E402
+from phase2_style import INK  # noqa: E402
 from phase2_data import ceiling, oracle_ladder  # noqa: E402
 from phase2_style import (FAINT, LW_HAIR, POP, PT_ANNOT, PT_SMALL,  # noqa: E402
                           PT_TICK, SHARED)
@@ -80,7 +80,7 @@ def draw_5d(ax):
     ax.set_yticklabels(["0", "0.05", "0.10", "0.15"], fontsize=PT_TICK)
     ax.set_ylabel("mean ΔMRR,\npopulation − mean", fontsize=PT_ANNOT, labelpad=1.5,
                   linespacing=1.15)
-    ax.grid(axis="y", lw=LW_HAIR, color="#EDEDED", zorder=0)
+    ax.grid(axis="y", lw=LW_HAIR, color="#E5E7E7", zorder=0)
     ax.set_axisbelow(True)
     for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)

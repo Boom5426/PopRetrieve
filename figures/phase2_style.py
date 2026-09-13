@@ -1,4 +1,4 @@
-"""The frozen visual vocabulary of Figure 5. Every panel imports from here; none redefines.
+"""The frozen visual vocabulary of Figures 5 and 6. Every panel imports from here; none redefines.
 
 WHY THIS FILE EXISTS
 --------------------
@@ -77,27 +77,30 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from figstyle import (COMP_SOFT, FOCAL_SOFT, GREEN_SOFT, GREY, INK,  # noqa: E402
-                      LIGHT_GREY, META, PURPLE_SOFT, RULE, SLATE, TRACK)
+from color_preferences import (BLUE, BLUE_WASH, FAINT as PALETTE_FAINT, GREEN,
+                              GREEN_WASH, GREY, HAIRLINE as PALETTE_HAIRLINE, NAVY,
+                              ORANGE, ORANGE_WASH, PURPLE, PURPLE_WASH, SLATE, TRACK)  # noqa: E402
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))   # figures/ -> repo root
 
 # ---------------------------------------------------------------------------------- colour
-POP = FOCAL_SOFT            # #5185C0  distributional / population-level
-MEAN = COMP_SOFT            # #E99D4E  mean-signature, and the additive limit
-EXT = GREEN_SOFT            # #55966B  handed information the retrieval method does not have
-TISSUE = PURPLE_SOFT        # #8281B9  patient tissue: a material, never a method
-MATERIAL = SLATE            # #4F6D7A  the constructed mixtures, as a reference mark
-SHARED = GREY               # #767676  context, thresholds, reference lines, anchors
-FAINT = LIGHT_GREY          # #D4D4D4  structure visible without being read
+POP = BLUE                  # muted blue: distributional / population-level
+MEAN = ORANGE               # muted terracotta: mean-signature, and the additive limit
+EXT = GREEN                 # sage: handed information the retrieval method does not have
+TISSUE = PURPLE             # dusty lilac: patient tissue: a material, never a method
+MATERIAL = SLATE            # muted slate: the constructed mixtures, as a reference mark
+SHARED = GREY               # neutral grey: context, thresholds, reference lines, anchors
+FAINT = PALETTE_FAINT       # pale grey-blue: structure visible without being read
 BAR_TRACK = TRACK
-HAIRLINE = RULE
-TEXT = INK
-SUBTLE = META
+HAIRLINE = PALETTE_HAIRLINE
+INK = NAVY                  # compatibility alias for panel modules using the old name
+TEXT = NAVY
+SUBTLE = SLATE
 
-POP_WASH = "#E4EDF6"
-MEAN_WASH = "#FBF0E4"
-EXT_WASH = "#E7F0EA"        # the region unsupervised recovery cannot reach, in f
+POP_WASH = BLUE_WASH
+MEAN_WASH = ORANGE_WASH
+EXT_WASH = GREEN_WASH        # the region unsupervised recovery cannot reach, in f
+TISSUE_WASH = PURPLE_WASH
 
 # ---------------------------------------------------------------------------------- type
 PT_LETTER = 9.5             # bold panel letter, drawn by fig5_assemble
@@ -117,11 +120,10 @@ MS_DOT = 24
 # ---------------------------------------------------------------------------------- keys
 # THE ONE WAY THIS DECK NAMES A COLOURED SERIES, and the reason it exists.
 #
-# figstyle's presentation layer states that a label is INK or META and that colour reaches the
-# reader through marks, not letters. It is not a preference. Measured against white, COMP_SOFT
-# sits at 2.23:1, FOCAL_SOFT at 3.84:1, PURPLE_SOFT at 3.63:1 and GREEN_SOFT at 3.52:1, and every
-# one of those is under the 4.5:1 that small text is normally held to. Figures 5 and 6 were
-# setting forty series names and value labels in exactly those colours at 6.5 pt.
+# The Figure 1 reference palette is deliberately carried by marks, not by small text. Series
+# names and value labels therefore stay in the dark NAVY ink, while the saturated family colours
+# remain reserved for the plotted evidence. Figures 5 and 6 set their direct labels this way so a
+# colour cannot be mistaken for a second annotation channel.
 #
 # Two cases, and only the second needs this helper:
 #

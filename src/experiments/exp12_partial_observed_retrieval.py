@@ -71,7 +71,7 @@ def _score(method, P, Q, query_states, ctrl=None, seed=0):
     if method == "mean_cosine":
         return score_mean_cosine(P, Q, control_P=ctrl, control_Q=ctrl)
     if method == "mean_l2":
-        return score_mean_l2(P, Q)
+        return score_mean_l2(P, Q, control_P=ctrl, control_Q=ctrl)
     if method == "cmap_match":
         return score_mean_cosine(P, Q, control_P=ctrl, control_Q=ctrl)
     if method == "cmap_reverse":

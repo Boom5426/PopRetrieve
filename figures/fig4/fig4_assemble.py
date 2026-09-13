@@ -112,7 +112,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..", "ed4")))
 sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..", "ed6")))
 
 # The one canonical output stem for this figure; must equal build_all.STEMS[5], which build_all
-# asserts, because that is the name copied to manuscript/latex/figures/fig4.pdf. The legacy
+# asserts, because that is the name copied to manuscript/figures/fig4.pdf. The legacy
 # fig4_hir_bench.* files in this directory are the SUPERSEDED six-panel HIR-Bench figure, not
 # another copy of this one.
 STEM = "fig4_benchmarks"
@@ -337,7 +337,7 @@ if __name__ == "__main__":
     # fig4_benchmarks.{png,pdf} at the end, i.e. the standalone `python fig4_assemble.py` shipped
     # the figure that build_all.py deploys WITHOUT ever running figstyle.save()'s 5 pt typography
     # gate: the one export path that skipped the check wrote to exactly the stem that is copied to
-    # manuscript/latex/figures/fig4.pdf. Writing only through save() means every path that can
+    # manuscript/figures/fig4.pdf. Writing only through save() means every path that can
     # produce that file also has to pass the floor.
     from figstyle import apply_style, panel_letter, save
     save(build(apply_style, panel_letter), os.path.join(HERE, STEM))

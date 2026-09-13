@@ -50,8 +50,12 @@ from scipy import stats
 # whole deck" untrue: a recolour meant editing 43 files and missing one was silent.
 import sys as _sys, os as _os
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
-from figstyle import FOCAL_SOFT, COMP_SOFT, GREY, INK  # noqa: E402
-GREEN_SOFT = "#55966B"
+from color_preferences import BLUE, GREEN, GREY, NAVY, ORANGE  # noqa: E402
+
+FOCAL_SOFT = BLUE
+COMP_SOFT = ORANGE
+GREEN_SOFT = GREEN
+INK = NAVY
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SRC = f"{REPO}/results/zhao_gbm"
 

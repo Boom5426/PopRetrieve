@@ -17,7 +17,7 @@ import numpy as np
 import torch
 
 from retrieval.metrics import (
-    energy_distance, energy_distance_u, mmd_rbf, mmd_rbf_u, sliced_wasserstein,
+    energy_distance_u, energy_distance_v, mmd_rbf_u, mmd_rbf_v, sliced_wasserstein,
 )
 
 G = 32
@@ -45,7 +45,7 @@ def test_null_u_is_centred_on_zero_and_v_is_not():
         for rep in range(12):
             P, Q = _draw(n, seed=100 * rep + n), _draw(n, seed=100 * rep + n + 7)
             vals_u.append(float(energy_distance_u(P, Q)))
-            vals_v.append(float(energy_distance(P, Q)))
+            vals_v.append(float(energy_distance_v(P, Q)))
         mu_u, mu_v = float(np.mean(vals_u)), float(np.mean(vals_v))
         se_u = float(np.std(vals_u, ddof=1)) / np.sqrt(len(vals_u))
         assert abs(mu_u) < 4 * se_u, f"U not centred on zero at n={n}: {mu_u:.4g} +- {se_u:.4g}"
@@ -56,7 +56,7 @@ def test_null_v_bias_shrinks_like_one_over_n():
     """The V form's null value must fall roughly as 1/n; the U form's must not trend at all."""
     means_v, means_u = [], []
     for n in SIZES:
-        v = [float(energy_distance(_draw(n, seed=31 * r + n), _draw(n, seed=31 * r + n + 3)))
+        v = [float(energy_distance_v(_draw(n, seed=31 * r + n), _draw(n, seed=31 * r + n + 3)))
              for r in range(12)]
         u = [float(energy_distance_u(_draw(n, seed=31 * r + n), _draw(n, seed=31 * r + n + 3)))
              for r in range(12)]
@@ -70,7 +70,7 @@ def test_null_v_bias_shrinks_like_one_over_n():
 def test_mmd_shows_the_same_pattern():
     """The MMD in this repository is the V form and carries the same 1/n bias."""
     for n in (25, 200):
-        v = [float(mmd_rbf(_draw(n, seed=17 * r + n), _draw(n, seed=17 * r + n + 5)))
+        v = [float(mmd_rbf_v(_draw(n, seed=17 * r + n), _draw(n, seed=17 * r + n + 5)))
              for r in range(10)]
         u = [float(mmd_rbf_u(_draw(n, seed=17 * r + n), _draw(n, seed=17 * r + n + 5)))
              for r in range(10)]
@@ -90,7 +90,7 @@ def test_mean_shift_is_ranked_identically_at_equal_sizes():
     for i, d in enumerate(deltas):
         P = _draw(100, seed=200 + i) + d
         du.append(float(energy_distance_u(P, Q)))
-        dv.append(float(energy_distance(P, Q)))
+        dv.append(float(energy_distance_v(P, Q)))
     assert du == sorted(du), f"U not monotone in the mean shift: {du}"
     assert dv == sorted(dv), f"V not monotone in the mean shift: {dv}"
     offs = np.array(dv) - np.array(du)
@@ -123,8 +123,8 @@ def test_unequal_sizes_do_not_bias_the_u_form():
     for rep in range(16):
         small_u.append(float(energy_distance_u(_draw(50, seed=300 + rep), Q)))
         big_u.append(float(energy_distance_u(_draw(200, seed=400 + rep), Q)))
-        small_v.append(float(energy_distance(_draw(50, seed=300 + rep), Q)))
-        big_v.append(float(energy_distance(_draw(200, seed=400 + rep), Q)))
+        small_v.append(float(energy_distance_v(_draw(50, seed=300 + rep), Q)))
+        big_v.append(float(energy_distance_v(_draw(200, seed=400 + rep), Q)))
     gap_u = float(np.mean(small_u) - np.mean(big_u))
     gap_v = float(np.mean(small_v) - np.mean(big_v))
     se = float(np.sqrt(np.var(small_u, ddof=1) / 16 + np.var(big_u, ddof=1) / 16))
@@ -147,7 +147,7 @@ def test_unequal_sizes_can_reorder_two_candidates_under_v():
         wrong = _draw(200, seed=600 + rep) + 0.06         # shifted, many cells
         if float(energy_distance_u(right, Q)) > float(energy_distance_u(wrong, Q)):
             flips_u += 1
-        if float(energy_distance(right, Q)) > float(energy_distance(wrong, Q)):
+        if float(energy_distance_v(right, Q)) > float(energy_distance_v(wrong, Q)):
             flips_v += 1
     assert flips_v > flips_u, (f"V should misrank the small correct candidate more often than U: "
                                f"V {flips_v}/20 vs U {flips_u}/20")

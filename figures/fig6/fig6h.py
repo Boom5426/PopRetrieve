@@ -22,7 +22,7 @@ import numpy as np, matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
-from figstyle import INK  # noqa: E402
+from phase2_style import INK  # noqa: E402
 from phase2_style import POP, MEAN, SHARED, PT_SMALL, PT_ANNOT, TEXT  # noqa: E402
 from phase2_data import oracle_ladder, oracle_flips, gain_ladder  # noqa: E402
 
@@ -76,7 +76,7 @@ def draw_6h(ax):
 
     ax.text(X0 + XW / 2, 0.465, "different units, no width drawn",
             ha="center", va="center", fontsize=PT_SMALL, color=SHARED)
-    ax.plot([0.03, 0.99], [0.535, 0.535], lw=0.7, color="#DDDDDD", zorder=1)
+    ax.plot([0.03, 0.99], [0.535, 0.535], lw=0.7, color="#E5E7E7", zorder=1)
 
 
 if __name__ == "__main__":

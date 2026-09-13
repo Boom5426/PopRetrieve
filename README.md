@@ -1,228 +1,134 @@
+<div align="center">
+
 # PopRetrieve
 
-**Objective-aligned evaluation inflates distributional gains in single-cell drug retrieval.**
+### Objective-aligned evaluation inflates distributional gains in single-cell drug retrieval
 
-<p align="center">
-  <img alt="tests" src="https://img.shields.io/badge/tests-99%20passed-brightgreen">
-  <img alt="reproducibility" src="https://img.shields.io/badge/consistency%20recheck-35%2F35-brightgreen">
-  <img alt="corrections" src="https://img.shields.io/badge/corrections-CORRECTIONS.md-orange">
-  <img alt="python" src="https://img.shields.io/badge/python-3.11-blue">
-  <img alt="license" src="https://img.shields.io/badge/license-MIT-blue">
-  <img alt="status" src="https://img.shields.io/badge/status-research%20code-orange">
+<p>
+  <a href="https://github.com/Boom5426/PopRetrieve/actions/workflows/tests.yml"><img alt="Tests" src="https://github.com/Boom5426/PopRetrieve/actions/workflows/tests.yml/badge.svg"></a>
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white">
+  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2ea44f"></a>
+  <a href="manuscript/PopRetrieve_manuscript.pdf"><img alt="Manuscript PDF" src="https://img.shields.io/badge/manuscript-PDF-B31B1B?logo=adobeacrobatreader&logoColor=white"></a>
 </p>
 
-Code, data recipes and manuscript sources for a study of **how distribution-aware single-cell drug
-retrieval is evaluated**. Given a query cell population and a library of candidate response
-populations, a distributional score picks `argmin_d D(P_d, Q)` in distribution space rather than
-matching mean signatures. This repository holds one such family of scores fixed, holds the queries
-and the candidate rankings fixed, and **changes only the criterion that grades them**.
+<p>
+  <strong>Audit whether single-cell population information improves drug retrieval for the decision that the evaluation is meant to support.</strong>
+</p>
 
-The result is the contribution. It is not a better drug-ranking method: the retrieval scores are
-the *instrument*.
+</div>
 
-| when the rankings are graded by | the distributional score |
-|---|---|
-| its own distributional objective | **far ahead**: Hit@1 0.837 vs 0.388 for the mean-signature incumbent |
-| mechanism-of-action recovery | **gone**: MoA-nDCG gain −0.037, and 41% of queries get *worse* |
-| an external functional oracle (GDSC) | **wins**, ρ +0.276 vs +0.083, but a scalar comparing no distributions reaches +0.232 |
-| the same proteins, same cells, scored as a *mean* | **loses**, +0.146 vs +0.242 |
+<p align="center">
+  <img src="assets/fig1_overview.png" alt="PopRetrieve overview figure" width="920">
+</p>
 
-Two external, blind, independent criteria built from identical material hand victory to opposite
-methods, purely by their own statistical form.
+<p align="center"><em>Figure 1. PopRetrieve separates direction, response magnitude and full population structure before asking which information changes a retrieval decision. <a href="manuscript/figures/fig1.pdf">Open the vector PDF.</a></em></p>
 
-- **Full results, with the counterexamples and the retraction notes:** [`docs/FINDINGS.md`](docs/FINDINGS.md)
-- **Every number this project has revised or withdrawn:** [`CORRECTIONS.md`](CORRECTIONS.md)
-- **The paper:** `manuscript/latex/PopRetrieve_manuscript.tex`
+> The same retrieval ranking can look far ahead under an objective-aligned distributional score and disappear under a more independent judge. PopRetrieve makes that dependence measurable.
 
----
+## What is PopRetrieve?
 
-## Installation
+PopRetrieve is a research codebase for population-to-population drug retrieval and for auditing how that retrieval is evaluated. Given a query cell population (Q) and candidate response populations ({P_d}), a population score ranks candidates using information beyond a single mean signature. The repository compares those rankings with mean-cosine, magnitude-aware mean-L2, energy, MMD, sliced-Wasserstein and subpopulation-coverage scores.
 
-```bash
-git clone https://github.com/Boom5426/PopRetrieve.git && cd PopRetrieve
-python -m venv .venv && source .venv/bin/activate      # Python 3.11
-pip install -r requirements.txt
-```
+The study is an evaluation framework, not a validated therapeutic recommender. It keeps the query construction and candidate rankings fixed while changing the criterion used to grade them. The release includes the numerical kernels, baseline predictors, synthetic HIR-Bench, analysis scripts, checked result tables, final manuscript PDFs and the latest figure files.
 
-CUDA is optional; it accelerates the energy distance and nothing else.
+### Main findings
 
-Verify the install without any data:
+| Question | Release-level answer |
+| --- | --- |
+| Does a population score improve response matching when candidate responses are observed? | Yes, but most of the gain over direction-only matching is recovered by a mean-based magnitude control. |
+| Does that gain transfer to mechanism recovery and external functional criteria? | It weakens, disappears or changes direction as the judge becomes more independent. |
+| Does forward prediction preserve the advantage? | Not for the additive predictors tested here; the oracle advantage can reverse after prediction. |
+| Is this a therapeutic recommendation system? | No. The distributional retrieval scores are the instrument used to audit objective–utility mismatch. |
+
+## Quick start
+
+The public package and synthetic benchmark do not require the large single-cell tensors.
 
 ```bash
-python tests/run_tests.py        # 99 tests, no pytest required; `pytest tests/` also works
+git clone https://github.com/Boom5426/PopRetrieve.git
+cd PopRetrieve
+
+python -m venv .venv
+source .venv/bin/activate                 # Windows: .venv\Scripts\activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+
+# 116 repository tests
+pytest -q
+
+# Small deterministic population-retrieval example
+python examples/run_retrieval_demo.py
 ```
+
+The core public namespace is `popretrieve.metrics`; the lower-level modules remain available under `retrieval`, `baselines`, `benchmarks`, `data` and `utils` for compatibility with the experiment scripts.
+
+```python
+from popretrieve.metrics import score_energy, score_mean_cosine
+
+energy_score = score_energy(candidate_cells, query_cells, max_cells=500, seed=7)
+mean_score = score_mean_cosine(candidate_cells, query_cells)
+```
+
+All retrieval scorers return similarities, so larger values rank candidates higher. The energy and MMD wrappers use the unbiased U-statistic by default. Set `POPRETRIEVE_ESTIMATOR=v` only when reproducing the explicitly labelled legacy V-statistic outputs.
 
 ## Data
 
-The processed single-cell tensors are large and **not tracked in git**. Put them under
-`data/processed/`, or point `DIDR_DATA_ROOT` at wherever they already live:
+Large processed tensors are not tracked in Git. Put them under `data/` or point `DIDR_DATA_ROOT` to an existing data directory:
 
 ```bash
-export DIDR_DATA_ROOT=/abs/path/to/data
+export DIDR_DATA_ROOT=/absolute/path/to/data
 ```
 
-```
-data/
-  processed/
-    sciplex3_all.pt      # SciPlex3: 276k cells x 2000 HVG, 188 drugs x 3 lines
-    cd34_all.pt          # CD34+ HSPCs: 34k cells, 36 drugs, 4 natural lineages
-    frangieh_hvg.npz     # Frangieh Perturb-CITE-seq: 218k cells, 248 KOs
-  annotation/            # drug_order.json, drug_morgan_ecfp4.npy, moa_mask.npy, ...
-```
+The expected inputs and provenance are documented in [`DATA.md`](DATA.md). They include SciPlex3, CD34+ HSPCs, Frangieh Perturb-CITE-seq, ZhaoSims2021 glioblastoma and the optional Tahoe-100M plate. GDSC dose-response workbooks are external inputs and are deliberately not redistributed.
 
-[`DATA.md`](DATA.md) gives the source, accession and preprocessing command for each file. The test
-suite runs without them; the experiments do not.
+The tests and `examples/run_retrieval_demo.py` run without these datasets. The data-dependent experiments do not.
 
-## Quickstart
+## Reproduce the study
 
-Every long-running script honours `QUICK=1`, which cuts the seed counts and grid resolution. Use it
-to confirm the pipeline works end to end before committing to a full run:
+Run the commands from a clean checkout or write outputs to a scratch copy of `results/`; long-running scripts may regenerate result files.
+
+| What | Command | Main output |
+| --- | --- | --- |
+| Core retrieval experiments | `bash scripts/run_all_core.sh` | `results/all_existing_results_recomputed.csv` |
+| Signature baselines and predict-then-rank | `bash scripts/run_all_baselines.sh` | `results/exp08_signature_baselines/`, `results/exp09_predict_then_rank/` |
+| Synthetic HIR-Bench | `bash scripts/run_hir_benchmark.sh` | `results/exp11_hir_benchmark/` |
+| Phase-II gate and transition analyses | `bash scripts/run_exp16_17.sh` | `results/exp16_17_verdict.md`, `results/phase2_transition/` |
+| Four-probe diagnostic | `PYTHONPATH=src python analysis/diagnostics/protocol_validation.py` | `results/upgrade/protocol_validation.json` |
+
+`QUICK=1` is supported by the long-running drivers as a smoke test. Quick outputs are not paper numbers and must not replace the checked result tables.
+
+The repository's detailed interpretation is in [`docs/FINDINGS.md`](docs/FINDINGS.md). [`CORRECTIONS.md`](CORRECTIONS.md) records revised and retracted numbers; read it before quoting any older analysis note.
+
+## Figures and manuscript
+
+The final manuscript and Supplementary Information are available as [`manuscript/PopRetrieve_manuscript.pdf`](manuscript/PopRetrieve_manuscript.pdf) and [`manuscript/PopRetrieve_SI.pdf`](manuscript/PopRetrieve_SI.pdf). The latest final figure composites and panel exports are in [`manuscript/figures/`](manuscript/figures/).
+
+Figure-generation sources are in [`figures/`](figures/). To rebuild the six main figure PDFs and synchronise them to the public manuscript-figure directory:
 
 ```bash
-QUICK=1 bash scripts/run_all_core.sh          # core retrieval experiments, reduced seeds
-QUICK=1 bash scripts/run_hir_benchmark.sh     # synthetic benchmark, ~40 s
+python figures/build_all.py                 # typography/build checks
+python figures/build_all.py --write         # export and update manuscript/figures/figN.pdf
+python figures/check_overlaps.py 1          # optional panel-overlap check
 ```
 
-`QUICK` results are **not** the paper's numbers and write to the same directories, so treat a quick
-pass as a smoke test only. `run_hir_benchmark.sh` refuses to overwrite the tracked full results
-unless you pass `ALLOW_QUICK_OVERWRITE=1`.
+The figure sources read checked result tables and per-panel source data; missing inputs raise instead of being replaced by defaults. The large atlas inputs remain external.
 
-Override the interpreter anywhere with `PY=/path/to/python`.
+## Repository map
 
-## Reproducing the paper
+| Path | Contents |
+| --- | --- |
+| `src/` | Installable retrieval kernels, rankers, data abstractions, predictors, benchmark generators and experiment drivers |
+| `analysis/` | Claim-specific analyses, diagnostics, natural-tissue checks and estimator audits |
+| `results/` | Reproducibility tables and checked summaries; heavy raw/intermediate dumps are excluded |
+| `figures/` | Figure builders, typography gates and per-panel source data |
+| `manuscript/` | Final manuscript/SI PDFs and latest final figure exports |
+| `oracle/` | Read-only provenance snapshot of the original GID-Flow implementation |
+| `scripts/` | Reproduction entry points |
+| `tests/` | Repository and numerical-contract tests |
+| `docs/` | Findings and Phase-II protocol/audit records |
 
-Run these in order. Each writes to `results/` and prints where.
+See [`PROJECT_STRUCTURE.md`](PROJECT_STRUCTURE.md) for the release topology and the boundary between public artifacts and external inputs.
 
-| # | what it reproduces | command | writes |
-|---|---|---|---|
-| 1 | core retrieval (exp01–07) and the consistency re-check | `bash scripts/run_all_core.sh` | `results/all_existing_results_recomputed.csv` |
-| 2 | signature baselines, the Hit@1 table, predict-then-rank (exp08–11) | `bash scripts/run_all_baselines.sh` | `results/baseline_comparison_master.csv` |
-| 3 | HIR-Bench, the synthetic benchmark (~60 min full) | `bash scripts/run_hir_benchmark.sh` | `results/exp11_hir_benchmark/` |
-| 4 | gate diagnosis and true-divergence stratification (exp12, 16, 17) | `bash scripts/run_exp16_17.sh` | `results/exp16_17_verdict.md` |
+## Citation and license
 
-Then the analyses that carry the individual claims:
-
-| what it reproduces | command | writes |
-|---|---|---|
-| the external GDSC functional oracle, both constructions | `python analysis/class_c/class_c_functional_oracle.py` | `results/upgrade/class_c_functional_oracle.csv` |
-| the oracle-shape reversal (the sharpest result) | `python analysis/class_c/oracle_shape_test.py` | `results/upgrade/oracle_shape_test.{csv,json}` |
-| the surface-protein oracle | `python analysis/class_c/class_c_protein_oracle.py` | `results/upgrade/` |
-| the two conditions in patient glioblastoma | `python analysis/natural/zhao_two_gates.py` | `results/zhao_gbm/zhao_two_gates.json` |
-| the same premise on disjoint compartments | `python analysis/natural/zhao_premise_disjoint.py` | `results/zhao_gbm/` |
-| every Tahoe-100M number quoted in the paper | `python analysis/tahoe_pilot/tahoe_summary_numbers.py` | `results/tahoe_pilot/manuscript_numbers.json` |
-| the four-probe diagnostic verdicts | `PYTHONPATH=src python analysis/diagnostics/protocol_validation.py` | `results/upgrade/protocol_validation.json` |
-
-Note what step 1's consistency re-check is and is not: `recompute_all.py` re-reads the cached
-experiment CSVs against the constants in `src/experiments/common.py` and confirms 35/35 headline
-numbers. It **runs no experiment**. The experiments are the four scripts above it.
-
-### Figures and the manuscript
-
-```bash
-bash scripts/run_all_figures.sh                 # Figs 1-6 + Extended Data 1-7 -> manuscript/latex/figures/
-cd manuscript/latex && make && make si          # both PDFs
-```
-
-Every headline number in the manuscript is quoted through a LaTeX macro whose value is produced by
-one of the scripts above, so a doubted number is rechecked by re-running that script rather than by
-trusting the text.
-
-## Using the diagnostic on your own method
-
-The reusable part of this repository is
-[`analysis/diagnostics/dart_diagnostic.py`](analysis/diagnostics/dart_diagnostic.py): four probes
-that separate a **real** null result from an **implementation artifact**. It depends only on numpy,
-scipy and scikit-learn, and operates on cell x gene matrices already in memory.
-
-```python
-from dart_diagnostic import (
-    translation_invariance_probe,   # is raw-vs-delta an unfair comparison?
-    subsampling_power_probe,        # is the null just low power at this cell budget?
-    metric_blindspot_probe,         # does the metric measure what it claims?
-    magnitude_confound_probe,       # is the positive result just response magnitude?
-)
-```
-
-Each returns a verdict dict. `protocol_validation.py` runs all four on this project's data and
-checks they reproduce the reported verdicts, which doubles as a worked example.
-
-If you take nothing else from here, take the four controls in
-[`docs/FINDINGS.md`](docs/FINDINGS.md#the-four-controls-if-you-read-nothing-else). Each of them
-caught an error of ours.
-
-## Repository layout
-
-| path | what is in it |
-|---|---|
-| `src/` | retrieval scores, baselines, data loaders, the HIR-Bench generator, the experiment drivers |
-| `oracle/` | the mixture-construction and evaluation scripts behind the controlled experiments |
-| `analysis/` | the analyses that carry the paper's claims, one directory per question |
-| `results/` | per-experiment summary tables; the large per-query dumps are gitignored |
-| `figures/` | one directory per figure, each panel a standalone script, plus `build_all.py` |
-| `manuscript/latex/` | manuscript and Supplementary Information sources, and their Makefile |
-| `scripts/` | the run-everything shell entry points used above |
-| `tests/` | 99 tests, including the ones that pin the algebraic claims |
-| `docs/FINDINGS.md` | the detailed results |
-| `CORRECTIONS.md` | every number this project has retracted or revised, and why |
-
-Inside `analysis/`, one directory per question:
-
-| directory | question it answers |
-|---|---|
-| `class_c/` | does the gain survive an external functional oracle, and is it distributional? |
-| `natural/` | do the conditions hold in patient tissue rather than in mixtures we built? |
-| `tahoe_pilot/` | do they hold at scale in unconstructed, non-tissue material? |
-| `identifiability/` | is the subpopulation structure recoverable at all? |
-| `predictors/` | do generated candidate populations carry differential response? |
-| `hir_bench/` | is retrieval failure predictable, and from features a method can actually see? |
-| `audit/` | the field-level evaluation audit behind Supplementary Table 2 |
-| `diagnostics/` | the four-probe protocol as a runnable check |
-
-## Reproducibility notes
-
-- **`CORRECTIONS.md` is part of the deliverable**, not an appendix. Forty-five entries covering
-  thirty-nine distinct corrections, each recording what a number was, what it is now, and why it
-  changed. Several retract mechanisms the earlier drafts asserted.
-- **Algebraic claims are pinned by tests, not by runs.** An additive predictor induces exactly zero
-  response divergence; that is asserted to `1.000000` in the test suite rather than measured.
-- **Numbers quoted in more than one place are LaTeX macros defined once**, so the text, a figure
-  caption and the Methods cannot drift apart.
-- **Figures rebuild from committed code.** `figures/build_all.py` fails the build if any rendered
-  text is authored below the 5 pt floor. That gate reads nominal point sizes and knows nothing
-  about the manuscript's column width, so a figure authored wider than the text block is scaled
-  down by LaTeX and can print below 5 pt while the gate still reports CLEAN. The five main figures
-  are authored at the printed width, so their scale factor is 1.00. There are no Extended Data
-  figures: the deck was consolidated from seven to three on 2026-08-29 and retired on 2026-08-30,
-  when all 21 surviving panels moved into the five main figures, which now run 8 to 14 panels
-  each. `figures/edfigs/ed_panels.py` records where every one of them went.
-- **A missing input raises**, rather than being replaced by a plausible default. That rule exists
-  because it was once broken; see `CORRECTIONS.md`.
-
-## A note on the name
-
-This project was called **DART** while it was still written as a method paper, and is now
-**PopRetrieve**, which is not an acronym. The rename follows a repositioning: what is released is
-an evaluation framework, not a proposed drug-ranking method.
-
-**Identifiers inside `results/` and `src/` still carry the `DART_` prefix, and that is deliberate.**
-Method keys such as `DART_energy` and `DART_coverage_worst`, and the gate's regime label `no_DART`,
-are the keys under which every published number was computed and stored. Renaming them would mean
-regenerating every results table and breaking the correspondence between the numbers in the paper
-and the files you can check them against. The historical drafts under `manuscript/_archive/` are
-left alone for the same reason.
-
-## Contributing
-
-See [`CONTRIBUTING.md`](CONTRIBUTING.md). In short: the test suite must pass, every reported number
-must stay reproducible, and negative results stay in view.
-
-## Citing
-
-The manuscript is in preparation. Until it is posted, cite this repository and the commit you used
-(see [`CITATION.cff`](CITATION.cff)). The dataset citations are in the manuscript's Data
-availability section and in [`DATA.md`](DATA.md).
-
-## License
-
-MIT, see [`LICENSE`](LICENSE). The datasets are covered by their own licences and are not
-redistributed here.
+Please cite the repository and the commit used; metadata is in [`CITATION.cff`](CITATION.cff). PopRetrieve is released under the MIT License. Datasets and external workbooks retain their own licenses and are not redistributed here.

@@ -163,7 +163,7 @@ are carried in prose.
   inches, not gridspec ratios. It owns `TITLES`, `ROW_LABELS` and the module-level `STEM`.
 - `fig4_benchmarks.{pdf,svg,png}` : the composite, and the only stem this figure is written under.
   `python figures/build_all.py --write` enforces the 5 pt floor, writes these, and copies the PDF to
-  `manuscript/latex/figures/fig4.pdf`, which is the file the manuscript compiles.
+  `manuscript/figures/fig4.pdf`, which is the file the manuscript compiles.
 - Superseded artefacts kept in this directory, none of them an input to the current figure:
   `fig4_hir_bench.{png,pdf}` and `fig4_hir_bench_partial.png` (the old six-panel composite),
   `_fig5_partial.png`, `fig4f_roc_curve.csv` and `fig4f_roc_summary.json` (source data for the

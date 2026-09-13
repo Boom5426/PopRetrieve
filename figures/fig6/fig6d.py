@@ -30,7 +30,7 @@ import numpy as np
 
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
-from figstyle import INK  # noqa: E402
+from phase2_style import INK  # noqa: E402
 from phase2_data import predicted_reference_deltas  # noqa: E402
 from phase2_style import (FAINT, LW_HAIR, MATERIAL, POP, PT_ANNOT,  # noqa: E402
                           PT_SMALL, PT_TICK, SHARED)
@@ -75,7 +75,7 @@ def draw_6d(ax):
     ax.set_xticks([-0.06, -0.03, 0.0])
     ax.set_xticklabels(["−0.06", "−0.03", "0"], fontsize=PT_TICK)
     ax.set_xlabel("ΔMRR under the predictor", fontsize=PT_ANNOT, labelpad=1.5)
-    ax.grid(axis="x", lw=LW_HAIR, color="#EDEDED", zorder=0)
+    ax.grid(axis="x", lw=LW_HAIR, color="#E5E7E7", zorder=0)
     ax.set_axisbelow(True)
     for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)

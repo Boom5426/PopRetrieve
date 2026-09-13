@@ -103,7 +103,7 @@ def draw_tissue(ax):
     ax.set_ylim(0, 1)
     ax.axis("off")
 
-    tx, ty = _box(ax, TUMOUR_BOX, SHARED, fc="#F7F7F7")
+    tx, ty = _box(ax, TUMOUR_BOX, SHARED, fc="#F3F6F9")
     ax.text(tx, ty + 0.058, "glioblastoma tissue", ha="center", va="center", fontsize=PT_ANNOT,
             color=TEXT)
     ax.text(tx, ty - 0.062, f"{n_patients} patients\ndrug and matched control", ha="center",

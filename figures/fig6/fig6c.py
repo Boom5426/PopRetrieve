@@ -13,7 +13,7 @@ import os, sys as _sys, os as _os
 import numpy as np, matplotlib.pyplot as plt
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
-from figstyle import INK  # noqa: E402
+from phase2_style import INK  # noqa: E402
 from phase2_style import (POP, MEAN, SHARED, PT_SMALL, PT_TICK, PT_ANNOT,  # noqa: E402
                           LW_HAIR, TEXT, key_label)
 from phase2_data import gain_ladder  # noqa: E402
@@ -36,7 +36,7 @@ def draw_6c(ax):
                 fontsize=PT_SMALL, color=INK)
     ax.axvline(0, ls="--", lw=1.0, color=SHARED, zorder=1)
     # The oracle is not a predictor and must not read as one more row in the same series.
-    ax.axhline(ys[0] - 0.5, lw=LW_HAIR, color="#C9C9C9", zorder=1)
+    ax.axhline(ys[0] - 0.5, lw=LW_HAIR, color="#D2D7E0", zorder=1)
 
     ax.set_yticks(ys)
     ax.set_yticklabels(d.label, fontsize=PT_TICK, linespacing=1.12)
@@ -46,7 +46,7 @@ def draw_6c(ax):
     ax.set_xticklabels(["\u22120.4", "\u22120.3", "\u22120.2", "\u22120.1", "0", "0.1"],
                        fontsize=PT_TICK)
     ax.set_xlabel("ΔMRR, population route minus mean route", fontsize=PT_ANNOT, labelpad=1.5)
-    ax.grid(axis="x", lw=LW_HAIR, color="#EDEDED", zorder=0)
+    ax.grid(axis="x", lw=LW_HAIR, color="#E5E7E7", zorder=0)
     ax.set_axisbelow(True)
     for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)

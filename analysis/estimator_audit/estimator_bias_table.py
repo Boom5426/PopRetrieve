@@ -40,7 +40,7 @@ import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 from retrieval.metrics import (                                      # noqa: E402
-    energy_distance, energy_distance_u, mmd_rbf, mmd_rbf_u, sliced_wasserstein,
+    energy_distance_u, energy_distance_v, mmd_rbf_u, mmd_rbf_v, sliced_wasserstein,
 )
 
 SIZES = (25, 50, 100, 200, 400)
@@ -61,9 +61,9 @@ def draw(n: int, g: int, gen: torch.Generator, shift: float = 0.0) -> torch.Tens
 def scorers(P, Q) -> dict[str, float]:
     return {
         "energy_u": float(energy_distance_u(P, Q)),
-        "energy_v": float(energy_distance(P, Q)),
+        "energy_v": float(energy_distance_v(P, Q)),
         "mmd_u": float(mmd_rbf_u(P, Q)),
-        "mmd_v": float(mmd_rbf(P, Q)),
+        "mmd_v": float(mmd_rbf_v(P, Q)),
         "sliced_wasserstein": float(sliced_wasserstein(P, Q)),
     }
 

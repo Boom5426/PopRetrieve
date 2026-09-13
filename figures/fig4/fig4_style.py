@@ -46,24 +46,29 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from figstyle import (COMP_SOFT, FOCAL_SOFT, GREEN_SOFT, GREY, INK,  # noqa: E402
-                      LIGHT_GREY, META, RULE, TRACK)
+from color_preferences import (BLUE, BLUE_WASH, FAINT as PALETTE_FAINT, GREEN,
+                              GREY, GREEN_WASH as PALETTE_GREEN_WASH,
+                              HAIRLINE, NAVY, ORANGE, ORANGE_WASH,
+                              PURPLE as PALETTE_PURPLE, PURPLE_WASH as PALETTE_PURPLE_WASH,
+                              SLATE, TRACK)  # noqa: E402
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 # ---------------------------------------------------------------------------------- colour
-POP = FOCAL_SOFT            # #5185C0  population-level, and the observable / honest arm
-MEAN = COMP_SOFT            # #E99D4E  mean-signature, and the evaluator-derived / circular arm
-EXT = GREEN_SOFT            # #55966B  external readout, or a control that performs no retrieval
-SHARED = GREY               # #767676  context, thresholds, reference lines
-FAINT = LIGHT_GREY          # #D4D4D4  structure visible without being read
+POP = BLUE                  # muted blue: population-level, and the observable / honest arm
+MEAN = ORANGE               # muted terracotta: mean-signature / evaluator-derived arm
+EXT = GREEN                 # sage: external readout, or a control that performs no retrieval
+PURPLE = PALETTE_PURPLE     # dusty lilac: alternate material arm used by the natural comparison
+SHARED = GREY               # neutral grey: context, thresholds, reference lines
+FAINT = PALETTE_FAINT       # pale grey-blue: structure visible without being read
 BAR_TRACK = TRACK
-HAIRLINE = RULE
-TEXT = INK
-SUBTLE = META
+TEXT = NAVY
+SUBTLE = SLATE
 
-POP_WASH = "#E4EDF6"
-MEAN_WASH = "#FBF0E4"
+POP_WASH = BLUE_WASH
+MEAN_WASH = ORANGE_WASH
+PURPLE_WASH = PALETTE_PURPLE_WASH
+GREEN_WASH = PALETTE_GREEN_WASH
 
 # ---------------------------------------------------------------------------------- type
 PT_LETTER = 9.5             # bold panel letter, drawn by fig4_assemble

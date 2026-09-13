@@ -88,18 +88,17 @@ import matplotlib.pyplot as plt
 # Palette and type ladder come from the house-style modules; do NOT re-declare a hex value or a
 # point size here. Every panel file used to carry its own copy of the palette, which made
 # figstyle's "one edit here recolours the whole deck" untrue: a recolour meant editing 43 files
-# and missing one was silent. PURPLE_SOFT is the house colour for "a second experimental arm
-# carrying no other semantics" and is imported for the same reason, not spelled out.
+# and missing one was silent. PURPLE is the alternate material/arm colour from the Figure 1
+# reference palette and is imported for the same reason, not spelled out.
 _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(_HERE))
 sys.path.insert(0, _HERE)
-from figstyle import PURPLE_SOFT  # noqa: E402
-from fig4_style import POP, PT_ANNOT, PT_SMALL, SHARED, TEXT  # noqa: E402
+from fig4_style import POP, PURPLE, PT_ANNOT, PT_SMALL, SHARED, TEXT  # noqa: E402
 
 # fig4_style freezes green for an external readout or a control that performs no retrieval (Fig. 3h
 # and Fig. 5e,f), and in this panel colour encodes the experimental ARM, with both bars of an arm
 # (unsupervised AND supervised ceiling) sharing it. A green arm here would therefore mean the
-# opposite of green next door, so the natural arm takes PURPLE_SOFT, which carries no semantic load.
+# opposite of green next door, so the natural arm takes PURPLE, which carries no semantic load.
 REPO = os.path.abspath(os.path.join(_HERE, "..", ".."))
 SRC = f"{REPO}/results/zhao_gbm/gate2_drug_response.json"
 UNC_SRC = f"{REPO}/results/zhao_gbm/gate2_uncertainty.json"
@@ -108,7 +107,7 @@ UNC_SRC = f"{REPO}/results/zhao_gbm/gate2_uncertainty.json"
 UNC = json.load(open(UNC_SRC)) if os.path.exists(UNC_SRC) else None
 
 ARMS = [("constructed_drug", "constructed\ndrug vs drug", POP),
-        ("natural", "natural tumour\ndrug vs drug", PURPLE_SOFT)]
+        ("natural", "natural tumour\ndrug vs drug", PURPLE)]
 
 YMIN, YMAX = 0.45, 1.12      # the bars are drawn from YMIN; see the box note in the docstring
 XPAD = 0.72                  # data units of clear band each side of the two group centres

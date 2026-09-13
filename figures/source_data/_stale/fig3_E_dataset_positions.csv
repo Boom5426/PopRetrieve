@@ -1,4 +1,0 @@
-dataset,typical_cross_cos,regime
-CD34+ lineages,0.95,below gate (no advantage)
-Frangieh immune,0.65,at/across gate
-cross-line,0.14,above gate (clean failure)

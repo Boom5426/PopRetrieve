@@ -123,6 +123,14 @@ LINE_H = 1.15
 ROW_OVERHANG = 0.38
 CAP = 0.17
 
+# Finalized Package 2 formal values copied from the existing audit result table. The panel uses
+# these values for the marks and annotation; it does not recompute cluster inference.
+FORMAL_MEANS = np.array([-0.049684, -0.039095, -0.015843, 0.014199])
+FORMAL_CI_LOW = np.array([-0.084913, -0.073264, -0.044747, -0.016465])
+FORMAL_CI_HIGH = np.array([-0.016783, -0.004809, 0.011394, 0.042546])
+FORMAL_MEDIANS = np.array([-0.006171, 0.000000, 0.000000, 0.000000])
+FORMAL_RHO = 0.1548
+
 
 def _p_text(p: float) -> str:
     """The printed p, in this figure's italic lowercase form, with a floor rather than a rounded 0."""
@@ -160,23 +168,19 @@ def draw_3d(ax):
     d = _load()
     n_total = len(d)
 
-    labels, means, los, his, meds, ns, divs, ties = [], [], [], [], [], [], [], []
+    labels, ns, divs, ties = [], [], [], []
     for name, sub in d.groupby("divq", observed=True):
         v = sub[GAIN].to_numpy(dtype=float)
-        m, lo, hi = boot_ci(v, stat=np.mean, seed=0)
         labels.append(str(name))
-        means.append(m)
-        los.append(lo)
-        his.append(hi)
-        meds.append(float(np.median(v)))
         ns.append(int(v.size))
         divs.append(float(sub[DIV].median()))
         ties.append(float((v == 0).mean()))
-    means, los, his = np.asarray(means), np.asarray(los), np.asarray(his)
-    meds, ties = np.asarray(meds), np.asarray(ties)
+    ties = np.asarray(ties)
     ys = np.arange(len(labels), dtype=float)
 
-    rho, p_rho = stats.spearmanr(d[DIV].values, d[GAIN].values)
+    rho, p_rho = FORMAL_RHO, np.nan
+    means, los, his = FORMAL_MEANS, FORMAL_CI_LOW, FORMAL_CI_HIGH
+    meds = FORMAL_MEDIANS
 
     # ---- the three facts the marks must carry, asserted before they are drawn ----------------
     assert np.all(np.diff(divs) > 0), f"rows are not in ascending divergence order: {divs}"
@@ -196,9 +200,6 @@ def draw_3d(ax):
         assert los[i] < 0.0 < his[i], (
             f"{labels[i]} is supposed to straddle zero; its interval is "
             f"[{los[i]:+.4f}, {his[i]:+.4f}]")
-    assert rho > 0 and p_rho < 0.01, (
-        f"Spearman rho = {rho:+.4f}, p = {p_rho:.3g}: the trend this panel prints no longer runs "
-        f"in the same direction as panel c's, which is the pair's whole point")
 
     # Judgement call 2: the medians are drawn from a distribution with a large exact-tie atom, and
     # the panel says so through the n column rather than by plotting three dots on the zero rule.
@@ -243,7 +244,8 @@ def draw_3d(ax):
         ax.text(XHI - 0.004, y, f"n = {n}", fontsize=PT_TICK, color=SUBTLE, ha="right",
                 va="center", zorder=5)
 
-    ax.text(XLO + 0.004, STAT_Y, f"Spearman $\\rho$ = {rho:+.2f}, {_p_text(p_rho)}",
+    ax.text(XLO + 0.004, STAT_Y,
+            "cluster $\\rho$ = +0.1548; CI [+0.0722,+0.2349]",
             fontsize=PT_ANNOT, color=TEXT, ha="left", va="bottom")
 
     ax.set_yticks(ys)

@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
-from figstyle import INK  # noqa: E402
+from phase2_style import INK  # noqa: E402
 from phase2_data import route_loss  # noqa: E402
 from phase2_style import (LW_HAIR, MEAN, POP, PT_ANNOT, PT_SMALL,  # noqa: E402
                           PT_TICK, SHARED, TEXT)
@@ -43,8 +43,7 @@ def draw_6b(ax):
         ax.plot([X_PRED, X_PRED], [r.predicted_lo, r.predicted_hi], lw=1.1, color=c, zorder=2,
                 solid_capstyle="butt")
         # Ink from here down. Every label on this panel sits on or beside its own coloured line,
-        # so the line carries the hue and the letters were spending it twice at 6.5 pt, where
-        # MEAN measures 2.23:1 against white and POP 3.84:1. See phase2_style.key_label.
+        # so the line carries the hue and the letters stay in dark ink. See phase2_style.key_label.
         ax.text(X_ORACLE - 0.06, r.oracle, f"{r.oracle:.4f}", ha="right", va="center",
                 fontsize=PT_SMALL, color=TEXT)
         # The two lines cross at x = 0.46, so a label at either midpoint lands on the other
@@ -68,7 +67,7 @@ def draw_6b(ax):
     ax.set_yticks([0.80, 0.85, 0.90, 0.95, 1.00])
     ax.set_yticklabels(["0.80", "0.85", "0.90", "0.95", "1.00"], fontsize=PT_TICK)
     ax.set_ylabel("MRR", fontsize=PT_ANNOT, labelpad=1.5)
-    ax.grid(axis="y", lw=LW_HAIR, color="#EDEDED", zorder=0)
+    ax.grid(axis="y", lw=LW_HAIR, color="#E5E7E7", zorder=0)
     ax.set_axisbelow(True)
     for sp in ("right", "top"):
         ax.spines[sp].set_visible(False)

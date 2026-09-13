@@ -234,6 +234,6 @@ font sizes, not positions. `figures/check_overlaps.py` reads text-against-text, 
   Owns the module-level `STEM`, which `build_all.py` checks against its own `STEMS` dict.
 - `fig2_temptation.{pdf,svg,png}` : the composite, and the only stem this figure is written under.
   `python figures/build_all.py --write` enforces the floor, writes these, and copies the PDF to
-  `manuscript/latex/figures/fig2.pdf`, which is the file the manuscript compiles.
+  `manuscript/figures/fig2.pdf`, which is the file the manuscript compiles.
 - `2a.png` ... `2g.png` : standalone per-panel previews, not inputs to the composite, and not
   guaranteed fresh.

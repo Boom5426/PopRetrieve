@@ -48,8 +48,7 @@ import numpy as np
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
-from figstyle import INK  # noqa: E402
-from phase2_style import MEAN, POP, PT_SMALL, SHARED, TISSUE  # noqa: E402
+from phase2_style import INK, MEAN, POP, PT_SMALL, SHARED, TISSUE  # noqa: E402
 
 TOP, BOT = 0.780, 0.300           # the two branch centres
 CAP_TOP = 0.640                   # one caption baseline for the candidate branch
@@ -62,11 +61,9 @@ N_DRUGS, N_FIT_LINES = 92, 43
 def _wash(colour, frac):
     """``colour`` at ``frac`` strength against white, as a hex.
 
-    Derived rather than typed. The predictor box carried a hand-picked "#F4F8FC", which is a pale
-    blue that is NOT a blend of POP: solving for the mixing fraction per channel gives 0.063,
-    0.057 and 0.048, so it was chosen by eye. A recolour of the family would have left it behind,
-    the way every duplicated hex in this deck has been left behind at least once. At 0.055 the
-    blend gives #f5f8fc, one level from the old value on one channel and equal on the other two.
+    The predictor box is derived from the active POP colour at a low opacity rather than typed as
+    a second blue. That keeps the light fill in step with the Figure 1 reference palette if the
+    family colour changes later.
     """
     import matplotlib.colors as mcolors
 
@@ -150,8 +147,8 @@ def draw_task(ax, mode):
     # Labelled to its LEFT, not below: the band below it carries the rule, and the whole left
     # half of this branch's row is empty because the candidate branch sits a row above.
     # Ink. The box it names is drawn with a TISSUE edge one glyph away, so the edge is already
-    # carrying the hue; the letters were carrying it a second time at 6.5 pt, where TISSUE
-    # measures 3.63:1 against white and small text is normally held to 4.5:1.
+    # carrying the hue; the letters therefore stay in dark ink rather than reusing the softened
+    # tissue colour as a small text colour.
     ax.text(0.378, BOT, "target\nwanted state", ha="right", va="center",
             fontsize=PT_SMALL, color=INK, linespacing=1.1)
 
@@ -162,8 +159,8 @@ def draw_task(ax, mode):
 
     _box(ax, 0.733, MID - 0.150, 0.150, 0.300, SHARED)
     # THE RANKING IS NOT COLOURED, and it used to be. Rank 1 was set in MEAN orange and rank 3 in
-    # POP blue. Blue at least meant something, it marked the correct answer, but bold was already
-    # marking it and blue at 6.5 pt is 3.84:1 against white. Orange meant nothing at all: this
+    # POP blue. Blue at least meant something, it marked the correct answer, but the softened blue
+    # is intentionally not used as a small text colour. Orange meant nothing at all: this
     # schematic draws ONE scorer and ONE ranking, so there is no mean route for a mean-level hue
     # to belong to, and "drug 47" is a filler entry sitting above the true one. Spending the
     # deck's mean-signature colour on a filler is how a hue stops meaning anything.

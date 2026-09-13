@@ -22,7 +22,7 @@ import pandas as pd
 from data.population import RetrievalResult
 from retrieval.evaluation import rank_of
 from retrieval.metrics import (
-    energy_distance, mmd_rbf, sliced_wasserstein, _tensor,
+    energy_distance_u, mmd_rbf_u, sliced_wasserstein, _tensor,
     score_mean_cosine, score_mean_l2, score_energy, score_coverage,
 )
 
@@ -107,8 +107,8 @@ def score_metric_robustness(q: dict, cap: int = 220, seed: int = 0,
         out["mean_cosine"][name] = _cos(tgt_sig, P.mean(0) - ctrl)
         Pt = _tensor(_cap(P, cap, r))
         with torch.no_grad():
-            out["energy"][name] = -float(energy_distance(Pt, Tt))
-            out["mmd"][name] = -float(mmd_rbf(Pt, Tt))
+            out["energy"][name] = -float(energy_distance_u(Pt, Tt))
+            out["mmd"][name] = -float(mmd_rbf_u(Pt, Tt))
             out["sliced_w"][name] = -float(sliced_wasserstein(Pt, Tt, n_proj=n_proj))
     return out
 

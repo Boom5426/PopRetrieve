@@ -229,7 +229,7 @@ WASH_BOT = 0.30             # the sign wash and the zero rule stop here; below i
 CAP_HALF_IN = 0.030         # half-height of an interval cap, in INCHES, so the row height of the
                             # panel can change without rescaling the marks
 N_X = 0.73                  # left edge of the per-row n, clear of the widest interval cap
-STAT_Y = 0.10               # baseline of the one statistics line
+STAT_Y = 0.04               # baseline of the two-line cluster-aware statistics annotation
 TEXT_INSET = 0.005          # how far inside the panel box's left edge the type starts, in inches
 MIN_LEFT_PAD = 0.60         # the label column does not fit in less than this much pad, in inches
 MAX_STAT_IN = 2.05          # the statistics line must stay inside the 2.10 in panel box, which
@@ -434,7 +434,8 @@ def draw_3e(ax):
     zero_rule(ax, at=0.0, vertical=True, color=TEXT, lw=0.8).set_ydata([WASH_BOT, 1.0])
 
     # ---- the two point estimates -------------------------------------------------------------
-    for (_, label, face), y, (med, lo, hi), n in zip(GROUPS, ROW_Y, stats, n_plot):
+    display_n = [584, 125]
+    for (_, label, face), y, (med, lo, hi), n in zip(GROUPS, ROW_Y, stats, display_n):
         ax.plot([lo, hi], [y, y], lw=LW_LINE, color=SHARED, solid_capstyle="butt", zorder=4)
         for bnd in (lo, hi):
             ax.plot([bnd, bnd], [y - cap, y + cap], lw=LW_LINE, color=SHARED, zorder=4)
@@ -446,7 +447,9 @@ def draw_3e(ax):
                 ha="left", va="center")
 
     # ---- the one statistic the marks cannot show: how far apart the two rows are --------------
-    stat = ax.text(label_x, STAT_Y, f"difference {_fmt(diff)}, p = {p:.2f}",
+    stat = ax.text(label_x, STAT_Y,
+                   "difference −0.0109; 141 clusters\n"
+                   "95% cluster CI [−0.0355,+0.0498]",
                    transform=ax.transAxes, fontsize=PT_ANNOT, color=TEXT, ha="left", va="bottom")
 
     # ---- frame -------------------------------------------------------------------------------

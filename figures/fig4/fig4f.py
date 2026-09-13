@@ -64,18 +64,19 @@ from matplotlib.colors import LinearSegmentedColormap
 # one was silent.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fig4_style import MEAN, POP, PT_ANNOT, PT_SMALL, TEXT  # noqa: E402
+from color_preferences import MIDPOINT  # noqa: E402
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 PRED = f"{REPO}/results/exp11_hir_benchmark/phase_grid_predictability_2x2.csv"
 
 # The colour axis is the AUC value, not the arm: MEAN orange at the bottom of the scale, POP blue
 # at the top, white at the midpoint. Which arm a cell belongs to is carried by its row.
-# The one hex literal left in this file. This triple is byte-for-byte figstyle.DIVMAP_SOFT
-# ([COMP_SOFT, "#f7f7f7", FOCAL_SOFT], verified identical over 256 samples on 2026-08-31), so it
-# is a duplicate of a map the house style already owns. It is NOT re-declaring MEAN or POP, which
+# The midpoint is the neutral tone from the Figure 1 reference palette. The endpoints remain the
+# semantic MEAN and POP colours imported from fig4_style, so the map does not invent a new arm.
+# It is NOT re-declaring MEAN or POP, which
 # are imported. The single-source fix is to re-export DIVMAP_SOFT from fig4_style and import it
 # here; that is a fig4_style edit, outside this file, and is left for whoever owns that module.
-CMAP = LinearSegmentedColormap.from_list("auc", [MEAN, "#f7f7f7", POP])
+CMAP = LinearSegmentedColormap.from_list("auc", [MEAN, MIDPOINT, POP])
 
 # 2026-08-31: both row labels are set on THREE lines. At PT_TICK "evaluator-derived" measures
 # 0.71 in and "at query time" 0.55 in, against a usable 0.52 in between the tick pad and panel a's
