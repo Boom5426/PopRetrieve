@@ -2,7 +2,7 @@
 
 # When do single-cell response distributions improve drug retrieval?
 
-### PopRetrieve · population-response retrieval for single-cell perturbation data
+### PopRetrieve: Population-response retrieval for single-cell perturbation data
 
 <p>
   <img alt="Single-cell" src="https://img.shields.io/badge/scope-single--cell-7B61FF?logo=cell&logoColor=white">
