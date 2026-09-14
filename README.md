@@ -1,8 +1,8 @@
 <div align="center">
 
-# PopRetrieve
+# When do single-cell response distributions improve drug retrieval?
 
-### Objective-aligned evaluation inflates distributional gains in single-cell drug retrieval
+### PopRetrieve · population-response retrieval for single-cell perturbation data
 
 <p>
   <img alt="Single-cell" src="https://img.shields.io/badge/scope-single--cell-7B61FF?logo=cell&logoColor=white">
@@ -13,12 +13,12 @@
   <a href="https://huggingface.co/datasets/Boom5426/PopRetrieve"><img alt="Hugging Face dataset" src="https://img.shields.io/badge/data-Hugging%20Face-FFD21E?logo=huggingface&logoColor=black"></a>
 </p>
 
-<p><strong>Population-level retrieval metrics for single-cell perturbation response.</strong></p>
+<p><strong>A framework for testing when population response structure changes intervention ranking.</strong></p>
 
 <p>
   <a href="#-installation">🚀 Install</a> ·
   <a href="#-data">🤗 Data</a> ·
-  <a href="#-reproducing-the-main-results">🧪 Reproduce</a> ·
+  <a href="#-reproducing-released-experiments">🧪 Reproduce</a> ·
   <a href="manuscript/PopRetrieve_manuscript.pdf">📄 Paper</a> ·
   <a href="CITATION.cff">📚 Cite</a>
 </p>
@@ -31,15 +31,17 @@
 
 ## ✨ Overview
 
-PopRetrieve studies whether cell-population structure improves drug retrieval beyond mean-based signatures. It provides population retrieval metrics, baseline methods, synthetic benchmarks and experiment drivers used in the accompanying manuscript.
+PopRetrieve asks when cell-population response structure improves intervention retrieval beyond what is already available from mean responses. It provides population-retrieval metrics, mean baselines, controlled benchmarks and experiment drivers used in the accompanying manuscript.
 
-The main comparison includes mean cosine, mean L2, energy distance, MMD, sliced Wasserstein and subpopulation-coverage scores. All scorers return similarities, so larger values rank candidates higher.
+The central comparison is a representation ladder: direction-only mean cosine, magnitude-aware mean L2 and population-level scores (energy distance, MMD, sliced Wasserstein and subpopulation coverage). The paper separates gains due to response magnitude from gains that require the full cellular response population.
+
+Across the settings examined, population information matters only when it changes candidate ordering beyond magnitude-aware means and survives forward prediction. The remaining advantage weakens under biological and functional evaluation; the same held-out protein measurements can also favour different fixed RNA rankings when evaluated as mean responses or as full response populations.
 
 <table>
   <tr>
-    <td align="center" width="33%"><strong>📐 Metrics</strong><br><sub>Mean, energy, MMD, sliced Wasserstein and coverage scorers.</sub></td>
-    <td align="center" width="33%"><strong>🧬 Biological settings</strong><br><sub>SciPlex3, primary CD34+ HSPCs and Perturb-CITE-seq.</sub></td>
-    <td align="center" width="33%"><strong>🔁 Reproducibility</strong><br><sub>Fixed configs, scripts, result summaries and final PDFs.</sub></td>
+    <td align="center" width="33%"><strong>📐 Scoring ladder</strong><br><sub>Direction, magnitude and population-response retrieval.</sub></td>
+    <td align="center" width="33%"><strong>🧬 Evaluation ladder</strong><br><sub>Response matching, biological and functional evaluation, then prediction.</sub></td>
+    <td align="center" width="33%"><strong>🔁 Reproducibility</strong><br><sub>Fixed configs, scripts, checked output snapshots and current PDFs.</sub></td>
   </tr>
 </table>
 
@@ -78,7 +80,7 @@ export DIDR_DATA_ROOT="$PWD/popretrieve-data"
 
 The release contains the three core processed matrices and the directly used annotation tables. CIGS-derived optional benchmark tables are not redistributed because their source does not state a clear redistribution license. Dataset schemas, provenance, checksums and this boundary are documented in [`DATA.md`](DATA.md) and the Hugging Face data card.
 
-## 🧪 Reproducing the main results
+## 🧪 Reproducing released experiments
 
 Run commands from the repository root. Full experiments require the corresponding external datasets.
 
@@ -90,18 +92,38 @@ Run commands from the repository root. Full experiments require the correspondin
 
 Set `QUICK=1` for reduced smoke runs. Quick outputs are not the manuscript results.
 
-Selected checked summaries are provided under [`results/`](results/). The latest manuscript and Supplementary Information are available as [`PopRetrieve_manuscript.pdf`](manuscript/PopRetrieve_manuscript.pdf) and [`PopRetrieve_SI.pdf`](manuscript/PopRetrieve_SI.pdf).
+Selected checked output snapshots are provided under [`results/`](results/). The current manuscript and Supplementary Information are available as [`PopRetrieve_manuscript.pdf`](manuscript/PopRetrieve_manuscript.pdf) and [`PopRetrieve_SI.pdf`](manuscript/PopRetrieve_SI.pdf). See [`results/README.md`](results/README.md) for the scope of those snapshots relative to the current manuscript.
+
+### Current-protocol audits
+
+Two audits added for the current manuscript can be rerun without changing the underlying task definitions. The Fig. 2e audit recomputes the formal full universe from the released per-query table; the Fig. 4 audit recomputes the matched-geometry protein evaluator matrix from the original Frangieh RNA and protein H5AD files.
+
+```bash
+# Fig. 2e: full 720-query / 143-drug formal universe
+python analysis/audit/fig2e_full_universe_audit.py \
+  --per-query results/exp12_partial_observed_retrieval/per_query_scores.csv \
+  --out-dir /path/to/new_fig2e_audit
+
+# Fig. 4: requires anndata and scanpy, plus the two Frangieh H5AD files
+python -m pip install -e '.[manuscript-audits]'
+python analysis/class_c/fig4_matched_geometry_evaluator_audit.py \
+  --raw-dir /path/to/frangieh_h5ad_directory \
+  --out-dir /path/to/new_fig4_audit
+```
+
+The checked outputs are stored in [`results/audit/`](results/audit/). Both commands refuse to overwrite an existing output directory.
 
 ## 🗂️ Repository layout
 
 | Path | Contents |
 | --- | --- |
 | `src/` | Retrieval metrics, baselines, data loaders, benchmarks and experiment drivers |
+| `analysis/` | Current-protocol audit scripts for Fig. 2e and Fig. 4 |
 | `configs/` | Dataset and experiment configurations |
 | `scripts/` | Main reproduction entry points |
 | `data/` | Location for external datasets |
-| `results/` | Selected headline result summaries |
-| `manuscript/` | Final manuscript and Supplementary Information PDFs |
+| `results/` | Checked output snapshots and compact result summaries |
+| `manuscript/` | Current manuscript and Supplementary Information PDFs |
 
 See [`PROJECT_STRUCTURE.md`](PROJECT_STRUCTURE.md) for package details.
 

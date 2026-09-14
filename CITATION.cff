@@ -1,17 +1,12 @@
 cff-version: 1.2.0
 message: "If you use this repository, please cite it as below."
-title: "Objective-aligned evaluation inflates distributional gains in single-cell drug retrieval"
+title: "When do single-cell response distributions improve drug retrieval?"
 abstract: >-
-  Code, analyses and manuscript sources for an audit of how distribution-aware
-  single-cell drug retrieval is evaluated. Holding the candidate rankings, the
-  scorer and the queries fixed and changing only the evaluating criterion, a
-  distributional advantage that is large under a metric of its own kind is absent
-  under a task-proximal mechanism criterion, and under an independent functional
-  oracle is real but small, with almost all of what remains reproduced by a scalar
-  that compares no distributions. The repository does not propose a better
-  drug-ranking method: the population-to-population retrieval scores it implements
-  are the instrument, released as PopRetrieve. It also ships CORRECTIONS.md, a record
-  of every number this project has retracted or revised.
+  Code, analyses and manuscript materials for studying when single-cell response
+  populations improve intervention retrieval beyond mean responses. PopRetrieve
+  compares direction-only mean cosine, magnitude-aware mean L2 and population-level
+  retrieval scores, then evaluates whether information beyond response magnitude
+  changes candidate ordering and survives forward prediction.
 authors:
   - name: "Boom5426"
 repository-code: "https://github.com/Boom5426/PopRetrieve"
@@ -23,4 +18,4 @@ keywords:
   - perturbation
   - evaluation
   - benchmark design
-  - objective-utility mismatch
+  - intervention ranking
