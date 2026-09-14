@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PopRetrieve is a population-response retrieval framework for testing when single-cell response distributions improve drug ranking.">
+  <meta name="theme-color" content="#1f2738">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PopRetrieve — When do single-cell response distributions improve drug retrieval?">
+  <meta property="og:description" content="Test whether population-level response structure changes intervention ranking beyond magnitude-aware mean responses.">
+  <title>PopRetrieve — Population-response retrieval</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap nav-wrap">
+      <a class="brand" href="#top" aria-label="PopRetrieve home">
+        <span class="brand-mark">P</span>
+        <span class="brand-name">PopRetrieve</span>
+        <span class="brand-note">population-response retrieval</span>
+      </a>
+      <button class="menu-toggle" aria-controls="site-nav" aria-expanded="false">Menu</button>
+      <nav id="site-nav" aria-label="Main navigation">
+        <a href="#framework">Framework</a>
+        <a href="#evidence">Findings</a>
+        <a href="#benchmark">Data</a>
+        <a href="#software">Software</a>
+        <a href="#paper">Paper</a>
+        <a class="github-link" href="https://github.com/Boom5426/PopRetrieve" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="wrap hero" id="top">
+      <div>
+        <p class="kicker">PopRetrieve / population-response retrieval</p>
+        <h1>When do single-cell response distributions improve drug retrieval?</h1>
+        <p class="hero-lead">A richer response representation is useful only when it changes candidate ranking beyond magnitude-aware means and remains useful under downstream evaluation.</p>
+        <p class="hero-description">PopRetrieve compares direction-only mean cosine, magnitude-aware mean L2, and population-level distances to determine what information changes an intervention retrieval decision.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="https://github.com/Boom5426/PopRetrieve/blob/main/manuscript/PopRetrieve_manuscript.pdf" target="_blank" rel="noopener noreferrer">Read the manuscript <span>↗</span></a>
+          <a class="button secondary" href="#framework">Explore the framework <span>↓</span></a>
+        </div>
+        <div class="hero-meta">
+          <span><strong>720</strong> queries in the formal audit universe</span>
+          <span><strong>143</strong> candidate drugs</span>
+          <span><strong>3</strong> released core matrices</span>
+          <span><strong>4</strong> population score families</span>
+        </div>
+      </div>
+      <figure class="figure-shell">
+        <div class="figure-head"><span>Framework overview</span><span>Figure 1</span></div>
+        <a href="assets/fig1_overview.png" target="_blank" rel="noopener"><img src="assets/fig1_overview.png" alt="PopRetrieve framework showing a ladder from mean-response direction to full population representation."></a>
+        <figcaption>PopRetrieve separates direction, magnitude, and full population structure, then tests whether that extra information changes retrieval outcomes.</figcaption>
+      </figure>
+    </section>
+
+    <section class="principle">
+      <div class="wrap principle-inner">
+        <span class="principle-label">Core principle</span>
+        <p>Control the representation first. Interpret population-level gain second.</p>
+      </div>
+    </section>
+
+    <section class="wrap section" id="framework">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">01 / Framework</span>
+          <h2>Four questions that should not be collapsed into a single score.</h2>
+        </div>
+        <p class="section-intro">PopRetrieve treats representation, ordering, and prediction as separate empirical questions. The aim is to identify when a cellular response distribution supplies decision-relevant information beyond a well-specified mean baseline.</p>
+      </div>
+
+      <div class="diagnostics">
+        <div class="diagnostic-list" role="tablist" aria-label="PopRetrieve diagnostic questions">
+          <button class="diagnostic active" data-panel="direction" role="tab" aria-selected="true">
+            <span class="num">01</span><span><h3>Direction</h3><p>Does response orientation match?</p></span><span class="arrow">→</span>
+          </button>
+          <button class="diagnostic" data-panel="magnitude" role="tab" aria-selected="false">
+            <span class="num">02</span><span><h3>Magnitude</h3><p>Is the apparent gain explained by scale?</p></span><span class="arrow">→</span>
+          </button>
+          <button class="diagnostic" data-panel="population" role="tab" aria-selected="false">
+            <span class="num">03</span><span><h3>Population structure</h3><p>Does the distribution reorder candidates?</p></span><span class="arrow">→</span>
+          </button>
+          <button class="diagnostic" data-panel="prediction" role="tab" aria-selected="false">
+            <span class="num">04</span><span><h3>Forward prediction</h3><p>Does the advantage survive prediction?</p></span><span class="arrow">→</span>
+          </button>
+        </div>
+        <div class="diagnostic-panel" role="tabpanel" aria-live="polite">
+          <p class="eyebrow" id="panel-number">01 / Direction</p>
+          <h3 id="panel-title">Does a candidate align with the target response direction?</h3>
+          <p id="panel-copy">Direction-only cosine similarity compares mean response orientation while deliberately discarding response magnitude and cell-to-cell structure.</p>
+          <div class="evidence-graphic" aria-hidden="true">
+            <span class="axis-y">information retained</span>
+            <span class="axis-x">representation complexity →</span>
+          </div>
+          <p class="panel-note" id="panel-note">Direction is a useful starting point, but it cannot distinguish an advantage caused by response magnitude from one caused by population structure.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="evidence-section" id="evidence">
+      <div class="wrap section">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">02 / Findings</span>
+            <h2>Population information is valuable only under a demanding set of conditions.</h2>
+          </div>
+          <p class="section-intro">A distributional metric may improve response matching without providing a reliable downstream decision. The relevant test is whether its additional information changes a candidate order and persists under the evaluation that matters.</p>
+        </div>
+        <div class="evidence-grid">
+          <article><span class="n">I</span><h3>Use magnitude-aware means as the control</h3><p>Comparing against direction-only cosine can attribute to population structure what is actually explained by response magnitude.</p></article>
+          <article><span class="n">II</span><h3>Focus on ranking disagreements</h3><p>Population structure affects retrieval when it changes the order of viable interventions, not merely when it offers another similarity score.</p></article>
+          <article><span class="n">III</span><h3>Evaluate the entire path to a decision</h3><p>A gain needs to remain visible through biological, functional, and predict-then-rank evaluation before it supports a recommendation.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap section" id="benchmark">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">03 / Data & benchmarks</span>
+          <h2>Population retrieval across controlled, biological, and predictive settings.</h2>
+        </div>
+        <p class="section-intro">The public release combines three processed core matrices with annotations. It supports controlled score comparisons, cross-context analysis, and the current-protocol audits documented in the manuscript.</p>
+      </div>
+
+      <div class="stats" aria-label="PopRetrieve release summary">
+        <div class="stat"><strong>3</strong><span>processed core data matrices</span></div>
+        <div class="stat"><strong>2k</strong><span>highly variable genes in the processed SciPlex3 and Frangieh matrices</span></div>
+        <div class="stat"><strong>720</strong><span>queries in the Fig. 2e formal audit universe</span></div>
+        <div class="stat"><strong>143</strong><span>candidate drugs in that audit universe</span></div>
+      </div>
+
+      <div class="benchmark-layout">
+        <table class="dataset-table">
+          <thead><tr><th>Dataset</th><th>Released role</th><th>Processed representation</th><th>Source</th></tr></thead>
+          <tbody>
+            <tr><td>SciPlex3</td><td>Drug-response retrieval</td><td>2,000 highly variable genes</td><td>scPerturb</td></tr>
+            <tr><td>CD34+ HSPCs</td><td>Core response matrix</td><td>Raw counts before normalization</td><td>GSE306429</td></tr>
+            <tr><td>Frangieh Perturb-CITE-seq</td><td>RNA and protein evaluation</td><td>2,000 highly variable genes</td><td>scPerturb</td></tr>
+          </tbody>
+        </table>
+        <div class="benchmark-note">
+          <h3>Raw single-cell tensors stay outside the code repository.</h3>
+          <p>Processed core inputs and annotations are released on Hugging Face. Dataset schemas, provenance, checksums, and source-specific redistribution boundaries are documented in the data card and repository.</p>
+          <div class="gene-strip"><span>SCIPLEX3</span><span>CD34+ HSPCS</span><span>FRANGIEH</span></div>
+          <div class="resource-links">
+            <a class="button secondary" href="https://huggingface.co/datasets/Boom5426/PopRetrieve" target="_blank" rel="noopener noreferrer">Open data release ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="software-section" id="software">
+      <div class="wrap section">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">04 / Software</span>
+            <h2>Score the mean response and the cell population with one API.</h2>
+          </div>
+          <p class="section-intro">The public package exposes population and mean-response metrics, together with baselines, reproducible experiment drivers, and current-protocol audit scripts.</p>
+        </div>
+        <div class="software-grid">
+          <div class="software-copy">
+            <h3>From a query population to an auditable retrieval comparison.</h3>
+            <p>Energy and MMD use the unbiased U-statistic by default. The installation and reproduction commands are maintained in the repository README.</p>
+            <div class="software-links">
+              <a href="https://github.com/Boom5426/PopRetrieve#-installation" target="_blank" rel="noopener noreferrer"><span>Installation</span><span>↗</span></a>
+              <a href="https://github.com/Boom5426/PopRetrieve#-reproducing-released-experiments" target="_blank" rel="noopener noreferrer"><span>Reproduce experiments</span><span>↗</span></a>
+              <a href="https://github.com/Boom5426/PopRetrieve/tree/main/results/audit" target="_blank" rel="noopener noreferrer"><span>Current-protocol audits</span><span>↗</span></a>
+              <a href="https://huggingface.co/datasets/Boom5426/PopRetrieve" target="_blank" rel="noopener noreferrer"><span>Processed data</span><span>↗</span></a>
+            </div>
+          </div>
+          <div class="code-card">
+            <div class="code-toolbar"><span>population_retrieval.py</span><button class="copy-button" data-copy-target="api-code">Copy</button></div>
+            <pre id="api-code"><code>from popretrieve.metrics import (
+    score_energy,
+    score_mean_cosine,
+)
+
+energy_score = score_energy(
+    candidate_cells,
+    query_cells,
+    max_cells=500,
+    seed=7,
+)
+mean_score = score_mean_cosine(
+    candidate_cells,
+    query_cells,
+)</code></pre>
+            <p>Python ≥ 3.10 · population and mean-response metrics · MIT License</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap section" id="paper">
+      <div class="paper-layout">
+        <div class="paper-mark"><span>P</span><small>PopRetrieve<br>2026</small></div>
+        <div class="paper-copy">
+          <span class="section-kicker">Paper & resources</span>
+          <h2>When do single-cell response distributions improve drug retrieval?</h2>
+          <p class="authors">PopRetrieve provides the code, analyses, evaluated metrics, and manuscript materials for testing when single-cell response populations add intervention-retrieval value beyond mean responses.</p>
+          <div class="resource-links">
+            <a class="button primary" href="https://github.com/Boom5426/PopRetrieve/blob/main/manuscript/PopRetrieve_manuscript.pdf" target="_blank" rel="noopener noreferrer">Manuscript ↗</a>
+            <a class="button secondary" href="https://github.com/Boom5426/PopRetrieve/blob/main/manuscript/PopRetrieve_SI.pdf" target="_blank" rel="noopener noreferrer">Supplementary information ↗</a>
+            <a class="button secondary" href="https://github.com/Boom5426/PopRetrieve" target="_blank" rel="noopener noreferrer">Source code ↗</a>
+          </div>
+          <p class="resource-note">For citation metadata, data boundaries, and project structure, see the repository's CITATION.cff, DATA.md, and README.md.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <p><strong>PopRetrieve</strong> — control the representation, then interpret the ranking.</p>
+      <div class="footer-links"><a href="https://github.com/Boom5426/PopRetrieve">GitHub ↗</a><a href="#top">Back to top ↑</a></div>
+    </div>
+  </footer>
+</body>
+</html>
