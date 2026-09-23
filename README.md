@@ -23,7 +23,7 @@
   <a href="#-reproducing-released-experiments">🧪 Reproduce</a> ·
   <a href="manuscript/PopRetrieve_manuscript.pdf">📄 Paper</a> ·
   <a href="manuscript/PopRetrieve_SI.pdf">📎 Supplement</a> ·
-  <a href="CITATION.cff">📚 Cite</a>
+  <a href="CITATION.bib">📚 Cite</a>
 </p>
 
 </div>
@@ -113,4 +113,16 @@ Within `src/`, `popretrieve/` exposes the public API; `retrieval/`, `baselines/`
 
 ## 📚 Citation and license
 
-The manuscript authors are listed in [`CITATION.cff`](CITATION.cff). PopRetrieve code is released under the MIT License. External datasets retain their original licenses.
+Use the [BibTeX entry](CITATION.bib) to cite the manuscript:
+
+```bibtex
+@misc{Wang2026PopRetrieve,
+  title        = {When do single-cell response distributions improve drug retrieval?},
+  author       = {Wang, Huihong and Liu, Xiaoping and Chen, Chen and Sun, Qiuyan and Li, Bo and Zhang, Bob},
+  year         = {2026},
+  howpublished = {Manuscript},
+  url          = {https://github.com/Boom5426/PopRetrieve/blob/main/manuscript/PopRetrieve_manuscript.pdf}
+}
+```
+
+PopRetrieve code is released under the MIT License. External datasets retain their original licenses.
