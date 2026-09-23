@@ -8,6 +8,9 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="PopRetrieve — When do single-cell response distributions improve drug retrieval?">
   <meta property="og:description" content="Test whether population-level response structure changes intervention ranking beyond magnitude-aware mean responses.">
+  <meta property="og:url" content="https://boom5426.github.io/PopRetrieve/">
+  <meta property="og:image" content="https://boom5426.github.io/PopRetrieve/assets/fig1_overview.png">
+  <link rel="canonical" href="https://boom5426.github.io/PopRetrieve/">
   <title>PopRetrieve — When do single-cell response distributions improve drug retrieval?</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
@@ -40,22 +43,23 @@
       <div>
         <p class="kicker">PopRetrieve / population-response retrieval</p>
         <h1>When do single-cell response distributions improve drug retrieval?</h1>
-        <p class="hero-lead">A richer response representation is useful only when it changes candidate ranking beyond magnitude-aware means and remains useful under downstream evaluation.</p>
-        <p class="hero-description">PopRetrieve compares direction-only mean cosine, magnitude-aware mean L2, and population-level distances to determine what information changes an intervention retrieval decision.</p>
+        <p class="hero-lead">More cellular detail can improve drug ranking. PopRetrieve tests when it does.</p>
+        <p class="hero-description">Compare response direction, mean-response magnitude and full cell populations, then test what survives biological evaluation and prediction in a new cellular context.</p>
         <div class="hero-actions">
           <a class="button primary" href="https://github.com/Boom5426/PopRetrieve/blob/main/manuscript/PopRetrieve_manuscript.pdf" target="_blank" rel="noopener noreferrer">Read the manuscript <span>↗</span></a>
-          <a class="button secondary" href="#framework">Explore the framework <span>↓</span></a>
+          <a class="button secondary" href="https://github.com/Boom5426/PopRetrieve/blob/main/manuscript/PopRetrieve_SI.pdf" target="_blank" rel="noopener noreferrer">Supplement <span>↗</span></a>
+          <a class="button secondary" href="#evidence">Key findings <span>↓</span></a>
         </div>
         <div class="hero-meta">
-          <span><strong>720</strong> queries in the formal audit universe</span>
-          <span><strong>143</strong> candidate drugs</span>
-          <span><strong>3</strong> released core matrices</span>
-          <span><strong>4</strong> population score families</span>
+          <span><strong>3,992</strong> queries</span>
+          <span><strong>44</strong> held-out cell lines</span>
+          <span><strong>92</strong> candidate compounds</span>
         </div>
+        <p class="meta-caption">Tahoe-100M intervention-identification benchmark · Figures 5–6</p>
       </div>
       <figure class="figure-shell">
         <div class="figure-head"><span>Framework overview</span><span>Figure 1</span></div>
-        <a href="assets/fig1_overview.png" target="_blank" rel="noopener"><img src="assets/fig1_overview.png" alt="PopRetrieve framework showing a ladder from mean-response direction to full population representation."></a>
+        <a href="assets/fig1_overview.png" target="_blank" rel="noopener" aria-label="Open full-size framework figure"><img src="assets/fig1_overview.png" alt="PopRetrieve framework showing a ladder from mean-response direction to full population representation." fetchpriority="high"></a>
         <figcaption>PopRetrieve separates direction, magnitude, and full population structure, then tests whether that extra information changes retrieval outcomes.</figcaption>
       </figure>
     </section>
@@ -63,7 +67,7 @@
     <section class="principle">
       <div class="wrap principle-inner">
         <span class="principle-label">Core principle</span>
-        <p>Control the representation first. Interpret population-level gain second.</p>
+        <p>Higher cellular resolution matters when the added information changes the drug ranking.</p>
       </div>
     </section>
 
@@ -71,34 +75,39 @@
       <div class="section-head">
         <div>
           <span class="section-kicker">01 / Framework</span>
-          <h2>Four questions that should not be collapsed into a single score.</h2>
+          <h2>From response direction to a predicted cell population.</h2>
         </div>
         <p class="section-intro">PopRetrieve treats representation, ordering, and prediction as separate empirical questions. The aim is to identify when a cellular response distribution supplies decision-relevant information beyond a well-specified mean baseline.</p>
       </div>
 
       <div class="diagnostics">
         <div class="diagnostic-list" role="tablist" aria-label="PopRetrieve diagnostic questions">
-          <button class="diagnostic active" data-panel="direction" role="tab" aria-selected="true">
-            <span class="num">01</span><span><h3>Direction</h3><p>Does response orientation match?</p></span><span class="arrow">→</span>
+          <button class="diagnostic active" id="tab-direction" data-panel="direction" role="tab" aria-controls="diagnostic-content" aria-selected="true" tabindex="0">
+            <span class="num">01</span><span><span class="diagnostic-title">Direction</span><span class="diagnostic-description">Does response orientation match?</span></span><span class="arrow">→</span>
           </button>
-          <button class="diagnostic" data-panel="magnitude" role="tab" aria-selected="false">
-            <span class="num">02</span><span><h3>Magnitude</h3><p>Is the apparent gain explained by scale?</p></span><span class="arrow">→</span>
+          <button class="diagnostic" id="tab-magnitude" data-panel="magnitude" role="tab" aria-controls="diagnostic-content" aria-selected="false" tabindex="-1">
+            <span class="num">02</span><span><span class="diagnostic-title">Magnitude</span><span class="diagnostic-description">Is the apparent gain explained by scale?</span></span><span class="arrow">→</span>
           </button>
-          <button class="diagnostic" data-panel="population" role="tab" aria-selected="false">
-            <span class="num">03</span><span><h3>Population structure</h3><p>Does the distribution reorder candidates?</p></span><span class="arrow">→</span>
+          <button class="diagnostic" id="tab-population" data-panel="population" role="tab" aria-controls="diagnostic-content" aria-selected="false" tabindex="-1">
+            <span class="num">03</span><span><span class="diagnostic-title">Population structure</span><span class="diagnostic-description">Does the distribution reorder candidates?</span></span><span class="arrow">→</span>
           </button>
-          <button class="diagnostic" data-panel="prediction" role="tab" aria-selected="false">
-            <span class="num">04</span><span><h3>Forward prediction</h3><p>Does the advantage survive prediction?</p></span><span class="arrow">→</span>
+          <button class="diagnostic" id="tab-prediction" data-panel="prediction" role="tab" aria-controls="diagnostic-content" aria-selected="false" tabindex="-1">
+            <span class="num">04</span><span><span class="diagnostic-title">Forward prediction</span><span class="diagnostic-description">Does the advantage survive prediction?</span></span><span class="arrow">→</span>
           </button>
         </div>
-        <div class="diagnostic-panel" role="tabpanel" aria-live="polite">
+        <div class="diagnostic-panel" id="diagnostic-content" role="tabpanel" aria-labelledby="tab-direction" tabindex="0">
           <p class="eyebrow" id="panel-number">01 / Direction</p>
           <h3 id="panel-title">Does a candidate align with the target response direction?</h3>
           <p id="panel-copy">Direction-only cosine similarity compares mean response orientation while deliberately discarding response magnitude and cell-to-cell structure.</p>
-          <div class="evidence-graphic" aria-hidden="true">
-            <span class="axis-y">information retained</span>
-            <span class="axis-x">representation complexity →</span>
-          </div>
+          <table class="representation-table">
+            <caption>Information retained by each representation</caption>
+            <thead><tr><th scope="col">Representation</th><th scope="col">Direction</th><th scope="col">Magnitude</th><th scope="col">Cell variation</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Direction-only mean</th><td>Yes</td><td>—</td><td>—</td></tr>
+              <tr><th scope="row">Magnitude-aware mean</th><td>Yes</td><td>Yes</td><td>—</td></tr>
+              <tr><th scope="row">Full population</th><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+            </tbody>
+          </table>
           <p class="panel-note" id="panel-note">Direction is a useful starting point, but it cannot distinguish an advantage caused by response magnitude from one caused by population structure.</p>
         </div>
       </div>
@@ -109,14 +118,14 @@
         <div class="section-head">
           <div>
             <span class="section-kicker">02 / Findings</span>
-            <h2>Population information is valuable only under a demanding set of conditions.</h2>
+            <h2>A small observed gain. A harder prediction problem.</h2>
           </div>
-          <p class="section-intro">A distributional metric may improve response matching without providing a reliable downstream decision. The relevant test is whether its additional information changes a candidate order and persists under the evaluation that matters.</p>
+          <p class="section-intro">The paper separates what the mean already explains, what changes with the evaluation criterion, and what happens when candidate responses must be predicted.</p>
         </div>
         <div class="evidence-grid">
-          <article><span class="n">I</span><h3>Use magnitude-aware means as the control</h3><p>Comparing against direction-only cosine can attribute to population structure what is actually explained by response magnitude.</p></article>
-          <article><span class="n">II</span><h3>Focus on ranking disagreements</h3><p>Population structure affects retrieval when it changes the order of viable interventions, not merely when it offers another similarity score.</p></article>
-          <article><span class="n">III</span><h3>Evaluate the entire path to a decision</h3><p>A gain needs to remain visible through biological, functional, and predict-then-rank evaluation before it supports a recommendation.</p></article>
+          <article><span class="n">01</span><h3>The mean explains most of the gain</h3><p>A magnitude-aware mean recovers most of the improvement over directional matching. With observed Tahoe responses, mean reciprocal rank is 0.945 for mean cosine, 0.965 for mean L2 and 0.976 for energy distance.</p><span class="finding-ref">Figures 2 &amp; 5</span></article>
+          <article><span class="n">02</span><h3>The evaluation changes the winner</h3><p>The additional population benefit weakens under mechanism and functional evaluation. The same held-out protein measurements favour different RNA retrieval strategies when evaluated as means or full populations.</p><span class="finding-ref">Figures 3 &amp; 4</span></article>
+          <article><span class="n">03</span><h3>Prediction does not preserve the advantage</h3><p>None of the six evaluated forward predictors shows a statistically supported population advantage. Generating state-dependent responses alone does not restore the gain measured with observed candidates.</p><span class="finding-ref">Figure 6</span></article>
         </div>
       </div>
     </section>
@@ -127,31 +136,25 @@
           <span class="section-kicker">03 / Data & benchmarks</span>
           <h2>Population retrieval across controlled, biological, and predictive settings.</h2>
         </div>
-        <p class="section-intro">The public release combines three processed core matrices with annotations. It supports controlled score comparisons, cross-context analysis, and the current-protocol audits documented in the manuscript.</p>
-      </div>
-
-      <div class="stats" aria-label="PopRetrieve release summary">
-        <div class="stat"><strong>3</strong><span>processed core data matrices</span></div>
-        <div class="stat"><strong>2k</strong><span>highly variable genes in the processed SciPlex3 and Frangieh matrices</span></div>
-        <div class="stat"><strong>720</strong><span>queries in the Fig. 2e formal audit universe</span></div>
-        <div class="stat"><strong>143</strong><span>candidate drugs in that audit universe</span></div>
+        <p class="section-intro">Three processed RNA matrices and annotation tables support the released experiments. The manuscript also draws on natural tissue, large-scale perturbations and external functional measurements.</p>
       </div>
 
       <div class="benchmark-layout">
         <table class="dataset-table">
-          <thead><tr><th>Dataset</th><th>Released role</th><th>Processed representation</th><th>Source</th></tr></thead>
+          <thead><tr><th scope="col">Dataset</th><th scope="col">Role</th><th scope="col">Features</th><th scope="col">Source</th></tr></thead>
           <tbody>
             <tr><td>SciPlex3</td><td>Drug-response retrieval</td><td>2,000 highly variable genes</td><td>scPerturb</td></tr>
-            <tr><td>CD34+ HSPCs</td><td>Core response matrix</td><td>Raw counts before normalization</td><td>GSE306429</td></tr>
-            <tr><td>Frangieh Perturb-CITE-seq</td><td>RNA and protein evaluation</td><td>2,000 highly variable genes</td><td>scPerturb</td></tr>
+            <tr><td>CD34+ HSPCs</td><td>Exploratory transfer</td><td>Processed from raw counts</td><td>GSE306429</td></tr>
+            <tr><td>Frangieh Perturb-CITE-seq</td><td>Perturbation retrieval</td><td>2,000 highly variable genes (RNA)</td><td>scPerturb</td></tr>
           </tbody>
         </table>
         <div class="benchmark-note">
-          <h3>Raw single-cell tensors stay outside the code repository.</h3>
-          <p>Processed core inputs and annotations are released on Hugging Face. Dataset schemas, provenance, checksums, and source-specific redistribution boundaries are documented in the data card and repository.</p>
+          <h3>Download data. Follow the experiment.</h3>
+          <p>Get the processed core inputs and annotations on Hugging Face. The data guide links the additional Frangieh protein, ZhaoSims2021, Tahoe-100M plate 3 and GDSC2 inputs used in the paper.</p>
           <div class="gene-strip"><span>SCIPLEX3</span><span>CD34+ HSPCS</span><span>FRANGIEH</span></div>
           <div class="resource-links">
             <a class="button secondary" href="https://huggingface.co/datasets/Boom5426/PopRetrieve" target="_blank" rel="noopener noreferrer">Open data release ↗</a>
+            <a class="button secondary" href="https://github.com/Boom5426/PopRetrieve/blob/main/DATA.md" target="_blank" rel="noopener noreferrer">Data guide ↗</a>
           </div>
         </div>
       </div>
@@ -164,24 +167,25 @@
             <span class="section-kicker">04 / Software</span>
             <h2>Score the mean response and the cell population with one API.</h2>
           </div>
-          <p class="section-intro">The public package exposes population and mean-response metrics, together with baselines, reproducible experiment drivers, and current-protocol audit scripts.</p>
+          <p class="section-intro">Use population and mean-response metrics, prediction baselines, controlled benchmarks and experiment drivers from the Python package.</p>
         </div>
         <div class="software-grid">
           <div class="software-copy">
-            <h3>From a query population to an auditable retrieval comparison.</h3>
+            <h3>Compare representations on the same query.</h3>
             <p>Energy and MMD use the unbiased U-statistic by default. The installation and reproduction commands are maintained in the repository README.</p>
             <div class="software-links">
               <a href="https://github.com/Boom5426/PopRetrieve#-installation" target="_blank" rel="noopener noreferrer"><span>Installation</span><span>↗</span></a>
               <a href="https://github.com/Boom5426/PopRetrieve#-reproducing-released-experiments" target="_blank" rel="noopener noreferrer"><span>Reproduce experiments</span><span>↗</span></a>
-              <a href="https://github.com/Boom5426/PopRetrieve/tree/main/results/audit" target="_blank" rel="noopener noreferrer"><span>Current-protocol audits</span><span>↗</span></a>
+              <a href="https://github.com/Boom5426/PopRetrieve/tree/main/results" target="_blank" rel="noopener noreferrer"><span>Result snapshots</span><span>↗</span></a>
               <a href="https://huggingface.co/datasets/Boom5426/PopRetrieve" target="_blank" rel="noopener noreferrer"><span>Processed data</span><span>↗</span></a>
             </div>
           </div>
           <div class="code-card">
-            <div class="code-toolbar"><span>population_retrieval.py</span><button class="copy-button" data-copy-target="api-code">Copy</button></div>
+            <div class="code-toolbar"><span>population_retrieval.py</span><button class="copy-button" data-copy-target="api-code" aria-label="Copy Python example">Copy</button></div>
             <pre id="api-code"><code>from popretrieve.metrics import (
     score_energy,
     score_mean_cosine,
+    score_mean_l2,
 )
 
 energy_score = score_energy(
@@ -193,7 +197,12 @@ energy_score = score_energy(
 mean_score = score_mean_cosine(
     candidate_cells,
     query_cells,
+)
+magnitude_score = score_mean_l2(
+    candidate_cells,
+    query_cells,
 )</code></pre>
+            <span class="copy-status" role="status" aria-live="polite"></span>
             <p>Python ≥ 3.10 · population and mean-response metrics · MIT License</p>
           </div>
         </div>
@@ -206,13 +215,14 @@ mean_score = score_mean_cosine(
         <div class="paper-copy">
           <span class="section-kicker">Paper & resources</span>
           <h2>When do single-cell response distributions improve drug retrieval?</h2>
-          <p class="authors">PopRetrieve provides the code, analyses, evaluated metrics, and manuscript materials for testing when single-cell response populations add intervention-retrieval value beyond mean responses.</p>
+          <p class="authors">Huihong Wang, Xiaoping Liu, Chen Chen, Chengyang Zhang, Qiuyan Sun, Bo Li and Bob Zhang</p>
+          <p class="resource-note">Manuscript and Supplementary Information updated 23 September 2026.</p>
           <div class="resource-links">
             <a class="button primary" href="https://github.com/Boom5426/PopRetrieve/blob/main/manuscript/PopRetrieve_manuscript.pdf" target="_blank" rel="noopener noreferrer">Manuscript ↗</a>
             <a class="button secondary" href="https://github.com/Boom5426/PopRetrieve/blob/main/manuscript/PopRetrieve_SI.pdf" target="_blank" rel="noopener noreferrer">Supplementary information ↗</a>
             <a class="button secondary" href="https://github.com/Boom5426/PopRetrieve" target="_blank" rel="noopener noreferrer">Source code ↗</a>
+            <a class="button secondary" href="https://github.com/Boom5426/PopRetrieve/blob/main/CITATION.cff" target="_blank" rel="noopener noreferrer">Cite this work ↗</a>
           </div>
-          <p class="resource-note">For citation metadata, data boundaries, and project structure, see the repository's CITATION.cff, DATA.md, and README.md.</p>
         </div>
       </div>
     </section>

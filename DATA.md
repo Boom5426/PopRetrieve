@@ -23,7 +23,7 @@ popretrieve-data/
     └── drugcentral_target_annotations.parquet
 ```
 
-## Sources
+## Core released inputs
 
 - **SciPlex3:** Srivatsan et al. (2020), [GSE139944](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE139944), processed to 2,000 highly variable genes with A549, K562 and MCF7 controls.
 - **CD34+ HSPCs:** [GSE306429](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE306429), using the raw-count layer before normalization.
@@ -31,6 +31,18 @@ popretrieve-data/
 - **Annotations:** SciPlex3 annotations enriched from ChEMBL, PubChem and DrugCentral.
 
 SciPlex3 and Frangieh use the harmonized [scPerturb release](https://doi.org/10.5281/zenodo.13350497). Full schemas, transformations, SHA-256 checksums and source-specific license notices are in the Hugging Face data card.
+
+The held-out protein evaluation uses the original `FrangiehIzar2021_RNA.h5ad` and `FrangiehIzar2021_protein.h5ad` files from scPerturb release 1.4. Obtain these separately from scPerturb; the processed Hugging Face release contains the Frangieh RNA matrix.
+
+## Additional public inputs used in the manuscript
+
+The public data package above contains the three core processed matrices used by the package experiments. The current manuscript also reports analyses using the following externally hosted inputs, which are not duplicated in this repository or its Hugging Face release:
+
+- **ZhaoSims2021 glioblastoma:** the harmonized `ZhaoSims2021.h5ad` from the same [scPerturb release](https://doi.org/10.5281/zenodo.13350497).
+- **Tahoe-100M:** plate 3 of the CC0 [Tahoe-100M release](https://huggingface.co/datasets/tahoebio/Tahoe-100M), together with its released `obs_metadata` and `sample_metadata` tables.
+- **GDSC2 functional readout:** release 8.5, `GDSC2_fitted_dose_response_27Oct23.xlsx`, available from [Genomics of Drug Sensitivity in Cancer](https://www.cancerrxgene.org/).
+
+These inputs remain subject to their source terms. The manuscript specifies the exact versions, held-out contexts and preprocessing used for each analysis.
 
 ## Optional CIGS benchmark
 

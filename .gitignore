@@ -29,6 +29,12 @@ results/**/FULL_reproduced_*/
 results/_*/
 results/main_figures/
 
+# Internal analysis and manuscript review outputs
+/analysis/
+/results/audit/
+/results/estimator_audit/
+/results/exp16_17_verdict.md
+
 # Local logs, temporary files and editors
 *.log
 *.tmp

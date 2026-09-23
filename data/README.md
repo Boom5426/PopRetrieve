@@ -1,5 +1,5 @@
-# Data contract
+# Data
 
-The repository does not redistribute the large single-cell tensors. Place them under this directory or set `DIDR_DATA_ROOT` to a directory with the same layout.
+Download the processed datasets following [`DATA.md`](../DATA.md). Place them under this directory or set `DIDR_DATA_ROOT` to the downloaded data directory.
 
-See [`../DATA.md`](../DATA.md) for dataset provenance, required filenames and the external GDSC/Tahoe inputs. Data-dependent experiments fail with an explicit missing-input error when the contract is not satisfied.
+[`DATA.md`](../DATA.md) also lists required filenames and the additional manuscript datasets.
