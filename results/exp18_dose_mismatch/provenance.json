@@ -1,0 +1,35 @@
+{
+  "data": "data/processed/sciplex3_all.pt",
+  "n_cells": 276325,
+  "n_genes": 2000,
+  "doses_nM": [
+    10.0,
+    100.0,
+    1000.0,
+    10000.0
+  ],
+  "lines": [
+    "A549",
+    "K562",
+    "MCF7"
+  ],
+  "split_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "min_cells_per_half": 20,
+  "responsive_cos": 0.5,
+  "n_boot": 10000,
+  "bootstrap_seed": 0,
+  "energy_check": [
+    -0.09322166442871094,
+    -0.09322166442871094
+  ],
+  "torch": "2.5.1+cpu",
+  "numpy": "2.2.6",
+  "pandas": "2.3.3",
+  "prereg": "docs/gb_revision/01_DOSE_MISMATCH_PREREG.md"
+}

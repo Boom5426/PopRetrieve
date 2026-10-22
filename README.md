@@ -92,6 +92,8 @@ Run commands from the repository root after downloading the required datasets. T
 | 🧬 Core retrieval experiments | `bash scripts/run_all_core.sh` |
 | 📊 Baseline and predict-then-rank experiments (requires optional CIGS inputs) | `bash scripts/run_all_baselines.sh` |
 | 🧪 Synthetic HIR-Bench | `bash scripts/run_hir_benchmark.sh` |
+| 💊 Dose-mismatch re-identification in SciPlex3 | `python src/experiments/exp18_dose_mismatch.py --data data/processed/sciplex3_all.pt` |
+| 📉 Tahoe-100M regression below the mean-cosine ceiling | `python src/experiments/exp19_ceiling_sensitivity.py --per-query results/phase2_transition/bottleneck/bottleneck_per_query.csv --out results/phase2_transition/bottleneck/ceiling_sensitivity.csv` |
 
 Set `QUICK=1` for reduced smoke runs. Quick outputs are not the manuscript results.
 
