@@ -1,0 +1,7 @@
+dataset,criterion,comparison,n_queries,n_changed,first_better,first_worse,equal
+GDSC2,centred,structure (energy vs mean_l2),103,14,10,4,0
+GDSC2,centred,magnitude (mean_l2 vs mean_cosine),103,65,37,28,0
+GDSC2,uncentred,structure (energy vs mean_l2),103,14,9,5,0
+GDSC2,uncentred,magnitude (mean_l2 vs mean_cosine),103,65,30,35,0
+MoA,shares annotated mechanism,structure (energy vs mean_l2),600,270,27,40,203
+MoA,shares annotated mechanism,magnitude (mean_l2 vs mean_cosine),600,504,64,48,392

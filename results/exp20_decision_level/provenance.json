@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "src/experiments/exp20_decision_level.py",
+    "--gdsc2",
+    "results/exp20_decision_level/inputs/gdsc2_candidate_scores.csv",
+    "--moa",
+    "results/exp12_partial_observed_retrieval/per_query_scores.csv",
+    "--out",
+    "results/exp20_decision_level"
+  ],
+  "inputs": {
+    "results/exp20_decision_level/inputs/gdsc2_candidate_scores.csv": "1d94f48283957669d3ef3843a68a80bb12ba7fba85b5a039cdc9e68b53c021b5",
+    "results/exp12_partial_observed_retrieval/per_query_scores.csv": "359e0ef9cfadb552f1be133649fd6976819cfdae8f2dd23737409e5eb919704f"
+  },
+  "n_boot": 10000,
+  "boot_seed": 0,
+  "top_b": 5,
+  "python": "3.11.15",
+  "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.43",
+  "versions": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  },
+  "gdsc2_gate_passed": true,
+  "moa_gate_passed": true
+}
