@@ -5,12 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "popretrieve"
 version = "0.1.0"
-description = "Code and reproducibility materials for 'When do single-cell response distributions improve drug retrieval?'"
+description = "Code and reproducibility materials for PopRetrieve, population-response retrieval for single-cell perturbation data"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [
-    { name = "Boom5426" },
+    { name = "PopRetrieve authors" },
 ]
 keywords = ["single-cell", "drug retrieval", "distributional distance", "perturbation", "evaluation"]
 classifiers = [
@@ -31,9 +31,6 @@ dependencies = [
 [project.scripts]
 popretrieve-hir-benchmark = "experiments.exp11_hir_benchmark:main"
 popretrieve-recompute-headlines = "experiments.recompute_all:main"
-
-[project.urls]
-Repository = "https://github.com/Boom5426/PopRetrieve"
 
 [tool.setuptools]
 package-dir = { "" = "src" }

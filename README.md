@@ -1,32 +1,27 @@
 <div align="center">
 
-# When do single-cell response distributions improve drug retrieval?
+# PopRetrieve
 
-### PopRetrieve: Population-response retrieval for single-cell perturbation data
+### Population-response retrieval for single-cell perturbation data
 
 <p>
   <img alt="Single-cell" src="https://img.shields.io/badge/scope-single--cell-7B61FF?logo=cell&logoColor=white">
   <img alt="Retrieval" src="https://img.shields.io/badge/task-drug%20retrieval-0F9D8A?logo=target&logoColor=white">
   <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white">
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2ea44f"></a>
-  <a href="manuscript/PopRetrieve_manuscript.pdf"><img alt="Manuscript PDF" src="https://img.shields.io/badge/manuscript-PDF-B31B1B?logo=adobeacrobatreader&logoColor=white"></a>
-  <a href="manuscript/PopRetrieve_SI.pdf"><img alt="Supplementary Information PDF" src="https://img.shields.io/badge/supplement-PDF-B31B1B?logo=adobeacrobatreader&logoColor=white"></a>
-  <a href="https://huggingface.co/datasets/Boom5426/PopRetrieve"><img alt="Hugging Face dataset" src="https://img.shields.io/badge/data-Hugging%20Face-FFD21E?logo=huggingface&logoColor=black"></a>
 </p>
 
 <p><strong>A framework for testing when population response structure changes intervention ranking.</strong></p>
 
 <p>
-  <a href="https://boom5426.github.io/PopRetrieve/">🌐 Project page</a> ·
   <a href="#-installation">🚀 Install</a> ·
   <a href="#-data">🤗 Data</a> ·
-  <a href="#-reproducing-released-experiments">🧪 Reproduce</a> ·
-  <a href="manuscript/PopRetrieve_manuscript.pdf">📄 Paper</a> ·
-  <a href="manuscript/PopRetrieve_SI.pdf">📎 Supplement</a> ·
-  <a href="CITATION.bib">📚 Cite</a>
+  <a href="#-reproducing-released-experiments">🧪 Reproduce</a>
 </p>
 
 </div>
+
+> This is an anonymized copy of the repository for double-anonymized peer review. Author names, links to the authors' accounts and the manuscript files are withheld.
 
 <p align="center">
   <img src="assets/fig1_overview.png" alt="PopRetrieve overview" width="920">
@@ -34,7 +29,7 @@
 
 ## ✨ Overview
 
-PopRetrieve asks when full single-cell response distributions improve drug ranking beyond average responses. This repository provides retrieval metrics, mean baselines, controlled benchmarks and selected experiment drivers for the accompanying [manuscript](manuscript/PopRetrieve_manuscript.pdf) and [Supplementary Information](manuscript/PopRetrieve_SI.pdf).
+PopRetrieve asks when full single-cell response distributions improve drug ranking beyond average responses. This repository provides retrieval metrics, mean baselines, controlled benchmarks and selected experiment drivers for the accompanying manuscript and its Supplementary material.
 
 The central comparison is a representation ladder: direction-only mean cosine, magnitude-aware mean L2 and population-level scores (energy distance, MMD, sliced Wasserstein and subpopulation coverage). The paper separates gains due to response magnitude from gains that require the full cellular response population.
 
@@ -44,16 +39,14 @@ In the manuscript, a magnitude-aware mean recovers most of the apparent gain ove
   <tr>
     <td align="center" width="33%"><strong>📐 Scoring ladder</strong><br><sub>Direction, magnitude and population-response retrieval.</sub></td>
     <td align="center" width="33%"><strong>🧬 Evaluation ladder</strong><br><sub>Response matching, biological and functional evaluation, then prediction.</sub></td>
-    <td align="center" width="33%"><strong>🔁 Reproducibility</strong><br><sub>Fixed configs, scripts, checked output snapshots and current PDFs.</sub></td>
+    <td align="center" width="33%"><strong>🔁 Reproducibility</strong><br><sub>Fixed configs, scripts and checked output snapshots.</sub></td>
   </tr>
 </table>
 
 ## 🚀 Installation
 
 ```bash
-git clone https://github.com/Boom5426/PopRetrieve.git
-cd PopRetrieve
-
+# from the root of the downloaded repository
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
@@ -73,11 +66,11 @@ Energy and MMD use the unbiased U-statistic by default. Set `POPRETRIEVE_ESTIMAT
 
 ## 🤗 Data
 
-The processed datasets are hosted at [Hugging Face](https://huggingface.co/datasets/Boom5426/PopRetrieve). Download them with Git LFS and point PopRetrieve to the clone:
+The processed datasets are hosted on Hugging Face. The dataset link is withheld during double-anonymized review and is available to the editor on the manuscript title page. Download them with Git LFS and point PopRetrieve to the local copy:
 
 ```bash
 git lfs install
-git clone https://huggingface.co/datasets/Boom5426/PopRetrieve popretrieve-data
+git clone <processed-data repository> popretrieve-data
 export DIDR_DATA_ROOT="$PWD/popretrieve-data"
 ```
 
@@ -109,25 +102,11 @@ Selected output snapshots and the scope of the released experiments are document
 | `src/` | Retrieval metrics, baselines, data loaders, benchmarks and experiment drivers |
 | `configs/` | Dataset and experiment configurations |
 | `scripts/` | Main reproduction entry points |
-| `docs/` | Project website for GitHub Pages |
 | `data/` | Location for external datasets |
 | `results/` | Checked output snapshots and compact result summaries |
-| `manuscript/` | Current manuscript and Supplementary Information PDFs |
 
 Within `src/`, `popretrieve/` exposes the public API; `retrieval/`, `baselines/`, `benchmarks/`, `data/` and `experiments/` contain the implementations.
 
-## 📚 Citation and license
+## 📚 License
 
-Use the [BibTeX entry](CITATION.bib) to cite the manuscript:
-
-```bibtex
-@misc{Wang2026PopRetrieve,
-  title        = {When do single-cell response distributions improve drug retrieval?},
-  author       = {Wang, Huihong and Liu, Xiaoping and Chen, Chen and Sun, Qiuyan and Li, Bo and Zhang, Bob},
-  year         = {2026},
-  howpublished = {Manuscript},
-  url          = {https://github.com/Boom5426/PopRetrieve/blob/main/manuscript/PopRetrieve_manuscript.pdf}
-}
-```
-
-PopRetrieve code is released under the MIT License. External datasets retain their original licenses.
+Citation information is withheld during double-anonymized review. PopRetrieve code is released under the MIT License. External datasets retain their original licenses.

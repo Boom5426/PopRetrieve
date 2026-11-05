@@ -1,10 +1,10 @@
 # Data
 
-Processed datasets are published at [Boom5426/PopRetrieve](https://huggingface.co/datasets/Boom5426/PopRetrieve). They are not duplicated in the GitHub repository.
+Processed datasets are published on Hugging Face. The dataset link is withheld during double-anonymized review and is available to the editor on the manuscript title page. They are not duplicated in the code repository.
 
 ```bash
 git lfs install
-git clone https://huggingface.co/datasets/Boom5426/PopRetrieve popretrieve-data
+git clone <processed-data repository> popretrieve-data
 export DIDR_DATA_ROOT="$PWD/popretrieve-data"
 ```
 

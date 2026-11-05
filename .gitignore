@@ -44,7 +44,7 @@ Thumbs.db
 .vscode/
 .idea/
 
-# LaTeX build intermediates; final public PDFs under manuscript/ are kept
+# LaTeX build intermediates
 *.aux
 *.bbl
 *.blg
