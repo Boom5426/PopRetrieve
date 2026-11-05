@@ -1,0 +1,22 @@
+{
+  "energy_minus_mean_l2": {
+    "target": 0.011041508425055902,
+    "reproduced": 0.0110289833749557,
+    "n_paired": 19960,
+    "pass": true
+  },
+  "mean_l2_minus_mean_cosine": {
+    "target": -0.008324192644609853,
+    "reproduced": -0.0083241926446098,
+    "n_paired": 19960,
+    "pass": true
+  },
+  "mean_l2_ranks_identical_across_arms": {
+    "n_rows": 19960,
+    "pass": true
+  },
+  "mean_cosine_ranks_identical_across_arms": {
+    "n_rows": 19960,
+    "pass": true
+  }
+}

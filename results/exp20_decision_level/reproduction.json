@@ -1,0 +1,48 @@
+{
+  "gdsc2_centred_energy_median_rho": {
+    "target": 0.2650401069518717,
+    "reproduced": 0.2650401069518717,
+    "pass": true
+  },
+  "gdsc2_centred_mean_l2_median_rho": {
+    "target": 0.2847593582887701,
+    "reproduced": 0.2847593582887701,
+    "pass": true
+  },
+  "gdsc2_centred_mean_cosine_median_rho": {
+    "target": 0.08255347593582889,
+    "reproduced": 0.08255347593582889,
+    "pass": true
+  },
+  "gdsc2_uncentred_energy_median_rho": {
+    "target": 0.0902,
+    "reproduced": 0.09024064171122995,
+    "pass": true
+  },
+  "gdsc2_uncentred_mean_l2_median_rho": {
+    "target": 0.0922,
+    "reproduced": 0.09224598930481284,
+    "pass": true
+  },
+  "gdsc2_uncentred_mean_cosine_median_rho": {
+    "target": 0.138,
+    "reproduced": 0.1380347593582888,
+    "pass": true
+  },
+  "gdsc2_queries_with_tied_top1": {
+    "mean_cosine": 0,
+    "mean_l2": 0,
+    "energy": 0
+  },
+  "moa_n_queries": 600,
+  "moa_structure_mean_dndcg": {
+    "target": -0.002,
+    "reproduced": -0.0016514593173906577,
+    "pass": true
+  },
+  "moa_magnitude_mean_dndcg": {
+    "target": -0.011,
+    "reproduced": -0.011383618696391758,
+    "pass": true
+  }
+}

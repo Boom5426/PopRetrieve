@@ -38,7 +38,7 @@ PopRetrieve asks when full single-cell response distributions improve drug ranki
 
 The central comparison is a representation ladder: direction-only mean cosine, magnitude-aware mean L2 and population-level scores (energy distance, MMD, sliced Wasserstein and subpopulation coverage). The paper separates gains due to response magnitude from gains that require the full cellular response population.
 
-In the manuscript, a magnitude-aware mean recovers most of the apparent gain over directional mean matching. The smaller contribution from cell-to-cell structure weakens under biological and functional evaluation. With observed responses in the target context, population retrieval adds a small gain; the predictors evaluated in the paper do not preserve that gain in a new context. The same held-out protein measurements can favour different RNA rankings depending on whether the evaluator uses mean or population responses.
+In the manuscript, a magnitude-aware mean recovers most of the apparent gain over directional mean matching. The smaller contribution from cell-to-cell structure weakens under biological and functional evaluation. With observed responses in the target context, population retrieval adds a small gain beyond the magnitude-aware mean. When responses are predicted for a new context, only a Gaussian optimal-transport map among the predictors evaluated in the paper retains that gain. The same held-out protein measurements can favour different RNA rankings depending on whether the evaluator uses mean or population responses.
 
 <table>
   <tr>
@@ -94,6 +94,9 @@ Run commands from the repository root after downloading the required datasets. T
 | 🧪 Synthetic HIR-Bench | `bash scripts/run_hir_benchmark.sh` |
 | 💊 Dose-mismatch re-identification in SciPlex3 | `python src/experiments/exp18_dose_mismatch.py --data data/processed/sciplex3_all.pt` |
 | 📉 Tahoe-100M regression below the mean-cosine ceiling | `python src/experiments/exp19_ceiling_sensitivity.py --per-query results/phase2_transition/bottleneck/bottleneck_per_query.csv --out results/phase2_transition/bottleneck/ceiling_sensitivity.csv` |
+| 🎯 Top-ranked candidate in GDSC2 and mechanism-of-action retrieval | `python -I src/experiments/exp20_decision_level.py --gdsc2 results/exp20_decision_level/inputs/gdsc2_candidate_scores.csv --moa results/exp12_partial_observed_retrieval/per_query_scores.csv --out results/exp20_decision_level` |
+| 🧮 Tahoe-100M prediction with the Gaussian optimal-transport map and its three covariance controls (GPU) | `python -I src/experiments/phase2_transition/phase_b_loco.py --h5ad <Tahoe-100M plate 3 .h5ad> --freeze-dir results/phase2_transition/eligibility --out results/phase2_transition/covariance_control --predictors ot_map,ot_map_identity,ot_map_shared,ot_map_deranged --device cuda` |
+| 🧮 Covariance-control contrasts from that run | `python -I src/experiments/exp21_covariance_control.py --res results/phase2_transition/covariance_control` |
 
 Set `QUICK=1` for reduced smoke runs. Quick outputs are not the manuscript results.
 

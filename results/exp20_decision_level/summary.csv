@@ -1,0 +1,41 @@
+dataset,outcome,quantity,n_queries,n_clusters,mean,ci_lo,ci_hi
+GDSC2,"top1 percentile, centred",mean_cosine,103,35,0.6278424942427285,,
+GDSC2,"top1 percentile, centred",mean_l2,103,35,0.642409405403212,,
+GDSC2,"top1 percentile, centred",energy,103,35,0.6807111117874427,,
+GDSC2,"top1 percentile, centred",structure (energy - mean_l2),103,35,0.03830170638423065,0.010800433805516475,0.06841653808237966
+GDSC2,"top1 percentile, centred",magnitude (mean_l2 - mean_cosine),103,35,0.014566911160483304,-0.0775380737615526,0.10440997161944184
+GDSC2,"top1 criterion value, centred",mean_cosine,103,35,0.17581140219605218,,
+GDSC2,"top1 criterion value, centred",mean_l2,103,35,0.2194332236509139,,
+GDSC2,"top1 criterion value, centred",energy,103,35,0.2634135351163203,,
+GDSC2,"top1 criterion value, centred",structure (energy - mean_l2),103,35,0.04398031146540641,0.014188571224593681,0.07691218452023059
+GDSC2,"top1 criterion value, centred",magnitude (mean_l2 - mean_cosine),103,35,0.04362182145486173,-0.052472019275011744,0.14300754258649115
+GDSC2,"top5 mean percentile, centred",mean_cosine,103,35,0.5563839136257114,,
+GDSC2,"top5 mean percentile, centred",mean_l2,103,35,0.6363964173032637,,
+GDSC2,"top5 mean percentile, centred",energy,103,35,0.6376651728195919,,
+GDSC2,"top5 mean percentile, centred",structure (energy - mean_l2),103,35,0.0012687555163283318,-0.007278062788074925,0.010501758658008656
+GDSC2,"top5 mean percentile, centred",magnitude (mean_l2 - mean_cosine),103,35,0.08001250367755224,0.016927819754062795,0.14433492651449614
+GDSC2,"top1 percentile, uncentred",mean_cosine,103,35,0.7046811435412038,,
+GDSC2,"top1 percentile, uncentred",mean_l2,103,35,0.6504870220450234,,
+GDSC2,"top1 percentile, uncentred",energy,103,35,0.6789788578790922,,
+GDSC2,"top1 percentile, uncentred",structure (energy - mean_l2),103,35,0.028491835834068842,0.004835521476904972,0.054437452717185725
+GDSC2,"top1 percentile, uncentred",magnitude (mean_l2 - mean_cosine),103,35,-0.054194121496180414,-0.13821992596920388,0.03225194684265882
+GDSC2,"top1 criterion value, uncentred",mean_cosine,103,35,0.2954180659233314,,
+GDSC2,"top1 criterion value, uncentred",mean_l2,103,35,0.26021354765910903,,
+GDSC2,"top1 criterion value, uncentred",energy,103,35,0.28265539820562263,,
+GDSC2,"top1 criterion value, uncentred",structure (energy - mean_l2),103,35,0.02244185054651356,0.002653881042505541,0.045223922806716395
+GDSC2,"top1 criterion value, uncentred",magnitude (mean_l2 - mean_cosine),103,35,-0.035204518264222384,-0.08705999875315887,0.01336136109340141
+GDSC2,"top5 mean percentile, uncentred",mean_cosine,103,35,0.599440251189498,,
+GDSC2,"top5 mean percentile, uncentred",mean_l2,103,35,0.6036986664434774,,
+GDSC2,"top5 mean percentile, uncentred",energy,103,35,0.6009496961580992,,
+GDSC2,"top5 mean percentile, uncentred",structure (energy - mean_l2),103,35,-0.002748970285378053,-0.010783189908796701,0.005485877605617689
+GDSC2,"top5 mean percentile, uncentred",magnitude (mean_l2 - mean_cosine),103,35,0.004258415253979363,-0.05039435295250076,0.06046223729052442
+MoA,Hit@1,mean_cosine,600,130,0.21666666666666667,,
+MoA,Hit@1,mean_l2,600,130,0.24333333333333335,,
+MoA,Hit@1,energy,600,130,0.22166666666666668,,
+MoA,Hit@1,structure (energy - mean_l2),600,130,-0.021666666666666667,-0.05152979066022544,0.006600660066006601
+MoA,Hit@1,magnitude (mean_l2 - mean_cosine),600,130,0.02666666666666667,-0.01852086858432036,0.07142857142857142
+MoA,Hit@5,mean_cosine,600,130,0.47833333333333333,,
+MoA,Hit@5,mean_l2,600,130,0.5216666666666666,,
+MoA,Hit@5,energy,600,130,0.5016666666666667,,
+MoA,Hit@5,structure (energy - mean_l2),600,130,-0.02,-0.04833333333333333,0.007055611842845871
+MoA,Hit@5,magnitude (mean_l2 - mean_cosine),600,130,0.043333333333333335,-0.008773090132739254,0.09523809523809523
